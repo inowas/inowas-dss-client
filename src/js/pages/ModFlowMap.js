@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Map, Marker, Popup, TileLayer, GeoJSON} from 'react-leaflet';
+import {Map, Marker, Popup, TileLayer, GeoJSON, LayersControl, FeatureGroup, Circle} from 'react-leaflet';
 
 //import * as DiagramActions from "../actions/DiagramActions";
 //import DiagramStore from "../stores/DiagramStore";
@@ -35,10 +35,30 @@ export default class ModFlowMap extends React.Component {
           zoom={13}
           bounds={this.getBounds()}
         >
-          <TileLayer url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-          <GeoJSON
-            data={this.getAreaGeoJson()}
-          />
+          <LayersControl position='topright'>
+            <LayersControl.BaseLayer
+              name="Common map layer"
+              checked
+            >
+              <TileLayer
+                url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+            </LayersControl.BaseLayer>
+
+            <LayersControl.BaseLayer name='OpenStreetMap.BlackAndWhite'>
+              <TileLayer
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url='http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+              />
+            </LayersControl.BaseLayer>
+
+            <LayersControl.Overlay
+              name='Area'
+              checked
+            >
+              <GeoJSON data={this.getAreaGeoJson()} />
+            </LayersControl.Overlay>
+          </LayersControl>
         </Map>
       </div>
     );
