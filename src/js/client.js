@@ -15,7 +15,7 @@ const app = document.getElementById('app');
 ReactDOM.render(
   <Router history={hashHistory}>
   <Route path="/" component={Layout}>
-    <IndexRoute component={ModFlowMap}></IndexRoute>
-    <Route path="diagram" component={Diagram}></Route>
+    <IndexRoute component={ModFlowMap}/>
+    <Route path="diagram" component={Diagram}/>
   </Route>
 </Router>, app);
