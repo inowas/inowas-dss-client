@@ -8,14 +8,14 @@ require('bootstrap');
 
 import Diagram from "./pages/Diagram";
 import Layout from "./pages/Layout";
-import ModFlowMap from "./pages/ModFlowMap";
+import Wells from "./pages/Wells";
 
 const app = document.getElementById('app');
 
 ReactDOM.render(
   <Router history={hashHistory}>
   <Route path="/" component={Layout}>
-    <IndexRoute component={ModFlowMap}/>
+    <Route path="wells" component={Wells}/>
     <Route path="diagram" component={Diagram}/>
   </Route>
 </Router>, app);

@@ -3,7 +3,11 @@ import React from "react";
 import C3Chart from 'react-c3js';
 
 import * as DiagramActions from "../actions/DiagramActions";
+import * as ModelActions from "../actions/ModelActions";
+
 import DiagramStore from "../stores/DiagramStore";
+import ModelStore from "../stores/ModelStore";
+
 
 export default class Diagram extends React.Component {
   constructor() {
@@ -45,6 +49,7 @@ export default class Diagram extends React.Component {
 
   componentWillMount() {
     DiagramStore.on("change", this.updateData);
+    ModelStore.on("change", this.updateData);
   }
 
   componentWillUnmount() {
@@ -61,6 +66,11 @@ export default class Diagram extends React.Component {
     DiagramActions.loadData();
   }
 
+  fetchModels() {
+    console.log("Diagram.fetchModels executed");
+    ModelActions.fetchModels();
+  }
+
   render() {
     const {data, type, options} = this.state;
     return (
@@ -68,6 +78,7 @@ export default class Diagram extends React.Component {
         <p>Test</p>
         <C3Chart data={data} type={type} options={options}/>
         <button onClick={this.loadData.bind(this)}>Lade neue Daten</button>
+        <button onClick={this.fetchModels.bind(this)}>Lade neue Models</button>
       </div>
     );
   }

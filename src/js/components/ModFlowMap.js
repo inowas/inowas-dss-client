@@ -11,15 +11,13 @@ import {
   ZoomControl
 } from 'react-leaflet';
 
-import MapToolBox from "../components/MapToolBox";
+import MapToolBox from "./MapToolBox";
+import MapOverlay from "./MapOverlay";
 
 //import * as DiagramActions from "../actions/DiagramActions";
 //import DiagramStore from "../stores/DiagramStore";
 
 export default class ModFlowMap extends React.Component {
-  constructor() {
-    super();
-  }
 
   componentWillMount() {
     //DiagramStore.on("change", this.getData);
@@ -28,7 +26,20 @@ export default class ModFlowMap extends React.Component {
   componentWillUnmount() {
     //DiagramStore.removeListener("change", this.getData);
   }
+/*
+  disableMap() {
+    console.log(this.context);
+    this.context.map._handlers.forEach(function(handler) {
+      handler.disable();
+    });
+  }
 
+  enableMap() {
+    this.context.map._handlers.forEach(function(handler) {
+      handler.enable();
+    });
+  }
+*/
   getBounds() {
     return [
       [
@@ -178,6 +189,18 @@ export default class ModFlowMap extends React.Component {
     };
   }
 
+  renderMapOverlay() {
+    if (this.props.children) {
+      return (
+        <MapOverlay>
+          {this.props.children}
+        </MapOverlay>
+      );
+    }
+
+    return("");
+  }
+
   render() {
     return (
       <div class="map-wrapper">
@@ -195,8 +218,9 @@ export default class ModFlowMap extends React.Component {
               <GeoJSON data={this.getAreaGeoJson()}/>
             </LayersControl.Overlay>
           </LayersControl>
-          <ZoomControl position="topright" />
+          <ZoomControl position="topright"/>
           <MapToolBox />
+          {this.renderMapOverlay()}
         </Map>
       </div>
     );

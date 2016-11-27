@@ -2,12 +2,32 @@ import React from "react";
 
 import Accordion from "./Accordion";
 import AccordionItem from "./AccordionItem";
-import List from "./List";
+import { IndexLink, Link } from "react-router";
 import ListItem from "./ListItem";
 
 export default class MapToolBox extends React.Component {
-  constructor(props) {
-    super();
+
+  componentWillMount() {
+    console.log(this.context);
+  }
+
+  disableMap() {
+    this.context.map._handlers.forEach(function(handler) {
+      handler.disable();
+    });
+  }
+
+  enableMap() {
+    this.context.map._handlers.forEach(function(handler) {
+      handler.enable();
+    });
+  }
+
+  zoomIn(){
+    this.context.map.zoomIn()
+  }
+  zoomOut(){
+    this.context.map.zoomOut()
   }
 
   render() {
@@ -17,17 +37,18 @@ export default class MapToolBox extends React.Component {
           <h3 class="panel-title">Toolbox</h3>
         </div>
         <div class="panel-body">
+          <button type="button" onClick={this.zoomIn.bind(this)}>Zoom in</button>
           <Accordion>
             <AccordionItem heading="Model Area">bla blub</AccordionItem>
             <AccordionItem heading="Soilmodel">bla blub</AccordionItem>
-            <AccordionItem heading="Boundaries">
-              <List>
-                <ListItem to="/wells">Wells</ListItem>
+            <AccordionItem heading="Boundaries" list>
+                <ListItem>
+                  <Link to="/wells" onClick={this.disableMap.bind(this)}>Wells</Link>
+                </ListItem>
                 <ListItem>Rivers</ListItem>
                 <ListItem>Recharge</ListItem>
                 <ListItem>Constant Head</ListItem>
                 <ListItem>General Head</ListItem>
-              </List>
             </AccordionItem>
             <AccordionItem heading="Properties">bla blub</AccordionItem>
             <AccordionItem heading="Calculation">bla blub</AccordionItem>

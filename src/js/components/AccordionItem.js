@@ -18,7 +18,7 @@ export default class AccordionItem extends React.Component {
           </h4>
         </div>
         <div id={id} class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-          <div class="panel-body">
+          <div class={this.props.list ? 'list-group' : 'panel-body'}>
             {this.props.children}
           </div>
         </div>
