@@ -1,21 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Router, Route, IndexRoute, hashHistory} from "react-router";
+import {Router, Route, hashHistory} from "react-router";
 
-var jQuery = require('jquery');
-window.jQuery = jQuery;
+window.jQuery = require('jquery');
 require('bootstrap');
 
-import Diagram from "./pages/Diagram";
 import Layout from "./pages/Layout";
 import Wells from "./pages/Wells";
+import ModelOverview from "./components/modelOverview/ModelOverview";
 
 const app = document.getElementById('app');
 
 ReactDOM.render(
   <Router history={hashHistory}>
-  <Route path="/" component={Layout}>
-    <Route path="wells" component={Wells}/>
-    <Route path="diagram" component={Diagram}/>
-  </Route>
-</Router>, app);
+    <Route path="/mov" component={ModelOverview}/>
+    <Route path="/mov/:modelId" component={ModelOverview}/>
+    <Route path="/mov/:modelId/:boundaryType" component={ModelOverview}/>
+    <Route path="/" component={Layout}>
+      <Route path="wells" component={Wells}/>
+    </Route>
+  </Router>,
+  app)
+;

@@ -6,7 +6,7 @@ export default class Layout extends React.Component {
 
   render() {
     return (
-      <div class="page-wrapper">
+      <div className="page-wrapper">
         <ModFlowMap>
           {this.props.children}
         </ModFlowMap>
