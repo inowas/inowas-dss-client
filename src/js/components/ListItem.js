@@ -4,8 +4,10 @@ export default class ListItem extends React.Component {
 
   render() {
     return (
-      <span className="list-group-item">{this.props.children}</span>
+      <span className="list-group-item">
+        {this.props.children}
+        <span className="badge">{this.props.bCount}</span>
+      </span>
     );
   }
-
 }

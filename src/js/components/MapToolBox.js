@@ -31,24 +31,25 @@ export default class MapToolBox extends React.Component {
   }
 
   render() {
+    const boundaries = this.props.model.boundaries;
     return (
-      <div class="map-tool-box panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title">Toolbox</h3>
+      <div className="map-tool-box panel panel-primary">
+        <div className="panel-heading">
+          <h3 className="panel-title">Toolbox</h3>
         </div>
-        <div class="panel-body">
+        <div className="panel-body">
           <button type="button" onClick={this.zoomIn.bind(this)}>Zoom in</button>
           <Accordion>
             <AccordionItem heading="Model Area">bla blub</AccordionItem>
             <AccordionItem heading="Soilmodel">bla blub</AccordionItem>
             <AccordionItem heading="Boundaries" list>
-                <ListItem>
+                <ListItem bCount={boundaries.WEL.length}>
                   <Link to="/wells" onClick={this.disableMap.bind(this)}>Wells</Link>
                 </ListItem>
-                <ListItem>Rivers</ListItem>
-                <ListItem>Recharge</ListItem>
-                <ListItem>Constant Head</ListItem>
-                <ListItem>General Head</ListItem>
+                <ListItem bCount={boundaries.RIV.length}>Rivers</ListItem>
+                <ListItem bCount={boundaries.RCH.length}>Recharge</ListItem>
+                <ListItem bCount={boundaries.CHD.length}>Constant Head</ListItem>
+                <ListItem bCount={boundaries.GHB.length}>General Head</ListItem>
             </AccordionItem>
             <AccordionItem heading="Properties">bla blub</AccordionItem>
             <AccordionItem heading="Calculation">bla blub</AccordionItem>
