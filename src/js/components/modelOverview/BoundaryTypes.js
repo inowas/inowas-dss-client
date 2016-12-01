@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router"
-import ModelStore from "../../../stores/ModelStore";
+import ModelStore from "../../stores/ModelStore";
 
 export default class BoundaryTypes extends React.Component {
 

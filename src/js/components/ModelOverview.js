@@ -1,10 +1,10 @@
 import React from "react";
-import BoundaryTypes from "./Components/BoundaryTypes";
-import BoundariesList from "./Components/BoundariesList"
-import ObservationPointsList from "./Components/ObservationPointsList"
-import StressPeriodsList from "./Components/StressPeriodsList"
-import Models from "./Components/Models";
-import ModelStore from "../../stores/ModelStore"
+import BoundaryTypes from "./modelOverview/BoundaryTypes";
+import BoundariesList from "./modelOverview/BoundariesList"
+import ObservationPointsList from "./modelOverview/ObservationPointsList"
+import StressPeriodsList from "./modelOverview/StressPeriodsList"
+import Models from "./modelOverview/Models";
+import ModelStore from "../stores/ModelStore"
 
 export default class ModelOverview extends React.Component {
   constructor() {

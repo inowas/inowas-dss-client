@@ -7,7 +7,7 @@ require('bootstrap');
 
 import Layout from "./pages/Layout";
 import Wells from "./pages/Wells";
-import ModelOverview from "./components/modelOverview/ModelOverview";
+import ModelOverview from "./components/ModelOverview";
 
 const app = document.getElementById('app');
 

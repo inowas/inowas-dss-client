@@ -1,5 +1,5 @@
 import React from "react";
-import ModelStore from "../../../stores/ModelStore"
+import ModelStore from "../../stores/ModelStore"
 
 export default class ObservationPointListItem extends React.Component {
 

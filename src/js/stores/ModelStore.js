@@ -1,5 +1,7 @@
+import Axios from "axios";
 import EventEmitter from "events";
-import axios from "axios";
+import Dispatcher from "../dispatcher"
+
 
 class ModelStore extends EventEmitter {
 
@@ -21,7 +23,7 @@ class ModelStore extends EventEmitter {
   }
 
   loadAllModels(){
-    axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models.json")
+    Axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models.json")
       .then((returnData) => {
         this.models = returnData.data;
         this.setActiveModel(this.models[0].id);
@@ -29,16 +31,14 @@ class ModelStore extends EventEmitter {
       })
   }
 
-  loadAllBoundaryTypesFromModel(){
+  loadAllBoundaryTypesFromModel(id){
     this.boundaryTypes = ['chd', 'ghb', 'rch', 'riv', 'wel'];
     this.emit("change");
   }
 
-  loadAllBoundariesByModelIdAndType(){
-    const id = this.activeModel;
-    const type = this.activeBoundaryType;
+  loadAllBoundariesByModelIdAndType(id, type){
 
-    axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +"/boundaries/"+ type +".json")
+    Axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +"/boundaries/"+ type +".json")
       .then((returnData) => {
         this.boundaries = returnData.data;
 
@@ -53,7 +53,7 @@ class ModelStore extends EventEmitter {
   loadAllObservationPointsByBoundaryId(){
     const id = this.activeBoundary;
 
-    axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/boundaries/"+ id +"/observationpoints.json")
+    Axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/boundaries/"+ id +"/observationpoints.json")
       .then((returnData) => {
         this.observationPoints = returnData.data;
 
@@ -67,7 +67,7 @@ class ModelStore extends EventEmitter {
   loadAllStressPeriodsByObservationPointId(){
     const id = this.activeObservationPoint;
 
-    axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/observationpoints/"+ id +"/stressperiods.json")
+    Axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/observationpoints/"+ id +"/stressperiods.json")
       .then((returnData) => {
         this.stressPeriods = returnData.data;
         this.emit("change");
@@ -94,7 +94,7 @@ class ModelStore extends EventEmitter {
     this.activeObservationPoint = null;
     this.stressPeriods = [];
     this.boundaries = [];
-    this.loadAllBoundariesByModelIdAndType();
+    this.loadAllBoundariesByModelIdAndType(this.activeModel, this.activeBoundaryType);
     this.emit("change");
   }
 
@@ -135,15 +135,24 @@ class ModelStore extends EventEmitter {
   }
 
   handleActions(action) {
-    switch (action.type) {
-      case "RECEIVE_MODEL_LIST": {
-        this.models = action.data;
-        this.emit("change");
+    switch(action.type) {
+      case "LOAD_ALL_MODELS":
+        this.loadAllModels();
         break;
-      }
+
+      case "LOAD_BOUNDARYTYPES_FROM_MODEL":
+        this.loadAllBoundaryTypesFromModel(action.id);
+        break;
+
+      case "LOAD_BOUNDARIES_FROM_MODEL":
+        this.loadAllBoundariesByModelIdAndType(action.id, action.bType);
+        break;
     }
+
   }
 }
 
 const modelStore = new ModelStore;
+Dispatcher.register(modelStore.handleActions.bind(modelStore));
+window.dispatcher = Dispatcher;
 export default modelStore;
