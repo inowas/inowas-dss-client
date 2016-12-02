@@ -1,6 +1,6 @@
-import React from "react";
+import React from "react"
 
-import {IndexLink} from "react-router";
+import { Link } from "react-router"
 
 export default class MapOverlay extends React.Component {
 
@@ -30,10 +30,10 @@ export default class MapOverlay extends React.Component {
         <div className="map-overlay-darkner"></div>
         <div className="map-overlay">
           <div className="panel panel-primary">
-            <div className="panel-heading clearfix">
-              <IndexLink to="/">
+            <div className="panel-heading">
+              <Link to="/">
                 <span className="glyphicon glyphicon-remove"></span>
-              </IndexLink>
+              </Link>
             </div>
             <div className="panel-body">
               {this.props.children}
