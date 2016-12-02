@@ -1,34 +1,12 @@
 import React from "react";
 
-import Accordion from "./Accordion";
-import AccordionItem from "./AccordionItem";
 import { IndexLink, Link } from "react-router";
-import ListItem from "./ListItem";
+
+import Accordion from "../primitive/Accordion";
+import AccordionItem from "../primitive/AccordionItem";
+import ListItem from "../primitive/ListItem";
 
 export default class MapToolBox extends React.Component {
-
-  componentWillMount() {
-    console.log(this.context);
-  }
-
-  disableMap() {
-    this.context.map._handlers.forEach(function(handler) {
-      handler.disable();
-    });
-  }
-
-  enableMap() {
-    this.context.map._handlers.forEach(function(handler) {
-      handler.enable();
-    });
-  }
-
-  zoomIn(){
-    this.context.map.zoomIn()
-  }
-  zoomOut(){
-    this.context.map.zoomOut()
-  }
 
   render() {
     const boundaries = this.props.model.boundaries;
@@ -38,13 +16,12 @@ export default class MapToolBox extends React.Component {
           <h3 className="panel-title">Toolbox</h3>
         </div>
         <div className="panel-body">
-          <button type="button" onClick={this.zoomIn.bind(this)}>Zoom in</button>
           <Accordion>
             <AccordionItem heading="Model Area">bla blub</AccordionItem>
             <AccordionItem heading="Soilmodel">bla blub</AccordionItem>
             <AccordionItem heading="Boundaries" list>
                 <ListItem bCount={boundaries.WEL.length}>
-                  <Link to="/wells" onClick={this.disableMap.bind(this)}>Wells</Link>
+                  <IndexLink to="/wells" activeClassName="active">Wells</IndexLink>
                 </ListItem>
                 <ListItem bCount={boundaries.RIV.length}>Rivers</ListItem>
                 <ListItem bCount={boundaries.RCH.length}>Recharge</ListItem>
@@ -58,5 +35,4 @@ export default class MapToolBox extends React.Component {
       </div>
     );
   }
-
 }
