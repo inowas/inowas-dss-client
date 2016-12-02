@@ -28,13 +28,12 @@ export default class ModFlowMap extends React.Component {
   getChildContext() {
     return {
       model: this.state.model,
-      updateWellName: this.updateWellName.bind(this),
+      updateBoundaryName: this.updateBoundaryName.bind(this),
     };
   }
-  //if the boundaries data structure would be flatend that could become updateBoundaryName
-  updateWellName(id, newName) {
-    //this.state.model.boundaries.find(b => b.id == id).name = newName;
-    this.state.model.boundaries.WEL.find(b => b.id == id).name = newName;
+
+  updateBoundaryName(id, newName) {
+    this.state.model.boundaries.find(b => b.id == id).name = newName;
     this.forceUpdate();
   }
 
@@ -94,5 +93,5 @@ export default class ModFlowMap extends React.Component {
 
 ModFlowMap.childContextTypes = {
   model: React.PropTypes.object,
-  updateWellName: React.PropTypes.func
+  updateBoundaryName: React.PropTypes.func
 };

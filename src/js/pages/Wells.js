@@ -6,18 +6,18 @@ import WellProperties from "../components/boundaries/well/WellProperties"
 export default class Wells extends React.Component {
 
   getWellById(id) {
-    return this.context.model.boundaries.WEL.find(b => b.id == id);
+    return this.context.model.boundaries.find(b => b.id == id);
   }
 
   render() {
 
     const { params } = this.props;
-    const { model, updateWellName } = this.context;
+    const { model, updateBoundaryName } = this.context;
 
     return (
       <div className="wells-wrapper">
-        <BoundarySidebar path="wells" boundaries={model.boundaries.WEL} />
-        {params.wellId && <WellProperties data={this.getWellById(params.wellId)} updateWellName={updateWellName} />}
+        <BoundarySidebar path="wells" boundaries={model.boundaries.filter(b => b.type == 'WEL')} />
+        {params.wellId && <WellProperties data={this.getWellById(params.wellId)} updateBoundaryName={updateBoundaryName} />}
       </div>
     );
   }
@@ -26,5 +26,5 @@ export default class Wells extends React.Component {
 
 Wells.contextTypes = {
   model: React.PropTypes.object,
-  updateWellName: React.PropTypes.func,
+  updateBoundaryName: React.PropTypes.func,
 };

@@ -12,7 +12,7 @@ export default class WellProperties extends React.Component {
   }
 
   updateWellName(e) {
-    this.props.updateWellName(this.props.data.id, e.target.value);
+    this.props.updateBoundaryName(this.props.data.id, e.target.value);
   }
 
   render() {

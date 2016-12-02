@@ -20,13 +20,13 @@ export default class MapToolBox extends React.Component {
             <AccordionItem heading="Model Area">bla blub</AccordionItem>
             <AccordionItem heading="Soilmodel">bla blub</AccordionItem>
             <AccordionItem heading="Boundaries" list>
-                <ListItem bCount={boundaries.WEL.length}>
+                <ListItem bCount={boundaries.find(b => b.type == 'WEL').length}>
                   <IndexLink to="/wells" activeClassName="active">Wells</IndexLink>
                 </ListItem>
-                <ListItem bCount={boundaries.RIV.length}>Rivers</ListItem>
-                <ListItem bCount={boundaries.RCH.length}>Recharge</ListItem>
-                <ListItem bCount={boundaries.CHD.length}>Constant Head</ListItem>
-                <ListItem bCount={boundaries.GHB.length}>General Head</ListItem>
+                <ListItem bCount={boundaries.filter(b => b.type == 'RIV').length}>Rivers</ListItem>
+                <ListItem bCount={boundaries.filter(b => b.type == 'RCH').length}>Recharge</ListItem>
+                <ListItem bCount={boundaries.filter(b => b.type == 'CHD').length}>Constant Head</ListItem>
+                <ListItem bCount={boundaries.filter(b => b.type == 'GHB').length}>General Head</ListItem>
             </AccordionItem>
             <AccordionItem heading="Properties">bla blub</AccordionItem>
             <AccordionItem heading="Calculation">bla blub</AccordionItem>
