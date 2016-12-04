@@ -7,8 +7,8 @@ import Models from "./modelOverview/Models";
 import ModelStore from "../stores/ModelStore"
 
 export default class ModelOverview extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       models: [],
       activeModel: null,

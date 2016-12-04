@@ -1,24 +1,24 @@
 import React from "react";
 
-var reactMixin = require('react-mixin');
-var UniqeIdMixin = require('unique-id-mixin');
+import reactMixin from "react-mixin";
+import UniqeIdMixin from "unique-id-mixin";
 
 export default class AccordionItem extends React.Component {
 
   render() {
-    let id = this.getNextUid( 'unique-string' );
+    const id = this.getNextUid( 'unique-string' );
 
     return (
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
-          <h4 class="panel-title">
+      <div className="panel panel-default">
+        <div className="panel-heading" role="tab" id="headingOne">
+          <h4 className="panel-title">
             <a role="button" data-toggle="collapse" data-parent="#accordion" href={'#' + id} aria-expanded="false" aria-controls="collapseOne">
               {this.props.heading}
             </a>
           </h4>
         </div>
-        <div id={id} class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-          <div class={this.props.list ? 'list-group' : 'panel-body'}>
+        <div id={id} className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div className={this.props.list ? 'list-group' : 'panel-body'}>
             {this.props.children}
           </div>
         </div>

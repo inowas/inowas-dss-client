@@ -4,7 +4,7 @@ export default class List extends React.Component {
 
   render() {
     return (
-      <div class="list-group">
+      <div className="list-group">
         {this.props.children}
       </div>
     );

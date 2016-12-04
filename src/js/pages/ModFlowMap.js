@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 import {
   Map,
@@ -9,48 +9,45 @@ import {
   LayersControl,
   FeatureGroup,
   ZoomControl
-} from 'react-leaflet';
+} from 'react-leaflet'
 
-import MapToolBox from "./MapToolBox";
-import MapOverlay from "./MapOverlay";
-
-//import * as DiagramActions from "../actions/DiagramActions";
-//import DiagramStore from "../stores/DiagramStore";
+import MapToolBox from "../components/map/MapToolBox"
+import MapOverlay from "../components/map/MapOverlay"
+import Model from "./../modflow_model_example_data"
 
 export default class ModFlowMap extends React.Component {
 
-  componentWillMount() {
-    //DiagramStore.on("change", this.getData);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      model: Model,
+    }
   }
 
-  componentWillUnmount() {
-    //DiagramStore.removeListener("change", this.getData);
-  }
-/*
-  disableMap() {
-    console.log(this.context);
-    this.context.map._handlers.forEach(function(handler) {
-      handler.disable();
-    });
+  getChildContext() {
+    return {
+      model: this.state.model,
+      updateBoundaryName: this.updateBoundaryName.bind(this),
+    };
   }
 
-  enableMap() {
-    this.context.map._handlers.forEach(function(handler) {
-      handler.enable();
-    });
+  updateBoundaryName(id, newName) {
+    this.state.model.boundaries.find(b => b.id == id).name = newName;
+    this.forceUpdate();
   }
-*/
+
   getBounds() {
-    const bb = this.props.model.bounding_box;
+    const {y_min, x_min, y_max, x_max } = this.state.model.bounding_box;
     return [
-      [bb.y_min, bb.x_min],
-      [bb.y_max, bb.x_max]
+      [y_min, x_min],
+      [y_max,x_max]
     ];
   }
 
   getAreaGeoJson() {
     return (
-      JSON.parse(this.props.model.area.geometry)
+      JSON.parse(this.state.model.area.geometry)
     )
   }
 
@@ -67,6 +64,8 @@ export default class ModFlowMap extends React.Component {
   }
 
   render() {
+    const { model } = this.state;
+
     return (
       <div className="map-wrapper">
         <Map bounds={this.getBounds()} zoomControl={false}>
@@ -84,10 +83,15 @@ export default class ModFlowMap extends React.Component {
             </LayersControl.Overlay>
           </LayersControl>
           <ZoomControl position="topright"/>
-          <MapToolBox model={this.props.model} />
+          <MapToolBox model={model} />
           {this.renderMapOverlay()}
         </Map>
       </div>
     );
   }
 }
+
+ModFlowMap.childContextTypes = {
+  model: React.PropTypes.object,
+  updateBoundaryName: React.PropTypes.func
+};

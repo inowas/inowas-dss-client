@@ -4,12 +4,12 @@ import ModelStore from "../../stores/ModelStore"
 
 export default class ModelListItem extends React.Component {
 
-  onClickHandler(e){
+  onClickHandler(e) {
     ModelStore.setActiveModel(e.target.id)
   }
 
   getClassNames(active) {
-    if (! active){
+    if (!active) {
       return "list-group-item";
     }
 
@@ -20,12 +20,7 @@ export default class ModelListItem extends React.Component {
     const model = this.props.model;
     const active = this.props.active;
     return (
-      <Link
-        id={model.id}
-        className={this.getClassNames(active)}
-        to={`/mov/${model.id}`}
-        onClick={this.onClickHandler}
-      >
+      <Link id={model.id} className={this.getClassNames(active)} to={`/mov/${model.id}`} onClick={this.onClickHandler}>
         {model.name}
       </Link>
     );
