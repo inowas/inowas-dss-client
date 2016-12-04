@@ -3,23 +3,23 @@ import BoundaryListItem from "./BoundaryListItem";
 
 export default class BoundariesList extends React.Component {
 
-  render() {
-    const boundaries = this.props.boundaries;
-    const activeBoundary = this.props.activeBoundary;
+    render() {
+        const boundaries = this.props.boundaries;
+        const activeBoundary = this.props.activeBoundary;
 
-    let items = "";
-    if (boundaries.length > 0) {
-      items = boundaries.map(function (boundary) {
+        let items = "";
+        if (boundaries.length > 0) {
+            items = boundaries.map(function (boundary) {
+                return (
+                    <BoundaryListItem key={boundary.id} boundary={boundary} active={boundary.id == activeBoundary}/>
+                );
+            });
+        }
+
         return (
-          <BoundaryListItem key={boundary.id} boundary={boundary} active={boundary.id == activeBoundary}/>
+            <div className="list-group">
+                {items}
+            </div>
         );
-      });
     }
-
-    return (
-      <div className="list-group">
-        {items}
-      </div>
-    );
-  }
 }

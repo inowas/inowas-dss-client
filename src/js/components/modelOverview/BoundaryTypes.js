@@ -4,46 +4,46 @@ import ModelStore from "../../stores/ModelStore";
 
 export default class BoundaryTypes extends React.Component {
 
-  onClickHandler(e){
-    ModelStore.setActiveBoundaryType(e.target.id);
-  }
-
-  getClassNames(activeBoundaryType, boundaryType) {
-    if (activeBoundaryType == boundaryType) {
-      return "list-group-item active";
+    onClickHandler(e) {
+        ModelStore.setActiveBoundaryType(e.target.id);
     }
 
-    return "list-group-item";
-  }
+    getClassNames(activeBoundaryType, boundaryType) {
+        if (activeBoundaryType == boundaryType) {
+            return "list-group-item active";
+        }
 
-  render() {
-    const boundaryTypes = this.props.types;
-    const activeBoundaryType = this.props.activeType;
+        return "list-group-item";
+    }
 
-    const activeModel = ModelStore.getActiveModel();
+    render() {
+        const boundaryTypes = this.props.types;
+        const activeBoundaryType = this.props.activeType;
 
-    const getClassNames = this.getClassNames;
-    const onClickHandler = this.onClickHandler;
+        const activeModel = ModelStore.getActiveModel();
 
-    const items = boundaryTypes.map(function(boundaryType, index) {
-      const classNames = getClassNames(activeBoundaryType, boundaryType);
-      return (
-        <Link
-          id={boundaryType}
-          onClick={onClickHandler}
-          key={boundaryType}
-          className={classNames}
-          to={`/mov/${activeModel}/${boundaryType}`}
-        >
-          {boundaryType}
-        </Link>
-      )
-    });
+        const getClassNames = this.getClassNames;
+        const onClickHandler = this.onClickHandler;
 
-    return (
-      <div className="list-group">
-        {items}
-      </div>
-    );
-  }
+        const items = boundaryTypes.map(function (boundaryType, index) {
+            const classNames = getClassNames(activeBoundaryType, boundaryType);
+            return (
+                <Link
+                    id={boundaryType}
+                    onClick={onClickHandler}
+                    key={boundaryType}
+                    className={classNames}
+                    to={`/mov/${activeModel}/${boundaryType}`}
+                >
+                    {boundaryType}
+                </Link>
+            )
+        });
+
+        return (
+            <div className="list-group">
+                {items}
+            </div>
+        );
+    }
 }

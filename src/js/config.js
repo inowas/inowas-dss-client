@@ -1,3 +1,3 @@
 export const config = {
-  baseApiUrl: 'http://dev.inowas.hydro.tu-dresden.de/api',
-}
+    baseApiUrl: 'http://dev.inowas.hydro.tu-dresden.de/api',
+};

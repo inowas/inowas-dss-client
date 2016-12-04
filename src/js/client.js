@@ -12,14 +12,15 @@ import Wells from "./pages/Wells";
 const app = document.getElementById('app');
 
 ReactDOM.render(
-  <Router history={hashHistory}>
-  <Route path="/mov" component={ModelOverview}/>
-  <Route path="/mov/:modelId" component={ModelOverview}/>
-  <Route path="/mov/:modelId/:boundaryType" component={ModelOverview}/>
-  <Route path="/" component={ModFlowMap}>
-    <Route path="wells" component={Wells} >
-      <Route path=":wellId" component={Wells}/>
-    </Route>
-  </Route>
-</Router>,
-app);
+    <Router history={hashHistory}>
+        <Route path="/mov" component={ModelOverview}/>
+        <Route path="/mov/:modelId" component={ModelOverview}/>
+        <Route path="/mov/:modelId/:boundaryType" component={ModelOverview}/>
+        <Route path="/" component={ModFlowMap}>
+            <Route path="wells" component={Wells}>
+                <Route path=":wellId" component={Wells}/>
+            </Route>
+        </Route>
+    </Router>,
+    app
+);
