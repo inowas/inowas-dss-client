@@ -1,18 +1,22 @@
 import React from "react";
-
-import path from "path";
-import {Link} from "react-router";
+import * as appActions from "../../actions/ApplicationActions";
 
 export default class BoundarySidebar extends React.Component {
 
-    renderBoundaryLinks() {
+    setActiveBoundary(bType, id){
+        appActions.setActiveBoundary(bType, id);
+    }
+
+    renderBoundaryList( activeBoundaries ) {
         return this.props.boundaries.map(b => {
             return (
                 <li key={b.id} role="presentation">
-                    <Link to={path.join(this.props.path, b.id)} activeClassName="active">
-                        <span className="color-dot color-1"></span>{b.name}
-                    </Link>
-                </li>);
+                    <a href="/#/" className={activeBoundaries[b.type] === b.id ? "active" : ""} onClick={this.setActiveBoundary.bind(this, b.type, b.id)}>
+                        <span className="color-dot color-1"/>
+                        {b.name}
+                    </a>
+                </li>
+            );
         });
     }
 
@@ -23,20 +27,19 @@ export default class BoundarySidebar extends React.Component {
                     <div className="input-group">
                         <input type="text" className="form-control" placeholder="Search for..."/>
                         <span className="input-group-btn">
-              <button className="btn btn-default" type="button">
-                <span className="glyphicon glyphicon-search"></span>
-              </button>
-            </span>
+                            <button className="btn btn-default" type="button">
+                                <span className="glyphicon glyphicon-search"/>
+                            </button>
+                        </span>
                     </div>
                 </div>
                 <ul className="scroll-vertical stretch nav nav-pills nav-stacked">
-                    {this.renderBoundaryLinks()}
+                    {this.renderBoundaryList(this.props.appState.activeBoundaries)}
                 </ul>
                 <button className="btn btn-default btn-block" type="button">
-                    <span className="glyphicon glyphicon-plus"></span>
+                    <span className="glyphicon glyphicon-plus"/>
                 </button>
             </div>
         );
     }
-
 }

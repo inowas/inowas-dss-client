@@ -15,7 +15,7 @@ export default class Wells extends React.Component {
         const {model, updateBoundaryName} = this.context;
 
         return (
-            <div className="wells-wrapper">
+            <div className="boundaries-wrapper">
                 <BoundarySidebar path="wells" boundaries={model.boundaries.filter(b => b.type == 'WEL')}/>
                 {params.wellId &&
                 <WellProperties data={this.getWellById(params.wellId)} updateBoundaryName={updateBoundaryName}/>}

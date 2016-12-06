@@ -1,6 +1,5 @@
 import React from "react"
-
-import {Link} from "react-router"
+import { hideBoundaryProperties } from "../../actions/ApplicationActions"
 
 export default class MapOverlay extends React.Component {
 
@@ -16,34 +15,36 @@ export default class MapOverlay extends React.Component {
         });
     }
 
-    componentWillMount() {
-        this.disableMap();
+    hide() {
+        this.enableMap();
+        hideBoundaryProperties();
     }
 
-    componentWillUnmount() {
-        this.enableMap();
-    }
 
     render() {
-        return (
-            <div>
-                <div className="map-overlay-darkner"></div>
-                <div className="map-overlay">
-                    <div className="panel panel-primary">
-                        <div className="panel-heading">
-                            <Link to="/">
-                                <span className="glyphicon glyphicon-remove"></span>
-                            </Link>
-                        </div>
-                        <div className="panel-body">
-                            {this.props.children}
+        if (this.props.appState.boundaryProperties){
+            this.disableMap();
+            return (
+                <div>
+                    <div className="map-overlay-darkner"></div>
+                    <div className="map-overlay">
+                        <div className="panel panel-primary">
+                            <div className="panel-heading">
+                                <span className="glyphicon glyphicon-remove" onClick={ this.hide.bind(this) } />
+                            </div>
+
+                            <div className="panel-body">
+                                {this.props.children}
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
-        );
-    }
+            );
+        }
 
+        return null;
+    }
 }
 
 MapOverlay.contextTypes = {
