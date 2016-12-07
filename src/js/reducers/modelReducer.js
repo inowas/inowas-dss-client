@@ -2,8 +2,11 @@
 const initialState = {
     fetching: false,
     fetched: false,
+    error: null,
     model: {},
-    error: null
+    fetchingBoundaries: false,
+    fetchedBoundaries: false,
+    errorBoundaries: null
 };
 
 const modelReducer = ( state=initialState, action ) => {
@@ -23,6 +26,24 @@ const modelReducer = ( state=initialState, action ) => {
                 fetched: true,
                 model: action.payload.data
             };
+            break;
+        }
+        case "FETCH_MODEL_BOUNDARIES_PENDING": {
+            state = { ...state, fetchingBoundaries: true };
+            break;
+        }
+        case "FETCH_MODEL_BOUNDARIES_REJECTED": {
+            state = { ...state, fetchingBoundaries: false, errorBoundaries: action.payload };
+            break;
+        }
+        case "FETCH_MODEL_BOUNDARIES_FULFILLED": {
+            state = {
+                ...state,
+                fetchingBoundaries: false,
+                fetchedBoundaries: true,
+            };
+
+            state.model.boundaries = action.payload.data;
             break;
         }
         case "FETCH_EXAMPLE_MODEL_FULFILLED": {

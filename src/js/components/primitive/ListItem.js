@@ -5,6 +5,7 @@ export default class ListItem extends React.Component {
 
     sBoundaryProperties(bType) {
         showBoundaryProperties(bType);
+
     }
 
     getClassNames(active){
@@ -16,7 +17,6 @@ export default class ListItem extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <span className={this.getClassNames(this.props.active)} onClick={ this.sBoundaryProperties.bind(this, this.props.type)}>
                 {this.props.children}

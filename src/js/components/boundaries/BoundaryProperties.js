@@ -1,7 +1,7 @@
 import React from "react"
 
-import BoundarySidebar from "../boundaries/BoundarySidebar";
-import WellProperties from "../boundaries/well/WellProperties";
+import Sidebar from "./BoundarySidebar";
+import Content from "./BoundaryContent";
 import * as AppActions from "../../actions/ApplicationActions";
 
 export default class BoundaryProperties extends React.Component {
@@ -30,14 +30,15 @@ export default class BoundaryProperties extends React.Component {
         const appState = this.props.appState;
         const bType = this.props.appState.boundaryProperties;
         const boundaries = this.props.model.boundaries.filter(b => b.type == bType);
+        const selectedBoundary = this.props.model.boundaries.filter(b => b.id == appState.activeBoundaries[bType]);
 
         return (
             <div className="boundaries-wrapper">
-                <BoundarySidebar boundaries={boundaries} appState={appState} />
+                <Sidebar boundaries={boundaries} appState={appState} />
+                <Content boundary={selectedBoundary} />
             </div>
         );
     }
-
 }
 
 BoundaryProperties.contextTypes = {

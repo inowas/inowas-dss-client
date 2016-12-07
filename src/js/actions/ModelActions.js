@@ -9,6 +9,13 @@ export function fetchExampleModel() {
     };
 }
 
+export function getModel(id) {
+    return {
+        type: "FETCH_MODEL",
+        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +".json")
+    }
+}
+
 export function fetchAllModels() {
     store.dispatch({
         type: "FETCH_MODELS",
@@ -16,9 +23,17 @@ export function fetchAllModels() {
     });
 }
 
-export function fetchModelsById(id) {
+export function fetchModelBoundaries( modelId ) {
+    store.dispatch({
+        type: "FETCH_MODEL_BOUNDARIES",
+        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ modelId +"/boundaries.json")
+    });
+}
+
+export function fetchModelById(id) {
     store.dispatch({
         type: "FETCH_MODEL",
         payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +".json")
     });
 }
+

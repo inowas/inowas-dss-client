@@ -7,7 +7,6 @@ import ListItem from "../primitive/ListItem";
 export default class MapToolBox extends React.Component {
 
     render() {
-        console.log(this.props.appState.boundaryProperties);
         const boundaries = this.props.model.boundaries;
 
         return (

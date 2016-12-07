@@ -45,14 +45,12 @@ export function fetchModelBoundaries(id) {
 }
 
 export function fetchModelBoundariesByType(id, type) {
-    console.log('fetchModelBoundariesByType:');
     dispatcher.dispatch({
         type: "FETCH_MODEL_BOUNDARIES_BY_TYPE"
     });
 
     axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/" + id + "/boundaries/" + type + ".json")
         .then((returnData) => {
-            console.log('Data: fetchModelBoundariesByType:');
             dispatcher.dispatch({
                 type: "RECEIVE_MODEL_BOUNDARIES_BY_TYPE",
                 data: returnData.data

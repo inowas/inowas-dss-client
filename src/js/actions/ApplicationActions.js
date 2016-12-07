@@ -21,3 +21,10 @@ export function setActiveBoundary(bType, id) {
         id: id
     });
 }
+
+export function setActiveModel(modelId) {
+    store.dispatch({
+        type: "SET_ACTIVE_MODEL",
+        payload: modelId
+    });
+}

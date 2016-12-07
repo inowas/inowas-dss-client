@@ -1,5 +1,6 @@
 
 const initialState = {
+    modelId: null,
     boundaryProperties: null,
     activeBoundaries: {}
 };
@@ -23,6 +24,15 @@ const applicationStateReducer = ( state=initialState, action ) => {
             state.activeBoundaries[action.bType] = action.id;
             break;
         }
+
+        case "SET_ACTIVE_MODEL": {
+            state = {
+                ...state,
+                modelId: action.payload
+            };
+            break;
+        }
+
     }
 
     return state;

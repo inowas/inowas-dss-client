@@ -13,7 +13,7 @@ import {
 
 import MapToolBox from "../components/map/MapToolBox"
 import MapOverlay from "../components/map/MapOverlay"
-import BoundaryProperties from "../components/map/BoundaryProperties"
+import BoundaryProperties from "../components/boundaries/BoundaryProperties"
 
 export default class ModFlowMap extends React.Component {
 
