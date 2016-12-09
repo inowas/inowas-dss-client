@@ -1,10 +1,8 @@
-import React from "react"
+import React from "react";
 import { connect } from "react-redux";
-
-import ModflowMap from "./ModFlowMap";
+import { Link } from "react-router";
 
 import * as modflowAction from "../actions/ModelActions"
-import * as appAction from "../actions/ApplicationActions"
 
 
 @connect((store) => {
@@ -24,8 +22,14 @@ export default class ModelList extends React.Component {
 
     render() {
         if (this.hasData()){
+            const models = this.props.models.models.map( model => {
+                return (
+                    <Link key={model.id} to={'/modflow/' + model.id}>{model.id}</Link>
+                )
+            });
+
             return (
-                <span>HASDATA</span>
+                <div>{models}</div>
             )
         }
 
