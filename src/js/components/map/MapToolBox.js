@@ -32,4 +32,5 @@ export default class MapToolBox extends React.Component {
             </div>
         );
     }
+
 }
