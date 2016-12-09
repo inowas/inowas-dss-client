@@ -9,25 +9,28 @@ import * as modflowAction from "../actions/ModelActions"
 
 @connect((store) => {
     return {
-        model: store.model.model,
+        modelStore: store.model,
         appState: store.appState
     }
 })
 export default class ModFlow extends React.Component {
 
     hasData(){
-
+        const model = this.props.modelStore.model;
+        return (model.hasOwnProperty('id') == true);
     }
 
     hasError(){
-        return true;
+        return this.props.modelStore.error;
     }
 
     componentWillMount(){
-        modflowAction.fetchModelById(this.props.appState.modelId);
+        modflowAction.fetchModelById(this.props.params.modelId);
     }
 
     render() {
+        const model = this.props.modelStore.model;
+        const appState = this.props.appState;
 
         if (this.hasError()) {
             browserHistory.push('/#/modflow/list');
@@ -35,13 +38,10 @@ export default class ModFlow extends React.Component {
 
         if (this.hasData()) {
             return (
-                <ModflowMap model={this.props.model} appState={this.props.appState}/>
+                <ModflowMap model={model} appState={appState}/>
             );
         }
 
-        if (this.props.model.hasOwnProperty('id') == true) {
-
-        }
         return null;
     }
 }

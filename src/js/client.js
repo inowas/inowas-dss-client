@@ -16,6 +16,7 @@ const app = document.getElementById('app');
 ReactDOM.render(
     <Provider store={store}>
         <Router history={hashHistory}>
+            <Route path="/" component={ModelList} />
             <Route path="/modflow/list" component={ModelList} />
             <Route path="/modflow/:modelId" component={Modflow} />
             <Route path="/tool" component={Tool} />
