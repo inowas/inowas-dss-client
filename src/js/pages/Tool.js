@@ -28,9 +28,7 @@ export default class Tool extends React.Component {
                         <h2>Calculation</h2>
                         <div className="grid-container">
                             <div className="col stretch">
-                                <div className="aspect-ratio-wrapper">
-                                    <div className="aspect-ratio-element diagram"></div>
-                                </div>
+                                <div className="diagram"></div>
                             </div>
                             <div className="col col-rel-0-5">
                                 <ul className="nav nav-stacked" role="navigation">
