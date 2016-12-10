@@ -9,7 +9,6 @@ export default class Settings extends React.Component {
     };
 
     render() {
-        console.log(this.props);
         const settings = this.props.data;
         return (
             <div>

@@ -5,7 +5,7 @@ import Background from "../components/tools/Background"
 import Chart from "../components/tools/Chart"
 import Parameters from "../components/tools/Parameters"
 import Settings from "../components/tools/Settings"
-import { changeSettings } from "../actions/ToolActions"
+import { changeSettings, changeParameter } from "../actions/ToolActions"
 
 @connect((store) => {
     return {tool: store.tool}
@@ -15,6 +15,16 @@ export default class Tool extends React.Component {
     handleChange = (e) => {
         if (e.target.name === 'settings'){
             this.props.dispatch(changeSettings(e.target.value));
+        }
+
+        if (e.target.name.startsWith('parameter')){
+            const param = e.target.name.split("_");
+
+            let parameter = {};
+            parameter.id = param[1];
+            parameter[param[2]] = e.target.value;
+
+            this.props.dispatch(changeParameter(parameter))
         }
     };
 
@@ -37,7 +47,7 @@ export default class Tool extends React.Component {
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Parameters data={this.props.tool.parameters} />
+                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} />
                     </section>
                 </div>
             </div>

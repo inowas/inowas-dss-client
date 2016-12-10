@@ -6,3 +6,10 @@ export function changeSettings(newSetting) {
         }
     }
 }
+
+export function changeParameter(parameter){
+    return {
+        type: "CHANGE_TOOL_PARAMETER",
+        payload: parameter
+    }
+}
