@@ -6,7 +6,7 @@ export default class Background extends React.Component {
             <div>
                 <h2>Background</h2>
                 <div className="center-horizontal center-vertical">
-                    <img src="images/toolScheme.svg"/>
+                    <img src={this.props.image} />
                 </div>
             </div>
         )

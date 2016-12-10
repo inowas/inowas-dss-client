@@ -11,7 +11,7 @@ export default class BoundarySidebar extends React.Component {
         return this.props.boundaries.map(b => {
             return (
                 <li key={b.id} role="presentation">
-                    <a href="/#/" className={activeBoundaries[b.type] === b.id ? "active" : ""} onClick={this.setActiveBoundary.bind(this, b.type, b.id)}>
+                    <a className={activeBoundaries[b.type] === b.id ? "active" : ""} onClick={this.setActiveBoundary.bind(this, b.type, b.id)}>
                         <span className="color-dot color-1"/>
                         {b.name}
                     </a>
