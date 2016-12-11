@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import {Router, Route, hashHistory} from "react-router";
 
-import Tool from "./pages/Tool"
+import T09A from "./pages/Tools/T09A"
 import Modflow from "./pages/ModFlow"
 import ModelList from "./pages/ModelList"
 import store from "./store";
@@ -19,7 +19,7 @@ ReactDOM.render(
             <Route path="/" component={ModelList} />
             <Route path="/modflow/list" component={ModelList} />
             <Route path="/modflow/:modelId" component={Modflow} />
-            <Route path="/tool" component={Tool} />
+            <Route path="/tools/T09A" component={T09A} />
         </Router>
     </Provider>,
     app

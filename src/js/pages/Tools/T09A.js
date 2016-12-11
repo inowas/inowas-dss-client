@@ -1,16 +1,16 @@
 import React from "react"
 import {connect} from "react-redux";
 
-import Background from "../components/tools/Background"
-import Chart from "../components/tools/Chart"
-import Parameters from "../components/tools/Parameters"
-import Settings from "../components/tools/Settings"
-import { changeSettings, changeParameter } from "../actions/ToolActions"
+import Background from "../../components/tools/Background"
+import Chart from "../../components/tools/Chart"
+import Parameters from "../../components/tools/Parameters"
+import Settings from "../../components/tools/Settings"
+import { changeSettings, changeParameter } from "../../actions/T09A"
 
 @connect((store) => {
-    return {tool: store.tool}
+    return {tool: store.T09A}
 })
-export default class Tool extends React.Component {
+export default class T09A extends React.Component {
 
     handleChange = (e) => {
         if (e.target.name === 'settings'){
