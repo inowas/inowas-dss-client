@@ -16,16 +16,16 @@ export default class Parameters extends React.Component{
                     <input
                         name={"parameter_"+param.id+"_min"}
                         className="parameter-min input input-xs"
-                        type="text"
-                        value={param.min.toFixed(param.decimals)}
+                        type="number"
+                        value={Number(param.min).toFixed(param.decimals)}
                         onChange={this.handleChange.bind(this)}
                     />
 
                     <input
                         name={"parameter_"+param.id+"_max"}
                         className="parameter-max input input-xs"
-                        type="text"
-                        value={param.max.toFixed(param.decimals)}
+                        type="number"
+                        value={Number(param.max).toFixed(param.decimals)}
                         onChange={this.handleChange.bind(this)}
                     />
 
@@ -38,6 +38,15 @@ export default class Parameters extends React.Component{
                         max={param.max}
                         step={param.stepSize}
                         value={param.value}
+                        onChange={this.handleChange.bind(this)}
+                    />
+                </td>
+                <td>
+                    <input
+                        name={"parameter_"+param.id+"_value"}
+                        className="parameter-max input input-xs"
+                        type="number"
+                        value={Number(param.value).toFixed(param.decimals)}
                         onChange={this.handleChange.bind(this)}
                     />
                 </td>

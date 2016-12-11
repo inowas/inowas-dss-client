@@ -6,7 +6,15 @@ const initialState = {
         'image' : "/images/tools/T09A.png"
     },
     chart: {
-        data: {}
+        data: [
+            {x: 1000, h: 4000, z: 2400},
+            {x:  900, h: 3000, z: 1398},
+            {x:  800, h: 2000, z: 9800},
+            {x:  700, h: 2780, z: 3908},
+            {x:  600, h: 1890, z: 4800},
+            {x:  500, h: 2390, z: 3800},
+            {x:  400, h: 3490, z: 4300}
+        ]
     },
     settings: {
         'selected': 'confined'

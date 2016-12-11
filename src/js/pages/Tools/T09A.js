@@ -37,7 +37,7 @@ export default class T09A extends React.Component {
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Chart data={this.props.tool.chart.data} options={this.props.tool.chart.options} />
+                        <Chart data={this.props.tool.chart.data} />
                     </section>
                 </div>
 
