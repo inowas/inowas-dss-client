@@ -2,7 +2,7 @@ import React from "react"
 import {connect} from "react-redux";
 
 import Background from "../../components/tools/Background"
-import Chart from "../../components/tools/Chart"
+import Chart from "../../components/tools/ChartT09A"
 import Parameters from "../../components/tools/Parameters"
 import Settings from "../../components/tools/Settings"
 import { changeSettings, changeParameter } from "../../actions/T09A"

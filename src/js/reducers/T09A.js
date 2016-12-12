@@ -14,7 +14,12 @@ const initialState = {
             {x:  600, h: 1890, z: 4800},
             {x:  500, h: 2390, z: 3800},
             {x:  400, h: 3490, z: 4300}
-        ]
+        ],
+        options: {
+            yAxis: {
+                domain: ['auto' , 'auto']
+            }
+        }
     },
     settings: {
         'selected': 'confined'

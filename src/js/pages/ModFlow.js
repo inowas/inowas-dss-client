@@ -29,7 +29,6 @@ export default class ModFlow extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         const model = this.props.modelStore.model;
         const appState = this.props.appState;
 
