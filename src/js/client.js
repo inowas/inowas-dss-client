@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import {Router, Route, hashHistory} from "react-router";
 
 import T09A from "./pages/Tools/T09A"
+import T09B from "./pages/Tools/T09B"
 import T09C from "./pages/Tools/T09C"
 import Modflow from "./pages/ModFlow"
 import ModelList from "./pages/ModelList"
@@ -22,6 +23,7 @@ ReactDOM.render(
                 <Route path="/modflow/list" component={ModelList} />
                 <Route path="/modflow/:modelId" component={Modflow} />
                 <Route path="/tools/T09A" component={T09A} />
+                <Route path="/tools/T09B" component={T09B} />
                 <Route path="/tools/T09C" component={T09C} />
             </Route>
         </Router>

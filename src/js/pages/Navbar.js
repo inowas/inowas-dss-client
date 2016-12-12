@@ -17,6 +17,7 @@ export default class NavBar extends React.Component {
                                     <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"/></a>
                                     <ul className="dropdown-menu">
                                         <li><a href="/#/tools/T09A">DEPTH OF SALTWATER INTERFACE</a></li>
+                                        <li><a href="/#/tools/T09B">FRESHWATER-SALTWATER INTERFACE</a></li>
                                         <li><a href="/#/tools/T09C">UPCONING</a></li>
                                     </ul>
                                 </li>
