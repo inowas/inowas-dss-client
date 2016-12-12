@@ -3,8 +3,9 @@ import {connect} from "react-redux";
 
 import Background from "../../components/tools/Background"
 import Chart from "../../components/tools/Chart"
+import Info from "../../components/tools/Info"
 import Parameters from "../../components/tools/Parameters"
-import { changeParameter } from "../../actions/T09C"
+import { changeParameter, calculate, reset } from "../../actions/T09C"
 
 @connect((store) => {
     return {tool: store.T09C}
@@ -24,6 +25,14 @@ export default class T09C extends React.Component {
         }
     };
 
+    handleReset = (e) => {
+        this.props.dispatch(reset());
+    };
+
+    componentWillMount(){
+        this.props.dispatch(calculate())
+    }
+
     render() {
         return (
             <div className="page-wrapper">
@@ -33,17 +42,17 @@ export default class T09C extends React.Component {
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Chart data={this.props.tool.chart.data} options={this.props.tool.chart.options} />
+                        <Chart data={this.props.tool.chart.data} info={this.props.tool.info} options={this.props.tool.chart.options} />
                     </section>
                 </div>
 
                 <div className="grid-container">
                     <section className="tile col col-abs-2">
-
+                        <Info data={this.props.tool.info} />
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} />
+                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
                     </section>
                 </div>
             </div>

@@ -8,6 +8,10 @@ export default class Parameters extends React.Component{
         }
     };
 
+    handleReset(e) {
+        this.props.handleReset(e);
+    };
+
     renderParam(param){
         return (
             <tr key={param.id} className="parameter">
@@ -72,7 +76,7 @@ export default class Parameters extends React.Component{
                 <div className="col col-rel-0-5">
                     <ul className="nav nav-stacked" role="navigation">
                         <li>
-                            <button className="button button-accent">Default</button>
+                            <button onClick={this.handleReset.bind(this)} className="button button-accent">Default</button>
                         </li>
                     </ul>
                 </div>

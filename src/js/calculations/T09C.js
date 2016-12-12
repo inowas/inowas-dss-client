@@ -11,9 +11,8 @@ export function calculateDiagramData(q, k, d, df, ds, start, stop, step) {
     let data = [];
 
     for(let i=0; i<xRange.length; i++){
-        let dataSet = [];
+        let dataSet = {};
         dataSet['x'] = xRange[i];
-        const z = dataSet['z'] = calculateZ(d);
         const h = calculateH(q, k, d, df, ds);
         dataSet['h'] = calculateCurve(h, xRange[i]);
         data.push(dataSet);
@@ -23,7 +22,7 @@ export function calculateDiagramData(q, k, d, df, ds, start, stop, step) {
 }
 
 export  function calculateZ(d) {
-    return d/3;
+    return 0.4*d;
 }
 
 export  function calculateH(q, k, d, df, ds) {
