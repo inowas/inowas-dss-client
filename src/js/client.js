@@ -6,6 +6,7 @@ import {Router, Route, hashHistory} from "react-router";
 import T09A from "./pages/Tools/T09A"
 import T09B from "./pages/Tools/T09B"
 import T09C from "./pages/Tools/T09C"
+import T09D from "./pages/Tools/T09D"
 import Modflow from "./pages/ModFlow"
 import ModelList from "./pages/ModelList"
 import NavBar from "./pages/Navbar"
@@ -25,6 +26,7 @@ ReactDOM.render(
                 <Route path="/tools/T09A" component={T09A} />
                 <Route path="/tools/T09B" component={T09B} />
                 <Route path="/tools/T09C" component={T09C} />
+                <Route path="/tools/T09D" component={T09D} />
             </Route>
         </Router>
     </Provider>,
