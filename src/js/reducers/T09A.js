@@ -27,21 +27,21 @@ const initialState = {
     parameters: [
         {
             order: 0,
-            id: 'z',
-            name: 'Thickness of freshwater below sea level [m]',
-            min: 0,
-            max: 100,
-            value: 40,
-            stepSize: 0.1,
-            decimals: 1
-        },
-        {
-            order: 1,
             id: 'h',
             name: 'Thickness of freshwater above sea level [m]',
             min: 0,
             max: 10,
             value: 1,
+            stepSize: 0.1,
+            decimals: 1
+        },
+        {
+            order: 1,
+            id: 'z',
+            name: 'Thickness of freshwater below sea level [m]',
+            min: 0,
+            max: 100,
+            value: 40,
             stepSize: 0.1,
             decimals: 1
         },
@@ -56,7 +56,7 @@ const initialState = {
             decimals: 3
         },
         {
-            order: 0,
+            order: 3,
             id: 'ds',
             name: 'Density of saltwater [g/cm³]',
             min: 1.020,

@@ -1,6 +1,6 @@
 import React from "react"
 
-export default class Parameters extends React.Component{
+export default class Parameters extends React.Component {
 
     handleChange(e) {
         if (this.props.handleChange){
@@ -59,9 +59,19 @@ export default class Parameters extends React.Component{
     }
 
     render(){
-        const params = this.props.data.map( param => {
-            return this.renderParam(param);
-        });
+        const sortedParameters = this.props.data.sort(
+            (a, b) => {
+                if (a.order > b.order) {
+                    return 1
+                }
+                return -1;
+            });
+
+        const params = sortedParameters.map(
+                param => {
+                    return this.renderParam(param);
+                })
+            ;
 
         return(
             <div className="grid-container">
