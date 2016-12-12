@@ -67,7 +67,7 @@ const T09BReducer = ( state=getInitialState(), action ) => {
 
     switch (action.type) {
 
-        case "RESET_TOOL_T09C": {
+        case "RESET_TOOL_T09B": {
             state = {...state};
             state = getInitialState();
             calculateAndModifyState(state);
