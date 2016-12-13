@@ -1,5 +1,5 @@
 import React from "react"
-import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Text, Legend, ReferenceLine} from "recharts"
+import {ResponsiveContainer, LineChart, XAxis, YAxis, CartesianGrid, Line} from "recharts"
 
 export default class Chart extends React.Component {
 
@@ -14,22 +14,23 @@ export default class Chart extends React.Component {
                                 <ResponsiveContainer width='100%' aspect={3.0/2.0}>
                                     <LineChart
                                         data={this.props.data}
-                                        margin={{top: 0, right: 0, left: 40, bottom: 40}}
+                                        margin={{top: 20, right: 40, left: 10, bottom: 40}}
                                     >
-                                        <XAxis dataKey='x' orientation={'top'} />
-                                        <YAxis type="number" domain={this.props.options.yAxis.domain} orientation={'right'}/>
-                                        <CartesianGrid strokeDasharray="3 3"/>
-                                        <Line isAnimationActive={false} type="monotone" dataKey={'z'} stroke="#000000" dot={false}/>
-                                        <Line isAnimationActive={false} type="monotone" dataKey={'h'} stroke="#8884d8" dot={false}/>
+                                        <XAxis label="x (m)" type="number" domain={this.props.options.xAxis.domain} dataKey='x' allowDecimals={false} tickLine={false} />
+                                        <YAxis label="z (m)" type="number" domain={this.props.options.yAxis.domain} allowDecimals={false} tickLine={false} />
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <Line dot={false} isAnimationActive={false}  type="basis" dataKey="b" stroke="#000000" strokeWidth="5" fillOpacity={1} />
+                                        <Line dot={false} isAnimationActive={false}  type="basis" dataKey="z" stroke="#ED8D05" strokeWidth="5" fillOpacity={1} />
                                     </LineChart>
                                 </ResponsiveContainer>
-                                <div className="diagram-labels-left">
+                                <div className="diagram-labels-right">
                                     <div className="diagram-label">
-                                        <p>
-                                            L={Number(this.props.info.l).toFixed(1)}m <br/>
-                                            z<sub>0</sub>={Number(this.props.info.z).toFixed(1)}m
-                                        </p>
+                                        <p>z<sub>0</sub>={Number(this.props.info.z).toFixed(1)}m</p>
                                     </div>
+                                    <div className="diagram-label">
+                                        <p>L={Number(this.props.info.l).toFixed(1)}m</p>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

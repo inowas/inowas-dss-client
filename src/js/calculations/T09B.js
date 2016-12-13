@@ -13,9 +13,13 @@ export function calculateDiagramData(i, b, df, ds, start, stop, step) {
     for(let ni=0; ni<xRange.length; ni++){
         let dataSet = {};
         const x = xRange[ni];
+        const z = calculateZofX(x, i, b, df, ds);
+
         dataSet['x'] = x;
-        dataSet['h'] = calculateHofX(x, i, b, df, ds);
-        dataSet['z'] = -calculateZofX(x, i, b, df, ds);
+        if (z<=b){
+            dataSet['z'] = -z;
+        }
+        dataSet['b'] = -b;
         data.unshift(dataSet);
     }
 
@@ -29,14 +33,6 @@ export  function calculateZ(i, b, df, ds) {
 export  function calculateZofX(x, i, b, df, ds) {
     const value = Math.sqrt(
         ((2*i*b*x)/(ds-df))+(Math.pow((i*b*df)/(ds-df), 2))
-    );
-
-    return value;
-}
-
-export  function calculateHofX(x, i, b, df, ds) {
-    const value = Math.sqrt(
-        ((2*i*b*x)/(ds-df))
     );
 
     return value;

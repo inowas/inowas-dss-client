@@ -10,8 +10,10 @@ function getInitialState() {
             data: [],
             options: {
                 yAxis: {
-                    domain: [0 , 'auto']
-                }
+                    domain: [0, 50]
+                },
+                yTicks: [0, -10, -20, -30, -40, -50, -60, -70],
+                xAxis: {domain: ['auto', 'auto']}
             }
         },
         info: {
@@ -23,7 +25,7 @@ function getInitialState() {
                 order: 0,
                 id: 'b',
                 name: 'Aquifer thickness, b (m)',
-                min: 0,
+                min: 1,
                 max: 100,
                 value: 50,
                 stepSize: 1,
@@ -117,7 +119,9 @@ function calculateAndModifyState(state) {
     const df = state.parameters.find( p => {return p.id == 'df'}).value;
     const ds = state.parameters.find( p => {return p.id == 'ds'}).value;
 
-    state.chart.data = calc.calculateDiagramData(i, b, df, ds, 0, 100, 10);
+    state.chart.options.yAxis.domain = [-b, 0];
+    state.chart.options.xAxis.domain = [0, b*10];
+    state.chart.data = calc.calculateDiagramData(i, b, df, ds, 0, b*10, 1);
     state.info.z = calc.calculateZ(i, b, df, ds).toFixed(1);
     state.info.l = calc.calculateL(i, b, df, ds).toFixed(1);
 
