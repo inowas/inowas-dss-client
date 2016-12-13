@@ -17,7 +17,7 @@ export function calculateDiagramData(i, b, df, ds, start, stop, step) {
 
         dataSet['x'] = x;
         if (z<=b){
-            dataSet['z'] = -z;
+            dataSet['zCrit'] = -z;
         }
         dataSet['b'] = -b;
         data.unshift(dataSet);

@@ -21,13 +21,13 @@ export default class Chart extends React.Component {
                                         <YAxis label="d (m)" type="number" domain={this.props.options.yAxis.domain} />
                                         <CartesianGrid strokeDasharray="3 3"/>
                                         <Line isAnimationActive={false} type="basis" dataKey={'h'} stroke="#ED8D05" strokeWidth="5" dot={false}/>
-                                        <ReferenceLine y={this.props.info.z} stroke="#ED8D05" strokeWidth="5" strokeDasharray="20 20" />
+                                        <ReferenceLine y={this.props.info.zCrit} stroke="#ED8D05" strokeWidth="5" strokeDasharray="20 20" />
                                     </LineChart>
                                 </ResponsiveContainer>
                                 <div className="diagram-labels-right">
                                     <div className="diagram-label">
                                         <p>
-                                            z={Number(this.props.info.h).toFixed(1)}m
+                                            z={Number(this.props.info.z).toFixed(1)}m
                                         </p>
                                     </div>
                                     <div className="diagram-label">

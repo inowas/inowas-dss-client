@@ -3,7 +3,7 @@ import React from "react";
 export default class Info extends React.Component {
 
     render() {
-        if (Number(this.props.data.h) > Number(this.props.data.z)){
+        if (Number(this.props.data.z) > Number(this.props.data.zCrit)){
             return (
                 <div className="padding-30">
                     <h2>
@@ -13,8 +13,8 @@ export default class Info extends React.Component {
 
                     <div className="center-vertical center-horizontal">
                         <p>
-                            The calculated upconing level of <strong>{this.props.data.h}m </strong>
-                            is higher than the critical elevation of <strong>{this.props.data.z}m</strong>.
+                            The calculated upconing level of <strong>{this.props.data.z}m </strong>
+                            is higher than the critical elevation of <strong>{this.props.data.zCrit}m</strong>.
                             At the current pumping rate, saltwater might enter the well.
                             We recommend a maximum pumping rate of <strong>{this.props.data.q}m<sup>3</sup>/d</strong>.
                         </p>
@@ -32,8 +32,8 @@ export default class Info extends React.Component {
 
                 <div className="center-vertical center-horizontal">
                     <p>
-                        The calculated upconing level of <strong>{this.props.data.h}m </strong>
-                        is lower than the critical elevation of <strong>{this.props.data.z}m </strong>
+                        The calculated upconing level of <strong>{this.props.data.z}m </strong>
+                        is lower than the critical elevation of <strong>{this.props.data.zCrit}m </strong>
                         so saltwater shouldn't enter the well. However, we recommend a maximum
                         pumping rate of <strong>{this.props.data.q}m<sup>3</sup>/d</strong>.
                     </p>

@@ -37,7 +37,7 @@ const initialState = {
         },
         {
             order: 1,
-            id: 'z',
+            id: 'zCrit',
             name: 'Thickness of freshwater below sea level [m]',
             min: 0,
             max: 100,
@@ -105,7 +105,7 @@ const T09AReducer = ( state=initialState, action ) => {
 
             const idf = state.parameters.findIndex( p => {return p.id == 'df'});
             const ids = state.parameters.findIndex( p => {return p.id == 'ds'});
-            const iz = state.parameters.findIndex( p => {return p.id == 'z'});
+            const iz = state.parameters.findIndex( p => {return p.id == 'zCrit'});
             const ih = state.parameters.findIndex( p => {return p.id == 'h'});
 
             if (changedParam.id == 'h'){
@@ -116,7 +116,7 @@ const T09AReducer = ( state=initialState, action ) => {
                 );
             }
 
-            if (changedParam.id == 'z'){
+            if (changedParam.id == 'zCrit'){
                 state.parameters[ih].value = calc.calculateH(
                     state.parameters[iz].value,
                     state.parameters[idf].value,

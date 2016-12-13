@@ -18,7 +18,7 @@ function getInitialState() {
         },
         info: {
             l: 0,
-            z: 0
+            zCrit: 0
         },
         parameters: [
             {
@@ -122,7 +122,7 @@ function calculateAndModifyState(state) {
     state.chart.options.yAxis.domain = [-b, 0];
     state.chart.options.xAxis.domain = [0, b*10];
     state.chart.data = calc.calculateDiagramData(i, b, df, ds, 0, b*10, 1);
-    state.info.z = calc.calculateZ(i, b, df, ds).toFixed(1);
+    state.info.zCrit = calc.calculateZ(i, b, df, ds).toFixed(1);
     state.info.l = calc.calculateL(i, b, df, ds).toFixed(1);
 
     return state

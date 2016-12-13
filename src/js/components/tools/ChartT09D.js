@@ -19,9 +19,9 @@ export default class Chart extends React.Component {
                                         <XAxis dataKey='x' />
                                         <YAxis type="number" domain={this.props.options.yAxis.domain} />
                                         <CartesianGrid strokeDasharray="3 3"/>
-                                        <Line isAnimationActive={false} type="monotone" dataKey={'z'} stroke="#000000" dot={false}/>
+                                        <Line isAnimationActive={false} type="monotone" dataKey={'zCrit'} stroke="#000000" dot={false}/>
                                         <Line isAnimationActive={false} type="monotone" dataKey={'h'} stroke="#8884d8" dot={false}/>
-                                        <ReferenceLine y={this.props.info.z} label="Max" stroke="red" strokeDasharray="3 3" />
+                                        <ReferenceLine y={this.props.info.zCrit} label="Max" stroke="red" strokeDasharray="3 3" />
                                     </LineChart>
                                 </ResponsiveContainer>
                                 <div className="diagram-labels-bottom-left">

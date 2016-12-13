@@ -19,7 +19,7 @@ export default class Chart extends React.Component {
                                         <XAxis dataKey='x' />
                                         <YAxis type="number" />
                                         <CartesianGrid strokeDasharray="3 3"/>
-                                        <Line isAnimationActive={false} type="monotone" dataKey={'z'} stroke="#000000" dot={false}/>
+                                        <Line isAnimationActive={false} type="monotone" dataKey={'zCrit'} stroke="#000000" dot={false}/>
                                         <Line isAnimationActive={false} type="monotone" dataKey={'h'} stroke="#8884d8" dot={false}/>
                                     </LineChart>
                                 </ResponsiveContainer>

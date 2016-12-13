@@ -163,11 +163,11 @@ function calculateAndModifyState(state) {
     const ds = state.parameters.find( p => {return p.id == 'ds'}).value;
 
     //state.chart.data = calc.calculateDiagramData(q, k, d, df, ds, 0, 100, 10);
-    //state.chart.options.yAxis.domain[1] = 2 * calc.calculateZ(d);
+    //state.chart.options.yAxis.domain[1] = 2 * calc.calculateZCrit(d);
 
-    //state.info.h = calc.calculateH(q, k, d, df, ds).toFixed(1);
+    //state.info.z = calc.calculateZ(q, k, d, df, ds).toFixed(1);
     //state.info.q = calc.calculateQ(k, d, df, ds).toFixed(1);
-    //state.info.z = calc.calculateZ(d).toFixed(1);
+    //state.info.zCrit = calc.calculateZCrit(d).toFixed(1);
 
     return state
 }
