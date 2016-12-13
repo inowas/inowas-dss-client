@@ -129,7 +129,7 @@ function calculateAndModifyState(state) {
     const df = state.parameters.find( p => {return p.id == 'df'}).value;
     const ds = state.parameters.find( p => {return p.id == 'ds'}).value;
 
-    state.chart.data = calc.calculateDiagramData(q, k, d, df, ds, 0, 100, 10);
+    state.chart.data = calc.calculateDiagramData(q, k, d, df, ds, 0, 1000, 1);
     state.chart.options.yAxis.domain[1] = 2 * calc.calculateZ(d);
 
     state.info.h = calc.calculateH(q, k, d, df, ds).toFixed(1);

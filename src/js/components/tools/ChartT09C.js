@@ -1,5 +1,5 @@
 import React from "react"
-import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Text, Legend, ReferenceLine} from "recharts"
+import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine} from "recharts"
 
 export default class Chart extends React.Component {
 
@@ -16,6 +16,7 @@ export default class Chart extends React.Component {
                                         data={this.props.data}
                                         margin={{top: 20, right: 40, left: 10, bottom: 40}}
                                     >
+
                                         <XAxis label="x (m)" type="number" dataKey='x' />
                                         <YAxis label="d (m)" type="number" domain={this.props.options.yAxis.domain} />
                                         <CartesianGrid strokeDasharray="3 3"/>
