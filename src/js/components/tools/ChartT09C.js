@@ -26,7 +26,7 @@ export default class Chart extends React.Component {
                                 <div className="diagram-labels-right">
                                     <div className="diagram-label">
                                         <p>
-                                            z={Number(this.props.info.z).toFixed(1)}m
+                                            z={Number(this.props.info.h).toFixed(1)}m
                                         </p>
                                     </div>
                                     <div className="diagram-label">

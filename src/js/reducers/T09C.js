@@ -25,8 +25,8 @@ function getInitialState() {
                 id: 'q',
                 name: 'Pumping rate, Q (m³/d)',
                 min: 0,
-                max: 100,
-                value: 50,
+                max: 2000,
+                value: 2000,
                 stepSize: 1,
                 decimals: 0
             },
@@ -45,8 +45,8 @@ function getInitialState() {
                 id: 'd',
                 name: 'Pre-pumping distance, d(m)',
                 min: 1,
-                max: 20,
-                value: 5,
+                max: 50,
+                value: 30,
                 stepSize: 0.5,
                 decimals: 1
             },

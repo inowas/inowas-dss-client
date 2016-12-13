@@ -3,7 +3,7 @@ import React from "react";
 export default class Info extends React.Component {
 
     render() {
-        if (this.props.data.h > this.props.data.z){
+        if (Number(this.props.data.h) > Number(this.props.data.z)){
             return (
                 <div className="padding-30">
                     <h2>
@@ -35,7 +35,7 @@ export default class Info extends React.Component {
                         The calculated upconing level of <strong>{this.props.data.h}m </strong>
                         is lower than the critical elevation of <strong>{this.props.data.z}m </strong>
                         so saltwater shouldn't enter the well. However, we recommend a maximum
-                        pumping rate of <strong>2,70m<sup>3</sup>/d</strong>.
+                        pumping rate of <strong>{this.props.data.q}m<sup>3</sup>/d</strong>.
                     </p>
                 </div>
             </div>
