@@ -1,5 +1,5 @@
 import React from "react"
-import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Text, Legend, ReferenceLine} from "recharts"
+import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine} from "recharts"
 
 export default class Chart extends React.Component {
 
@@ -21,7 +21,6 @@ export default class Chart extends React.Component {
                                         <CartesianGrid strokeDasharray="3 3"/>
                                         <Line isAnimationActive={false} type="monotone" dataKey={'zCrit'} stroke="#000000" dot={false}/>
                                         <Line isAnimationActive={false} type="monotone" dataKey={'h'} stroke="#8884d8" dot={false}/>
-                                        <ReferenceLine y={this.props.info.zCrit} label="Max" stroke="red" strokeDasharray="3 3" />
                                     </LineChart>
                                 </ResponsiveContainer>
                                 <div className="diagram-labels-bottom-left">

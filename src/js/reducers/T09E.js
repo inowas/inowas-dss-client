@@ -1,10 +1,10 @@
 
-import * as calc from "../calculations/T09F"
+import * as calc from "../calculations/T09E"
 
 function getInitialState() {
     return {
         background: {
-            'image' : "/images/tools/T09F.png"
+            'image' : "/images/tools/T09E.png"
         },
         chart: {
             data: [],
@@ -34,7 +34,7 @@ function getInitialState() {
             },
             {
                 order: 1,
-                id: 'zCrit',
+                id: 'z',
                 name: 'Depth to base of aquifer, z0 (m)',
                 min: 0,
                 max: 100,
@@ -110,7 +110,7 @@ const T09DReducer = ( state=getInitialState(), action ) => {
 
     switch (action.type) {
 
-        case "CHANGE_TOOL_T09F_SETTINGS": {
+        case "CHANGE_TOOL_T09E_SETTINGS": {
             state = {
                 ...state,
                 settings: action.payload
@@ -119,7 +119,7 @@ const T09DReducer = ( state=getInitialState(), action ) => {
             break;
         }
 
-        case "RESET_TOOL_T09F": {
+        case "RESET_TOOL_T09E": {
             state = {...state};
             state = getInitialState();
             calculateAndModifyState(state);
@@ -127,14 +127,14 @@ const T09DReducer = ( state=getInitialState(), action ) => {
             break;
         }
 
-        case "CALCULATE_TOOL_T09F": {
+        case "CALCULATE_TOOL_T09E": {
             state = {...state};
             calculateAndModifyState(state);
 
             break;
         }
 
-        case "CHANGE_TOOL_T09F_PARAMETER": {
+        case "CHANGE_TOOL_T09E_PARAMETER": {
 
             const changedParam = action.payload;
             state = {...state};

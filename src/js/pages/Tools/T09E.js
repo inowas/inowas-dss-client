@@ -2,13 +2,13 @@ import React from "react"
 import {connect} from "react-redux";
 
 import Background from "../../components/tools/Background"
-import Chart from "../../components/tools/ChartT09F"
+import Chart from "../../components/tools/ChartT09E"
 import Settings from "../../components/tools/Settings"
 import Parameters from "../../components/tools/Parameters"
-import { changeSettings, changeParameter, calculate, reset } from "../../actions/T09F"
+import { changeSettings, changeParameter, calculate, reset } from "../../actions/T09E"
 
 @connect((store) => {
-    return {tool: store.T09F}
+    return {tool: store.T09E}
 })
 export default class T09F extends React.Component {
 
