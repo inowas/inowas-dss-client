@@ -2,8 +2,6 @@ import React from "react";
 
 export default class StressPeriods extends React.Component {
 
-
-
     renderTableHead(bType) {
 
         let headNames = [];
@@ -48,6 +46,10 @@ export default class StressPeriods extends React.Component {
     }
 
     renderStressPeriods(bType) {
+        this.props.data.sort( (a,b) => {
+            return new Date(a.date_time_begin) - (new Date(b.date_time_begin));
+        });
+
         switch (bType) {
             case 'CHD':
                 return this.props.data.map(s => {
@@ -92,8 +94,7 @@ export default class StressPeriods extends React.Component {
         return (
             <div>
                 <ul className="nav nav-tabs">
-                    <li role="presentation" className="active"><a href="/#/">Table</a></li>
-                    <li role="presentation"><a href="/#/">Plot</a></li>
+                    <li role="presentation" className="active"><a href="./">Table</a></li>
                 </ul>
 
                 <table className="table table-striped">
