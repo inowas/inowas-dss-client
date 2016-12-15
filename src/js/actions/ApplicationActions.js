@@ -22,6 +22,14 @@ export function setActiveBoundary(bType, id) {
     });
 }
 
+export function setBoundaryData(id) {
+    store.dispatch({
+        type: "SET_ACTIVE_BOUNDARY",
+        bType: bType,
+        id: id
+    });
+}
+
 export function setActiveModel(modelId) {
     store.dispatch({
         type: "SET_ACTIVE_MODEL",

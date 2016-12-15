@@ -3,10 +3,7 @@ const initialState = {
     fetching: false,
     fetched: false,
     error: null,
-    model: {},
-    fetchingBoundaries: false,
-    fetchedBoundaries: false,
-    errorBoundaries: null
+    model: {}
 };
 
 const modelReducer = ( state=initialState, action ) => {
@@ -28,24 +25,6 @@ const modelReducer = ( state=initialState, action ) => {
             };
             break;
         }
-        case "FETCH_MODEL_BOUNDARIES_PENDING": {
-            state = { ...state, fetchingBoundaries: true };
-            break;
-        }
-        case "FETCH_MODEL_BOUNDARIES_REJECTED": {
-            state = { ...state, fetchingBoundaries: false, errorBoundaries: action.payload };
-            break;
-        }
-        case "FETCH_MODEL_BOUNDARIES_FULFILLED": {
-            state = {
-                ...state,
-                fetchingBoundaries: false,
-                fetchedBoundaries: true,
-            };
-
-            state.model.boundaries = action.payload.data;
-            break;
-        }
         case "FETCH_EXAMPLE_MODEL_FULFILLED": {
             state = {
                 ...state,
@@ -55,6 +34,30 @@ const modelReducer = ( state=initialState, action ) => {
             };
             break;
         }
+        case "FETCH_MODEL_BOUNDARY_PENDING": {
+            state = { ...state, fetching: true };
+            break;
+        }
+        case "FETCH_MODEL_BOUNDARY_REJECTED": {
+            state = { ...state, fetching: false, errorBoundaries: action.payload };
+            break;
+        }
+        case "FETCH_MODEL_BOUNDARY_FULFILLED": {
+            state = {
+                ...state,
+                fetchingBoundaries: false,
+                fetchedBoundaries: true,
+            };
+
+            state.model.boundaries = state.model.boundaries.map( b => {
+                if (b.id == action.payload.data.id) {
+                    return b = action.payload.data;
+                }
+                return b;
+            });
+            break;
+        }
+
     }
     return state;
 };

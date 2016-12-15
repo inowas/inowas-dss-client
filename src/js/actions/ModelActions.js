@@ -23,10 +23,10 @@ export function fetchAllModels() {
     });
 }
 
-export function fetchModelBoundaries( modelId ) {
+export function fetchModelBoundary( id ) {
     store.dispatch({
-        type: "FETCH_MODEL_BOUNDARIES",
-        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ modelId +"/boundaries.json")
+        type: "FETCH_MODEL_BOUNDARY",
+        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/boundaries/"+ id +".json")
     });
 }
 
@@ -36,4 +36,3 @@ export function fetchModelById(id) {
         payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +".json")
     });
 }
-
