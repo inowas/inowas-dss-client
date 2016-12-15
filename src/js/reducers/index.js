@@ -8,8 +8,10 @@ import T09B from "./T09B";
 import T09C from "./T09C";
 import T09D from "./T09D";
 import T09E from "./T09E";
+import user from "./userReducer";
 
 export default combineReducers({
+    user,
     appState,
     models,
     model,

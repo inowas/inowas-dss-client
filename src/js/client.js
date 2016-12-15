@@ -22,7 +22,6 @@ const app = document.getElementById('app');
 ReactDOM.render(
     <Provider store={store}>
         <Router history={hashHistory}>
-            <Route path="/login" component={Login} />
             <Route path="/" component={NavBar}>
                 <Route path="/modflow/list" component={ModelList} />
                 <Route path="/modflow/:modelId" component={Modflow} />
@@ -32,7 +31,7 @@ ReactDOM.render(
                 <Route path="/tools/T09D" component={T09D} />
                 <Route path="/tools/T09E" component={T09E} />
             </Route>
-
+            <Route path="/login" component={Login} />
         </Router>
     </Provider>,
     app
