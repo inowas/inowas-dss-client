@@ -31,6 +31,7 @@ export default class T09A extends React.Component {
     render() {
         return (
             <div className="page-wrapper">
+              <div className="page-width">
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
                         <Background image={this.props.tool.background.image} />
@@ -49,6 +50,7 @@ export default class T09A extends React.Component {
                     <section className="tile col col-abs-3 stretch">
                         <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} />
                     </section>
+                </div>
                 </div>
             </div>
         )

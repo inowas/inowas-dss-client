@@ -12,7 +12,6 @@ export default class NavBar extends React.Component {
                         </div>
                         <div id="navbar" className="">
                             <ul className="nav navbar-nav">
-                                <li className="active"><a href="#">Home</a></li>
                                 <li className="dropdown">
                                     <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"/></a>
                                     <ul className="dropdown-menu">
@@ -21,7 +20,7 @@ export default class NavBar extends React.Component {
                                         <li><a href="/#/tools/T09C">UPCONING</a></li>
                                         <li><a href="/#/tools/T09D">CRITICAL WELL DISCHARGE</a></li>
                                         <li><a href="/#/tools/T09E">SEA LEVEL RISE</a></li>
-                                        <li><a href="/#/tools/scenario-analysis/f7515c31-4215-484b-8569-0d3006faa411">SCENARIO ANALYSIS</a></li>
+                                        <li><a href="/#/tools/scenario-analysis">SCENARIO ANALYSIS</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="/#/modflow/list">Modflow</a></li>

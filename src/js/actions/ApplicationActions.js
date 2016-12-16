@@ -36,3 +36,17 @@ export function setActiveModel(modelId) {
         payload: modelId
     });
 }
+
+export function switchToScenarioAnalysisSelect() {
+  store.dispatch({
+      type: "SET_SCENARIO_ANALYSIS_SELECT",
+      payload: true
+  });
+}
+
+export function switchToScenarioAnalysisEdit() {
+  store.dispatch({
+      type: "SET_SCENARIO_ANALYSIS_SELECT",
+      payload: false
+  });
+}

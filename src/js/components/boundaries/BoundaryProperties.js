@@ -43,5 +43,4 @@ export default class BoundaryProperties extends React.Component {
 
 BoundaryProperties.contextTypes = {
     model: React.PropTypes.object,
-    updateBoundaryName: React.PropTypes.func,
 };

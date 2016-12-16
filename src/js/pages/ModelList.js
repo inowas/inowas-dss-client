@@ -24,7 +24,7 @@ export default class ModelList extends React.Component {
         if (this.hasData()){
             const models = this.props.models.models.map( model => {
                 return (
-                    <Link key={model.id} to={'/modflow/' + model.id}>{model.id}</Link>
+                    <Link key={model.id} to={'/tools/scenario-analysis/' + model.id}>{model.id}</Link>
                 )
             });
 

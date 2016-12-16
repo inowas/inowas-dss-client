@@ -1,6 +1,7 @@
 
 const initialState = {
     modelId: null,
+    scenarioAnalysisSelect: true,
     boundaryProperties: null,
     activeBoundaries: {}
 };
@@ -29,6 +30,14 @@ const applicationStateReducer = ( state=initialState, action ) => {
             state = {
                 ...state,
                 modelId: action.payload
+            };
+            break;
+        }
+
+        case "SET_SCENARIO_ANALYSIS_SELECT": {
+            state = {
+                ...state,
+                scenarioAnalysisSelect: action.payload
             };
             break;
         }
