@@ -11,6 +11,10 @@ export default class WellProperties extends React.Component {
         );
     }
 
+    changeHandler(e){
+        console.log(e.target);
+    }
+
     render() {
         const boundary = this.props.boundary;
         const geometry = JSON.parse(boundary.geometry);
@@ -28,7 +32,7 @@ export default class WellProperties extends React.Component {
                                 <label className="col-sm-3 control-label">Well name</label>
                                 <div className="col-sm-9">
                                     <div className="input-group">
-                                        <input value={boundary.name} onClick={this.inputFieldHandler} name="name" id="inputName" type="text" className="form-control input-sm" placeholder="Well name" />
+                                        <input value={boundary.name} onChange={this.changeHandler.bind(this)} name="name" id="inputName" type="text" className="form-control input-sm" placeholder="Well name" />
                                         <span className="input-group-btn btn-group-sm">
                                             <button className="btn btn-default btn-group-sm" type="button">Save!</button>
                                         </span>

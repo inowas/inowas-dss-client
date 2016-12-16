@@ -1,23 +1,32 @@
 import React from "react";
 import * as appActions from "../../actions/ApplicationActions";
+import * as modelActions from "../../actions/ModelActions";
 
 export default class BoundarySidebar extends React.Component {
 
     setActiveBoundary(bType, id){
         appActions.setActiveBoundary(bType, id);
+        modelActions.fetchModelBoundary(id);
+
     }
 
     renderBoundaryList( activeBoundaries ) {
         return this.props.boundaries.map(b => {
             return (
                 <li key={b.id} role="presentation">
-                    <a href="/#/" className={activeBoundaries[b.type] === b.id ? "active" : ""} onClick={this.setActiveBoundary.bind(this, b.type, b.id)}>
+                    <a className={activeBoundaries[b.type] === b.id ? "active" : ""} onClick={this.setActiveBoundary.bind(this, b.type, b.id)}>
                         <span className="color-dot color-1"/>
                         {b.name}
                     </a>
                 </li>
             );
         });
+    }
+
+    componentWillMount(){
+        if (this.props.boundaries.length > 0){
+            this.setActiveBoundary(this.props.boundaries[0].type, this.props.boundaries[0].id)
+        }
     }
 
     render() {

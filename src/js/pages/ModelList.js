@@ -29,12 +29,18 @@ export default class ModelList extends React.Component {
             });
 
             return (
-                <div>{models}</div>
+                <div className="page-wrapper">
+                    <div>
+                        {models}
+                    </div>
+                </div>
             )
         }
 
         return (
-            <span>LOADING</span>
+            <div className="page-wrapper">
+                <span>LOADING</span>
+            </div>
         );
     }
 }
