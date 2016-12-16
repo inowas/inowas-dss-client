@@ -50,7 +50,7 @@ module.exports = {
         }
       }, {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap=inline&importLoaders=1&minimize!postcss-loader!less-loader')
+        loader: ExtractTextPlugin.extract('style-loader', debug ? 'css-loader?sourceMap=inline&importLoaders=1!postcss-loader?sourceMap=inline!less-loader?sourceMap=inline' : 'css-loader?importLoaders=1&minimize!postcss-loader!less-loader' )
       }, {
         test: /\.(svg|woff|woff2|eot|ttf)$/,
         loader: "file-loader?publicPath=../&name=fonts/[name].[ext]"
