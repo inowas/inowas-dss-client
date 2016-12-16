@@ -11,9 +11,9 @@ import {
     ZoomControl
 } from 'react-leaflet'
 
-import MapToolBox from "../components/map/MapToolBox"
-import MapOverlay from "../components/map/MapOverlay"
-import BoundaryProperties from "../components/boundaries/BoundaryProperties"
+import MapToolBox from "../components/map/MapToolBox";
+import MapOverlay from "../components/map/MapOverlay";
+import BoundaryProperties from "../components/boundaries/BoundaryProperties";
 
 export default class ModFlowMap extends React.Component {
 

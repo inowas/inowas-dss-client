@@ -2,9 +2,11 @@ import React from "react"
 import { connect } from "react-redux";
 import { browserHistory } from 'react-router';
 
-import ModflowMap from "./ModFlowMap";
+import ModflowMap from "./../ModFlowMap";
+import ScaffoldDividedFixed from "../../components/primitive/ScaffoldDividedFixed";
+import ScenarioSelect from "../../components/tools/ScenarioSelect";
 
-import * as modflowAction from "../actions/ModelActions";
+import * as modflowAction from "../../actions/ModelActions";
 
 
 @connect((store) => {
@@ -13,7 +15,7 @@ import * as modflowAction from "../actions/ModelActions";
         appState: store.appState
     }
 })
-export default class ModFlow extends React.Component {
+export default class ScenarioAnalysis extends React.Component {
 
     hasData(){
         const model = this.props.modelStore.model;
@@ -38,9 +40,7 @@ export default class ModFlow extends React.Component {
 
         if (this.hasData()) {
             return (
-              <div className="page-wrapper">
-                <ModflowMap model={model} appState={appState}/>
-              </div>
+                <ScaffoldDividedFixed left={<ScenarioSelect />} right={<ModflowMap model={model} appState={appState}/>} />
             );
         }
 

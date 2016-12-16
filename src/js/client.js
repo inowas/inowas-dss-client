@@ -8,6 +8,7 @@ import T09B from "./pages/Tools/T09B"
 import T09C from "./pages/Tools/T09C"
 import T09D from "./pages/Tools/T09D"
 import T09E from "./pages/Tools/T09E"
+import ScenarioAnalysis from "./pages/Tools/ScenarioAnalysis"
 import Login from "./pages/Login"
 import Modflow from "./pages/ModFlow"
 import ModelList from "./pages/ModelList"
@@ -30,6 +31,7 @@ ReactDOM.render(
                 <Route path="/tools/T09C" component={T09C} />
                 <Route path="/tools/T09D" component={T09D} />
                 <Route path="/tools/T09E" component={T09E} />
+                <Route path="/tools/scenario-analysis/:modelId" component={ScenarioAnalysis} />
             </Route>
             <Route path="/login" component={Login} />
         </Router>
