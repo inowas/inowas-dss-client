@@ -1,0 +1,32 @@
+.scroll-vertical {
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.container-flex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  margin-bottom: 15px;
+
+  .col-flex:not(:first-child) {
+    margin-left: 15px;
+  }
+
+  .col-flex:not(:last-child) {
+    margin-right: 15px;
+  }
+}
+
+.stretch {
+  flex: 1;
+}
+
+.align-content-center {
+  display: flex;
+  align-items: center;
+}
+
+.no-last-margin *:last-child {
+  margin-bottom: 0;
+}

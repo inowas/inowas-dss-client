@@ -8,7 +8,10 @@ var autoprefixer = require('autoprefixer');
 const plugins = [
   new CopyWebpackPlugin([
     {
-      from: './*.html',
+      from: './*.html'
+    }, {
+      from: './images',
+      to: 'images'
     }, {
       from: '../node_modules/leaflet/dist/images',
       to: 'images'
