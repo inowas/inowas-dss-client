@@ -12,13 +12,12 @@ function getInitialState() {
                 yAxis: {
                     domain: [0, 50]
                 },
-                yTicks: [0, -10, -20, -30, -40, -50, -60, -70],
-                xAxis: {domain: ['auto', 'auto']}
+                xAxis: {}
             }
         },
         info: {
             l: 0,
-            zCrit: 0
+            z: 0
         },
         parameters: [
             {
@@ -120,9 +119,9 @@ function calculateAndModifyState(state) {
     const ds = state.parameters.find( p => {return p.id == 'ds'}).value;
 
     state.chart.options.yAxis.domain = [-b, 0];
-    state.chart.options.xAxis.domain = [0, b*10];
+    state.chart.options.xAxis.domain = [-b*10, 0];
     state.chart.data = calc.calculateDiagramData(i, b, df, ds, 0, b*10, 1);
-    state.info.zCrit = calc.calculateZ(i, b, df, ds).toFixed(1);
+    state.info.z = calc.calculateZ(i, b, df, ds).toFixed(1);
     state.info.l = calc.calculateL(i, b, df, ds).toFixed(1);
 
     return state
