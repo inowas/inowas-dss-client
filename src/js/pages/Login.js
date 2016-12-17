@@ -1,4 +1,3 @@
-import axios from "axios"
 import React from "react"
 import { connect } from "react-redux"
 import { login } from "../actions/UserActions"
@@ -24,19 +23,7 @@ export default class Login extends React.Component {
     }
 
     onSubmit(e){
-        console.log(this.state);
-
-        axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-        axios.post('http://dev.inowas.hydro.tu-dresden.de/api/users/credentials.json', {
-            username: 'inowas',
-            password: 'inowas'
-        }).then(function (response) {
-                console.log(response);
-        }).catch(function (error) {
-                console.log(error);
-        });
-
-        //this.props.dispatch(login(this.state.identifier, this.state.password));
+        this.props.dispatch(login(this.state.identifier, this.state.password));
     }
 
     onChange(e){

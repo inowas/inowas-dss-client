@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from "../axios";
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 export function login(username, password) {
     return {
         type: "LOGIN",
-        payload: axios.post(
-            "http://dev.inowas.hydro.tu-dresden.de/api/user/credentials.json", {
+        payload: axios.post('/users/credentials.json', {
                 username: username,
                 password: password
             }
