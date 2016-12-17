@@ -8,8 +8,6 @@ export function login(username, password) {
                 username: username,
                 password: password
             }
-        ).then(function (response) {
-            console.log(response)
-        })
+        )
     }
 }
