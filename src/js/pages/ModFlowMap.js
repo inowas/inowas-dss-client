@@ -1,5 +1,6 @@
 import React from "react"
-import { Map, TileLayer, GeoJSON, LayersControl, ZoomControl, CircleMarker} from 'react-leaflet'
+import { Map, TileLayer, FeatureGroup, GeoJSON, LayersControl, ZoomControl, CircleMarker} from 'react-leaflet'
+import { EditControl } from "react-leaflet-draw"
 
 import MapToolBox from "../components/map/MapToolBox";
 import MapOverlay from "../components/map/MapOverlay";
@@ -78,7 +79,18 @@ export default class ModFlowMap extends React.Component {
                         </LayersControl>
                         <ZoomControl position="topright"/>
 
-                        {boundaries}
+                        <FeatureGroup>
+                            <EditControl
+                                position='topright'
+                                draw={{
+                                    rectangle: false
+                                }}
+                            />
+
+                            {boundaries}
+
+                        </FeatureGroup>
+
 
                         <MapToolBox model={this.props.model} appState={this.props.appState}/>
                         <MapOverlay appState={appState}>
