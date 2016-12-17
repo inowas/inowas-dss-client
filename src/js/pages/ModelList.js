@@ -1,8 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router";
+import { Map, Marker, Popup, TileLayer, GeoJSON } from 'react-leaflet';
+import { loadWorldMap } from "../data/map.geo"
 
 import * as modflowAction from "../actions/ModelActions"
+
 
 
 @connect((store) => {
@@ -21,17 +24,70 @@ export default class ModelList extends React.Component {
     }
 
     render() {
+        const mapStyle = {background: 'transparent'};
+        const myCustomStyle = {
+            stroke: false,
+            fill: true,
+            fillColor: '#c0c0c0',
+            fillOpacity: 1};
+
         if (this.hasData()){
             const models = this.props.models.models.map( model => {
+                console.log(model);
                 return (
-                    <Link key={model.id} to={'/tools/scenario-analysis/' + model.id}>{model.id}</Link>
+                    <tr key={model.id}>
+                        <td>#</td>
+                        <td><Link to={'/modflow/' + model.id}>{model.name}</Link></td>
+                    </tr>
                 )
             });
 
             return (
                 <div className="page-wrapper">
-                    <div>
-                        {models}
+                    <div className="page-width">
+                        <div className="grid-container">
+                            <section className="tile col col-abs-3 stacked">
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <ul className="nav nav-pills">
+                                                <li role="presentation" className="clickable"><a>My models</a></li>
+                                                <li role="presentation" className="clickable active"><a>Public models</a></li>
+                                            </ul>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="input-group">
+                                                <input type="text" className="form-control" placeholder="Search for..." />
+                                                <span className="input-group-btn">
+                                                    <button className="btn btn-default" type="button">Go!</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table id="table_public_models" className="table table-striped table-hover table_models">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Model name</th>
+                                                <th>Creator</th>
+                                                <th>Created</th>
+                                                <th>Last modified</th>
+                                                <th>Public</th>
+                                                <th>State</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {models}
+                                        </tbody>
+                                    </table>
+                            </section>
+                            <section className="col col-abs-2 stacked">
+                                <div id="models-map">
+                                    <Map center={[40, 0]} zoom={0} zoomControl={false} style={mapStyle}>
+                                        <GeoJSON data={loadWorldMap()} style={myCustomStyle} />
+                                    </Map>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
             )
