@@ -1,15 +1,5 @@
 import React from "react"
-
-import {
-    Map,
-    Marker,
-    Popup,
-    TileLayer,
-    GeoJSON,
-    LayersControl,
-    FeatureGroup,
-    ZoomControl
-} from 'react-leaflet'
+import { Map, TileLayer, GeoJSON, LayersControl, ZoomControl, CircleMarker} from 'react-leaflet'
 
 import MapToolBox from "../components/map/MapToolBox";
 import MapOverlay from "../components/map/MapOverlay";
@@ -26,10 +16,6 @@ export default class ModFlowMap extends React.Component {
         }
     }
 
-    getChildContext() {
-        return {model: this.props.model};
-    }
-
     getBounds(bb) {
         const {y_min, x_min, y_max, x_max} = bb;
         return [
@@ -40,24 +26,39 @@ export default class ModFlowMap extends React.Component {
         ];
     }
 
-    getAreaGeoJson() {
-        return (JSON.parse(this.props.model.area.geometry))
-    }
 
-    renderMapToolBox() {
-        if (!this.props.appState.scenarioAnalysisSelect) {
-            return <MapToolBox model={this.props.model} appState={this.props.appState}/>;
-        }
-
-        return null;
+    parseJson(json){
+        return (JSON.parse(json));
     }
 
     render() {
-
-        const model = this.props.model;
-        const appState = this.props.appState;
+        const {model, appState, styles} = this.props;
 
         if (model.id) {
+            const boundaries = model.boundaries.map( b => {
+                if (b.type == 'WEL'){
+                    const style = styles.wells[b.well_type];
+                    const data = this.parseJson(b.geometry);
+                    return <CircleMarker
+                        key={b.id}
+                        center={[data.coordinates[1], data.coordinates[0]]}
+                        radius={style.radius}
+                        color={style.color}
+                        weight={style.weight}
+                        fillColor={style.fillColor}
+                        fillOpacity={style.fillOpacity}
+                    />
+                } else {
+                    const style = styles[b.type];
+                    const data = this.parseJson(b.geometry);
+                    return <GeoJSON
+                        key={b.id}
+                        data={data}
+                        style={style}
+                    />
+                }
+            });
+
             return (
                 <div className="map-wrapper">
                     <Map bounds={this.getBounds(this.props.model.bounding_box)} zoomControl={false}>
@@ -71,13 +72,17 @@ export default class ModFlowMap extends React.Component {
                             </LayersControl.BaseLayer>
 
                             <LayersControl.Overlay name='Area' checked>
-                                <GeoJSON data={this.getAreaGeoJson()}/>
+                                <GeoJSON data={this.parseJson(model.area.geometry)}/>
                             </LayersControl.Overlay>
+
                         </LayersControl>
                         <ZoomControl position="topright"/>
-                        {this.renderMapToolBox()}
+
+                        {boundaries}
+
+                        <MapToolBox model={this.props.model} appState={this.props.appState}/>
                         <MapOverlay appState={appState}>
-                            <BoundaryProperties appState={appState} model={model}/>
+                            <BoundaryProperties appState={appState} model={model} />
                         </MapOverlay>
                     </Map>
                 </div>

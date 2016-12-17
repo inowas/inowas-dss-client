@@ -1,10 +1,9 @@
 import React from "react"
-import {connect} from "react-redux";
-import {browserHistory} from 'react-router';
+import { connect } from "react-redux";
 
 import ModflowMap from "./ModFlowMap";
 
-import * as modflowAction from "../actions/ModelActions";
+import { fetchModelById } from "../actions/ModelActions";
 
 @connect((store) => {
     return {modelStore: store.model, appState: store.appState}
@@ -21,21 +20,18 @@ export default class ModFlow extends React.Component {
     }
 
     componentWillMount() {
-        modflowAction.fetchModelById(this.props.params.modelId);
+        this.props.dispatch(fetchModelById(this.props.params.modelId));
     }
 
     render() {
+        const styles = this.props.modelStore.styles;
         const model = this.props.modelStore.model;
         const appState = this.props.appState;
-
-        if (this.hasError()) {
-            browserHistory.push('/#/modflow/scenario-analysis');
-        }
 
         if (this.hasData()) {
             return (
                 <div className="page-wrapper">
-                    <ModflowMap model={model} appState={appState}/>
+                    <ModflowMap model={model} styles={styles} appState={appState}/>
                 </div>
             );
         }

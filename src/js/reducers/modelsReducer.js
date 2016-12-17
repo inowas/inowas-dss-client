@@ -3,6 +3,7 @@ const initialState = {
     fetching: false,
     fetched: false,
     models: [],
+    mapData: null,
     error: null
 };
 
@@ -22,6 +23,13 @@ const modelsReducer = ( state=initialState, action ) => {
                 fetching: false,
                 fetched: true,
                 models: action.payload.data
+            };
+            break;
+        }
+        case "FETCH_MODEL_MAP_FULFILLED": {
+            state = {
+                ...state,
+                mapData: action.payload.data
             };
             break;
         }

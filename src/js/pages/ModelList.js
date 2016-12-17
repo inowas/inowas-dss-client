@@ -1,12 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import { Map, Marker, Popup, TileLayer, GeoJSON } from 'react-leaflet';
-import { loadWorldMap } from "../data/map.geo"
-
-import * as modflowAction from "../actions/ModelActions"
-
-
+import { fetchAllModels, fetchModelMap } from "../actions/ModelActions"
+import ModelListMap from "../components/map/ModelListMap"
 
 @connect((store) => {
     return {
@@ -20,20 +16,13 @@ export default class ModelList extends React.Component {
     }
 
     componentWillMount(){
-        modflowAction.fetchAllModels();
+        this.props.dispatch(fetchAllModels());
+        this.props.dispatch(fetchModelMap());
     }
 
     render() {
-        const mapStyle = {background: 'transparent'};
-        const myCustomStyle = {
-            stroke: false,
-            fill: true,
-            fillColor: '#c0c0c0',
-            fillOpacity: 1};
-
         if (this.hasData()){
             const models = this.props.models.models.map( model => {
-                console.log(model);
                 return (
                     <tr key={model.id}>
                         <td>#</td>
@@ -81,11 +70,7 @@ export default class ModelList extends React.Component {
                                     </table>
                             </section>
                             <section className="col col-abs-2 stacked">
-                                <div id="models-map">
-                                    <Map center={[40, 0]} zoom={0} zoomControl={false} style={mapStyle}>
-                                        <GeoJSON data={loadWorldMap()} style={myCustomStyle} />
-                                    </Map>
-                                </div>
+                                <ModelListMap mapData={this.props.models.mapData}/>
                             </section>
                         </div>
                     </div>

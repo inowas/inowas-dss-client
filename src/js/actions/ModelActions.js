@@ -1,39 +1,29 @@
 import axios from "../axios";
-import store from "../store"
-import model from "../modflow_model_example_data";
 
-export function fetchExampleModel() {
+export function fetchAllModels() {
     return {
-        type: "FETCH_EXAMPLE_MODEL_FULFILLED",
-        payload: model
+        type: "FETCH_MODELS",
+        payload: axios.get("/modflow/models.json")
     };
 }
 
-export function getModel(id) {
-    return {
-        type: "FETCH_MODEL",
-        payload: axios.get("/modflow/models/"+ id +".json")
-    }
-}
-
-export function fetchAllModels() {
-    axios.defaults.headers.common['X-AUTH-TOKEN'] = store.getState().user.apiKey;
-    store.dispatch({
-        type: "FETCH_MODELS",
-        payload: axios.get("/modflow/models.json")
-    });
-}
-
 export function fetchModelBoundary( id ) {
-    store.dispatch({
+    return {
         type: "FETCH_MODEL_BOUNDARY",
         payload: axios.get("/modflow/boundaries/"+ id +".json")
-    });
+    };
+}
+
+export function fetchModelMap() {
+    return {
+        type: "FETCH_MODEL_MAP",
+        payload: axios.get("modflow/models/list/map.json")
+    };
 }
 
 export function fetchModelById(id) {
-    store.dispatch({
+    return {
         type: "FETCH_MODEL",
         payload: axios.get("/modflow/models/"+ id +".json")
-    });
+    };
 }

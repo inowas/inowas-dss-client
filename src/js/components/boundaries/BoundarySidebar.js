@@ -1,13 +1,9 @@
 import React from "react";
-import * as appActions from "../../actions/ApplicationActions";
-import * as modelActions from "../../actions/ModelActions";
 
 export default class BoundarySidebar extends React.Component {
 
     setActiveBoundary(bType, id){
-        appActions.setActiveBoundary(bType, id);
-        modelActions.fetchModelBoundary(id);
-
+        this.props.setActiveBoundary(bType, id);
     }
 
     renderBoundaryList( activeBoundaries ) {

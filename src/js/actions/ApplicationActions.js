@@ -15,11 +15,11 @@ export function hideBoundaryProperties() {
 }
 
 export function setActiveBoundary(bType, id) {
-    store.dispatch({
+    return {
         type: "SET_ACTIVE_BOUNDARY",
         bType: bType,
         id: id
-    });
+    };
 }
 
 export function setBoundaryData(id) {
