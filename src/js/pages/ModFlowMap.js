@@ -1,5 +1,5 @@
 import React from "react"
-import { Map, TileLayer, FeatureGroup, GeoJSON, LayersControl, ZoomControl, CircleMarker} from 'react-leaflet'
+import { Map, TileLayer, FeatureGroup, GeoJSON, LayersControl, ZoomControl, CircleMarker, ImageOverlay} from 'react-leaflet'
 import { EditControl } from "react-leaflet-draw"
 
 import MapToolBox from "../components/map/MapToolBox";
@@ -19,12 +19,7 @@ export default class ModFlowMap extends React.Component {
 
     getBounds(bb) {
         const {y_min, x_min, y_max, x_max} = bb;
-        return [
-            [
-                y_min, x_min
-            ],
-            [y_max, x_max]
-        ];
+        return [[y_min, x_min], [y_max, x_max]];
     }
 
 
@@ -33,8 +28,8 @@ export default class ModFlowMap extends React.Component {
     }
 
     render() {
-        const {model, appState, styles} = this.props;
-
+        const {model, appState, styles, store} = this.props;
+        const boundingBox = model.bounding_box;
         if (model.id) {
             const boundaries = model.boundaries.map( b => {
                 if (b.type == 'WEL'){
@@ -62,7 +57,7 @@ export default class ModFlowMap extends React.Component {
 
             return (
                 <div className="map-wrapper">
-                    <Map bounds={this.getBounds(this.props.model.bounding_box)} zoomControl={false}>
+                    <Map bounds={this.getBounds(boundingBox)} zoomControl={false}>
                         <LayersControl position='topright'>
                             <LayersControl.BaseLayer name="Common map layer" checked>
                                 <TileLayer url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
@@ -76,6 +71,14 @@ export default class ModFlowMap extends React.Component {
                                 <GeoJSON data={this.parseJson(model.area.geometry)}/>
                             </LayersControl.Overlay>
 
+                            <LayersControl.Overlay name='Heads' checked>
+                                <ImageOverlay
+                                    url={'http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/'+model.id+'/heads/image.png'}
+                                    bounds={this.getBounds(boundingBox)}
+                                    opacity={0.5}
+                                />
+                            </LayersControl.Overlay>
+
                         </LayersControl>
                         <ZoomControl position="topright"/>
 
@@ -86,13 +89,11 @@ export default class ModFlowMap extends React.Component {
                                     rectangle: false
                                 }}
                             />
-
                             {boundaries}
-
                         </FeatureGroup>
 
 
-                        <MapToolBox model={this.props.model} appState={this.props.appState}/>
+                        <MapToolBox model={model} appState={appState} store={store} />
                         <MapOverlay appState={appState}>
                             <BoundaryProperties appState={appState} model={model} />
                         </MapOverlay>

@@ -27,3 +27,10 @@ export function fetchModelById(id) {
         payload: axios.get("/modflow/models/"+ id +".json")
     };
 }
+
+export function fetchHeadImage(modelId, totim) {
+    return {
+        type: "FETCH_HEAD_IMAGE",
+        payload: axios.get("/modflow/models/" + id + "/heads/image.png?totim=364")
+    };
+}

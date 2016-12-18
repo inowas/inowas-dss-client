@@ -7,7 +7,7 @@ const initialState = {
     styles: {
         inactive: {color: "#000", weight: 0, fillColor: "#000", fillOpacity: 0.7},
         active: {color: "#ff7800", weight: 0, fillColor: "#000", fillOpacity: 0},
-        boundingBox: {color: "#000", weight: 0.2, fillColor: "blue", fillOpacity: 0},
+        bounding_box: {color: "#000", weight: 0.2, fillColor: "blue", fillOpacity: 0},
         areaGeometry: {color: "#000", weight: 0.2, fillColor: "blue", fillOpacity: 0.1},
         hasNoWell: {color: "#000", weight: 0, fillOpacity: 0},
         hasWell: {color: "blue", weight: 1, fillColor: "darkblue", fillOpacity: 1},
@@ -45,15 +45,6 @@ const modelReducer = ( state=initialState, action ) => {
                 fetching: false,
                 fetched: true,
                 model: action.payload.data
-            };
-            break;
-        }
-        case "FETCH_EXAMPLE_MODEL_FULFILLED": {
-            state = {
-                ...state,
-                fetching: false,
-                fetched: true,
-                model: action.payload
             };
             break;
         }

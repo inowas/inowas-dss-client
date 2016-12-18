@@ -15,7 +15,7 @@ export default class AccordionItem extends React.Component {
         return (
             <div className={"accordion-item panel" + panelClass}>
                 <div className="accordion-item-heading panel-heading" role="tab" id={"heading_" + id}>
-                    <button class="btn btn-link" role="button" data-toggle="collapse" data-parent={"#" + this.context.id} data-target={'#' + id} aria-expanded="false" aria-controls="collapseOne">
+                    <button className="btn btn-link" role="button" data-toggle="collapse" data-parent={"#" + this.context.id} data-target={'#' + id} aria-expanded="false" aria-controls="collapseOne">
                         {this.props.icon}
                         <Icon className="pull-right" icon="arrow-down" />
                         {this.props.heading}
