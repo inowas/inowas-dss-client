@@ -1,11 +1,14 @@
 import React from "react"
 import { connect } from "react-redux";
-import ModflowMap from "./ModFlowMap";
+import ScenarioAnalysisMap from "./ScenarioAnalysisMap";
 
 import { switchToScenarioAnalysisEdit, switchToScenarioAnalysisSelect, setCurrentTool } from "../actions/ApplicationActions";
-import { fetchScenarios, setBaseModel } from "../actions/ScenarioAnalysisActions"
+import { fetchScenarios, setBaseModel, calculateScenario } from "../actions/ScenarioAnalysisActions"
 
 import ScenarioSelect from "../components/map/ScenarioSelect";
+import ScenarioMapToolBox from "../components/map/ScenarioMapToolBox";
+import ScenarioMapOverlay from "../components/map/ScenarioMapOverlay";
+import ScenarioBoundaryProperties from "../components/boundaries/ScenarioBoundaryProperties";
 
 @connect((store) => {
     return {
@@ -17,8 +20,17 @@ import ScenarioSelect from "../components/map/ScenarioSelect";
 })
 export default class ScenarioAnalysis extends React.Component {
 
-    hasData() {
+    onCalculateHandler(){
+        const scenarioId = this.props.scenarioAnalysis.activeScenario;
+        this.props.dispatch(calculateScenario(scenarioId));
+    }
+
+    canRenderSidebar() {
         return this.props.scenarioAnalysis.fetched;
+    }
+
+    canRenderMap() {
+        return this.props.scenarioAnalysis.scenario;
     }
 
     componentWillMount() {
@@ -36,32 +48,46 @@ export default class ScenarioAnalysis extends React.Component {
         this.props.dispatch(switchToScenarioAnalysisSelect());
     }
 
-    render() {
-        const scenario = this.props.scenarioAnalysis.scenario;
-        const activeScenario = this.props.scenarioAnalysis.activeScenario;
-        const appState = this.props.appState;
-        const baseModel= this.props.scenarioAnalysis.baseModel;
-        const scenarios = this.props.scenarioAnalysis.scenarios;
-        const className = appState.scenarioAnalysisSelect ? "off-canvas-active" : null;
-        const styles = this.props.modelStore.styles;
-        const store = this.props.store;
-
-        if (this.hasData()) {
+    renderScenarioSidebar(){
+        if (this.canRenderSidebar()) {
             return (
-                <div className={"page-wrapper " + className}>
-                    <ScenarioSelect
-                        selectScenario={this.selectScenario.bind(this)}
-                        editScenario={this.editScenario.bind(this)}
-                        appState={appState}
-                        scenarios={scenarios}
-                        baseModel={baseModel}
-                        activeScenario={activeScenario}
-                    />
-                    <ModflowMap model={scenario} styles={styles} appState={appState} store={store} />
-                </div>
-            );
+                <ScenarioSelect
+                    selectScenario={this.selectScenario.bind(this)}
+                    editScenario={this.editScenario.bind(this)}
+                    appState={this.props.appState}
+                    scenarios={this.props.scenarioAnalysis.scenarios}
+                    baseModel={this.props.scenarioAnalysis.baseModel}
+                    activeScenario={this.props.scenarioAnalysis.activeScenario}
+                />
+            )
         }
+    }
 
-        return null;
+    renderMap(){
+        if (this.canRenderMap()) {
+            const scenario = this.props.scenarioAnalysis.scenario;
+            const appState = this.props.appState;
+            const styles = this.props.modelStore.styles;
+            const store = this.props.store;
+
+            return (
+                <div>
+                    <ScenarioAnalysisMap model={scenario} styles={styles} appState={appState} store={store} />
+                    <ScenarioMapToolBox model={scenario} appState={appState} onCalculate={::this.onCalculateHandler} />
+                    <ScenarioMapOverlay appState={appState}>
+                        <ScenarioBoundaryProperties appState={appState} model={scenario} />
+                    </ScenarioMapOverlay>
+                </div>
+            )}
+    }
+
+    render() {
+        const className = this.props.appState.scenarioAnalysisSelect ? "off-canvas-active" : null;
+        return (
+            <div className={"page-wrapper " + className}>
+                {this.renderScenarioSidebar()}
+                {this.renderMap()}
+            </div>
+        )
     }
 }

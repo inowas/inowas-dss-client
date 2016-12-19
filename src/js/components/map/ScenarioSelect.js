@@ -5,6 +5,14 @@ import { duplicateScenario, deleteScenario, updateNameAndDescription, setActiveS
 
 export default class ScenarioSelect extends React.Component {
 
+    constructor(props){
+        super(props)
+
+        this.state = {
+
+        }
+    }
+
     toggle() {
       if(this.props.appState.scenarioAnalysisSelect) {
         this.props.editScenario();

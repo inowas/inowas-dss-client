@@ -83,3 +83,13 @@ export function fetchScenario(modelId, scenarioId) {
         })
     };
 }
+
+export function calculateScenario(scenarioId) {
+    const apiKey = getApiKey();
+    return {
+        type: "CALCULATE_SCENARIO",
+        payload: axios.post("scenarioanalysis/calculation/"+ scenarioId +".json", {},{
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    };
+}
