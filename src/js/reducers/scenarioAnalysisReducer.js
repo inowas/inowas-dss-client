@@ -46,6 +46,24 @@ const scenarioAnalysis = ( state=initialState, action ) => {
             break;
         }
 
+        case "UPDATE_SCENARIO_PENDING": {
+            state = { ...state, fetching: true };
+            break;
+        }
+        case "UPDATE_SCENARIO_REJECTED": {
+            state = { ...state, fetching: false, error: action.payload };
+            break;
+        }
+        case "UPDATE_SCENARIO_FULFILLED": {
+            state = {
+                ...state,
+                fetching: false,
+                fetched: true,
+                scenarios: action.payload.data
+            };
+            break;
+        }
+
         case "DELETE_SCENARIO_PENDING": {
             state = { ...state, fetching: true };
             break;

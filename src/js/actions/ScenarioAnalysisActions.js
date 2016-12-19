@@ -42,3 +42,17 @@ export function deleteScenario(modelId, scenarioId) {
         })
     }
 }
+
+export function updateNameAndDescription(modelId, scenarioId, name, description) {
+    const apiKey = getApiKey();
+    return {
+        type: "UPDATE_SCENARIO",
+        payload: axios.put('/scenarioanalysis/models/'+ modelId +'/scenarios/'+ scenarioId +'.json',
+            {
+                name: name,
+                description: description
+            },
+            {headers: {'X-AUTH-TOKEN': apiKey}}
+        )
+    }
+}
