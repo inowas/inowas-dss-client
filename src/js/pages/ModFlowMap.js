@@ -27,6 +27,10 @@ export default class ModFlowMap extends React.Component {
         return (JSON.parse(json));
     }
 
+    onClickHandler(e){
+        //console.log("You clicked the map at " + e.latlng)
+    };
+
     render() {
         const {model, appState, styles, store} = this.props;
         const boundingBox = model.bounding_box;
@@ -57,7 +61,7 @@ export default class ModFlowMap extends React.Component {
 
             return (
                 <div className="map-wrapper">
-                    <Map bounds={this.getBounds(boundingBox)} zoomControl={false}>
+                    <Map bounds={this.getBounds(boundingBox)} zoomControl={false} onClick={::this.onClickHandler}>
                         <LayersControl position='topright'>
                             <LayersControl.BaseLayer name="Common map layer" checked>
                                 <TileLayer url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>

@@ -23,6 +23,10 @@ export default class ModFlow extends React.Component {
         return this.props.modelStore.error;
     }
 
+    handleClick(e, data){
+        return(alert('test'))
+    }
+
     componentWillMount() {
         this.props.dispatch(fetchModelById(this.props.params.modelId));
     }
@@ -36,7 +40,7 @@ export default class ModFlow extends React.Component {
         if (this.hasData()) {
             return (
                 <div className="page-wrapper">
-                    <ModflowMap model={model} styles={styles} appState={appState} store={store} />
+                    <ModflowMap onMoveend={this.handleClick} model={model} styles={styles} appState={appState} store={store} />
                 </div>
             );
         }
