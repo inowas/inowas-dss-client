@@ -1,7 +1,7 @@
 import React from "react";
 import ScenarioListItem from "../map/ScenarioListItem"
 import store from "../../store"
-import { duplicateScenario, deleteScenario, updateNameAndDescription } from "../../actions/ScenarioAnalysisActions"
+import { duplicateScenario, deleteScenario, updateNameAndDescription, setActiveScenario } from "../../actions/ScenarioAnalysisActions"
 
 export default class ScenarioSelect extends React.Component {
 
@@ -28,7 +28,12 @@ export default class ScenarioSelect extends React.Component {
         store.dispatch(deleteScenario(modelId, scenarioId));
     }
 
+    setActiveScenario(scenarioId){
+        store.dispatch(setActiveScenario(scenarioId));
+    }
+
     render() {
+        const activeScenario = this.props.activeScenario;
         const scenarios = this.props.scenarios.sort( (a,b) => {
             return (a.order - b.order)
         }).map( s => {
@@ -36,6 +41,8 @@ export default class ScenarioSelect extends React.Component {
                 <ScenarioListItem
                     key={s.id}
                     scenario={s}
+                    active={activeScenario==s.id}
+                    setActiveScenario={this.setActiveScenario.bind(this)}
                     deleteScenario={this.deleteScenario.bind(this)}
                     duplicateScenario={this.duplicateScenario.bind(this)}
                     updateNameAndDescription={this.updateNameAndDescription.bind(this)}

@@ -12,6 +12,10 @@ export default class ScenarioListItem extends React.Component{
         }
     }
 
+    onClickScenarioHandler(e){
+        this.props.setActiveScenario(this.props.scenario.id);
+    }
+
     onClickDuplicateHandler(e){
         this.props.duplicateScenario(this.props.scenario.id);
     }
@@ -21,7 +25,6 @@ export default class ScenarioListItem extends React.Component{
     }
 
     onClickEditHandler(e){
-        console.log({['edit'+e.target.nodeName]: true});
         this.setState({['edit'+e.target.nodeName]: true});
     }
 
@@ -109,11 +112,17 @@ export default class ScenarioListItem extends React.Component{
         )
     }
 
-    render(){
+    getClassNames(active){
+        if (active){
+            return 'scenario-select-item active';
+        }
+        return 'scenario-select-item';
+    }
 
+    render(){
         return(
-            <li className="scenario-select-item active">
-                <div className="item-img-wrapper">
+            <li className={this.getClassNames(this.props.active)}>
+                <div className="item-img-wrapper" onClick={this.onClickScenarioHandler.bind(this)}>
                     <img src="../images/scenarios_thumb.png"/>
                     <div className="item-buttons">
                         {this.renderEditButton()}

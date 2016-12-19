@@ -34,6 +34,7 @@ export default class ModFlow extends React.Component {
     }
 
     render() {
+        const activeScenario = this.props.scenarioAnalysis.activeScenario;
         const model = this.props.modelStore.model;
         const appState = this.props.appState;
         const baseModel= this.props.scenarioAnalysis.baseModel;
@@ -49,6 +50,7 @@ export default class ModFlow extends React.Component {
                         appState={appState}
                         scenarios={scenarios}
                         baseModel={baseModel}
+                        activeScenario={activeScenario}
                     />
                     <ModflowMap model={model} appState={appState}/>
                 </div>

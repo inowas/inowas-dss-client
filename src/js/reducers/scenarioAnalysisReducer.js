@@ -1,5 +1,6 @@
 
 const initialState = {
+    activeScenario: null,
     baseModel: null,
     scenarios: [],
     fetching: false,
@@ -23,8 +24,13 @@ const scenarioAnalysis = ( state=initialState, action ) => {
                 ...state,
                 fetching: false,
                 fetched: true,
-                scenarios: action.payload.data
+                scenarios: action.payload.data,
             };
+
+            if (state.scenarios.length>0){
+                state.activeScenario = state.scenarios[0].id
+            }
+
             break;
         }
 
@@ -86,6 +92,14 @@ const scenarioAnalysis = ( state=initialState, action ) => {
             state = {
                 ...state,
                 baseModel: action.payload
+            };
+            break;
+        }
+
+        case "SET_ACTIVE_SCENARIO": {
+            state = {
+                ...state,
+                activeScenario: action.payload
             };
             break;
         }

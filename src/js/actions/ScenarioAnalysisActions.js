@@ -22,6 +22,13 @@ export function setBaseModel(modelId) {
     }
 }
 
+export function setActiveScenario(scenarioId) {
+    return {
+        type: "SET_ACTIVE_SCENARIO",
+        payload: scenarioId
+    }
+}
+
 export function duplicateScenario(modelId, scenarioId) {
     const apiKey = getApiKey();
     return {
