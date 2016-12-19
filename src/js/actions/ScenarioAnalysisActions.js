@@ -1,0 +1,44 @@
+import axios from "../axios";
+import store from "../store"
+
+const getApiKey = function() {
+    return store.getState().user.apiKey;
+};
+
+export function fetchScenarios(modelId) {
+    const apiKey = getApiKey();
+    return {
+        type: "FETCH_SCENARIOS",
+        payload: axios.get('/scenarioanalysis/models/'+ modelId +'.json', {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    }
+}
+
+export function setBaseModel(modelId) {
+    return {
+        type: "SET_BASEMODEL",
+        payload: modelId
+    }
+}
+
+export function duplicateScenario(modelId, scenarioId) {
+    const apiKey = getApiKey();
+    return {
+        type: "DUPLICATE_SCENARIO",
+        payload: axios.post('/scenarioanalysis/models/'+ modelId +'/scenarios/'+ scenarioId +'/duplicate.json',
+            {},
+            {headers: {'X-AUTH-TOKEN': apiKey}}
+        )
+    }
+}
+
+export function deleteScenario(modelId, scenarioId) {
+    const apiKey = getApiKey();
+    return {
+        type: "DELETE_SCENARIO",
+        payload: axios.delete('/scenarioanalysis/models/'+ modelId +'/scenarios/'+ scenarioId +'.json', {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    }
+}

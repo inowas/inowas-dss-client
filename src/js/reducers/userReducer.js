@@ -4,7 +4,7 @@ const initialState = {
     error: false,
     fetched: false,
     username: "",
-    apiKey: ""
+    apiKey: null
 };
 
 const userReducer = ( state=initialState, action ) => {

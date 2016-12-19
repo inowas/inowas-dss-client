@@ -11,7 +11,7 @@ import T09E from "./pages/Tools/T09E"
 import Login from "./pages/Login"
 import Modflow from "./pages/ModFlow"
 import ModelList from "./pages/ModelList"
-import NavBar from "./pages/Navbar"
+import Main from "./pages/Main"
 import store from "./store";
 import ScenarioAnalysis from "./pages/ScenarioAnalysis"
 
@@ -23,7 +23,7 @@ const app = document.getElementById('app');
 ReactDOM.render(
     <Provider store={store}>
     <Router history={hashHistory}>
-        <Route path="/" component={NavBar}>
+        <Route path="/" component={Main}>
             <Route path="/modflow/list" component={ModelList}/>
             <Route path="/modflow/:modelId" component={Modflow}/>
             <Route path="/tools/T09A" component={T09A}/>
@@ -31,8 +31,8 @@ ReactDOM.render(
             <Route path="/tools/T09C" component={T09C}/>
             <Route path="/tools/T09D" component={T09D}/>
             <Route path="/tools/T09E" component={T09E}/>
-            <Route path="/tools/scenario-analysis" component={ModelList}/>
-            <Route path="/tools/scenario-analysis/:modelId" component={ScenarioAnalysis}/>
+            <Route path="/scenarioanalysis" component={ModelList}/>
+            <Route path="/scenarioanalysis/:modelId" component={ScenarioAnalysis}/>
         </Route>
         <Route path="/login" component={Login}/>
     </Router>

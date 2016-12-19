@@ -1,5 +1,7 @@
 import React from "react";
-import Icon from "../primitive/Icon";
+import ScenarioListItem from "../map/ScenarioListItem"
+import store from "../../store"
+import { duplicateScenario, deleteScenario } from "../../actions/ScenarioAnalysisActions"
 
 export default class ScenarioSelect extends React.Component {
 
@@ -11,59 +13,35 @@ export default class ScenarioSelect extends React.Component {
       }
     }
 
+    duplicateScenario(scenarioId){
+        const modelId = this.props.baseModel;
+        store.dispatch(duplicateScenario(modelId, scenarioId));
+    }
+
+    deleteScenario(scenarioId){
+        const modelId = this.props.baseModel;
+        store.dispatch(deleteScenario(modelId, scenarioId));
+    }
+
     render() {
+        const scenarios = this.props.scenarios.map( s => {
+            return(
+                <ScenarioListItem
+                    key={s.id}
+                    scenario={s}
+                    deleteScenario={this.deleteScenario.bind(this)}
+                    duplicateScenario={this.duplicateScenario.bind(this)}
+                />
+            )
+        });
+
         return (
             <div className="off-canvas-drawer">
                 <button className="toggle" onClick={this.toggle.bind(this)}>umschalten</button>
-
                 <ul className="scenario-select">
-                    <li className="scenario-select-item active">
-                        <div className="item-img-wrapper">
-                            <img src="../images/scenarios_thumb.png"/>
-                            <div className="item-buttons">
-                                <button onClick={this.props.editScenario} className="item-button"><Icon icon="edit"/></button>
-                                <button className="item-button"><Icon icon="duplicate"/></button>
-                                <button className="item-button"><Icon icon="trash"/></button>
-                            </div>
-                        </div>
-                        <h3 className="item-heading">Scenario 1</h3>
-                        <div className="item-description">
-                            Description sfjngjbwrfbwwf wuhq hurg griu ug ur urg rreg!
-                        </div>
-                    </li>
-
-                    <li className="scenario-select-item">
-                        <div className="item-img-wrapper">
-                            <img src="../images/scenarios_thumb.png"/>
-                            <div className="item-buttons">
-                                <button onClick={this.props.editScenario} className="item-button"><Icon icon="edit"/></button>
-                                <button className="item-button"><Icon icon="duplicate"/></button>
-                                <button className="item-button"><Icon icon="trash"/></button>
-                            </div>
-                        </div>
-                        <h3 className="item-heading">Scenario 2</h3>
-                        <div className="item-description">
-                            Description sfjngjbwrfbwwf wuhq hurg griu ug ur urg rreg!
-                        </div>
-                    </li>
-
-                    <li className="scenario-select-item">
-                        <div className="item-img-wrapper">
-                            <img src="../images/scenarios_thumb.png"/>
-                            <div className="item-buttons">
-                                <button onClick={this.props.editScenario} className="item-button"><Icon icon="edit"/></button>
-                                <button className="item-button"><Icon icon="duplicate"/></button>
-                                <button className="item-button"><Icon icon="trash"/></button>
-                            </div>
-                        </div>
-                        <h3 className="item-heading">Scenario 3</h3>
-                        <div className="item-description">
-                            Description sfjngjbwrfbwwf wuhq hurg griu ug ur urg rreg!
-                        </div>
-                    </li>
+                    {scenarios}
                 </ul>
             </div>
         );
     }
-
 }
