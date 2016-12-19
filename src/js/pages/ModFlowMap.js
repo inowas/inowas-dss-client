@@ -48,34 +48,53 @@ export default class ModFlowMap extends React.Component {
         )
     }
 
+    getHeadsImageUrl(id, tool){
+        switch (tool){
+            case 'modflow':
+                return ('http://dev.inowas.hydro.tu-dresden.de/image/modflow/models/'+id+'/heads.png')
+                break;
+            case 'scenarioanalysis':
+                return ('http://dev.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png')
+                break;
+        }
+    }
+
+    renderBoundariesByType(type){
+        const boundaries = this.props.model.boundaries;
+        const styles = this.props.styles;
+        const filteredBoundaries = boundaries.filter( b => {return b.type == type});
+        const renderedBoundaries = filteredBoundaries.map( b => {
+            if (b.type == 'WEL'){
+                const style = styles.wells[b.well_type];
+                const data = this.parseJson(b.geometry);
+                return <CircleMarker
+                    key={b.id}
+                    center={[data.coordinates[1], data.coordinates[0]]}
+                    radius={style.radius}
+                    color={style.color}
+                    weight={style.weight}
+                    fillColor={style.fillColor}
+                    fillOpacity={style.fillOpacity}
+                />
+            }
+
+            const style = styles[b.type];
+            const data = this.parseJson(b.geometry);
+            return <GeoJSON
+                key={b.id}
+                data={data}
+                style={style}
+            />
+        });
+
+        return renderedBoundaries;
+    }
+
     render() {
 
         if (this.hasData()) {
-            const {model, appState, styles, store} = this.props;
+            const {model, appState, store} = this.props;
             const boundingBox = model.bounding_box;
-            const boundaries = model.boundaries.map( b => {
-                if (b.type == 'WEL'){
-                    const style = styles.wells[b.well_type];
-                    const data = this.parseJson(b.geometry);
-                    return <CircleMarker
-                        key={b.id}
-                        center={[data.coordinates[1], data.coordinates[0]]}
-                        radius={style.radius}
-                        color={style.color}
-                        weight={style.weight}
-                        fillColor={style.fillColor}
-                        fillOpacity={style.fillOpacity}
-                    />
-                } else {
-                    const style = styles[b.type];
-                    const data = this.parseJson(b.geometry);
-                    return <GeoJSON
-                        key={b.id}
-                        data={data}
-                        style={style}
-                    />
-                }
-            });
             return (
                 <div className="map-wrapper">
                     <Map bounds={this.getBounds(boundingBox)} zoomControl={false} onClick={::this.onClickHandler}>
@@ -90,7 +109,7 @@ export default class ModFlowMap extends React.Component {
 
                             <LayersControl.Overlay name='Heads' checked>
                                 <ImageOverlay
-                                    url={'http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/'+model.id+'/heads/image.png'}
+                                    url={this.getHeadsImageUrl(model.id, 'modflow')}
                                     bounds={this.getBounds(boundingBox)}
                                     opacity={0.5}
                                 />
@@ -100,18 +119,26 @@ export default class ModFlowMap extends React.Component {
                                 <GeoJSON data={this.parseJson(model.area.geometry)}/>
                             </LayersControl.Overlay>
 
-                            <LayersControl.Overlay name='Heads' checked>
-                                <ImageOverlay
-                                    url={'http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/'+model.id+'/heads/image.png'}
-                                    bounds={this.getBounds(boundingBox)}
-                                    opacity={0.5}
-                                />
+                            <LayersControl.Overlay name='General Head Boundary' checked>
+                                <FeatureGroup>
+                                    {this.renderBoundariesByType('GHB')}
+                                </FeatureGroup>
+                            </LayersControl.Overlay>
+
+                            <LayersControl.Overlay name='Rivers' checked>
+                                <FeatureGroup>
+                                    {this.renderBoundariesByType('RIV')}
+                                </FeatureGroup>
+                            </LayersControl.Overlay>
+
+                            <LayersControl.Overlay name='Wells' checked>
+                                <FeatureGroup>
+                                    {this.renderBoundariesByType('WEL')}
+                                </FeatureGroup>
                             </LayersControl.Overlay>
 
                         </LayersControl>
                         <ZoomControl position="topright"/>
-
-                        {boundaries}
 
                         <MapToolBox model={model} appState={appState} store={store} />
                         <MapOverlay appState={appState}>
