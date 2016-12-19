@@ -2,7 +2,22 @@ import React from "react";
 
 export default class SoilDiagram extends React.Component {
 
-    render() {
+    renderSoilDiagram(type){
+
+        if (type == 'rp'){
+            return (
+                <div className="soil-diagram">
+                    <div className="soil-depth">0.00m</div>
+                    <div className="soil-layer soil-5" style={{
+                        flex: 100
+                    }}>
+                        <span className="layer-badge">Layer 1</span>
+                    </div>
+                    <div className="soil-depth">-71.90m</div>
+                </div>
+            )
+        }
+
         return (
             <div className="soil-diagram">
                 <div className="soil-depth">0.00m</div>
@@ -40,4 +55,11 @@ export default class SoilDiagram extends React.Component {
         );
     }
 
+    render() {
+        return(
+            <div>
+                {this.renderSoilDiagram('rp')}
+            </div>
+        )
+    }
 }

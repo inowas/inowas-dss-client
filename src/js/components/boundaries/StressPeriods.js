@@ -29,7 +29,7 @@ export default class StressPeriods extends React.Component {
         return (
             <thead>
             <tr>
-                {headNames.map( h => {return <th>{h}</th>})}
+                {headNames.map( h => {return <th key={Math.random()}>{h}</th>})}
                 <th>
                     <div className="btn-group" role="group">
                         <button type="button" className="btn btn-default">
@@ -74,6 +74,41 @@ export default class StressPeriods extends React.Component {
                         <tr key={s.id}>
                             <td>{new Date(s.date_time_begin).toLocaleDateString()}</td>
                             <td>{s.flux}</td>
+                            <td>
+                                <button className="btn btn-xs btn-danger" type="button">
+                                    <span className="glyphicon glyphicon-trash" />
+                                </button>
+                            </td>
+                        </tr>
+                    );
+                });
+                break;
+
+            case 'RIV':
+                return this.props.data.map(s => {
+                    return (
+                        <tr key={s.id}>
+                            <td>{new Date(s.date_time_begin).toLocaleDateString()}</td>
+                            <td>{s.stage}</td>
+                            <td>{s.conductivity}</td>
+                            <td>{s.bottom_elevation}</td>
+                            <td>
+                                <button className="btn btn-xs btn-danger" type="button">
+                                    <span className="glyphicon glyphicon-trash" />
+                                </button>
+                            </td>
+                        </tr>
+                    );
+                });
+                break;
+
+            case 'GHB':
+                return this.props.data.map(s => {
+                    return (
+                        <tr key={s.id}>
+                            <td>{new Date(s.date_time_begin).toLocaleDateString()}</td>
+                            <td>{s.stage}</td>
+                            <td>{s.conductivity}</td>
                             <td>
                                 <button className="btn btn-xs btn-danger" type="button">
                                     <span className="glyphicon glyphicon-trash" />
