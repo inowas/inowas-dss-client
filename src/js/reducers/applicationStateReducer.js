@@ -1,8 +1,8 @@
 
 const initialState = {
-    application: null,
+    tool: null,
     modelId: null,
-    scenarioAnalysisSelect: false,
+    scenarioAnalysisSelect: true,
     modflowToolBox: false,
     boundaryProperties: false,
     activeBoundaries: {}
@@ -47,11 +47,31 @@ const applicationStateReducer = ( state=initialState, action ) => {
         case "SET_SCENARIO_ANALYSIS_SELECT": {
             state = {
                 ...state,
-                scenarioAnalysisSelect: action.payload
+                scenarioAnalysisSelect: action.payload,
+                modflowToolBox: !action.payload
             };
+
             break;
         }
 
+        case "SET_CURRENT_TOOL":{
+            state = {
+                ...state,
+                tool: action.payload
+            };
+
+            if (state.tool == 'modflow'){
+                state.scenarioAnalysisSelect = false;
+                state.modflowToolBox = true;
+            }
+
+            if (state.tool == 'scenarioanalysis'){
+                state.scenarioAnalysisSelect = true;
+                state.modflowToolBox = false;
+            }
+
+            break;
+        }
     }
 
     return state;

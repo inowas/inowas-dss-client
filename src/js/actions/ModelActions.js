@@ -44,3 +44,26 @@ export function fetchModelMap() {
         })
     };
 }
+
+export function calculateModel(tool, modelId) {
+    const apiKey = getApiKey();
+    if ( tool=="modflow" ){
+        return {
+            type: "CALCULATE_MODEL",
+            payload: axios.post("modflow/calculation/"+ modelId +".json", {},{
+                headers: {'X-AUTH-TOKEN': apiKey}
+            })
+        };
+    }
+
+    if ( tool=="scenarioanalysis" ){
+        return {
+            type: "CALCULATE_MODEL",
+            payload: axios.post("scenarioanalysis/calculation/"+ modelId +".json", {},{
+                headers: {'X-AUTH-TOKEN': apiKey}
+            })
+        };
+    }
+
+
+}

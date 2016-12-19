@@ -3,7 +3,7 @@ import store from "../store"
 export function showBoundaryProperties(bType) {
     store.dispatch({
         type: "SET_BOUNDARY_PROPERTIES",
-        payload:  bType
+        payload: bType
     });
 }
 
@@ -38,15 +38,22 @@ export function setActiveModel(modelId) {
 }
 
 export function switchToScenarioAnalysisSelect() {
-  store.dispatch({
-      type: "SET_SCENARIO_ANALYSIS_SELECT",
-      payload: true
-  });
+    return {
+        type: "SET_SCENARIO_ANALYSIS_SELECT",
+        payload: true
+    };
 }
 
 export function switchToScenarioAnalysisEdit() {
-  store.dispatch({
-      type: "SET_SCENARIO_ANALYSIS_SELECT",
-      payload: false
-  });
+    return {
+        type: "SET_SCENARIO_ANALYSIS_SELECT",
+        payload: false
+    };
+}
+
+export function setCurrentTool(name) {
+    return {
+        type: "SET_CURRENT_TOOL",
+        payload: name
+    };
 }

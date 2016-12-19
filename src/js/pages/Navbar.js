@@ -20,10 +20,10 @@ export default class NavBar extends React.Component {
                                         <li><a href="/#/tools/T09C">UPCONING</a></li>
                                         <li><a href="/#/tools/T09D">CRITICAL WELL DISCHARGE</a></li>
                                         <li><a href="/#/tools/T09E">SEA LEVEL RISE</a></li>
-                                        <li><a href="/#/tools/scenario-analysis">SCENARIO ANALYSIS</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="/#/modflow/list">Modflow</a></li>
+                                <li><a href="/#/scenarioanalysis/list">Scenario Analysis</a></li>
                             </ul>
                         </div>
                     </div>

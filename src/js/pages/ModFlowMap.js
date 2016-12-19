@@ -6,6 +6,9 @@ import MapToolBox from "../components/map/MapToolBox";
 import MapOverlay from "../components/map/MapOverlay";
 import BoundaryProperties from "../components/boundaries/BoundaryProperties";
 
+import { calculateModel } from "../actions/ModelActions"
+import store from "../store"
+
 export default class ModFlowMap extends React.Component {
 
     constructor(props) {
@@ -35,6 +38,14 @@ export default class ModFlowMap extends React.Component {
         //console.log("You clicked the map at " + e.latlng)
     };
 
+    onCalculateHandler(modelId){
+        const tool = this.props.appState.tool;
+        if (tool == 'scenarioanalysis'){
+            modelId = store.getState().scenarioAnalysis.activeScenario;
+        }
+        store.dispatch(calculateModel(tool, modelId));
+    }
+
     renderEditControl(){
         return (
         <FeatureGroup>
@@ -48,14 +59,18 @@ export default class ModFlowMap extends React.Component {
         )
     }
 
-    getHeadsImageUrl(id, tool){
-        switch (tool){
-            case 'modflow':
-                return ('http://dev.inowas.hydro.tu-dresden.de/image/modflow/models/'+id+'/heads.png')
-                break;
-            case 'scenarioanalysis':
-                return ('http://dev.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png')
-                break;
+    getHeadsImageUrl(){
+        const {model, appState} = this.props;
+        const tool = appState.tool;
+
+        if (tool == 'scenarioanalysis'){
+            const id = store.getState().scenarioAnalysis.activeScenario;
+            return ('http://dev.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png');
+        }
+
+        if (tool == 'modflow'){
+            const id = model.id;
+            return ('http://dev.inowas.hydro.tu-dresden.de/image/modflow/models/'+id+'/heads.png');
         }
     }
 
@@ -90,10 +105,24 @@ export default class ModFlowMap extends React.Component {
         return renderedBoundaries;
     }
 
+    renderToolBox(){
+        const {model, appState} = this.props;
+        if (appState.modflowToolBox == true) {
+            return(
+                <div>
+                    <MapToolBox model={model} appState={appState} onCalculate={::this.onCalculateHandler} />
+                    <MapOverlay appState={appState}>
+                        <BoundaryProperties appState={appState} model={model} />
+                    </MapOverlay>
+                </div>
+            )
+        }
+    }
+
     render() {
 
         if (this.hasData()) {
-            const {model, appState, store} = this.props;
+            const {model, appState} = this.props;
             const boundingBox = model.bounding_box;
             return (
                 <div className="map-wrapper">
@@ -109,7 +138,7 @@ export default class ModFlowMap extends React.Component {
 
                             <LayersControl.Overlay name='Heads' checked>
                                 <ImageOverlay
-                                    url={this.getHeadsImageUrl(model.id, 'modflow')}
+                                    url={this.getHeadsImageUrl()}
                                     bounds={this.getBounds(boundingBox)}
                                     opacity={0.5}
                                 />
@@ -140,10 +169,8 @@ export default class ModFlowMap extends React.Component {
                         </LayersControl>
                         <ZoomControl position="topright"/>
 
-                        <MapToolBox model={model} appState={appState} store={store} />
-                        <MapOverlay appState={appState}>
-                            <BoundaryProperties appState={appState} model={model} />
-                        </MapOverlay>
+                        {this.renderToolBox()}
+
                     </Map>
                 </div>
             );

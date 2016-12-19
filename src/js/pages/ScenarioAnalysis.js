@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux";
 import ModflowMap from "./ModFlowMap";
 
-import * as applicationAction from "../actions/ApplicationActions";
+import { switchToScenarioAnalysisEdit, switchToScenarioAnalysisSelect, setCurrentTool } from "../actions/ApplicationActions";
 import { fetchScenarios, setBaseModel } from "../actions/ScenarioAnalysisActions"
 
 import ScenarioSelect from "../components/map/ScenarioSelect";
@@ -15,7 +15,7 @@ import ScenarioSelect from "../components/map/ScenarioSelect";
         store: store
     }
 })
-export default class ModFlow extends React.Component {
+export default class ScenarioAnalysis extends React.Component {
 
     hasData() {
         return this.props.scenarioAnalysis.fetched;
@@ -24,14 +24,16 @@ export default class ModFlow extends React.Component {
     componentWillMount() {
         this.props.dispatch(fetchScenarios(this.props.params.modelId));
         this.props.dispatch(setBaseModel(this.props.params.modelId));
+        this.props.dispatch(setCurrentTool('scenarioanalysis'));
     }
 
     editScenario() {
-        applicationAction.switchToScenarioAnalysisEdit();
+        this.props.dispatch(switchToScenarioAnalysisEdit());
+
     }
 
     selectScenario() {
-        applicationAction.switchToScenarioAnalysisSelect();
+        this.props.dispatch(switchToScenarioAnalysisSelect());
     }
 
     render() {

@@ -11,12 +11,11 @@ export default class MapToolBox extends React.Component {
     }
 
     onClickHandler(e){
-
+        this.props.onCalculate(this.props.model.id);
     }
 
     render() {
         const boundaries = this.props.model.boundaries;
-        console.log(this.props.store);
 
         return (
             <Accordion className="map-tool-box col-abs-2">
