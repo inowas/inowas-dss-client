@@ -27,14 +27,32 @@ export default class ModFlowMap extends React.Component {
         return (JSON.parse(json));
     }
 
+    hasData(){
+        return (this.props.model != null)
+    }
+
     onClickHandler(e){
         //console.log("You clicked the map at " + e.latlng)
     };
 
+    renderEditControl(){
+        return (
+        <FeatureGroup>
+            <EditControl
+                position='topright'
+                draw={{
+                    rectangle: false
+                }}
+            />
+        </FeatureGroup>
+        )
+    }
+
     render() {
-        const {model, appState, styles, store} = this.props;
-        const boundingBox = model.bounding_box;
-        if (model.id) {
+
+        if (this.hasData()) {
+            const {model, appState, styles, store} = this.props;
+            const boundingBox = model.bounding_box;
             const boundaries = model.boundaries.map( b => {
                 if (b.type == 'WEL'){
                     const style = styles.wells[b.well_type];
@@ -58,7 +76,6 @@ export default class ModFlowMap extends React.Component {
                     />
                 }
             });
-
             return (
                 <div className="map-wrapper">
                     <Map bounds={this.getBounds(boundingBox)} zoomControl={false} onClick={::this.onClickHandler}>
@@ -70,6 +87,14 @@ export default class ModFlowMap extends React.Component {
                             <LayersControl.BaseLayer name='OpenStreetMap.BlackAndWhite'>
                                 <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' url='http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'/>
                             </LayersControl.BaseLayer>
+
+                            <LayersControl.Overlay name='Heads' checked>
+                                <ImageOverlay
+                                    url={'http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/'+model.id+'/heads/image.png'}
+                                    bounds={this.getBounds(boundingBox)}
+                                    opacity={0.5}
+                                />
+                            </LayersControl.Overlay>
 
                             <LayersControl.Overlay name='Area' checked>
                                 <GeoJSON data={this.parseJson(model.area.geometry)}/>
@@ -86,16 +111,7 @@ export default class ModFlowMap extends React.Component {
                         </LayersControl>
                         <ZoomControl position="topright"/>
 
-                        <FeatureGroup>
-                            <EditControl
-                                position='topright'
-                                draw={{
-                                    rectangle: false
-                                }}
-                            />
-                            {boundaries}
-                        </FeatureGroup>
-
+                        {boundaries}
 
                         <MapToolBox model={model} appState={appState} store={store} />
                         <MapOverlay appState={appState}>

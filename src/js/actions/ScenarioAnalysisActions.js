@@ -63,3 +63,23 @@ export function updateNameAndDescription(modelId, scenarioId, name, description)
         )
     }
 }
+
+export function fetchScenarioBoundary( modelId, scenarioId, boundaryId ) {
+    const apiKey = getApiKey();
+    return {
+        type: "FETCH_SCENARIO_BOUNDARY",
+        payload: axios.get('/scenarioanalysis/models/'+ modelId +'/scenarios/'+ scenarioId +'/boundaries/'+ boundaryId +'.json', {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    };
+}
+
+export function fetchScenario(modelId, scenarioId) {
+    const apiKey = getApiKey();
+    return {
+        type: "FETCH_SCENARIO",
+        payload: axios.get('/scenarioanalysis/models/'+ modelId +'/scenarios/'+ scenarioId +'.json', {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    };
+}

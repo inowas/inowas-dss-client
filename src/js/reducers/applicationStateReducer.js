@@ -1,8 +1,10 @@
 
 const initialState = {
+    application: null,
     modelId: null,
-    scenarioAnalysisSelect: true,
-    boundaryProperties: null,
+    scenarioAnalysisSelect: false,
+    modflowToolBox: false,
+    boundaryProperties: false,
     activeBoundaries: {}
 };
 
@@ -30,6 +32,14 @@ const applicationStateReducer = ( state=initialState, action ) => {
             state = {
                 ...state,
                 modelId: action.payload
+            };
+            break;
+        }
+
+        case "SET_MODFLOW_TOOLBOX": {
+            state = {
+                ...state,
+                modflowToolBox: action.payload
             };
             break;
         }

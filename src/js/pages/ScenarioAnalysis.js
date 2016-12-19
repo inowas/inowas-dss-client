@@ -11,7 +11,8 @@ import ScenarioSelect from "../components/map/ScenarioSelect";
     return {
         modelStore: store.model,
         appState: store.appState,
-        scenarioAnalysis: store.scenarioAnalysis
+        scenarioAnalysis: store.scenarioAnalysis,
+        store: store
     }
 })
 export default class ModFlow extends React.Component {
@@ -34,12 +35,14 @@ export default class ModFlow extends React.Component {
     }
 
     render() {
+        const scenario = this.props.scenarioAnalysis.scenario;
         const activeScenario = this.props.scenarioAnalysis.activeScenario;
-        const model = this.props.modelStore.model;
         const appState = this.props.appState;
         const baseModel= this.props.scenarioAnalysis.baseModel;
         const scenarios = this.props.scenarioAnalysis.scenarios;
         const className = appState.scenarioAnalysisSelect ? "off-canvas-active" : null;
+        const styles = this.props.modelStore.styles;
+        const store = this.props.store;
 
         if (this.hasData()) {
             return (
@@ -52,7 +55,7 @@ export default class ModFlow extends React.Component {
                         baseModel={baseModel}
                         activeScenario={activeScenario}
                     />
-                    <ModflowMap model={model} appState={appState}/>
+                    <ModflowMap model={scenario} styles={styles} appState={appState} store={store} />
                 </div>
             );
         }

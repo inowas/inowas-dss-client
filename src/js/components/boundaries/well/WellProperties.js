@@ -20,6 +20,8 @@ export default class WellProperties extends React.Component {
         const geometry = JSON.parse(boundary.geometry);
         const lng = geometry.coordinates[1];
         const lat = geometry.coordinates[0];
+        const layer = boundary.layer_number + 1;
+
 
         return (
             <div className="scroll-vertical col-md-10 container-fluid">
@@ -81,7 +83,7 @@ export default class WellProperties extends React.Component {
                                 <label className="col-sm-3 control-label">Layer</label>
                                 <div className="col-sm-9">
                                     <div className="input-group">
-                                        <input value={lng} name="latitude" id="inputLatitude" type="number" className="form-control input-sm" placeholder="Longitude"/>
+                                        <input value={layer} name="latitude" id="inputLatitude" type="number" className="form-control input-sm" placeholder="Longitude"/>
                                         <span className="input-group-btn btn-group-sm">
                                             <button className="btn btn-default btn-group-sm" type="button">
                                                 <span className="glyphicon glyphicon-map-marker" />
