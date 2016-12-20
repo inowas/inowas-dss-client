@@ -6,6 +6,14 @@ export default class BoundarySidebar extends React.Component {
         this.props.setActiveBoundary(bType, id);
     }
 
+    onAddHandler(e){
+        this.props.addBoundary();
+    }
+
+    onRemoveHandler(e){
+        this.props.removeBoundary();
+    }
+
     renderBoundaryList( activeBoundaries ) {
         return this.props.boundaries.map(b => {
             return (
@@ -41,8 +49,11 @@ export default class BoundarySidebar extends React.Component {
                 <ul className="scroll-vertical stretch nav nav-pills nav-stacked">
                     {this.renderBoundaryList(this.props.appState.activeBoundaries)}
                 </ul>
-                <button className="btn btn-default btn-block" type="button">
+                <button className="btn btn-default btn-block" type="button" onClick={this.onAddHandler.bind(this)}>
                     <span className="glyphicon glyphicon-plus"/>
+                </button>
+                <button className="btn btn-default btn-block" type="button" onClick={this.onRemoveHandler.bind(this)}>
+                    <span className="glyphicon glyphicon-minus"/>
                 </button>
             </div>
         );

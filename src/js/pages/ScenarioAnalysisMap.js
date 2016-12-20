@@ -1,8 +1,8 @@
 import React from "react"
-import { Map, TileLayer, FeatureGroup, GeoJSON, LayersControl, ZoomControl, CircleMarker, ImageOverlay} from 'react-leaflet'
+import { Map, TileLayer, FeatureGroup, GeoJSON, LayersControl, ZoomControl, CircleMarker, ImageOverlay, Popup, Marker} from 'react-leaflet'
 import { EditControl } from "react-leaflet-draw"
 
-import { calculateModel } from "../actions/ModelActions"
+import { setPointForNewWell, addWell } from "../actions/ScenarioAnalysisActions"
 import store from "../store"
 
 export default class ScenarioAnalysisMap extends React.Component {
@@ -20,6 +20,11 @@ export default class ScenarioAnalysisMap extends React.Component {
         return [[y_min, x_min], [y_max, x_max]];
     }
 
+    getBottomRight(bb) {
+        const {y_min, x_min, y_max, x_max} = bb;
+        return [y_max, x_max];
+    }
+
 
     parseJson(json){
         return (JSON.parse(json));
@@ -30,6 +35,14 @@ export default class ScenarioAnalysisMap extends React.Component {
     }
 
     onClickHandler(e){
+        if (this.props.appState.selectPoint){
+            store.dispatch(addWell(
+                store.getState().scenarioAnalysis.baseModel,
+                store.getState().scenarioAnalysis.activeScenario,
+                e.latlng
+                )
+            )
+        }
         //console.log("You clicked the map at " + e.latlng)
     };
 
@@ -56,34 +69,51 @@ export default class ScenarioAnalysisMap extends React.Component {
         const styles = this.props.styles;
         const filteredBoundaries = boundaries.filter( b => {return b.type == type});
         return filteredBoundaries.map( b => {
-            if (b.type == 'WEL'){
-                const style = styles.wells[b.well_type];
+            if (typeof b.geometry !== 'undefined'){
+                if (typeof b.geometry !== 'undefined' && b.type == 'WEL'){
+                    const style = styles.wells[b.well_type];
+                    const data = this.parseJson(b.geometry);
+                    return <CircleMarker
+                        key={b.id}
+                        center={[data.coordinates[1], data.coordinates[0]]}
+                        radius={style.radius}
+                        color={style.color}
+                        weight={style.weight}
+                        fillColor={style.fillColor}
+                        fillOpacity={style.fillOpacity}
+                    />
+                }
+
+                const style = styles[b.type];
                 const data = this.parseJson(b.geometry);
-                return <CircleMarker
+                return <GeoJSON
                     key={b.id}
-                    center={[data.coordinates[1], data.coordinates[0]]}
-                    radius={style.radius}
-                    color={style.color}
-                    weight={style.weight}
-                    fillColor={style.fillColor}
-                    fillOpacity={style.fillOpacity}
+                    data={data}
+                    style={style}
                 />
             }
-
-            const style = styles[b.type];
-            const data = this.parseJson(b.geometry);
-            return <GeoJSON
-                key={b.id}
-                data={data}
-                style={style}
-            />
         });
+    }
+
+    renderHeadsPopup(){
+        const heads = this.props.heads;
+        if (heads.length>0){
+            console.log(heads[0]);
+            return(
+                <Popup position={this.getBottomRight(this.props.model.bounding_box)}>
+                    <span>
+                        Maximum: {Math.round(heads[0].max_value)}m<br />
+                        Minimum: {Math.round(heads[0].min_value)}m
+                    </span>
+                </Popup>
+            )
+        }
     }
 
     render() {
 
         if (this.hasData()) {
-            const {model, appState} = this.props;
+            const {model, appState, heads} = this.props;
             const boundingBox = model.bounding_box;
             return (
                 <div className="map-wrapper">
@@ -130,6 +160,7 @@ export default class ScenarioAnalysisMap extends React.Component {
                         </LayersControl>
                         <ZoomControl position="topright"/>
 
+                        {this.renderHeadsPopup()}
 
                     </Map>
                 </div>

@@ -16,14 +16,14 @@ export default class ScenarioMapOverlay extends React.Component {
     }
 
     hide() {
-        this.enableMap();
+        //this.enableMap();
         hideBoundaryProperties();
     }
 
 
     render() {
         if (this.props.appState.boundaryProperties){
-            this.disableMap();
+            //this.disableMap();
             return (
                 <div>
                     <div className="map-overlay-darkner"></div>

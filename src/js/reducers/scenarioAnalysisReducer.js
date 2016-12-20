@@ -2,6 +2,7 @@
 const initialState = {
     activeScenario: null,
     scenario: null,
+    heads: null,
     baseModel: null,
     scenarios: [],
     fetching: false,
@@ -142,6 +143,40 @@ const scenarioAnalysis = ( state=initialState, action ) => {
                 }
                 return b;
             });
+            break;
+        }
+
+        case "SCENARIO_SUBMIT_EVENT_FULFILLED": {
+            state = {
+                ...state,
+                fetching: false,
+                fetched: true,
+                scenario: action.payload.data
+            };
+            break;
+        }
+
+        case "FETCH_SCENARIO_HEAD_LIST_FULFILLED": {
+            state = {
+                ...state,
+                fetching: false,
+                fetched: true,
+                heads: action.payload.data
+            };
+            break;
+        }
+
+        case "CHANGE_BOUNDARY_NAME": {
+            state = {...state};
+            const boundaries = state.scenario.boundaries.map( b => {
+                if (b.id == action.payload.id){
+                    b.name = action.payload.name;
+                }
+                return b;
+            });
+
+            state.scenario.boundaries = boundaries;
+
             break;
         }
     }

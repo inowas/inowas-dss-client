@@ -5,6 +5,12 @@ export function showBoundaryProperties(bType) {
         type: "SET_BOUNDARY_PROPERTIES",
         payload: bType
     });
+
+    store.dispatch({
+        type: "SET_SELECT_POINT",
+            payload: false
+        }
+    );
 }
 
 export function hideBoundaryProperties() {

@@ -1,7 +1,7 @@
 import React from "react";
 import ScenarioListItem from "../map/ScenarioListItem"
 import store from "../../store"
-import { duplicateScenario, deleteScenario, updateNameAndDescription, setActiveScenario, fetchScenario } from "../../actions/ScenarioAnalysisActions"
+import { duplicateScenario, deleteScenario, updateNameAndDescription, setActiveScenario, fetchScenario, getHeadList } from "../../actions/ScenarioAnalysisActions"
 
 export default class ScenarioSelect extends React.Component {
 
@@ -40,12 +40,14 @@ export default class ScenarioSelect extends React.Component {
         const modelId = this.props.baseModel;
         store.dispatch(setActiveScenario(scenarioId));
         store.dispatch(fetchScenario(modelId, scenarioId));
+        store.dispatch(getHeadList(scenarioId));
     }
 
     componentWillMount(){
         const modelId = this.props.baseModel;
         const activeScenario = this.props.activeScenario;
         store.dispatch(fetchScenario(modelId, activeScenario));
+        store.dispatch(getHeadList(activeScenario));
     }
 
     render() {

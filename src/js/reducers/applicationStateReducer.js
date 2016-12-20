@@ -1,5 +1,6 @@
 
 const initialState = {
+    selectPoint: false,
     tool: null,
     modelId: null,
     scenarioAnalysisSelect: true,
@@ -11,6 +12,21 @@ const initialState = {
 const applicationStateReducer = ( state=initialState, action ) => {
 
     switch (action.type) {
+        case "SET_SELECT_POINT": {
+            state = {
+                ...state,
+                selectPoint: action.payload
+            };
+
+            if (action.payload === true){
+                state.boundaryProperties = null
+            } else {
+                //state.boundaryProperties = true
+            }
+
+            break;
+        }
+
         case "SET_BOUNDARY_PROPERTIES": {
             state = {
                 ...state,

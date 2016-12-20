@@ -66,13 +66,14 @@ export default class ScenarioAnalysis extends React.Component {
     renderMap(){
         if (this.canRenderMap()) {
             const scenario = this.props.scenarioAnalysis.scenario;
+            const heads = this.props.scenarioAnalysis.heads;
             const appState = this.props.appState;
             const styles = this.props.modelStore.styles;
             const store = this.props.store;
 
             return (
                 <div>
-                    <ScenarioAnalysisMap model={scenario} styles={styles} appState={appState} store={store} />
+                    <ScenarioAnalysisMap heads={heads} model={scenario} styles={styles} appState={appState} store={store} />
                     <ScenarioMapToolBox model={scenario} appState={appState} onCalculate={::this.onCalculateHandler} />
                     <ScenarioMapOverlay appState={appState}>
                         <ScenarioBoundaryProperties appState={appState} model={scenario} />
