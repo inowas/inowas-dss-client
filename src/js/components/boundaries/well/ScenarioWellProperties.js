@@ -43,6 +43,7 @@ export default class ScenarioWellProperties extends React.Component {
         const lng = geometry.coordinates[1];
         const lat = geometry.coordinates[0];
         const layer = boundary.layer_number + 1;
+        const wellType = boundary.well_type;
 
 
         return (
@@ -115,7 +116,6 @@ export default class ScenarioWellProperties extends React.Component {
                                 </div>
                             </div>
                         </div>
-
                     </form>
 
                     <div className="col-md-6">

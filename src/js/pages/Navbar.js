@@ -15,15 +15,11 @@ export default class NavBar extends React.Component {
                                 <li className="dropdown">
                                     <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span className="caret"/></a>
                                     <ul className="dropdown-menu">
-                                        <li><a href="/#/tools/T09A">DEPTH OF SALTWATER INTERFACE</a></li>
-                                        <li><a href="/#/tools/T09B">FRESHWATER-SALTWATER INTERFACE</a></li>
-                                        <li><a href="/#/tools/T09C">UPCONING</a></li>
-                                        <li><a href="/#/tools/T09D">CRITICAL WELL DISCHARGE</a></li>
-                                        <li><a href="/#/tools/T09E">SEA LEVEL RISE</a></li>
+                                        <li><a href="/#/tools/T09C">T09c Upconing</a></li>
+                                        <li><a href="/#/modflow/list">T03 Numerical model setup (MODFLOW)</a></li>
+                                        <li><a href="/#/scenarioanalysis/list">T07 Application specific scenarios analyzer</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="/#/modflow/list">Modflow</a></li>
-                                <li><a href="/#/scenarioanalysis/list">Scenario Analysis</a></li>
                             </ul>
                         </div>
                     </div>
