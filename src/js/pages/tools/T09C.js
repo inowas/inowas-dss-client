@@ -36,24 +36,26 @@ export default class T09C extends React.Component {
     render() {
         return (
             <div className="page-wrapper">
-                <div className="grid-container">
-                    <section className="tile col col-abs-2 stacked">
-                        <Background image={this.props.tool.background.image} />
-                    </section>
+                <div className="page-width">
+                    <div className="grid-container">
+                        <section className="tile col col-abs-2 stacked">
+                            <Background image={this.props.tool.background.image} />
+                        </section>
 
-                    <section className="tile col col-abs-3 stretch">
-                        <Chart data={this.props.tool.chart.data} info={this.props.tool.info} options={this.props.tool.chart.options} />
-                    </section>
-                </div>
+                        <section className="tile col col-abs-3 stretch">
+                            <Chart data={this.props.tool.chart.data} info={this.props.tool.info} options={this.props.tool.chart.options} />
+                        </section>
+                    </div>
 
-                <div className="grid-container">
-                    <section className="tile col col-abs-2">
-                        <Info data={this.props.tool.info} />
-                    </section>
+                    <div className="grid-container">
+                        <section className="tile col col-abs-2">
+                            <Info data={this.props.tool.info} />
+                        </section>
 
-                    <section className="tile col col-abs-3 stretch">
-                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
-                    </section>
+                        <section className="tile col col-abs-3 stretch">
+                            <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
+                        </section>
+                    </div>
                 </div>
             </div>
         )
