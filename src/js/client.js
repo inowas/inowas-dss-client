@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {Router, Route, hashHistory} from "react-router";
 
-import * as tools from "./pages/tooles"
+import * as tools from "./pages/tools"
 
 import Login from "./pages/Login"
 import Modflow from "./pages/ModFlow"
