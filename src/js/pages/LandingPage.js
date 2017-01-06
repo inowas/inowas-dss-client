@@ -4,7 +4,7 @@ export default class LandingPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="landingPage-wrapper">
                 <div className="container-top">
                     <form className="form-signin">
                         <h2 className="form-signin-heading">Sign up!</h2>
@@ -20,7 +20,6 @@ export default class LandingPage extends React.Component {
                         </div>
                         <button className="btn btn-lg btn-primary btn-block" type="submit">Go</button>
                     </form>
-
                     <div id="startCarousel" className="carousel slide" data-ride="carousel">
                         <ol className="carousel-indicators">
                             <li data-target="#startCarousel" data-slide-to="0" className="active"></li>
@@ -151,7 +150,7 @@ export default class LandingPage extends React.Component {
 
                         </div>
 
-                        <div>
+                        <div className="align-center">
                             <a className="btn more" href="#">Read more</a>
                         </div>
 
@@ -308,7 +307,7 @@ export default class LandingPage extends React.Component {
                         </div>
 
                     </div>
-                    <div>
+                    <div className="align-center">
                         <a className="btn more" href="#">Read more</a>
                     </div>
 
@@ -345,7 +344,7 @@ export default class LandingPage extends React.Component {
                             </div>
                         </div>
 
-                        <div>
+                        <div className="align-center">
                             <a className="btn more" href="#">Read more</a>
                         </div>
 
@@ -357,7 +356,7 @@ export default class LandingPage extends React.Component {
                             <img src="../images/landingPage/documentation-image.png" width="1238" height="388" className="" alt=""/>
                         </figure>
                         <p className="top-space">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
-                        <div>
+                        <div className="align-center">
                             <a className="btn more" href="#">Read more</a>
                         </div>
                     </div>
