@@ -31,7 +31,7 @@ export default class LandingPage extends React.Component {
 
                         <div className="carousel-inner" role="listbox">
                             <div className="item active">
-                                <img src="images/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="first-slide"/>
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="first-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
                                         <h2>Web Mar Apps</h2>
@@ -41,7 +41,7 @@ export default class LandingPage extends React.Component {
                             </div>
 
                             <div className="item">
-                                <img src="images/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="second-slide"/>
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="second-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
                                         <h2>Web Mar Apps</h2>
@@ -51,7 +51,7 @@ export default class LandingPage extends React.Component {
                             </div>
 
                             <div className="item">
-                                <img src="images/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="third-slide"/>
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="third-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
                                         <h2>Web Mar Apps</h2>
@@ -61,7 +61,7 @@ export default class LandingPage extends React.Component {
                             </div>
 
                             <div className="item">
-                                <img src="images/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="fourth-slide"/>
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="fourth-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
                                         <h2>Web Mar Apps</h2>
@@ -101,10 +101,10 @@ export default class LandingPage extends React.Component {
 
                             <div className="carousel-inner" role="listbox">
 
-                                <div className="fill fill-app-bg" style={{ background-image: 'url(images/mar-applications-bg.png)', }}></div>
+                                <div className="fill fill-app-bg"></div>
 
                                 <div className="item active">
-                                    <img src="images/mar-applications-01.png" alt="Web Mar Apps" className="first-slide"/>
+                                    <img src="../images/landingPage/mar-applications-01.png" alt="Web Mar Apps" className="first-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
@@ -115,7 +115,7 @@ export default class LandingPage extends React.Component {
                                 </div>
 
                                 <div className="item">
-                                    <img src="images/mar-applications-02.png" alt="Web Mar Apps" className="second-slide"/>
+                                    <img src="../images/landingPage/mar-applications-02.png" alt="Web Mar Apps" className="second-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
@@ -126,7 +126,7 @@ export default class LandingPage extends React.Component {
                                 </div>
 
                                 <div className="item">
-                                    <img src="images/mar-applications-03.png" alt="Web Mar Apps" className="third-slide"/>
+                                    <img src="../images/landingPage/mar-applications-03.png" alt="Web Mar Apps" className="third-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
@@ -137,7 +137,7 @@ export default class LandingPage extends React.Component {
                                 </div>
 
                                 <div className="item">
-                                    <img src="images/mar-applications-04.png" alt="Web Mar Apps" className="fourth-slide"/>
+                                    <img src="../images/landingPage/mar-applications-04.png" alt="Web Mar Apps" className="fourth-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
@@ -151,7 +151,7 @@ export default class LandingPage extends React.Component {
 
                         </div>
 
-                        <div style="text-align: center;">
+                        <div>
                             <a className="btn more" href="#">Read more</a>
                         </div>
 
@@ -159,7 +159,7 @@ export default class LandingPage extends React.Component {
 
                     <div className="row toolbox top-space">
                         <h2>Toolbox</h2>
-                        <div className="col-md-4" style="width: 28%;">
+                        <div className="col-md-4">
                             <div className="panel toolbox-panel-01">
                                 <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
@@ -175,7 +175,7 @@ export default class LandingPage extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4" style="width: 38%;">
+                        <div className="col-md-4">
                             <div className="panel toolbox-panel-03">
                                 <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
@@ -192,31 +192,31 @@ export default class LandingPage extends React.Component {
 
                             <ol className="carousel-indicators">
                                 <li data-target="#toolsCarousel" data-slide-to="0" className="active">
-                                    <img src="images/toolbox-icon-01.png"/>
+                                    <img src="../images/icons/toolbox-icon-01.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="1">
-                                    <img src="images/toolbox-icon-02.png"/>
+                                    <img src="../images/icons/toolbox-icon-02.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="2">
-                                    <img src="images/toolbox-icon-03.png"/>
+                                    <img src="../images/icons/toolbox-icon-03.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="3">
-                                    <img src="images/toolbox-icon-04.png"/>
+                                    <img src="../images/icons/toolbox-icon-04.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="4">
-                                    <img src="images/toolbox-icon-05.png"/>
+                                    <img src="../images/icons/toolbox-icon-05.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="5">
-                                    <img src="images/toolbox-icon-06.png"/>
+                                    <img src="../images/icons/toolbox-icon-06.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="6">
-                                    <img src="images/toolbox-icon-07.png"/>
+                                    <img src="../images/icons/toolbox-icon-07.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="7">
-                                    <img src="images/toolbox-icon-08.png"/>
+                                    <img src="../images/icons/toolbox-icon-08.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="8">
-                                    <img src="images/toolbox-icon-09.png"/>
+                                    <img src="../images/icons/toolbox-icon-09.png"/>
                                 </li>
                             </ol>
 
@@ -308,7 +308,7 @@ export default class LandingPage extends React.Component {
                         </div>
 
                     </div>
-                    <div style="text-align: center;">
+                    <div>
                         <a className="btn more" href="#">Read more</a>
                     </div>
 
@@ -316,7 +316,7 @@ export default class LandingPage extends React.Component {
                         <h2>Geo Database</h2>
                         <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                         <figure>
-                            <img src="images/geo-database-image.png" width="773" height="236" className="" alt=""/>
+                            <img src="../images/landingPage/geo-database-image.png" width="773" height="236" className="" alt=""/>
                         </figure>
                         <div className="col-md-4">
                             <div className="panel geo-panel-01">
@@ -345,7 +345,7 @@ export default class LandingPage extends React.Component {
                             </div>
                         </div>
 
-                        <div style="text-align: center;">
+                        <div>
                             <a className="btn more" href="#">Read more</a>
                         </div>
 
@@ -354,10 +354,10 @@ export default class LandingPage extends React.Component {
                     <div className="row documentation top-space">
                         <h2>Full documentation</h2>
                         <figure>
-                            <img src="images/documentation-image.png" width="1238" height="388" className="" alt=""/>
+                            <img src="../images/landingPage/documentation-image.png" width="1238" height="388" className="" alt=""/>
                         </figure>
                         <p className="top-space">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
-                        <div style="text-align: center;">
+                        <div>
                             <a className="btn more" href="#">Read more</a>
                         </div>
                     </div>
