@@ -162,7 +162,7 @@ export default class LandingPage extends React.Component {
                             <div className="panel toolbox-panel-01">
                                 <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
-                                    <p>Simple tools derived from data mining and empirical correlations</p>
+                                    <p><strong>Simple</strong> tools derived from data mining and empirical correlations</p>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +170,7 @@ export default class LandingPage extends React.Component {
                             <div className="panel toolbox-panel-02">
                                 <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
-                                    <p>Practical implementation of analytical equations of groundwater flow</p>
+                                    <p><strong>Practical</strong> implementation of analytical equations of groundwater flow</p>
                                 </div>
                             </div>
                         </div>
@@ -178,11 +178,11 @@ export default class LandingPage extends React.Component {
                             <div className="panel toolbox-panel-03">
                                 <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
-                                    <p>Reliable simulations using complex numerical flow models (i.e. MODFLOW)</p>
+                                    <p><strong>Reliable</strong> simulations using complex numerical flow models (i.e. MODFLOW)</p>
                                 </div>
                             </div>
                         </div>
-                        <p className="description">The applications are based on a collection of simple, practical and reliable web tools for planning, management and optimization of managed aquifer recharge schemes. The tools of various degrees of complexity are either included in application-specific workflows or used as standalone web-based instruments.</p>
+                        <p className="description align-center">The applications are based on a collection of simple, practical and reliable web tools for planning, management and optimization of managed aquifer recharge schemes. The tools of various degrees of complexity are either included in application-specific workflows or used as standalone web-based instruments.</p>
                     </div>
 
                     <div className="row toolbox-icons">
@@ -308,14 +308,14 @@ export default class LandingPage extends React.Component {
 
                     </div>
                     <div className="align-center">
-                        <a className="btn more" href="#">Read more</a>
+                        <a className="btn more" href="http://wiki.inowas.hydro.tu-dresden.de/category/tools/">Read more</a>
                     </div>
 
                     <div className="row geo-database top-space">
                         <h2>Geo Database</h2>
-                        <p className="align-center">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                        <p className="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                         <figure>
-                            <img src="../images/landingPage/geo-database-image.png" width="773" height="236" className="" alt=""/>
+                            <img src="../images/landingPage/geo-database-image.png" width="700" height="315" className="" alt=""/>
                         </figure>
                         <div className="col-md-4">
                             <div className="panel geo-panel-01">
@@ -345,19 +345,19 @@ export default class LandingPage extends React.Component {
                         </div>
 
                         <div className="align-center">
-                            <a className="btn more" href="#">Read more</a>
+                            <a className="btn more" href="http://kb.inowas.hydro.tu-dresden.de">Read more</a>
                         </div>
 
                     </div>
 
                     <div className="row documentation top-space">
-                        <h2>Full documentation</h2>
+                        <h2>Documentation</h2>
                         <figure>
                             <img src="../images/landingPage/documentation-image.png" width="1238" height="388" className="" alt=""/>
                         </figure>
-                        <p className="top-space align-center">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                        <p className="description align-center">Detailed documentation of all tools, applications and geo database, including practical examples and references for further read. The documentation can be accessed at any time from the individual pages, providing valuable support for project development.</p>
                         <div className="align-center">
-                            <a className="btn more" href="#">Read more</a>
+                            <a className="btn more" href="http:/wiki.inowas.hydro.tu-dresden.de">Read more</a>
                         </div>
                     </div>
 

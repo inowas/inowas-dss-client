@@ -25,8 +25,8 @@ function getInitialState() {
                 id: 'q',
                 name: 'Pumping rate, Q (m³/d)',
                 min: 0,
-                max: 2000,
-                value: 2000,
+                max: 3500,
+                value: 1000,
                 stepSize: 1,
                 decimals: 0
             },
@@ -38,7 +38,7 @@ function getInitialState() {
                 max: 100,
                 value: 50,
                 stepSize: 1,
-                decimals: 0
+                decimals: 1
             },
             {
                 order: 2,

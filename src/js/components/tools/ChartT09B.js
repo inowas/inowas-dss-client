@@ -11,7 +11,7 @@ export default class Chart extends React.Component {
                     <div className="col stretch">
                         <div className="aspect-ratio-wrapper">
                             <div className="aspect-ratio-element diagram">
-                                <ResponsiveContainer width='100%' aspect={3.0/2.0}>
+                                <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                     <LineChart
                                         data={this.props.data}
                                         margin={{top: 20, right: 40, left: 10, bottom: 40}}

@@ -32,10 +32,10 @@ export default class Info extends React.Component {
 
                 <div className="center-vertical center-horizontal">
                     <p>
-                        The calculated upconing level of <strong>{this.props.data.z}m </strong>
-                        is lower than the critical elevation of <strong>{this.props.data.zCrit}m </strong>
+                        The calculated upconing level of <strong>{this.props.data.z} m </strong>
+                        is lower than the critical elevation of <strong>{this.props.data.zCrit} m </strong>
                         so saltwater shouldn't enter the well. However, we recommend a maximum
-                        pumping rate of <strong>{this.props.data.q}m<sup>3</sup>/d</strong>.
+                        pumping rate of <strong>{this.props.data.q} m<sup>3</sup>/d</strong>.
                     </p>
                 </div>
             </div>
