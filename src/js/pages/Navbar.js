@@ -14,7 +14,7 @@ export default class NavBar extends React.Component {
                             <ul className="level_1" role="menubar">
                                 <li className="submenu">
                                     <a href="">
-                                        <i className="flaticon-settings-6"></i>Dashboard
+                                        <i className="flaticon-settings-6"></i>Dashboard 
                                     </a>
                                 </li>
                                 <li className="submenu">
@@ -23,20 +23,25 @@ export default class NavBar extends React.Component {
                                 </li>
                                 <li className="submenu">
                                     <a href="">
-                                        <i className="flaticon-database-1"></i>Datasets
-                                        <span>(18)</span>
-                                    </a>
-                                </li>
-                                <li className="submenu">
-                                    <a href="">
-                                        <i className="flaticon-folder-4"></i>Projects
-                                        <span>(1)</span>
+                                        <i className="flaticon-database-1"></i>Datasets (<strong>18</strong>)
                                     </a>
                                 </li>
                                 <li className="submenu dropdown">
                                     <a href="" className="dropdown-toggle">
-                                        <i className="flaticon-windows-1"></i>Applications
-                                        <span>(2)</span>
+                                        <i className="flaticon-folder-4"></i>Projects (<strong>1</strong>)
+                                    </a>
+                                    <ul className="dropdown-menu">
+                                        <li>
+                                            <a href="#">INOWAS Project</a>
+                                        </li>
+                                        <li className="add-new">
+                                            <a href="#">+ Add project</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li className="submenu dropdown">
+                                    <a href="" className="dropdown-toggle">
+                                        <i className="flaticon-windows-1"></i>Applications (<strong>2</strong>)
                                     </a>
                                     <ul className="dropdown-menu">
                                         <li>
@@ -53,8 +58,7 @@ export default class NavBar extends React.Component {
                                 <li className="submenu dropdown">
                                     <a href="" className="dropdown-toggle">
                                         <i className="flaticon-controls-4"></i>
-                                        Tools
-                                        <span>(3)</span>
+                                        Tools (<strong>3</strong>)
                                     </a>
                                     <ul className="dropdown-menu">
                                         <li>
