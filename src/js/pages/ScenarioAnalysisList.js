@@ -26,7 +26,7 @@ export default class ScenarioAnalysisList extends React.Component {
                 return (
                     <tr key={model.id}>
                         <td>#</td>
-                        <td><Link to={'/scenarioanalysis/' + model.id}>{model.name}</Link></td>
+                        <td><Link to={'tools/scenarioanalysis/' + model.id}>{model.name}</Link></td>
                     </tr>
                 )
             });
