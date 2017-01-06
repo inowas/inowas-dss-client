@@ -26,7 +26,7 @@ export default class ModelList extends React.Component {
                 return (
                     <tr key={model.id}>
                         <td>#</td>
-                        <td><Link to={'/modflow/' + model.id}>{model.name}</Link></td>
+                        <td><Link to={'tools/modflow/' + model.id}>{model.name}</Link></td>
                     </tr>
                 )
             });

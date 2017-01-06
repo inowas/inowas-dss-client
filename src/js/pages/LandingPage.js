@@ -1,25 +1,14 @@
 import React from "react"
 
+import Login from "../components/landingPage/Login";
+
 export default class LandingPage extends React.Component {
 
     render() {
         return (
             <div className="landingPage-wrapper">
                 <div className="container-top">
-                    <form className="form-signin">
-                        <h2 className="form-signin-heading">Sign up!</h2>
-                        <label for="user" className="sr-only">Username</label>
-                        <input id="user" className="form-control" placeholder="Username" required="" autoFocus="" type="text"/>
-                        <label for="inputPassword" className="sr-only">Password</label>
-                        <input id="inputPassword" className="form-control" placeholder="Password" required="" type="password"/>
-                        <div className="checkbox">
-                            <label>
-                                <input value="remember-me" type="checkbox"/>
-                                Remember me
-                            </label>
-                        </div>
-                        <button className="btn btn-lg btn-primary btn-block" type="submit">Go</button>
-                    </form>
+                    <Login />
                     <div id="startCarousel" className="carousel fade" data-ride="carousel" data-interval="4000">
                         <ol className="carousel-indicators">
                             <li data-target="#startCarousel" data-slide-to="0" className="active"></li>
