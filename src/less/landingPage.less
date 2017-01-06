@@ -9,11 +9,17 @@
 .navbar-top {
     background-color: #4C4C4C;
     left: 0;
-    min-height: 22px;
+    min-height: 30px;
     margin-bottom: 20px;
     position: fixed;
     right: 0;
     z-index: 1030;
+}
+
+.navbar-top ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .navbar-right {
@@ -48,10 +54,14 @@
     list-style: none;
 }
 
+.navbar-top a:focus,
+.navbar-top a:hover {
+    text-decoration: none;
+}
+
 .navbar-top .level_1 > li {
-    float: left;
     position: relative;
-    display: block;
+    display: inline-block;
 }
 
 .navbar-top .level_1 > li > a {
@@ -75,6 +85,7 @@
 
 .level_1 > li > .dropdown-menu {
     margin-top: 0;
+    border-radius: 0;
 }
 
 .dropdown-menu {
@@ -106,8 +117,10 @@
     white-space: nowrap;
 }
 
+.dropdown-menu > li > a:focus,
 .dropdown-menu > li > a:hover {
     color: #DCDCDC;
+    background: transparent;
 }
 
 .dropdown-menu .add-new a {
@@ -117,6 +130,7 @@
 }
 
 .dropdown-menu .add-new a:hover {
+    background-color: #DCDCDC;
     color: #1EB1ED;
 }
 
@@ -407,7 +421,7 @@ h2.section-title {
 }
 
 .carousel-control {
-  z-index: 5000;
+    z-index: 5000;
 }
 
 .carousel-control .glyphicon-chevron-left {
@@ -419,8 +433,8 @@ h2.section-title {
 }
 /* Start Carousel */
 /* Declare heights because of positioning of img element */
-#startCarousel.carousel,
-#startCarousel .carousel-inner {
+#startCarousel .carousel-inner,
+#startCarousel.carousel {
     height: 444px;
     opacity: 1;
 }
