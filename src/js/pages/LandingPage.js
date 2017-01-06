@@ -20,7 +20,7 @@ export default class LandingPage extends React.Component {
                         </div>
                         <button className="btn btn-lg btn-primary btn-block" type="submit">Go</button>
                     </form>
-                    <div id="startCarousel" className="carousel slide" data-ride="carousel">
+                    <div id="startCarousel" className="carousel fade" data-ride="carousel" data-interval="4000">
                         <ol className="carousel-indicators">
                             <li data-target="#startCarousel" data-slide-to="0" className="active"></li>
                             <li data-target="#startCarousel" data-slide-to="1"></li>
@@ -34,7 +34,7 @@ export default class LandingPage extends React.Component {
                                 <div className="container">
                                     <div className="carousel-caption">
                                         <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <p>Web-based applications for planning, management managed aquifer recharge (MAR) schemes</p>
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@ export default class LandingPage extends React.Component {
 
                     <div className="row mar top-space">
                         <h2>Managed Aquifer Recharge</h2>
-                        <p className="description">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later recovery or environmental benefits. A MAR scheme typically includes the following components: (1) water capture zone, (2) pre-treatment, (3) recharge, (4) subsurface storage, (5) recovery, (6) post-treatment, and (7) re-use. To meet site-specific requirements, different techniques are available, making MAR a reliable instrument for sustainable groundwater management.</p>
+                        <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later recovery or environmental benefits. A MAR scheme typically includes the following components: (1) water capture zone, (2) pre-treatment, (3) recharge, (4) subsurface storage, (5) recovery, (6) post-treatment, and (7) re-use. To meet site-specific requirements, different techniques are available, making MAR a reliable instrument for sustainable groundwater management.</p>
 
                         <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="2000">
                             <ol className="carousel-indicators">
@@ -313,7 +313,7 @@ export default class LandingPage extends React.Component {
 
                     <div className="row geo-database top-space">
                         <h2>Geo Database</h2>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                        <p className="align-center">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                         <figure>
                             <img src="../images/landingPage/geo-database-image.png" width="773" height="236" className="" alt=""/>
                         </figure>
@@ -355,7 +355,7 @@ export default class LandingPage extends React.Component {
                         <figure>
                             <img src="../images/landingPage/documentation-image.png" width="1238" height="388" className="" alt=""/>
                         </figure>
-                        <p className="top-space">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                        <p className="top-space align-center">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                         <div className="align-center">
                             <a className="btn more" href="#">Read more</a>
                         </div>

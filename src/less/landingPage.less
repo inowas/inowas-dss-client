@@ -1,9 +1,9 @@
 .landingPage-wrapper {
-  background-color: #EFF3F6;
+    background-color: #EFF3F6;
 }
 
 .align-center {
-  text-align: center;
+    text-align: center;
 }
 
 .navbar-top {
@@ -406,6 +406,10 @@ h2.section-title {
     padding-top: 3px;
 }
 
+.carousel-control {
+  z-index: 5000;
+}
+
 .carousel-control .glyphicon-chevron-left {
     left: 20%;
 }
@@ -415,12 +419,28 @@ h2.section-title {
 }
 /* Start Carousel */
 /* Declare heights because of positioning of img element */
-#startCarousel.carousel {
+#startCarousel.carousel,
+#startCarousel .carousel-inner {
     height: 444px;
+    opacity: 1;
 }
 
 #startCarousel .carousel-inner > .item {
     height: 444px;
+    .transition(.3s ease-in-out opacity);
+    left: 0 !important;
+    opacity: 0;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    display: block !important;
+    z-index: 1;
+}
+
+#startCarousel .carousel-inner > .item.active {
+    opacity: 1;
+    .transition(.7s ease-in-out opacity);
+    z-index: 2;
 }
 
 #startCarousel .carousel-inner > .item > img {
@@ -456,7 +476,7 @@ h2.section-title {
 }
 
 #marCarousel .fill-app-bg {
-  background-image: url(../images/landingPage/mar-applications-bg.png);
+    background-image: url("../images/landingPage/mar-applications-bg.png");
 }
 
 #marCarousel.carousel {
@@ -525,11 +545,7 @@ h2.section-title {
 }
 
 #marCarousel .item {
-    -webkit-transition: opacity ease-in-out 0.3s;
-    -moz-transition: opacity ease-in-out 0.3s;
-    -ms-transition: opacity ease-in-out 0.3s;
-    -o-transition: opacity ease-in-out 0.3s;
-    transition: opacity ease-in-out 0.3s;
+    .transition(.3s ease-in-out opacity);
     left: 0 !important;
     opacity: 0;
     top: 0;
@@ -541,10 +557,7 @@ h2.section-title {
 
 #marCarousel .active {
     opacity: 1;
-    -moz-transition: opacity ease-in-out 0.7s;
-    -o-transition: opacity ease-in-out 0.7s;
-    -webkit-transition: opacity ease-in-out 0.7s;
-    transition: opacity ease-in-out 0.7s;
+    .transition(.7s ease-in-out opacity);
     z-index: 2;
 }
 
@@ -596,11 +609,7 @@ h2.section-title {
 }
 
 #toolsCarousel .item {
-    -webkit-transition: opacity ease-in-out 0.3s;
-    -moz-transition: opacity ease-in-out 0.3s;
-    -ms-transition: opacity ease-in-out 0.3s;
-    -o-transition: opacity ease-in-out 0.3s;
-    transition: opacity ease-in-out 0.3s;
+    .transition(.3s ease-in-out opacity);
     left: 0 !important;
     opacity: 0;
     top: 0;
@@ -612,10 +621,7 @@ h2.section-title {
 
 #toolsCarousel .active {
     opacity: 1;
-    -moz-transition: opacity ease-in-out 0.3s;
-    -o-transition: opacity ease-in-out 0.3s;
-    -webkit-transition: opacity ease-in-out 0.3s;
-    transition: opacity ease-in-out 0.3s;
+    .transition(.3s ease-in-out opacity);
     z-index: 2;
 }
 
@@ -666,30 +672,30 @@ h2.section-title {
 }
 
 .toolbox-panel-01 {
-    background: url("../images/landingPage/toolbox-panel-bg-01.png") no-repeat bottom center transparent;
+    background-image: url("../images/landingPage/toolbox-panel-bg-01.png") no-repeat bottom center transparent;
     padding-bottom: 24px;
 }
 
 .toolbox-panel-02 {
-    background: url("../images/landingPage/toolbox-panel-bg-02.png") no-repeat bottom center transparent;
+    background-image: url("../images/landingPage/toolbox-panel-bg-02.png") no-repeat bottom center transparent;
     padding-bottom: 26px;
 }
 
 .toolbox-panel-03 {
-    background: url("../images/landingPage/toolbox-panel-bg-03.png") no-repeat bottom center transparent;
+    background-image: url("../images/landingPage/toolbox-panel-bg-03.png") no-repeat bottom center transparent;
     padding-bottom: 30px;
 }
 
 .toolbox-panel-01 .panel-heading {
-    background: url("../images/landingPage/toolbox-image-01.png");
+    background-image: url("../images/landingPage/toolbox-image-01.png");
 }
 
 .toolbox-panel-02 .panel-heading {
-    background: url("../images/landingPage/toolbox-image-02.png");
+    background-image: url("../images/landingPage/toolbox-image-02.png");
 }
 
 .toolbox-panel-03 .panel-heading {
-    background: url("../images/landingPage/toolbox-image-03.png");
+    background-image: url("../images/landingPage/toolbox-image-03.png");
 }
 
 .toolbox .panel-heading {
