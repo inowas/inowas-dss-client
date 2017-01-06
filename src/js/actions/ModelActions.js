@@ -1,38 +1,69 @@
-import axios from "axios";
+import axios from "../axios";
 import store from "../store"
-import model from "../modflow_model_example_data";
 
-export function fetchExampleModel() {
+const getApiKey = function() {
+    return store.getState().user.apiKey;
+};
+
+export function fetchAllModels() {
+    const apiKey = getApiKey();
     return {
-        type: "FETCH_EXAMPLE_MODEL_FULFILLED",
-        payload: model
+        type: "FETCH_MODELS",
+        payload: axios.get("/modflow/models.json", {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
     };
 }
 
-export function getModel(id) {
-    return {
-        type: "FETCH_MODEL",
-        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +".json")
-    }
-}
-
-export function fetchAllModels() {
-    store.dispatch({
-        type: "FETCH_MODELS",
-        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models.json")
-    });
-}
-
 export function fetchModelBoundary( id ) {
-    store.dispatch({
+    const apiKey = getApiKey();
+    return {
         type: "FETCH_MODEL_BOUNDARY",
-        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/boundaries/"+ id +".json")
-    });
+        payload: axios.get("/modflow/boundaries/"+ id +".json", {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    };
 }
 
 export function fetchModelById(id) {
-    store.dispatch({
+    const apiKey = getApiKey();
+    return {
         type: "FETCH_MODEL",
-        payload: axios.get("http://dev.inowas.hydro.tu-dresden.de/api/modflow/models/"+ id +".json")
-    });
+        payload: axios.get("/modflow/models/"+ id +".json", {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    };
+}
+
+export function fetchModelMap() {
+    const apiKey = getApiKey();
+    return {
+        type: "FETCH_MODEL_MAP",
+        payload: axios.get("modflow/models/list/map.json", {
+            headers: {'X-AUTH-TOKEN': apiKey}
+        })
+    };
+}
+
+export function calculateModel(tool, modelId) {
+    const apiKey = getApiKey();
+    if ( tool=="modflow" ){
+        return {
+            type: "CALCULATE_MODEL",
+            payload: axios.post("modflow/calculation/"+ modelId +".json", {},{
+                headers: {'X-AUTH-TOKEN': apiKey}
+            })
+        };
+    }
+
+    if ( tool=="scenarioanalysis" ){
+        return {
+            type: "CALCULATE_MODEL",
+            payload: axios.post("scenarioanalysis/calculation/"+ modelId +".json", {},{
+                headers: {'X-AUTH-TOKEN': apiKey}
+            })
+        };
+    }
+
+
 }

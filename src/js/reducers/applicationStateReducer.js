@@ -1,13 +1,32 @@
 
 const initialState = {
+    selectPoint: false,
+    tool: null,
     modelId: null,
-    boundaryProperties: null,
+    scenarioAnalysisSelect: true,
+    modflowToolBox: false,
+    boundaryProperties: false,
     activeBoundaries: {}
 };
 
 const applicationStateReducer = ( state=initialState, action ) => {
 
     switch (action.type) {
+        case "SET_SELECT_POINT": {
+            state = {
+                ...state,
+                selectPoint: action.payload
+            };
+
+            if (action.payload === true){
+                state.boundaryProperties = null
+            } else {
+                //state.boundaryProperties = true
+            }
+
+            break;
+        }
+
         case "SET_BOUNDARY_PROPERTIES": {
             state = {
                 ...state,
@@ -33,6 +52,42 @@ const applicationStateReducer = ( state=initialState, action ) => {
             break;
         }
 
+        case "SET_MODFLOW_TOOLBOX": {
+            state = {
+                ...state,
+                modflowToolBox: action.payload
+            };
+            break;
+        }
+
+        case "SET_SCENARIO_ANALYSIS_SELECT": {
+            state = {
+                ...state,
+                scenarioAnalysisSelect: action.payload,
+                modflowToolBox: !action.payload
+            };
+
+            break;
+        }
+
+        case "SET_CURRENT_TOOL":{
+            state = {
+                ...state,
+                tool: action.payload
+            };
+
+            if (state.tool == 'modflow'){
+                state.scenarioAnalysisSelect = false;
+                state.modflowToolBox = true;
+            }
+
+            if (state.tool == 'scenarioanalysis'){
+                state.scenarioAnalysisSelect = true;
+                state.modflowToolBox = false;
+            }
+
+            break;
+        }
     }
 
     return state;

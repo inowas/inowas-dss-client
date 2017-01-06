@@ -1,11 +1,10 @@
 import React from "react"
 import { connect } from "react-redux";
-import { browserHistory } from 'react-router';
 
 import ModflowMap from "./ModFlowMap";
 
-import * as modflowAction from "../actions/ModelActions"
-
+import { fetchModelById } from "../actions/ModelActions";
+import { setCurrentTool } from "../actions/ApplicationActions";
 
 @connect((store) => {
     return {
@@ -15,30 +14,31 @@ import * as modflowAction from "../actions/ModelActions"
 })
 export default class ModFlow extends React.Component {
 
-    hasData(){
+    hasData() {
         const model = this.props.modelStore.model;
         return (model.hasOwnProperty('id') == true);
     }
 
-    hasError(){
+    hasError() {
         return this.props.modelStore.error;
     }
 
-    componentWillMount(){
-        modflowAction.fetchModelById(this.props.params.modelId);
+
+    componentWillMount() {
+        this.props.dispatch(fetchModelById(this.props.params.modelId));
+        this.props.dispatch(setCurrentTool('modflow'));
     }
 
     render() {
+        const styles = this.props.modelStore.styles;
         const model = this.props.modelStore.model;
         const appState = this.props.appState;
 
-        if (this.hasError()) {
-            browserHistory.push('/#/modflow/list');
-        }
-
         if (this.hasData()) {
             return (
-                <ModflowMap model={model} appState={appState}/>
+                <div className="page-wrapper">
+                    <ModflowMap model={model} styles={styles} appState={appState} />
+                </div>
             );
         }
 

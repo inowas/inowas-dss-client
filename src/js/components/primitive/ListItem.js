@@ -1,5 +1,5 @@
 import React from "react";
-import { showBoundaryProperties } from "../../actions/ApplicationActions"
+import {showBoundaryProperties} from "../../actions/ApplicationActions"
 
 export default class ListItem extends React.Component {
 
@@ -8,8 +8,8 @@ export default class ListItem extends React.Component {
 
     }
 
-    getClassNames(active){
-        if (active){
+    getClassNames(active) {
+        if (active) {
             return "list-group-item active";
         }
 
@@ -18,9 +18,16 @@ export default class ListItem extends React.Component {
 
     render() {
         return (
-            <span className={this.getClassNames(this.props.active)} onClick={ this.sBoundaryProperties.bind(this, this.props.type)}>
+            <span className={"list-item " + this.getClassNames(this.props.active)} onClick={this
+                .sBoundaryProperties
+                .bind(this, this.props.type)}>
+                {this.props.icon}
                 {this.props.children}
-                <span className="badge">{this.props.boundaries.filter(b => b.type == this.props.type).length}</span>
+                <span className="badge">{this
+                        .props
+                        .boundaries
+                        .filter(b => b.type == this.props.type)
+                        .length}</span>
             </span>
         );
     }

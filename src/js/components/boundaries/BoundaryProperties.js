@@ -2,16 +2,17 @@ import React from "react"
 
 import Sidebar from "./BoundarySidebar";
 import Content from "./BoundaryContent";
-import * as AppActions from "../../actions/ApplicationActions";
+
+import { setActiveBoundary } from "../../actions/ApplicationActions"
+import { fetchModelBoundary } from "../../actions/ModelActions"
+
+import store from "../../store";
 
 export default class BoundaryProperties extends React.Component {
 
-    getWellById(id) {
-        return this.context.model.boundaries.find(b => b.id == id);
-    }
-
     setActiveBoundary(bType, id){
-        AppActions.setActiveBoundary(bType, id);
+        store.dispatch(setActiveBoundary(bType, id));
+        store.dispatch(fetchModelBoundary(id));
     }
 
     componentWillMount(){
@@ -34,7 +35,7 @@ export default class BoundaryProperties extends React.Component {
 
         return (
             <div className="boundaries-wrapper">
-                <Sidebar boundaries={boundaries} appState={appState} />
+                <Sidebar boundaries={boundaries} appState={appState} setActiveBoundary={this.setActiveBoundary} />
                 <Content boundary={selectedBoundary} />
             </div>
         );
@@ -43,5 +44,4 @@ export default class BoundaryProperties extends React.Component {
 
 BoundaryProperties.contextTypes = {
     model: React.PropTypes.object,
-    updateBoundaryName: React.PropTypes.func,
 };

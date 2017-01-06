@@ -3,7 +3,7 @@ const initialState = {
     fetching: false,
     error: false,
     fetched: false,
-    username: null,
+    username: "",
     apiKey: null
 };
 

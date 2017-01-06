@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg2"
+   version="1.1"
+   viewBox="0 0 24 24"
+   height="24"
+   width="24">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Icons / Right</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title4">Icons / Right</title>
+  <desc
+     id="desc6">Created with Sketch.</desc>
+  <defs
+     id="defs8" />
+  <g
+     transform="translate(7.9233034,2.0016146)"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1"
+     id="Welcome">
+    <g
+       style="stroke:#979797"
+       transform="translate(-402,-205)"
+       id="App-config.---dashboard">
+      <g
+         transform="translate(40,127)"
+         id="Sidebar">
+        <g
+           transform="translate(363,78)"
+           id="Icons-/-Right">
+          <g
+             transform="matrix(0,1,1,0,0,0)"
+             id="Icons-/-Up">
+            <polyline
+               points="0 0 9.91464284 6 20 0"
+               id="Up" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,16 +1,86 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Forma_1_1_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="559px" height="548px" viewBox="0 0 559 548" enable-background="new 0 0 559 548" xml:space="preserve">
-<g id="Forma_1">
-	<g>
-		<path d="M539.069,509.121H19.931c-10.914,0-19.456,9.009-19.456,19.439c0,10.432,9.016,19.44,19.456,19.44h519.613
-			c10.914,0,19.456-9.009,19.456-19.44C559,518.13,549.983,509.121,539.069,509.121z M19.456,449.38l92.06-0.475
-			c5.22,0,9.965-1.896,13.761-5.689l317.938-317.673c7.593-7.587,7.593-19.914,0-27.975l-91.11-91.982
-			c-7.593-7.587-19.931-7.587-27.997,0l-63.588,64.009L6.169,323.259c-3.321,3.793-5.694,8.534-5.694,13.75L0,429.466
-			c0,5.216,1.898,10.431,5.695,14.224C9.491,447.483,14.236,449.38,19.456,449.38z M338.342,47.31l64.062,64.009l-36.064,36.035
-			l-64.062-64.009L338.342,47.31z M39.861,345.543L274.28,111.318l64.062,64.009L103.923,409.078l-64.536,0.474L39.861,345.543z"/>
-	</g>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="edit.svg">
+  <metadata
+     id="metadata25">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Buttons / Edit</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2622"
+     inkscape:window-height="1782"
+     id="namedview23"
+     showgrid="false"
+     inkscape:zoom="31.466667"
+     inkscape:cx="24.377309"
+     inkscape:cy="15.281284"
+     inkscape:window-x="114"
+     inkscape:window-y="42"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title4">Buttons / Edit</title>
+  <desc
+     id="desc6">Created with Sketch.</desc>
+  <defs
+     id="defs8">
+    <rect
+       id="path-1"
+       x="-8"
+       y="-7"
+       width="30"
+       height="30" />
+    <mask
+       id="mask-2"
+       maskContentUnits="userSpaceOnUse"
+       maskUnits="objectBoundingBox"
+       x="0"
+       y="0"
+       width="30"
+       height="30"
+       fill="white">
+      <use
+         xlink:href="#path-1"
+         id="use12"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+    </mask>
+  </defs>
+  <path
+     style="fill:#4c4c4c;fill-rule:evenodd;stroke:none;stroke-width:1"
+     d="m 19.164468,5.5384424 -0.70082,-0.7010655 c -0.28623,-0.2854918 -0.751721,-0.2857377 -1.037951,2.459e-4 l -0.768688,0.7686885 -12.0361484,0 0,13.7704917 13.7704924,0 0,-12.0270491 0.075,-0.075 0,0 0.698115,-0.6981148 c 0.286229,-0.2862295 0.286229,-0.7519672 0,-1.0381967 z m -9.6140174,8.1216396 0.7918034,0.791803 -1.0888524,0.297049 0.297049,-1.088852 z M 17.422992,7.6224588 16.379877,6.5793441 16.727582,6.2316391 17.770943,7.2747539 17.422992,7.6224588 Z M 17.075287,7.9701637 10.815615,14.229836 9.7724996,13.186721 16.032173,6.927049 17.075287,7.9701637 Z m 0.824262,-0.1286065 0,11.0434418 -12.7868854,0 0,-12.7868845 11.0525414,0 -6.9142624,6.9147545 -0.04623,0.04623 -0.521558,1.912868 -0.301475,0.301475 c -0.09615,0.09615 -0.09615,0.251557 0,0.347705 0.04795,0.04795 0.110901,0.07205 0.173852,0.07205 0.06295,0 0.125902,-0.0241 0.173853,-0.07205 l 0.301475,-0.301475 1.9128684,-0.522049 6.479755,-6.4795074 0,0 0.109918,-0.1099181 0.366147,-0.3666393 z M 18.816763,6.2289342 18.118648,6.927049 17.075287,5.8836883 17.773402,5.1855736 c 0.09443,-0.094426 0.248115,-0.09418 0.342541,0 l 0.70082,0.7008196 c 0.09443,0.09418 0.09443,0.2481148 0,0.342541 z"
+     id="Shape-3"
+     inkscape:connector-curvature="0" />
 </svg>

@@ -15,9 +15,9 @@ export function calculateDiagramData(i, b, df, ds, start, stop, step) {
         const x = xRange[ni];
         const z = calculateZofX(x, i, b, df, ds);
 
-        dataSet['x'] = x;
+        dataSet['x'] = -x;
         if (z<=b){
-            dataSet['zCrit'] = -z;
+            dataSet['z'] = -z;
         }
         dataSet['b'] = -b;
         data.unshift(dataSet);

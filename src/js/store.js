@@ -13,4 +13,3 @@ const middleware = applyMiddleware(
 );
 
 export default createStore( reducers, middleware );
-

@@ -6,16 +6,11 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var autoprefixer = require('autoprefixer');
 
 const plugins = [
-  new CopyWebpackPlugin([
-    {
-      from: './*.html'
-    }, {
-      from: './images',
-      to: 'images'
-    }, {
-      from: '../node_modules/leaflet/dist/images',
-      to: 'images'
-    }
+    new CopyWebpackPlugin([
+        {from: './*.html'},
+        {from: './images', to: 'images'},
+        {from: '../node_modules/leaflet/dist/images', to: 'images'},
+        {from: '../node_modules/leaflet-draw/dist/images', to: 'images'}
   ]),
   new ExtractTextPlugin("/css/style.min.css", {
     allChunks: true

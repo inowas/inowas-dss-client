@@ -1,11 +1,18 @@
 .page-wrapper {
-    margin-top: 40px;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     padding: 2 * @grid-gutter;
-    min-width: @page-width;
-    max-width: 100%;
-    min-height: 100vh;
-    position: relative;
     background-color: @background-wrapper;
+    overflow: auto;
+}
+
+.page-width {
+  margin: auto;
+  min-width: @page-min-width;
+  max-width: @page-max-width;
 }
 
 .grid-container {

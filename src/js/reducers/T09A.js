@@ -1,5 +1,5 @@
 
-import * as calc from "../calculations/T09A"
+import * as calculations from "../calculations";
 
 const initialState = {
     background: {
@@ -109,7 +109,7 @@ const T09AReducer = ( state=initialState, action ) => {
             const ih = state.parameters.findIndex( p => {return p.id == 'h'});
 
             if (changedParam.id == 'h'){
-                state.parameters[iz].value = calc.calculateZ(
+                state.parameters[iz].value = calculations.T09A.calculateZ(
                     state.parameters[ih].value,
                     state.parameters[idf].value,
                     state.parameters[ids].value
@@ -117,7 +117,7 @@ const T09AReducer = ( state=initialState, action ) => {
             }
 
             if (changedParam.id == 'zCrit'){
-                state.parameters[ih].value = calc.calculateH(
+                state.parameters[ih].value = calculations.T09A.calculateH(
                     state.parameters[iz].value,
                     state.parameters[idf].value,
                     state.parameters[ids].value
@@ -125,13 +125,13 @@ const T09AReducer = ( state=initialState, action ) => {
             }
 
             if (changedParam.id == 'df' || changedParam.id == 'ds'){
-                state.parameters[iz].value = calc.calculateZ(
+                state.parameters[iz].value = calculations.T09A.calculateZ(
                     state.parameters[ih].value,
                     state.parameters[idf].value,
                     state.parameters[ids].value
                 );
 
-                state.parameters[ih].value = calc.calculateH(
+                state.parameters[ih].value = calculations.T09A.calculateH(
                     state.parameters[iz].value,
                     state.parameters[idf].value,
                     state.parameters[ids].value
