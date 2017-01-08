@@ -19,41 +19,41 @@ export default class LandingPage extends React.Component {
 
                         <div className="carousel-inner" role="listbox">
                             <div className="item active">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="first-slide"/>
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326" className="first-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Apps</h2>
+                                        <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="item">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="second-slide"/>
+                                <img src="../images/landingPage/carousel-slide-02.png" alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Tools</h2>
+                                        <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="item">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="third-slide"/>
+                                <img src="../images/landingPage/carousel-slide-03.png" alt="Web MAR Data" width="558" height="326" className="third-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Data</h2>
+                                        <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="item">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="fourth-slide"/>
+                                <img src="../images/landingPage/carousel-slide-04.png" alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Wiki</h2>
+                                        <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ export default class LandingPage extends React.Component {
                 <div className="container">
 
                     <div className="row mar top-space">
-                        <h2>Managed Aquifer Recharge</h2>
+                        <h2>Free web-based software</h2>
                         <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later recovery or environmental benefits. A MAR scheme typically includes the following components: (1) water capture zone, (2) pre-treatment, (3) recharge, (4) subsurface storage, (5) recovery, (6) post-treatment, and (7) re-use. To meet site-specific requirements, different techniques are available, making MAR a reliable instrument for sustainable groundwater management.</p>
 
                         <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="2000">
@@ -148,7 +148,7 @@ export default class LandingPage extends React.Component {
                     <div className="row toolbox top-space">
                         <h2>Toolbox</h2>
                         <div className="col-md-4">
-                            <div className="panel toolbox-panel-01">
+                            <div className="panel toolbox-panel-01">            
                                 <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
                                     <p><strong>Simple</strong> tools derived from data mining and empirical correlations</p>
@@ -356,34 +356,46 @@ export default class LandingPage extends React.Component {
                     <div className="container">
 
                         <div className="col-md-3 footer-section">
-                            <div className="footer-col-header">Applications</div>
+                            <div className="footer-col-header">Header 1</div>
                             <ul className="footer-list">
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">A03. Restoration of groundwater levels</a>
+                                    <a className="footer-list-link" href="#">Sign up!</a>
                                 </li>
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">A05. Assessment of saltwater intrusion</a>
+                                    <a className="footer-list-link" href="#">Log in</a>
+                                </li>
+                                
+                                <li className="footer-list-item">
+                                    <a className="footer-list-link" href="#">My profile</a>
+                                </li>
+                                
+                                <li className="footer-list-item">
+                                    <a className="footer-list-link" href="#">Documentation</a>
                                 </li>
 
                             </ul>
                         </div>
 
                         <div className="col-md-3 footer-section">
-                            <div className="footer-col-header">Tools</div>
+                            <div className="footer-col-header">Documentation</div>
                             <ul className="footer-list">
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">T09. Simple saltwater intrusion equations</a>
+                                    <a className="footer-list-link" href="#">Projects</a>
+                                </li>
+                                
+                                <li className="footer-list-item">
+                                    <a className="footer-list-link" href="#">Applications</a>
                                 </li>
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">T03. Numerical model setup (MODFLOW)</a>
+                                    <a className="footer-list-link" href="#">Tools</a>
                                 </li>
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">T07. Application-specific scenarios analyser</a>
+                                    <a className="footer-list-link" href="#">Database</a>
                                 </li>
 
                             </ul>
