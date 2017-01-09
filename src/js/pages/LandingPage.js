@@ -76,10 +76,10 @@ export default class LandingPage extends React.Component {
                 <div className="container">
 
                     <div className="row mar top-space">
-                        <h2>Free web-based software</h2>
-                        <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later recovery or environmental benefits. A MAR scheme typically includes the following components: (1) water capture zone, (2) pre-treatment, (3) recharge, (4) subsurface storage, (5) recovery, (6) post-treatment, and (7) re-use. To meet site-specific requirements, different techniques are available, making MAR a reliable instrument for sustainable groundwater management.</p>
+                        <h2>Free web-based modelling platform</h2>
+                        <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later water recovery or for environmental benefits. To meet various site-specific requirements, different water infiltration techniques are available, making MAR a reliable instrument for sustainable groundwater management. The present platform provides a collection of free web-based tools aimed at planning, management and optimization of main components of MAR schemes: </p>
 
-                        <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="2000">
+                        <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="3000">
                             <ol className="carousel-indicators">
                                 <li data-target="#marCarousel" data-slide-to="0" className="active"></li>
                                 <li data-target="#marCarousel" data-slide-to="1"></li>
@@ -91,45 +91,47 @@ export default class LandingPage extends React.Component {
 
                                 <div className="fill fill-app-bg"></div>
 
+                                
+                                
                                 <div className="item active">
-                                    <img src="../images/landingPage/mar-applications-01.png" alt="Web Mar Apps" className="first-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="second-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A05. Sustain environmental surface water flows</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="item">
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="first-slide"/>
+                                    <div className="carousel-caption">
+                                        <div className="tooltip tooltip-bottom" role="tooltip">
+                                            <div className="tooltip-inner">
+                                                <p>A12. Design and operational optimization of MAR schemes</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="item">
-                                    <img src="../images/landingPage/mar-applications-02.png" alt="Web Mar Apps" className="second-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="third-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A02. Maximize natural storage capacity</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="item">
-                                    <img src="../images/landingPage/mar-applications-03.png" alt="Web Mar Apps" className="third-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="fourth-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="item">
-                                    <img src="../images/landingPage/mar-applications-04.png" alt="Web Mar Apps" className="fourth-slide"/>
-                                    <div className="carousel-caption">
-                                        <div className="tooltip tooltip-bottom" role="tooltip">
-                                            <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A03. Restoration of groundwater levels</p>
                                             </div>
                                         </div>
                                     </div>
@@ -139,6 +141,8 @@ export default class LandingPage extends React.Component {
 
                         </div>
 
+                        <p className="description align-center">There are 13 applications available on the INOWAS platform that cover most of the challanges and issues encountered at MAR sites, both from the quantitative and qualitative perspective: from optimization of MAR site location (A11), assessment of saltwater intrusion (A07), application of MAR for the restoration of groundwater levels in overexploited aquifers (A03), for the maximization of natural storage capacity of the aquifers (A02), for improvement of water quality (A08), through design and operational optimization of MAR schemes (A12), clogging development (A10), assessment of the risk associated with MAR (A09) etc.</p>
+                        
                         <div className="align-center">
                             <a className="btn more" href="#">Read more</a>
                         </div>
@@ -171,7 +175,7 @@ export default class LandingPage extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <p className="description align-center">The applications are based on a collection of simple, practical and reliable web tools for planning, management and optimization of managed aquifer recharge schemes. The tools of various degrees of complexity are either included in application-specific workflows or used as standalone web-based instruments.</p>
+                        <p className="description align-center">The applications are based on a collection of simple, practical and reliable web-based tools of various degrees of complexity. The tools are either included in application-specific workflows or used as standalone modelling instruments.</p>
                     </div>
 
                     <div className="row toolbox-icons">
