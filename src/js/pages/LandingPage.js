@@ -176,6 +176,7 @@ export default class LandingPage extends React.Component {
                             </div>
                         </div>
                         <p className="description align-center">The applications are based on a collection of simple, practical and reliable web-based tools of various degrees of complexity. The tools are either included in application-specific workflows or used as standalone modelling instruments.</p>
+                        <p className="description align-center"><strong>Examples of tools</strong>:</p>
                     </div>
 
                     <div className="row toolbox-icons">
