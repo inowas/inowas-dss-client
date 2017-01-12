@@ -23,12 +23,12 @@ export default class Chart extends React.Component {
                                         <Line dot={false} isAnimationActive={false}  type="basis" dataKey="z" stroke="#ED8D05" strokeWidth="5" fillOpacity={1} />
                                     </LineChart>
                                 </ResponsiveContainer>
-                                <div className="diagram-labels-right">
+                                <div className="diagram-labels-left">
                                     <div className="diagram-label">
-                                        <p>z<sub>0</sub>={Number(this.props.info.z).toFixed(1)}m</p>
+                                        <p>z<sub>0</sub> = <strong>{Number(this.props.info.z).toFixed(1)}</strong> m</p>
                                     </div>
                                     <div className="diagram-label">
-                                        <p>L={Number(this.props.info.l).toFixed(1)}m</p>
+                                        <p>L = <strong>{Number(this.props.info.l).toFixed(1)}</strong> m</p>
                                     </div>
 
                                 </div>
