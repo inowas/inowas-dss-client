@@ -1,20 +1,21 @@
-import React from "react"
+import React from 'react';
 
-import Login from "../components/landingPage/Login";
+import Login from '../components/landingPage/Login';
 
 export default class LandingPage extends React.Component {
 
     render() {
+
         return (
             <div className="landingPage-wrapper">
                 <div className="container-top">
                     <Login />
                     <div id="startCarousel" className="carousel fade" data-ride="carousel" data-interval="4000">
                         <ol className="carousel-indicators">
-                            <li data-target="#startCarousel" data-slide-to="0" className="active"></li>
-                            <li data-target="#startCarousel" data-slide-to="1"></li>
-                            <li data-target="#startCarousel" data-slide-to="2"></li>
-                            <li data-target="#startCarousel" data-slide-to="3"></li>
+                            <li data-target="#startCarousel" data-slide-to="0" className="active"/>
+                            <li data-target="#startCarousel" data-slide-to="1"/>
+                            <li data-target="#startCarousel" data-slide-to="2"/>
+                            <li data-target="#startCarousel" data-slide-to="3"/>
                         </ol>
 
                         <div className="carousel-inner" role="listbox">
@@ -61,11 +62,11 @@ export default class LandingPage extends React.Component {
                         </div>
 
                         <a className="left carousel-control" href="#startCarousel" role="button" data-slide="prev">
-                            <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"/>
                             <span className="sr-only">Previous</span>
                         </a>
                         <a className="right carousel-control" href="#startCarousel" role="button" data-slide="next">
-                            <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"/>
                             <span className="sr-only">Next</span>
                         </a>
 
@@ -81,15 +82,15 @@ export default class LandingPage extends React.Component {
 
                         <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="2000">
                             <ol className="carousel-indicators">
-                                <li data-target="#marCarousel" data-slide-to="0" className="active"></li>
-                                <li data-target="#marCarousel" data-slide-to="1"></li>
-                                <li data-target="#marCarousel" data-slide-to="2"></li>
-                                <li data-target="#marCarousel" data-slide-to="3"></li>
+                                <li data-target="#marCarousel" data-slide-to="0" className="active"/>
+                                <li data-target="#marCarousel" data-slide-to="1"/>
+                                <li data-target="#marCarousel" data-slide-to="2"/>
+                                <li data-target="#marCarousel" data-slide-to="3"/>
                             </ol>
 
                             <div className="carousel-inner" role="listbox">
 
-                                <div className="fill fill-app-bg"></div>
+                                <div className="fill fill-app-bg"/>
 
                                 <div className="item active">
                                     <img src="../images/landingPage/mar-applications-01.png" alt="Web Mar Apps" className="first-slide"/>
@@ -149,7 +150,7 @@ export default class LandingPage extends React.Component {
                         <h2>Toolbox</h2>
                         <div className="col-md-4">
                             <div className="panel toolbox-panel-01">
-                                <div className="panel-heading"></div>
+                                <div className="panel-heading"/>
                                 <div className="panel-body text-center">
                                     <p><strong>Simple</strong> tools derived from data mining and empirical correlations</p>
                                 </div>
@@ -157,7 +158,7 @@ export default class LandingPage extends React.Component {
                         </div>
                         <div className="col-md-4">
                             <div className="panel toolbox-panel-02">
-                                <div className="panel-heading"></div>
+                                <div className="panel-heading"/>
                                 <div className="panel-body text-center">
                                     <p><strong>Practical</strong> implementation of analytical equations of groundwater flow</p>
                                 </div>
@@ -165,7 +166,7 @@ export default class LandingPage extends React.Component {
                         </div>
                         <div className="col-md-4">
                             <div className="panel toolbox-panel-03">
-                                <div className="panel-heading"></div>
+                                <div className="panel-heading"/>
                                 <div className="panel-body text-center">
                                     <p><strong>Reliable</strong> simulations using complex numerical flow models (i.e. MODFLOW)</p>
                                 </div>
@@ -308,7 +309,7 @@ export default class LandingPage extends React.Component {
                         </figure>
                         <div className="col-md-4">
                             <div className="panel geo-panel-01">
-                                <div className="panel-heading"></div>
+                                <div className="panel-heading"/>
                                 <div className="panel-body">
                                     <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                                 </div>
@@ -317,7 +318,7 @@ export default class LandingPage extends React.Component {
 
                         <div className="col-md-4">
                             <div className="panel geo-panel-02">
-                                <div className="panel-heading"></div>
+                                <div className="panel-heading"/>
                                 <div className="panel-body">
                                     <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                                 </div>
@@ -326,7 +327,7 @@ export default class LandingPage extends React.Component {
 
                         <div className="col-md-4">
                             <div className="panel geo-panel-03">
-                                <div className="panel-heading"></div>
+                                <div className="panel-heading"/>
                                 <div className="panel-body">
                                     <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                                 </div>

@@ -1,0 +1,30 @@
+{
+    "env": {
+        "browser": true,
+        "node": true
+    },
+
+    "globals": {
+        "React": true
+    },
+
+    "parser": "babel-eslint",
+
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+        }
+    },
+
+    "rules": {
+        "no-unused-vars": ["warn", { "vars": "all", "args": "after-used" }],
+        "jsx-quotes": ["warn", "prefer-double"],
+        "quotes": ["warn", "single"]
+    },
+
+    "plugins": [
+        "react"
+    ]
+}
