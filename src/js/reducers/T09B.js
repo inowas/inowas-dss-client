@@ -34,7 +34,7 @@ function getInitialState() {
                 order: 1,
                 id: 'i',
                 name: 'Hydraulic gradient, i (-)',
-                min: 0.001,
+                min: 0.000,
                 max: 0.010,
                 value: 0.002,
                 stepSize: 0.001,
