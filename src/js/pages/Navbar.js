@@ -58,11 +58,14 @@ export default class NavBar extends React.Component {
                                 <li className="submenu dropdown">
                                     <a href="" className="dropdown-toggle">
                                         <i className="flaticon-controls-4"></i>
-                                        Tools (<strong>3</strong>)
+                                        Tools (<strong>4</strong>)
                                     </a>
                                     <ul className="dropdown-menu">
                                         <li>
-                                            <Link to={'tools/T09C'}>T09c Upconing</Link>
+                                            <Link to={'tools/T09B'}>T09_b Freshwater-saltwater interface (Glover equation)</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={'tools/T09C'}>T09_c Upconing</Link>
                                         </li>
                                         <li>
                                             <Link to={'tools/modflow/list'}>T03 Numerical model setup (MODFLOW)</Link>
