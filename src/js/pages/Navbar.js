@@ -1,6 +1,6 @@
-import React from "react"
+import React from 'react'
 
-import {Link} from "react-router";
+import {Link} from 'react-router';
 
 export default class NavBar extends React.Component {
 
@@ -14,7 +14,7 @@ export default class NavBar extends React.Component {
                             <ul className="level_1" role="menubar">
                                 <li className="submenu">
                                     <a href="">
-                                        <i className="flaticon-settings-6"></i>Dashboard 
+                                        <i className="flaticon-settings-6"></i>Dashboard
                                     </a>
                                 </li>
                                 <li className="submenu">
@@ -61,6 +61,9 @@ export default class NavBar extends React.Component {
                                         Tools (<strong>4</strong>)
                                     </a>
                                     <ul className="dropdown-menu">
+                                        <li>
+                                            <Link to={'tools/T06'}>T06 MAR method selection tool</Link>
+                                        </li>
                                         <li>
                                             <Link to={'tools/T09B'}>T09_b Freshwater-saltwater interface (Glover equation)</Link>
                                         </li>

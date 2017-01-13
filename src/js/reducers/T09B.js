@@ -123,6 +123,7 @@ function calculateAndModifyState(state) {
     state.chart.data = calc.calculateDiagramData(i, b, df, ds, 0, b*10, 1);
     state.info.z = calc.calculateZ(i, b, df, ds).toFixed(1);
     state.info.l = calc.calculateL(i, b, df, ds).toFixed(1);
+    state.info.xT = state.chart.data.find((d) => {return d.b == Math.round(d.z)}).x;
 
     return state
 }
