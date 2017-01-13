@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {groupBy} from 'lodash';
 
 import {changeCondition} from '../../actions/T06';
+import Header from '../../components/tools/Header';
 
 @connect((store) => {
     return {tool: store.T06}
@@ -29,12 +30,13 @@ export default class T06 extends React.Component {
         var groupedConditions = groupBy(this.props.tool.conditions, 'category');
         var groupedConditionsList = [];
 
-
         for (var category in groupedConditions) {
             if (groupedConditions.hasOwnProperty(category)) {
                 var conditionsList = groupedConditions[category].map((c) => {
                     return (
-                        <li className="condition" key={c.name.replaceAll(' ', '_')}>
+                        <li className="condition" key={c
+                            .name
+                            .replaceAll(' ', '_')}>
                             <label className="condition-label"><input onChange={this.handleChange} value={c.name} checked={c.selected} type="checkbox"/>{c.name}</label>
                         </li>
                     );
@@ -87,17 +89,27 @@ export default class T06 extends React.Component {
         }
 
         return (applicable_methods.map((am) => {
-            const method = this.props.tool.methods.find((m) => {return (m.slug == am)});
+            const method = this
+                .props
+                .tool
+                .methods
+                .find((m) => {
+                    return (m.slug == am)
+                });
             return (
                 <tr className="method" key={method.slug}>
                     <td className="method-name">
                         {method.name}
                     </td>
                     <td className="method-cost">
-                        {method.highCost ? 'high' : 'low'}
+                        {method.highCost
+                            ? 'high'
+                            : 'low'}
                     </td>
                     <td className="method-land-need">
-                        {method.highLandNeed ? 'high' : 'low'}
+                        {method.highLandNeed
+                            ? 'high'
+                            : 'low'}
                     </td>
                 </tr>
             );
@@ -105,11 +117,10 @@ export default class T06 extends React.Component {
     }
 
     render() {
-        //const {conditions, methods} = this.props.tool;
-
         return (
             <div className="page-wrapper">
                 <div className="page-width tool-T06">
+                    <Header/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <h2>Input Conditions</h2>
@@ -121,12 +132,16 @@ export default class T06 extends React.Component {
                         <section className="tile col col-abs-3 stretch">
                             <h2>Methods Suggested</h2>
                             <table class="methods">
-                                <tr>
-                                    <th>MAR methods</th>
-                                    <th>Unit costs</th>
-                                    <th>Area required</th>
-                                </tr>
-                                {this.methods()}
+                                <thead>
+                                    <tr>
+                                        <th>MAR methods</th>
+                                        <th>Unit costs</th>
+                                        <th>Area required</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.methods()}
+                                </tbody>
                             </table>
                         </section>
                     </div>
