@@ -9,7 +9,7 @@ export default class LandingPage extends React.Component {
         return (
             <div className="landingPage-wrapper">
                 <div className="container-top">
-                    <Login />
+                    <Login/>
                     <div id="startCarousel" className="carousel fade" data-ride="carousel" data-interval="4000">
                         <ol className="carousel-indicators">
                             <li data-target="#startCarousel" data-slide-to="0" className="active"/>
@@ -20,41 +20,41 @@ export default class LandingPage extends React.Component {
 
                         <div className="carousel-inner" role="listbox">
                             <div className="item active">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="first-slide"/>
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326" className="first-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Apps</h2>
+                                        <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="item">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="second-slide"/>
+                                <img src="../images/landingPage/carousel-slide-02.png" alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Tools</h2>
+                                        <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="item">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="third-slide"/>
+                                <img src="../images/landingPage/carousel-slide-03.png" alt="Web MAR Data" width="558" height="326" className="third-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Data</h2>
+                                        <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="item">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web Mar Apps" width="558" height="326" className="fourth-slide"/>
+                                <img src="../images/landingPage/carousel-slide-04.png" alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
                                 <div className="container">
                                     <div className="carousel-caption">
-                                        <h2>Web Mar Apps</h2>
-                                        <p>Web-based applications for planning, management and optimisation of managed aquifer recharge (MAR) schemes</p>
+                                        <h2>Web MAR Wiki</h2>
+                                        <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
                                     </div>
                                 </div>
                             </div>
@@ -77,10 +77,11 @@ export default class LandingPage extends React.Component {
                 <div className="container">
 
                     <div className="row mar top-space">
-                        <h2>Managed Aquifer Recharge</h2>
-                        <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later recovery or environmental benefits. A MAR scheme typically includes the following components: (1) water capture zone, (2) pre-treatment, (3) recharge, (4) subsurface storage, (5) recovery, (6) post-treatment, and (7) re-use. To meet site-specific requirements, different techniques are available, making MAR a reliable instrument for sustainable groundwater management.</p>
+                        <h2>Free web-based modelling platform</h2>
+                        <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later water recovery or for environmental benefits. To meet various site-specific requirements, different water infiltration techniques are available, making MAR a reliable instrument for sustainable groundwater management. The present platform provides a collection of free web-based tools aimed at planning, management and optimization of main components of MAR schemes:
+                        </p>
 
-                        <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="2000">
+                        <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="3000">
                             <ol className="carousel-indicators">
                                 <li data-target="#marCarousel" data-slide-to="0" className="active"/>
                                 <li data-target="#marCarousel" data-slide-to="1"/>
@@ -93,44 +94,44 @@ export default class LandingPage extends React.Component {
                                 <div className="fill fill-app-bg"/>
 
                                 <div className="item active">
-                                    <img src="../images/landingPage/mar-applications-01.png" alt="Web Mar Apps" className="first-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="second-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A05. Sustain environmental surface water flows</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="item">
-                                    <img src="../images/landingPage/mar-applications-02.png" alt="Web Mar Apps" className="second-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="first-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A12. Design and operational optimization of MAR schemes</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="item">
-                                    <img src="../images/landingPage/mar-applications-03.png" alt="Web Mar Apps" className="third-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="third-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A02. Maximize natural storage capacity</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="item">
-                                    <img src="../images/landingPage/mar-applications-04.png" alt="Web Mar Apps" className="fourth-slide"/>
+                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="fourth-slide"/>
                                     <div className="carousel-caption">
                                         <div className="tooltip tooltip-bottom" role="tooltip">
                                             <div className="tooltip-inner">
-                                                <p>A02. Maximize natural aquifer storage capacity</p>
+                                                <p>A03. Restoration of groundwater levels</p>
                                             </div>
                                         </div>
                                     </div>
@@ -140,8 +141,26 @@ export default class LandingPage extends React.Component {
 
                         </div>
 
+                        <p className="description align-center">There are 13 applications available on the INOWAS platform that cover most of the challanges encountered at MAR sites, both from the quantitative and qualitative perspective: from optimization of MAR site location (<a href="http://wiki.inowas.hydro.tu-dresden.de/a13-optimisation-of-mar-site-location/" target="_blank">
+                                <strong>A11</strong>
+                            </a>), assessment of saltwater intrusion (<a href="http://wiki.inowas.hydro.tu-dresden.de/a07-assessment-of-seawater-intrusion/" target="_blank">
+                                <strong>A07</strong>
+                            </a>), application of MAR for the restoration of groundwater levels in overexploited aquifers (<a href="http://wiki.inowas.hydro.tu-dresden.de/a03-restoration-of-groundwater-levels/" target="_blank">
+                                <strong>A03</strong>
+                            </a>), for the maximization of natural storage capacity of the aquifers (<a href="http://wiki.inowas.hydro.tu-dresden.de/a02-maximise-natural-storage-capacity/" target="_blank">
+                                <strong>A02</strong>
+                            </a>), for improvement of water quality (<a href="http://wiki.inowas.hydro.tu-dresden.de/a08-improve-water-quality/" target="_blank">
+                                <strong>A08</strong>
+                            </a>), through design and operational optimization of MAR schemes (<a href="http://wiki.inowas.hydro.tu-dresden.de/a12-design-optimization-of-mar-schemes/" target="_blank">
+                                <strong>A12</strong>
+                            </a>), clogging development (<a href="http://wiki.inowas.hydro.tu-dresden.de/a10-clogging-development-assessment/" target="_blank">
+                                <strong>A10</strong>
+                            </a>), assessment of the risk associated with MAR (<a href="http://wiki.inowas.hydro.tu-dresden.de/a09-risk-assessment/" target="_blank">
+                                <strong>A09</strong>
+                            </a>) etc.</p>
+
                         <div className="align-center">
-                            <a className="btn more" href="#">Read more</a>
+                            <a className="btn more" href="http://wiki.inowas.hydro.tu-dresden.de/category/applications/" target="_blank">Read more</a>
                         </div>
 
                     </div>
@@ -149,10 +168,13 @@ export default class LandingPage extends React.Component {
                     <div className="row toolbox top-space">
                         <h2>Toolbox</h2>
                         <div className="col-md-4">
+
                             <div className="panel toolbox-panel-01">
-                                <div className="panel-heading"/>
+                                <div className="panel-heading"></div>
                                 <div className="panel-body text-center">
-                                    <p><strong>Simple</strong> tools derived from data mining and empirical correlations</p>
+                                    <p>
+                                        <strong>Simple</strong>
+                                        tools derived from data mining and empirical correlations</p>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +182,9 @@ export default class LandingPage extends React.Component {
                             <div className="panel toolbox-panel-02">
                                 <div className="panel-heading"/>
                                 <div className="panel-body text-center">
-                                    <p><strong>Practical</strong> implementation of analytical equations of groundwater flow</p>
+                                    <p>
+                                        <strong>Practical</strong>
+                                        implementation of analytical equations of groundwater flow</p>
                                 </div>
                             </div>
                         </div>
@@ -168,11 +192,15 @@ export default class LandingPage extends React.Component {
                             <div className="panel toolbox-panel-03">
                                 <div className="panel-heading"/>
                                 <div className="panel-body text-center">
-                                    <p><strong>Reliable</strong> simulations using complex numerical flow models (i.e. MODFLOW)</p>
+                                    <p>
+                                        <strong>Reliable</strong>
+                                        simulations using complex numerical flow models (i.e. MODFLOW)</p>
                                 </div>
                             </div>
                         </div>
-                        <p className="description align-center">The applications are based on a collection of simple, practical and reliable web tools for planning, management and optimization of managed aquifer recharge schemes. The tools of various degrees of complexity are either included in application-specific workflows or used as standalone web-based instruments.</p>
+                        <p className="description align-center">The applications are based on a collection of simple, practical and reliable web-based tools of various degrees of complexity. The tools are either included in application-specific workflows or used as standalone modelling instruments.</p>
+                        <p className="description align-center">
+                            <strong>Examples of tools</strong>:</p>
                     </div>
 
                     <div className="row toolbox-icons">
@@ -357,34 +385,46 @@ export default class LandingPage extends React.Component {
                     <div className="container">
 
                         <div className="col-md-3 footer-section">
-                            <div className="footer-col-header">Applications</div>
+                            <div className="footer-col-header">Header 1</div>
                             <ul className="footer-list">
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">A03. Restoration of groundwater levels</a>
+                                    <a className="footer-list-link" href="#">Sign up!</a>
                                 </li>
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">A05. Assessment of saltwater intrusion</a>
+                                    <a className="footer-list-link" href="#">Log in</a>
+                                </li>
+
+                                <li className="footer-list-item">
+                                    <a className="footer-list-link" href="#">My profile</a>
+                                </li>
+
+                                <li className="footer-list-item">
+                                    <a className="footer-list-link" href="#">Documentation</a>
                                 </li>
 
                             </ul>
                         </div>
 
                         <div className="col-md-3 footer-section">
-                            <div className="footer-col-header">Tools</div>
+                            <div className="footer-col-header">Documentation</div>
                             <ul className="footer-list">
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">T09. Simple saltwater intrusion equations</a>
+                                    <a className="footer-list-link" href="#">Projects</a>
                                 </li>
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">T03. Numerical model setup (MODFLOW)</a>
+                                    <a className="footer-list-link" href="#">Applications</a>
                                 </li>
 
                                 <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">T07. Application-specific scenarios analyser</a>
+                                    <a className="footer-list-link" href="#">Tools</a>
+                                </li>
+
+                                <li className="footer-list-item">
+                                    <a className="footer-list-link" href="#">Database</a>
                                 </li>
 
                             </ul>

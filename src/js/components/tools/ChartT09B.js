@@ -9,7 +9,7 @@ export default class Chart extends React.Component {
                 <h2>Calculation</h2>
                 <div className="grid-container">
                     <div className="col stretch">
-                        <div className="aspect-ratio-wrapper">
+
                             <div className="aspect-ratio-element diagram">
                                 <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                     <LineChart
@@ -23,16 +23,16 @@ export default class Chart extends React.Component {
                                         <Line dot={false} isAnimationActive={false}  type="basis" dataKey="z" stroke="#ED8D05" strokeWidth="5" fillOpacity={1} />
                                     </LineChart>
                                 </ResponsiveContainer>
-                                <div className="diagram-labels-right">
+                                <div className="diagram-labels-left">
                                     <div className="diagram-label">
-                                        <p>z<sub>0</sub>={Number(this.props.info.z).toFixed(1)}m</p>
+                                        <p>z<sub>0</sub> = <strong>{Number(this.props.info.z).toFixed(1)}</strong> m</p>
                                     </div>
                                     <div className="diagram-label">
-                                        <p>L={Number(this.props.info.l).toFixed(1)}m</p>
+                                        <p>L = <strong>{Number(this.props.info.l).toFixed(1)}</strong> m</p>
                                     </div>
 
                                 </div>
-                            </div>
+                            
                         </div>
                     </div>
                     <div className="col col-rel-0-5">

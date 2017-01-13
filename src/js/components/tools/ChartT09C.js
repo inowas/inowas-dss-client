@@ -36,15 +36,13 @@ export default class Chart extends React.Component {
                             <div className="diagram-labels-right">
                                 <div className="diagram-label">
                                     <p>
-                                        z = {Number(this.props.info.z).toFixed(1)}
+                                        z = <strong>{Number(this.props.info.z).toFixed(1)}</strong>
                                         m
                                     </p>
                                 </div>
                                 <div className="diagram-label">
                                     <p>
-                                        Q<sub>max</sub>
-                                        = {Number(this.props.info.q).toFixed(1)}
-                                        m<sup>3</sup>/d
+                                        Q<sub>max</sub> = <strong>{Number(this.props.info.q).toFixed(1)}</strong> m<sup>3</sup>/d
                                     </p>
                                 </div>
                             </div>
