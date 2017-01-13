@@ -1,9 +1,9 @@
 
-import * as calculations from "../calculations";
+import * as calculations from '../calculations';
 
 const initialState = {
     background: {
-        'image' : "/images/tools/T09A.png"
+        'image' : '/images/tools/T09A.png'
     },
     chart: {
         data: [
@@ -71,7 +71,7 @@ const initialState = {
 const T09AReducer = ( state=initialState, action ) => {
 
     switch (action.type) {
-        case "CHANGE_TOOL_SETTINGS": {
+        case 'CHANGE_TOOL_SETTINGS': {
             state = {
                 ...state,
                 settings: action.payload
@@ -80,7 +80,7 @@ const T09AReducer = ( state=initialState, action ) => {
             break;
         }
 
-        case "CHANGE_TOOL_PARAMETER": {
+        case 'CHANGE_TOOL_PARAMETER': {
 
             const changedParam = action.payload;
             state = {

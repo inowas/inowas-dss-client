@@ -1,9 +1,9 @@
-import React from "react"
-import {connect} from "react-redux";
+import React from 'react'
+import {connect} from 'react-redux';
 
-import Background from "../../components/tools/Background"
-import Parameters from "../../components/tools/Parameters"
-import {changeSettings, changeParameter} from "../../actions/T09A"
+import Background from '../../components/tools/Background'
+import Parameters from '../../components/tools/Parameters'
+import {changeSettings, changeParameter} from '../../actions/T09A'
 
 @connect((store) => {
     return {tool: store.T09A}
@@ -16,7 +16,7 @@ export default class T09A extends React.Component {
         }
 
         if (e.target.name.startsWith('parameter')) {
-            const param = e.target.name.split("_");
+            const param = e.target.name.split('_');
 
             let parameter = {};
             parameter.id = param[1];

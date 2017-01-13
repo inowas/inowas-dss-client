@@ -1,11 +1,11 @@
-import React from "react"
-import {connect} from "react-redux";
+import React from 'react'
+import {connect} from 'react-redux';
 
-import Background from "../../components/tools/Background"
-import Chart from "../../components/tools/ChartT09C"
-import Info from "../../components/tools/Info"
-import Parameters from "../../components/tools/Parameters"
-import { changeParameter, calculate, reset } from "../../actions/T09C"
+import Background from '../../components/tools/Background'
+import Chart from '../../components/tools/ChartT09C'
+import Info from '../../components/tools/Info'
+import Parameters from '../../components/tools/Parameters'
+import { changeParameter, calculate, reset } from '../../actions/T09C'
 
 @connect((store) => {
     return {tool: store.T09C}
@@ -15,7 +15,7 @@ export default class T09C extends React.Component {
     handleChange = (e) => {
 
         if (e.target.name.startsWith('parameter')){
-            const param = e.target.name.split("_");
+            const param = e.target.name.split('_');
 
             let parameter = {};
             parameter.id = param[1];
