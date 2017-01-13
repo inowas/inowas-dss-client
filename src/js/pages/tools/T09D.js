@@ -1,11 +1,11 @@
-import React from "react"
-import {connect} from "react-redux";
+import React from 'react';
+import {connect} from 'react-redux';
 
-import Background from "../../components/tools/Background"
-import Chart from "../../components/tools/ChartT09D"
-import Settings from "../../components/tools/Settings"
-import Parameters from "../../components/tools/Parameters"
-import { changeSettings, changeParameter, calculate, reset } from "../../actions/T09D"
+import Background from '../../components/tools/Background';
+import Chart from '../../components/tools/ChartT09D';
+import Settings from '../../components/tools/Settings';
+import Parameters from '../../components/tools/Parameters';
+import { changeSettings, changeParameter, calculate, reset } from '../../actions/T09D';
 
 @connect((store) => {
     return {tool: store.T09D}
@@ -19,7 +19,7 @@ export default class T09D extends React.Component {
         }
 
         if (e.target.name.startsWith('parameter')){
-            const param = e.target.name.split("_");
+            const param = e.target.name.split('_');
 
             let parameter = {};
             parameter.id = param[1];
