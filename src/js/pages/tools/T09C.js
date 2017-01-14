@@ -7,6 +7,8 @@ import Info from '../../components/tools/Info'
 import Parameters from '../../components/tools/Parameters'
 import { changeParameter, calculate, reset } from '../../actions/T09C'
 
+import Header from '../../components/tools/Header';
+
 @connect((store) => {
     return {tool: store.T09C}
 })
@@ -37,6 +39,7 @@ export default class T09C extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
+                    <Header/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image} />

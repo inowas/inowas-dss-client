@@ -5,6 +5,8 @@ import Background from '../../components/tools/Background'
 import Parameters from '../../components/tools/Parameters'
 import {changeSettings, changeParameter} from '../../actions/T09A'
 
+import Header from '../../components/tools/Header';
+
 @connect((store) => {
     return {tool: store.T09A}
 })
@@ -30,6 +32,7 @@ export default class T09A extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
+                    <Header/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image}/>

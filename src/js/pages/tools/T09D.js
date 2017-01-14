@@ -7,6 +7,8 @@ import Settings from '../../components/tools/Settings';
 import Parameters from '../../components/tools/Parameters';
 import { changeSettings, changeParameter, calculate, reset } from '../../actions/T09D';
 
+import Header from '../../components/tools/Header';
+
 @connect((store) => {
     return {tool: store.T09D}
 })
