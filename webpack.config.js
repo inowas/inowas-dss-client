@@ -1,8 +1,8 @@
-var debug = process.env.NODE_ENV !== "production";
+var debug = process.env.NODE_ENV !== 'production';
 var webpack = require('webpack');
 var path = require('path');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 
 const plugins = [
@@ -12,20 +12,20 @@ const plugins = [
         {from: '../node_modules/leaflet/dist/images', to: 'images'},
         {from: '../node_modules/leaflet-draw/dist/images', to: 'images'}
   ]),
-  new ExtractTextPlugin("/css/style.min.css", {
+  new ExtractTextPlugin('/css/style.min.css', {
     allChunks: true
   })
 ];
 
 module.exports = {
-  context: path.join(__dirname, "src"),
+  context: path.join(__dirname, 'src'),
   debug: debug,
-  devtool: debug ? "inline-sourcemap" : null,
+  devtool: debug ? 'inline-sourcemap' : null,
   entry: ['./less/main.less', './js/client.js'],
   output: {
     publicPath: '/', //important for hot module replacement in conjunction with --content-base it has to equal path
     path: path.join(__dirname, 'dist/'),
-    filename: "js/client.min.js",
+    filename: 'js/client.min.js',
     sourceMapFilename: '[name].map',
     chunkFilename: '[id].chunk.js',
     lazy: true
@@ -35,8 +35,8 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: [
-          path.resolve(__dirname, "node_modules"),
-          path.resolve(__dirname, "dist")
+          path.resolve(__dirname, 'node_modules'),
+          path.resolve(__dirname, 'dist')
         ],
         /*include: [
           path.resolve(__dirname, "src/js"),
@@ -51,10 +51,10 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style-loader', debug ? 'css-loader?sourceMap=inline&importLoaders=1!postcss-loader?sourceMap=inline!less-loader?sourceMap=inline' : 'css-loader?importLoaders=1&minimize!postcss-loader!less-loader' )
       }, {
         test: /\.(svg|woff|woff2|eot|ttf)$/,
-        loader: "file-loader?publicPath=../&name=fonts/[name].[ext]"
+        loader: 'file-loader?publicPath=../&name=fonts/[name].[ext]'
       }, {
         test: /\.(png|jpg|jpeg|gif)$/,
-        loader: "file-loader?publicPath=../&name=images/[name].[ext]"
+        loader: 'file-loader?publicPath=../&name=images/[name].[ext]'
       }
     ]
   },

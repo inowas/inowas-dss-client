@@ -25,7 +25,7 @@ export function calculateDiagramData(q, b, k, rho_f, rho_s, q_w, x_w, x_min, x_m
         console.log('L', L);
         let M = (L * Math.sqrt(x + x_w, 2) - Math.pow(x - x_w, 2)) / (1 - L);
         console.log('M', M);
-        return (-1) * Math.sqrt(M);
+        return  Math.sqrt(M);
 
 
         // let M = Math.sqrt(1 / (Math.pow(Math.E, 2 * k / q_w * b * b / d_rho * Math.PI - 4 / q_w * d_rho * x * Math.PI + 2 * k / q_w * b * b / d_rho / d_rho * Math.PI) - 1));

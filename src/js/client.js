@@ -17,9 +17,11 @@ import ScenarioAnalysis from './pages/ScenarioAnalysis';
 window.jQuery = require('jquery');
 require('bootstrap');
 
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function (search, replacement) {
     var target = this;
-    return target.split(search).join(replacement);
+    return target
+        .split(search)
+        .join(replacement);
 };
 
 const app = document.getElementById('app');
@@ -30,16 +32,17 @@ ReactDOM.render(
         <Route path="/">
             <IndexRoute component={LandingPage}/>
             <Route path="tools" component={Main}>
-              <Route path="modflow/list" component={ModelList}/>
-              <Route path="modflow/:modelId" component={Modflow}/>
-              <Route path="T09A" component={tools.T09A}/>
-              <Route path="T09B" component={tools.T09B}/>
-              <Route path="T09C" component={tools.T09C}/>
-              <Route path="T09D" component={tools.T09D}/>
-              <Route path="T09E" component={tools.T09E}/>
-              <Route path="T06" component={tools.T06}/>
-              <Route path="scenarioanalysis/list" component={ScenarioAnalysisList} />
-              <Route path="scenarioanalysis/:modelId" component={ScenarioAnalysis} />
+                <Route path="modflow/list" component={ModelList}/>
+                <Route path="modflow/:modelId" component={Modflow}/>
+                <Route path="T02" component={tools.T02}/>
+                <Route path="T06" component={tools.T06}/>
+                <Route path="T09A" component={tools.T09A}/>
+                <Route path="T09B" component={tools.T09B}/>
+                <Route path="T09C" component={tools.T09C}/>
+                <Route path="T09D" component={tools.T09D}/>
+                <Route path="T09E" component={tools.T09E}/>
+                <Route path="scenarioanalysis/list" component={ScenarioAnalysisList}/>
+                <Route path="scenarioanalysis/:modelId" component={ScenarioAnalysis}/>
             </Route>
             <Route path="login" component={Login}/>
         </Route>

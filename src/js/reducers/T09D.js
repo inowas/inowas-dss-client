@@ -57,7 +57,7 @@ function getInitialState() {
                 id: 'qw',
                 name: 'Well pumping rate, Q (m³/d)',
                 min: 0,
-                max: 100,
+                max: 9000,
                 value: 5000,
                 stepSize: 1,
                 decimals: 0
@@ -162,7 +162,7 @@ function calculateAndModifyState(state) {
     const xw = state.parameters.find( p => {return p.id == 'xw'}).value;
     const rhof = state.parameters.find( p => {return p.id == 'rhof'}).value;
     const rhos = state.parameters.find( p => {return p.id == 'rhos'}).value;
-    state.chart.data = calc.calculateDiagramData(q, b, k, rhof, rhos, qw, xw, 0, 100, 1);
+    state.chart.data = calc.calculateDiagramData(q, b, k, rhof, rhos, qw, xw, -100, 0, 1);
 
     // state.chart.data = calc.calculateDiagramData(q, k, d, df, ds, 0, 100, 10);
     // state.chart.options.yAxis.domain[1] = 2 * calc.calculateZCrit(d);

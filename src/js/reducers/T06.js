@@ -209,7 +209,7 @@ function getInitialState() {
         }]
     };
 }
-const T09CReducer = (state = getInitialState(), action) => {
+const T06Reducer = (state = getInitialState(), action) => {
     switch (action.type) {
         case 'CHANGE_TOOL_T06_CONDITION':
             {
@@ -225,4 +225,4 @@ const T09CReducer = (state = getInitialState(), action) => {
     }
     return state;
 };
-export default T09CReducer;
+export default T06Reducer;
