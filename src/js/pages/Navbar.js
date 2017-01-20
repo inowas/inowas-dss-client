@@ -22,7 +22,7 @@ export default class NavBar extends React.Component {
                                         <i className="flaticon-file"></i>Documentation</a>
                                 </li>
                                 <li className="submenu">
-                                    <a href="">
+                                    <a href="http://kb.inowas.hydro.tu-dresden.de">
                                         <i className="flaticon-database-1"></i>Datasets (<strong>18</strong>)
                                     </a>
                                 </li>
