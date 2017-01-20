@@ -3,7 +3,7 @@ import * as calc from '../calculations/T13A';
 function getInitialState() {
     return {
         background: {
-            'image': '/images/tools/T02.png'
+            'image': '/images/tools/T13A.png'
         },
         chart: {
             data: [],
@@ -13,72 +13,69 @@ function getInitialState() {
                 }
             }
         },
-        info: {
-            hmax: 0,
-        },
         parameters: [{
             order: 0,
             id: 'w',
             name: 'Percolation rate, w(m/d)',
             min: 0,
             max: 10,
-            value: 0.405,
+            value: 0.1,
             stepSize: 0.1,
-            decimals: 3
+            decimals: 1
         }, {
             order: 1,
-            id: 'L',
-            name: 'Basin length, L (m)',
+            id: 'K',
+            name: 'Hydraulic conductivity, K (m/d)',
             min: 0,
             max: 100,
-            value: 20.5,
+            value: 10,
             stepSize: 1,
             decimals: 1
         }, {
             order: 2,
-            id: 'W',
-            name: 'Basin width, W (m)',
+            id: 'ne',
+            name: 'Effective porosity, n (-)',
             min: 0,
-            max: 100,
-            value: 20.5,
-            stepSize: 1,
+            max: 5,
+            value: 0.35,
+            stepSize: 0.05,
             decimals: 1
         }, {
             order: 3,
-            id: 'hi',
-            name: 'Initial groundwater Level, hi (m)',
+            id: 'L',
+            name: 'Aquifer length, L´ (m)',
             min: 0,
-            max: 100,
-            value: 35,
-            stepSize: 1,
+            max: 5000,
+            value: 1000,
+            stepSize: 10,
             decimals: 0
         }, {
             order: 4,
-            id: 'Sy',
-            name: 'Specific yield, Sy (-)',
-            min: 0.000,
-            max: 1,
-            value: 0.085,
-            stepSize: 0.001,
-            decimals: 3
+            id: 'hL',
+            name: 'Fixed head boundary, hL (m)',
+            min: 0,
+            max: 10,
+            value: 2,
+            stepSize: 0.1,
+            decimals: 1
         }, {
             order: 5,
-            id: 'K',
-            name: 'Hydraulic conductivity, K (m/d)',
+            id: 'xi',
+            name: 'Distance to initial position, xi (m)',
             min: 1,
-            max: 50,
-            value: 1.83,
-            stepSize: 0.01,
-            decimals: 2
+            max: 500,
+            value: 50,
+            stepSize: 1,
+            decimals: 0
         }, {
             order: 6,
-            id: 't',
-            name: 'Infiltration time, t (d)',
-            min: 0,
-            max: 100,
-            value: 1.5,
+            id: 'xe',
+            name: 'Distance to arrival location, xe (m)',
+            min: 1,
+            max: 1500,
+            value: 1000,
             stepSize: 1,
-            decimals: 1
+            decimals: 0
         }]
     }
 };
@@ -115,6 +112,20 @@ const T13AReducer = (state = getInitialState(), action) => {
                         }
                     }
                 });
+
+                // check xi <= xe <= L
+                let xe = state.parameters.find(p => {return p.id == 'xe'}),
+                xi = state.parameters.find(p => {return p.id == 'xi'}),
+                L = state.parameters.find(p => {return p.id == 'L'});
+
+                if (xe.value < xi.value) {
+                    xe.value = xi.value;
+                }
+
+                if (xe.value > L.value) {
+                    xe.value = L.value;
+                }
+
                 state.parameters.map(p => {
                     if (p.value > p.max) {
                         p.max = p.value;
@@ -123,6 +134,7 @@ const T13AReducer = (state = getInitialState(), action) => {
                         p.min = p.value;
                     }
                 });
+
                 calculateAndModifyState(state);
                 break;
             }
@@ -135,31 +147,31 @@ function calculateAndModifyState(state) {
             return p.id == 'w'
         })
         .value;
-    const L = state.parameters.find(p => {
-            return p.id == 'L'
-        })
-        .value;
-    const W = state.parameters.find(p => {
-            return p.id == 'W'
-        })
-        .value;
-    const hi = state.parameters.find(p => {
-            return p.id == 'hi'
-        })
-        .value;
-    const Sy = state.parameters.find(p => {
-            return p.id == 'Sy'
-        })
-        .value;
     const K = state.parameters.find(p => {
             return p.id == 'K'
         })
         .value;
-    const t = state.parameters.find(p => {
-            return p.id == 't'
+    const ne = state.parameters.find(p => {
+            return p.id == 'ne'
         })
         .value;
-    state.chart.data = calc.calculateDiagramData(w, L, W, hi, Sy, K, t, 0, 120, 10);
+    const L = state.parameters.find(p => {
+            return p.id == 'L'
+        })
+        .value;
+    const hL = state.parameters.find(p => {
+            return p.id == 'hL'
+        })
+        .value;
+    const xi = state.parameters.find(p => {
+            return p.id == 'xi'
+        })
+        .value;
+    const xe = state.parameters.find(p => {
+            return p.id == 'xe'
+        })
+        .value;
+    state.chart.data = calc.calculateDiagramData(w, K, ne, L, hL, xi, xe, 10);
     //state.chart.options.yAxis.domain[1] = 2 * calc.calculateZCrit(d);
     return state
 }

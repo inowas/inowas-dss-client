@@ -32,14 +32,6 @@ export default class Chart extends React.Component {
                                     <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#1EB1ED" strokeWidth="5" dot={false}/>
                                 </LineChart>
                             </ResponsiveContainer>
-                            <div className="diagram-labels-right">
-                                <div className="diagram-label">
-                                    <p>
-                                        h<sub>max</sub> = <strong>{Number(this.props.info.hmax).toFixed(2)}</strong>
-                                        m
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div className="col col-rel-0-5">
