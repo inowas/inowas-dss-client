@@ -6,7 +6,7 @@ export default class Header extends React.Component {
         super(props);
 
         this.state = {
-            name: 'Default example'
+            name: props.title ? props.title : 'Default title'
         }
     }
 

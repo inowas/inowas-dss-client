@@ -5,6 +5,8 @@ import Background from '../../components/tools/Background'
 import Chart from '../../components/tools/ChartT02'
 import Parameters from '../../components/tools/Parameters'
 import { changeParameter, calculate, reset } from '../../actions/T02'
+import Header from '../../components/tools/Header';
+
 
 @connect((store) => {
     return {tool: store.T02}
@@ -36,6 +38,7 @@ export default class T02 extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
+                    <Header title={'Groundwater mounding (Hantush)'} />
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image} />

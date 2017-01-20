@@ -62,6 +62,9 @@ export default class NavBar extends React.Component {
                                     </a>
                                     <ul className="dropdown-menu">
                                         <li>
+                                            <Link to={'tools/T02'}>T02 Groundwater mounding (Hantush)</Link>
+                                        </li>
+                                        <li>
                                             <Link to={'tools/T06'}>T06 MAR method selection tool</Link>
                                         </li>
                                         <li>

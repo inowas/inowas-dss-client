@@ -120,7 +120,7 @@ export default class T06 extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width tool-T06">
-                    <Header/>
+                    <Header title={'MAR method selection'} />
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <h2>Input Conditions</h2>
