@@ -1,4 +1,4 @@
-import * as calc from '../calculations/T02';
+import * as calc from '../calculations/T13A';
 
 function getInitialState() {
     return {
@@ -82,22 +82,22 @@ function getInitialState() {
         }]
     }
 };
-const T02Reducer = (state = getInitialState(), action) => {
+const T13AReducer = (state = getInitialState(), action) => {
     switch (action.type) {
-        case 'RESET_TOOL_T02':
+        case 'RESET_TOOL_T13A':
             {
                 state = getInitialState();
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CALCULATE_TOOL_T02':
+        case 'CALCULATE_TOOL_T13A':
             {
                 state = { ...state
                 };
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CHANGE_TOOL_T02_PARAMETER':
+        case 'CHANGE_TOOL_T13A_PARAMETER':
             {
                 const changedParam = action.payload;
                 state = { ...state,
@@ -160,10 +160,7 @@ function calculateAndModifyState(state) {
         })
         .value;
     state.chart.data = calc.calculateDiagramData(w, L, W, hi, Sy, K, t, 0, 120, 10);
-
-
-    state.info.hmax = state.chart.data[0].hhi + hi;
     //state.chart.options.yAxis.domain[1] = 2 * calc.calculateZCrit(d);
     return state
 }
-export default T02Reducer;
+export default T13AReducer;

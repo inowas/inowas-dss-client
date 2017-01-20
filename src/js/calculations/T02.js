@@ -22,7 +22,6 @@ export function calculateDiagramData(w, L, W, hi, Sy, K, t, x_min, x_max, d_x) {
     function calcHhi(x) {
         const s1 = S((l + x) / sqrt4vt, a / sqrt4vt), // y = 0 => s1 = s2
             s3 = S((l - x) / sqrt4vt, a / sqrt4vt);  // y = 0 => s3 = s4
-        console.log(x, s1, s3);
         return Math.sqrt(w / 2 / K * v * t * (2 * s1 + 2 * s3) + hi * hi) - hi; // eq 1
     }
 
