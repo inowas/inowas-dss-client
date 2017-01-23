@@ -27,9 +27,9 @@ export default class Chart extends React.Component {
                                 }}>
 
                                     <XAxis label="x (m)" type="number" dataKey="x"/>
-                                    <YAxis label="t" type="number" domain={this.props.options.yAxis.domain}/>
+                                    <YAxis label="t (d)" type="number" domain={this.props.options.yAxis.domain}/>
                                     <CartesianGrid strokeDasharray="3 3"/>
-                                    <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#1EB1ED" strokeWidth="5" dot={false}/>
+                                    <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
                                 </LineChart>
                             </ResponsiveContainer>
                         </div>
