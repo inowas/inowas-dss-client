@@ -17,7 +17,7 @@ export default class Chart extends React.Component {
                 <h2>Calculation</h2>
                 <div className="grid-container">
                     <div className="col stretch">
-                        <div className="diagram">
+
                             <ResponsiveContainer width={'100%'} aspect={2.0 / 1.0}>
                                 <LineChart data={this.props.data} margin={{
                                     top: 20,
@@ -40,7 +40,7 @@ export default class Chart extends React.Component {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+
                     </div>
                     <div className="col col-rel-0-5">
                         <ul className="nav nav-stacked" role="navigation">

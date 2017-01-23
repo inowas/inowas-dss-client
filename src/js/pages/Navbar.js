@@ -58,20 +58,29 @@ export default class NavBar extends React.Component {
                                 <li className="submenu dropdown">
                                     <a href="" className="dropdown-toggle">
                                         <i className="flaticon-controls-4"></i>
-                                        Tools (<strong>4</strong>)
+                                        Tools (<strong>9</strong>)
                                     </a>
                                     <ul className="dropdown-menu">
                                         <li>
                                             <Link to={'tools/T02'}>T02 Groundwater mounding (Hantush)</Link>
                                         </li>
                                         <li>
-                                            <Link to={'tools/T06'}>T06 MAR method selection tool</Link>
+                                            <Link to={'tools/T06'}>T06 MAR method selection</Link>
                                         </li>
                                         <li>
-                                            <Link to={'tools/T09B'}>T09_b Freshwater-saltwater interface (Glover equation)</Link>
+                                            <Link to={'tools/T09A'}>T09_a Saltwater intrusion / Depth of freshwater-saltwater interface (Ghyben-Herzberg)</Link>
                                         </li>
                                         <li>
-                                            <Link to={'tools/T09C'}>T09_c Upconing</Link>
+                                            <Link to={'tools/T09B'}>T09_b Saltwater intrusion / Shape of freshwater-saltwater interface (Glover)</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={'tools/T09C'}>T09_c Saltwater intrusion / Upconing</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={'tools/T09D'}>T09_d Saltwater intrusion / Critical well discharge</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={'tools/T13A'}>T13_a Travel time / Aquifer with no-flow and fixed-head boundaries</Link>
                                         </li>
                                         <li>
                                             <Link to={'tools/modflow/list'}>T03 Numerical model setup (MODFLOW)</Link>
