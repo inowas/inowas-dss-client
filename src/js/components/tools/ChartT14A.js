@@ -25,12 +25,20 @@ export default class Chart extends React.Component {
                                     bottom: 40
                                 }}>
 
-                                    <XAxis label="x (m)" type="number" dataKey="x"/>
-                                    <YAxis label="t (d)" type="number" domain={this.props.options.yAxis.domain}/>
+                                    <XAxis label="T (d)" type="number" dataKey="t"/>
+                                    <YAxis label="dQ (m³/d)" type="number" domain={this.props.options.yAxis.domain}/>
                                     <CartesianGrid strokeDasharray="3 3"/>
-                                    <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
+                                    <Line isAnimationActive={false} type="basis" dataKey={'dQ'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
                                 </LineChart>
                             </ResponsiveContainer>
+                            <div className="diagram-labels-bottom-right">
+                                <div className="diagram-label">
+                                    <p>
+                                        dQ = <strong>{this.props.info.dQ.toFixed(1)}</strong>
+                                        m³/d
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="col col-rel-0-5">
