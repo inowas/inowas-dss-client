@@ -1,3 +1,5 @@
+//TODO bug after changing xi
+
 import React from 'react'
 import {connect} from 'react-redux';
 

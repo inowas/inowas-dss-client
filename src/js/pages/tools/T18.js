@@ -2,17 +2,17 @@ import React from 'react'
 import {connect} from 'react-redux';
 
 import Background from '../../components/tools/Background'
-import Chart from '../../components/tools/ChartT09C'
-import Info from '../../components/tools/InfoT09C'
+import Chart from '../../components/tools/ChartT18'
+import Info from '../../components/tools/InfoT18'
 import Parameters from '../../components/tools/Parameters'
-import { changeParameter, calculate, reset } from '../../actions/T09C'
+import { changeParameter, calculate, reset } from '../../actions/T18'
 
 import Header from '../../components/tools/Header';
 
 @connect((store) => {
-    return {tool: store.T09C}
+    return {tool: store.T18}
 })
-export default class T09C extends React.Component {
+export default class T18 extends React.Component {
 
     handleChange = (e) => {
 
@@ -27,7 +27,7 @@ export default class T09C extends React.Component {
         }
     };
 
-    handleReset = (e) => {
+    handleReset = () => {
         this.props.dispatch(reset());
     };
 
@@ -39,10 +39,9 @@ export default class T09C extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
-                    <Header/>
+                    <Header title={'SAT basin design'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
-                            <Background image={this.props.tool.background.image} />
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
@@ -52,7 +51,7 @@ export default class T09C extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Info data={this.props.tool.info} />
+                            <Info info={this.props.tool.info} />
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
