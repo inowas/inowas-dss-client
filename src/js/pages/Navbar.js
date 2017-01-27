@@ -83,6 +83,9 @@ export default class NavBar extends React.Component {
                                             <Link to={'tools/T13A'}>T13_a Travel time / Aquifer with no-flow and fixed-head boundaries</Link>
                                         </li>
                                         <li>
+                                            <Link to={'tools/T18'}>T18 SAT basin design</Link>
+                                        </li>
+                                        <li>
                                             <Link to={'tools/modflow/list'}>T03 Numerical model setup (MODFLOW)</Link>
                                         </li>
                                         <li>
