@@ -1,15 +1,18 @@
-export function changeSettings(newSetting) {
+export function changeParameter(parameter) {
     return {
-        type: "CHANGE_TOOL_SETTINGS",
-        payload: {
-            'selected': newSetting
-        }
+        type: 'CHANGE_TOOL_T09A_PARAMETER',
+        payload: parameter
     }
 }
 
-export function changeParameter(parameter){
+export function calculate() {
     return {
-        type: "CHANGE_TOOL_PARAMETER",
-        payload: parameter
+        type: 'CALCULATE_TOOL_T09A'
+    }
+}
+
+export function reset() {
+    return {
+        type: 'RESET_TOOL_T09A'
     }
 }

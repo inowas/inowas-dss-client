@@ -4,13 +4,16 @@ export function calculateDiagramData(LLRN, LLRO, AF, Q, IR, OD, Cn, Co) {
     Co = calcC(Co, IR, AF, OD, LLRO);
     return [{
         name: 'AH',
-        value: calcA(1, Q, HLR)
+        value: calcA(1, Q, HLR),
+        fill: '#4C4C4C'
     }, {
         name: 'AN',
-        value: calcA(Cn, Q, LLRN)
+        value: calcA(Cn, Q, LLRN),
+        fill: '#1EB1ED'
     }, {
         name: 'AO',
-        value: calcA(Co, Q, LLRO)
+        value: calcA(Co, Q, LLRO),
+        fill: '#ED8D05'
     }]
 }
 

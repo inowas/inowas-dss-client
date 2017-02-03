@@ -20,12 +20,12 @@ export default class Chart extends React.Component {
                             <ResponsiveContainer width="100%" aspect={2.0 / 1.0}>
                                 <BarChart layout="vertical" data={this.props.data} margin={{
                                     top: 20,
-                                    right: 40,
+                                    right: 80,
                                     left: 10,
                                     bottom: 40
                                 }}>
 
-                                    <XAxis type="number"/>
+                                    <XAxis type="number" label="Area (m²)"/>
                                     <YAxis type="category" dataKey="name"/>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <Bar isAnimationActive={false} dataKey="value" fill="#ED8D05"/>

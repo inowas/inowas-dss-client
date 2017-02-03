@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-    ResponsiveContainer,
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Text,
-    Legend,
-    ReferenceLine
-} from 'recharts'
+import {ResponsiveContainer, BarChart, Bar, XAxis} from 'recharts'
 
 export default class Chart extends React.Component {
 
@@ -21,19 +11,38 @@ export default class Chart extends React.Component {
                     <div className="col stretch">
                         <div className="diagram">
                             <ResponsiveContainer width="100%" aspect={2.0 / 1.0}>
-                                <LineChart data={this.props.data} margin={{
+                                <BarChart data={this.props.data} barSize={50} margin={{
                                     top: 15,
                                     right: 30,
                                     left: 20,
                                     bottom: 15
                                 }}>
-                                    <XAxis dataKey="x"/>
-                                    <YAxis type="number"/>
-                                    <CartesianGrid strokeDasharray="3 3"/>
-                                    <Line isAnimationActive={false} type="monotone" dataKey={'zCrit'} stroke="#000000" dot={false}/>
-                                    <Line isAnimationActive={false} type="monotone" dataKey={'h'} stroke="#8884d8" dot={false}/>
-                                </LineChart>
+                                    <Bar isAnimationActive={false} dataKey="h" stackId="a" fill="#1EB1ED"/>
+                                    <Bar isAnimationActive={false} dataKey="z" stackId="a" fill="#ED8D05"/>
+                                </BarChart>
                             </ResponsiveContainer>
+                            <div className="diagram-labels-right">
+                                <div className="diagram-label">
+                                    <p>
+                                        h =
+                                        <strong>{this
+                                                .props
+                                                .info
+                                                .h
+                                                .toFixed(1)}</strong>m
+                                    </p>
+                                </div>
+                                <div className="diagram-label">
+                                    <p>
+                                        z =
+                                        <strong>{this
+                                                .props
+                                                .info
+                                                .z
+                                                .toFixed(1)}</strong>m
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="col col-rel-0-5">

@@ -5,7 +5,7 @@ import Background from '../../components/tools/Background'
 import Chart from '../../components/tools/ChartT09C'
 import Info from '../../components/tools/InfoT09C'
 import Parameters from '../../components/tools/Parameters'
-import { changeParameter, calculate, reset } from '../../actions/T09C'
+import {changeParameter, calculate, reset} from '../../actions/T09C'
 
 import Header from '../../components/tools/Header';
 
@@ -16,43 +16,52 @@ export default class T09C extends React.Component {
 
     handleChange = (e) => {
 
-        if (e.target.name.startsWith('parameter')){
-            const param = e.target.name.split('_');
+        if (e.target.name.startsWith('parameter')) {
+            const param = e
+                .target
+                .name
+                .split('_');
 
             let parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this
+                .props
+                .dispatch(changeParameter(parameter))
         }
     };
 
-    handleReset = (e) => {
-        this.props.dispatch(reset());
+    handleReset = () => {
+        this
+            .props
+            .dispatch(reset());
     };
 
-    componentWillMount(){
-        this.props.dispatch(calculate())
+    componentWillMount() {
+        this
+            .props
+            .dispatch(calculate())
     }
 
     render() {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
-                    <Header/>
+                    <Header title={'UPCONING'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
-                            <Background image={this.props.tool.background.image} />
+                            <Background image={this.props.tool.background.image}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
-                            <Chart data={this.props.tool.chart.data} info={this.props.tool.info} options={this.props.tool.chart.options} />
+                            <Chart data={this.props.tool.chart.data} info={this.props.tool.info} options={this.props.tool.chart.options}/>
                         </section>
                     </div>
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Info data={this.props.tool.info} />
+                            <Info data={this.props.tool.info}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
