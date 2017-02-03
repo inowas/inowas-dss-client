@@ -1,4 +1,5 @@
 import * as calc from '../calculations/T13A';
+import applyParameterUpdate from './applyParameterUpdate';
 
 function getInitialState() {
     return {
@@ -96,22 +97,12 @@ const T13AReducer = (state = getInitialState(), action) => {
             }
         case 'CHANGE_TOOL_T13A_PARAMETER':
             {
-                const changedParam = action.payload;
                 state = { ...state,
                 };
-                state.parameters.map(p => {
-                    if (p.id === changedParam.id) {
-                        if (changedParam.hasOwnProperty('min')) {
-                            p.min = changedParam.min;
-                        }
-                        if (changedParam.hasOwnProperty('max')) {
-                            p.max = changedParam.max;
-                        }
-                        if (changedParam.hasOwnProperty('value')) {
-                            p.value = changedParam.value;
-                        }
-                    }
-                });
+
+                const newParam = action.payload;
+                var param = state.parameters.find(p => {return p.id === newParam.id});
+                applyParameterUpdate(param, newParam);
 
                 // check xi <= xe <= L
                 let xe = state.parameters.find(p => {return p.id == 'xe'}),
@@ -125,15 +116,6 @@ const T13AReducer = (state = getInitialState(), action) => {
                 if (xe.value > L.value) {
                     xe.value = L.value;
                 }
-
-                state.parameters.map(p => {
-                    if (p.value > p.max) {
-                        p.max = p.value;
-                    }
-                    if (p.value < p.min) {
-                        p.min = p.value;
-                    }
-                });
 
                 calculateAndModifyState(state);
                 break;
@@ -172,7 +154,6 @@ function calculateAndModifyState(state) {
         })
         .value;
     state.chart.data = calc.calculateDiagramData(w, K, ne, L, hL, xi, xe, 10);
-    //state.chart.options.yAxis.domain[1] = 2 * calc.calculateZCrit(d);
-    return state
+    return state;
 }
 export default T13AReducer;

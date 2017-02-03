@@ -82,33 +82,20 @@ const T09AReducer = ( state=initialState, action ) => {
 
         case 'CHANGE_TOOL_PARAMETER': {
 
-            const changedParam = action.payload;
             state = {
                 ...state,
             };
 
-            state.parameters.map( p => {
-                if (p.id === changedParam.id){
-                    if (changedParam.hasOwnProperty('min')){
-                        p.min = changedParam.min;
-                    }
-
-                    if (changedParam.hasOwnProperty('max')){
-                        p.max = changedParam.max;
-                    }
-
-                    if (changedParam.hasOwnProperty('value')){
-                        p.value = changedParam.value;
-                    }
-                }}
-            );
+            const newParam = action.payload;
+            var param = state.parameters.find(p => {return p.id === newParam.id});
+            applyParameterUpdate(param, newParam);
 
             const idf = state.parameters.findIndex( p => {return p.id == 'df'});
             const ids = state.parameters.findIndex( p => {return p.id == 'ds'});
             const iz = state.parameters.findIndex( p => {return p.id == 'zCrit'});
             const ih = state.parameters.findIndex( p => {return p.id == 'h'});
 
-            if (changedParam.id == 'h'){
+            if (newParam.id == 'h'){
                 state.parameters[iz].value = calculations.T09A.calculateZ(
                     state.parameters[ih].value,
                     state.parameters[idf].value,
@@ -116,7 +103,7 @@ const T09AReducer = ( state=initialState, action ) => {
                 );
             }
 
-            if (changedParam.id == 'zCrit'){
+            if (newParam.id == 'zCrit'){
                 state.parameters[ih].value = calculations.T09A.calculateH(
                     state.parameters[iz].value,
                     state.parameters[idf].value,
@@ -124,7 +111,7 @@ const T09AReducer = ( state=initialState, action ) => {
                 );
             }
 
-            if (changedParam.id == 'df' || changedParam.id == 'ds'){
+            if (newParam.id == 'df' || newParam.id == 'ds'){
                 state.parameters[iz].value = calculations.T09A.calculateZ(
                     state.parameters[ih].value,
                     state.parameters[idf].value,
@@ -137,16 +124,6 @@ const T09AReducer = ( state=initialState, action ) => {
                     state.parameters[ids].value
                 );
             }
-
-            state.parameters.map( p => {
-                if (p.value > p.max) {
-                    p.max = p.value;
-                }
-
-                if (p.value < p.min) {
-                    p.min = p.value;
-                }
-            });
 
             break;
         }

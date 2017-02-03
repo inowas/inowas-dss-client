@@ -1,4 +1,5 @@
 import * as calc from '../calculations/T14A';
+import applyParameterUpdate from './applyParameterUpdate';
 
 function getInitialState() {
     return {
@@ -87,45 +88,12 @@ const T14AReducer = (state = getInitialState(), action) => {
             }
         case 'CHANGE_TOOL_T14A_PARAMETER':
             {
-                const changedParam = action.payload;
                 state = { ...state,
                 };
-                state.parameters.map(p => {
-                    if (p.id === changedParam.id) {
-                        if (changedParam.hasOwnProperty('min')) {
-                            if(p.hasOwnProperty('validMin')) {
-                                // validate min value
-                                if(p.validMin(changedParam.min)) {
-                                    p.min = changedParam.min;
-                                }
-                            } else {
-                                p.min = changedParam.min;
-                            }
-                        }
-                        if (changedParam.hasOwnProperty('max')) {
-                            if(p.hasOwnProperty('validMax')) {
-                                // validate max value
-                                if(p.validMax(changedParam.max)) {
-                                    p.max = changedParam.max;
-                                }
-                            } else {
-                                p.max = changedParam.max;
-                            }
-                        }
-                        if (changedParam.hasOwnProperty('value')) {
-                            p.value = changedParam.value;
-                        }
-                    }
-                });
 
-                state.parameters.map(p => {
-                    if (p.value > p.max) {
-                        p.max = p.value;
-                    }
-                    if (p.value < p.min) {
-                        p.min = p.value;
-                    }
-                });
+                const newParam = action.payload;
+                var param = state.parameters.find(p => {return p.id === newParam.id});
+                applyParameterUpdate(param, newParam);
 
                 calculateAndModifyState(state);
                 break;

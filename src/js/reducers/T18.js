@@ -1,4 +1,5 @@
 import * as calc from '../calculations/T18';
+import applyParameterUpdate from './applyParameterUpdate';
 import {
     inputType
 } from '../inputType';
@@ -127,22 +128,13 @@ const T18Reducer = (state = getInitialState(), action) => {
             }
         case 'CHANGE_TOOL_T18_PARAMETER':
             {
-                const changedParam = action.payload;
                 state = { ...state
                 };
-                state.parameters.map(p => {
-                    if (p.id === changedParam.id) {
-                        if (changedParam.hasOwnProperty('min')) {
-                            p.min = changedParam.min;
-                        }
-                        if (changedParam.hasOwnProperty('max')) {
-                            p.max = changedParam.max;
-                        }
-                        if (changedParam.hasOwnProperty('value')) {
-                            p.value = changedParam.value;
-                        }
-                    }
-                });
+
+                const newParam = action.payload;
+                var param = state.parameters.find(p => {return p.id === newParam.id});
+                applyParameterUpdate(param, newParam);
+
                 calculateAndModifyState(state);
                 break;
             }

@@ -1,5 +1,5 @@
-
 import * as calc from '../calculations/T09D'
+import applyParameterUpdate from './applyParameterUpdate';
 
 function getInitialState() {
     return {
@@ -27,6 +27,7 @@ function getInitialState() {
                 id: 'k',
                 name: 'Hydraulic conductivity, K (m/d)',
                 min: 1,
+                validMin: function(x) {return x > 0},
                 max: 100,
                 value: 50,
                 stepSize: 1,
@@ -35,8 +36,9 @@ function getInitialState() {
             {
                 order: 1,
                 id: 'b',
-                name: 'Depth to base of aquifer, B (m)',
-                min: 0,
+                name: 'Aquifer thickness below sea level, b (m)',
+                min: 10,
+                validMin: function(x) {return x > 0},
                 max: 100,
                 value: 20,
                 stepSize: 1,
@@ -46,28 +48,31 @@ function getInitialState() {
                 order: 2,
                 id: 'q',
                 name: 'Offshore discharge rate, q (m³/d)',
-                min: 0,
-                max: 100,
+                min: 0.1,
+                validMin: function(x) {return x > 0},
+                max: 10,
                 value: 1,
-                stepSize: 1,
-                decimals: 0
+                stepSize: 0.1,
+                decimals: 1
             },
             {
                 order: 3,
                 id: 'qw',
-                name: 'Well pumping rate, Q (m³/d)',
-                min: 0,
-                max: 9000,
+                name: 'Well pumping rate, Qw (m³/d)',
+                min: 1000,
+                validMin: function(x) {return x > 0},
+                max: 8000,
                 value: 5000,
-                stepSize: 1,
+                stepSize: 10,
                 decimals: 0
             },
             {
                 order: 4,
                 id: 'xw',
                 name: 'Distance from well to shoreline, xw (m)',
-                min: 0,
-                max: 4000,
+                min: 1000,
+                validMin: function(x) {return x > 0},
+                max: 5000,
                 value: 2000,
                 stepSize: 1,
                 decimals: 0
@@ -76,9 +81,11 @@ function getInitialState() {
                 order: 5,
                 id: 'rhof',
                 name: 'Density of freshwater [g/cm³]',
-                min: 1.000,
-                max: 1.005,
-                value: 1.000,
+                min: 0.9,
+                validMin: function(x) {return x >= 0.9},
+                max: 1.03,
+                validMax: function(x) {return x <= 1.05},
+                value: 1,
                 stepSize: 0.001,
                 decimals: 3
             },
@@ -86,8 +93,10 @@ function getInitialState() {
                 order: 6,
                 id: 'rhos',
                 name: 'Density of saltwater [g/cm³]',
-                min: 1.020,
-                max: 1.030,
+                min: 0.9,
+                validMin: function(x) {return x >= 0.9},
+                max: 1.03,
+                validMax: function(x) {return x <= 1.05},
                 value: 1.025,
                 stepSize: 0.001,
                 decimals: 3
@@ -126,25 +135,11 @@ const T09DReducer = ( state=getInitialState(), action ) => {
 
         case 'CHANGE_TOOL_T09D_PARAMETER': {
 
-            const changedParam = action.payload;
             state = {...state};
 
-            //Martin: wouldn't be a find be enough?
-            state.parameters.map( p => {
-                if (p.id === changedParam.id){
-                    if (changedParam.hasOwnProperty('min')){
-                        p.min = changedParam.min;
-                    }
-
-                    if (changedParam.hasOwnProperty('max')){
-                        p.max = changedParam.max;
-                    }
-
-                    if (changedParam.hasOwnProperty('value')){
-                        p.value = changedParam.value;
-                    }
-                }}
-            );
+            const newParam = action.payload;
+            var param = state.parameters.find(p => {return p.id === newParam.id});
+            applyParameterUpdate(param, newParam);
 
             calculateAndModifyState(state);
             break;
