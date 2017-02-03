@@ -20,7 +20,7 @@ function getInitialState() {
         parameters: [{
             order: 0,
             id: 'h',
-            name: 'Thickness of freshwater above sea level [m]',
+            name: 'Thickness of freshwater above sea level, h [m]',
             min: 0,
             max: 10,
             value: 1,
