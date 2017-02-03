@@ -125,13 +125,7 @@ function calculateAndModifyState(state) {
     state.info.l = calc.calculateL(i, b, df, ds)
         .toFixed(1);
 
-    //TODO
-    const d = state.chart.data.find(d => {return d.b == Math.round(d.z)});
-    if(d) {
-        state.info.xT = d.x;
-    } else {
-        state.info.xT = NaN;
-    }
-    return state
+    state.info.xT = calc.calculateXT(i, b, df, ds);
+    return state;
 }
 export default T09BReducer;
