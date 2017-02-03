@@ -48,7 +48,7 @@ export default class T13A extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
-                    <Header title={'Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge'}/>
+                    <Header title={'T13_a. Travel time // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image}/>

@@ -43,7 +43,7 @@ export default class T09F extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
-                    <Header/>
+                    <Header title={'T09_e. Saltwater intrusion // Sea level rise'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image} />

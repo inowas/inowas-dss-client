@@ -38,7 +38,7 @@ export default class T09B extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
-                    <Header title={'FRESHWATER-SALTWATER INTERFACE (GLOVER EQUATION)'}/>
+                    <Header title={'T09_b. Saltwater intrusion // Shape of freshwater-saltwater interface (Glover equation)'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image} />
