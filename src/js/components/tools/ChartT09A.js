@@ -1,5 +1,5 @@
 import React from 'react'
-import {ResponsiveContainer, BarChart, Bar, XAxis} from 'recharts'
+import {ResponsiveContainer, BarChart, Bar, XAxis, Legend} from 'recharts'
 
 export default class Chart extends React.Component {
 
@@ -18,28 +18,29 @@ export default class Chart extends React.Component {
                                     bottom: 15
                                 }}>
                                     <Bar isAnimationActive={false} dataKey="h" stackId="a" fill="#1EB1ED"/>
-                                    <Bar isAnimationActive={false} dataKey="z" stackId="a" fill="#ED8D05"/>
+                                    <Bar isAnimationActive={false} dataKey="z" stackId="a" fill="#DBF3FD"/>
+                                    <Legend />
                                 </BarChart>
                             </ResponsiveContainer>
                             <div className="diagram-labels-right">
                                 <div className="diagram-label">
                                     <p>
-                                        h =
+                                        h =&nbsp;
                                         <strong>{this
                                                 .props
                                                 .info
                                                 .h
-                                                .toFixed(1)}</strong>m
+                                                .toFixed(1)}</strong>&nbsp;m
                                     </p>
                                 </div>
                                 <div className="diagram-label">
                                     <p>
-                                        z =
+                                        z =&nbsp;
                                         <strong>{this
                                                 .props
                                                 .info
                                                 .z
-                                                .toFixed(1)}</strong>m
+                                                .toFixed(1)}</strong>&nbsp;m
                                     </p>
                                 </div>
                             </div>

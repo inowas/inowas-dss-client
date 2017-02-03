@@ -52,7 +52,7 @@ export default class T09A extends React.Component {
         return (
             <div className="page-wrapper">
                 <div className="page-width">
-                    <Header title={'DEPTH OF SALTWATER INTERFACE (GHYBEN-HERZBERG RELATION)'}/>
+                    <Header title={'T09_a. Saltwater intrusion // Depth of freshwater - saltwater interface (Ghyben-Herzberg relation)'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
                             <Background image={this.props.tool.background.image}/>
