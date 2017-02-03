@@ -34,7 +34,7 @@ export default class Chart extends React.Component {
                             <div className="diagram-labels-bottom-right">
                                 <div className="diagram-label">
                                     <p>
-                                        dQ = <strong>{this.props.info.dQ.toFixed(1)}</strong>
+                                        &#916;Q&nbsp;=&nbsp;<strong>{this.props.info.dQ.toFixed(1)}</strong>&nbsp;
                                         m³/d
                                     </p>
                                 </div>

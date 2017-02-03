@@ -36,8 +36,11 @@ export default class Chart extends React.Component {
                                 <div className="diagram-label">
                                     <p>
                                         h<sub>max</sub>
+                                        &nbsp;
                                         =
+                                        &nbsp;
                                         <strong>{Number(this.props.info.hmax).toFixed(2)}</strong>
+                                        &nbsp;
                                         m
                                     </p>
                                 </div>

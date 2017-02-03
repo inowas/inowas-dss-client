@@ -25,7 +25,7 @@ export default class Chart extends React.Component {
                             <div className="diagram-labels-right">
                                 <div className="diagram-label">
                                     <p>
-                                        h =&nbsp;
+                                        h&nbsp;=&nbsp;
                                         <strong>{this
                                                 .props
                                                 .info
@@ -35,7 +35,7 @@ export default class Chart extends React.Component {
                                 </div>
                                 <div className="diagram-label">
                                     <p>
-                                        z =&nbsp;
+                                        z&nbsp;=&nbsp;
                                         <strong>{this
                                                 .props
                                                 .info
