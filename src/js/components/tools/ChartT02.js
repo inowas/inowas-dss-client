@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import {
     ResponsiveContainer,
     LineChart,
@@ -7,7 +7,7 @@ import {
     YAxis,
     CartesianGrid,
     ReferenceLine
-} from "recharts"
+} from 'recharts'
 
 export default class Chart extends React.Component {
 
@@ -17,7 +17,7 @@ export default class Chart extends React.Component {
                 <h2>Calculation</h2>
                 <div className="grid-container">
                     <div className="col stretch">
-
+                        <div className="diagram">
                             <ResponsiveContainer width={'100%'} aspect={2.0 / 1.0}>
                                 <LineChart data={this.props.data} margin={{
                                     top: 20,
@@ -35,12 +35,14 @@ export default class Chart extends React.Component {
                             <div className="diagram-labels-right">
                                 <div className="diagram-label">
                                     <p>
-                                        h<sub>max</sub> = <strong>{Number(this.props.info.hmax).toFixed(2)}</strong>
+                                        h<sub>max</sub>
+                                        =
+                                        <strong>{Number(this.props.info.hmax).toFixed(2)}</strong>
                                         m
                                     </p>
                                 </div>
                             </div>
-
+                        </div>
                     </div>
                     <div className="col col-rel-0-5">
                         <ul className="nav nav-stacked" role="navigation">
