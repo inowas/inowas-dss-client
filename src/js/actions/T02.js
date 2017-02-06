@@ -1,3 +1,11 @@
+export function changeSettings(newVariable) {
+    return {
+        type: 'CHANGE_TOOL_T02_SETTINGS',
+        payload: {
+            'variable': newVariable
+        }
+    }
+}
 
 export function changeParameter(parameter){
     return {

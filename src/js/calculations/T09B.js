@@ -1,4 +1,3 @@
-
 function range(start, stop, step) {
     let a=[start], b=start;
     while(b<stop){b+=step;a.push(b)}
@@ -16,7 +15,7 @@ export function calculateDiagramData(i, b, df, ds, start, stop, step) {
         const z = calculateZofX(x, i, b, df, ds);
 
         dataSet['x'] = -x;
-        if (z<=b){
+        if (z<=b) {
             dataSet['z'] = -z;
         }
         dataSet['b'] = -b;
@@ -40,4 +39,9 @@ export  function calculateZofX(x, i, b, df, ds) {
 
 export  function calculateL(i, b, df, ds) {
     return (i*b*df)/(2*(ds-df));
+}
+
+export function calculateXT(i, b, rho_f, rho_s) {
+    const frac1 = (i*b*rho_f) / (rho_s - rho_f);
+    return ((b*b - frac1*frac1)*(rho_s - rho_f)) / (2*i*b);
 }

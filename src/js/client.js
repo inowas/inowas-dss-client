@@ -5,6 +5,7 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
 import * as tools from './pages/tools';
 
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
 import Modflow from './pages/ModFlow';
@@ -32,6 +33,7 @@ ReactDOM.render(
         <Route path="/">
             <IndexRoute component={LandingPage}/>
             <Route path="tools" component={Main}>
+                <IndexRoute component={Dashboard}/>
                 <Route path="modflow/list" component={ModelList}/>
                 <Route path="modflow/:modelId" component={Modflow}/>
                 <Route path="T02" component={tools.T02}/>

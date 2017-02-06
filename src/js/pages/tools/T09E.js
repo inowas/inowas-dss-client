@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 
 import Background from "../../components/tools/Background"
 import Chart from "../../components/tools/ChartT09E"
-import Settings from "../../components/tools/Settings"
+// import Settings from "../../components/tools/Settings"
 import Parameters from "../../components/tools/Parameters"
 import { changeSettings, changeParameter, calculate, reset } from "../../actions/T09E"
 

@@ -3,10 +3,9 @@ import {connect} from 'react-redux';
 
 import Background from '../../components/tools/Background';
 import Chart from '../../components/tools/ChartT09D';
-import Settings from '../../components/tools/Settings';
+import Settings from '../../components/tools/SettingsT09D';
 import Parameters from '../../components/tools/Parameters';
 import { changeSettings, changeParameter, calculate, reset } from '../../actions/T09D';
-
 import Header from '../../components/tools/Header';
 
 @connect((store) => {

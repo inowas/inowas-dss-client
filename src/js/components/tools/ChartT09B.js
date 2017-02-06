@@ -26,7 +26,7 @@ export default class Chart extends React.Component {
                                     bottom: 40
                                 }}>
                                     <XAxis label="x (m)" type="number" domain={this.props.options.xAxis.domain} dataKey="x" allowDecimals={false} tickLine={false}/>
-                                    <YAxis label="z (m)" type="number" domain={this.props.options.yAxis.domain} allowDecimals={false} tickLine={false}/>
+                                    <YAxis label="z (m)" type="number" domain={this.props.options.yAxis.domain} allowDecimals={false} tickLine={false} tickFormatter={(x) => {return x.toFixed(2)}}/>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <Line dot={false} isAnimationActive={false} type="basis" dataKey="b" stroke="#000000" strokeWidth="5" fillOpacity={1}/>
                                     <Line dot={false} isAnimationActive={false} type="basis" dataKey="z" stroke="#ED8D05" strokeWidth="5" fillOpacity={1}/>

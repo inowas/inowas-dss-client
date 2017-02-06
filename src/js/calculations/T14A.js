@@ -1,6 +1,5 @@
 import erfc from './erfc';
 
-
 export function calculateDiagramData(Qw, S, T, d, t_min, t_max, d_t) {
     function calcdQ(t) {
         return Qw * erfc(Math.sqrt((d * d * S) / (4 * T * t)));
