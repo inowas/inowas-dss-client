@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router";
-import { fetchAllModels, fetchModelMap } from "../actions/ModelActions"
-import ModelListMap from "../components/map/ModelListMap"
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import { fetchAllModels, fetchModelMap } from '../actions/ModelActions';
+import ModelListMap from '../components/modflow/ModelListMap';
 
 @connect((store) => {
     return {

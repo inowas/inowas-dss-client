@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '../../../less/toolHeader.less';
+
 export default class Header extends React.Component {
 
     constructor(props) {

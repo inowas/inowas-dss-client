@@ -1,30 +1,28 @@
-import React from "react";
+import React from 'react';
 
-import reactMixin from "react-mixin";
-import UniqeIdMixin from "unique-id-mixin";
-import Icon from "../primitive/Icon.js";
+import Icon from '../primitive/Icon.js';
 
 export default class AccordionItem extends React.Component {
 
+    toggleActive = () => {
+        this.props.toggleActive(this.props.index);
+    }
+
     render() {
-        const id = this.getNextUid('unique-string');
-        const panelClass = this.props.primary
-            ? " panel-primary primary"
-            : " panel-default";
+
+        const {active, className} = this.props;
 
         return (
-            <div className={"accordion-item panel" + panelClass}>
-                <div className="accordion-item-heading panel-heading" role="tab" id={"heading_" + id}>
-                    <button className="btn btn-link" role="button" data-toggle="collapse" data-parent={"#" + this.context.id} data-target={'#' + id} aria-expanded="false" aria-controls="collapseOne">
-                        {this.props.icon}
-                        <Icon className="pull-right" icon="arrow-down" />
+            <div className={'accordion-item' + ' ' + (className || '')} data-active={active}>
+                <div className="accordion-item-header" onClick={this.toggleActive}>
+                    {this.props.icon}
+                    <span className="accordion-item-heading">
                         {this.props.heading}
-                    </button>
+                    </span>
+                    <Icon className="icon-right" name={active ? 'arrow_up' : 'arrow_down'}/>
                 </div>
-                <div id={id} className="accordion-item-body anel-collapse collapse" role="tabpanel" aria-labelledby={"heading_" + id}>
-                    <div className={this.props.list
-                        ? 'list-group'
-                        : 'panel-body'}>
+                <div className="accordion-item-body">
+                    <div>
                         {this.props.children}
                     </div>
                 </div>
@@ -34,8 +32,12 @@ export default class AccordionItem extends React.Component {
 
 }
 
-reactMixin(AccordionItem.prototype, UniqeIdMixin);
-
-AccordionItem.contextTypes = {
-    id: React.PropTypes.string
-};
+AccordionItem.propTypes = {
+    icon: React.PropTypes.object,
+    className: React.PropTypes.string,
+    heading: React.PropTypes.string.isRequired,
+    children: React.PropTypes.object.isRequired,
+    index: React.PropTypes.number,
+    active: React.PropTypes.bool,
+    toggleActive: React.PropTypes.func
+}

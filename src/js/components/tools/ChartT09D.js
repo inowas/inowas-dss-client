@@ -9,7 +9,9 @@ import {
     Text,
     Legend,
     ReferenceLine
-} from 'recharts'
+} from 'recharts';
+
+import '../../../less/toolDiagram.less';
 
 export default class Chart extends React.Component {
 

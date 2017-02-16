@@ -1,5 +1,7 @@
 import React from "react";
 
+import '../../../less/toolSketch.less';
+
 export default class Background extends React.Component {
     render() {
         return (

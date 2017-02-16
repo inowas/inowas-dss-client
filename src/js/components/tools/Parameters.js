@@ -1,26 +1,15 @@
 import React from 'react';
 import {inputType} from '../../inputType';
 
-export default class Parameters extends React.Component {
+import '../../../less/toolParameters.less';
+import '../../../less/input-range.less';
 
-    // handleChange(e) {
-    //     if (this.props.handleChange) {
-    //         this
-    //             .props
-    //             .handleChange(e);
-    //     }
-    // };
+export default class Parameters extends React.Component {
 
     handleChange = e => {
         if (this.props.handleChange)
             this.props.handleChange(e);
         }
-
-    // handleReset(e) {
-    //     this
-    //         .props
-    //         .handleReset(e);
-    // };
 
     handleReset = e => {
         if (this.props.handleReset)

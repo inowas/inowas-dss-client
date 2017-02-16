@@ -1,0 +1,59 @@
+@import 'variables.less';
+
+.grid-container {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: @grid-gutter;
+}
+
+.grid-container:last-child {
+    margin-bottom: 0;
+}
+
+.col {
+    margin-right: @grid-gutter;
+}
+
+.col:last-child {
+    margin-right: 0;
+}
+
+.col-abs-1 {
+    width: @grid-column;
+}
+
+.col-abs-2 {
+    width: 2 * @grid-column + @grid-gutter;
+}
+
+.col-abs-3 {
+    width: 3 * @grid-column + 2 * @grid-gutter;
+}
+
+.col-abs-4 {
+    width: 4 * @grid-column + 3 * @grid-gutter;
+}
+
+.col-abs-5 {
+    width: 5 * @grid-column + 4 * @grid-gutter;
+}
+
+.col-rel-0-5 {
+    width: 10%;
+}
+
+.col-rel-1 {
+    width: 20%;
+}
+
+.col-rel-2 {
+    width: 40%;
+}
+
+.col-rel-3 {
+    width: 60%;
+}
+
+.stretch {
+    flex: 1;
+}

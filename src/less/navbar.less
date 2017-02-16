@@ -1,117 +1,92 @@
-.navbar-top {
-    background-color: #4C4C4C;
-    left: 0;
-    min-height: 30px;
-    margin-bottom: 20px;
+@import "variables.less";
+
+.navbar-wrapper {
+    background-color: @background-dark;
+    color: @color-dark;
     position: fixed;
-    right: 0;
-    z-index: 1030;
-}
-
-.navbar-top ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.navbar-right {
-    float: right !important;
-    margin-right: -15px;
-}
-
-.navbar-right > li > a {
-    color: #FFFFFF;
-    display: inline-block;
-    font-size: 12px;
-    line-height: 1.5;
-    padding: 5px 15px;
-}
-
-
-/* NAVIGATION
-------------- */
-.navbar-top .level_1 {
-    float: left;
-    margin: 0;
-    list-style: none;
-}
-
-.navbar-top a:focus,
-.navbar-top a:hover {
-    text-decoration: none;
-}
-
-.navbar-top .level_1 > li {
-    position: relative;
-    display: inline-block;
-}
-
-.navbar-top .level_1 > li > a {
-    color: #FFFFFF;
-    display: inline-block;
-    font-size: 12px;
-    line-height: 1.5;
-    text-transform: uppercase;
-    padding: 5px 15px;
-}
-
-.dropdown:hover .dropdown-toggle,
-.navbar-top .level_1 > li > a:focus,
-.navbar-top .level_1 > li > a:hover {
-    background-color: #1EB1ED;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.level_1 > li > .dropdown-menu {
-    margin-top: 0;
-    border-radius: 0;
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
+    top: 0;
     left: 0;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 160px;
-    padding: 5px 0;
-    margin: 2px 0 0;
-    font-size: 12px;
-    text-align: left;
-    list-style: none;
-    background-color: #4C4C4C;
-}
+    right: 0;
+    z-index: 900;
 
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
+    .navbar {
+        display: flex;
 
-.dropdown-menu > li > a {
-    display: block;
-    padding: 3px 35px;
-    clear: both;
-    line-height: 1.4;
-    color: #FFFFFF;
-    white-space: nowrap;
-}
+        .nav-left {
+            flex: 1;
+            text-transform: uppercase;
 
-.dropdown-menu > li > a:focus,
-.dropdown-menu > li > a:hover {
-    color: #DCDCDC;
-    background: transparent;
-}
+            .nav-item .nav-item {
+                text-transform: none;
+            }
+        }
 
-.dropdown-menu .add-new a {
-    background-color: #DCDCDC;
-    color: #4C4C4C;
-    margin-top: 5px;
-}
+        .nav-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
 
-.dropdown-menu .add-new a:hover {
-    background-color: #DCDCDC;
-    color: #1EB1ED;
+            .nav-item {
+                line-height: 1.5em;
+                position: relative;
+
+                .nav-element {
+                    text-decoration: none;
+                    display: block;
+                    padding: @spacing-small @spacing-regular;
+                    cursor: pointer;
+
+                    &:hover,
+                    &:focus {
+                        background-color: @primary;
+                    }
+
+                    .icon {
+                        margin-right: 0.75em;
+                    }
+                }
+
+                .nav-list {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    display: none;
+                    min-width: 2 * @grid-column;
+                    padding: @spacing-small 0;
+                    background-color: @background-dark;
+
+                    .nav-item {
+                        width: 100%;
+
+                        .nav-element {
+                            padding: @spacing-small @spacing-large;
+
+                            &:hover,
+                            &:focus {
+                                background-color: transparent;
+                                color: @grey-semi-bright;
+                            }
+                        }
+                    }
+
+                    .nav-item-add-new {
+                        .nav-element {
+                            background-color: @grey-semi-bright;
+                            color: @color-bright;
+
+                            &:hover {
+                                background-color: @grey-semi-bright;
+                                color: @primary;
+                            }
+                        }
+                    }
+                }
+
+                &:hover .nav-list {
+                    display: block;
+                }
+            }
+        }
+    }
 }

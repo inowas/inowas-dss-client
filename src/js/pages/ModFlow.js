@@ -1,16 +1,13 @@
-import React from "react"
-import { connect } from "react-redux";
+import React from 'react';
+import {connect} from 'react-redux';
 
-import ModflowMap from "./ModFlowMap";
+import ModflowMap from '../components/modflow/ModFlowMap';
 
-import { fetchModelById } from "../actions/ModelActions";
-import { setCurrentTool } from "../actions/ApplicationActions";
+import {fetchModelById} from '../actions/ModelActions';
+import {setCurrentTool} from '../actions/ApplicationActions';
 
 @connect((store) => {
-    return {
-        modelStore: store.model,
-        appState: store.appState
-    }
+    return {modelStore: store.model, appState: store.appState}
 })
 export default class ModFlow extends React.Component {
 
@@ -23,7 +20,6 @@ export default class ModFlow extends React.Component {
         return this.props.modelStore.error;
     }
 
-
     componentWillMount() {
         this.props.dispatch(fetchModelById(this.props.params.modelId));
         this.props.dispatch(setCurrentTool('modflow'));
@@ -35,11 +31,7 @@ export default class ModFlow extends React.Component {
         const appState = this.props.appState;
 
         if (this.hasData()) {
-            return (
-                <div className="page-wrapper">
-                    <ModflowMap model={model} styles={styles} appState={appState} />
-                </div>
-            );
+            return <ModflowMap model={model} styles={styles} appState={appState}/>;
         }
 
         return null;
