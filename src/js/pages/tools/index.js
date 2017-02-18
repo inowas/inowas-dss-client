@@ -6,6 +6,7 @@ import T09C from './T09C';
 import T09D from './T09D';
 import T09E from './T09E';
 import T13A from './T13A';
+import T13B from './T13B';
 import T14A from './T14A';
 import T18 from './T18';
 
@@ -17,5 +18,6 @@ exports.T09C = T09C;
 exports.T09D = T09D;
 exports.T09E = T09E;
 exports.T13A = T13A;
+exports.T13B = T13B;
 exports.T14A = T14A;
 exports.T18 = T18;
