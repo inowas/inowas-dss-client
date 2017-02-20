@@ -39,5 +39,5 @@ export default class Accordion extends React.Component {
 
 Accordion.propTypes = {
     className: React.PropTypes.string,
-    children: React.PropTypes.array.isRequired
+    children: React.PropTypes.node.isRequired
 }
