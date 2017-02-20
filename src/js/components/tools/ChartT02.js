@@ -1,4 +1,7 @@
 import React from 'react'
+
+import '../../../less/toolDiagram.less';
+
 import * as calc from '../../calculations/T02';
 import {
     ResponsiveContainer,

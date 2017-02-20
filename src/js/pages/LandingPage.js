@@ -1,4 +1,12 @@
 import React from 'react';
+//import '../../../node_modules/bootstrap/less/bootstrap.less';
+// import '../../../node_modules/bootstrap/less/carousel.less';
+import '../../less/carousel.less';
+// window.jQuery = require('jquery');
+// require('bootstrap');
+
+import '../helper/carousel.js';
+import '../../less/landingPage.less';
 
 import Login from '../components/landingPage/Login';
 
@@ -209,31 +217,31 @@ export default class LandingPage extends React.Component {
 
                             <ol className="carousel-indicators">
                                 <li data-target="#toolsCarousel" data-slide-to="0" className="active">
-                                    <img src="../images/icons/toolbox-icon-01.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-01.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="1">
-                                    <img src="../images/icons/toolbox-icon-02.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-02.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="2">
-                                    <img src="../images/icons/toolbox-icon-03.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-03.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="3">
-                                    <img src="../images/icons/toolbox-icon-04.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-04.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="4">
-                                    <img src="../images/icons/toolbox-icon-05.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-05.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="5">
-                                    <img src="../images/icons/toolbox-icon-06.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-06.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="6">
-                                    <img src="../images/icons/toolbox-icon-07.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-07.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="7">
-                                    <img src="../images/icons/toolbox-icon-08.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-08.png"/>
                                 </li>
                                 <li data-target="#toolsCarousel" data-slide-to="8">
-                                    <img src="../images/icons/toolbox-icon-09.png"/>
+                                    <img src="../images/landingPage/toolbox-icon-09.png"/>
                                 </li>
                             </ol>
 

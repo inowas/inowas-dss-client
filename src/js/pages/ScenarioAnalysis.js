@@ -1,14 +1,14 @@
-import React from "react"
-import { connect } from "react-redux";
-import ScenarioAnalysisMap from "./ScenarioAnalysisMap";
+import React from 'react'
+import { connect } from 'react-redux';
+import ScenarioAnalysisMap from '../components/modflow/ScenarioAnalysisMap';
 
-import { switchToScenarioAnalysisEdit, switchToScenarioAnalysisSelect, setCurrentTool } from "../actions/ApplicationActions";
-import { fetchScenarios, setBaseModel, calculateScenario } from "../actions/ScenarioAnalysisActions"
+import { switchToScenarioAnalysisEdit, switchToScenarioAnalysisSelect, setCurrentTool } from '../actions/ApplicationActions';
+import { fetchScenarios, setBaseModel, calculateScenario } from '../actions/ScenarioAnalysisActions'
 
-import ScenarioSelect from "../components/map/ScenarioSelect";
-import ScenarioMapToolBox from "../components/map/ScenarioMapToolBox";
-import ScenarioMapOverlay from "../components/map/ScenarioMapOverlay";
-import ScenarioBoundaryProperties from "../components/boundaries/ScenarioBoundaryProperties";
+import ScenarioSelect from '../components/modflow/ScenarioSelect';
+import ScenarioMapToolBox from '../components/modflow/ScenarioMapToolBox';
+import ScenarioMapOverlay from '../components/modflow/ScenarioMapOverlay';
+import ScenarioBoundaryProperties from '../components/modflow/boundaries/ScenarioBoundaryProperties';
 
 @connect((store) => {
     return {
@@ -83,9 +83,9 @@ export default class ScenarioAnalysis extends React.Component {
     }
 
     render() {
-        const className = this.props.appState.scenarioAnalysisSelect ? "off-canvas-active" : null;
+        const className = this.props.appState.scenarioAnalysisSelect ? 'off-canvas-active' : null;
         return (
-            <div className={"page-wrapper " + className}>
+            <div className={'page-wrapper ' + className}>
                 {this.renderScenarioSidebar()}
                 {this.renderMap()}
             </div>

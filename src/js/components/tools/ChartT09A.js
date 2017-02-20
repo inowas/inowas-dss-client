@@ -1,6 +1,8 @@
 import React from 'react'
 import {ResponsiveContainer, BarChart, Bar, XAxis, Legend} from 'recharts'
 
+import '../../../less/toolDiagram.less';
+
 export default class Chart extends React.Component {
 
     render() {

@@ -1,4 +1,6 @@
 {
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+
     "env": {
         "browser": true,
         "node": true
@@ -18,13 +20,20 @@
         }
     },
 
+    "plugins": [
+        "react"
+    ],
+
+    "settings": {
+        "react": {
+            "createClass": "createClass",
+            "pragma": "React"
+        }
+    },
+
     "rules": {
         "no-unused-vars": ["warn", { "vars": "all", "args": "after-used" }],
         "jsx-quotes": ["warn", "prefer-double"],
         "quotes": ["warn", "single"]
-    },
-
-    "plugins": [
-        "react"
-    ]
+    }
 }

@@ -1,0 +1,42 @@
+@import "variables.less";
+
+.diagram {
+    position: relative;
+}
+
+.diagram-labels-right {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+}
+
+.diagram-labels-left {
+    position: absolute;
+    top: 30px;
+    left: 80px;
+}
+
+.diagram-labels-bottom-right {
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+}
+
+.diagram-labels-bottom-left {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+}
+
+.diagram-label {
+    text-align: center;
+    background: #EFF3F6;
+    box-shadow: @diagram-label-shadow;
+    opacity: 0.9;
+    padding: 5px;
+    margin: 5px;
+
+    p {
+        margin: 0;
+    }
+}

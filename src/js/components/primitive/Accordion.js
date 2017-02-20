@@ -1,35 +1,44 @@
-import React from "react";
+import React from 'react';
 
-import reactMixin from "react-mixin";
-import UniqeIdMixin from "unique-id-mixin";
+import '../../../less/accordion.less';
 
 export default class Accordion extends React.Component {
 
-    componentWillMount() {
-        this.setState({
-            id: "accordion_" + this.getNextUid('unique-string')
-        });
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeIndex: null
+        }
     }
 
-    getChildContext() {
-        return {id: this.state.id};
+    toggleActiveItem = (index) => {
+        console.log('Accordion', index, this.state.activeIndex);
+        if(index == this.state.activeIndex) {
+            index = null;
+        }
+        this.setState({activeIndex: index});
     }
 
     render() {
-        const className = this.props.className;
-        const id = this.state.id;
+        const { className } = this.props;
+        let index = 0;
+        const children = React.Children.map(this.props.children, (child) => {
+            const currentIndex = index++;
+            const active = (currentIndex == this.state.activeIndex);
+            return React.cloneElement(child, {index: currentIndex, active, toggleActive: this.toggleActiveItem});
+        });
 
         return (
-            <div className={"panel-group accordion" + " " + className} id={id} role="tablist" aria-multiselectable="true">
-                {this.props.children}
+            <div className={'accordion' + ' ' + className}>
+                {children}
             </div>
         );
     }
 
 }
 
-reactMixin(Accordion.prototype, UniqeIdMixin);
-
-Accordion.childContextTypes = {
-    id: React.PropTypes.string
-};
+Accordion.propTypes = {
+    className: React.PropTypes.string,
+    children: React.PropTypes.object.isRequired
+}

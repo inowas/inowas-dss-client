@@ -15,9 +15,6 @@ import Main from './pages/Main';
 import store from './store';
 import ScenarioAnalysis from './pages/ScenarioAnalysis';
 
-window.jQuery = require('jquery');
-require('bootstrap');
-
 String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target

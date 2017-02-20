@@ -8,6 +8,8 @@ import {
     Line
 } from 'recharts'
 
+import '../../../less/toolDiagram.less';
+
 export default class Chart extends React.Component {
 
     render() {

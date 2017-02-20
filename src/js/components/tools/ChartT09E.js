@@ -1,5 +1,7 @@
 import React from "react"
-import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine} from "recharts"
+import {ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine} from "recharts";
+
+import '../../../less/toolDiagram.less';
 
 export default class Chart extends React.Component {
 

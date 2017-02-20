@@ -1,6 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux';
 
+import '../../../less/4TileTool.less';
+import '../../../less/toolT06.less';
+
 import {groupBy} from 'lodash';
 
 import {changeCondition} from '../../actions/T06';
@@ -14,15 +17,11 @@ export default class T06 extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handleChange = this
-            .handleChange
-            .bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange = (e) => {
-        this
-            .props
-            .dispatch(changeCondition({name: e.target.value, selected: e.target.checked}));
+        this.props.dispatch(changeCondition({name: e.target.value, selected: e.target.checked}));
     };
 
     conditions() {
@@ -34,9 +33,7 @@ export default class T06 extends React.Component {
             if (groupedConditions.hasOwnProperty(category)) {
                 var conditionsList = groupedConditions[category].map((c) => {
                     return (
-                        <li className="condition" key={c
-                            .name
-                            .replaceAll(' ', '_')}>
+                        <li className="condition" key={c.name.replaceAll(' ', '_')}>
                             <label className="condition-label"><input onChange={this.handleChange} value={c.name} checked={c.selected} type="checkbox"/>{c.name}</label>
                         </li>
                     );
@@ -71,13 +68,9 @@ export default class T06 extends React.Component {
     }
 
     methods() {
-        var selectedConditions = this
-            .props
-            .tool
-            .conditions
-            .filter((c) => {
-                return c.selected
-            });
+        var selectedConditions = this.props.tool.conditions.filter((c) => {
+            return c.selected
+        });
 
         // get first
         var applicable_methods = (selectedConditions.length > 0)
@@ -89,13 +82,9 @@ export default class T06 extends React.Component {
         }
 
         return (applicable_methods.map((am) => {
-            const method = this
-                .props
-                .tool
-                .methods
-                .find((m) => {
-                    return (m.slug == am)
-                });
+            const method = this.props.tool.methods.find((m) => {
+                return (m.slug == am)
+            });
             return (
                 <tr className="method" key={method.slug}>
                     <td className="method-name">
@@ -118,33 +107,31 @@ export default class T06 extends React.Component {
 
     render() {
         return (
-            <div className="page-wrapper">
-                <div className="page-width tool-T06">
-                    <Header title={'T06. MAR method selection'} />
-                    <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked">
-                            <h2>Input Conditions</h2>
-                            <ul className="conditions">
-                                {this.conditions()}
-                            </ul>
-                        </section>
+            <div className="app-width tool-T06">
+                <Header title={'T06. MAR method selection'}/>
+                <div className="grid-container">
+                    <section className="tile col col-abs-2 stacked">
+                        <h2>Input Conditions</h2>
+                        <ul className="conditions">
+                            {this.conditions()}
+                        </ul>
+                    </section>
 
-                        <section className="tile col col-abs-3 stretch">
-                            <h2>Methods Suggested</h2>
-                            <table class="methods">
-                                <thead>
-                                    <tr>
-                                        <th>MAR methods</th>
-                                        <th>Unit costs</th>
-                                        <th>Area required</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.methods()}
-                                </tbody>
-                            </table>
-                        </section>
-                    </div>
+                    <section className="tile col col-abs-3 stretch">
+                        <h2>Methods Suggested</h2>
+                        <table class="methods">
+                            <thead>
+                                <tr>
+                                    <th>MAR methods</th>
+                                    <th>Unit costs</th>
+                                    <th>Area required</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.methods()}
+                            </tbody>
+                        </table>
+                    </section>
                 </div>
             </div>
         )
