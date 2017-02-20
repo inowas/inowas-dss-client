@@ -168,47 +168,58 @@ export default class LandingPage extends React.Component {
                             </a>) etc.</p>
 
                         <div className="align-center">
-                            <a className="btn more" href="http://wiki.inowas.hydro.tu-dresden.de/category/applications/" target="_blank">Read more</a>
+                            <a className="button button-primary more" href="http://wiki.inowas.hydro.tu-dresden.de/category/applications/" target="_blank">Read more</a>
                         </div>
 
                     </div>
 
-                    <div className="row toolbox top-space">
+                    <div className="toolbox top-space">
                         <h2>Toolbox</h2>
-                        <div className="col-md-4">
+                        <div className="grid-container">
+                            <div className="col col-rel-1 stretch">
 
-                            <div className="panel toolbox-panel-01">
-                                <div className="panel-heading"></div>
-                                <div className="panel-body text-center">
-                                    <p>
-                                        <strong>Simple</strong>
-                                        tools derived from data mining and empirical correlations</p>
+                                <div className="panel toolbox-panel-01">
+                                    <div className="panel-heading"></div>
+                                    <div className="panel-body text-center">
+                                        <p>
+                                            <strong>Simple</strong>
+                                            tools derived from data mining and empirical correlations
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col col-rel-1 stretch">
+                                <div className="panel toolbox-panel-02">
+                                    <div className="panel-heading"></div>
+                                    <div className="panel-body text-center">
+                                        <p>
+                                            <strong>Practical</strong>
+                                            implementation of analytical equations of groundwater flow
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col col-rel-1 stretch">
+                                <div className="panel toolbox-panel-03">
+                                    <div className="panel-heading"></div>
+                                    <div className="panel-body text-center">
+                                        <p>
+                                            <strong>Reliable</strong>
+                                            simulations using complex numerical flow models (i.e. MODFLOW)
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
-                            <div className="panel toolbox-panel-02">
-                                <div className="panel-heading"/>
-                                <div className="panel-body text-center">
-                                    <p>
-                                        <strong>Practical</strong>
-                                        implementation of analytical equations of groundwater flow</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="panel toolbox-panel-03">
-                                <div className="panel-heading"/>
-                                <div className="panel-body text-center">
-                                    <p>
-                                        <strong>Reliable</strong>
-                                        simulations using complex numerical flow models (i.e. MODFLOW)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <p className="description align-center">The applications are based on a collection of simple, practical and reliable web-based tools of various degrees of complexity. The tools are either included in application-specific workflows or used as standalone modelling instruments.</p>
+
                         <p className="description align-center">
-                            <strong>Examples of tools</strong>:</p>
+                            The applications are based on a collection of simple, practical and reliable web-based tools of various degrees of complexity. The tools are either included in application-specific workflows or used as standalone modelling instruments.
+                        </p>
+                        <p className="description align-center">
+                            <strong>Examples of tools</strong>:
+                        </p>
+
                     </div>
 
                     <div className="row toolbox-icons">
@@ -334,44 +345,48 @@ export default class LandingPage extends React.Component {
 
                     </div>
                     <div className="align-center">
-                        <a className="btn more" href="http://wiki.inowas.hydro.tu-dresden.de/category/tools/">Read more</a>
+                        <a className="button button-primary more" href="http://wiki.inowas.hydro.tu-dresden.de/category/tools/">Read more</a>
                     </div>
 
                     <div className="row geo-database top-space">
                         <h2>Geo Database</h2>
+
                         <p className="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
                         <figure>
                             <img src="../images/landingPage/geo-database-image.png" width="700" height="315" className="" alt=""/>
                         </figure>
-                        <div className="col-md-4">
-                            <div className="panel geo-panel-01">
-                                <div className="panel-heading"/>
-                                <div className="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+
+                        <div className="grid-container">
+                            <div className="col col-rel-1 stretch">
+                                <div className="panel geo-panel-01">
+                                    <div className="panel-heading"/>
+                                    <div className="panel-body">
+                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="col-md-4">
-                            <div className="panel geo-panel-02">
-                                <div className="panel-heading"/>
-                                <div className="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                            <div className="col col-rel-1 stretch">
+                                <div className="panel geo-panel-02">
+                                    <div className="panel-heading"/>
+                                    <div className="panel-body">
+                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="col-md-4">
-                            <div className="panel geo-panel-03">
-                                <div className="panel-heading"/>
-                                <div className="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                            <div className="col col-rel-1 stretch">
+                                <div className="panel geo-panel-03">
+                                    <div className="panel-heading"/>
+                                    <div className="panel-body">
+                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="align-center">
-                            <a className="btn more" href="http://kb.inowas.hydro.tu-dresden.de">Read more</a>
+                            <a className="button button-primary more" href="http://kb.inowas.hydro.tu-dresden.de">Read more</a>
                         </div>
 
                     </div>
@@ -383,7 +398,7 @@ export default class LandingPage extends React.Component {
                         </figure>
                         <p className="description align-center">Detailed documentation of all tools, applications and geo database, including practical examples and references for further read. The documentation can be accessed at any time from the individual pages, providing valuable support for project development.</p>
                         <div className="align-center">
-                            <a className="btn more" href="http:/wiki.inowas.hydro.tu-dresden.de">Read more</a>
+                            <a className="button button-primary more" href="http:/wiki.inowas.hydro.tu-dresden.de">Read more</a>
                         </div>
                     </div>
 
@@ -391,51 +406,52 @@ export default class LandingPage extends React.Component {
 
                 <footer className="footer">
                     <div className="container">
+                        <div className="grid-container">
+                            <div className="col col-rel-1 footer-section">
+                                <div className="footer-col-header">Header 1</div>
+                                <ul className="footer-list">
 
-                        <div className="col-md-3 footer-section">
-                            <div className="footer-col-header">Header 1</div>
-                            <ul className="footer-list">
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Sign up!</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Sign up!</a>
-                                </li>
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Log in</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Log in</a>
-                                </li>
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">My profile</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">My profile</a>
-                                </li>
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Documentation</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Documentation</a>
-                                </li>
+                                </ul>
+                            </div>
 
-                            </ul>
-                        </div>
+                            <div className="col col-rel-1 footer-section">
+                                <div className="footer-col-header">Documentation</div>
+                                <ul className="footer-list">
 
-                        <div className="col-md-3 footer-section">
-                            <div className="footer-col-header">Documentation</div>
-                            <ul className="footer-list">
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Projects</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Projects</a>
-                                </li>
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Applications</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Applications</a>
-                                </li>
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Tools</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Tools</a>
-                                </li>
+                                    <li className="footer-list-item">
+                                        <a className="footer-list-link" href="#">Database</a>
+                                    </li>
 
-                                <li className="footer-list-item">
-                                    <a className="footer-list-link" href="#">Database</a>
-                                </li>
-
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
 
                     </div>
