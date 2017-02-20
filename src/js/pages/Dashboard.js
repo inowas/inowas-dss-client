@@ -2,6 +2,8 @@ import React from 'react';
 import Accordion from '../components/primitive/Accordion';
 import AccordionItem from '../components/primitive/AccordionItem';
 import Icon from '../components/primitive/Icon';
+import StackedNav from '../components/primitive/StackedNav';
+
 
 import '../../less/dashboard.less';
 
@@ -12,34 +14,35 @@ export default class Dashboard extends React.Component {
         return (
             <div className="dashboard">
                 <div className="app-width grid-container">
-                    <div className="tile col col-abs-2">
+                    <StackedNav>
                         <h2>Dashboard</h2>
                         <Accordion>
                             <AccordionItem icon={<Icon name="dataset" />} heading="Datasets">
-                                <ul className="panel">
+                                <ul className="nav-sub">
                                     <li>
-                                        <a href="#" className="active">Dataset 01</a>
+                                        <a className="link" href="#">Dataset 01</a>
                                     </li>
                                     <li>
-                                        <a href="#">Dataset 02</a>
+                                        <a className="link" href="#">Dataset 02</a>
                                     </li>
                                     <li>
-                                        <a href="#">Dataset 03</a>
+                                        <a className="link" href="#">Dataset 03</a>
                                     </li>
                                 </ul>
                             </AccordionItem>
                             <AccordionItem icon={<Icon name="folder" />} heading="Projects">
-                                <ul className="panel">
+                                <ul className="nav-sub">
                                     <li>
-                                        <a href="#" className="active">Project 01</a>
+                                        <a className="link" href="#">Project 01</a>
                                     </li>
                                     <li>
-                                        <a href="#">Project 02</a>
+                                        <a className="link" href="#">Project 02</a>
                                     </li>
                                 </ul>
                             </AccordionItem>
                         </Accordion>
-                    </div>
+                    </StackedNav>
+
                     <div className="tile col col-abs-3 stretch">
                         <a href="#">
                             <i className="flaticon-multiply"></i>

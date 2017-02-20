@@ -13,7 +13,6 @@ export default class Accordion extends React.Component {
     }
 
     toggleActiveItem = (index) => {
-        console.log('Accordion', index, this.state.activeIndex);
         if(index == this.state.activeIndex) {
             index = null;
         }
@@ -40,5 +39,5 @@ export default class Accordion extends React.Component {
 
 Accordion.propTypes = {
     className: React.PropTypes.string,
-    children: React.PropTypes.object.isRequired
+    children: React.PropTypes.array.isRequired
 }
