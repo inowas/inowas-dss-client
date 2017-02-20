@@ -86,6 +86,12 @@ export default class NavBar extends React.Component {
                                             <Link to={'tools/T13B'}>T13_b Aquifer system with two fixed head boundary conditions</Link>
                                         </li>
                                         <li>
+                                            <Link to={'tools/T13C'}>T13_c Aquifer system with two fixed head boundary conditions</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={'tools/T13E'}>T13_e Aquifer system with one pumping well at constant rate, no groundwater recharge</Link>
+                                        </li>
+                                        <li>
                                             <Link to={'tools/T14A'}>T14_a Fully penetrating stream with no streambed resistance</Link>
                                         </li>
                                         <li>

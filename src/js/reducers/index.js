@@ -12,6 +12,8 @@ import T09D from './T09D';
 import T09E from './T09E';
 import T13A from './T13A';
 import T13B from './T13B';
+import T13C from './T13C';
+import T13E from './T13E';
 import T14A from './T14A';
 import T18 from './T18';
 import scenarioAnalysis from './scenarioAnalysisReducer';
@@ -32,6 +34,8 @@ export default combineReducers({
     T09E,
     T13A,
     T13B,
+    T13C,
+    T13E,
     T14A,
     T18
 });
