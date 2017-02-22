@@ -2,4 +2,47 @@
 
 .dashboard {
     padding-top: @spacing-large;
+
+    .toolbar {
+        .toolbar-search {
+            input {
+                width: 100%;
+            }
+        }
+
+        .toolbar-edit {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            & > li {
+                display: inline-block;
+                padding: @spacing-small @spacing-regular;
+
+                .icon {
+                    margin-right: 0.5em;
+                }
+            }
+        }
+
+        .toolbar-public {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            & > li {
+                display: inline-block;
+                padding: @spacing-small @spacing-regular;
+
+                &:not(:last-child) {
+                    padding-right: 0;
+
+                    &::after {
+                        content: '|';
+                        margin-left: @spacing-regular;
+                    }
+                }
+            }
+        }
+    }
 }

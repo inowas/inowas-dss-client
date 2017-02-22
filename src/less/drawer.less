@@ -1,0 +1,32 @@
+@import 'variables.less';
+
+.drawer {
+    position: fixed;
+    z-index: 900;
+    left: -1 * (@grid-column + 2 * @grid-gutter);
+    top: @navbar-height;
+    bottom: 0;
+    box-shadow: @box-shadow;
+
+    width: @grid-column + 2 * @grid-gutter;
+    background-color: @background-bright;
+    transition: 0.25s left ease-in-out;
+
+    .drawer-toggle {
+        position: absolute;
+        bottom: @spacing-regular;
+        left: ~"calc(100% +" (@spacing-regular) ~")";
+        font-size: 1.2em;
+    }
+
+    .drawer-content {
+        position: relative;
+        overflow: auto;
+        max-height: 100%;
+        padding: @grid-gutter;
+    }
+
+    &[data-visible=true] {
+        left: 0;
+    }
+}

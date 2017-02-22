@@ -1,18 +1,18 @@
 @import 'variables.less';
 
 body {
-    min-height: 100vh;
     padding: 0;
     margin: 0;
     background-color: @background-wrapper;
 }
 
 .application-wrapper {
-    margin-top: 30px;
+    margin-top: @navbar-height;
+    position: relative;
 }
 
 .app-width {
-  margin: auto;
-  min-width: @app-min-width;
-  max-width: @app-max-width;
+    margin: auto;
+    min-width: @app-min-width;
+    max-width: @app-max-width;
 }

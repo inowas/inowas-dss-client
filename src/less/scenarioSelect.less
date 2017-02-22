@@ -1,0 +1,50 @@
+@import "variables.less";
+
+.scenarioSelect {
+    .scenarioSelect-item {
+        border: @spacing-small solid transparent;
+        padding: @spacing-small;
+        margin-bottom: 2 * @spacing-regular;
+        position: relative;
+
+        &:not(:last-child) {
+            &::after {
+                content: '';
+                position: absolute;
+                display: block;
+                height: 1px;
+                width: ~"calc(100% - " (2 * @spacing-small) ~")";
+                background-color: @grey-semi-bright;
+                margin-top: @spacing-regular + 2 * @spacing-small;
+            }
+        }
+
+        &[data-selected=true] {
+            border: @spacing-small solid @accent;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: auto;
+        }
+
+        .input-on-focus {
+            display: block;
+            border: 1px solid transparent;
+            background: transparent;
+            border-radius: 0;
+            width: 100%;
+            padding: @spacing-small @spacing-regular;
+            resize: none;
+
+            &:focus {
+                border: 1px solid @grey-semi;
+            }
+        }
+
+        .name-input {
+            font-size: 2em;
+            margin-bottom: @spacing-regular;
+        }
+    }
+}
