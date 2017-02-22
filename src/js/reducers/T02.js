@@ -100,7 +100,7 @@ function getInitialState() {
             decimals: 1
         }]
     }
-};
+}
 
 const T02Reducer = (state = getInitialState(), action) => {
     switch (action.type) {

@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router';
 import Icon from './primitive/Icon';
-
 import '../../less/navbar.less';
 
 export default class NavBar extends React.Component {
@@ -66,6 +65,9 @@ export default class NavBar extends React.Component {
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T06'}>T06 MAR method selection</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-element" to={'tools/T07'}>T07 Scenario Analysis</Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T09A'}>T09_a Saltwater intrusion / Depth of freshwater-saltwater interface (Ghyben-Herzberg)</Link>

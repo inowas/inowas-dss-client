@@ -1,12 +1,3 @@
-export function changeSettings(newSetting) {
-    return {
-        type: "CHANGE_TOOL_T13C_SETTINGS",
-        payload: {
-            'selected': newSetting
-        }
-    }
-}
-
 export function changeParameter(parameter){
     return {
         type: 'CHANGE_TOOL_T13C_PARAMETER',

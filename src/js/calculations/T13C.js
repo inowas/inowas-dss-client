@@ -1,6 +1,6 @@
-export function calculateDiagramData(w, K, ne, L, h1, x_min, x_max, d_x) {
+export function calculateDiagramData(w, K, ne, L1, h1, x_min, x_max, d_x) {
     const xi = x_min;
-    const alpha = L*L + K * h1*h1 / w;
+    const alpha = L1*L1 + K * h1*h1 / w;
     const root1 = Math.sqrt(alpha / K / w);
     const root3 = Math.sqrt(1/(xi*xi) - 1/alpha);
     const root4 = Math.sqrt( (alpha / (xi*xi)) - 1);
