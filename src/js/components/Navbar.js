@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router';
 import Icon from './primitive/Icon';
-
 import '../../less/navbar.less';
 
 export default class NavBar extends React.Component {
