@@ -2,6 +2,7 @@ import React from 'react';
 import Accordion from '../components/primitive/Accordion';
 import AccordionItem from '../components/primitive/AccordionItem';
 import Icon from '../components/primitive/Icon';
+import StackedNav from '../components/primitive/StackedNav';
 
 import '../../less/dashboard.less';
 
@@ -12,73 +13,79 @@ export default class Dashboard extends React.Component {
         return (
             <div className="dashboard">
                 <div className="app-width grid-container">
-                    <div className="tile col col-abs-2">
+                    <StackedNav>
                         <h2>Dashboard</h2>
                         <Accordion>
-                            <AccordionItem icon={<Icon name="dataset" />} heading="Datasets">
-                                <ul className="panel">
+                            <AccordionItem icon={< Icon name = "dataset" />} heading="Datasets">
+                                <ul className="nav-sub">
                                     <li>
-                                        <a href="#" className="active">Dataset 01</a>
+                                        <a className="link" href="#">Dataset 01</a>
                                     </li>
                                     <li>
-                                        <a href="#">Dataset 02</a>
+                                        <a className="link" href="#">Dataset 02</a>
                                     </li>
                                     <li>
-                                        <a href="#">Dataset 03</a>
+                                        <a className="link" href="#">Dataset 03</a>
                                     </li>
                                 </ul>
                             </AccordionItem>
-                            <AccordionItem icon={<Icon name="folder" />} heading="Projects">
-                                <ul className="panel">
+                            <AccordionItem icon={< Icon name = "folder" />} heading="Projects">
+                                <ul className="nav-sub">
                                     <li>
-                                        <a href="#" className="active">Project 01</a>
+                                        <a className="link" href="#">Project 01</a>
                                     </li>
                                     <li>
-                                        <a href="#">Project 02</a>
+                                        <a className="link" href="#">Project 02</a>
                                     </li>
                                 </ul>
                             </AccordionItem>
                         </Accordion>
-                    </div>
+                    </StackedNav>
+
                     <div className="tile col col-abs-3 stretch">
-                        <a href="#">
-                            <i className="flaticon-multiply"></i>
-                        </a>
                         <h2 className="section-title">Models</h2>
-                        <form className="details-search">
-                            <input className="form-control" placeholder="Search..." type="text"/>
-                        </form>
-                        <ul className="functions-edit">
-                            <li>
-                                <a href="#">
-                                    <i className="flaticon-add"></i>Add new</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i className="flaticon-download"></i>Import</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i className="flaticon-share-1"></i>Share</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i className="flaticon-garbage-2"></i>Delete</a>
-                            </li>
-                        </ul>
-                        <ul className="functions-public">
-                            <li>
-                                <a href="#">Personal</a>
-                            </li>
-                            <li>
-                                <span>|</span>
-                            </li>
-                            <li>
-                                <a href="#">Public</a>
-                            </li>
-                        </ul>
+                        <div className="grid-container toolbar">
+                            <div className="col col-rel-1 toolbar-search">
+                                <input className="input" placeholder="Search..." type="text"/>
+                            </div>
+                            <ul className="col stretch toolbar-edit">
+                                <li>
+                                    <a className="link" href="#">
+                                        <Icon name="add"/>
+                                        <span>Add new</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a className="link" href="#">
+                                        <Icon name="import"/>
+                                        <span>Import</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a className="link" href="#">
+                                        <Icon name="share"/>
+                                        <span>Share</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a className="link" href="#">
+                                        <Icon name="trash"/>
+                                        <span>Delete</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul className="col toolbar-public">
+                                <li>
+                                    <a className="link" href="#">Personal</a>
+                                </li>
+                                <li>
+                                    <a className="link" href="#">Public</a>
+                                </li>
+                            </ul>
+                        </div>
+
                         <div className="table-responsive">
-                            <table className="table table-striped">
+                            <table className="table">
                                 <thead>
                                     <tr>
                                         <th>No.</th>

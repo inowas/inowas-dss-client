@@ -26,6 +26,7 @@ import Marker from './marker.svg';
 import Person from './person.svg';
 import Rivers from './rivers.svg';
 import Settings from './settings.svg';
+import Share from './share.svg';
 import Tools from './tools.svg';
 import Trash from './trash.svg';
 
@@ -56,6 +57,7 @@ const icons = {
     person: <Person/>,
     rivers: <Rivers/>,
     settings: <Settings/>,
+    share: <Share/>,
     tools: <Tools/>,
     trash: <Trash/>
 }

@@ -10,7 +10,7 @@ import {
     XAxis,
     YAxis,
     CartesianGrid
-} from 'recharts'
+} from 'recharts';
 
 export default class Chart extends React.Component {
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Icon from '../primitive/Icon.js';
+import Icon from './Icon.js';
 
 export default class AccordionItem extends React.Component {
 
