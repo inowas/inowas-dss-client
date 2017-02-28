@@ -14,33 +14,21 @@ function getInitialState() {
                 }
             }
         },
-        settings: {
-            selected: 'hL'
-        },
         info: {
           xwd: 0
         },
 
         parameters: [{
             order: 0,
-            id: 'w',
-            name: 'Percolation rate, w(m/d)',
+            id: 'Qw',
+            name: 'Constant pumped flow rate, Qw(m3/sec)',
             min: 0,
-            max: 10,
-            value: 0.1,
-            stepSize: 0.1,
+            max: 2000,
+            value: 1300,
+            stepSize: 100,
             decimals: 1
         }, {
             order: 1,
-            id: 'K',
-            name: 'Hydraulic conductivity, K (m/d)',
-            min: 0,
-            max: 100,
-            value: 10,
-            stepSize: 1,
-            decimals: 1
-        }, {
-            order: 2,
             id: 'ne',
             name: 'Effective porosity, n (-)',
             min: 0,
@@ -49,25 +37,16 @@ function getInitialState() {
             stepSize: 0.05,
             decimals: 1
         }, {
-            order: 3,
-            id: 'L',
-            name: 'Aquifer length, L´ (m)',
-            min: 0,
-            max: 5000,
-            value: 1000,
-            stepSize: 10,
-            decimals: 0
-        }, {
-            order: 4,
+            order: 2,
             id: 'hL',
             name: 'Downstream head, hL (m)',
             min: 0,
             max: 10,
-            value: 1,
+            value: 6,
             stepSize: 0.1,
             decimals: 1
         }, {
-            order: 5,
+            order: 3,
             id: 'h0',
             name: 'Upstream head, h0 (m)',
             min: 0,
@@ -76,38 +55,28 @@ function getInitialState() {
             stepSize: 0.1,
             decimals: 1
         }, {
-            order: 6,
+            order: 4,
             id: 'xi',
-            name: 'Distance to initial position, xi (m)',
+            name: 'Initial position, xi (m)',
             min: 1,
             max: 500,
-            value: 50,
+            value: 303,
             stepSize: 1,
             decimals: 0
         }, {
-            order: 7,
-            id: 'xe',
-            name: 'Distance to arrival location, xe (m)',
+            order: 5,
+            id: 'x',
+            name: 'Location of the well, x (m)',
             min: 1,
-            max: 1500,
-            value: 1000,
+            max: 1.5,
+            value: 0.1,
             stepSize: 1,
             decimals: 0
         }]
     }
 };
-const T13CReducer = (state = getInitialState(), action) => {
+const T13EReducer = (state = getInitialState(), action) => {
     switch (action.type) {
-        case 'CHANGE_TOOL_T13E_SETTINGS':
-            {
-               state = {
-                    ...state,
-                    settings: action.payload
-                };
-                calculateAndModifyState(state);
-                break;
-            }
-
         case 'RESET_TOOL_T13E':
             {
                 state = getInitialState();
@@ -129,20 +98,6 @@ const T13CReducer = (state = getInitialState(), action) => {
                 const newParam = action.payload;
                 var param = state.parameters.find(p => {return p.id === newParam.id});
                 applyParameterUpdate(param, newParam);
-
-                // check xi <= xe <= L
-                let xe = state.parameters.find(p => {return p.id == 'xe'}),
-                xi = state.parameters.find(p => {return p.id == 'xi'}),
-                L = state.parameters.find(p => {return p.id == 'L'});
-
-                if (xe.value < xi.value) {
-                    xe.value = xi.value;
-                }
-
-                if (xe.value > L.value) {
-                    xe.value = L.value;
-                }
-
                 calculateAndModifyState(state);
                 break;
             }
@@ -151,20 +106,12 @@ const T13CReducer = (state = getInitialState(), action) => {
 };
 
 function calculateAndModifyState(state) {
-    const w = state.parameters.find(p => {
-            return p.id == 'w'
-        })
-        .value;
-    const K = state.parameters.find(p => {
-            return p.id == 'K'
+    const Qw = state.parameters.find(p => {
+            return p.id == 'Qw'
         })
         .value;
     const ne = state.parameters.find(p => {
             return p.id == 'ne'
-        })
-        .value;
-    const L = state.parameters.find(p => {
-            return p.id == 'L'
         })
         .value;
     const hL = state.parameters.find(p => {
@@ -175,21 +122,15 @@ function calculateAndModifyState(state) {
         return p.id == 'h0'
     })
         .value;
-    var h1 = hL;
-    if (state.settings.selected === 'h0') {
-        h1 = h0;
-    }
-
     const xi = state.parameters.find(p => {
             return p.id == 'xi'
         })
         .value;
-    const xe = state.parameters.find(p => {
-            return p.id == 'xe'
+    const x = state.parameters.find(p => {
+            return p.id == 'x'
         })
         .value;
-    state.chart.data = calc.calculateDiagramData(w, K, ne, L, h1, xi, xe, 10);
-    state.info.xwd = calc.calculateXwd(L, K, w, hL, h0).toFixed(1);
+    state.chart.data = calc.calculateDiagramData(Qw, hL, h0, x, xi, 10);
     return state;
 }
-export default T13CReducer;
+export default T13EReducer;

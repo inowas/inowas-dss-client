@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router';
 import Icon from './primitive/Icon';
-
 import '../../less/navbar.less';
 
 export default class NavBar extends React.Component {
@@ -96,6 +95,15 @@ export default class NavBar extends React.Component {
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T14A'}>T14_a Fully penetrating stream with no streambed resistance</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-element" to={'tools/T14B'}>T14_b Fully penetrating stream with semipervious layer</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-element" to={'tools/T14C'}>T14_c Partially penetrating stream with streambed resistance</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-element" to={'tools/T14D'}>T14_d Partially penetrating stream in an aquitard overlying a pumped aquifer</Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T18'}>T18 SAT basin design</Link>

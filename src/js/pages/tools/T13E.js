@@ -5,8 +5,6 @@ import {connect} from 'react-redux';
 
 import Background from '../../components/tools/Background'
 import Chart from '../../components/tools/ChartT13E'
-import Info from '../../components/tools/InfoT13E'
-import Settings from '../../components/tools/SettingsT13E';
 import Parameters from '../../components/tools/Parameters'
 import {changeSettings, changeParameter, calculate, reset} from '../../actions/T13E'
 import Header from '../../components/tools/Header';
@@ -66,8 +64,6 @@ export default class T13E extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Info data={this.props.tool.info} />
-                            <Settings data={this.props.tool.settings} handleChange={this.handleChange}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">

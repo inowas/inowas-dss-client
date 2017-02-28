@@ -14,9 +14,6 @@ function getInitialState() {
                 }
             }
         },
-        settings: {
-            selected: 'hL'
-        },
         info: {
           xwd: 0
         },
@@ -98,16 +95,6 @@ function getInitialState() {
 };
 const T13CReducer = (state = getInitialState(), action) => {
     switch (action.type) {
-        case 'CHANGE_TOOL_T13C_SETTINGS':
-            {
-               state = {
-                    ...state,
-                    settings: action.payload
-                };
-                calculateAndModifyState(state);
-                break;
-            }
-
         case 'RESET_TOOL_T13C':
             {
                 state = getInitialState();
@@ -175,11 +162,6 @@ function calculateAndModifyState(state) {
         return p.id == 'h0'
     })
         .value;
-    var h1 = hL;
-    if (state.settings.selected === 'h0') {
-        h1 = h0;
-    }
-
     const xi = state.parameters.find(p => {
             return p.id == 'xi'
         })
@@ -188,8 +170,10 @@ function calculateAndModifyState(state) {
             return p.id == 'xe'
         })
         .value;
-    state.chart.data = calc.calculateDiagramData(w, K, ne, L, h1, xi, xe, 10);
     state.info.xwd = calc.calculateXwd(L, K, w, hL, h0).toFixed(1);
+    var h1 = hL;
+    const L1 = L + Math.abs(state.info.xwd);
+    state.chart.data = calc.calculateDiagramData(w, K, ne, L1, h1, xi, xe, 10);
     return state;
 }
 export default T13CReducer;
