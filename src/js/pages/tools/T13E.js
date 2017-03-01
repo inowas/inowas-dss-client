@@ -49,8 +49,7 @@ export default class T13E extends React.Component {
 
     render() {
         return (
-            <div className="page-wrapper">
-                <div className="page-width">
+            <div className="app-width">
                     <Header title={'T13_E. Travel time // Aquifer system with one pumping well at constant rate, no groundwater recharge'}/>
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
@@ -71,7 +70,6 @@ export default class T13E extends React.Component {
                         </section>
                     </div>
                 </div>
-            </div>
         )
     }
 }
