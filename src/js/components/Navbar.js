@@ -106,6 +106,9 @@ export default class NavBar extends React.Component {
                                         <Link className="nav-element" to={'tools/T14D'}>T14_d Partially penetrating stream in an aquitard overlying a pumped aquifer</Link>
                                     </li>
                                     <li className="nav-item">
+                                        <Link className="nav-element" to={'tools/T16A'}>T16_a Saturated hydraulic conductivity based on grain size distribution</Link>
+                                    </li>
+                                    <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T18'}>T18 SAT basin design</Link>
                                     </li>
                                     <li className="nav-item">

@@ -19,6 +19,7 @@ import T14A from './T14A';
 import T14B from './T14B';
 import T14C from './T14C';
 import T14D from './T14D';
+import T16A from './T16A';
 import T18 from './T18';
 import scenarioAnalysis from './scenarioAnalysisReducer';
 import user from './userReducer';
@@ -45,5 +46,6 @@ export default combineReducers({
     T14B,
     T14C,
     T14D,
+    T16A,
     T18
 });
