@@ -115,7 +115,7 @@ export default class NavBar extends React.Component {
                                         <Link className="nav-element" to={'tools/modflow/list'}>T03 Numerical model setup (MODFLOW)</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-element" to={'tools/scenarioanalysis/list'}>T07 Application specific scenarios analyzer</Link>
+                                        <Link className="nav-element" to={'tools/T22'}>T22 Mar portal</Link>
                                     </li>
                                     <li className="nav-item nav-item-add-new">
                                         <a className="nav-element" href="#">+ Add tool</a>

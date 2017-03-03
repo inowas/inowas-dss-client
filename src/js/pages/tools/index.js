@@ -16,6 +16,7 @@ import T14C from './T14C';
 import T14D from './T14D';
 import T16A from './T16A';
 import T18 from './T18';
+import T22 from './T22';
 
 exports.T02 = T02;
 exports.T06 = T06;
@@ -35,3 +36,4 @@ exports.T14C = T14C;
 exports.T14D = T14D;
 exports.T16A = T16A;
 exports.T18 = T18;
+exports.T22 = T22;

@@ -51,6 +51,7 @@ ReactDOM.render(
                 <Route path="T14D" component={tools.T14D}/>
                 <Route path="T16A" component={tools.T16A}/>
                 <Route path="T18" component={tools.T18}/>
+                <Route path="T22" component={tools.T22}/>
                 <Route path="scenarioanalysis/list" component={ScenarioAnalysisList}/>
                 <Route path="scenarioanalysis/:modelId" component={ScenarioAnalysis}/>
             </Route>
