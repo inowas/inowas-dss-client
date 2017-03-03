@@ -1,13 +1,14 @@
+function getInitialState() {
+    return {
+        fetching: false,
+        error: false,
+        fetched: false,
+        username: "",
+        apiKey: localStorage.getItem('api_key')
+    }
+}
 
-const initialState = {
-    fetching: false,
-    error: false,
-    fetched: false,
-    username: "",
-    apiKey: null
-};
-
-const userReducer = ( state=initialState, action ) => {
+const userReducer = ( state=getInitialState(), action ) => {
 
     switch (action.type) {
         case "LOGIN_PENDING": {
@@ -25,7 +26,13 @@ const userReducer = ( state=initialState, action ) => {
                 fetched: true,
                 apiKey: action.payload.data.api_key
             };
+
+            localStorage.setItem('api_key', action.payload.data.api_key);
             break;
+        }
+        case "LOGOUT": {
+            localStorage.clear();
+            state = getInitialState();
         }
     }
 
