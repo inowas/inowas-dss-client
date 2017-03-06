@@ -4,6 +4,7 @@ import Accordion from '../components/primitive/Accordion';
 import AccordionItem from '../components/primitive/AccordionItem';
 import { Link } from 'react-router';
 import Icon from '../components/primitive/Icon';
+import Popup from '../components/primitive/Popup';
 import StackedNav from '../components/primitive/StackedNav';
 import { fetchDashboardModelsT07 } from '../actions/dashboard';
 
@@ -20,7 +21,8 @@ export default class Dashboard extends React.Component {
     };
 
     state = {
-        active: null
+        active: null,
+        popupVisible: true
     }
 
     setToolSelection = ( slug ) => {
@@ -133,6 +135,12 @@ export default class Dashboard extends React.Component {
         return null;
     }
 
+    closePopup = () => {
+        this.setState({
+            popupVisible: false
+        });
+    }
+
     render( ) {
         const { tools } = this.props.dashboardStore;
 
@@ -158,6 +166,10 @@ export default class Dashboard extends React.Component {
                     </StackedNav>
                     {this.renderDataTable( )}
                 </div>
+                <Popup visible={this.state.popupVisible} close={this.closePopup}>
+                    <div>Test Popup</div><br /><br /><br /><br /><br />
+                    <span>Test</span>
+                </Popup>
             </div>
         );
     }
