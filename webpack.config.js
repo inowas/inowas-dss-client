@@ -98,5 +98,15 @@ module.exports = {
             mangle: false,
             sourcemap: false
         })
-    )
+    ),
+    resolve: {
+        modules: [ path.resolve( __dirname, './src' ), 'node_modules' ],
+        descriptionFiles: [ 'package.json' ],
+        mainFiles: [ 'index' ],
+        extensions: [ '', '.js', '.jsx' ],
+        enforceExtension: false,
+        alias: {
+            ConfiguredAxios: path.resolve( __dirname, 'src/js/api/ConfiguredAxios' )
+        }
+    }
 };

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import appState from './applicationStateReducer';
 import model from './modelReducer';
+import dashboard from './dashboard';
 import models from './modelsReducer';
 import T02 from './T02';
 import T06 from './T06';
@@ -27,6 +28,7 @@ import user from './userReducer';
 export default combineReducers({
     user,
     appState,
+    dashboard,
     models,
     model,
     scenarioAnalysis,

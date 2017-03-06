@@ -2,21 +2,22 @@
 
 .drawer {
     position: fixed;
-    z-index: 900;
+    z-index: 1100;
     left: -1 * (@grid-column + 2 * @grid-gutter);
     top: @navbar-height;
     bottom: 0;
-    box-shadow: @box-shadow;
+    box-shadow: 0px 0px 0px 0px fade(@grey-dark, 70%);
 
     width: @grid-column + 2 * @grid-gutter;
     background-color: @background-bright;
-    transition: 0.25s left ease-in-out;
+    transition: 0.25s left ease-in-out, 0.25s box-shadow ease-in-out;
 
     .drawer-toggle {
         position: absolute;
         bottom: @spacing-regular;
         left: ~"calc(100% +" (@spacing-regular) ~")";
         font-size: 1.2em;
+        z-index: 1101;
     }
 
     .drawer-content {
@@ -28,5 +29,10 @@
 
     &[data-visible=true] {
         left: 0;
+        box-shadow: 0px 0px 0px ~"calc(100vw -" (@grid-column + 2 * @grid-gutter) ~")" fade(@grey-dark, 70%);
+
+        .drawer-toggle {
+            color: @color-dark;
+        }
     }
 }
