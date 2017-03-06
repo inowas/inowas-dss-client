@@ -17,6 +17,8 @@ import {
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
 
+import { fetchDetails } from '../../actions/T07';
+
 @connect((store) => {
     return {tool: store.T07}
 })
@@ -63,6 +65,10 @@ export default class T07 extends React.Component {
         }
     }
 
+    componentWillMount() {
+        this.props.dispatch(fetchDetails(this.props.params.id));
+    }
+
     updateBounds = bounds => {
         this.setState({
             bounds: [
@@ -72,7 +78,7 @@ export default class T07 extends React.Component {
                 [bounds.getSouth(), bounds.getWest()]
             ]
         });
-    }
+    };
 
     setCrossSection = (lat, lng) => {
         const {boundingBox, grid} = this.state;
@@ -100,7 +106,7 @@ export default class T07 extends React.Component {
                 ]
             ]
         });
-    }
+    };
 
     toggleSelection = id => {
         var state = {

@@ -35,7 +35,7 @@ ReactDOM.render(
                 <Route path="modflow/:modelId" component={Modflow}/>
                 <Route path="T02" component={tools.T02}/>
                 <Route path="T06" component={tools.T06}/>
-                <Route path="T07" component={tools.T07}/>
+                <Route path="T07/:id" component={tools.T07}/>
                 <Route path="T09A" component={tools.T09A}/>
                 <Route path="T09B" component={tools.T09B}/>
                 <Route path="T09C" component={tools.T09C}/>

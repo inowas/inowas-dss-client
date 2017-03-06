@@ -1,13 +1,11 @@
-import { ModflowBasemodel, ModflowScenario } from '../model/ModflowModel'
+import ModflowModel from '../model/ModflowModel';
 
-function getInitialState(id) {
+function getInitialState() {
     return {
         area: null,
-        gridSize:  null,
+        gridSize: null,
         boundingBox: null,
-        models: [
-            ModflowBasemodel(id)
-        ]
+        models: []
     };
 }
 
@@ -21,27 +19,20 @@ const T07Reducer = (state = getInitialState(), action) => {
             state = getInitialState(action.baseModelId);
             break;
 
-        case 'FETCH_MODEL_DETAILS_FULFILLED':
+        case 'SET_MODEL_DETAILS':
             state = {...state};
-            state.area = action.payload.area;
-            state.gridSize = action.payload.grid_size;
-            state.boundingBox = action.payload.bounding_box;
+            const modelDetails = action.payload;
 
-            let model = findModel(action.payload.modelId, state.models);
+            state.area = modelDetails.area;
+            state.gridSize = modelDetails.gridSize;
+            state.boundingBox = modelDetails.boundingBox;
 
-            if (model instanceof ModflowBasemodel || model instanceof ModflowScenario){
-                model.name = action.payload.name;
-                model.description = action.payload.description;
-            }
-
+            let model = new ModflowModel(modelDetails.getId(), modelDetails.isBaseModel);
+            model.name = modelDetails.name;
+            model.description = modelDetails.description;
+            console.log(model);
+            state.models.push(model);
             break;
-
-        case "FETCH_MODEL_BOUNDARIES_FULFILLED": {
-            state = {...state};
-            let model = findModel(action.payload.modelId, state.models);
-            model.boundaries = action.payload.boundaries;
-            break;
-        }
     }
 
     return state;

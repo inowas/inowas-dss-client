@@ -1,35 +1,17 @@
 /**
  * ModflowModel Base Class
  */
-class ModflowModel {
+export default class ModflowModel {
+
+    constructor(modelId, isBaseModel = false) {
+        this.modelId = modelId;
+        this.isBaseModel = isBaseModel;
+    }
 
     modelId = null;
     name = null;
     description = null;
     boundaries = [];
     selected: true;
-
-    constructor(modelId) {
-        this.modelId = modelId;
-    }
+    isBaseModel;
 }
-
-class ModflowBasemodel extends ModflowModel{
-
-    isbaseModel = true;
-
-    constructor(modelId) {
-        super(modelId);
-    }
-}
-
-class ModflowScenario extends ModflowModel{
-
-    isbaseModel = false;
-
-    constructor(modelId) {
-        super(modelId);
-    }
-}
-
-export { ModflowBasemodel, ModflowScenario }
