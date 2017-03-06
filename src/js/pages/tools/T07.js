@@ -123,11 +123,23 @@ export default class T07 extends React.Component {
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
-                    <section className="tile col stretch">
+                    <section className="tile col col-min-2 stretch">
                         <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
                     </section>
 
-                    <section className="tile col stretch">
+                    <section className="tile col col-min-2 stretch">
+                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                    </section>
+
+                    <section className="tile col col-min-2 stretch">
+                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                    </section>
+
+                    <section className="tile col col-min-2 stretch">
+                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                    </section>
+
+                    <section className="tile col col-min-2 stretch">
                         <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
                     </section>
                 </div>
