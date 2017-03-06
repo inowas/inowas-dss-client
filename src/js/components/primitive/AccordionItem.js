@@ -1,15 +1,24 @@
-import React from 'react';
+import React, {PropTypes, Component} from 'react';
 
 import Icon from './Icon.js';
 
-export default class AccordionItem extends React.Component {
+export default class AccordionItem extends Component {
+
+    static propTypes = {
+        icon: PropTypes.object,
+        className: PropTypes.string,
+        heading: PropTypes.string.isRequired,
+        children: PropTypes.object.isRequired,
+        index: PropTypes.number,
+        active: PropTypes.bool,
+        toggleActive: PropTypes.func
+    }
 
     toggleActive = () => {
         this.props.toggleActive(this.props.index);
     }
 
     render() {
-
         const {active, className} = this.props;
 
         return (
@@ -30,14 +39,4 @@ export default class AccordionItem extends React.Component {
         );
     }
 
-}
-
-AccordionItem.propTypes = {
-    icon: React.PropTypes.object,
-    className: React.PropTypes.string,
-    heading: React.PropTypes.string.isRequired,
-    children: React.PropTypes.object.isRequired,
-    index: React.PropTypes.number,
-    active: React.PropTypes.bool,
-    toggleActive: React.PropTypes.func
 }

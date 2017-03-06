@@ -3,23 +3,22 @@ function getInitialState() {
         fetching: false,
         error: false,
         fetched: false,
-        username: "",
+        username: '',
         apiKey: localStorage.getItem('api_key')
-    }
+    };
 }
 
-const userReducer = ( state=getInitialState(), action ) => {
-
+const userReducer = ( state = getInitialState(), action ) => {
     switch (action.type) {
-        case "LOGIN_PENDING": {
+        case 'LOGIN_PENDING': {
             state = { ...state, fetching: true };
             break;
         }
-        case "LOGIN_REJECTED": {
+        case 'LOGIN_REJECTED': {
             state = { ...state, fetching: false, error: action.payload };
             break;
         }
-        case "LOGIN_FULFILLED": {
+        case 'LOGIN_FULFILLED': {
             state = {
                 ...state,
                 fetching: false,
@@ -30,8 +29,8 @@ const userReducer = ( state=getInitialState(), action ) => {
             localStorage.setItem('api_key', action.payload.data.api_key);
             break;
         }
-        case "LOGOUT": {
-            localStorage.clear();
+        case 'LOGOUT': {
+            localStorage.removeItem('api_key');
             state = getInitialState();
         }
     }

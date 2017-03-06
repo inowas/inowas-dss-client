@@ -13,7 +13,7 @@ export default class Drawer extends React.Component {
             visible: this.props.visible
                 ? true
                 : false
-        }
+        };
     }
 
     toggleVisibility = () => {
@@ -23,7 +23,6 @@ export default class Drawer extends React.Component {
     }
 
     render() {
-
         const {className, children} = this.props;
         const {visible} = this.state;
 
@@ -33,7 +32,7 @@ export default class Drawer extends React.Component {
                    {children}
                 </div>
                 <div className="drawer-toggle" onClick={this.toggleVisibility}>
-                    <Icon name={visible ? 'close' : 'layer_vertical'} />
+                    <Icon name={visible ? 'arrow_left' : 'arrow_right'} />
                 </div>
             </div>
         );
@@ -45,4 +44,4 @@ Drawer.propTypes = {
     visible: React.PropTypes.bool,
     className: React.PropTypes.string,
     children: React.PropTypes.node
-}
+};

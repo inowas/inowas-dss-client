@@ -1,24 +1,23 @@
-import React from "react";
-import {showBoundaryProperties} from "../../actions/ApplicationActions"
+import React from 'react';
+import {showBoundaryProperties} from '../../actions/ApplicationActions';
 
 export default class ListItem extends React.Component {
 
     sBoundaryProperties(bType) {
         showBoundaryProperties(bType);
-
     }
 
     getClassNames(active) {
         if (active) {
-            return "list-group-item active";
+            return 'list-group-item active';
         }
 
-        return "list-group-item";
+        return 'list-group-item';
     }
 
     render() {
         return (
-            <span className={"list-item " + this.getClassNames(this.props.active)} onClick={this
+            <span className={'list-item ' + this.getClassNames(this.props.active)} onClick={this
                 .sBoundaryProperties
                 .bind(this, this.props.type)}>
                 {this.props.icon}

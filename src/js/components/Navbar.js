@@ -1,11 +1,15 @@
-import React from 'react'
-import {Link} from 'react-router';
+import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import Icon from './primitive/Icon';
 import '../../less/navbar.less';
 
 export default class NavBar extends React.Component {
 
-    render() {
+    static propTypes = {
+        logout: PropTypes.func
+    };
+
+    render( ) {
         return (
             <header className="navbar-wrapper">
                 <div className="navbar app-width">
@@ -13,22 +17,22 @@ export default class NavBar extends React.Component {
                         <ul className="nav-list">
                             <li className="nav-item">
                                 <Link className="nav-element" to="/tools">
-                                    <Icon name="settings" />Dashboard
+                                    <Icon name="settings"/>Dashboard
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-element" href="http://wiki.inowas.hydro.tu-dresden.de">
-                                    <Icon name="file" />Documentation
+                                    <Icon name="file"/>Documentation
                                 </a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-element" href="http://kb.inowas.hydro.tu-dresden.de">
-                                    <Icon name="dataset" />Datasets (<strong>18</strong>)
+                                    <Icon name="dataset"/>Datasets (<strong>18</strong>)
                                 </a>
                             </li>
                             <li className="nav-item nav-item-has-children">
                                 <span className="nav-element">
-                                    <Icon name="folder" />Projects (<strong>1</strong>)
+                                    <Icon name="folder"/>Projects (<strong>1</strong>)
                                 </span>
                                 <ul className="nav-list">
                                     <li className="nav-item">
@@ -41,7 +45,7 @@ export default class NavBar extends React.Component {
                             </li>
                             <li className="nav-item nav-item-has-children">
                                 <span className="nav-element">
-                                    <Icon name="layer_vertical" />Applications (<strong>2</strong>)
+                                    <Icon name="layer_vertical"/>Applications (<strong>2</strong>)
                                 </span>
                                 <ul className="nav-list">
                                     <li className="nav-item">
@@ -57,7 +61,7 @@ export default class NavBar extends React.Component {
                             </li>
                             <li className="nav-item nav-item-has-children">
                                 <span className="nav-element">
-                                    <Icon name="tools" />Tools (<strong>9</strong>)
+                                    <Icon name="tools"/>Tools (<strong>9</strong>)
                                 </span>
                                 <ul className="nav-list">
                                     <li className="nav-item">
@@ -84,14 +88,14 @@ export default class NavBar extends React.Component {
                                     <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T13A'}>T13_a Travel time / Aquifer with no-flow and fixed-head boundaries</Link>
                                     </li>
-                                    <li  className="nav-item">
+                                    <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T13B'}>T13_b Aquifer system with two fixed head boundary conditions</Link>
                                     </li>
-                                    <li  className="nav-item">
+                                    <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T13C'}>T13_c Aquifer system with two fixed head boundary conditions</Link>
                                     </li>
-                                    <li  className="nav-item">
-                                        <Link  className="nav-element" to={'tools/T13E'}>T13_e Aquifer system with one pumping well at constant rate, no groundwater recharge</Link>
+                                    <li className="nav-item">
+                                        <Link className="nav-element" to={'tools/T13E'}>T13_e Aquifer system with one pumping well at constant rate, no groundwater recharge</Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-element" to={'tools/T14A'}>T14_a Fully penetrating stream with no streambed resistance</Link>
@@ -126,10 +130,15 @@ export default class NavBar extends React.Component {
                     </nav>
                     <nav className="nav-right">
                         <ul className="nav-list">
-                            <li className="nav-item">
-                                <a className="nav-element" href="#">
-                                    <Icon name="person" />Hey, Ralf Junghanns
-                                </a>
+                            <li className="nav-item nav-item-has-children">
+                                <span className="nav-element" href="#">
+                                    <Icon name="person"/>Hey, Gast
+                                </span>
+                                <ul className="nav-list">
+                                    <li className="nav-item">
+                                        <button className="nav-element" onClick={this.props.logout}>logout</button>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </nav>
