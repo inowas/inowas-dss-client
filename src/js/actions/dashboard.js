@@ -1,7 +1,9 @@
 import ConfiguredAxios from 'ConfiguredAxios';
 import store from '../store';
 
-const apiKey = store.getState().user.apiKey;
+function apiKey() {
+    return store.getState().user.apiKey;
+}
 
 export function setDashboardModelsT07( models ) {
     return {
@@ -15,7 +17,7 @@ export function fetchDashboardModelsT07() {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/my/projects.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/my/projects.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setDashboardModelsT07( action.payload.data ) );

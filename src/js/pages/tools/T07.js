@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {connect} from 'react-redux';
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
@@ -18,7 +18,7 @@ import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
 
 @connect((store) => {
-    return {tool: store.T07}
+    return {tool: store.T07};
 })
 export default class T07 extends React.Component {
 
@@ -60,7 +60,7 @@ export default class T07 extends React.Component {
                 160, 170
             ],
             crossSection: null
-        }
+        };
     }
 
     updateBounds = bounds => {
@@ -103,11 +103,11 @@ export default class T07 extends React.Component {
     }
 
     toggleSelection = id => {
-        var state = {
+        const state = {
             ...this.state
         };
-        var scenario = state.scenarios.find(s => {
-            return s.id == id
+        const scenario = state.scenarios.find(s => {
+            return s.id == id;
         });
         scenario.selected = !scenario.selected;
         this.setState(state);
@@ -118,23 +118,11 @@ export default class T07 extends React.Component {
 
         return (
             <div className="toolT07 app-width">
-                <Drawer visible={true}>
+                <Drawer visible>
                     <ScenarioSelect scenarios={scenarios} toggleSelection={this.toggleSelection}/>
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
-                    <section className="tile col col-min-2 stretch">
-                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
-                    </section>
-
-                    <section className="tile col col-min-2 stretch">
-                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
-                    </section>
-
-                    <section className="tile col col-min-2 stretch">
-                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
-                    </section>
-
                     <section className="tile col col-min-2 stretch">
                         <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
                     </section>
@@ -162,6 +150,6 @@ export default class T07 extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }
