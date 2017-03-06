@@ -17,7 +17,7 @@ import {
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
 
-import { fetchDetails, fetchModelBoundaries } from '../../actions/T07';
+import { fetchModelDetails, fetchModelBoundaries } from '../../actions/T07';
 
 @connect((store) => {
     return {tool: store.T07};
@@ -66,7 +66,7 @@ export default class T07 extends React.Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(fetchDetails(this.props.params.id));
+        this.props.dispatch(fetchModelDetails(this.props.params.id));
     }
 
     updateBounds = bounds => {

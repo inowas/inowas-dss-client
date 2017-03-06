@@ -3,21 +3,11 @@ import store from '../store';
 import ModflowBoundary from '../model/ModflowBoundary';
 import ModflowModelBoundaries from '../model/ModflowModelBoundaries';
 import ModflowModelDetails from '../model/ModflowModelDetails';
+import ModflowLayerValues from '../model/ModflowLayerValues';
 
 const apiKey = store.getState().user.apiKey;
 
-export function setModelDetails( details ) {
-    if (details instanceof ModflowModelDetails === false) {
-        throw Error('Expected first param to be instance of ModflowModelDetails');
-    }
-
-    return {
-        type: 'SET_MODEL_DETAILS',
-        payload: details
-    };
-}
-
-export function fetchDetails(id) {
+export function fetchModelDetails( id ) {
     return dispatch => {
         return dispatch( {
             type: 'FETCH_DATA',
@@ -42,6 +32,7 @@ export function fetchDetails(id) {
 
             dispatch( setModelDetails( baseModel ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
+            dispatch( fetchLayerValues( baseModel.modelId ) );
 
             const scenarios = action.payload.data.scenarios;
 
@@ -58,6 +49,7 @@ export function fetchDetails(id) {
 
                 dispatch( setModelDetails( scenario ) );
                 dispatch( fetchModelBoundaries( scenario.modelId ) );
+                dispatch( fetchLayerValues( scenario.modelId ) );
             });
 
         } ).catch( ( error ) => {
@@ -67,18 +59,7 @@ export function fetchDetails(id) {
     };
 }
 
-export function setModelBoundaries( boundaries ) {
-    if (boundaries instanceof ModflowModelBoundaries === false) {
-        throw Error('Expected first param to be instance of ModflowModelBoundaries');
-    }
-
-    return {
-        type: 'SET_MODEL_BOUNDARIES',
-        payload: boundaries
-    };
-}
-
-export function fetchModelBoundaries(id) {
+export function fetchModelBoundaries( id ) {
     return dispatch => {
         return dispatch( {
             type: 'FETCH_DATA',
@@ -100,5 +81,57 @@ export function fetchModelBoundaries(id) {
             // eslint-disable-next-line no-console
             console.error( error );
         } );
+    };
+}
+
+export function fetchLayerValues( id ) {
+    return dispatch => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/'+id+'/calculation/layervalues.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+            }
+        } ).then( ( { action } ) => {
+
+            dispatch( setLayerValues( new ModflowLayerValues( id, action.payload.data) ) );
+
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    }
+}
+
+
+export function setModelDetails( details ) {
+    if (details instanceof ModflowModelDetails === false) {
+        throw Error('Expected first param to be instance of ModflowModelDetails');
+    }
+
+    return {
+        type: 'SET_MODEL_DETAILS',
+        payload: details
+    };
+}
+
+export function setModelBoundaries( boundaries ) {
+    if (boundaries instanceof ModflowModelBoundaries === false) {
+        throw Error('Expected first param to be instance of ModflowModelBoundaries');
+    }
+
+    return {
+        type: 'SET_MODEL_BOUNDARIES',
+        payload: boundaries
+    };
+}
+
+export function setLayerValues( layerValues ) {
+    if (layerValues instanceof ModflowLayerValues === false) {
+        throw Error('Expected first param to be instance of ModflowModelBoundaries');
+    }
+
+    return {
+        type: 'SET_MODEL_LAYERVALUES',
+        payload: layerValues
     };
 }

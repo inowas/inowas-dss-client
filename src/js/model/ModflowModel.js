@@ -9,10 +9,10 @@ export default class ModflowModel {
     boundaries = [];
     selected: true;
     isBaseModel;
+    layerValues;
 
     static fromModflowDetails(details){
         let model = new ModflowModel(details.modelId, details.isBaseModel);
-        console.log(details);
         model.name = details.name;
         model.description = details.description;
         return model;
