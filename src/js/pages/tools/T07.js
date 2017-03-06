@@ -17,7 +17,7 @@ import {
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
 
-import { fetchDetails } from '../../actions/T07';
+import { fetchDetails, fetchModelBoundaries } from '../../actions/T07';
 
 @connect((store) => {
     return {tool: store.T07};

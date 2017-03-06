@@ -1,6 +1,6 @@
 export default class ModflowModelDetails{
 
-    id = null;
+    modelId = null;
     name = null;
     description = null;
     area = null;
@@ -8,8 +8,8 @@ export default class ModflowModelDetails{
     gridSize = null;
     isBaseModel = null;
 
-    constructor(id, name, description, area, boundingBox, gridSize, isBaseModel = false){
-        this.id = id;
+    constructor(modelId, name, description, area, boundingBox, gridSize, isBaseModel = false){
+        this.modelId = modelId;
         this.name = name;
         this.description = description;
         this.area = area;
@@ -17,8 +17,4 @@ export default class ModflowModelDetails{
         this.gridSize = gridSize;
         this.isBaseModel = isBaseModel;
     };
-
-    getId(){
-        return this.id;
-    }
 }

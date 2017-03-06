@@ -15,31 +15,34 @@ const T07Reducer = (state = getInitialState(), action) => {
             state = {...state};
             break;
 
-        case 'SET_TOOL_T07_BASE_MODEL_ID':
-            state = getInitialState(action.baseModelId);
-            break;
-
         case 'SET_MODEL_DETAILS':
             state = {...state};
+
             const modelDetails = action.payload;
+            state.models.push(ModflowModel.fromModflowDetails(modelDetails));
 
-            state.area = modelDetails.area;
-            state.gridSize = modelDetails.gridSize;
-            state.boundingBox = modelDetails.boundingBox;
+            if (modelDetails.isBaseModel){
+                state.area = modelDetails.area;
+                state.gridSize = modelDetails.gridSize;
+                state.boundingBox = modelDetails.boundingBox;
+            }
 
-            let model = new ModflowModel(modelDetails.getId(), modelDetails.isBaseModel);
-            model.name = modelDetails.name;
-            model.description = modelDetails.description;
-            console.log(model);
-            state.models.push(model);
+            break;
+
+        case 'SET_MODEL_BOUNDARIES':
+            const modelId = action.payload.modelId;
+            state = {...state};
+            state.models.map( m => {
+                if (m.modelId === modelId){
+                    m.boundaries = action.payload.boundaries;
+                    return m;
+                }
+            });
+
             break;
     }
 
     return state;
 };
-
-function findModel(modelId, modelArray) {
-    return modelArray.find(model => model.modelId === modelId);
-}
 
 export default T07Reducer;
