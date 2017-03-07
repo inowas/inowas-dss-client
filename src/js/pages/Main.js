@@ -1,25 +1,36 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
 
-import Scaffold from '../pages/Scaffold';
 import Login from '../pages/Login';
 
-@connect((store) => {
-    return {user: store.user}
-})
-export default class Main extends React.Component {
+import '../../less/scaffold.less';
 
-    isUserLoggedIn() {
-        return !(this.props.user.apiKey == null);
+@connect(( store ) => {
+    return { user: store.user };
+})
+export default class Main extends Component {
+    static propTypes = {
+        children: PropTypes.node,
+        user: PropTypes.object
     }
 
-    render() {
-        if (this.isUserLoggedIn()) {
-            return <Scaffold>
-                {this.props.children}
-            </Scaffold>;
+    isUserLoggedIn( ) {
+        return this.props.user.apiKey !== null;
+    }
+
+    render( ) {
+        if (this.isUserLoggedIn( )) {
+            return (
+                <div className="application-wrapper">
+                    {this.props.children}
+                </div>
+            );
         }
 
-        return <Login/>;
+        return (
+            <div className="application-wrapper">
+                <Login/>
+            </div>
+        );
     }
 }

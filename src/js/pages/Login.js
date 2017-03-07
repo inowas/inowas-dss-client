@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes, Component} from 'react';
 import { connect } from 'react-redux';
 import { login } from '../actions/UserActions';
 
@@ -7,7 +7,10 @@ import '../../less/login.less';
 @connect(( store ) => {
     return { user: store.user };
 })
-export default class Login extends React.Component {
+export default class Login extends Component {
+    static propTypes = {
+        dispatch: PropTypes.func.isRequired
+    }
 
     constructor( props ) {
         super( props );
@@ -22,7 +25,7 @@ export default class Login extends React.Component {
         this.onChange = this.onChange.bind( this );
     }
 
-    onSubmit( e ) {
+    onSubmit( ) {
         this.props.dispatch(login( this.state.identifier, this.state.password ));
     }
 
@@ -37,16 +40,14 @@ export default class Login extends React.Component {
         return (
             <div className="login-container center-horizontal center-vertical">
                 <form className="tile" id="loginForm" onSubmit={this.onSubmit}>
-                    <div className="form-group input-group">
-                        <span className="input-group-addon"><i className="glyphicon glyphicon-user"/></span>
-                        <input value={identifier} onChange={this.onChange} name="identifier" className="form-control" type="text" placeholder="username"/>
+                    <div>
+                        <input value={identifier} onChange={this.onChange} name="identifier" className="input" type="text" placeholder="username"/>
                     </div>
-                    <div className="form-group input-group">
-                        <span className="input-group-addon"><i className="glyphicon glyphicon-lock"/></span>
-                        <input value={password} onChange={this.onChange} name="password" className="form-control" type="password" placeholder="password"/>
+                    <div>
+                        <input value={password} onChange={this.onChange} name="password" className="input" type="password" placeholder="password"/>
                     </div>
-                    <div className="form-group">
-                        <button onClick={this.onSubmit} type="button" className="btn btn-def btn-block">Login</button>
+                    <div>
+                        <button onClick={this.onSubmit} type="button" className="button">Login</button>
                     </div>
                 </form>
             </div>

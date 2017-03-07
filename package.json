@@ -33,6 +33,7 @@
     "babel-preset-stage-0": "^6.3.13",
     "bootstrap": "^3.3.7",
     "copy-webpack-plugin": "^4.0.1",
+    "dateformat": "^2.0.0",
     "eslint": "^3.13.1",
     "eslint-config-xo-react": "^0.10.0",
     "eslint-plugin-import": "^2.2.0",

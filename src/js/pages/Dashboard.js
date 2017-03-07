@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import dateFormat from 'dateformat';
+
 import Accordion from '../components/primitive/Accordion';
 import AccordionItem from '../components/primitive/AccordionItem';
 import { Link } from 'react-router';
@@ -7,6 +9,7 @@ import Icon from '../components/primitive/Icon';
 import Popup from '../components/primitive/Popup';
 import StackedNav from '../components/primitive/StackedNav';
 import { fetchDashboardModelsT07 } from '../actions/dashboard';
+import Navbar from './Navbar';
 
 import '../../less/dashboard.less';
 
@@ -22,7 +25,83 @@ export default class Dashboard extends React.Component {
 
     state = {
         active: null,
-        popupVisible: true
+        popupVisible: false, // TODO remove popup
+        navigation: [{
+            name: 'Documentation',
+            path: '',
+            icon: <Icon name="file"/>
+        }, {
+            name: 'Datasets',
+            path: 'http://kb.inowas.hydro.tu-dresden.de',
+            icon: <Icon name="dataset"/>
+        }, {
+            name: 'Projects',
+            icon: <Icon name="folder"/>
+        }, {
+            name: 'Applications',
+            icon: <Icon name="layer_vertical"/>
+        }, {
+            name: 'Tools',
+            icon: <Icon name="layer_horizontal_hatched"/>,
+            sub: [{
+                name: 'T02 Groundwater mounding (Hantush)',
+                path: 'tools/T02'
+            }, {
+                name: 'T06 MAR method selection',
+                path: 'tools/T06'
+            }, {
+                name: 'T07 Scenario Analysis',
+                path: 'tools/T07'
+            }, {
+                name: 'T09_a Saltwater intrusion / Depth of freshwater-saltwater interface (Ghyben-Herzberg)',
+                path: 'tools/T09A'
+            }, {
+                name: 'T09_b Saltwater intrusion / Shape of freshwater-saltwater interface (Glover)',
+                path: 'tools/T09B'
+            }, {
+                name: 'T09_c Saltwater intrusion / Upconing',
+                path: 'tools/T09C'
+            }, {
+                name: 'T09_d Saltwater intrusion / Critical well discharge',
+                path: 'tools/T09D'
+            }, {
+                name: 'T13_a Travel time / Aquifer with no-flow and fixed-head boundaries',
+                path: 'tools/T13A'
+            }, {
+                name: 'T13_b Aquifer system with two fixed head boundary conditions',
+                path: 'tools/T13B'
+            }, {
+                name: 'T13_c Aquifer system with two fixed head boundary conditions',
+                path: 'tools/T13C'
+            }, {
+                name: 'T13_e Aquifer system with one pumping well at constant rate, no groundwater recharge',
+                path: 'tools/T13E'
+            }, {
+                name: 'T14_a Fully penetrating stream with no streambed resistance',
+                path: 'tools/T14A'
+            }, {
+                name: 'T14_b Fully penetrating stream with semipervious layer',
+                path: 'tools/T14B'
+            }, {
+                name: 'T14_c Partially penetrating stream with streambed resistance',
+                path: 'tools/T14C'
+            }, {
+                name: 'T14_d Partially penetrating stream in an aquitard overlying a pumped aquifer',
+                path: 'tools/T14D'
+            }, {
+                name: 'T16_a Saturated hydraulic conductivity based on grain size distribution',
+                path: 'tools/T16A'
+            }, {
+                name: 'T18 SAT basin design',
+                path: 'tools/T18'
+            }, {
+                name: 'T03 Numerical model setup (MODFLOW)',
+                path: 'tools/modflow/list'
+            }, {
+                name: 'T22 Mar portal',
+                path: 'tools/T22'
+            }]
+        }]
     }
 
     setToolSelection = ( slug ) => {
@@ -38,24 +117,26 @@ export default class Dashboard extends React.Component {
         return tools.map(( tool, index ) => {
             return (
                 <li key={index}>
-                    <button onClick={this.setToolSelection( tool.slug )} className="link" href="#">{tool.slug}</button>
+                    <button onClick={this.setToolSelection( tool.slug )} className="link" href="#">{tool.slug + ': ' + tool.name}</button>
                 </li>
             );
         });
     }
 
-    renderTableRows( models ) {
+    renderTableRows( basePath, models ) {
         return models.map(( model, index ) => {
+            const createdAt = new Date(model.created_at);
+
             return (
                 <tr key={index}>
-                    <td>{model.id}</td>
+                    <td>{index}</td>
                     <td>{model.name}</td>
-                    <td/>
-                    <td/>
-                    <td>{model.created_at}</td>
+                    <td>{model.project}</td>
+                    <td>{model.application}</td>
+                    <td>{dateFormat(createdAt, 'mm/dd/yyyy HH:MM')}</td>
                     <td>{model.user_id}</td>
                     <td>
-                        <Link className="link" to={'tools/T07/' + model.model_id}>edit</Link>
+                        {!model.fake && <Link className="link" to={basePath + model.model_id}>edit</Link>}
                     </td>
                 </tr>
             );
@@ -126,7 +207,7 @@ export default class Dashboard extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.renderTableRows( activeTool.models )}
+                            {this.renderTableRows( activeTool.path, activeTool.models )}
                         </tbody>
                     </table>
                 </div>
@@ -142,10 +223,12 @@ export default class Dashboard extends React.Component {
     }
 
     render( ) {
+        const {navigation} = this.state;
         const { tools } = this.props.dashboardStore;
 
         return (
             <div className="dashboard">
+                <Navbar links={navigation} />
                 <div className="app-width grid-container">
                     <StackedNav>
                         <h2>Dashboard</h2>

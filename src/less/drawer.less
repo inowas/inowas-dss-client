@@ -6,33 +6,45 @@
     left: -1 * (@grid-column + 2 * @grid-gutter);
     top: @navbar-height;
     bottom: 0;
-    box-shadow: 0px 0px 0px 0px fade(@grey-dark, 70%);
+    padding-right: 0;
+    background-color: fade(@background-dark, 70%);
+    transition: 0.25s left ease-in-out, 0.25s padding-right ease-in-out;
 
-    width: @grid-column + 2 * @grid-gutter;
-    background-color: @background-bright;
-    transition: 0.25s left ease-in-out, 0.25s box-shadow ease-in-out;
-
-    .drawer-toggle {
-        position: absolute;
-        bottom: @spacing-regular;
-        left: ~"calc(100% +" (@spacing-regular) ~")";
-        font-size: 1.2em;
-        z-index: 1101;
-    }
-
-    .drawer-content {
+    .body {
+        width: @grid-column + 2 * @grid-gutter;
+        height: 100%;
         position: relative;
-        overflow: auto;
-        max-height: 100%;
-        padding: @grid-gutter;
+
+        .toggle {
+            position: absolute;
+            bottom: 0;
+            left: ~"calc(100% -" (@spacing-small) ~")";
+            background-color: @background-bright;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 2 * @spacing-large + @spacing-small;
+            padding-left: @spacing-small;
+            height: 2 * @spacing-large;
+            z-index: 1101;
+            cursor: pointer;
+            box-shadow: @box-shadow;
+        }
+
+        .content {
+            position: relative;
+            overflow: auto;
+            z-index: 1102;
+            height: 100%;
+            padding: @grid-gutter;
+            background-color: @background-bright;
+            box-shadow: @box-shadow;
+        }
     }
 
     &[data-visible=true] {
         left: 0;
-        box-shadow: 0px 0px 0px ~"calc(100vw -" (@grid-column + 2 * @grid-gutter) ~")" fade(@grey-dark, 70%);
-
-        .drawer-toggle {
-            color: @color-dark;
-        }
+        padding-right: ~"calc(100vw - " (@grid-column + 2 * @grid-gutter) ~")";
     }
 }

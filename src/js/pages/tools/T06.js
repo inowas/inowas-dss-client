@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {connect} from 'react-redux';
 
 import '../../../less/4TileTool.less';
@@ -8,9 +8,10 @@ import {groupBy} from 'lodash';
 
 import {changeCondition} from '../../actions/T06';
 import Header from '../../components/tools/Header';
+import Navbar from '../Navbar';
 
 @connect((store) => {
-    return {tool: store.T06}
+    return {tool: store.T06};
 })
 export default class T06 extends React.Component {
 
@@ -25,13 +26,12 @@ export default class T06 extends React.Component {
     };
 
     conditions() {
+        const groupedConditions = groupBy(this.props.tool.conditions, 'category');
+        const groupedConditionsList = [];
 
-        var groupedConditions = groupBy(this.props.tool.conditions, 'category');
-        var groupedConditionsList = [];
-
-        for (var category in groupedConditions) {
+        for (const category in groupedConditions) {
             if (groupedConditions.hasOwnProperty(category)) {
-                var conditionsList = groupedConditions[category].map((c) => {
+                const conditionsList = groupedConditions[category].map((c) => {
                     return (
                         <li className="condition" key={c.name.replaceAll(' ', '_')}>
                             <label className="condition-label"><input onChange={this.handleChange} value={c.name} checked={c.selected} type="checkbox"/>{c.name}</label>
@@ -51,39 +51,40 @@ export default class T06 extends React.Component {
         }
 
         return groupedConditionsList;
-
     }
 
     intersect(a, b) {
-        var t;
-        if (b.length > a.length)
+        let t;
+        if (b.length > a.length)            {
             t = b,
             b = a,
-            a = t; // indexOf to loop over shorter
-        return a.filter(function (e) {
-            if (b.indexOf(e) !== -1)
+            a = t;
+        } // indexOf to loop over shorter
+        return a.filter(function(e) {
+            if (b.indexOf(e) !== -1)                {
                 return true;
             }
+        }
         );
     }
 
     methods() {
-        var selectedConditions = this.props.tool.conditions.filter((c) => {
-            return c.selected
+        const selectedConditions = this.props.tool.conditions.filter((c) => {
+            return c.selected;
         });
 
         // get first
-        var applicable_methods = (selectedConditions.length > 0)
+        let applicable_methods = (selectedConditions.length > 0)
             ? selectedConditions[0].applicable_methods
             : [];
 
-        for (var i = 0; i < selectedConditions.length; i++) {
+        for (let i = 0; i < selectedConditions.length; i++) {
             applicable_methods = this.intersect(applicable_methods, selectedConditions[i].applicable_methods);
         }
 
         return (applicable_methods.map((am) => {
             const method = this.props.tool.methods.find((m) => {
-                return (m.slug == am)
+                return (m.slug == am);
             });
             return (
                 <tr className="method" key={method.slug}>
@@ -108,6 +109,7 @@ export default class T06 extends React.Component {
     render() {
         return (
             <div className="app-width tool-T06">
+                <Navbar links={[]} />
                 <Header title={'T06. MAR method selection'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -119,7 +121,7 @@ export default class T06 extends React.Component {
 
                     <section className="tile col col-abs-3 stretch">
                         <h2>Methods Suggested</h2>
-                        <table class="methods">
+                        <table className="methods">
                             <thead>
                                 <tr>
                                     <th>MAR methods</th>
@@ -134,6 +136,6 @@ export default class T06 extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }
