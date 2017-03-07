@@ -11,7 +11,9 @@ export default class CrossSectionMap extends Component {
         updateBounds: PropTypes.func.isRequired,
         bounds: PropTypes.array,
         setCrossSection: PropTypes.func.isRequired,
-        crossSection: PropTypes.array
+        crossSection: PropTypes.array,
+        min: PropTypes.number.isRequired,
+        max: PropTypes.number.isRequired
     };
 
     handleMove = e => {
@@ -36,7 +38,7 @@ export default class CrossSectionMap extends Component {
             ];
 
             return (
-                <ImageOverlay url={this.props.model.result.imgUrl(-40, 10)} bounds={boundingBox} opacity={0.5}/>
+                <ImageOverlay url={this.props.model.result.imgUrl(this.props.min, this.props.max)} bounds={boundingBox} opacity={0.5}/>
             );
         }
     }

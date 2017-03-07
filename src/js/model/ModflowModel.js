@@ -1,4 +1,5 @@
 import MfBoundary from './ModflowBoundary';
+import MfResult from './ModflowModelResult';
 
 /**
  * ModflowModel Base Class
@@ -54,5 +55,23 @@ export default class ModflowModel {
 
     toggleSelection() {
         this.selected = !this.selected;
+    }
+
+    minValue() {
+        if (this.result instanceof MfResult === false){
+            return null;
+        }
+
+        console.log(this.result);
+
+        return this.result.min();
+    }
+
+    maxValue() {
+        if (this.result instanceof MfResult === false){
+            return null;
+        }
+
+        return this.result.max();
     }
 }

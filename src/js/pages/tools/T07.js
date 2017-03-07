@@ -160,7 +160,7 @@ export default class T07 extends Component {
         }).map(( model, index ) => {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <CrossSectionMap model={model} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                    <CrossSectionMap model={model} min={models[0].minValue()} max={models[0].maxValue()} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
                 </section>
             );
         });

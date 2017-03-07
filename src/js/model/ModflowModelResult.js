@@ -9,6 +9,8 @@ export default class ModflowModelResult {
     _totalTime;
     _data;
     _imgUrl;
+    _min;
+    _max;
 
     constructor(modelId, layerNumber, resultType, totalTime, data, imgUrl) {
         this._modelId = modelId;
@@ -17,6 +19,8 @@ export default class ModflowModelResult {
         this._totalTime = totalTime;
         this._data = data;
         this._imgUrl = imgUrl;
+        this._min = this.calculatePercentile(data, 3);
+        this._max = this.calculatePercentile(data, 95);
     }
 
     modelId(){
@@ -45,5 +49,29 @@ export default class ModflowModelResult {
         }
 
         return this._imgUrl+'?min='+ min + '&max=' + max;
+    }
+
+    min(){
+        return this._min;
+    }
+
+    max(){
+        return this._max;
+    }
+
+    calculatePercentile(data, percent){
+        const values = [];
+        data.forEach( row => {
+            row.forEach( column => {
+                if (column !== null){
+                    values.push(column);
+                }
+            })
+        });
+
+        values.sort( (a, b) => a-b );
+
+        const key = Math.round(values.length/100*percent);
+        return values[key];
     }
 }
