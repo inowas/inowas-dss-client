@@ -14,4 +14,8 @@ export default class ResultType {
     toString() {
         return this.type.toString();
     }
+
+    sameAs(element) {
+        return (this.type.toString() === element.toString());
+    }
 }

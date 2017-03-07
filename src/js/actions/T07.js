@@ -1,11 +1,13 @@
 import ConfiguredAxios from 'ConfiguredAxios';
 import store from '../store';
 import ModflowBoundary from '../model/ModflowBoundary';
+import ModflowLayerValues from '../model/ModflowLayerValues';
 import ModflowModelBoundaries from '../model/ModflowModelBoundaries';
 import ModflowModelDetails from '../model/ModflowModelDetails';
-import ModflowLayerValues from '../model/ModflowLayerValues';
+import ModflowModelResult from '../model/ModflowModelResult';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
+import TotalTime from '../model/TotalTime';
 import TotalTimes from '../model/TotalTimes';
 
 const apiKey = store.getState().user.apiKey;
@@ -53,7 +55,6 @@ export function fetchModelDetails( id ) {
 
                 dispatch( setModelDetails( scenario ) );
                 dispatch( fetchModelBoundaries( scenario.modelId ) );
-                dispatch( fetchLayerValues( scenario.modelId ) );
             });
 
         } ).catch( ( error ) => {
@@ -124,6 +125,27 @@ export function fetchTotalTimes( id, type, layer ) {
     }
 }
 
+export function updateResults( id, resultType, layerNumber, totalTime ){
+
+    const url = '/scenarioanalysis/model/'+ id +'/calculation/result/type/'+ resultType.toString() +'/layer/'+ layerNumber.toString() +'/totim/'+ totalTime.toString();
+
+    return dispatch => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( url +'.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+            }
+        } ).then( ( { action } ) => {
+
+            dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, url+'.png')) );
+
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    }
+}
+
 export function setTotalTimes( totalTimes ) {
     if ((totalTimes instanceof TotalTimes) === false) {
         throw Error('Expected first param to be instance of TotalTimes');
@@ -166,5 +188,56 @@ export function setLayerValues( layerValues ) {
     return {
         type: 'SET_MODEL_LAYERVALUES',
         payload: layerValues
+    };
+}
+
+export function setResults( modflowModelResult ) {
+    if (modflowModelResult instanceof ModflowModelResult === false) {
+        throw Error('Expected first param to be instance of ModflowModelResult');
+    }
+
+    return {
+        type: 'SET_MODEL_RESULT',
+        payload: modflowModelResult
+    };
+}
+
+export function toggleModelSelection( modelId ) {
+    return {
+        type: 'TOGGLE_MODEL_SELECTION',
+        payload: modelId
+    };
+}
+
+export function setSelectedLayer( layer ) {
+    if (layer instanceof LayerNumber === false) {
+        throw Error('Expected first param to be instance of LayerNumber');
+    }
+
+    return {
+        type: 'SET_SELECTED_LAYER',
+        payload: layer
+    };
+}
+
+export function setSelectedResultType( resultType ) {
+    if (resultType instanceof ResultType === false) {
+        throw Error('Expected first param to be instance of ResultType');
+    }
+
+    return {
+        type: 'SET_SELECTED_RESULT_TYPE',
+        payload: resultType
+    };
+}
+
+export function setSelectedTotalTime( totalTime ) {
+    if (totalTime instanceof TotalTime === false) {
+        throw Error('Expected first param to be instance of TotalTime');
+    }
+
+    return {
+        type: 'SET_SELECTED_TOTAL_TIME',
+        payload: totalTime
     };
 }

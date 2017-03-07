@@ -12,16 +12,18 @@ export default class ModflowModel {
     gridSize = null;
     area = null;
     boundaries = [];
-    selected: true;
+    selected = null;
     isBaseModel;
-    layerValues;
+    result;
 
     static fromModflowDetails(details){
         let model = new ModflowModel(details.modelId, details.isBaseModel);
+        model.area = details.area;
         model.name = details.name;
         model.description = details.description;
         model.boundingBox = details.boundingBox;
         model.gridSize = details.gridSize;
+        model.selected = true;
         return model;
     }
 
@@ -44,5 +46,13 @@ export default class ModflowModel {
                 return boundary;
             }
         })
+    }
+
+    isSelected() {
+        return this.selected;
+    }
+
+    toggleSelection() {
+        this.selected = !this.selected;
     }
 }

@@ -9,4 +9,8 @@ export default class LayerNumber {
     toString() {
         return this.layerNumber.toString();
     }
+
+    sameAs(element) {
+        return (this.layerNumber.toString() === element.toString());
+    }
 }

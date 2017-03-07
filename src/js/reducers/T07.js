@@ -58,7 +58,7 @@ const T07Reducer = (state = getInitialState(), action) => {
 
             break;
 
-        case 'SET_SELECTED_LAYER_NUMBER':
+        case 'SET_SELECTED_LAYER':
             state = {...state};
             state.selectedLayerNumber = action.payload;
             break;
@@ -71,6 +71,26 @@ const T07Reducer = (state = getInitialState(), action) => {
         case 'SET_SELECTED_TOTAL_TIME':
             state = {...state};
             state.selectedTotalTime = action.payload;
+            break;
+
+        case 'SET_MODEL_RESULT':
+            state = {...state};
+            state.models.map( m => {
+               if (m.modelId === action.payload.modelId()){
+                   m.result = action.payload;
+                   return m;
+               }
+            });
+
+            break;
+
+        case 'TOGGLE_MODEL_SELECTION':
+            state = {...state};
+            state.models.map( m => {
+                if (m.modelId === action.payload){
+                    m.toggleSelection();
+                }
+            });
             break;
     }
 

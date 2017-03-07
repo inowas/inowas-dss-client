@@ -17,7 +17,12 @@ import {
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
 
-import { fetchModelDetails, fetchModelBoundaries } from '../../actions/T07';
+import { fetchModelDetails, updateResults, setSelectedLayer, setSelectedResultType, setSelectedTotalTime, toggleModelSelection } from '../../actions/T07';
+
+import LayerNumber from '../../model/LayerNumber';
+import ResultType from '../../model/ResultType';
+import TotalTime from '../../model/TotalTime';
+import ModflowModelResult from '../../model/ModflowModelResult';
 
 @connect((store) => {
     return {tool: store.T07};
@@ -67,14 +72,12 @@ export default class T07 extends React.Component {
 
     componentWillMount() {
         this.props.dispatch(fetchModelDetails(this.props.params.id));
-    }
+    };
 
     updateBounds = bounds => {
         this.setState({
             bounds: [
-                [
-                    bounds.getNorth(), bounds.getEast()
-                ],
+                [bounds.getNorth(), bounds.getEast()],
                 [bounds.getSouth(), bounds.getWest()]
             ]
         });
@@ -109,14 +112,55 @@ export default class T07 extends React.Component {
     };
 
     toggleSelection = id => {
-        const state = {
-            ...this.state
-        };
-        const scenario = state.scenarios.find(s => {
-            return s.id == id;
-        });
-        scenario.selected = !scenario.selected;
-        this.setState(state);
+        this.props.dispatch( toggleModelSelection( id ));
+        this.updateModelResults(this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime);
+    };
+
+    changeLayerValue = (layerNumber, resultType) => {
+        this.props.dispatch( setSelectedLayer( layerNumber ));
+        this.props.dispatch( setSelectedResultType( resultType ));
+        this.updateModelResults(resultType, layerNumber, this.props.tool.selectedTotalTime);
+    };
+
+    changeTotalTime = totalTime => {
+        this.props.dispatch( setSelectedTotalTime( totalTime ));
+        this.updateModelResults(this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, totalTime);
+    };
+
+    updateModelResults(resultType, layerNumber, totalTime) {
+        if (layerNumber instanceof LayerNumber === false){
+            console.error('Cannot update ModelResults, due layerNumber is not from Type LayerNumber.');
+            return;
+        }
+
+        if (resultType instanceof ResultType === false){
+            console.error('Cannot update ModelResults, due resultType is not from Type ResultType.');
+            return;
+        }
+
+        if (totalTime instanceof TotalTime === false){
+            console.error('Cannot update ModelResults, due totalTime is not from Type TotalTime.');
+            return;
+        }
+
+        this.props.tool.models.forEach( m => {
+
+            if (m.isSelected() == false){
+                return;
+            }
+
+            if (m.result instanceof ModflowModelResult){
+                if (
+                    m.result.resultType().sameAs(resultType) &&
+                    m.result.layerNumber().sameAs(layerNumber) &&
+                    m.result.totalTime().sameAs(totalTime)
+                ) {
+                    return;
+                }
+            }
+
+            this.props.dispatch( updateResults(m.modelId, resultType, layerNumber, totalTime) )
+        })
     };
 
     render() {
