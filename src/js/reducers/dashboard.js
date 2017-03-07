@@ -4,27 +4,90 @@ const initialState = {
         name: 'Groundwater mounding (Hantush)',
         models: [ {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'f2dce7df-8e36-4b51-9711-7605620967f9',
-            name: 'Test 1',
+            user_id: 'Jana Glaß',
+            name: 'DEFAULT MODEL',
             description: 'Description',
-            project: 'Inowas',
-            application: 'test app',
+            project: 'INOWAS',
+            application: 'A02',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: false
+        }, {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Ralf Junghanns',
+            name: 'Long Bien (Hanoi) infiltration basins',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A03',
             created_at: '2017-03-03T13:48:07+00:00',
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'f2dce7df-8e36-4b51-9711-7605620967f9',
-            name: 'Test 2',
+            user_id: 'José Bonilla',
+            name: 'Heredia wetland infiltration',
             description: 'Description',
-            project: 'Inowas',
-            application: 'test app',
+            project: 'AyA Costa Rica',
+            application: 'A03',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: true
+        }, {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Catalin Stefan',
+            name: 'Soil-aquifer-treatment at Yavne 2',
+            description: 'Description',
+            project: 'SHAFDAN',
+            application: 'A08',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: true
+        }, {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Jens Fahl',
+            name: 'Soil-aquifer-treatment at Yavne 4',
+            description: 'Description',
+            project: 'SHAFDAN',
+            application: 'A08',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: true
+        }, {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Ralf Junghanns',
+            name: 'Mendoza reclamation basins',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A03',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: true
+        }, {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Felix Barquero',
+            name: 'Rapid infiltration basin in Pirna',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A10',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: true
+        }, {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Thomas Fichtner',
+            name: 'Pirna infiltration tank',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A10',
             created_at: '2017-03-03T13:48:07+00:00',
             fake: true
         } ]
     }, {
         slug: 'T07',
         name: 'Scenario Analysis',
-        models: []
+        models: [ {
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            user_id: 'Ralf Junghanns',
+            name: 'DEFAULT MODEL',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A03',
+            created_at: '2017-03-03T13:48:07+00:00',
+            fake: true
+        } ]
     } ]
 };
 
