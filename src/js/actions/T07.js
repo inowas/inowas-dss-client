@@ -4,6 +4,9 @@ import ModflowBoundary from '../model/ModflowBoundary';
 import ModflowModelBoundaries from '../model/ModflowModelBoundaries';
 import ModflowModelDetails from '../model/ModflowModelDetails';
 import ModflowLayerValues from '../model/ModflowLayerValues';
+import ResultType from '../model/ResultType';
+import LayerNumber from '../model/LayerNumber';
+import TotalTimes from '../model/TotalTimes';
 
 const apiKey = store.getState().user.apiKey;
 
@@ -33,10 +36,11 @@ export function fetchModelDetails( id ) {
             dispatch( setModelDetails( baseModel ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.modelId ) );
+            dispatch( fetchTotalTimes( baseModel.modelId,  new ResultType('head'), new LayerNumber(3)) );
 
             const scenarios = action.payload.data.scenarios;
 
-            scenarios.map( sc => {
+            scenarios.forEach( sc => {
                 const scenario = new ModflowModelDetails(
                     sc.model_id,
                     sc.name,
@@ -102,6 +106,35 @@ export function fetchLayerValues( id ) {
     }
 }
 
+export function fetchTotalTimes( id, type, layer ) {
+    return dispatch => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/'+ id +'/calculation/times/type/'+ type.toString() +'/layer/'+ layer.toString() +'.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+            }
+        } ).then( ( { action } ) => {
+
+            dispatch( setTotalTimes( new TotalTimes( id, type, layer, action.payload.data.start_date, action.payload.data.end_date, action.payload.data.total_times )));
+
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    }
+}
+
+export function setTotalTimes( totalTimes ) {
+    if ((totalTimes instanceof TotalTimes) === false) {
+        throw Error('Expected first param to be instance of TotalTimes');
+    }
+
+    return {
+        type: 'SET_TOTAL_TIMES',
+        payload: totalTimes
+    };
+
+}
 
 export function setModelDetails( details ) {
     if (details instanceof ModflowModelDetails === false) {

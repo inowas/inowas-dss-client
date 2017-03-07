@@ -1,10 +1,24 @@
+import LayerNumber from './LayerNumber';
+
 export default class ModflowLayerValues{
 
-    modelId = null;
-    layerValues = [];
+    _modelId = null;
+    _layerValues = [];
 
     constructor(modelId, layerValues){
-        this.modelId = modelId;
-        this.layerValues = layerValues;
+        this._modelId = modelId;
+        this._layerValues = layerValues;
     };
+
+    modelId() {
+        return this._modelId;
+    }
+
+    layerValues() {
+        return this._layerValues;
+    }
+
+    getLowestHeadLayer() {
+        return new LayerNumber(3);
+    }
 }

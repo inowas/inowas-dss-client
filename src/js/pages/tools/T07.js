@@ -117,7 +117,7 @@ export default class T07 extends React.Component {
         });
         scenario.selected = !scenario.selected;
         this.setState(state);
-    }
+    };
 
     render() {
         const {boundingBox, scenarios, bounds, crossSection} = this.state;

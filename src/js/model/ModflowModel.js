@@ -1,3 +1,5 @@
+import MfBoundary from './ModflowBoundary';
+
 /**
  * ModflowModel Base Class
  */
@@ -6,6 +8,9 @@ export default class ModflowModel {
     modelId = null;
     name = null;
     description = null;
+    boundingBox = null;
+    gridSize = null;
+    area = null;
     boundaries = [];
     selected: true;
     isBaseModel;
@@ -15,6 +20,8 @@ export default class ModflowModel {
         let model = new ModflowModel(details.modelId, details.isBaseModel);
         model.name = details.name;
         model.description = details.description;
+        model.boundingBox = details.boundingBox;
+        model.gridSize = details.gridSize;
         return model;
     }
 
@@ -23,12 +30,8 @@ export default class ModflowModel {
         this.isBaseModel = isBaseModel;
     }
 
-    setName(name) {
-        this.name = name;
-    }
-
-    setDescription(name) {
-        this.description = description;
+    containsBoundary(boundary) {
+        return this.boundaries.find( b => b.id == boundary.id ) instanceof MfBoundary;
     }
 
     addBoundary(boundary) {

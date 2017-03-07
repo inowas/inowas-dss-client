@@ -1,10 +1,14 @@
 import ModflowModel from '../model/ModflowModel';
+import TotalTime from '../model/TotalTime';
+import ResultType from '../model/ResultType';
 
 function getInitialState() {
     return {
-        area: null,
-        gridSize: null,
-        boundingBox: null,
+        layerValues: null,
+        selectedLayerNumber: null,
+        selectedResultType: null,
+        totalTimes: null,
+        selectedTotalTime: null,
         models: []
     };
 }
@@ -20,13 +24,6 @@ const T07Reducer = (state = getInitialState(), action) => {
 
             const modelDetails = action.payload;
             state.models.push(ModflowModel.fromModflowDetails(modelDetails));
-
-            if (modelDetails.isBaseModel){
-                state.area = modelDetails.area;
-                state.gridSize = modelDetails.gridSize;
-                state.boundingBox = modelDetails.boundingBox;
-            }
-
             break;
 
         case 'SET_MODEL_BOUNDARIES':
@@ -42,13 +39,38 @@ const T07Reducer = (state = getInitialState(), action) => {
 
         case 'SET_MODEL_LAYERVALUES':
             state = {...state};
-            state.models.map( m => {
-                if (m.modelId === action.payload.modelId){
-                    m.layerValues = action.payload.layerValues;
-                    return m;
-                }
-            });
+            state.layerValues = action.payload;
 
+            if (state.selectedLayerNumber === null){
+                state.selectedLayerNumber = state.layerValues.getLowestHeadLayer();
+                state.selectedResultType = new ResultType('head');
+            }
+
+            break;
+
+        case 'SET_TOTAL_TIMES':
+            state = {...state};
+            state.totalTimes = action.payload;
+
+            if (state.selectedTotalTime === null){
+                state.selectedTotalTime = new TotalTime(state.totalTimes.totalTimes()[state.totalTimes.totalTimes().length -1]);
+            }
+
+            break;
+
+        case 'SET_SELECTED_LAYER_NUMBER':
+            state = {...state};
+            state.selectedLayerNumber = action.payload;
+            break;
+
+        case 'SET_SELECTED_RESULT_TYPE':
+            state = {...state};
+            state.selectedResultType = action.payload;
+            break;
+
+        case 'SET_SELECTED_TOTAL_TIME':
+            state = {...state};
+            state.selectedTotalTime = action.payload;
             break;
     }
 
