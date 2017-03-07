@@ -22,7 +22,7 @@ export default class Dashboard extends React.Component {
 
     state = {
         active: null,
-        popupVisible: true
+        popupVisible: false
     }
 
     setToolSelection = ( slug ) => {
