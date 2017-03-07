@@ -1,40 +1,58 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 
-import { Map, TileLayer, Rectangle} from 'react-leaflet';
+import { Map, TileLayer, Rectangle } from 'react-leaflet';
 
 import '../../../less/crossSectionMap.less';
 
-export default class CrossSectionMap extends React.Component {
+export default class CrossSectionMap extends Component {
 
-    constructor(props) {
-        super(props);
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        updateBounds: PropTypes.func.isRequired,
+        bounds: PropTypes.array,
+        setCrossSection: PropTypes.func.isRequired,
+        crossSection: PropTypes.array
     }
 
     handleMove = e => {
-        this.props.updateBounds(e.target.getBounds());
+        const bounds = e.target.getBounds( );
+        this.props.updateBounds([
+            [
+                bounds.getSouth( ), bounds.getWest( )
+            ],
+            [bounds.getNorth( ), bounds.getEast( )]
+        ]);
     }
 
     handleClick = e => {
-        this.props.setCrossSection(e.latlng.lat, e.latlng.lng);
+        this.props.setCrossSection( e.latlng.lat, e.latlng.lng );
     }
 
-    render() {
-        const {boundingBox, bounds, crossSection} = this.props;
+    render( ) {
+        const { model, bounds, crossSection } = this.props;
+        const boundingBox = [
+            [
+                model.boundingBox.y_min, model.boundingBox.x_min
+            ],
+            [model.boundingBox.y_max, model.boundingBox.x_max ]
+        ];
+        // const boundingBox = [[model.boundingBox.x_min, model.boundingBox.y_min], [model.boundingBox.x_max, model.boundingBox.y_max]];
+
+        // return (
+        //     <Map className="crossSectionMap" bounds={bounds} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
+        //         <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+        //         <Rectangle color="#000000" bounds={boundingBox}/> {crossSection
+        //             ? <Rectangle bounds={crossSection}/>
+        //             : null}
+        //     </Map>
+        // );
+        console.log( 'bounds', bounds );
         return (
-            <Map className="crossSectionMap" bounds={bounds} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
+            <Map animate={false} className="crossSectionMap" bounds={bounds} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                <Rectangle color="#000000" bounds={boundingBox} />
-                {crossSection ? <Rectangle bounds={crossSection} /> : null}
+                <Rectangle color="#000000" bounds={boundingBox}/>
             </Map>
         );
     }
 
-}
-
-CrossSectionMap.propTypes = {
-    boundingBox: React.PropTypes.array,
-    updateBounds: React.PropTypes.func.isRequired,
-    bounds: React.PropTypes.array,
-    setCrossSection: React.PropTypes.func.isRequired,
-    crossSection: React.PropTypes.array
 }

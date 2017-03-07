@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
@@ -19,7 +19,15 @@ import {
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
 
-import { fetchModelDetails, updateResults, setSelectedLayer, setSelectedResultType, setSelectedTotalTime, toggleModelSelection } from '../../actions/T07';
+import {
+    fetchModelDetails,
+    updateResults,
+    setSelectedLayer,
+    setSelectedResultType,
+    setSelectedTotalTime,
+    toggleModelSelection,
+    setBounds
+} from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
@@ -32,48 +40,18 @@ import ModflowModelResult from '../../model/ModflowModelResult';
 export default class T07 extends Component {
 
     static propTypes = {
-        dispatch: PropTypes.func.isRequired
+        dispatch: PropTypes.func.isRequired,
+        params: PropTypes.object,
+        tool: PropTypes.object.isRequired
     };
 
-    constructor( props ) {
-        super( props );
-
-        this.state = {
-            scenarios: [
-                {
-                    baseModelId: 0,
-                    id: 0,
-                    name: 'name1',
-                    description: 'description1',
-                    thumbnail: 'scenarios_thumb.png',
-                    selected: true
-                }, {
-                    baseModelId: 0,
-                    id: 1,
-                    name: 'name2',
-                    description: 'description2',
-                    thumbnail: 'scenarios_thumb.png',
-                    selected: false
-                }
-            ],
-
-            bounds: [
-                [
-                    20.942793923555, 105.75218379342
-                ],
-                [21.100124603334, 105.91170436595 ]
-            ],
-            boundingBox: [
-                [
-                    20.942793923555, 105.75218379342
-                ],
-                [21.100124603334, 105.91170436595 ]
-            ],
-            grid: [
-                160, 170
-            ],
-            crossSection: null,
-            navigation: [{
+    state = {
+        grid: [
+            160, 170
+        ],
+        crossSection: null,
+        navigation: [
+            {
                 name: 'Cross section',
                 path: '',
                 icon: <Icon name="layer_horizontal_hatched"/>
@@ -89,25 +67,21 @@ export default class T07 extends Component {
                 name: 'Overall budget',
                 path: '',
                 icon: <Icon name="layer_horizontal_hatched"/>
-            }]
-        };
+            }
+        ]
     }
 
-    componentWillMount() {
-        this.props.dispatch(fetchModelDetails(this.props.params.id));
-    };
+    componentWillMount( ) {
+        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+    }
 
     updateBounds = bounds => {
-        this.setState({
-            bounds: [
-                [bounds.getNorth(), bounds.getEast()],
-                [bounds.getSouth(), bounds.getWest()]
-            ]
-        });
+        this.props.dispatch(setBounds( bounds ));
     };
 
     setCrossSection = ( lat, lng ) => {
-        const { boundingBox, grid } = this.state;
+        const { boundingBox } = this.props.tool;
+        const { grid } = this.state;
 
         const dlat = ( boundingBox[1][0 ] - boundingBox[0][0 ]) / grid[0]; // row width of bounding box grid
         const dlng = ( boundingBox[1][1 ] - boundingBox[0][1 ]) / grid[1]; // column width of bounding box grid
@@ -135,75 +109,87 @@ export default class T07 extends Component {
     };
 
     toggleSelection = id => {
-        this.props.dispatch( toggleModelSelection( id ));
-        this.updateModelResults(this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime);
+        return ( ) => {
+            this.props.dispatch(toggleModelSelection( id ));
+            this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime );
+        };
     };
 
-    changeLayerValue = (layerNumber, resultType) => {
-        this.props.dispatch( setSelectedLayer( layerNumber ));
-        this.props.dispatch( setSelectedResultType( resultType ));
-        this.updateModelResults(resultType, layerNumber, this.props.tool.selectedTotalTime);
+    changeLayerValue = ( layerNumber, resultType ) => {
+        this.props.dispatch(setSelectedLayer( layerNumber ));
+        this.props.dispatch(setSelectedResultType( resultType ));
+        this.updateModelResults( resultType, layerNumber, this.props.tool.selectedTotalTime );
     };
 
     changeTotalTime = totalTime => {
-        this.props.dispatch( setSelectedTotalTime( totalTime ));
-        this.updateModelResults(this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, totalTime);
+        this.props.dispatch(setSelectedTotalTime( totalTime ));
+        this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, totalTime );
     };
 
-    updateModelResults(resultType, layerNumber, totalTime) {
-        if (layerNumber instanceof LayerNumber === false){
-            console.error('Cannot update ModelResults, due layerNumber is not from Type LayerNumber.');
+    updateModelResults( resultType, layerNumber, totalTime ) {
+        if ( layerNumber instanceof LayerNumber === false ) {
+            console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
             return;
         }
 
-        if (resultType instanceof ResultType === false){
-            console.error('Cannot update ModelResults, due resultType is not from Type ResultType.');
+        if ( resultType instanceof ResultType === false ) {
+            console.error( 'Cannot update ModelResults, due resultType is not from Type ResultType.' );
             return;
         }
 
-        if (totalTime instanceof TotalTime === false){
-            console.error('Cannot update ModelResults, due totalTime is not from Type TotalTime.');
+        if ( totalTime instanceof TotalTime === false ) {
+            console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
             return;
         }
 
-        this.props.tool.models.forEach( m => {
-
-            if (m.isSelected() == false){
+        this.props.tool.models.forEach(m => {
+            if ( m.isSelected( ) == false ) {
                 return;
             }
 
-            if (m.result instanceof ModflowModelResult){
-                if (
-                    m.result.resultType().sameAs(resultType) &&
-                    m.result.layerNumber().sameAs(layerNumber) &&
-                    m.result.totalTime().sameAs(totalTime)
-                ) {
+            if ( m.result instanceof ModflowModelResult ) {
+                if (m.result.resultType( ).sameAs( resultType ) && m.result.layerNumber( ).sameAs( layerNumber ) && m.result.totalTime( ).sameAs( totalTime )) {
                     return;
                 }
             }
 
-            this.props.dispatch( updateResults(m.modelId, resultType, layerNumber, totalTime) )
-        })
-    };
+            this.props.dispatch(updateResults( m.modelId, resultType, layerNumber, totalTime ));
+        });
+    }
 
-    render() {
-        const { boundingBox, scenarios, bounds, crossSection, navigation } = this.state;
+    renderMaps( models ) {
+        const { crossSection } = this.state;
+        const { bounds } = this.props.tool;
+        return models.filter(model => {
+            return model.selected;
+        }).map(( model, index ) => {
+            return (
+                <section key={model.modelId} className="tile col col-min-2 stretch">
+                    <CrossSectionMap model={model} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                </section>
+            );
+        });
+    }
+
+    render( ) {
+        const { navigation } = this.state;
+
+        let { models } = this.props.tool;
+
+        models = models.map(m => {
+            m.thumbnail = 'scenarios_thumb.png';
+            return m;
+        });
 
         return (
             <div className="toolT07 app-width">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 <Drawer visible>
-                    <ScenarioSelect scenarios={scenarios} toggleSelection={this.toggleSelection}/>
+                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
-                    <section className="tile col col-min-2 stretch">
-                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
-                    </section>
-
-                    <section className="tile col col-min-2 stretch">
-                        <CrossSectionMap boundingBox={boundingBox} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
-                    </section>
+                    {this.renderMaps( models )}
                 </div>
 
                 <div className="grid-container">

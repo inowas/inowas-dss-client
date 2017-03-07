@@ -9,88 +9,100 @@ function getInitialState() {
         selectedResultType: null,
         totalTimes: null,
         selectedTotalTime: null,
-        models: []
+        models: [],
+        bounds: [
+            [ -90, -180 ],
+            [ 90, 180 ]
+        ]
     };
 }
 
-const T07Reducer = (state = getInitialState(), action) => {
-    switch (action.type) {
+const T07Reducer = ( state = getInitialState(), action ) => {
+    switch ( action.type ) {
         case 'SET_TOOL_T07_MODEL_LIST':
-            state = {...state};
+            state = { ...state };
             break;
 
-        case 'SET_MODEL_DETAILS':
-            state = {...state};
+        case 'T07_SET_MODEL_DETAILS':
+            state = { ...state };
 
             const modelDetails = action.payload;
-            state.models.push(ModflowModel.fromModflowDetails(modelDetails));
+            state.models.push( ModflowModel.fromModflowDetails( modelDetails ) );
             break;
 
-        case 'SET_MODEL_BOUNDARIES':
-            state = {...state};
+        case 'T07_SET_MODEL_BOUNDARIES':
+            state = { ...state };
             state.models.map( m => {
-                if (m.modelId === action.payload.modelId){
+                if ( m.modelId === action.payload.modelId ) {
                     m.boundaries = action.payload.boundaries;
                     return m;
                 }
-            });
+            } );
 
             break;
 
-        case 'SET_MODEL_LAYERVALUES':
-            state = {...state};
+        case 'T07_SET_MODEL_LAYERVALUES':
+            state = { ...state };
             state.layerValues = action.payload;
 
-            if (state.selectedLayerNumber === null){
+            if ( state.selectedLayerNumber === null ) {
                 state.selectedLayerNumber = state.layerValues.getLowestHeadLayer();
-                state.selectedResultType = new ResultType('head');
+                state.selectedResultType = new ResultType( 'head' );
             }
 
             break;
 
-        case 'SET_TOTAL_TIMES':
-            state = {...state};
+        case 'T07_SET_TOTAL_TIMES':
+            state = { ...state };
             state.totalTimes = action.payload;
 
-            if (state.selectedTotalTime === null){
-                state.selectedTotalTime = new TotalTime(state.totalTimes.totalTimes()[state.totalTimes.totalTimes().length -1]);
+            if ( state.selectedTotalTime === null ) {
+                state.selectedTotalTime = new TotalTime( state.totalTimes.totalTimes()[ state.totalTimes.totalTimes().length - 1 ] );
             }
 
             break;
 
-        case 'SET_SELECTED_LAYER':
-            state = {...state};
+        case 'T07_SET_SELECTED_LAYER':
+            state = { ...state };
             state.selectedLayerNumber = action.payload;
             break;
 
-        case 'SET_SELECTED_RESULT_TYPE':
-            state = {...state};
+        case 'T07_SET_SELECTED_RESULT_TYPE':
+            state = { ...state };
             state.selectedResultType = action.payload;
             break;
 
-        case 'SET_SELECTED_TOTAL_TIME':
-            state = {...state};
+        case 'T07_SET_SELECTED_TOTAL_TIME':
+            state = { ...state };
             state.selectedTotalTime = action.payload;
             break;
 
-        case 'SET_MODEL_RESULT':
-            state = {...state};
+        case 'T07_SET_MODEL_RESULT':
+            state = { ...state };
             state.models.map( m => {
-               if (m.modelId === action.payload.modelId()){
-                   m.result = action.payload;
-                   return m;
-               }
-            });
+                if ( m.modelId === action.payload.modelId() ) {
+                    m.result = action.payload;
+                    return m;
+                }
+            } );
 
             break;
 
-        case 'TOGGLE_MODEL_SELECTION':
-            state = {...state};
+        case 'T07_TOGGLE_MODEL_SELECTION':
+            state = { ...state };
             state.models.map( m => {
-                if (m.modelId === action.payload){
+                if ( m.modelId === action.payload ) {
                     m.toggleSelection();
                 }
-            });
+            } );
+            break;
+
+        case 'T07_SET_BOUNDS':
+            console.log( 'bounds in reducer', action.payload );
+            state = {
+                ...state,
+                bounds: action.payload
+            };
             break;
     }
 

@@ -17,10 +17,9 @@ export function fetchModelDetails( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/'+id+'.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
             }
         } ).then( ( { action } ) => {
-
             const area = JSON.parse(action.payload.data.base_model.area);
             const boundingBox = JSON.parse(action.payload.data.base_model.bounding_box);
             const gridSize = JSON.parse(action.payload.data.base_model.grid_size);
@@ -36,6 +35,12 @@ export function fetchModelDetails( id ) {
             );
 
             dispatch( setModelDetails( baseModel ) );
+            const yMin = (baseModel.boundingBox.y_min < baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
+            const yMax = (baseModel.boundingBox.y_min > baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
+            const xMin = (baseModel.boundingBox.x_min < baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
+            const xMax = (baseModel.boundingBox.x_min > baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
+            console.log('bounds in thunk action', [[yMin, xMin], [yMax, xMax]]);
+            dispatch( setBounds( [[yMin, xMin], [yMax, xMax]] ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.modelId ) );
             dispatch( fetchTotalTimes( baseModel.modelId,  new ResultType('head'), new LayerNumber(3)) );
@@ -56,7 +61,6 @@ export function fetchModelDetails( id ) {
                 dispatch( setModelDetails( scenario ) );
                 dispatch( fetchModelBoundaries( scenario.modelId ) );
             });
-
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -69,7 +73,7 @@ export function fetchModelBoundaries( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/'+id+'/boundaries.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/boundaries.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
             }
         } ).then( ( { action } ) => {
             const modelId = id;
@@ -81,7 +85,6 @@ export function fetchModelBoundaries( id ) {
 
             const payload = new ModflowModelBoundaries(modelId, boundaries);
             dispatch( setModelBoundaries( payload ) );
-
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -94,17 +97,15 @@ export function fetchLayerValues( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/'+id+'/calculation/layervalues.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/layervalues.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
             }
         } ).then( ( { action } ) => {
-
             dispatch( setLayerValues( new ModflowLayerValues( id, action.payload.data) ) );
-
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
         } );
-    }
+    };
 }
 
 export function fetchTotalTimes( id, type, layer ) {
@@ -112,38 +113,33 @@ export function fetchTotalTimes( id, type, layer ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/'+ id +'/calculation/times/type/'+ type.toString() +'/layer/'+ layer.toString() +'.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/times/type/' + type.toString() + '/layer/' + layer.toString() + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
             }
         } ).then( ( { action } ) => {
-
             dispatch( setTotalTimes( new TotalTimes( id, type, layer, action.payload.data.start_date, action.payload.data.end_date, action.payload.data.total_times )));
-
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
         } );
-    }
+    };
 }
 
-export function updateResults( id, resultType, layerNumber, totalTime ){
-
-    const url = '/scenarioanalysis/model/'+ id +'/calculation/result/type/'+ resultType.toString() +'/layer/'+ layerNumber.toString() +'/totim/'+ totalTime.toString();
+export function updateResults( id, resultType, layerNumber, totalTime ) {
+    const url = '/scenarioanalysis/model/' + id + '/calculation/result/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
 
     return dispatch => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( url +'.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
             }
         } ).then( ( { action } ) => {
-
-            dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, url+'.png')) );
-
+            dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, url + '.png')) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
         } );
-    }
+    };
 }
 
 export function setTotalTimes( totalTimes ) {
@@ -152,10 +148,9 @@ export function setTotalTimes( totalTimes ) {
     }
 
     return {
-        type: 'SET_TOTAL_TIMES',
+        type: 'T07_SET_TOTAL_TIMES',
         payload: totalTimes
     };
-
 }
 
 export function setModelDetails( details ) {
@@ -164,7 +159,7 @@ export function setModelDetails( details ) {
     }
 
     return {
-        type: 'SET_MODEL_DETAILS',
+        type: 'T07_SET_MODEL_DETAILS',
         payload: details
     };
 }
@@ -175,7 +170,7 @@ export function setModelBoundaries( boundaries ) {
     }
 
     return {
-        type: 'SET_MODEL_BOUNDARIES',
+        type: 'T07_SET_MODEL_BOUNDARIES',
         payload: boundaries
     };
 }
@@ -186,7 +181,7 @@ export function setLayerValues( layerValues ) {
     }
 
     return {
-        type: 'SET_MODEL_LAYERVALUES',
+        type: 'T07_SET_MODEL_LAYERVALUES',
         payload: layerValues
     };
 }
@@ -197,14 +192,14 @@ export function setResults( modflowModelResult ) {
     }
 
     return {
-        type: 'SET_MODEL_RESULT',
+        type: 'T07_SET_MODEL_RESULT',
         payload: modflowModelResult
     };
 }
 
 export function toggleModelSelection( modelId ) {
     return {
-        type: 'TOGGLE_MODEL_SELECTION',
+        type: 'T07_TOGGLE_MODEL_SELECTION',
         payload: modelId
     };
 }
@@ -215,7 +210,7 @@ export function setSelectedLayer( layer ) {
     }
 
     return {
-        type: 'SET_SELECTED_LAYER',
+        type: 'T07_SET_SELECTED_LAYER',
         payload: layer
     };
 }
@@ -226,7 +221,7 @@ export function setSelectedResultType( resultType ) {
     }
 
     return {
-        type: 'SET_SELECTED_RESULT_TYPE',
+        type: 'T07_SET_SELECTED_RESULT_TYPE',
         payload: resultType
     };
 }
@@ -237,7 +232,15 @@ export function setSelectedTotalTime( totalTime ) {
     }
 
     return {
-        type: 'SET_SELECTED_TOTAL_TIME',
+        type: 'T07_SET_SELECTED_TOTAL_TIME',
         payload: totalTime
+    };
+}
+
+export function setBounds( bounds ) {
+    console.log('bounds in action', bounds);
+    return {
+        type: 'T07_SET_BOUNDS',
+        payload: bounds
     };
 }

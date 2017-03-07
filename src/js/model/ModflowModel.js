@@ -16,8 +16,8 @@ export default class ModflowModel {
     isBaseModel;
     result;
 
-    static fromModflowDetails(details){
-        let model = new ModflowModel(details.modelId, details.isBaseModel);
+    static fromModflowDetails(details) {
+        const model = new ModflowModel(details.modelId, details.isBaseModel);
         model.area = details.area;
         model.name = details.name;
         model.description = details.description;
@@ -45,7 +45,7 @@ export default class ModflowModel {
             if (b.id === boundary.id) {
                 return boundary;
             }
-        })
+        });
     }
 
     isSelected() {

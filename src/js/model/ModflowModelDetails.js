@@ -1,4 +1,4 @@
-export default class ModflowModelDetails{
+export default class ModflowModelDetails {
 
     modelId = null;
     name = null;
@@ -8,7 +8,7 @@ export default class ModflowModelDetails{
     gridSize = null;
     isBaseModel = null;
 
-    constructor(modelId, name, description, area, boundingBox, gridSize, isBaseModel = false){
+    constructor(modelId, name, description, area, boundingBox, gridSize, isBaseModel = false) {
         this.modelId = modelId;
         this.name = name;
         this.description = description;
@@ -16,5 +16,5 @@ export default class ModflowModelDetails{
         this.boundingBox = boundingBox;
         this.gridSize = gridSize;
         this.isBaseModel = isBaseModel;
-    };
+    }
 }
