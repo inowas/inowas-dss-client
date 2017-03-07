@@ -38,7 +38,7 @@ export default class Dashboard extends React.Component {
         return tools.map(( tool, index ) => {
             return (
                 <li key={index}>
-                    <button onClick={this.setToolSelection( tool.slug )} className="link" href="#">{tool.slug}</button>
+                    <button onClick={this.setToolSelection( tool.slug )} className="link" href="#">{tool.slug + ': ' + tool.name}</button>
                 </li>
             );
         });
@@ -46,16 +46,18 @@ export default class Dashboard extends React.Component {
 
     renderTableRows( models ) {
         return models.map(( model, index ) => {
+            const createdAt = new Date(model.created_at);
+
             return (
                 <tr key={index}>
-                    <td>{model.id}</td>
+                    <td>{index}</td>
                     <td>{model.name}</td>
-                    <td/>
-                    <td/>
-                    <td>{model.created_at}</td>
+                    <td>{model.project}</td>
+                    <td>{model.application}</td>
+                    <td>{createdAt.getDay() + '.' + createdAt.getMonth()}</td>
                     <td>{model.user_id}</td>
                     <td>
-                        <Link className="link" to={'tools/T07/' + model.model_id}>edit</Link>
+                        {!model.fake && <Link className="link" to={'tools/T07/' + model.model_id}>edit</Link>}
                     </td>
                 </tr>
             );
