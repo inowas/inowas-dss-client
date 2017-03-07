@@ -1,22 +1,31 @@
-import React from 'react'
+import React from 'react';
 import {connect} from 'react-redux';
 
 import '../../../less/4TileTool.less';
 
-import Background from '../../components/tools/Background'
-import Chart from '../../components/tools/ChartT02'
+import Background from '../../components/tools/Background';
+import Chart from '../../components/tools/ChartT02';
 import Settings from '../../components/tools/SettingsT02';
-import Parameters from '../../components/tools/Parameters'
-import {changeSettings, changeParameter, calculate, reset} from '../../actions/T02'
+import Parameters from '../../components/tools/Parameters';
+import {changeSettings, changeParameter, calculate, reset} from '../../actions/T02';
 import Header from '../../components/tools/Header';
+import Icon from '../../components/primitive/Icon';
+import Navbar from '../Navbar';
 
 @connect((store) => {
-    return {tool: store.T02}
+    return {tool: store.T02};
 })
 export default class T02 extends React.Component {
 
-    handleChange = (e) => {
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'http://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
+            icon: <Icon name="file"/>
+        }]
+    }
 
+    handleChange = (e) => {
         if (e.target.name == 'variable') {
             this.props.dispatch(changeSettings(e.target.value));
         }
@@ -24,11 +33,11 @@ export default class T02 extends React.Component {
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
-            let parameter = {};
+            const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this.props.dispatch(changeParameter(parameter));
         }
     };
 
@@ -37,36 +46,39 @@ export default class T02 extends React.Component {
     };
 
     componentWillMount() {
-        this.props.dispatch(calculate())
+        this.props.dispatch(calculate());
     }
 
     render() {
+        const { navigation } = this.state;
+
         const variable = this.props.tool.settings.variable;
         const parameters = this.props.tool.parameters;
         const w = parameters.find(p => {
-            return p.id == 'w'
+            return p.id == 'w';
         }).value;
         const L = parameters.find(p => {
-            return p.id == 'L'
+            return p.id == 'L';
         }).value;
         const W = parameters.find(p => {
-            return p.id == 'W'
+            return p.id == 'W';
         }).value;
         const hi = parameters.find(p => {
-            return p.id == 'hi'
+            return p.id == 'hi';
         }).value;
         const Sy = parameters.find(p => {
-            return p.id == 'Sy'
+            return p.id == 'Sy';
         }).value;
         const K = parameters.find(p => {
-            return p.id == 'K'
+            return p.id == 'K';
         }).value;
         const t = parameters.find(p => {
-            return p.id == 't'
+            return p.id == 't';
         }).value;
 
         return (
             <div className="app-width">
+                <Navbar links={navigation} />
                 <Header title={'T02. Groundwater mounding (Hantush)'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -88,6 +100,6 @@ export default class T02 extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }

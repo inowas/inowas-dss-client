@@ -1,48 +1,49 @@
-import React from 'react'
-import {connect} from 'react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 
 import '../../../less/4TileTool.less';
 
-import Background from '../../components/tools/Background'
-import Chart from '../../components/tools/ChartT18'
-import Info from '../../components/tools/InfoT18'
-import Parameters from '../../components/tools/Parameters'
-import {changeParameter, calculate, reset} from '../../actions/T18'
+import Background from '../../components/tools/Background';
+import Chart from '../../components/tools/ChartT18';
+import Info from '../../components/tools/InfoT18';
+import Parameters from '../../components/tools/Parameters';
+import { changeParameter, calculate, reset } from '../../actions/T18';
+import Navbar from '../Navbar';
 
 import Header from '../../components/tools/Header';
 
-@connect((store) => {
-    return {tool: store.T18}
+@connect(( store ) => {
+    return { tool: store.T18 };
 })
 export default class T18 extends React.Component {
 
-    handleChange = (e) => {
+    handleChange = ( e ) => {
+        if (e.target.name.startsWith( 'parameter' )) {
+            const param = e.target.name.split( '_' );
 
-        if (e.target.name.startsWith('parameter')) {
-            const param = e.target.name.split('_');
-
-            let parameter = {};
+            const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this.props.dispatch(changeParameter( parameter ));
         }
     };
 
-    handleReset = () => {
-        this.props.dispatch(reset());
+    handleReset = ( ) => {
+        this.props.dispatch(reset( ));
     };
 
-    componentWillMount() {
-        this.props.dispatch(calculate())
+    componentWillMount( ) {
+        this.props.dispatch(calculate( ));
     }
 
-    render() {
+    render( ) {
         return (
             <div className="app-width">
+                <Navbar links={[ ]}/>
                 <Header title={'T18. SAT basin design'}/>
                 <div className="grid-container">
-                    <section className="tile col col-abs-2 stacked"></section>
+                    <section className="tile col col-abs-2 stacked" />
 
                     <section className="tile col col-abs-3 stretch">
                         <Chart data={this.props.tool.chart.data} info={this.props.tool.info} options={this.props.tool.chart.options}/>
@@ -59,6 +60,6 @@ export default class T18 extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }

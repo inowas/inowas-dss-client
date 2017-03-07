@@ -1,29 +1,29 @@
-import React from 'react'
+import React from 'react';
 import {connect} from 'react-redux';
 
 import '../../../less/4TileTool.less';
 
-import Background from '../../components/tools/Background'
-import Chart from '../../components/tools/ChartT13A'
-import Parameters from '../../components/tools/Parameters'
-import {changeParameter, calculate, reset} from '../../actions/T13A'
+import Background from '../../components/tools/Background';
+import Chart from '../../components/tools/ChartT13A';
+import Parameters from '../../components/tools/Parameters';
+import {changeParameter, calculate, reset} from '../../actions/T13A';
 import Header from '../../components/tools/Header';
+import Navbar from '../Navbar';
 
 @connect((store) => {
-    return {tool: store.T13A}
+    return {tool: store.T13A};
 })
 export default class T13A extends React.Component {
 
     handleChange = (e) => {
-
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
-            let parameter = {};
+            const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this.props.dispatch(changeParameter(parameter));
         }
     };
 
@@ -32,12 +32,13 @@ export default class T13A extends React.Component {
     };
 
     componentWillMount() {
-        this.props.dispatch(calculate())
+        this.props.dispatch(calculate());
     }
 
     render() {
         return (
             <div className="app-width">
+                <Navbar links={[]} />
                 <Header title={'T13_a. Travel time // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -50,13 +51,13 @@ export default class T13A extends React.Component {
                 </div>
 
                 <div className="grid-container">
-                    <section className="tile col col-abs-2"></section>
+                    <section className="tile col col-abs-2" />
 
                     <section className="tile col col-abs-3 stretch">
                         <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }

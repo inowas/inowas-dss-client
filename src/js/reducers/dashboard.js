@@ -1,7 +1,10 @@
+import { unionBy } from 'lodash';
+
 const initialState = {
     tools: [ {
         slug: 'T02',
         name: 'Groundwater mounding (Hantush)',
+        path: 'tools/T02/',
         models: [ {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
             user_id: 'Jana Glaß',
@@ -78,8 +81,9 @@ const initialState = {
     }, {
         slug: 'T07',
         name: 'Scenario Analysis',
+        path: 'tools/T07/',
         models: [ {
-            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
+            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec2',
             user_id: 'Ralf Junghanns',
             name: 'DEFAULT MODEL',
             description: 'Description',
@@ -96,7 +100,8 @@ const dashboard = ( state = initialState, action ) => {
     switch ( action.type ) {
         case 'SET_DASHBOARD_MODELS_TO7':
             newState = { ...state };
-            newState.tools.find( t => { return ( t.slug === 'T07' ); } ).models = action.payload;
+            state.tools.find( t => { return ( t.slug === 'T07' ); } ).models = unionBy(action.payload, state.tools.find( t => { return ( t.slug === 'T07' ); } ).models, 'model_id');
+            break;
     }
     return newState;
 };

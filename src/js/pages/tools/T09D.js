@@ -9,14 +9,14 @@ import Settings from '../../components/tools/SettingsT09D';
 import Parameters from '../../components/tools/Parameters';
 import {changeSettings, changeParameter, calculate, reset} from '../../actions/T09D';
 import Header from '../../components/tools/Header';
+import Navbar from '../Navbar';
 
 @connect((store) => {
-    return {tool: store.T09D}
+    return {tool: store.T09D};
 })
 export default class T09D extends React.Component {
 
     handleChange = (e) => {
-
         if (e.target.name === 'settings') {
             this.props.dispatch(changeSettings(e.target.value));
         }
@@ -24,11 +24,11 @@ export default class T09D extends React.Component {
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
-            let parameter = {};
+            const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this.props.dispatch(changeParameter(parameter));
         }
     };
 
@@ -37,12 +37,13 @@ export default class T09D extends React.Component {
     };
 
     componentWillMount() {
-        this.props.dispatch(calculate())
+        this.props.dispatch(calculate());
     }
 
     render() {
         return (
             <div className="app-width">
+                <Navbar links={[]} />
                 <Header title={'T09_d. Saltwater intrusion // Critical well discharge'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -64,6 +65,6 @@ export default class T09D extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }

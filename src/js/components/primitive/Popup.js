@@ -9,7 +9,7 @@ export default class Popup extends Component {
     static propTypes = {
         visible: PropTypes.bool,
         children: PropTypes.node,
-        className: PropTypes.String,
+        className: PropTypes.string,
         close: PropTypes.func
     }
 

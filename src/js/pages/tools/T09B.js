@@ -1,30 +1,30 @@
-import React from "react"
-import {connect} from "react-redux";
+import React from 'react';
+import {connect} from 'react-redux';
 
 import '../../../less/4TileTool.less';
 
-import Background from "../../components/tools/Background"
-import Chart from "../../components/tools/ChartT09B"
-import Parameters from "../../components/tools/Parameters"
-import {changeParameter, calculate, reset} from "../../actions/T09B"
+import Background from '../../components/tools/Background';
+import Chart from '../../components/tools/ChartT09B';
+import Parameters from '../../components/tools/Parameters';
+import {changeParameter, calculate, reset} from '../../actions/T09B';
 
 import Header from '../../components/tools/Header';
+import Navbar from '../Navbar';
 
 @connect((store) => {
-    return {tool: store.T09B}
+    return {tool: store.T09B};
 })
 export default class T09B extends React.Component {
 
     handleChange = (e) => {
-
         if (e.target.name.startsWith('parameter')) {
-            const param = e.target.name.split("_");
+            const param = e.target.name.split('_');
 
-            let parameter = {};
+            const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this.props.dispatch(changeParameter(parameter));
         }
     };
 
@@ -33,12 +33,13 @@ export default class T09B extends React.Component {
     };
 
     componentWillMount() {
-        this.props.dispatch(calculate())
+        this.props.dispatch(calculate());
     }
 
     render() {
         return (
             <div className="app-width">
+                <Navbar links={[]} />
                 <Header title={'T09_b. Saltwater intrusion // Shape of freshwater-saltwater interface (Glover equation)'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -57,6 +58,6 @@ export default class T09B extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }

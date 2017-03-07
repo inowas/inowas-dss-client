@@ -1,10 +1,14 @@
-import React from 'react'
+import React from 'react';
 import Iframe from 'react-iframe';
+import Navbar from '../Navbar';
 
 export default class T22 extends React.Component {
-    render() {
+    render( ) {
         return (
-            <Iframe url="https://ggis.un-igrac.org/ggis-viewer/viewer/globalmar/public/default" />
-        )
+            <div>
+                <Navbar links={[ ]}/>
+                <Iframe url="https://ggis.un-igrac.org/ggis-viewer/viewer/globalmar/public/default"/>
+            </div>
+        );
     }
 }
