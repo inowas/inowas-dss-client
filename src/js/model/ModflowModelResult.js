@@ -39,7 +39,11 @@ export default class ModflowModelResult {
         return this._data;
     }
 
-    imgUrl(){
-        return this._imgUrl;
+    imgUrl(min = null, max=null){
+        if (min == null || max == null){
+            return this._imgUrl;
+        }
+
+        return this._imgUrl+'?min='+ min + '&max=' + max;
     }
 }

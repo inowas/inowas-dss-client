@@ -1,3 +1,4 @@
+import axios from '../axios'
 import ConfiguredAxios from 'ConfiguredAxios';
 import store from '../store';
 import ModflowBoundary from '../model/ModflowBoundary';
@@ -125,6 +126,7 @@ export function fetchTotalTimes( id, type, layer ) {
 }
 
 export function updateResults( id, resultType, layerNumber, totalTime ) {
+    const baseUrl = axios.defaults.baseURL.replace('api', 'image');
     const url = '/scenarioanalysis/model/' + id + '/calculation/result/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
 
     return dispatch => {
@@ -134,7 +136,7 @@ export function updateResults( id, resultType, layerNumber, totalTime ) {
                 promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, url + '.png')) );
+            dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png')) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -238,7 +240,6 @@ export function setSelectedTotalTime( totalTime ) {
 }
 
 export function setBounds( bounds ) {
-    console.log('bounds in action', bounds);
     return {
         type: 'T07_SET_BOUNDS',
         payload: bounds

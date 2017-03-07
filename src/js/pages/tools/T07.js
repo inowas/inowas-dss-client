@@ -69,9 +69,9 @@ export default class T07 extends Component {
                 icon: <Icon name="layer_horizontal_hatched"/>
             }
         ]
-    }
+    };
 
-    componentWillMount( ) {
+    componentWillMount() {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
 
@@ -82,9 +82,8 @@ export default class T07 extends Component {
     setCrossSection = ( lat, lng ) => {
         const { boundingBox } = this.props.tool;
         const { grid } = this.state;
-
-        const dlat = ( boundingBox[1][0 ] - boundingBox[0][0 ]) / grid[0]; // row width of bounding box grid
-        const dlng = ( boundingBox[1][1 ] - boundingBox[0][1 ]) / grid[1]; // column width of bounding box grid
+        const dlat = ( boundingBox[1][0] - boundingBox[0][0]) / grid[0]; // row width of bounding box grid
+        const dlng = ( boundingBox[1][1] - boundingBox[0][1]) / grid[1]; // column width of bounding box grid
         const roundedLat = Math.floor( lat / dlat ) * dlat; // start of the row
 
         console.log( 'Clicked Cell in grid of bounding box:' );
@@ -98,12 +97,8 @@ export default class T07 extends Component {
 
         this.setState({
             crossSection: [
-                [roundedLat, boundingBox[0][1 ]
-                ],
-                [
-                    roundedLat + dlat,
-                    boundingBox[1][1 ]
-                ]
+                [roundedLat, boundingBox[0][1]],
+                [roundedLat + dlat, boundingBox[1][1]]
             ]
         });
     };
