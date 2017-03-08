@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import Chart from 'react-c3js'
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
 import Drawer from '../../components/primitive/Drawer';
@@ -166,15 +167,62 @@ export default class T07 extends Component {
         });
     }
 
-    render( ) {
+    renderChart(rowNumber) {
+        const models = this.props.tool.models;
+
+        if (models.countModelsWithResults() == 0) {
+            return null;
+        }
+
+        const columns = [];
+        let leftBorder = 0;
+        let rightBorder = 0;
+
+        models.models().forEach( m => {
+            if (m.isSelected() && m.hasResult()){
+                columns.push(m.chartDataByRowNumber(rowNumber));
+            }
+        });
+
+        let chartData = {columns: columns};
+        let grid = {};
+
+        const baseModel = models.models()[0];
+
+        if (baseModel.hasResult()) {
+            leftBorder = baseModel.chartLeftBorderByRowNumber(rowNumber);
+            rightBorder = baseModel.chartRightBorderByRowNumber(rowNumber);
+
+            grid = {
+                x: {
+                    show: true,
+                    lines: [
+                        {value: leftBorder, text: 'Eastern model border', position: 'middle'},
+                        {value: rightBorder, text: 'Western model border', position: 'middle'}
+                    ]
+                }
+            };
+        }
+
+        return (
+            <div className="grid-container">
+                <section className="tile col stretch">
+                    <ResponsiveContainer width={'100%'} aspect={3}>
+                        <Chart data={chartData} grid={grid} element='testchart' type='pie' />
+                    </ResponsiveContainer>
+                </section>
+            </div>
+        )
+    }
+
+    render() {
         const { navigation } = this.state;
-
-        let { models } = this.props.tool;
-
+        let models = this.props.tool.models.models();
         models = models.map(m => {
             m.thumbnail = 'scenarios_thumb.png';
             return m;
         });
+
 
         return (
             <div className="toolT07 app-width">
@@ -186,35 +234,7 @@ export default class T07 extends Component {
                 <div className="grid-container">
                     {this.renderMaps( models )}
                 </div>
-
-                <div className="grid-container">
-                    <section className="tile col stretch">
-                        <ResponsiveContainer width={'100%'} aspect={3}>
-                            <LineChart data={[
-                                {
-                                    x: 0,
-                                    z: 0
-                                }, {
-                                    x: 1,
-                                    z: 1
-                                }, {
-                                    x: 2,
-                                    z: 4
-                                }
-                            ]} margin={{
-                                top: 20,
-                                right: 20,
-                                left: 20,
-                                bottom: 20
-                            }}>
-                                <XAxis label="x" type="number" dataKey="x"/>
-                                <YAxis label="z" type="number" domain={[ 'auto', 'auto' ]}/>
-                                <CartesianGrid strokeDasharray="3 3"/>
-                                <Line isAnimationActive={false} dataKey={'z'} stroke="#1EB1ED" strokeWidth="2"/>
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </section>
-                </div>
+                {this.renderChart(30)}
             </div>
         );
     }
