@@ -27,7 +27,7 @@ import {
     setSelectedResultType,
     setSelectedTotalTime,
     toggleModelSelection,
-    setBounds
+    setMapView
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -72,19 +72,15 @@ export default class T07 extends Component {
         ]
     };
 
-    componentWillMount() {
+    componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
-
-    updateBounds = bounds => {
-        this.props.dispatch(setBounds( bounds ));
-    };
 
     setCrossSection = ( lat, lng ) => {
         const { boundingBox } = this.props.tool;
         const { grid } = this.state;
-        const dlat = ( boundingBox[1][0] - boundingBox[0][0]) / grid[0]; // row width of bounding box grid
-        const dlng = ( boundingBox[1][1] - boundingBox[0][1]) / grid[1]; // column width of bounding box grid
+        const dlat = ( boundingBox[1][0 ] - boundingBox[0][0 ]) / grid[0]; // row width of bounding box grid
+        const dlng = ( boundingBox[1][1 ] - boundingBox[0][1 ]) / grid[1]; // column width of bounding box grid
         const roundedLat = Math.floor( lat / dlat ) * dlat; // start of the row
 
         console.log( 'Clicked Cell in grid of bounding box:' );
@@ -98,16 +94,23 @@ export default class T07 extends Component {
 
         this.setState({
             crossSection: [
-                [roundedLat, boundingBox[0][1]],
-                [roundedLat + dlat, boundingBox[1][1]]
+                [roundedLat, boundingBox[0][1 ]
+                ],
+                [
+                    roundedLat + dlat,
+                    boundingBox[1][1 ]
+                ]
             ]
         });
     };
 
     toggleSelection = id => {
-        return ( ) => {
+        return ( e ) => {
             this.props.dispatch(toggleModelSelection( id ));
             this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime );
+            const event = document.createEvent( 'HTMLEvents' );
+            event.initEvent( 'resize', true, false );
+            e.target.dispatchEvent( event );
         };
     };
 
@@ -153,15 +156,19 @@ export default class T07 extends Component {
         });
     }
 
+    updateMapView = ( latLng, zoom ) => {
+        this.props.dispatch(setMapView( latLng, zoom ));
+    };
+
     renderMaps( models ) {
         const { crossSection } = this.state;
-        const { bounds } = this.props.tool;
+        const { mapPosition } = this.props.tool;
         return models.filter(model => {
             return model.selected;
-        }).map(( model, index ) => {
+        }).map(( model ) => {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <CrossSectionMap model={model} min={models[0].minValue()} max={models[0].maxValue()} bounds={bounds} updateBounds={this.updateBounds} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
                 </section>
             );
         });

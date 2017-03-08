@@ -11,10 +11,15 @@ function getInitialState() {
         totalTimes: null,
         selectedTotalTime: null,
         models: new ModflowModels(),
-        bounds: [
-            [ -90, -180 ],
-            [ 90, 180 ]
-        ]
+        mapPosition: {
+            bounds: [{
+                lat: -90,
+                lng: -180
+            }, {
+                lat: 90,
+                lng: 180
+            }]
+        }
     };
 }
 
@@ -99,10 +104,16 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             break;
 
         case 'T07_SET_BOUNDS':
-            console.log( 'bounds in reducer', action.payload );
             state = {
                 ...state,
-                bounds: action.payload
+                mapPosition: action.payload
+            };
+            break;
+
+        case 'T07_SET_MAP_VIEW':
+            state = {
+                ...state,
+                mapPosition: action.payload
             };
             break;
     }

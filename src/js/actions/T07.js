@@ -1,4 +1,4 @@
-import axios from '../axios'
+import axios from '../axios';
 import ConfiguredAxios from 'ConfiguredAxios';
 import store from '../store';
 import ModflowBoundary from '../model/ModflowBoundary';
@@ -36,12 +36,18 @@ export function fetchModelDetails( id ) {
             );
 
             dispatch( setModelDetails( baseModel ) );
-            const yMin = (baseModel.boundingBox.y_min < baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
-            const yMax = (baseModel.boundingBox.y_min > baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
-            const xMin = (baseModel.boundingBox.x_min < baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
-            const xMax = (baseModel.boundingBox.x_min > baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
-            console.log('bounds in thunk action', [[yMin, xMin], [yMax, xMax]]);
-            dispatch( setBounds( [[yMin, xMin], [yMax, xMax]] ) );
+            // const yMin = (baseModel.boundingBox.y_min < baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
+            // const yMax = (baseModel.boundingBox.y_min > baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
+            // const xMin = (baseModel.boundingBox.x_min < baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
+            // const xMax = (baseModel.boundingBox.x_min > baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
+            // dispatch( setBounds( [[yMin, xMin], [yMax, xMax]] ) );
+            dispatch( setBounds([{
+                lat: baseModel.boundingBox.y_min,
+                lng: baseModel.boundingBox.x_min
+            }, {
+                lat: baseModel.boundingBox.y_max,
+                lng: baseModel.boundingBox.x_max
+            }]) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.modelId ) );
             dispatch( fetchTotalTimes( baseModel.modelId,  new ResultType('head'), new LayerNumber(3)) );
@@ -242,6 +248,18 @@ export function setSelectedTotalTime( totalTime ) {
 export function setBounds( bounds ) {
     return {
         type: 'T07_SET_BOUNDS',
-        payload: bounds
+        payload: {
+            bounds
+        }
+    };
+}
+
+export function setMapView(center, zoom) {
+    return {
+        type: 'T07_SET_MAP_VIEW',
+        payload: {
+            center,
+            zoom
+        }
     };
 }

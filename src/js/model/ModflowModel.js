@@ -24,7 +24,7 @@ export default class ModflowModel {
         model.description = details.description;
         model.boundingBox = details.boundingBox;
         model.gridSize = details.gridSize;
-        model.selected = true;
+        model.selected = false;
         return model;
     }
 
@@ -58,7 +58,7 @@ export default class ModflowModel {
     }
 
     minValue() {
-        if (this.result instanceof MfResult === false){
+        if (this.result instanceof MfResult === false) {
             return null;
         }
 
@@ -68,7 +68,7 @@ export default class ModflowModel {
     }
 
     maxValue() {
-        if (this.result instanceof MfResult === false){
+        if (this.result instanceof MfResult === false) {
             return null;
         }
 
