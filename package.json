@@ -47,7 +47,7 @@
     "less-loader": "^2.2.3",
     "postcss-loader": "^1.1.1",
     "react": "^15.4.2",
-    "react-c3js": "^0.1.12",
+    "react-c3js": "<=0.1.13",
     "react-dom": "^15.4.0",
     "react-leaflet": "^1.0.2",
     "react-mixin": "^2.0.2",
