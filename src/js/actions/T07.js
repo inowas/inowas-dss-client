@@ -263,3 +263,10 @@ export function setMapView(center, zoom) {
         }
     };
 }
+
+export function setActiveGridCell(cell) {
+    return {
+        type: 'T07_SET_ACTIVE_GRID_CELL',
+        payload: cell
+    };
+}

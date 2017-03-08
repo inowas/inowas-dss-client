@@ -18,6 +18,10 @@ function getInitialState() {
                 lat: 90,
                 lng: 180
             }]
+        },
+        activeGridCell: {
+            x: null,
+            y: null
         }
     };
 }
@@ -113,6 +117,13 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state = {
                 ...state,
                 mapPosition: action.payload
+            };
+            break;
+
+        case 'T07_SET_ACTIVE_GRID_CELL':
+            state = {
+                ...state,
+                activeGridCell: action.payload
             };
             break;
     }

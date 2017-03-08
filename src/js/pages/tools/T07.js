@@ -26,7 +26,8 @@ import {
     setSelectedResultType,
     setSelectedTotalTime,
     toggleModelSelection,
-    setMapView
+    setMapView,
+    setActiveGridCell
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -46,10 +47,6 @@ export default class T07 extends Component {
     };
 
     state = {
-        grid: [
-            160, 170
-        ],
-        crossSection: null,
         navigation: [
             {
                 name: 'Cross section',
@@ -75,38 +72,16 @@ export default class T07 extends Component {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
 
-    setCrossSection = ( lat, lng ) => {
-        const { boundingBox } = this.props.tool;
-        const { grid } = this.state;
-        const dlat = ( boundingBox[1][0 ] - boundingBox[0][0 ]) / grid[0]; // row width of bounding box grid
-        const dlng = ( boundingBox[1][1 ] - boundingBox[0][1 ]) / grid[1]; // column width of bounding box grid
-        const roundedLat = Math.floor( lat / dlat ) * dlat; // start of the row
-
-        console.log( 'Clicked Cell in grid of bounding box:' );
-        console.log('x:', Math.floor( ( lng - boundingBox[0][1 ]) / dlng )); // x coordinate of bounding box grid from 0 to grid[1]-1
-        console.log('y:', grid[0] - 1 - Math.floor( ( lat - boundingBox[0][0 ]) / dlat )); // y coordinate of bounding box grid from 0 to grid[0]-1
-
-        if ( lat < boundingBox[0][0 ] || lat > boundingBox[1][0 ] || lng < boundingBox[0][1 ] || lng > boundingBox[1][1 ]) {
-            // clickedPoint is outside boundingBox
-            return;
-        }
-
-        this.setState({
-            crossSection: [
-                [roundedLat, boundingBox[0][1 ]
-                ],
-                [
-                    roundedLat + dlat,
-                    boundingBox[1][1 ]
-                ]
-            ]
-        });
+    setCrossSection = ( cell ) => {
+        this.props.dispatch( setActiveGridCell(cell) );
     };
 
     toggleSelection = id => {
         return ( e ) => {
             this.props.dispatch(toggleModelSelection( id ));
             this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime );
+
+            // manually emit a resize event so the leaflet maps recalculate their container size
             const event = document.createEvent( 'HTMLEvents' );
             event.initEvent( 'resize', true, false );
             e.target.dispatchEvent( event );
@@ -160,14 +135,13 @@ export default class T07 extends Component {
     };
 
     renderMaps( models ) {
-        const { crossSection } = this.state;
-        const { mapPosition } = this.props.tool;
+        const { mapPosition, activeGridCell } = this.props.tool;
         return models.filter(model => {
             return model.selected;
         }).map(( model ) => {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} setCrossSection={this.setCrossSection} crossSection={crossSection}/>
+                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
                 </section>
             );
         });
