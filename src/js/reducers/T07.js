@@ -29,10 +29,6 @@ function getInitialState() {
 
 const T07Reducer = ( state = getInitialState(), action ) => {
     switch ( action.type ) {
-        case 'SET_TOOL_T07_MODEL_LIST':
-            state = { ...state };
-            break;
-
         case 'T07_SET_MODEL_DETAILS':
             state = { ...state };
 

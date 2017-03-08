@@ -36,6 +36,7 @@
     "dateformat": "^2.0.0",
     "eslint": "^3.13.1",
     "eslint-config-xo-react": "^0.10.0",
+    "eslint-plugin-es6-recommended": "^0.1.2",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-react": "^6.9.0",
     "extract-text-webpack-plugin": "^1.0.1",

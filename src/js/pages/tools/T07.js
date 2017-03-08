@@ -66,10 +66,6 @@ export default class T07 extends Component {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
 
-    setCrossSection = ( cell ) => {
-        this.props.dispatch( setActiveGridCell(cell) );
-    };
-
     toggleSelection = id => {
         return ( e ) => {
             this.props.dispatch(toggleModelSelection( id ));
@@ -124,13 +120,57 @@ export default class T07 extends Component {
         });
     }
 
+    selectLayer = ( e ) => {
+        const valueSplitted = e.target.value.split('_');
+        this.changeLayerValue(new LayerNumber(valueSplitted[0]), new ResultType(valueSplitted[1]));
+    }
+
+    renderSelectOptions( options, optionIndex ) {
+        return options.map(( o, index ) => {
+            let selected = false;
+
+            if ( this.props.tool.selectedLayerNumber === optionIndex && this.props.tool.selectedResultType === o ) {
+                selected = true;
+            }
+
+            return (
+                <option key={index} value={optionIndex + '_' + o} selected={selected}>{'Layer ' + optionIndex + ' ' + o}</option>
+            );
+        });
+    }
+
+    renderSelectOptgroups( layerValues ) {
+        if ( layerValues !== null ) {
+            return layerValues.map(( l, index ) => {
+                return (
+                    <optgroup key={index} label={'Layer ' + index}>
+                        {this.renderSelectOptions( l, index )}
+                    </optgroup>
+                );
+            });
+        }
+        return null;
+    }
+
+    renderSelect( ) {
+        return (
+            <select className="layer-select" onChange={this.selectLayer}>
+                {this.renderSelectOptgroups( this.props.tool.layerValues )}
+            </select>
+        );
+    }
+
     updateMapView = ( latLng, zoom ) => {
         this.props.dispatch(setMapView( latLng, zoom ));
     };
 
-    updateBounds = (bounds) => {
+    updateBounds = ( bounds ) => {
         this.props.dispatch(setBounds( bounds ));
     }
+
+    setCrossSection = ( cell ) => {
+        this.props.dispatch(setActiveGridCell( cell ));
+    };
 
     renderMaps( models ) {
         const { mapPosition, activeGridCell } = this.props.tool;
@@ -145,43 +185,52 @@ export default class T07 extends Component {
         });
     }
 
-    renderChart() {
+    renderChart( ) {
         const models = this.props.tool.models;
 
-        if (models.countModelsWithResults() === 0) {
+        if ( models.countModelsWithResults( ) === 0 ) {
             return null;
         }
 
         const rowNumber = this.props.tool.activeGridCell.y;
-        if (rowNumber === null) {
+        if ( rowNumber === null ) {
             return null;
         }
 
-        const columns = [];
+        const columns = [ ];
         let leftBorder = 0;
         let rightBorder = 0;
 
-        models.models().forEach( m => {
-            if (m.isSelected() && m.hasResult()) {
-                columns.push(m.chartDataByRowNumber(rowNumber));
+        models.models( ).forEach(m => {
+            if (m.isSelected( ) && m.hasResult( )) {
+                columns.push(m.chartDataByRowNumber( rowNumber ));
             }
         });
 
-        const chartData = {columns: columns};
+        const chartData = {
+            columns: columns
+        };
         let grid = {};
 
-        const baseModel = models.models()[0];
+        const baseModel = models.models( )[ 0 ];
 
-        if (baseModel.hasResult()) {
-            leftBorder = baseModel.chartLeftBorderByRowNumber(rowNumber);
-            rightBorder = baseModel.chartRightBorderByRowNumber(rowNumber);
+        if (baseModel.hasResult( )) {
+            leftBorder = baseModel.chartLeftBorderByRowNumber( rowNumber );
+            rightBorder = baseModel.chartRightBorderByRowNumber( rowNumber );
 
             grid = {
                 x: {
                     show: true,
                     lines: [
-                        {value: leftBorder, text: 'Eastern model border', position: 'middle'},
-                        {value: rightBorder, text: 'Western model border', position: 'middle'}
+                        {
+                            value: leftBorder,
+                            text: 'Eastern model border',
+                            position: 'middle'
+                        }, {
+                            value: rightBorder,
+                            text: 'Western model border',
+                            position: 'middle'
+                        }
                     ]
                 }
             };
@@ -190,20 +239,19 @@ export default class T07 extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} element="testchart" type="pie" />
+                    <Chart data={chartData} grid={grid} element="testchart" type="pie"/>
                 </section>
             </div>
         );
     }
 
-    render() {
+    render( ) {
         const { navigation } = this.state;
-        let models = this.props.tool.models.models();
+        let models = this.props.tool.models.models( );
         models = models.map(m => {
             m.thumbnail = 'scenarios_thumb.png';
             return m;
         });
-
 
         return (
             <div className="toolT07 app-width">
@@ -211,11 +259,11 @@ export default class T07 extends Component {
                 <Drawer visible>
                     <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
                 </Drawer>
-                <Header title={'T07. Scenario Analysis'}/>
+                <Header title={'T07. Scenario Analysis'}/> {this.renderSelect( )}
                 <div className="grid-container">
                     {this.renderMaps( models )}
                 </div>
-                {this.renderChart()}
+                {this.renderChart( )}
             </div>
         );
     }
