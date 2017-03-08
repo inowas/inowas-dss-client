@@ -273,7 +273,7 @@ export default class T07 extends Component {
                 </div>
                 <div className="grid-container">
                     <div className="tile col stretch">
-                        <RangeSlider min={0} max={10} step={1} value={sliderValue} onChange={this.updateSliderValue} />
+                        <RangeSlider min={0} max={1000} step={1} value={sliderValue} onChange={this.updateSliderValue} />
                     </div>
                 </div>
                 {this.renderChart( )}
