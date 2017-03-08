@@ -11,9 +11,7 @@ export default class CrossSectionMap extends Component {
         updateBounds: PropTypes.func.isRequired,
         bounds: PropTypes.array,
         setCrossSection: PropTypes.func.isRequired,
-        crossSection: PropTypes.array,
-        min: PropTypes.number.isRequired,
-        max: PropTypes.number.isRequired
+        crossSection: PropTypes.array
     };
 
     handleMove = e => {
