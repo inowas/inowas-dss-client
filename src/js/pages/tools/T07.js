@@ -129,14 +129,8 @@ export default class T07 extends Component {
 
     renderSelectOptions( options, optionIndex ) {
         return options.map(( o, index ) => {
-            let selected = false;
-
-            if ( this.props.tool.selectedLayerNumber === optionIndex && this.props.tool.selectedResultType === o ) {
-                selected = true;
-            }
-
             return (
-                <option key={index} value={optionIndex + '_' + o} selected={selected}>{'Layer ' + optionIndex + ' ' + o}</option>
+                <option key={index} value={optionIndex + '_' + o}>{'Layer ' + optionIndex + ' ' + o}</option>
             );
         });
     }
@@ -156,7 +150,7 @@ export default class T07 extends Component {
 
     renderSelect() {
         return (
-            <select className="layer-select" onChange={this.selectLayer}>
+            <select className="layer-select" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
             </select>
         );
@@ -292,7 +286,8 @@ export default class T07 extends Component {
                 <Drawer visible>
                     <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
                 </Drawer>
-                <Header title={'T07. Scenario Analysis'}/> {this.renderSelect( )}
+                <Header title={'T07. Scenario Analysis'}/>
+                {this.renderSelect( )}
                 <div className="grid-container">
                     {this.renderMaps( models )}
                 </div>
