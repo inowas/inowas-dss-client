@@ -25,7 +25,7 @@ export default class ModflowLayerValues {
     }
 
     getLowestHeadLayer() {
-        for (let i=this._layerCount; i>=0; i--){
+        for (let i=this._layerCount-1; i>=0; i--){
             if (this._layerValues[i].indexOf('head') > -1){
                 return new LayerNumber(i);
             }

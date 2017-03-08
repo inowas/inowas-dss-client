@@ -125,7 +125,7 @@ export default class T07 extends Component {
     selectLayer = ( e ) => {
         const valueSplitted = e.target.value.split('_');
         this.changeLayerValue(new LayerNumber(valueSplitted[0]), new ResultType(valueSplitted[1]));
-    }
+    };
 
     renderSelectOptions( options, optionIndex ) {
         return options.map(( o, index ) => {
@@ -154,7 +154,7 @@ export default class T07 extends Component {
         return null;
     }
 
-    renderSelect( ) {
+    renderSelect() {
         return (
             <select className="layer-select" onChange={this.selectLayer}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
@@ -168,7 +168,7 @@ export default class T07 extends Component {
 
     updateBounds = ( bounds ) => {
         this.props.dispatch(setBounds( bounds ));
-    }
+    };
 
     setCrossSection = ( cell ) => {
         this.props.dispatch(setActiveGridCell( cell ));
@@ -187,7 +187,7 @@ export default class T07 extends Component {
         });
     }
 
-    renderChart( ) {
+    renderChart() {
         const models = this.props.tool.models;
 
         if ( models.countModelsWithResults( ) === 0 ) {
@@ -251,7 +251,7 @@ export default class T07 extends Component {
         this.setState({
             sliderValue: value
         });
-    }
+    };
 
     render( ) {
         const { navigation, sliderValue } = this.state;
