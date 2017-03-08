@@ -2,6 +2,7 @@ import ModflowModels from '../model/ModflowModelsCollection';
 import ModflowModel from '../model/ModflowModel';
 import TotalTime from '../model/TotalTime';
 import ResultType from '../model/ResultType';
+import LayerNumber from '../model/LayerNumber';
 
 function getInitialState() {
     return {
@@ -52,8 +53,11 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.layerValues = action.payload;
 
             if ( state.selectedLayerNumber === null ) {
-                state.selectedLayerNumber = state.layerValues.getLowestHeadLayer();
-                state.selectedResultType = new ResultType( 'head' );
+                if (state.layerValues.getLowestHeadLayer() instanceof LayerNumber){
+                    state.selectedLayerNumber = state.layerValues.getLowestHeadLayer();
+                    state.selectedResultType = new ResultType( 'head' );
+                    break;
+                }
             }
 
             break;
