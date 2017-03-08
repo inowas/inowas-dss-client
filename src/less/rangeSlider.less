@@ -1,0 +1,108 @@
+@import "variables.less";
+
+.rangeSlider {
+    position: relative;
+    padding: @spacing-large 0;
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      margin: 4px 0;
+    }
+
+    .slider:focus {
+      outline: none;
+    }
+
+    .slider::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: @grey-bright;
+      border-radius: 2px;
+    }
+
+    .slider::-moz-range-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: @grey-bright;
+      border-radius: 2px;
+    }
+
+    .slider::-ms-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
+
+    .slider::-ms-fill-lower {
+      background: @grey-bright;
+    }
+
+    .slider::-ms-fill-upper {
+      background: @grey-bright;
+    }
+
+    .slider::-webkit-slider-thumb {
+      height: 12px;
+      width: 12px;
+      border-radius: 6px;
+      border: 0;
+      background: @grey-dark;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -4px;
+    }
+
+    .slider::-moz-range-thumb {
+      height: 12px;
+      width: 12px;
+      border-radius: 6px;
+      border: 0;
+      background: @grey-dark;
+      cursor: pointer;
+    }
+
+    .slider::-ms-thumb {
+      height: 12px;
+      width: 12px;
+      border-radius: 6px;
+      border: 0;
+      background: @grey-dark;
+      cursor: pointer;
+      height: 4px;
+    }
+
+    .slider:focus::-webkit-slider-runnable-track {
+      background: @primary;
+    }
+
+    .slider:focus::-ms-fill-lower {
+      background: @grey-bright;
+    }
+
+    .slider:focus::-ms-fill-upper {
+      background: @primary;
+    }
+
+    .output {
+        position: absolute;
+        top: 0;
+    }
+
+    .min {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    .max {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+}
