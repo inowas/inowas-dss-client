@@ -39,4 +39,17 @@ export default class TotalTimes {
     totalTimes() {
         return this._totalTimes;
     }
+
+    minValue() {
+        return this._totalTimes.sort( (a, b) => { return a-b } )[0];
+    }
+
+    maxValue() {
+        return this._totalTimes.sort( (a, b) => { return b-a } )[0];
+    }
+
+    stepSize() {
+        const totalTimes = this._totalTimes.sort( (a, b) => { return a-b } );
+        return (totalTimes[1]-totalTimes[0]);
+    }
 }

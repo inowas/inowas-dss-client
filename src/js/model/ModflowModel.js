@@ -62,8 +62,6 @@ export default class ModflowModel {
             return null;
         }
 
-        console.log(this.result);
-
         return this.result.min();
     }
 
