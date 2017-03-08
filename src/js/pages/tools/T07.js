@@ -6,6 +6,7 @@ import CrossSectionMap from '../../components/primitive/CrossSectionMap';
 import Drawer from '../../components/primitive/Drawer';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
+import RangeSlider from '../../components/primitive/RangeSlider';
 import Navbar from '../Navbar';
 import ScenarioSelect from '../../components/tools/ScenarioSelect';
 
@@ -59,7 +60,8 @@ export default class T07 extends Component {
                 path: '',
                 icon: <Icon name="layer_horizontal_hatched"/>
             }
-        ]
+        ],
+        sliderValue: 5
     };
 
     componentWillMount( ) {
@@ -245,8 +247,14 @@ export default class T07 extends Component {
         );
     }
 
+    updateSliderValue = value => {
+        this.setState({
+            sliderValue: value
+        });
+    }
+
     render( ) {
-        const { navigation } = this.state;
+        const { navigation, sliderValue } = this.state;
         let models = this.props.tool.models.models( );
         models = models.map(m => {
             m.thumbnail = 'scenarios_thumb.png';
@@ -262,6 +270,11 @@ export default class T07 extends Component {
                 <Header title={'T07. Scenario Analysis'}/> {this.renderSelect( )}
                 <div className="grid-container">
                     {this.renderMaps( models )}
+                </div>
+                <div className="grid-container">
+                    <div className="tile col stretch">
+                        <RangeSlider min={0} max={10} step={1} value={sliderValue} onChange={this.updateSliderValue} />
+                    </div>
                 </div>
                 {this.renderChart( )}
             </div>
