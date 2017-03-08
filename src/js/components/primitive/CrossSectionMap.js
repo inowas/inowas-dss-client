@@ -45,13 +45,12 @@ export default class CrossSectionMap extends Component {
 
         const dlat = ( boundingBox.y_max - boundingBox.y_min) / grid.n_y; // row width of bounding box grid
         const dlng = ( boundingBox.x_max - boundingBox.x_min) / grid.n_x; // column width of bounding box grid
-        const roundedLat = Math.floor( lat / dlat ) * dlat; // start of the row
 
         // console.log( 'Clicked Cell in grid of bounding box:' );
         const x = Math.floor( ( lng - boundingBox.x_min) / dlng );
         // console.log('x:', x); // x coordinate of bounding box grid from 0 to grid[1]-1
         const y = grid.n_y - 1 - Math.floor( ( lat - boundingBox.y_min) / dlat );
-        console.log('y:', y); // y coordinate of bounding box grid from 0 to grid[0]-1
+        // console.log('y:', y); // y coordinate of bounding box grid from 0 to grid[0]-1
 
         // Make sure point is inside bounding box
         if ( y >= 0 && y < grid.n_y && x >= 0 && x < grid.n_x) {
@@ -87,12 +86,12 @@ export default class CrossSectionMap extends Component {
             crossSectionLatRectangle = <Rectangle bounds={[[crossSectionLat, model.boundingBox.x_min], [crossSectionLat + dlat, model.boundingBox.x_max]]}/>;
         }
 
-        let crossSectionLngRectangle = null;
-        if (activeCell && activeCell.x !== null) {
-            const dlng = ( model.boundingBox.x_max - model.boundingBox.x_min) / model.gridSize.n_x; // column width of bounding box grid
-            const crossSectionLng = activeCell.x * dlng + model.boundingBox.x_min;
-            crossSectionLngRectangle = <Rectangle bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}/>;
-        }
+        // let crossSectionLngRectangle = null;
+        // if (activeCell && activeCell.x !== null) {
+        //     const dlng = ( model.boundingBox.x_max - model.boundingBox.x_min) / model.gridSize.n_x; // column width of bounding box grid
+        //     const crossSectionLng = activeCell.x * dlng + model.boundingBox.x_min;
+        //     crossSectionLngRectangle = <Rectangle bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}/>;
+        // }
 
         return (
             <Map className="crossSectionMap" {...mapPosition} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
@@ -101,7 +100,7 @@ export default class CrossSectionMap extends Component {
                 <Rectangle color="#000000" bounds={boundingBox}/>
                 {this.renderHeatMap()}
                 {crossSectionLatRectangle}
-                {crossSectionLngRectangle}
+                {/* crossSectionLngRectangle*/}
                 <button title="reset view" className="button resetView" onClick={this.resetView}><Icon name="marker" /></button>
             </Map>
         );

@@ -11,14 +11,16 @@ import LayerNumber from '../model/LayerNumber';
 import TotalTime from '../model/TotalTime';
 import TotalTimes from '../model/TotalTimes';
 
-const apiKey = store.getState().user.apiKey;
+function apiKey() {
+    return store.getState().user.apiKey;
+}
 
 export function fetchModelDetails( id ) {
     return dispatch => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
             const area = JSON.parse(action.payload.data.base_model.area);
@@ -75,7 +77,7 @@ export function fetchModelBoundaries( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/boundaries.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/boundaries.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
             const modelId = id;
@@ -99,7 +101,7 @@ export function fetchLayerValues( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/layervalues.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/layervalues.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setLayerValues( new ModflowLayerValues( id, action.payload.data) ) );
@@ -115,7 +117,7 @@ export function fetchTotalTimes( id, type, layer ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/times/type/' + type.toString() + '/layer/' + layer.toString() + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/times/type/' + type.toString() + '/layer/' + layer.toString() + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setTotalTimes( new TotalTimes( id, type, layer, action.payload.data.start_date, action.payload.data.end_date, action.payload.data.total_times )));
@@ -134,7 +136,7 @@ export function updateResults( id, resultType, layerNumber, totalTime ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey } } )
+                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png')) );

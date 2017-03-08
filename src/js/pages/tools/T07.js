@@ -8,14 +8,6 @@ import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
 import ScenarioSelect from '../../components/tools/ScenarioSelect';
-import {
-    ResponsiveContainer,
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid
-} from 'recharts';
 
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
@@ -118,7 +110,7 @@ export default class T07 extends Component {
         }
 
         this.props.tool.models.forEach(m => {
-            if ( m.isSelected( ) == false ) {
+            if ( m.isSelected( ) === false ) {
                 return;
             }
 
@@ -155,7 +147,8 @@ export default class T07 extends Component {
 
     renderChart() {
         const models = this.props.tool.models;
-        if (models.countModelsWithResults() == 0) {
+
+        if (models.countModelsWithResults() === 0) {
             return null;
         }
 
@@ -197,9 +190,7 @@ export default class T07 extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <ResponsiveContainer width={'100%'} aspect={3}>
-                        <Chart data={chartData} grid={grid} element="testchart" type="pie" />
-                    </ResponsiveContainer>
+                    <Chart data={chartData} grid={grid} element="testchart" type="pie" />
                 </section>
             </div>
         );
