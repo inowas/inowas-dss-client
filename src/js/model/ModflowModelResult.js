@@ -74,4 +74,12 @@ export default class ModflowModelResult {
         const key = Math.round(values.length/100*percent);
         return values[key];
     }
+
+    rowData(row){
+        if (this._data.length >= row+1) {
+            return this._data[row];
+        }
+
+        return null;
+    }
 }

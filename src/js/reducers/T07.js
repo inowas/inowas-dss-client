@@ -1,3 +1,4 @@
+import ModflowModels from '../model/ModflowModelsCollection';
 import ModflowModel from '../model/ModflowModel';
 import TotalTime from '../model/TotalTime';
 import ResultType from '../model/ResultType';
@@ -9,7 +10,7 @@ function getInitialState() {
         selectedResultType: null,
         totalTimes: null,
         selectedTotalTime: null,
-        models: [],
+        models: new ModflowModels(),
         mapPosition: {
             bounds: [{
                 lat: -90,

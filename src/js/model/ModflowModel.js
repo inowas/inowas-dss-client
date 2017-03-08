@@ -74,4 +74,73 @@ export default class ModflowModel {
 
         return this.result.max();
     }
+
+    chartDataByRowNumber(row) {
+        if (this.result instanceof MfResult === false){
+            return null;
+        }
+
+        const rowData = this.result.rowData(row);
+
+        if (rowData === null){
+            return null;
+        }
+
+        const chartData = [];
+        chartData.push(this.name);
+        rowData.forEach( v => {chartData.push(v)});
+        return chartData;
+    }
+
+    chartLeftBorderByRowNumber(row) {
+        if (this.result instanceof MfResult === false){
+            return null;
+        }
+
+        const rowData = this.result.rowData(row);
+
+        if (rowData === null){
+            return null;
+        }
+
+        let leftBorder = 0;
+        for (let i=0; i<rowData.length; i++){
+            if (rowData[i] === null){
+                continue;
+            }
+
+            leftBorder = i;
+            break;
+        }
+
+        return leftBorder;
+    }
+
+    chartRightBorderByRowNumber(row) {
+        if (this.result instanceof MfResult === false){
+            return null;
+        }
+
+        const rowData = this.result.rowData(row);
+
+        if (rowData === null){
+            return null;
+        }
+
+        let rightBorder = 0;
+        for (let i=rowData.length-1; i>=0; i--){
+            if (rowData[i] === null){
+                continue;
+            }
+
+            rightBorder = i;
+            break;
+        }
+
+        return rightBorder;
+    }
+
+    hasResult() {
+        return (this.result instanceof MfResult);
+    }
 }
