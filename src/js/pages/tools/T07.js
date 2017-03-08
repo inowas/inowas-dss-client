@@ -153,10 +153,14 @@ export default class T07 extends Component {
         });
     }
 
-    renderChart(rowNumber) {
+    renderChart() {
         const models = this.props.tool.models;
-
         if (models.countModelsWithResults() == 0) {
+            return null;
+        }
+
+        const rowNumber = this.props.tool.activeGridCell.y;
+        if (rowNumber === null) {
             return null;
         }
 
@@ -220,7 +224,7 @@ export default class T07 extends Component {
                 <div className="grid-container">
                     {this.renderMaps( models )}
                 </div>
-                {this.props.tool.activeGridCell.y && this.renderChart(this.props.tool.activeGridCell.y)}
+                {this.renderChart()}
             </div>
         );
     }
