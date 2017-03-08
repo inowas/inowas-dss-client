@@ -36,11 +36,6 @@ export function fetchModelDetails( id ) {
             );
 
             dispatch( setModelDetails( baseModel ) );
-            // const yMin = (baseModel.boundingBox.y_min < baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
-            // const yMax = (baseModel.boundingBox.y_min > baseModel.boundingBox.y_max) ? baseModel.boundingBox.y_min : baseModel.boundingBox.y_max;
-            // const xMin = (baseModel.boundingBox.x_min < baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
-            // const xMax = (baseModel.boundingBox.x_min > baseModel.boundingBox.x_max) ? baseModel.boundingBox.x_min : baseModel.boundingBox.x_max;
-            // dispatch( setBounds( [[yMin, xMin], [yMax, xMax]] ) );
             dispatch( setBounds([{
                 lat: baseModel.boundingBox.y_min,
                 lng: baseModel.boundingBox.x_min

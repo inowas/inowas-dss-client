@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import Chart from 'react-c3js'
+import Chart from 'react-c3js';
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
 import Drawer from '../../components/primitive/Drawer';
@@ -28,6 +28,7 @@ import {
     setSelectedTotalTime,
     toggleModelSelection,
     setMapView,
+    setBounds,
     setActiveGridCell
 } from '../../actions/T07';
 
@@ -135,6 +136,10 @@ export default class T07 extends Component {
         this.props.dispatch(setMapView( latLng, zoom ));
     };
 
+    updateBounds = (bounds) => {
+        this.props.dispatch(setBounds( bounds ));
+    }
+
     renderMaps( models ) {
         const { mapPosition, activeGridCell } = this.props.tool;
         return models.filter(model => {
@@ -142,7 +147,7 @@ export default class T07 extends Component {
         }).map(( model ) => {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
                 </section>
             );
         });
@@ -160,12 +165,12 @@ export default class T07 extends Component {
         let rightBorder = 0;
 
         models.models().forEach( m => {
-            if (m.isSelected() && m.hasResult()){
+            if (m.isSelected() && m.hasResult()) {
                 columns.push(m.chartDataByRowNumber(rowNumber));
             }
         });
 
-        let chartData = {columns: columns};
+        const chartData = {columns: columns};
         let grid = {};
 
         const baseModel = models.models()[0];
@@ -189,11 +194,11 @@ export default class T07 extends Component {
             <div className="grid-container">
                 <section className="tile col stretch">
                     <ResponsiveContainer width={'100%'} aspect={3}>
-                        <Chart data={chartData} grid={grid} element='testchart' type='pie' />
+                        <Chart data={chartData} grid={grid} element="testchart" type="pie" />
                     </ResponsiveContainer>
                 </section>
             </div>
-        )
+        );
     }
 
     render() {
@@ -215,7 +220,7 @@ export default class T07 extends Component {
                 <div className="grid-container">
                     {this.renderMaps( models )}
                 </div>
-                {this.renderChart(30)}
+                {this.props.tool.activeGridCell.y && this.renderChart(this.props.tool.activeGridCell.y)}
             </div>
         );
     }

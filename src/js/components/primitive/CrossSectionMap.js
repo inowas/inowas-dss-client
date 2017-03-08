@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 
 import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay } from 'react-leaflet';
 
+import Icon from './Icon';
+
 import '../../../less/crossSectionMap.less';
 
 export default class CrossSectionMap extends Component {
@@ -9,6 +11,7 @@ export default class CrossSectionMap extends Component {
     static propTypes = {
         model: PropTypes.object.isRequired,
         updateMapView: PropTypes.func.isRequired,
+        updateBounds: PropTypes.func.isRequired,
         mapPosition: PropTypes.object.isRequired,
         setClickedCell: PropTypes.func.isRequired,
         activeCell: PropTypes.object
@@ -20,6 +23,17 @@ export default class CrossSectionMap extends Component {
 
         this.props.updateMapView({lat: center.lat, lng: center.lng}, zoom);
     };
+
+    resetView = () => {
+        const {model} = this.props;
+        this.props.updateBounds([{
+            lat: model.boundingBox.y_min,
+            lng: model.boundingBox.x_min
+        }, {
+            lat: model.boundingBox.y_max,
+            lng: model.boundingBox.x_max
+        }]);
+    }
 
     handleClick = e => {
         const lat = e.latlng.lat;
@@ -88,6 +102,7 @@ export default class CrossSectionMap extends Component {
                 {this.renderHeatMap()}
                 {crossSectionLatRectangle}
                 {crossSectionLngRectangle}
+                <button title="reset view" className="button resetView" onClick={this.resetView}><Icon name="marker" /></button>
             </Map>
         );
     }

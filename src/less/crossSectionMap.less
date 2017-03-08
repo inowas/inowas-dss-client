@@ -1,3 +1,13 @@
+@import "variables.less";
+
 .crossSectionMap {
     min-height: 300px;
+    position: relative;
+
+    .resetView {
+        position: absolute;
+        top: @spacing-small;
+        right: @spacing-small;
+        z-index: 1200;
+    }
 }
