@@ -33,6 +33,10 @@ export default class ModflowModel {
         this.isBaseModel = isBaseModel;
     }
 
+    boundaryCount() {
+        return this.boundaries.length;
+    }
+
     containsBoundary(boundary) {
         return this.boundaries.find( b => b.id == boundary.id ) instanceof MfBoundary;
     }
