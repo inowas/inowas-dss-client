@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay } from 'react-leaflet';
+import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay, CircleMarker } from 'react-leaflet';
 
 import Icon from './Icon';
 import ColorLegend from './ColorLegend';
@@ -18,6 +18,29 @@ export default class CrossSectionMap extends Component {
         min: PropTypes.number,
         max: PropTypes.number,
         activeCell: PropTypes.object
+    };
+
+    state = {
+        styles: {
+            inactive: {color: "#000", weight: 0, fillColor: "#000", fillOpacity: 0.7},
+            active: {color: "#ff7800", weight: 0, fillColor: "#000", fillOpacity: 0},
+            boundingBox: {color: "#000", weight: 0.5, fillColor: "blue", fillOpacity: 0.1},
+            area: {color: "#000", weight: 0.5, fillColor: "blue", fillOpacity: 0.1},
+            hasNoWell: {color: "#000", weight: 0, fillOpacity: 0},
+            hasWell: {color: "blue", weight: 1, fillColor: "darkblue", fillOpacity: 1},
+            wells: {
+                cw:  {radius: 3, color: 'black', weight: 1, fillColor: 'darkgreen', fillOpacity: 0.7},
+                iw:  {radius: 3, color: 'black', weight: 1, fillColor: 'darkgreen', fillOpacity: 0.7},
+                sniw:  {radius: 5, color: 'red', weight: 2, fillColor: 'darkgreen', fillOpacity: 0.7},
+                puw: {radius: 3, color: 'black', weight: 1, fillColor: 'darkblue', fillOpacity: 0.7},
+                snpw:  {radius: 5, color: 'red', weight: 2, fillColor: 'darkblue', fillOpacity: 0.7},
+                prw: {radius: 3, color: 'black', weight: 1, fillColor: 'darkblue', fillOpacity: 0.7},
+                smw: {radius: 5, color: 'black', weight: 1, fillColor: 'red', fillOpacity: 1},
+                snw: {radius: 5, color: 'black', weight: 1, fillColor: 'yellow', fillOpacity: 1},
+                snifw:  {radius: 5, color: '#63b3ea', weight: 2, fillColor: '#bbdff6', fillOpacity: 0.7}
+            },
+            river: {color: "#000", weight: 0.5, fillColor: "blue", fillOpacity: 0}
+        },
     };
 
     handleMove = e => {
@@ -86,12 +109,60 @@ export default class CrossSectionMap extends Component {
         );
     }
 
-    render() {
-        const { model, mapPosition, activeCell } = this.props;
+    renderBoundaries() {
+
+        if (this.props.model.boundaryCount() == 0){
+            return null;
+        }
+
+        const boundaries = this.props.model.boundaries;
+        return boundaries.map( b => {
+           if (b.type == 'well'){
+               const name = b.name;
+               const geometry = JSON.parse(b.geometry);
+               const metadata = JSON.parse(b.metadata);
+
+               const style = this.state.styles.wells[metadata.well_type];
+               return (
+                   <CircleMarker
+                       key={b.boundary_id}
+                       center={[geometry.coordinates[1], geometry.coordinates[0]]}
+                       radius={style.radius}
+                       color={style.color}
+                       weight={style.weight}
+                       fillColor={style.fillColor}
+                       fillOpacity={style.fillOpacity}
+                   />
+               )
+           }
+        });
+    }
+
+    renderBoundingBox() {
+
+        const model = this.props.model;
         const boundingBox = [
             [model.boundingBox.y_min, model.boundingBox.x_min],
             [model.boundingBox.y_max, model.boundingBox.x_max]
         ];
+
+        const style = this.state.styles.boundingBox;
+
+        return (
+            <Rectangle
+                bounds={boundingBox}
+                color={style.color}
+                weight={style.weight}
+                fillColor={style.fillColor}
+                fillOpacity={style.fillOpacity}
+            />
+        )
+    }
+
+    renderCrossSectionSelection(lat=true, lng=false) {
+
+        const activeCell = this.props.activeCell;
+        const model = this.props.model;
 
         let crossSectionLatRectangle = null;
         if (activeCell && activeCell.y !== null) {
@@ -100,21 +171,30 @@ export default class CrossSectionMap extends Component {
             crossSectionLatRectangle = <Rectangle bounds={[[crossSectionLat, model.boundingBox.x_min], [crossSectionLat + dlat, model.boundingBox.x_max]]}/>;
         }
 
-        // let crossSectionLngRectangle = null;
-        // if (activeCell && activeCell.x !== null) {
-        //     const dlng = ( model.boundingBox.x_max - model.boundingBox.x_min) / model.gridSize.n_x; // column width of bounding box grid
-        //     const crossSectionLng = activeCell.x * dlng + model.boundingBox.x_min;
-        //     crossSectionLngRectangle = <Rectangle bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}/>;
-        // }
+        let crossSectionLngRectangle = null;
+        if (activeCell && activeCell.x !== null) {
+             const dlng = ( model.boundingBox.x_max - model.boundingBox.x_min) / model.gridSize.n_x; // column width of bounding box grid
+             const crossSectionLng = activeCell.x * dlng + model.boundingBox.x_min;
+             crossSectionLngRectangle = <Rectangle bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}/>;
+        }
+
+        if (lat && lng){return (<div>{crossSectionLatRectangle}{crossSectionLngRectangle}</div>)}
+        if (lat){return (<div>{crossSectionLatRectangle}</div>)}
+        if (lng){return (<div>{crossSectionLngRectangle}</div>)}
+    }
+
+    render() {
+        const { model, mapPosition } = this.props;
 
         return (
             <Map className="crossSectionMap" {...mapPosition} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                <GeoJSON data={model.area}/>
-                <Rectangle color="#000000" bounds={boundingBox}/>
+                <GeoJSON data={model.area} style={this.state.styles.area} />
+                {this.renderBoundingBox()}
                 {this.renderHeatMap()}
-                {crossSectionLatRectangle}
-                {/* crossSectionLngRectangle*/}
+                {this.renderBoundaries()}
+                {this.renderCrossSectionSelection()}
+
                 <button title="reset view" className="button resetView" onClick={this.resetView}><Icon name="marker" /></button>
                 {this.renderLegend()}
             </Map>
