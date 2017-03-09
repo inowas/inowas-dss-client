@@ -8,6 +8,7 @@ import * as tools from './pages/tools';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
+import Impressum from './pages/Impressum';
 import Modflow from './pages/ModFlow';
 import ModelList from './pages/ModelList';
 import ScenarioAnalysisList from './pages/ScenarioAnalysisList';
@@ -29,6 +30,7 @@ ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/">
             <IndexRoute component={LandingPage}/>
+            <Route path="impressum" component={Impressum}/>
             <Route path="tools" component={Main}>
                 <IndexRoute component={Dashboard}/>
                 <Route path="modflow/list" component={ModelList}/>
@@ -50,8 +52,8 @@ ReactDOM.render(
                 <Route path="T14C(/:id)" component={tools.T14C}/>
                 <Route path="T14D(/:id)" component={tools.T14D}/>
                 <Route path="T16A(/:id)" component={tools.T16A}/>
+                <Route path="T17(/:id)" component={tools.T17}/>
                 <Route path="T18(/:id)" component={tools.T18}/>
-                <Route path="T22(/:id)" component={tools.T22}/>
                 <Route path="scenarioanalysis/list" component={ScenarioAnalysisList}/>
                 <Route path="scenarioanalysis/:modelId" component={ScenarioAnalysis}/>
             </Route>

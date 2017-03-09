@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 import Login from '../pages/Login';
+import Footer from '../components/Footer';
 
 import '../../less/scaffold.less';
 
@@ -22,7 +23,10 @@ export default class Main extends Component {
         if (this.isUserLoggedIn( )) {
             return (
                 <div className="application-wrapper">
-                    {this.props.children}
+                    <div className="application-content">
+                        {this.props.children}
+                    </div>
+                    <Footer/>
                 </div>
             );
         }

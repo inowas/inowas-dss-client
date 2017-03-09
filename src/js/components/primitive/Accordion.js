@@ -9,11 +9,11 @@ export default class Accordion extends React.Component {
 
         this.state = {
             activeIndex: null
-        }
+        };
     }
 
     toggleActiveItem = (index) => {
-        if(index == this.state.activeIndex) {
+        if(index === this.state.activeIndex) {
             index = null;
         }
         this.setState({activeIndex: index});
@@ -24,7 +24,7 @@ export default class Accordion extends React.Component {
         let index = 0;
         const children = React.Children.map(this.props.children, (child) => {
             const currentIndex = index++;
-            const active = (currentIndex == this.state.activeIndex);
+            const active = (currentIndex === this.state.activeIndex);
             return React.cloneElement(child, {index: currentIndex, active, toggleActive: this.toggleActiveItem});
         });
 
@@ -40,4 +40,4 @@ export default class Accordion extends React.Component {
 Accordion.propTypes = {
     className: React.PropTypes.string,
     children: React.PropTypes.node.isRequired
-}
+};

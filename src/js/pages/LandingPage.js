@@ -1,153 +1,112 @@
 import React from 'react';
-//import '../../../node_modules/bootstrap/less/bootstrap.less';
-// import '../../../node_modules/bootstrap/less/carousel.less';
-import '../../less/carousel.less';
-// window.jQuery = require('jquery');
-// require('bootstrap');
 
-import '../helper/carousel.js';
 import '../../less/landingPage.less';
 
 import Login from '../components/landingPage/Login';
+import Footer from '../components/Footer';
+import Slider from '../components/primitive/Slider';
+import SliderItem from '../components/primitive/SliderItem';
 
 export default class LandingPage extends React.Component {
 
-    render() {
-
+    render( ) {
         return (
-            <div className="landingPage-wrapper">
-                <div className="container-top">
+            <div className="application-wrapper landingPage-wrapper">
+                <header className="header">
                     <Login/>
-                    <div id="startCarousel" className="carousel fade" data-ride="carousel" data-interval="4000">
-                        <ol className="carousel-indicators">
+                    <Slider className="app-width">
+                        {/* }<ol className="carousel-indicators">
                             <li data-target="#startCarousel" data-slide-to="0" className="active"/>
                             <li data-target="#startCarousel" data-slide-to="1"/>
                             <li data-target="#startCarousel" data-slide-to="2"/>
                             <li data-target="#startCarousel" data-slide-to="3"/>
-                        </ol>
+                        </ol>*/}
 
-                        <div className="carousel-inner" role="listbox">
-                            <div className="item active">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326" className="first-slide"/>
-                                <div className="container">
-                                    <div className="carousel-caption">
-                                        <h2>Web MAR Apps</h2>
-                                        <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
-                                    </div>
-                                </div>
+                        <SliderItem>
+                            <div className="caption">
+                                <h2>Web MAR Apps</h2>
+                                <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
                             </div>
+                            <div className="image-wrapper">
+                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326"/>
+                            </div>
+                        </SliderItem>
 
-                            <div className="item">
+                        <SliderItem>
+
+                            <div className="caption">
+                                <h2>Web MAR Tools</h2>
+                                <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
+                            </div>
+                            <div className="image-wrapper">
                                 <img src="../images/landingPage/carousel-slide-02.png" alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
-                                <div className="container">
-                                    <div className="carousel-caption">
-                                        <h2>Web MAR Tools</h2>
-                                        <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
-                                    </div>
-                                </div>
                             </div>
+                        </SliderItem>
 
-                            <div className="item">
+                        <SliderItem>
+
+                            <div className="caption">
+                                <h2>Web MAR Data</h2>
+                                <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
+                            </div>
+                            <div className="image-wrapper">
                                 <img src="../images/landingPage/carousel-slide-03.png" alt="Web MAR Data" width="558" height="326" className="third-slide"/>
-                                <div className="container">
-                                    <div className="carousel-caption">
-                                        <h2>Web MAR Data</h2>
-                                        <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
-                                    </div>
-                                </div>
                             </div>
+                        </SliderItem>
 
-                            <div className="item">
+                        <SliderItem>
+                            <div className="caption">
+                                <h2>Web MAR Wiki</h2>
+                                <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
+                            </div>
+                            <div className="image-wrapper">
                                 <img src="../images/landingPage/carousel-slide-04.png" alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
-                                <div className="container">
-                                    <div className="carousel-caption">
-                                        <h2>Web MAR Wiki</h2>
-                                        <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
-                                    </div>
-                                </div>
                             </div>
+                        </SliderItem>
 
-                        </div>
+                    </Slider>
 
-                        <a className="left carousel-control" href="#startCarousel" role="button" data-slide="prev">
-                            <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"/>
-                            <span className="sr-only">Previous</span>
-                        </a>
-                        <a className="right carousel-control" href="#startCarousel" role="button" data-slide="next">
-                            <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"/>
-                            <span className="sr-only">Next</span>
-                        </a>
+                </header>
 
-                    </div>
-
-                </div>
-
-                <div className="container">
+                <div className="app-width content">
 
                     <div className="row mar top-space">
                         <h2>Free web-based modelling platform</h2>
                         <p className="description align-center">Managed aquifer recharge (MAR) represents the purposeful recharge of an aquifer for later water recovery or for environmental benefits. To meet various site-specific requirements, different water infiltration techniques are available, making MAR a reliable instrument for sustainable groundwater management. The present platform provides a collection of free web-based tools aimed at planning, management and optimization of main components of MAR schemes:
                         </p>
 
-                        <div id="marCarousel" className="carousel fade" data-ride="carousel" data-interval="3000">
-                            <ol className="carousel-indicators">
+                        <Slider>
+                            {/* <ol className="carousel-indicators">
                                 <li data-target="#marCarousel" data-slide-to="0" className="active"/>
                                 <li data-target="#marCarousel" data-slide-to="1"/>
                                 <li data-target="#marCarousel" data-slide-to="2"/>
                                 <li data-target="#marCarousel" data-slide-to="3"/>
-                            </ol>
-
-                            <div className="carousel-inner" role="listbox">
-
-                                <div className="fill fill-app-bg"/>
-
-                                <div className="item active">
-                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="second-slide"/>
-                                    <div className="carousel-caption">
-                                        <div className="tooltip tooltip-bottom" role="tooltip">
-                                            <div className="tooltip-inner">
-                                                <p>A05. Sustain environmental surface water flows</p>
-                                            </div>
-                                        </div>
+                            </ol>*/}
+                                <SliderItem className="first">
+                                    <div className="tooltip tooltip-bottom" role="tooltip">
+                                        A05. Sustain environmental surface water flows
                                     </div>
-                                </div>
+                                </SliderItem>
 
-                                <div className="item">
-                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="first-slide"/>
-                                    <div className="carousel-caption">
-                                        <div className="tooltip tooltip-bottom" role="tooltip">
-                                            <div className="tooltip-inner">
-                                                <p>A12. Design and operational optimization of MAR schemes</p>
-                                            </div>
-                                        </div>
+                                <SliderItem className="second">
+                                    <div className="tooltip tooltip-bottom" role="tooltip">
+                                        A12. Design and operational optimization of MAR schemes
                                     </div>
-                                </div>
+                                </SliderItem>
 
-                                <div className="item">
-                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="third-slide"/>
-                                    <div className="carousel-caption">
-                                        <div className="tooltip tooltip-bottom" role="tooltip">
-                                            <div className="tooltip-inner">
-                                                <p>A02. Maximize natural storage capacity</p>
-                                            </div>
-                                        </div>
+                                <SliderItem className="third">
+                                    <div className="tooltip tooltip-bottom" role="tooltip">
+                                        A02. Maximize natural storage capacity
                                     </div>
-                                </div>
+                                </SliderItem>
 
-                                <div className="item">
-                                    <img src="../images/landingPage/mar-application.png" alt="Web Mar Apps" className="fourth-slide"/>
-                                    <div className="carousel-caption">
-                                        <div className="tooltip tooltip-bottom" role="tooltip">
-                                            <div className="tooltip-inner">
-                                                <p>A03. Restoration of groundwater levels</p>
-                                            </div>
-                                        </div>
+                                <SliderItem className="fourth">
+                                    <div className="tooltip tooltip-bottom" role="tooltip">
+                                        A03. Restoration of groundwater levels
                                     </div>
-                                </div>
+                                </SliderItem>
 
-                            </div>
-
-                        </div>
+                        </Slider>
 
                         <p className="description align-center">There are 13 applications available on the INOWAS platform that cover most of the challanges encountered at MAR sites, both from the quantitative and qualitative perspective: from optimization of MAR site location (<a href="http://wiki.inowas.hydro.tu-dresden.de/a13-optimisation-of-mar-site-location/" target="_blank">
                                 <strong>A11</strong>
@@ -179,7 +138,7 @@ export default class LandingPage extends React.Component {
                             <div className="col col-rel-1 stretch">
 
                                 <div className="panel toolbox-panel-01">
-                                    <div className="panel-heading"></div>
+                                    <div className="panel-heading"/>
                                     <div className="panel-body text-center">
                                         <p>
                                             <strong>Simple</strong>
@@ -190,7 +149,7 @@ export default class LandingPage extends React.Component {
                             </div>
                             <div className="col col-rel-1 stretch">
                                 <div className="panel toolbox-panel-02">
-                                    <div className="panel-heading"></div>
+                                    <div className="panel-heading"/>
                                     <div className="panel-body text-center">
                                         <p>
                                             <strong>Practical</strong>
@@ -202,7 +161,7 @@ export default class LandingPage extends React.Component {
 
                             <div className="col col-rel-1 stretch">
                                 <div className="panel toolbox-panel-03">
-                                    <div className="panel-heading"></div>
+                                    <div className="panel-heading"/>
                                     <div className="panel-body text-center">
                                         <p>
                                             <strong>Reliable</strong>
@@ -224,9 +183,9 @@ export default class LandingPage extends React.Component {
 
                     <div className="row toolbox-icons">
 
-                        <div id="toolsCarousel" className="carousel fade" data-ride="carousel" data-interval="false">
+                        <Slider>
 
-                            <ol className="carousel-indicators">
+                            {/* <ol className="carousel-indicators">
                                 <li data-target="#toolsCarousel" data-slide-to="0" className="active">
                                     <img src="../images/landingPage/toolbox-icon-01.png"/>
                                 </li>
@@ -254,94 +213,90 @@ export default class LandingPage extends React.Component {
                                 <li data-target="#toolsCarousel" data-slide-to="8">
                                     <img src="../images/landingPage/toolbox-icon-09.png"/>
                                 </li>
-                            </ol>
+                            </ol>*/}
 
-                            <div className="carousel-inner" role="listbox">
-
-                                <div className="item active">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T05. Optimisation of ASR well location</h3>
-                                            <p>Optimisation algorithm for finding the best location of ASR injection wells resulting in maximum groundwater storage increase for a given injection rate</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T05. Optimisation of ASR well location</h3>
+                                        <p>Optimisation algorithm for finding the best location of ASR injection wells resulting in maximum groundwater storage increase for a given injection rate</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T04. GIS-based site suitability mapping</h3>
-                                            <p>WebGIS-based multi-criteria decision analysis tool for preliminary ranking of areas that could be suitable for MAR application</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T04. GIS-based site suitability mapping</h3>
+                                        <p>WebGIS-based multi-criteria decision analysis tool for preliminary ranking of areas that could be suitable for MAR application</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T09. Simple saltwater intrusion equations</h3>
-                                            <p>Analytical equations for the analysis and prediction of the location of the saltwater interface in a groundwater system</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T09. Simple saltwater intrusion equations</h3>
+                                        <p>Analytical equations for the analysis and prediction of the location of the saltwater interface in a groundwater system</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T02. Groundwater mounding calculator (Hantush)</h3>
-                                            <p>The groundwater mounding calculator solves the Hantush analytical equation for groundwater mounding beneath an infiltration basin</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T02. Groundwater mounding calculator (Hantush)</h3>
+                                        <p>The groundwater mounding calculator solves the Hantush analytical equation for groundwater mounding beneath an infiltration basin</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T08. 1D transport model (Ogata-Banks)</h3>
-                                            <p>1D advection-dispersion equation using the Ogata-Banks solution as function of various parameters</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T08. 1D transport model (Ogata-Banks)</h3>
+                                        <p>1D advection-dispersion equation using the Ogata-Banks solution as function of various parameters</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T01. ASR efficiency assessment (Ward)</h3>
-                                            <p>Assessment of the suitability of a proposed site for an ASR system based on lateral groundwater flow, dispersive mixing, mixed convection and free aquifer convection</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T01. ASR efficiency assessment (Ward)</h3>
+                                        <p>Assessment of the suitability of a proposed site for an ASR system based on lateral groundwater flow, dispersive mixing, mixed convection and free aquifer convection</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T03. Numerical model setup (MODFLOW, MT3DMS, SEAWAT)</h3>
-                                            <p>Setup a new MODFLOW model for a study area to better understand the local groundwater flow system or as basis for scenario analysis</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T03. Numerical model setup (MODFLOW, MT3DMS, SEAWAT)</h3>
+                                        <p>Setup a new MODFLOW model for a study area to better understand the local groundwater flow system or as basis for scenario analysis</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T21. Estimation of aquifer storage capacity</h3>
-                                            <p>Estimation of aquifer storage capacity based on long-term measurements of aquifer recharge, groundwater extraction, and discharge</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T21. Estimation of aquifer storage capacity</h3>
+                                        <p>Estimation of aquifer storage capacity based on long-term measurements of aquifer recharge, groundwater extraction, and discharge</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                                <div className="item">
-                                    <div className="container">
-                                        <div className="carousel-caption">
-                                            <h3>T07. Application-specific scenarios analyzer</h3>
-                                            <p>This tool makes use of the output files of the MODFLOW-based model and uses them for the customized analysis of user-defined model scenarios</p>
-                                        </div>
+                            <SliderItem>
+                                <div className="container">
+                                    <div className="carousel-caption">
+                                        <h3>T07. Application-specific scenarios analyzer</h3>
+                                        <p>This tool makes use of the output files of the MODFLOW-based model and uses them for the customized analysis of user-defined model scenarios</p>
                                     </div>
                                 </div>
+                            </SliderItem>
 
-                            </div>
-
-                        </div>
+                        </Slider>
 
                     </div>
                     <div className="align-center">
@@ -403,62 +358,8 @@ export default class LandingPage extends React.Component {
                     </div>
 
                 </div>
-
-                <footer className="footer">
-                    <div className="container">
-                        <div className="grid-container">
-                            <div className="col col-rel-1 footer-section">
-                                <div className="footer-col-header">Header 1</div>
-                                <ul className="footer-list">
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Sign up!</a>
-                                    </li>
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Log in</a>
-                                    </li>
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">My profile</a>
-                                    </li>
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Documentation</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                            <div className="col col-rel-1 footer-section">
-                                <div className="footer-col-header">Documentation</div>
-                                <ul className="footer-list">
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Projects</a>
-                                    </li>
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Applications</a>
-                                    </li>
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Tools</a>
-                                    </li>
-
-                                    <li className="footer-list-item">
-                                        <a className="footer-list-link" href="#">Database</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </footer>
+                <Footer />
             </div>
         );
     }
-
 }

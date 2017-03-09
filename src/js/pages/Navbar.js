@@ -47,6 +47,7 @@ export default class NavBar extends React.Component {
     render( ) {
         const { links } = this.props;
         links.unshift({ name: 'Dashboard', path: '/tools', icon: <Icon name="settings"/> });
+        links.unshift({ name: 'Home', path: '/', icon: <Icon name="world"/> });
 
         return (
             <header className="navbar-wrapper">

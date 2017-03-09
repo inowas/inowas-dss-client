@@ -19,7 +19,7 @@ export default class AccordionItem extends Component {
     }
 
     render() {
-        const {active, className} = this.props;
+        const {active, className, children} = this.props;
 
         return (
             <div className={'accordion-item' + ' ' + (className || '')} data-active={active}>
@@ -32,7 +32,7 @@ export default class AccordionItem extends Component {
                 </div>
                 <div className="accordion-item-body">
                     <div>
-                        {this.props.children}
+                        {children}
                     </div>
                 </div>
             </div>
