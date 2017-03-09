@@ -20,7 +20,7 @@ export default class T02 extends React.Component {
     state = {
         navigation: [{
             name: 'Documentation',
-            path: 'http://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
             icon: <Icon name="file"/>
         }]
     }

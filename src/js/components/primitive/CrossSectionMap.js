@@ -33,7 +33,7 @@ export default class CrossSectionMap extends Component {
             lat: model.boundingBox.y_max,
             lng: model.boundingBox.x_max
         }]);
-    }
+    };
 
     handleClick = e => {
         const lat = e.latlng.lat;

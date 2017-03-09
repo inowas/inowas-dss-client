@@ -129,7 +129,9 @@ export function fetchTotalTimes( id, type, layer ) {
 }
 
 export function updateResults( id, resultType, layerNumber, totalTime ) {
-    const baseUrl = axios.defaults.baseURL.replace('api', 'image');
+    console.log(axios.defaults.baseURL);
+    const baseUrl = axios.defaults.baseURL.replace(/de\/api/i, 'de\/image');
+    console.log(baseUrl);
     const url = '/scenarioanalysis/model/' + id + '/calculation/result/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
 
     return dispatch => {
