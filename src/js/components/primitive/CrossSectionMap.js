@@ -72,6 +72,13 @@ export default class CrossSectionMap extends Component {
         return null;
     }
 
+    renderLegend() {
+        return (
+            null
+            //<ColorLegend legend={this.props.model.result.legend.legend(this.props.min, this.props.max)}>
+        )
+    }
+
     render() {
         const { model, mapPosition, activeCell } = this.props;
         const boundingBox = [
@@ -102,6 +109,7 @@ export default class CrossSectionMap extends Component {
                 {crossSectionLatRectangle}
                 {/* crossSectionLngRectangle*/}
                 <button title="reset view" className="button resetView" onClick={this.resetView}><Icon name="marker" /></button>
+                {this.renderLegend()}
             </Map>
         );
     }
