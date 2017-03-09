@@ -193,11 +193,8 @@ export default class T07 extends Component {
             return null;
         }
 
-        const columns = [ ];
-        let leftBorder = 0;
-        let rightBorder = 0;
-
-        models.models( ).forEach(m => {
+        const columns = [];
+        models.models().forEach(m => {
             if (m.isSelected( ) && m.hasResult( )) {
                 columns.push(m.chartDataByRowNumber( rowNumber ));
             }
@@ -206,28 +203,37 @@ export default class T07 extends Component {
         const chartData = {
             columns: columns
         };
+
         let grid = {};
+        let axis = {};
 
-        const baseModel = models.models( )[ 0 ];
-
-        if (baseModel.hasResult( )) {
-            leftBorder = baseModel.chartLeftBorderByRowNumber( rowNumber );
-            rightBorder = baseModel.chartRightBorderByRowNumber( rowNumber );
-
+        const baseModel = models.baseModel();
+        if (baseModel.hasResult()) {
+            chartData.x = 'x';
+            columns.unshift(baseModel.columnXAxis());
             grid = {
                 x: {
                     show: true,
                     lines: [
                         {
-                            value: leftBorder,
+                            value: baseModel.chartLeftBorderByRowNumber( rowNumber ),
                             text: 'Eastern model border',
                             position: 'middle'
                         }, {
-                            value: rightBorder,
+                            value: baseModel.chartRightBorderByRowNumber( rowNumber ),
                             text: 'Western model border',
                             position: 'middle'
                         }
                     ]
+                }
+            };
+
+            axis = {
+                x: {
+                    label: baseModel.labelXAxis()
+                },
+                y: {
+                    label: baseModel.labelYAxis()
                 }
             };
         }
@@ -235,7 +241,7 @@ export default class T07 extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} element="testchart" type="pie"/>
+                    <Chart data={chartData} grid={grid} axis={axis} element="testchart" />
                 </section>
             </div>
         );
