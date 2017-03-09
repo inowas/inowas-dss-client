@@ -61,7 +61,7 @@ export default class NavBar extends React.Component {
                         <ul className="nav-list">
                             <li className="nav-item nav-item-has-children">
                                 <span className="nav-element" href="#">
-                                    <Icon name="person"/>Hey, Gast
+                                    <Icon name="person"/>Hey, Guest
                                 </span>
                                 <ul className="nav-list">
                                     <li className="nav-item">

@@ -149,7 +149,7 @@ export default class T07 extends Component {
 
     renderSelect( ) {
         return (
-            <select className="layer-select" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
+            <select className="layer-select select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
             </select>
         );
@@ -174,6 +174,7 @@ export default class T07 extends Component {
         }).map(( model ) => {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
+                    <h2>{model.name}</h2>
                     <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
                 </section>
             );
@@ -291,7 +292,7 @@ export default class T07 extends Component {
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
-                    <div className="tile col col-abs-1">
+                    <div className="tile col col-abs-1 center-horizontal">
                         {this.renderSelect( )}
                     </div>
                     <div className="tile col stretch">
