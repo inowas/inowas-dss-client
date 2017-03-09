@@ -123,7 +123,7 @@ export default class T07 extends Component {
     }
 
     selectLayer = ( e ) => {
-        const valueSplitted = e.target.value.split('_');
+        const valueSplitted = e.target.value.split( '_' );
         this.changeLayerValue(new LayerNumber(valueSplitted[0]), new ResultType(valueSplitted[1]));
     };
 
@@ -148,7 +148,7 @@ export default class T07 extends Component {
         return null;
     }
 
-    renderSelect() {
+    renderSelect( ) {
         return (
             <select className="layer-select" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
@@ -181,7 +181,7 @@ export default class T07 extends Component {
         });
     }
 
-    renderChart() {
+    renderChart( ) {
         const models = this.props.tool.models;
 
         if ( models.countModelsWithResults( ) === 0 ) {
@@ -242,37 +242,29 @@ export default class T07 extends Component {
     }
 
     updateSliderValue = value => {
-        this.props.dispatch(setSelectedTotalTime(new TotalTime(value)));
+        this.props.dispatch(setSelectedTotalTime(new TotalTime( value )));
         this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime );
     };
 
-    renderSlider(){
-
+    renderSlider( ) {
         const totalTimes = this.props.tool.totalTimes;
-        if (totalTimes === null) {
+        if ( totalTimes === null ) {
             return;
         }
 
         let sliderValue = this.props.tool.selectedTotalTime;
-        if (sliderValue === null) {
-            sliderValue = new TotalTime(totalTimes.maxValue());
+        if ( sliderValue === null ) {
+            sliderValue = new TotalTime(totalTimes.maxValue( ));
         }
 
-        const minValue = totalTimes.minValue();
-        const maxValue = totalTimes.maxValue();
-        const stepSize = totalTimes.stepSize();
+        const minValue = totalTimes.minValue( );
+        const maxValue = totalTimes.maxValue( );
+        const stepSize = totalTimes.stepSize( );
 
-
-        return (
-            <div className="grid-container">
-                <div className="tile col stretch">
-                    <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt()} onChange={this.updateSliderValue} />
-                </div>
-            </div>
-        )
+        return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
     }
 
-    render() {
+    render( ) {
         const { navigation, sliderValue } = this.state;
         let models = this.props.tool.models.models( );
         models = models.map(m => {
@@ -287,12 +279,18 @@ export default class T07 extends Component {
                     <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
-                {this.renderSelect( )}
+                <div className="grid-container">
+                    <div className="tile col col-abs-1">
+                        {this.renderSelect( )}
+                    </div>
+                    <div className="tile col stretch">
+                        {this.renderSlider( )}
+                    </div>
+                </div>
                 <div className="grid-container">
                     {this.renderMaps( models )}
                 </div>
-                {this.renderSlider()}
-                {this.renderChart()}
+                {this.renderChart( )}
             </div>
         );
     }

@@ -83,7 +83,7 @@ const initialState = {
         name: 'Application-specific scenario analyzer',
         path: 'tools/T07/',
         models: [ {
-            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec2',
+            model_id: 'jgfhgf',
             user_id: 'Ralf Junghanns',
             name: 'Infiltration basins Hanoi city center',
             description: 'Description',
@@ -92,7 +92,7 @@ const initialState = {
             created_at: '2016-11-28T08:32:19+00:00',
             fake: true
         }, {
-            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec2',
+            model_id: 'hgjhgg',
             user_id: 'Ralf Junghanns',
             name: 'Infiltration wells in Long Bien',
             description: 'Description',
@@ -101,7 +101,7 @@ const initialState = {
             created_at: '2016-08-12T15:09:17+00:00',
             fake: true
         }, {
-            model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec2',
+            model_id: 'jghgfhg',
             user_id: 'Jana Ringleb',
             name: 'MAR feasibility study',
             description: 'Description',

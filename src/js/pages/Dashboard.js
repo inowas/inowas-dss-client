@@ -104,6 +104,11 @@ export default class Dashboard extends React.Component {
         }]
     }
 
+    componentDidMount() {
+        this.props.dispatch(fetchDashboardModelsT07( ));
+        this.setState({ active: 'T07' });
+    }
+
     setToolSelection = ( slug ) => {
         return ( ) => {
             if ( slug === 'T07' ) {
