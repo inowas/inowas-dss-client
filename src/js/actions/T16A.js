@@ -1,3 +1,10 @@
+export function changeSieve(parameter){
+    return {
+        type: 'CHANGE_TOOL_T16A_Sieve',
+        payload: parameter
+    }
+}
+
 export function changeParameter(parameter){
     return {
         type: 'CHANGE_TOOL_T16A_PARAMETER',

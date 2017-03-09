@@ -102,7 +102,7 @@ const T13BReducer = (state = getInitialState(), action) => {
             {
                state = {
                     ...state,
-                    settings: action.payload
+                     settings: action.payload
                 };
                 calculateAndModifyState(state);
                 break;
