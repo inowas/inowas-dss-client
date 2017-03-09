@@ -11,7 +11,7 @@ export default class Slider extends Component {
             <footer className="footer">
                 <div className="content app-width grid-container">
                     <div className="col col-abs-1">
-                        <Link className="link" to={'/impressum'}>Impressum</Link>
+                        <p><Link className="link" to={'/impressum'}>Impressum</Link></p>
                     </div>
                     <div className="col col-abs-1">
                         <p>Developed by</p>
