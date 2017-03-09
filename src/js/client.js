@@ -23,6 +23,12 @@ String.prototype.replaceAll = function(search, replacement) {
         .join(replacement);
 };
 
+Date.prototype.addDays = function(days) {
+    const dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+};
+
 const app = document.getElementById('app');
 
 ReactDOM.render(

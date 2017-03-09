@@ -18,7 +18,7 @@ import {
     updateResults,
     setSelectedLayer,
     setSelectedResultType,
-    setSelectedTotalTime,
+    setSelectedTotalTimeIndex,
     toggleModelSelection,
     setMapView,
     setBounds,
@@ -71,7 +71,7 @@ export default class T07 extends Component {
     toggleSelection = id => {
         return ( e ) => {
             this.props.dispatch(toggleModelSelection( id ));
-            this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime );
+            this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
 
             // manually emit a resize event so the leaflet maps recalculate their container size
             const event = document.createEvent( 'HTMLEvents' );
@@ -83,15 +83,10 @@ export default class T07 extends Component {
     changeLayerValue = ( layerNumber, resultType ) => {
         this.props.dispatch(setSelectedLayer( layerNumber ));
         this.props.dispatch(setSelectedResultType( resultType ));
-        this.updateModelResults( resultType, layerNumber, this.props.tool.selectedTotalTime );
+        this.updateModelResults( resultType, layerNumber, this.props.tool.selectedTotalTimeIndex );
     };
 
-    changeTotalTime = totalTime => {
-        this.props.dispatch(setSelectedTotalTime( totalTime ));
-        this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, totalTime );
-    };
-
-    updateModelResults( resultType, layerNumber, totalTime ) {
+    updateModelResults( resultType, layerNumber, totalTimeIndex ) {
         if ( layerNumber instanceof LayerNumber === false ) {
             console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
             return;
@@ -102,10 +97,14 @@ export default class T07 extends Component {
             return;
         }
 
-        if ( totalTime instanceof TotalTime === false ) {
-            console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
-            return;
-        }
+        // if ( totalTime instanceof TotalTime === false ) {
+        //     console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
+        //     return;
+        // }
+
+        const totalTimes = this.props.tool.totalTimes.totalTimes;
+
+        const totalTime = (totalTimeIndex === null) ? new TotalTime(totalTimes[totalTimes.length - 1]) : new TotalTime(totalTimes[totalTimeIndex]);
 
         this.props.tool.models.forEach(m => {
             if ( m.isSelected( ) === false ) {
@@ -241,31 +240,43 @@ export default class T07 extends Component {
         );
     }
 
-    updateSliderValue = value => {
-        this.props.dispatch(setSelectedTotalTime(new TotalTime( value )));
-        this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTime );
+    changeTotalTimeIndex = index => {
+        // this.props.dispatch(setSelectedTotalTime(new TotalTime( value )));
+        this.props.dispatch(setSelectedTotalTimeIndex(index));
+        this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
     };
 
     renderSlider( ) {
-        const totalTimes = this.props.tool.totalTimes;
-        if ( totalTimes === null ) {
-            return;
+        if (!this.props.tool.totalTimes) {
+            return null;
         }
 
-        let sliderValue = this.props.tool.selectedTotalTime;
+        const totalTimes = this.props.tool.totalTimes.totalTimes;
+        // console.log(totalTimes);
+        // if ( totalTimes === null ) {
+        //     return null;
+        // }
+        //
+        // let sliderValue = this.props.tool.selectedTotalTime;
+        // if ( sliderValue === null ) {
+        //     sliderValue = new TotalTime(totalTimes.maxValue( ));
+        // }
+        //
+        // const minValue = totalTimes.minValue( );
+        // const maxValue = totalTimes.maxValue( );
+        // const stepSize = totalTimes.stepSize( );
+        //
+        // return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
+
+        let sliderValue = this.props.tool.selectedTotalTimeIndex;
         if ( sliderValue === null ) {
-            sliderValue = new TotalTime(totalTimes.maxValue( ));
+            sliderValue = totalTimes.length - 1;
         }
-
-        const minValue = totalTimes.minValue( );
-        const maxValue = totalTimes.maxValue( );
-        const stepSize = totalTimes.stepSize( );
-
-        return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
+        return ( <RangeSlider data={totalTimes} startDate={this.props.tool.totalTimes.start()} step={1} value={sliderValue} onChange={this.changeTotalTimeIndex}/> );
     }
 
     render( ) {
-        const { navigation, sliderValue } = this.state;
+        const { navigation } = this.state;
         let models = this.props.tool.models.models( );
         models = models.map(m => {
             m.thumbnail = 'scenarios_thumb.png';

@@ -28,7 +28,7 @@ export default class ColorLegend {
         for (let i = 0; i < nrOfColors; i++) {
             const value = this._min + delta * i;
             const color = this._spectrum[i];
-            legend.push({
+            legend.unshift({
                 color: color,
                 value: value
             });

@@ -10,7 +10,7 @@ function getInitialState() {
         selectedLayerNumber: null,
         selectedResultType: null,
         totalTimes: null,
-        selectedTotalTime: null,
+        selectedTotalTimeIndex: null,
         models: new ModflowModels(),
         mapPosition: {
             bounds: [{
@@ -53,7 +53,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.layerValues = action.payload;
 
             if ( state.selectedLayerNumber === null ) {
-                if (state.layerValues.getLowestHeadLayer() instanceof LayerNumber){
+                if (state.layerValues.getLowestHeadLayer() instanceof LayerNumber) {
                     state.selectedLayerNumber = state.layerValues.getLowestHeadLayer();
                     state.selectedResultType = new ResultType( 'head' );
                     break;
@@ -67,7 +67,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.totalTimes = action.payload;
 
             if ( state.selectedTotalTime === null ) {
-                state.selectedTotalTime = new TotalTime( state.totalTimes.totalTimes()[ state.totalTimes.totalTimes().length - 1 ] );
+                state.selectedTotalTime = new TotalTime( state.totalTimes.totalTimes[ state.totalTimes.totalTimes.length - 1 ] );
             }
 
             break;
@@ -82,9 +82,14 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.selectedResultType = action.payload;
             break;
 
-        case 'T07_SET_SELECTED_TOTAL_TIME':
+        // case 'T07_SET_SELECTED_TOTAL_TIME':
+        //     state = { ...state };
+        //     state.selectedTotalTime = action.payload;
+        //     break;
+
+        case 'T07_SET_SELECTED_TOTAL_TIME_INDEX':
             state = { ...state };
-            state.selectedTotalTime = action.payload;
+            state.selectedTotalTimeIndex = action.payload;
             break;
 
         case 'T07_SET_MODEL_RESULT':

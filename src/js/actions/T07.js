@@ -233,14 +233,21 @@ export function setSelectedResultType( resultType ) {
     };
 }
 
-export function setSelectedTotalTime( totalTime ) {
-    if (totalTime instanceof TotalTime === false) {
-        throw Error('Expected first param to be instance of TotalTime');
-    }
+// export function setSelectedTotalTime( totalTime ) {
+//     if (totalTime instanceof TotalTime === false) {
+//         throw Error('Expected first param to be instance of TotalTime');
+//     }
+//
+//     return {
+//         type: 'T07_SET_SELECTED_TOTAL_TIME',
+//         payload: totalTime
+//     };
+// }
 
+export function setSelectedTotalTimeIndex( index ) {
     return {
-        type: 'T07_SET_SELECTED_TOTAL_TIME',
-        payload: totalTime
+        type: 'T07_SET_SELECTED_TOTAL_TIME_INDEX',
+        payload: index
     };
 }
 

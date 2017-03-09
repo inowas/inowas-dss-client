@@ -9,7 +9,6 @@ export default class ColorLegend extends Component {
     }
 
     renderLabels( legend ) {
-        console.log('legend: ', legend);
         return legend.map((l, index) => {
             return (
                 <div className="label" key={index}>{Math.round(l.value).toFixed(0)}</div>
