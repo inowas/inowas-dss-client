@@ -1,0 +1,27 @@
+@import "variables.less";
+
+.colorLegend {
+    position: absolute;
+    display: flex;
+    z-index: 1000;
+
+    bottom: 0;
+    left: 0;
+    margin-left: 0.5em;
+
+    .stripe {
+        width: @spacing-large;
+        height: 80px;
+        transform: translateY(10px);
+    }
+
+    .labels{
+        margin-left: 0.5em;
+
+        .label {
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+    }
+}

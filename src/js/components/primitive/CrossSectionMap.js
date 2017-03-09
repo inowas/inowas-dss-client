@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay, CircleMarker } from 'react-leaflet';
 
 import Icon from './Icon';
+import ColorLegend from './ColorLegend';
 
 import '../../../less/crossSectionMap.less';
 
@@ -14,6 +15,8 @@ export default class CrossSectionMap extends Component {
         updateBounds: PropTypes.func.isRequired,
         mapPosition: PropTypes.object.isRequired,
         setClickedCell: PropTypes.func.isRequired,
+        min: PropTypes.number,
+        max: PropTypes.number,
         activeCell: PropTypes.object
     };
 
@@ -96,10 +99,14 @@ export default class CrossSectionMap extends Component {
     }
 
     renderLegend() {
+        const {model} = this.props;
+        if (!model.hasResult()) {
+            return null;
+        }
+
         return (
-            null
-            //<ColorLegend legend={this.props.model.result.legend.legend(this.props.min, this.props.max)}>
-        )
+            <ColorLegend legend={this.props.model.result.legend(this.props.min, this.props.max)} />
+        );
     }
 
     renderBoundaries() {

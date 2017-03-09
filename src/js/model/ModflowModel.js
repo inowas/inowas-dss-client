@@ -38,12 +38,13 @@ export default class ModflowModel {
     }
 
     containsBoundary(boundary) {
-        return this.boundaries.find( b => b.id == boundary.id ) instanceof MfBoundary;
+        return this.boundaries.find( b => b.id === boundary.id ) instanceof MfBoundary;
     }
 
     addBoundary(boundary) {
         this.boundaries.push(boundary);
     }
+
 
     updateBoundary(boundary) {
         this.boundaries.map( b => {
@@ -78,36 +79,36 @@ export default class ModflowModel {
     }
 
     chartDataByRowNumber(row) {
-        if (this.result instanceof MfResult === false){
+        if (this.result instanceof MfResult === false) {
             return null;
         }
 
         const rowData = this.result.rowData(row);
 
-        if (rowData === null){
+        if (rowData === null) {
             return null;
         }
 
         const chartData = [];
         chartData.push(this.name);
-        rowData.forEach( v => {chartData.push(v)});
+        rowData.forEach( v => {chartData.push(v);});
         return chartData;
     }
 
     chartLeftBorderByRowNumber(row) {
-        if (this.result instanceof MfResult === false){
+        if (this.result instanceof MfResult === false) {
             return null;
         }
 
         const rowData = this.result.rowData(row);
 
-        if (rowData === null){
+        if (rowData === null) {
             return null;
         }
 
         let leftBorder = 0;
-        for (let i=0; i<rowData.length; i++){
-            if (rowData[i] === null){
+        for (let i = 0; i < rowData.length; i++) {
+            if (rowData[i] === null) {
                 continue;
             }
 
@@ -119,19 +120,19 @@ export default class ModflowModel {
     }
 
     chartRightBorderByRowNumber(row) {
-        if (this.result instanceof MfResult === false){
+        if (this.result instanceof MfResult === false) {
             return null;
         }
 
         const rowData = this.result.rowData(row);
 
-        if (rowData === null){
+        if (rowData === null) {
             return null;
         }
 
         let rightBorder = 0;
-        for (let i=rowData.length-1; i>=0; i--){
-            if (rowData[i] === null){
+        for (let i = rowData.length - 1; i >= 0; i--) {
+            if (rowData[i] === null) {
                 continue;
             }
 
@@ -145,4 +146,8 @@ export default class ModflowModel {
     hasResult() {
         return (this.result instanceof MfResult);
     }
+
+    // get result() {
+    //     return this.result;
+    // }
 }
