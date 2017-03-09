@@ -98,8 +98,8 @@ export default class Dashboard extends React.Component {
                 name: 'T03 Numerical model setup (MODFLOW)',
                 path: 'tools/modflow/list'
             }, {
-                name: 'T22 Mar portal',
-                path: 'tools/T22'
+                name: 'T17 Global Mar portal',
+                path: 'tools/T17'
             }]
         }]
     }
