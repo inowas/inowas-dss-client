@@ -24,11 +24,11 @@ export default class Dashboard extends React.Component {
     };
 
     state = {
-        active: null,
-        popupVisible: false, // TODO remove popup
+        active: 'T07',
+        popupVisible: false,
         navigation: [{
             name: 'Documentation',
-            path: '',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/',
             icon: <Icon name="file"/>
         }, {
             name: 'Datasets',
@@ -106,7 +106,6 @@ export default class Dashboard extends React.Component {
 
     componentDidMount() {
         this.props.dispatch(fetchDashboardModelsT07( ));
-        this.setState({ active: 'T07' });
     }
 
     setToolSelection = ( slug ) => {
@@ -141,7 +140,7 @@ export default class Dashboard extends React.Component {
                     <td>{dateFormat(createdAt, 'mm/dd/yyyy HH:MM')}</td>
                     <td>{model.user_id}</td>
                     <td>
-                        {!model.fake && <Link className="link" to={basePath + model.model_id}>edit</Link>}
+                        {!model.fake && <Link className="link" to={basePath + model.model_id}>use it <Icon name="arrow_right"/></Link>}
                     </td>
                 </tr>
             );
@@ -165,36 +164,36 @@ export default class Dashboard extends React.Component {
                         </div>
                         <ul className="col stretch toolbar-edit">
                             <li>
-                                <a className="link" href="#">
+                                <button className="link" onClick={this.showPopup}>
                                     <Icon name="add"/>
                                     <span>Add new</span>
-                                </a>
+                                </button>
                             </li>
                             <li>
-                                <a className="link" href="#">
+                                <button className="link" onClick={this.showPopup}>
                                     <Icon name="import"/>
                                     <span>Import</span>
-                                </a>
+                                </button>
                             </li>
                             <li>
-                                <a className="link" href="#">
+                                <button className="link" onClick={this.showPopup}>
                                     <Icon name="share"/>
                                     <span>Share</span>
-                                </a>
+                                </button>
                             </li>
                             <li>
-                                <a className="link" href="#">
+                                <button className="link" onClick={this.showPopup}>
                                     <Icon name="trash"/>
                                     <span>Delete</span>
-                                </a>
+                                </button>
                             </li>
                         </ul>
                         <ul className="col toolbar-public">
-                            <li>
+                            {/* <li>
                                 <a className="link" href="#">Personal</a>
-                            </li>
+                            </li>*/}
                             <li>
-                                <a className="link" href="#">Public</a>
+                                <button className="link">Public</button>
                             </li>
                         </ul>
                     </div>
@@ -227,6 +226,12 @@ export default class Dashboard extends React.Component {
         });
     }
 
+    showPopup = () => {
+        this.setState({
+            popupVisible: true
+        });
+    }
+
     render( ) {
         const {navigation} = this.state;
         const { tools } = this.props.dashboardStore;
@@ -237,7 +242,7 @@ export default class Dashboard extends React.Component {
                 <div className="app-width grid-container">
                     <StackedNav>
                         <h2>Dashboard</h2>
-                        <Accordion>
+                        <Accordion firstActive={1}>
                             <AccordionItem icon={< Icon name = "folder" />} heading="Projects">
                                 <ul className="nav-sub">
                                     <li>
@@ -255,8 +260,10 @@ export default class Dashboard extends React.Component {
                     {this.renderDataTable( )}
                 </div>
                 <Popup visible={this.state.popupVisible} close={this.closePopup}>
-                    <div>Test Popup</div><br /><br /><br /><br /><br />
-                    <span>Test</span>
+                    <h2>Warning</h2>
+                    <p>
+                        You don't have the permissions to do this.
+                    </p>
                 </Popup>
             </div>
         );
