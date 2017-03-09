@@ -200,5 +200,4 @@ export default class CrossSectionMap extends Component {
             </Map>
         );
     }
-
 }

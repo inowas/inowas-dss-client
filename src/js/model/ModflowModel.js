@@ -116,7 +116,13 @@ export default class ModflowModel {
             break;
         }
 
-        return leftBorder;
+
+        const nX = this.gridSize.n_x;
+        const xMin = this.boundingBox.x_min;
+        const xMax = this.boundingBox.x_max;
+        const dX = (xMax-xMin)/nX;
+
+        return Math.round((xMin+(leftBorder*dX))*1000)/1000;
     }
 
     chartRightBorderByRowNumber(row) {
@@ -140,14 +146,51 @@ export default class ModflowModel {
             break;
         }
 
-        return rightBorder;
+        const nX = this.gridSize.n_x;
+        const xMin = this.boundingBox.x_min;
+        const xMax = this.boundingBox.x_max;
+        const dX = (xMax-xMin)/nX;
+
+        return Math.round((xMin+(rightBorder*dX))*1000)/1000;
     }
+
+
+    labelYAxis(){
+        if (this.hasResult()){
+            if (this.result.resultType().toString() == 'head') {
+                return 'Groundwater Head [m]'
+            }
+
+            if (this.result.resultType().toString() == 'drawdown') {
+                return 'Groundwater DrawDown [m]'
+            }
+        }
+
+        return '';
+    }
+
+    labelXAxis(){
+        if (this.hasResult()) {
+            return ('Longitude');
+        }
+    }
+
+    columnXAxis(){
+        const column = ['x'];
+        const nX = this.gridSize.n_x;
+        const xMin = this.boundingBox.x_min;
+        const xMax = this.boundingBox.x_max;
+        const dX = (xMax-xMin)/nX;
+
+        for (let i=0; i<nX; i++){
+            column.push(Math.round((xMin+(i*dX))*1000)/1000);
+        }
+
+        return column;
+    }
+
 
     hasResult() {
         return (this.result instanceof MfResult);
     }
-
-    // get result() {
-    //     return this.result;
-    // }
 }
