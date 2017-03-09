@@ -8,7 +8,14 @@ body {
 
 .application-wrapper {
     margin-top: @navbar-height;
+    min-height: ~"calc(100vh -" @navbar-height ~")";
+    display: flex;
+    flex-direction: column;
     position: relative;
+
+    .application-content {
+        flex: 1;
+    }
 }
 
 .app-width {

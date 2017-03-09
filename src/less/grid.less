@@ -4,6 +4,7 @@
     display: flex;
     align-items: stretch;
     margin-bottom: @grid-gutter;
+    overflow: auto;
 }
 
 .grid-container:last-child {
@@ -52,6 +53,26 @@
 
 .col-rel-3 {
     width: 60%;
+}
+
+.col-min-1 {
+    min-width: @grid-column;
+}
+
+.col-min-2 {
+    min-width: 2 * @grid-column + @grid-gutter;
+}
+
+.col-min-3 {
+    min-width: 3 * @grid-column + 2 * @grid-gutter;
+}
+
+.col-min-4 {
+    min-width: 4 * @grid-column + 3 * @grid-gutter;
+}
+
+.col-min-5 {
+    min-width: 5 * @grid-column + 4 * @grid-gutter;
 }
 
 .stretch {

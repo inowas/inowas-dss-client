@@ -1,30 +1,166 @@
+@import "variables.less";
+
 .landingPage-wrapper {
     background-color: #EFF3F6;
     font-size: 16px;
-}
 
-.container {
-    width: 1200px;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-}
+    .login-wrapper {
+        background-color: @background-dark;
+        color: @color-dark;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1200;
 
-.containter-top {
-    background-color: #4C4C4C;
-}
+        .login {
+            display: flex;
+            height: @navbar-height;
+            width: @app-max-width;
+            margin: auto;
+            align-items: center;
 
-.main {
-    background-color: #FFFFFF;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.1);
-    float: left;
-    min-height: 200px;
-    margin-left: 420px;
-    padding: 20px;
-    position: relative;
-    width: 740px;
-    top: 52px;
+            label {
+                margin-right: 1em;
+            }
+
+            .input {
+                margin-right: 2em;
+                background-color: @grey-semi-dark;
+                color: @color-dark;
+                -webkit-text-fill-color: @color-dark !important;
+
+                &:-webkit-autofill {
+                    -webkit-box-shadow: 0 0 0px 1000px @grey-semi-dark inset;
+                }
+            }
+        }
+    }
+
+    .navbar-wrapper {
+        font-size: 12px;
+    }
+
+    .header {
+        background: url("../images/landingPage/carousel_bg.png") no-repeat #1A6CA7;
+        background-size: cover;
+
+        .slider {
+            .item {
+                height: 444px;
+
+                .caption {
+                    position: relative;
+                    height: 100%;
+                    max-width: 40%;
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 7%;
+                    justify-content: center;
+                    color: @color-dark;
+
+                    h2 {
+                        color: #EEEEEE;
+                        font-size: 48px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        text-align: left;
+                        text-shadow: none;
+                    }
+                }
+
+                .image-wrapper {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    .content {
+        .mar {
+            .slider {
+                background-position: center 13px;
+                background-repeat: no-repeat;
+                background-image: url("../images/landingPage/mar-overview.png");
+
+                .item {
+                    height: 650px;
+
+                    .tooltip {
+                        background-color: #FFFFFF;
+                        border-radius: 0;
+                        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+                        color: #4C4C4C;
+                        margin: 0 auto;
+                        max-width: none;
+                        padding: 5px 30px;
+                        text-align: center;
+                        position: absolute;
+
+                        &::before {
+                            top: -20px;
+                            left: 50%;
+                            margin-left: -5px;
+                            color: transparent;
+                            content: "";
+                            border-width: 0 25px 20px;
+                            border-bottom-color: #FFFFFF;
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            border-style: solid;
+                        }
+                    }
+
+                    &.first {
+                        .tooltip {
+                            top: 370px;
+                            left: 10px;
+                        }
+                    }
+
+                    &.second {
+                        .tooltip {
+                            top: 260px;
+                            left: -90px;
+                        }
+                    }
+
+                    &.third {
+                        .tooltip {
+                            top: 400px;
+                            left: 220px;
+                        }
+                    }
+
+                    &.fourth {
+                        .tooltip {
+                            top: 280px;
+                            left: 300px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .toolbox-icons {
+            color: @color-dark;
+
+            .slider {
+                text-align: center;
+            }
+        }
+    }
 }
 
 .top-space {
@@ -42,368 +178,6 @@
     font-size: 16px;
     line-height: 26px;
 }
-/* FORMS
---------- */
-.form-control {
-    display: block;
-    width: 220px;
-    padding: 0.5rem 0.75rem;
-    font-size: 12px;
-    line-height: 1;
-    color: #55595c;
-    background-color: #fff;
-    background-image: none;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: 4px;
-}
-
-.form-signin {
-    margin: 0 auto;
-    max-width: 1170px;
-    position: relative;
-    z-index: 1005;
-}
-
-.form-signin h2 {
-    color: #FFFFFF;
-    float: left;
-    font-size: 18px;
-    margin: 18px 10px 0 7%;
-}
-
-.form-signin .form-control {
-    float: left;
-    margin: 10px 10px 0 0;
-    width: 150px;
-}
-
-.form-signin .checkbox {
-    float: left;
-    font-size: 14px;
-    color: #FFFFFF;
-    margin: 20px 10px 0 0;
-}
-
-.form-signin .btn-block {
-    float: left;
-    font-size: 14px;
-    padding: 0;
-    width: 36px;
-    margin-top: 10px;
-    height: 34px;
-}
-
-.container-top {
-    background: url("../images/landingPage/carousel_bg.png") no-repeat #1A6CA7;
-    background-size: cover;
-}
-/* CUSTOMIZE THE CAROUSEL
--------------------------------------------------- */
-/* Carousel base class */
-.carousel {
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 1200px;
-}
-
-.carousel-indicators li {
-    background-color: #FFFFFF;
-    border: none;
-    border-radius: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-    height: 8px;
-    margin: 0 5px;
-    width: 20px;
-}
-
-.carousel-indicators .active {
-    background-color: #ED8D05;
-    height: 8px;
-    margin: 0 5px;
-    width: 20px;
-}
-
-.carousel-caption > p {
-    font-size: 16px;
-    font-weight: 300;
-    color: white;
-    padding-top: 0px;
-    text-shadow: none;
-}
-
-.carousel-control {
-    z-index: 5000;
-}
-
-.carousel-control .glyphicon-chevron-left {
-    left: 20%;
-}
-
-.carousel-control .glyphicon-chevron-right {
-    right: 20%;
-}
-/* Start Carousel */
-/* Declare heights because of positioning of img element */
-#startCarousel .carousel-inner,
-#startCarousel.carousel {
-    height: 444px;
-    opacity: 1;
-}
-
-#startCarousel .carousel-inner > .item {
-    height: 444px;
-    transition: opacity 1s ease-in-out;
-    left: 0 !important;
-    opacity: 0;
-    top: 0;
-    position: absolute;
-    width: 100%;
-    display: block !important;
-    z-index: 1;
-}
-
-#startCarousel .carousel-inner > .item.active {
-    opacity: 1;
-    transition: opacity 0.7s ease-in-out;
-    z-index: 2;
-}
-
-#startCarousel .carousel-inner > .item > img {
-    position: relative;
-    top: 30px;
-    right: 0;
-    min-width: 100%;
-}
-
-/* Since positioning the image, we need to help out the caption */
-
-#startCarousel .carousel-caption {
-    z-index: 10;
-    top: 20%;
-    text-align: left;
-    left: 7%;
-    right: 50%;
-}
-
-#startCarousel h2 {
-    color: #EEEEEE;
-    font-size: 48px;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-align: left;
-    text-shadow: none;
-}
-
-/* MAR Carousel */
-
-#marCarousel .fill {
-    background-position: center 13px;
-    background-repeat: no-repeat;
-    height: 100%;
-    // filter: grayscale(100%) opacity(.1);
-    position: absolute;
-    width: 100%;
-}
-
-#marCarousel .fill-app-bg {
-    background-image: url("../images/landingPage/mar-overview.png");
-}
-
-#marCarousel.carousel {
-    height: 650px;
-    margin-top: 30px;
-}
-
-#marCarousel .carousel-indicators {
-    bottom: 0;
-}
-
-#marCarousel .carousel-inner {
-    height: 100%;
-}
-
-#marCarousel .first-slide {
-    position: absolute;
-    top: 280px;
-    left: 570px;
-}
-
-#marCarousel .first-slide+.carousel-caption {
-    position: relative;
-    top: 370px;
-    left: 10px;
-}
-
-#marCarousel .second-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-#marCarousel .second-slide+.carousel-caption {
-    position: relative;
-    top: 260px;
-    left: -90px;
-}
-
-#marCarousel .third-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-#marCarousel .third-slide+.carousel-caption {
-    position: relative;
-    top: 400px;
-    left: 220px;
-}
-
-#marCarousel .fourth-slide {
-    position: absolute;
-    top: 170px;
-    left: 505px;
-}
-
-#marCarousel .fourth-slide+.carousel-caption {
-    position: relative;
-    top: 280px;
-    left: 300px;
-}
-
-#marCarousel.fade {
-    opacity: 1;
-}
-
-#marCarousel .item {
-    transition: opacity .3s ease-in-out;
-    left: 0 !important;
-    opacity: 0;
-    top: 0;
-    position: absolute;
-    width: 100%;
-    display: block !important;
-    z-index: 1;
-}
-
-#marCarousel .active {
-    opacity: 1;
-    transition: opacity .7s ease-in-out;
-    z-index: 2;
-}
-
-#marCarousel .next {
-    left: 0;
-    opacity: 1;
-    z-index: 1;
-}
-
-#marCarousel .carousel-caption .tooltip {
-    filter: alpha(opacity=1);
-    opacity: 1;
-    position: relative;
-    text-align: center;
-    display: inline-block;
-}
-
-#marCarousel .carousel-caption .tooltip-inner {
-    background-color: #FFFFFF;
-    border-radius: 0;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-    color: #4C4C4C;
-    margin: 0 auto;
-    max-width: none;
-    padding: 5px 30px;
-    text-align: center;
-}
-
-#marCarousel .carousel-caption .tooltip-inner::before {
-    top: -20px;
-    left: 50%;
-    margin-left: -5px;
-    color: transparent;
-    content: "";
-    border-width: 0 25px 20px;
-    border-bottom-color: #FFFFFF;
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-
-/* Tools Carousel */
-
-#toolsCarousel.carousel {
-    margin-bottom: 20px;
-}
-
-#toolsCarousel.fade {
-    opacity: 1;
-}
-
-#toolsCarousel .item {
-    transition: opacity .3s ease-in-out;
-    left: 0 !important;
-    opacity: 0;
-    top: 0;
-    position: absolute;
-    width: 100%;
-    display: block !important;
-    z-index: 1;
-}
-
-#toolsCarousel .active {
-    opacity: 1;
-    transition: opacity .3s ease-in-out;
-    z-index: 2;
-}
-
-#toolsCarousel .carousel-indicators {
-    left: 30%;
-    position: relative;
-    top: 30px;
-    width: 100%;
-}
-
-#toolsCarousel .carousel-indicators .active {
-    border: 3px solid #1EB1ED;
-    border-radius: 35px;
-}
-
-#toolsCarousel .carousel-indicators li {
-    background-color: transparent;
-    border: 3px solid transparent;
-    box-shadow: none;
-    height: 70px;
-    margin: 10px;
-    text-indent: 0;
-    width: 70px;
-}
-
-#toolsCarousel .carousel-inner {
-    height: 150px;
-}
-
-#toolsCarousel .carousel-caption {
-    top: 50px;
-    left: 0;
-    right: 0;
-}
-
-#toolsCarousel h3 {
-    font-size: 16px;
-    font-weight: 700;
-    text-shadow: none;
-}
-
-
-/* TOOLBOX ---------- */
-
-.toolbox .col-md-4 {
-    padding: 0;
-}
 
 .panel {
     box-shadow: none;
@@ -412,17 +186,17 @@
 
 .toolbox-panel-01 {
     background: url("../images/landingPage/toolbox-panel-bg-01.png") no-repeat bottom center transparent;
-    padding-bottom: 24px;
+    padding-bottom: 28px;
 }
 
 .toolbox-panel-02 {
     background: url("../images/landingPage/toolbox-panel-bg-02.png") no-repeat bottom center transparent;
-    padding-bottom: 26px;
+    padding-bottom: 32px;
 }
 
 .toolbox-panel-03 {
     background: url("../images/landingPage/toolbox-panel-bg-03.png") no-repeat bottom center transparent;
-    padding-bottom: 30px;
+    padding-bottom: 38px;
 }
 
 .toolbox-panel-01 .panel-heading {
@@ -471,9 +245,6 @@
     text-transform: uppercase;
 }
 
-.btn.more {
-    margin: 20px 10px;
-}
 /* GEO DATABASE
 --------------- */
 .geo-database figure {
@@ -513,43 +284,4 @@ div[class*="geo-panel"] .panel-body {
     display: inline-block;
     padding: 0 0 0 15px;
     width: 80%;
-}
-/* FOOTER
---------- */
-.footer {
-    background-color: #272727;
-    font-size: 14px;
-    position: relative;
-    padding: 20px 0;
-    text-align: left;
-    margin-top: 50px;
-}
-
-.footer li {
-    list-style-type: none;
-    margin-left: -40px;
-}
-
-.footer a {
-    color: #EEEEEE;
-	text-decoration: none;
-}
-
-.footer-col {}
-
-.footer-col-header {
-    color: #EEEEEE;
-    font-size: 18px;
-	margin-bottom: 25px;
-	position: relative;
-}
-
-.footer-col-header:after {
-    content: "";
-	position: absolute;
-	top: 100%;
-	width: 40px;
-	border-bottom: 1px solid #FFF;
-	left: 0;
-	margin-top: 5px;
 }

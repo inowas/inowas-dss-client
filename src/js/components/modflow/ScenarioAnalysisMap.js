@@ -61,7 +61,7 @@ export default class ScenarioAnalysisMap extends React.Component {
 
     getHeadsImageUrl(){
         const id = store.getState().scenarioAnalysis.activeScenario;
-        return ('http://dev.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png');
+        return ('https://api.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png');
     }
 
     renderBoundariesByType(type){

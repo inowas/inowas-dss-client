@@ -29,6 +29,7 @@ import Settings from './settings.svg';
 import Share from './share.svg';
 import Tools from './tools.svg';
 import Trash from './trash.svg';
+import World from './world.svg';
 
 const icons = {
     add_multiple: <AddMultiple/>,
@@ -59,7 +60,8 @@ const icons = {
     settings: <Settings/>,
     share: <Share/>,
     tools: <Tools/>,
-    trash: <Trash/>
-}
+    trash: <Trash/>,
+    world: <World/>
+};
 
 export default icons;

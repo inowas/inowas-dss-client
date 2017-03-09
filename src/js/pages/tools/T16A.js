@@ -1,5 +1,5 @@
-import React from 'react'
-import {connect} from 'react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 
 import '../../../less/4TileTool.less';
 
@@ -8,23 +8,24 @@ import Chart from '../../components/tools/ChartT16A'
 import Sieves from '../../components/tools/Sieves'
 import HydroData from '../../components/tools/HydroData'
 import {changeSieve, changeParameter, calculate, reset} from '../../actions/T16A'
-import Header from '../../components/tools/Header';
 
-@connect((store) => {
-    return {tool: store.T16A}
+import Header from '../../components/tools/Header';
+import Navbar from '../Navbar';
+
+@connect(( store ) => {
+    return { tool: store.T16A };
 })
 export default class T16A extends React.Component {
 
-    handleChange = (e) => {
+    handleChange = ( e ) => {
+        if (e.target.name.startsWith( 'parameter' )) {
+            const param = e.target.name.split( '_' );
 
-        if (e.target.name.startsWith('parameter')) {
-            const param = e.target.name.split('_');
-
-            let parameter = {};
+            const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter))
+            this.props.dispatch(changeParameter( parameter ));
         }
         if (e.target.name.startsWith('sieve')) {
             const param = e.target.name.split('_');
@@ -37,12 +38,12 @@ export default class T16A extends React.Component {
         }
     };
 
-    handleReset = (e) => {
-        this.props.dispatch(reset());
+    handleReset = ( e ) => {
+        this.props.dispatch(reset( ));
     };
 
-    componentWillMount() {
-        this.props.dispatch(calculate())
+    componentWillMount( ) {
+        this.props.dispatch(calculate( ));
     }
 
     total(param) {
@@ -67,9 +68,9 @@ export default class T16A extends React.Component {
         const params = this.props.tool.hydroData.map(param => {
             return this.total(param);
         });
-
         return (
             <div className="app-width">
+                <Navbar links={[ ]}/>
                 <Header title={'T16_a. Saturated hydraulic conductivity based on grain size distribution'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -84,7 +85,6 @@ export default class T16A extends React.Component {
                 <div className="grid-container">
                     <section className="tile col col-abs-2">
                     </section>
-
                     <section className="tile col col-rel-1">
                         <h2>SIEVING</h2>
                         <h3>After wet separation</h3>
@@ -101,6 +101,6 @@ export default class T16A extends React.Component {
                     </section>
                 </div>
             </div>
-        )
+        );
     }
 }

@@ -7,7 +7,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 900;
+    z-index: 1200;
 
     .navbar {
         display: flex;
@@ -17,8 +17,23 @@
             flex: 1;
             text-transform: uppercase;
 
-            .nav-item .nav-item {
-                text-transform: none;
+            .nav-item {
+
+                .nav-list {
+                    left: 0;
+                }
+
+                .nav-item {
+                    text-transform: none;
+                }
+            }
+        }
+
+        .nav-right {
+            .nav-item {
+                .nav-list {
+                    right: 0;
+                }
             }
         }
 
@@ -35,11 +50,16 @@
                 .nav-element {
                     text-decoration: none;
                     display: block;
+                    width: 100%;
                     padding: @spacing-small @spacing-regular;
                     cursor: pointer;
+                    border: 0;
+                    background-color: transparent;
+                    color: @color-dark;
+                    text-align: left;
 
-                    &:hover,
-                    &:focus {
+                    &:focus,
+                    &:hover {
                         background-color: @primary;
                     }
 
@@ -51,11 +71,14 @@
                 .nav-list {
                     position: absolute;
                     top: 100%;
-                    left: 0;
                     display: none;
-                    min-width: 2 * @grid-column;
+                    min-width: @grid-column;
+                    width: 100%;
+                    max-width: 2 * @grid-column + @grid-gutter;
                     padding: @spacing-small 0;
                     background-color: @background-dark;
+                    max-height: 80vh;
+                    overflow: auto;
 
                     .nav-item {
                         width: 100%;
@@ -63,8 +86,8 @@
                         .nav-element {
                             padding: @spacing-small @spacing-large;
 
-                            &:hover,
-                            &:focus {
+                            &:focus,
+                            &:hover {
                                 background-color: transparent;
                                 color: @grey-semi-bright;
                             }

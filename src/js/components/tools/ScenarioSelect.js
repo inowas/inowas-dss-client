@@ -1,30 +1,28 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 
 import ScenarioItem from './ScenarioItem';
 
 import '../../../less/scenarioSelect.less';
 
-export default class ScenarioSelect extends React.Component {
+export default class ScenarioSelect extends Component {
 
-    renderScenarios(scenarios) {
+    static propTypes = {
+        scenarios: PropTypes.array.isRequired,
+        toggleSelection: PropTypes.func.isRequired
+    }
+
+    renderScenarios( scenarios ) {
         return scenarios.map(s => {
-            return (
-                <ScenarioItem key={s.id} scenario={s} toggleSelection={this.props.toggleSelection} />
-            );
+            return ( <ScenarioItem key={s.modelId} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
         });
     }
 
-    render() {
+    render( ) {
         return (
             <div className="scenarioSelect">
-                {this.renderScenarios(this.props.scenarios)}
+                {this.renderScenarios( this.props.scenarios )}
             </div>
         );
     }
 
-}
-
-ScenarioSelect.propTypes = {
-    scenarios: React.PropTypes.array.isRequired,
-    toggleSelection: React.PropTypes.func.isRequired
 }

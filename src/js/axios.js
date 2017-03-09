@@ -1,3 +1,3 @@
-import axios from "axios";
-axios.defaults.baseURL = 'http://dev.inowas.hydro.tu-dresden.de/api';
+import axios from 'axios';
+axios.defaults.baseURL = 'https://api.inowas.hydro.tu-dresden.de/api';
 export default axios;
