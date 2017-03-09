@@ -25,7 +25,7 @@ export default class Dashboard extends React.Component {
 
     state = {
         active: null,
-        popupVisible: false, // TODO remove popup
+        popupVisible: true, // TODO remove popup
         navigation: [{
             name: 'Documentation',
             path: '',
@@ -65,17 +65,8 @@ export default class Dashboard extends React.Component {
                 name: 'T09_d Saltwater intrusion / Critical well discharge',
                 path: 'tools/T09D'
             }, {
-                name: 'T13_a Travel time / Aquifer with no-flow and fixed-head boundaries',
-                path: 'tools/T13A'
-            }, {
-                name: 'T13_b Aquifer system with two fixed head boundary conditions',
-                path: 'tools/T13B'
-            }, {
-                name: 'T13_c Aquifer system with two fixed head boundary conditions',
-                path: 'tools/T13C'
-            }, {
-                name: 'T13_e Aquifer system with one pumping well at constant rate, no groundwater recharge',
-                path: 'tools/T13E'
+                name: 'T13 Calculation of the travel time',
+                path: 'tools/T13'
             }, {
                 name: 'T14_a Fully penetrating stream with no streambed resistance',
                 path: 'tools/T14A'

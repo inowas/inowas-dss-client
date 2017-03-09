@@ -15,12 +15,12 @@ export default class Impressum extends Component {
                 <header className="header">
                     <Login/>
                     <Slider className="app-width">
-                        {/* }<ol className="carousel-indicators">
+                        <ol className="carousel-indicators">
                             <li data-target="#startCarousel" data-slide-to="0" className="active"/>
                             <li data-target="#startCarousel" data-slide-to="1"/>
                             <li data-target="#startCarousel" data-slide-to="2"/>
                             <li data-target="#startCarousel" data-slide-to="3"/>
-                        </ol>*/}
+                        </ol>
 
                         <SliderItem>
                             <div className="caption">

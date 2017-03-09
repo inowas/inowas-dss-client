@@ -10,7 +10,7 @@ export default class T13 extends React.Component {
     render() {
         return (
             <div className="app-width">
-                <Header title={'T13: Travel time'}/>
+                <h3>Please select the set of boundary conditions that apply to your problem:</h3>
                 <div className="grid-container">
                     <a href="#/tools/T13A" className="tile col col-rel-1-t13">
                        <div className="div-block">
