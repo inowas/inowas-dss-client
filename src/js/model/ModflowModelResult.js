@@ -1,3 +1,5 @@
+import Legend from './ColorLegend'
+
 /**
  * ModflowModelResult
  */
@@ -11,6 +13,7 @@ export default class ModflowModelResult {
     _imgUrl;
     _min;
     _max;
+    _legend;
 
     constructor(modelId, layerNumber, resultType, totalTime, data, imgUrl) {
         this._modelId = modelId;
@@ -21,6 +24,7 @@ export default class ModflowModelResult {
         this._imgUrl = imgUrl;
         this._min = this.calculatePercentile(data, 3);
         this._max = this.calculatePercentile(data, 95);
+        this._legend = new Legend(this._min, this._max);
     }
 
     modelId(){
@@ -57,6 +61,10 @@ export default class ModflowModelResult {
 
     max(){
         return this._max;
+    }
+
+    legend(min = null, max = null) {
+        return this._legend.legend(min, max);
     }
 
     calculatePercentile(data, percent){

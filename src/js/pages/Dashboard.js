@@ -32,7 +32,7 @@ export default class Dashboard extends React.Component {
             icon: <Icon name="file"/>
         }, {
             name: 'Datasets',
-            path: 'http://kb.inowas.hydro.tu-dresden.de',
+            path: 'https://kb.inowas.hydro.tu-dresden.de',
             icon: <Icon name="dataset"/>
         }, {
             name: 'Projects',

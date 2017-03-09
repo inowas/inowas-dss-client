@@ -67,12 +67,12 @@ export default class ModFlowMap extends React.Component {
 
         if (tool == 'scenarioanalysis'){
             const id = store.getState().scenarioAnalysis.activeScenario;
-            return ('http://dev.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png');
+            return ('https://api.inowas.hydro.tu-dresden.de/image/scenarioanalysis/models/'+id+'/heads.png');
         }
 
         if (tool == 'modflow'){
             const id = model.id;
-            return ('http://dev.inowas.hydro.tu-dresden.de/image/modflow/models/'+id+'/heads.png');
+            return ('https://api.inowas.hydro.tu-dresden.de/image/modflow/models/'+id+'/heads.png');
         }
     }
 
