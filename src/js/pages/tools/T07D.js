@@ -41,28 +41,31 @@ export default class T07D extends Component {
         tool: PropTypes.object.isRequired
     };
 
-    state = {
-        navigation: [
-            {
-                name: 'Cross section',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Scenarios difference',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Time series',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Overall budget',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }
-        ],
-        sliderValue: 5
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            navigation: [
+                {
+                    name: 'Cross section',
+                    path: 'tools/T07A/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Scenarios difference',
+                    path: 'tools/T07B/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Time series',
+                    path: 'tools/T07C/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Overall budget',
+                    path: 'tools/T07D/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }
+            ]
+        };
+    }
 
     componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
@@ -251,7 +254,7 @@ export default class T07D extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} element="testchart" />
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{duratio: 0}} element="testchart" />
                 </section>
             </div>
         );
