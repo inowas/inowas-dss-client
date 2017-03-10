@@ -14,16 +14,12 @@ export default class AccordionItem extends Component {
         toggleActive: PropTypes.func
     }
 
-    toggleActive = () => {
-        this.props.toggleActive(this.props.index);
-    }
-
     render() {
-        const {active, className, children} = this.props;
+        const {active, className, children, toggleActive} = this.props;
 
         return (
             <div className={'accordion-item' + ' ' + (className || '')} data-active={active}>
-                <div className="accordion-item-header" onClick={this.toggleActive}>
+                <div className="accordion-item-header" onClick={toggleActive}>
                     {this.props.icon}
                     <span className="accordion-item-heading">
                         {this.props.heading}

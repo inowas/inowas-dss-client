@@ -23,11 +23,13 @@ export default class Accordion extends Component {
     }
 
     toggleActiveItem = ( index ) => {
-        let newIndex = index;
-        if ( index === this.state.activeIndex ) {
-            newIndex = null;
-        }
-        this.setState({ activeIndex: newIndex });
+        return () => {
+            let newIndex = index;
+            if ( index === this.state.activeIndex ) {
+                newIndex = null;
+            }
+            this.setState({ activeIndex: newIndex });
+        };
     }
 
     render( ) {
@@ -39,7 +41,7 @@ export default class Accordion extends Component {
             return React.cloneElement(child, {
                 index: currentIndex,
                 active,
-                toggleActive: this.toggleActiveItem
+                toggleActive: this.toggleActiveItem(currentIndex)
             });
         });
 
