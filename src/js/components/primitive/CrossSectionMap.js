@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay, CircleMarker } from 'react-leaflet';
+import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay, CircleMarker, LayersControl, LayerGroup } from 'react-leaflet';
 
 import Icon from './Icon';
 import ColorLegend from './ColorLegend';
@@ -92,7 +92,9 @@ export default class CrossSectionMap extends Component {
             ];
 
             return (
-                <ImageOverlay url={this.props.model.result.imgUrl(this.props.min, this.props.max)} bounds={boundingBox} opacity={0.5}/>
+                <LayersControl.Overlay name='Heads' checked={true}>
+                    <ImageOverlay url={this.props.model.result.imgUrl(this.props.min, this.props.max)} bounds={boundingBox} opacity={0.5}/>
+                </LayersControl.Overlay>
             );
         }
         return null;
@@ -116,7 +118,7 @@ export default class CrossSectionMap extends Component {
         }
 
         const boundaries = this.props.model.boundaries;
-        return boundaries.map( b => {
+        const wells = boundaries.map( b => {
            if (b.type == 'well'){
                const name = b.name;
                const geometry = JSON.parse(b.geometry);
@@ -136,6 +138,14 @@ export default class CrossSectionMap extends Component {
                )
            }
         });
+
+        return (
+            <LayersControl.Overlay name='Wells' checked={true}>
+                <LayerGroup>
+                    {wells}
+                </LayerGroup>
+            </LayersControl.Overlay>
+        )
     }
 
     renderBoundingBox() {
@@ -149,13 +159,23 @@ export default class CrossSectionMap extends Component {
         const style = this.state.styles.boundingBox;
 
         return (
-            <Rectangle
-                bounds={boundingBox}
-                color={style.color}
-                weight={style.weight}
-                fillColor={style.fillColor}
-                fillOpacity={style.fillOpacity}
-            />
+            <LayersControl.Overlay name='BoundingBox' checked={true}>
+                <Rectangle
+                    bounds={boundingBox}
+                    color={style.color}
+                    weight={style.weight}
+                    fillColor={style.fillColor}
+                    fillOpacity={style.fillOpacity}
+                />
+            </LayersControl.Overlay>
+        )
+    }
+
+    renderArea() {
+        return (
+            <LayersControl.Overlay name='Area' checked={true}>
+                <GeoJSON data={this.props.model.area} style={this.state.styles.area} />
+            </LayersControl.Overlay>
         )
     }
 
@@ -189,12 +209,14 @@ export default class CrossSectionMap extends Component {
         return (
             <Map className="crossSectionMap" {...mapPosition} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                <GeoJSON data={model.area} style={this.state.styles.area} />
-                {this.renderBoundingBox()}
-                {this.renderHeatMap()}
-                {this.renderBoundaries()}
-                {this.renderCrossSectionSelection()}
+                <LayersControl position='topright'>
+                    {this.renderArea()}
+                    {this.renderBoundingBox()}
+                    {this.renderHeatMap()}
+                    {this.renderBoundaries()}
+                </LayersControl>
 
+                {this.renderCrossSectionSelection()}
                 <button title="reset view" className="button resetView" onClick={this.resetView}><Icon name="marker" /></button>
                 {this.renderLegend()}
             </Map>
