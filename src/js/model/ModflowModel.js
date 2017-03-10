@@ -1,5 +1,6 @@
 import MfBoundary from './ModflowBoundary';
 import MfResult from './ModflowModelResult';
+import MapData from './CrossSectionMapDataObject';
 
 /**
  * ModflowModel Base Class
@@ -44,7 +45,6 @@ export default class ModflowModel {
     addBoundary(boundary) {
         this.boundaries.push(boundary);
     }
-
 
     updateBoundary(boundary) {
         this.boundaries.map( b => {
@@ -154,7 +154,6 @@ export default class ModflowModel {
         return Math.round((xMin+(rightBorder*dX))*1000)/1000;
     }
 
-
     labelYAxis(){
         if (this.hasResult()){
             if (this.result.resultType().toString() == 'head') {
@@ -207,5 +206,34 @@ export default class ModflowModel {
 
     hasResult() {
         return (this.result instanceof MfResult);
+    }
+
+    mapData(min = null, max = null) {
+
+        if (this.hasResult() === false) {
+            return MapData.fromProps(
+                this.area,
+                this.boundingBox,
+                this.gridSize,
+                this.boundaries
+            )
+        }
+
+        if (min === null) {
+            min = this.result.min();
+        }
+
+        if (max === null) {
+            max = this.result.max();
+        }
+
+        return MapData.fromProps(
+            this.area,
+            this.boundingBox,
+            this.gridSize,
+            this.boundaries,
+            this.result.legend(min, max),
+            this.result.imgUrl(min, max)
+        )
     }
 }

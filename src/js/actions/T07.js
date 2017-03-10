@@ -8,7 +8,6 @@ import ModflowModelDetails from '../model/ModflowModelDetails';
 import ModflowModelResult from '../model/ModflowModelResult';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
-import TotalTime from '../model/TotalTime';
 import TotalTimes from '../model/TotalTimes';
 
 function apiKey() {
@@ -128,10 +127,8 @@ export function fetchTotalTimes( id, type, layer ) {
     };
 }
 
-export function updateResults( id, resultType, layerNumber, totalTime ) {
-    console.log(axios.defaults.baseURL);
+export function updateResultsT07A(id, resultType, layerNumber, totalTime ) {
     const baseUrl = axios.defaults.baseURL.replace(/de\/api/i, 'de\/image');
-    console.log(baseUrl);
     const url = '/scenarioanalysis/model/' + id + '/calculation/result/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
 
     return dispatch => {
@@ -141,7 +138,26 @@ export function updateResults( id, resultType, layerNumber, totalTime ) {
                 promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setResults(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png')) );
+            dispatch( setResultsT07A(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png')) );
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    };
+}
+
+export function updateResultsT07B(modelId1, modelId2, resultType, layerNumber, totalTime ) {
+    const baseUrl = axios.defaults.baseURL.replace(/de\/api/i, 'de\/image');
+    const url = '/scenarioanalysis/result/difference/models/' + modelId1 + '/' + modelId2 + '/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
+
+    return dispatch => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
+            }
+        } ).then( ( { action } ) => {
+            dispatch( setResultsT07A(new ModflowModelResult(id, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png')) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -193,13 +209,13 @@ export function setLayerValues( layerValues ) {
     };
 }
 
-export function setResults( modflowModelResult ) {
+export function setResultsT07A(modflowModelResult ) {
     if (modflowModelResult instanceof ModflowModelResult === false) {
         throw Error('Expected first param to be instance of ModflowModelResult');
     }
 
     return {
-        type: 'T07_SET_MODEL_RESULT',
+        type: 'T07A_SET_MODEL_RESULT',
         payload: modflowModelResult
     };
 }
@@ -232,17 +248,6 @@ export function setSelectedResultType( resultType ) {
         payload: resultType
     };
 }
-
-// export function setSelectedTotalTime( totalTime ) {
-//     if (totalTime instanceof TotalTime === false) {
-//         throw Error('Expected first param to be instance of TotalTime');
-//     }
-//
-//     return {
-//         type: 'T07_SET_SELECTED_TOTAL_TIME',
-//         payload: totalTime
-//     };
-// }
 
 export function setSelectedTotalTimeIndex( index ) {
     return {

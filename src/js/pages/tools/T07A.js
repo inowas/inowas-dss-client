@@ -15,7 +15,7 @@ import '../../../less/toolT07.less';
 
 import {
     fetchModelDetails,
-    updateResults,
+    updateResultsT07A,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
@@ -117,7 +117,7 @@ export default class T07A extends Component {
                 }
             }
 
-            this.props.dispatch(updateResults( m.modelId, resultType, layerNumber, totalTime ));
+            this.props.dispatch(updateResultsT07A( m.modelId, resultType, layerNumber, totalTime ));
         });
     }
 
@@ -167,15 +167,16 @@ export default class T07A extends Component {
         this.props.dispatch(setActiveGridCell( cell ));
     };
 
-    renderMaps( models ) {
-        const { mapPosition, activeGridCell } = this.props.tool;
+    renderMaps() {
+        const { models, mapPosition, activeGridCell } = this.props.tool;
+
         return models.filter(model => {
             return model.selected;
         }).map(( model ) => {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
-                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+                    <CrossSectionMap mapData={model.mapData(models.globalMinValue(), models.globalMaxValue())} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
                 </section>
             );
         });
@@ -294,8 +295,7 @@ export default class T07A extends Component {
 
     render( ) {
         const { navigation } = this.state;
-        let models = this.props.tool.models.models( );
-        models = models.map(m => {
+        const models = this.props.tool.models.map(m => {
             m.thumbnail = 'scenarios_thumb.png';
             return m;
         });
@@ -316,7 +316,7 @@ export default class T07A extends Component {
                     </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMaps( models )}
+                    {this.renderMaps()}
                 </div>
                 {this.renderChart( )}
             </div>

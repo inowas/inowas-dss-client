@@ -50,4 +50,40 @@ export default class ModflowModelsCollection {
 
         return counter;
     }
+
+    globalMinValue = () => {
+        const values = [];
+        this._models.forEach( m => {
+
+            if (m.isSelected() === false){
+                return null;
+            }
+
+            const minValue = m.minValue();
+            if (minValue === null) {
+                return;
+            }
+            values.push(minValue);
+        });
+
+        return values.sort( (a, b) => a > b )[0];
+    };
+
+    globalMaxValue = () => {
+        const values = [];
+        this._models.forEach( m => {
+
+            if (m.isSelected() === false){
+                return null;
+            }
+
+            const maxValue = m.maxValue();
+            if (maxValue === null) {
+                return;
+            }
+            values.push(maxValue);
+        });
+
+        return values.sort( (a, b) => a < b )[0];
+    }
 }

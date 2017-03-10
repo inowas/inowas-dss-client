@@ -15,7 +15,7 @@ import '../../../less/toolT07.less';
 
 import {
     fetchModelDetails,
-    updateResults,
+    updateResultsT07B,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
@@ -117,7 +117,7 @@ export default class T07B extends Component {
                 }
             }
 
-            this.props.dispatch(updateResults( m.modelId, resultType, layerNumber, totalTime ));
+            this.props.dispatch(updateResultsT07B( m.modelId, resultType, layerNumber, totalTime ));
         });
     }
 

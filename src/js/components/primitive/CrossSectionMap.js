@@ -11,13 +11,11 @@ import '../../../less/crossSectionMap.less';
 export default class CrossSectionMap extends Component {
 
     static propTypes = {
-        model: PropTypes.object.isRequired,
+        mapData: PropTypes.object.isRequired,
         updateMapView: PropTypes.func.isRequired,
         updateBounds: PropTypes.func.isRequired,
         mapPosition: PropTypes.object.isRequired,
         setClickedCell: PropTypes.func.isRequired,
-        min: PropTypes.number,
-        max: PropTypes.number,
         activeCell: PropTypes.object
     };
 
@@ -53,13 +51,14 @@ export default class CrossSectionMap extends Component {
     };
 
     resetView = () => {
-        const {model} = this.props;
+        const bb = this.props.mapData.boundingBox();
+
         this.props.updateBounds([{
-            lat: model.boundingBox.y_min,
-            lng: model.boundingBox.x_min
+            lat: bb.y_min,
+            lng: bb.x_min
         }, {
-            lat: model.boundingBox.y_max,
-            lng: model.boundingBox.x_max
+            lat: bb.y_max,
+            lng: bb.x_max
         }]);
     };
 
@@ -67,18 +66,18 @@ export default class CrossSectionMap extends Component {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        const { model } = this.props;
-        const boundingBox = model.boundingBox;
-        const grid = model.gridSize;
+        const { mapData } = this.props;
+        const boundingBox = mapData.boundingBox();
+        const grid = mapData.gridSize();
 
         const dlat = ( boundingBox.y_max - boundingBox.y_min) / grid.n_y; // row width of bounding box grid
         const dlng = ( boundingBox.x_max - boundingBox.x_min) / grid.n_x; // column width of bounding box grid
 
-        // console.log( 'Clicked Cell in grid of bounding box:' );
+        //console.log( 'Clicked Cell in grid of bounding box:' );
         const x = Math.floor( ( lng - boundingBox.x_min) / dlng );
-        // console.log('x:', x); // x coordinate of bounding box grid from 0 to grid[1]-1
+        //console.log('x:', x); // x coordinate of bounding box grid from 0 to grid[1]-1
         const y = grid.n_y - 1 - Math.floor( ( lat - boundingBox.y_min) / dlat );
-        // console.log('y:', y); // y coordinate of bounding box grid from 0 to grid[0]-1
+        //console.log('y:', y); // y coordinate of bounding box grid from 0 to grid[0]-1
 
         // Make sure point is inside bounding box
         if ( y >= 0 && y < grid.n_y && x >= 0 && x < grid.n_x) {
@@ -87,38 +86,38 @@ export default class CrossSectionMap extends Component {
     };
 
     renderHeatMap() {
-        if (this.props.model.result) {
-            const boundingBox = [
-                [this.props.model.boundingBox.y_min, this.props.model.boundingBox.x_min],
-                [this.props.model.boundingBox.y_max, this.props.model.boundingBox.x_max]
-            ];
-
-            return (
-                <LayersControl.Overlay name="Heads" checked>
-                    <ImageOverlay url={this.props.model.result.imgUrl(this.props.min, this.props.max)} bounds={boundingBox} opacity={0.5}/>
-                </LayersControl.Overlay>
-            );
-        }
-        return null;
-    }
-
-    renderLegend() {
-        const {model} = this.props;
-        if (!model.hasResult()) {
+        if (this.props.mapData.imgUrl() === null){
             return null;
         }
 
+        const bb = this.props.mapData.boundingBox();
+        const boundingBox = [[bb.y_min, bb.x_min], [bb.y_max, bb.x_max]];
+
         return (
-            <ColorLegend legend={this.props.model.result.legend(this.props.min, this.props.max)} />
+            <LayersControl.Overlay name="Heads" checked>
+                <ImageOverlay url={this.props.mapData.imgUrl()} bounds={boundingBox} opacity={0.5}/>
+            </LayersControl.Overlay>
+        );
+    }
+
+    renderLegend() {
+        const legend = this.props.mapData.legend();
+
+        if (legend === null) {
+            return  null;
+        }
+
+        return (
+            <ColorLegend legend={legend} />
         );
     }
 
     renderBoundaries() {
-        if (this.props.model.boundaryCount() == 0) {
+        const boundaries = this.props.mapData.boundaries();
+        if (boundaries.length == 0) {
             return null;
         }
 
-        const boundaries = this.props.model.boundaries;
         const wells = boundaries.map( b => {
             if (b.type == 'well') {
                 const name = b.name;
@@ -150,12 +149,8 @@ export default class CrossSectionMap extends Component {
     }
 
     renderBoundingBox() {
-        const model = this.props.model;
-        const boundingBox = [
-            [model.boundingBox.y_min, model.boundingBox.x_min],
-            [model.boundingBox.y_max, model.boundingBox.x_max]
-        ];
-
+        const bb = this.props.mapData.boundingBox();
+        const boundingBox = [[bb.y_min, bb.x_min], [bb.y_max, bb.x_max]];
         const style = this.state.styles.boundingBox;
 
         return (
@@ -172,24 +167,26 @@ export default class CrossSectionMap extends Component {
     }
 
     renderArea() {
+        const area = this.props.mapData.area();
         return (
             <LayersControl.Overlay name="Area" checked>
-                <GeoJSON data={this.props.model.area} style={this.state.styles.area} />
+                <GeoJSON data={area} style={this.state.styles.area} />
             </LayersControl.Overlay>
         );
     }
 
     renderCrossSectionSelection(lat = true, lng = false) {
         const activeCell = this.props.activeCell;
-        const model = this.props.model;
+        const gridSize = this.props.mapData.gridSize();
         const style = this.state.styles.crossSectionSelection;
+        const boundingBox = this.props.mapData.boundingBox();
 
         let crossSectionLatRectangle = null;
         if (activeCell && activeCell.y !== null) {
-            const dlat = ( model.boundingBox.y_max - model.boundingBox.y_min) / model.gridSize.n_y; // row width of bounding box grid
-            const crossSectionLat = (model.gridSize.n_y - activeCell.y - 1) * dlat + model.boundingBox.y_min;
+            const dlat = ( boundingBox.y_max - boundingBox.y_min) / gridSize.n_y; // row width of bounding box grid
+            const crossSectionLat = (gridSize.n_y - activeCell.y - 1) * dlat + boundingBox.y_min;
             crossSectionLatRectangle = <Rectangle
-                bounds={[[crossSectionLat, model.boundingBox.x_min], [crossSectionLat + dlat, model.boundingBox.x_max]]}
+                bounds={[[crossSectionLat, boundingBox.x_min], [crossSectionLat + dlat, boundingBox.x_max]]}
                 color={style.color}
                 weight={style.weight}
                 opacity={style.opacity}
@@ -200,10 +197,10 @@ export default class CrossSectionMap extends Component {
 
         let crossSectionLngRectangle = null;
         if (activeCell && activeCell.x !== null) {
-             const dlng = ( model.boundingBox.x_max - model.boundingBox.x_min) / model.gridSize.n_x; // column width of bounding box grid
-             const crossSectionLng = activeCell.x * dlng + model.boundingBox.x_min;
+             const dlng = ( boundingBox.x_max - boundingBox.x_min) / gridSize.n_x; // column width of bounding box grid
+             const crossSectionLng = activeCell.x * dlng + boundingBox.x_min;
              crossSectionLngRectangle = <Rectangle
-                 bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}
+                 bounds={[[boundingBox.y_min, crossSectionLng], [boundingBox.y_max, crossSectionLng + dlng]]}
                  color={style.color}
                  weight={style.weight}
                  opacity={style.opacity}

@@ -12,6 +12,7 @@ function getInitialState() {
         totalTimes: null,
         selectedTotalTimeIndex: null,
         models: new ModflowModels(),
+        T07BResult: null,
         mapPosition: {
             bounds: [{
                 lat: -90,
@@ -92,7 +93,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.selectedTotalTimeIndex = action.payload;
             break;
 
-        case 'T07_SET_MODEL_RESULT':
+        case 'T07A_SET_MODEL_RESULT':
             state = { ...state };
             state.models.map( m => {
                 if ( m.modelId === action.payload.modelId() ) {
