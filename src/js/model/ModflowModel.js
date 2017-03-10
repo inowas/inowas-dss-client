@@ -189,6 +189,21 @@ export default class ModflowModel {
         return column;
     }
 
+    coordinateByGridCell(col, row){
+        const nX = this.gridSize.n_x;
+        const nY = this.gridSize.n_y;
+        const xMin = this.boundingBox.x_min;
+        const xMax = this.boundingBox.x_max;
+        const yMin = this.boundingBox.y_min;
+        const yMax = this.boundingBox.y_max;
+        const dX = (xMax-xMin)/nX;
+        const dY = (yMax-yMin)/nY;
+
+        const x = Math.round((xMin+((col+0.5)*dX))*1000)/1000;
+        const y = Math.round((yMin+((row+0.5)*dY))*1000)/1000;
+
+        return {x: x, y: y};
+    }
 
     hasResult() {
         return (this.result instanceof MfResult);

@@ -193,6 +193,11 @@ export default class T07 extends Component {
             return null;
         }
 
+        const colNumber = this.props.tool.activeGridCell.x;
+        if ( colNumber === null ) {
+            return null;
+        }
+
         const columns = [];
         models.models().forEach(m => {
             if (m.isSelected( ) && m.hasResult( )) {
@@ -222,6 +227,11 @@ export default class T07 extends Component {
                         }, {
                             value: baseModel.chartRightBorderByRowNumber( rowNumber ),
                             text: 'Western model border',
+                            position: 'middle'
+                        },
+                        {
+                            value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
+                            text: 'Selected column',
                             position: 'middle'
                         }
                     ]

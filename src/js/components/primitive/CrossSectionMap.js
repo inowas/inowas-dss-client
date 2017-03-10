@@ -22,6 +22,7 @@ export default class CrossSectionMap extends Component {
 
     state = {
         styles: {
+            crossSectionSelection: {color: "#000", weight: 0.5, opacity: 0.5, fillColor: "#000", fillOpacity: 0.5},
             inactive: {color: "#000", weight: 0, fillColor: "#000", fillOpacity: 0.7},
             active: {color: "#ff7800", weight: 0, fillColor: "#000", fillOpacity: 0},
             boundingBox: {color: "#000", weight: 0.5, fillColor: "blue", fillOpacity: 0.1},
@@ -183,19 +184,34 @@ export default class CrossSectionMap extends Component {
 
         const activeCell = this.props.activeCell;
         const model = this.props.model;
+        const style = this.state.styles.crossSectionSelection;
 
         let crossSectionLatRectangle = null;
         if (activeCell && activeCell.y !== null) {
             const dlat = ( model.boundingBox.y_max - model.boundingBox.y_min) / model.gridSize.n_y; // row width of bounding box grid
             const crossSectionLat = (model.gridSize.n_y - activeCell.y - 1) * dlat + model.boundingBox.y_min;
-            crossSectionLatRectangle = <Rectangle bounds={[[crossSectionLat, model.boundingBox.x_min], [crossSectionLat + dlat, model.boundingBox.x_max]]}/>;
+            crossSectionLatRectangle = <Rectangle
+                bounds={[[crossSectionLat, model.boundingBox.x_min], [crossSectionLat + dlat, model.boundingBox.x_max]]}
+                color={style.color}
+                weight={style.weight}
+                opacity={style.opacity}
+                fillColor={style.fillColor}
+                fillOpacity={style.fillOpacity}
+            />;
         }
 
         let crossSectionLngRectangle = null;
         if (activeCell && activeCell.x !== null) {
              const dlng = ( model.boundingBox.x_max - model.boundingBox.x_min) / model.gridSize.n_x; // column width of bounding box grid
              const crossSectionLng = activeCell.x * dlng + model.boundingBox.x_min;
-             crossSectionLngRectangle = <Rectangle bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}/>;
+             crossSectionLngRectangle = <Rectangle
+                 bounds={[[model.boundingBox.y_min, crossSectionLng], [model.boundingBox.y_max, crossSectionLng + dlng]]}
+                 color={style.color}
+                 weight={style.weight}
+                 opacity={style.opacity}
+                 fillColor={style.fillColor}
+                 fillOpacity={style.fillOpacity}
+             />;
         }
 
         if (lat && lng){return (<div>{crossSectionLatRectangle}{crossSectionLngRectangle}</div>)}
@@ -204,7 +220,7 @@ export default class CrossSectionMap extends Component {
     }
 
     render() {
-        const { model, mapPosition } = this.props;
+        const { mapPosition } = this.props;
 
         return (
             <Map className="crossSectionMap" {...mapPosition} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
