@@ -170,16 +170,13 @@ export default class T07C extends Component {
         this.props.dispatch(setActiveGridCell( cell ));
     };
 
-    renderMaps( models ) {
+    renderMap( models ) {
         const { mapPosition, activeGridCell } = this.props.tool;
         return models.filter(model => {
             return model.selected;
         }).map(( model ) => {
             return (
-                <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <h2>{model.name}</h2>
-                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
-                </section>
+                <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
             );
         });
     }
@@ -266,60 +263,40 @@ export default class T07C extends Component {
         this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
     };
 
-    renderSlider( ) {
-        if (!this.props.tool.totalTimes) {
-            return null;
-        }
-
-        const totalTimes = this.props.tool.totalTimes.totalTimes;
-        // console.log(totalTimes);
-        // if ( totalTimes === null ) {
-        //     return null;
-        // }
-        //
-        // let sliderValue = this.props.tool.selectedTotalTime;
-        // if ( sliderValue === null ) {
-        //     sliderValue = new TotalTime(totalTimes.maxValue( ));
-        // }
-        //
-        // const minValue = totalTimes.minValue( );
-        // const maxValue = totalTimes.maxValue( );
-        // const stepSize = totalTimes.stepSize( );
-        //
-        // return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
-
-        let sliderValue = this.props.tool.selectedTotalTimeIndex;
-        if ( sliderValue === null ) {
-            sliderValue = totalTimes.length - 1;
-        }
-        return ( <RangeSlider data={totalTimes} startDate={this.props.tool.totalTimes.start()} step={1} value={sliderValue} onChange={this.changeTotalTimeIndex}/> );
-    }
-
     render( ) {
         const { navigation } = this.state;
-        let models = this.props.tool.models.models( );
-        models = models.map(m => {
-            m.thumbnail = 'scenarios_thumb.png';
-            return m;
-        });
 
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
-                <Drawer visible>
-                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
-                </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
                         {this.renderSelect( )}
                     </div>
-                    <div className="tile col stretch">
-                        {this.renderSlider( )}
-                    </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMaps( models )}
+                    <section className="tile col col-abs-3">
+                        {/* this.renderMap( model )*/}
+                    </section>
+                    <section className="tile col col-abs-2">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Point</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>3535</td>
+                                    <td>34346</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
                 </div>
                 {this.renderChart( )}
             </div>
