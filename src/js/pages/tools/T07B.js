@@ -254,7 +254,7 @@ export default class T07B extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} transition={{duratio: 0}} element="testchart" />
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
                 </section>
             </div>
         );
