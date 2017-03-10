@@ -100,11 +100,6 @@ export default class T07A extends Component {
             return;
         }
 
-        // if ( totalTime instanceof TotalTime === false ) {
-        //     console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
-        //     return;
-        // }
-
         const totalTimes = this.props.tool.totalTimes.totalTimes;
 
         const totalTime = (totalTimeIndex === null) ? new TotalTime(totalTimes[totalTimes.length - 1]) : new TotalTime(totalTimes[totalTimeIndex]);
@@ -272,22 +267,6 @@ export default class T07A extends Component {
         }
 
         const totalTimes = this.props.tool.totalTimes.totalTimes;
-        // console.log(totalTimes);
-        // if ( totalTimes === null ) {
-        //     return null;
-        // }
-        //
-        // let sliderValue = this.props.tool.selectedTotalTime;
-        // if ( sliderValue === null ) {
-        //     sliderValue = new TotalTime(totalTimes.maxValue( ));
-        // }
-        //
-        // const minValue = totalTimes.minValue( );
-        // const maxValue = totalTimes.maxValue( );
-        // const stepSize = totalTimes.stepSize( );
-        //
-        // return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
-
         let sliderValue = this.props.tool.selectedTotalTimeIndex;
         if ( sliderValue === null ) {
             sliderValue = totalTimes.length - 1;

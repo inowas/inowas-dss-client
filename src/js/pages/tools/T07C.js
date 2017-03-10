@@ -3,12 +3,9 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
-import Drawer from '../../components/primitive/Drawer';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
-import RangeSlider from '../../components/primitive/RangeSlider';
 import Navbar from '../Navbar';
-import ScenarioSelect from '../../components/tools/ScenarioSelect';
 
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
@@ -19,7 +16,6 @@ import {
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
-    toggleModelSelection,
     setMapView,
     setBounds,
     setActiveGridCell
@@ -71,18 +67,6 @@ export default class T07C extends Component {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
 
-    toggleSelection = id => {
-        return ( e ) => {
-            this.props.dispatch(toggleModelSelection( id ));
-            this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
-
-            // manually emit a resize event so the leaflet maps recalculate their container size
-            const event = document.createEvent( 'HTMLEvents' );
-            event.initEvent( 'resize', true, false );
-            e.target.dispatchEvent( event );
-        };
-    };
-
     changeLayerValue = ( layerNumber, resultType ) => {
         this.props.dispatch(setSelectedLayer( layerNumber ));
         this.props.dispatch(setSelectedResultType( resultType ));
@@ -99,11 +83,6 @@ export default class T07C extends Component {
             console.error( 'Cannot update ModelResults, due resultType is not from Type ResultType.' );
             return;
         }
-
-        // if ( totalTime instanceof TotalTime === false ) {
-        //     console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
-        //     return;
-        // }
 
         const totalTimes = this.props.tool.totalTimes.totalTimes;
 
@@ -258,7 +237,6 @@ export default class T07C extends Component {
     }
 
     changeTotalTimeIndex = index => {
-        // this.props.dispatch(setSelectedTotalTime(new TotalTime( value )));
         this.props.dispatch(setSelectedTotalTimeIndex(index));
         this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
     };
