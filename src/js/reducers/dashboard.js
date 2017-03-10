@@ -95,7 +95,7 @@ const initialState = {
     }, {
         slug: 'T07',
         name: 'Application-specific scenario analyzer',
-        path: 'tools/T07/',
+        path: 'tools/T07A/',
         models: [ {
             model_id: '07_1',
             user_id: 'Jana Glass',
