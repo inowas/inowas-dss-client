@@ -46,11 +46,13 @@ export default class ModflowModel {
         this.boundaries.push(boundary);
     }
 
+    // doesn't do anything
     updateBoundary(boundary) {
         this.boundaries.map( b => {
             if (b.id === boundary.id) {
                 return boundary;
             }
+            return null;
         });
     }
 
@@ -118,11 +120,11 @@ export default class ModflowModel {
 
 
         const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.x_min;
-        const xMax = this.boundingBox.x_max;
-        const dX = (xMax-xMin)/nX;
+        const xMin = this.boundingBox.southWest.lng;
+        const xMax = this.boundingBox.northEast.lng;
+        const dX = (xMax - xMin) / nX;
 
-        return Math.round((xMin+(leftBorder*dX))*1000)/1000;
+        return Math.round((xMin + (leftBorder * dX)) * 1000) / 1000;
     }
 
     chartRightBorderByRowNumber(row) {
@@ -147,59 +149,60 @@ export default class ModflowModel {
         }
 
         const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.x_min;
-        const xMax = this.boundingBox.x_max;
-        const dX = (xMax-xMin)/nX;
+        const xMin = this.boundingBox.southWest.lng;
+        const xMax = this.boundingBox.northEast.lng;
+        const dX = (xMax - xMin) / nX;
 
-        return Math.round((xMin+(rightBorder*dX))*1000)/1000;
+        return Math.round((xMin + (rightBorder * dX)) * 1000) / 1000;
     }
 
-    labelYAxis(){
-        if (this.hasResult()){
-            if (this.result.resultType().toString() == 'head') {
-                return 'Groundwater Head [m]'
+    labelYAxis() {
+        if (this.hasResult()) {
+            if (this.result.resultType().toString() === 'head') {
+                return 'Groundwater Head [m]';
             }
 
-            if (this.result.resultType().toString() == 'drawdown') {
-                return 'Groundwater DrawDown [m]'
+            if (this.result.resultType().toString() === 'drawdown') {
+                return 'Groundwater DrawDown [m]';
             }
         }
 
         return '';
     }
 
-    labelXAxis(){
+    labelXAxis() {
         if (this.hasResult()) {
             return ('Longitude');
         }
+        return null;
     }
 
-    columnXAxis(){
+    columnXAxis() {
         const column = ['x'];
         const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.x_min;
-        const xMax = this.boundingBox.x_max;
-        const dX = (xMax-xMin)/nX;
+        const xMin = this.boundingBox.southWest.lng;
+        const xMax = this.boundingBox.northEast.lng;
+        const dX = (xMax - xMin) / nX;
 
-        for (let i=0; i<nX; i++){
-            column.push(Math.round((xMin+(i*dX))*1000)/1000);
+        for (let i = 0; i < nX; i++) {
+            column.push(Math.round((xMin + (i * dX)) * 1000) / 1000);
         }
 
         return column;
     }
 
-    coordinateByGridCell(col, row){
+    coordinateByGridCell(col, row) {
         const nX = this.gridSize.n_x;
         const nY = this.gridSize.n_y;
-        const xMin = this.boundingBox.x_min;
-        const xMax = this.boundingBox.x_max;
-        const yMin = this.boundingBox.y_min;
-        const yMax = this.boundingBox.y_max;
-        const dX = (xMax-xMin)/nX;
-        const dY = (yMax-yMin)/nY;
+        const xMin = this.boundingBox.southWest.lng;
+        const xMax = this.boundingBox.northEast.lng;
+        const yMin = this.boundingBox.southWest.lat;
+        const yMax = this.boundingBox.northEast.lat;
+        const dX = (xMax - xMin) / nX;
+        const dY = (yMax - yMin) / nY;
 
-        const x = Math.round((xMin+((col+0.5)*dX))*1000)/1000;
-        const y = Math.round((yMin+((row+0.5)*dY))*1000)/1000;
+        const x = Math.round((xMin + ((col + 0.5) * dX)) * 1000) / 1000;
+        const y = Math.round((yMin + ((row + 0.5) * dY)) * 1000) / 1000;
 
         return {x: x, y: y};
     }
@@ -209,14 +212,13 @@ export default class ModflowModel {
     }
 
     mapData(min = null, max = null) {
-
         if (this.hasResult() === false) {
             return MapData.fromProps(
                 this.area,
                 this.boundingBox,
                 this.gridSize,
                 this.boundaries
-            )
+            );
         }
 
         if (min === null) {
@@ -234,6 +236,6 @@ export default class ModflowModel {
             this.boundaries,
             this.result.legend(min, max),
             this.result.imgUrl(min, max)
-        )
+        );
     }
 }

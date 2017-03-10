@@ -185,7 +185,10 @@ export default class T07D extends Component {
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
-                        {this.renderSelect( )}
+                        <select className="select block">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
                     </div>
                 </div>
                 <div className="grid-container">

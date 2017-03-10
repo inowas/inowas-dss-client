@@ -51,15 +51,9 @@ export default class CrossSectionMap extends Component {
     };
 
     resetView = () => {
-        const bb = this.props.mapData.boundingBox();
+        const boundingBox = this.props.mapData.boundingBox();
 
-        this.props.updateBounds([{
-            lat: bb.y_min,
-            lng: bb.x_min
-        }, {
-            lat: bb.y_max,
-            lng: bb.x_max
-        }]);
+        this.props.updateBounds(boundingBox.toArray());
     };
 
     handleClick = e => {
@@ -70,14 +64,11 @@ export default class CrossSectionMap extends Component {
         const boundingBox = mapData.boundingBox();
         const grid = mapData.gridSize();
 
-        const dlat = ( boundingBox.y_max - boundingBox.y_min) / grid.n_y; // row width of bounding box grid
-        const dlng = ( boundingBox.x_max - boundingBox.x_min) / grid.n_x; // column width of bounding box grid
+        const dlat = ( boundingBox.northEast.lat - boundingBox.southWest.lat) / grid.n_y; // row width of bounding box grid
+        const dlng = ( boundingBox.northEast.lng - boundingBox.southWest.lng) / grid.n_x; // column width of bounding box grid
 
-        //console.log( 'Clicked Cell in grid of bounding box:' );
-        const x = Math.floor( ( lng - boundingBox.x_min) / dlng );
-        //console.log('x:', x); // x coordinate of bounding box grid from 0 to grid[1]-1
-        const y = grid.n_y - 1 - Math.floor( ( lat - boundingBox.y_min) / dlat );
-        //console.log('y:', y); // y coordinate of bounding box grid from 0 to grid[0]-1
+        const x = Math.floor( ( lng - boundingBox.southWest.lng) / dlng );
+        const y = grid.n_y - 1 - Math.floor( ( lat - boundingBox.southWest.lat) / dlat );
 
         // Make sure point is inside bounding box
         if ( y >= 0 && y < grid.n_y && x >= 0 && x < grid.n_x) {
@@ -86,12 +77,11 @@ export default class CrossSectionMap extends Component {
     };
 
     renderHeatMap() {
-        if (this.props.mapData.imgUrl() === null){
+        if (this.props.mapData.imgUrl() === null) {
             return null;
         }
 
-        const bb = this.props.mapData.boundingBox();
-        const boundingBox = [[bb.y_min, bb.x_min], [bb.y_max, bb.x_max]];
+        const boundingBox = this.props.mapData.boundingBox().toArray();
 
         return (
             <LayersControl.Overlay name="Heads" checked>
@@ -114,13 +104,12 @@ export default class CrossSectionMap extends Component {
 
     renderBoundaries() {
         const boundaries = this.props.mapData.boundaries();
-        if (boundaries.length == 0) {
+        if (boundaries.length === 0) {
             return null;
         }
 
         const wells = boundaries.map( b => {
-            if (b.type == 'well') {
-                const name = b.name;
+            if (b.type === 'well') {
                 const geometry = JSON.parse(b.geometry);
                 const metadata = JSON.parse(b.metadata);
 
@@ -137,6 +126,7 @@ export default class CrossSectionMap extends Component {
                    />
                 );
             }
+            return null;
         });
 
         return (
@@ -149,8 +139,7 @@ export default class CrossSectionMap extends Component {
     }
 
     renderBoundingBox() {
-        const bb = this.props.mapData.boundingBox();
-        const boundingBox = [[bb.y_min, bb.x_min], [bb.y_max, bb.x_max]];
+        const boundingBox = this.props.mapData.boundingBox().toArray();
         const style = this.state.styles.boundingBox;
 
         return (
@@ -183,10 +172,10 @@ export default class CrossSectionMap extends Component {
 
         let crossSectionLatRectangle = null;
         if (activeCell && activeCell.y !== null) {
-            const dlat = ( boundingBox.y_max - boundingBox.y_min) / gridSize.n_y; // row width of bounding box grid
-            const crossSectionLat = (gridSize.n_y - activeCell.y - 1) * dlat + boundingBox.y_min;
+            const dlat = ( boundingBox.northEast.lat - boundingBox.southWest.lat) / gridSize.n_y; // row width of bounding box grid
+            const crossSectionLat = (gridSize.n_y - activeCell.y - 1) * dlat + boundingBox.southWest.lat;
             crossSectionLatRectangle = (<Rectangle
-                bounds={[[crossSectionLat, boundingBox.x_min], [crossSectionLat + dlat, boundingBox.x_max]]}
+                bounds={[{lat: crossSectionLat, lng: boundingBox.southWest.lng}, {lat: crossSectionLat + dlat, lng: boundingBox.northEast.lng}]}
                 color={style.color}
                 weight={style.weight}
                 opacity={style.opacity}
@@ -197,10 +186,10 @@ export default class CrossSectionMap extends Component {
 
         let crossSectionLngRectangle = null;
         if (activeCell && activeCell.x !== null) {
-            const dlng = ( boundingBox.x_max - boundingBox.x_min) / gridSize.n_x; // column width of bounding box grid
-            const crossSectionLng = activeCell.x * dlng + boundingBox.x_min;
+            const dlng = ( boundingBox.northEast.lng - boundingBox.southWest.lng) / gridSize.n_x; // column width of bounding box grid
+            const crossSectionLng = activeCell.x * dlng + boundingBox.southWest.lng;
             crossSectionLngRectangle = (<Rectangle
-                 bounds={[[boundingBox.y_min, crossSectionLng], [boundingBox.y_max, crossSectionLng + dlng]]}
+                 bounds={[{lat: boundingBox.southWest.lat, lng: crossSectionLng}, {lat: boundingBox.northEast.lat, lng: crossSectionLng + dlng}]}
                  color={style.color}
                  weight={style.weight}
                  opacity={style.opacity}

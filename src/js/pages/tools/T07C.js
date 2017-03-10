@@ -37,8 +37,8 @@ export default class T07C extends Component {
         tool: PropTypes.object.isRequired
     };
 
-    constructor(props) {
-        super(props);
+    constructor( props ) {
+        super( props );
 
         this.state = {
             navigation: [
@@ -86,7 +86,9 @@ export default class T07C extends Component {
 
         const totalTimes = this.props.tool.totalTimes.totalTimes;
 
-        const totalTime = (totalTimeIndex === null) ? new TotalTime(totalTimes[totalTimes.length - 1]) : new TotalTime(totalTimes[totalTimeIndex]);
+        const totalTime = ( totalTimeIndex === null )
+            ? new TotalTime(totalTimes[totalTimes.length - 1])
+            : new TotalTime(totalTimes[totalTimeIndex]);
 
         this.props.tool.models.forEach(m => {
             if ( m.isSelected( ) === false ) {
@@ -149,95 +151,94 @@ export default class T07C extends Component {
         this.props.dispatch(setActiveGridCell( cell ));
     };
 
-    renderMap( models ) {
-        const { mapPosition, activeGridCell } = this.props.tool;
-        return models.filter(model => {
-            return model.selected;
-        }).map(( model ) => {
-            return (
-                <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
-            );
-        });
+    renderMap( ) {
+        const { models } = this.props.tool;
+        if ( models ) {
+            const model = models.baseModel( );
+            const { mapPosition, activeGridCell } = this.props.tool;
+            return ( <CrossSectionMap mapData={model.mapData(models.globalMinValue( ), models.globalMaxValue( ))} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/> );
+        }
+        return null;
     }
 
     renderChart( ) {
-        const models = this.props.tool.models;
-
-        if ( models.countModelsWithResults( ) === 0 ) {
-            return null;
-        }
-
-        const rowNumber = this.props.tool.activeGridCell.y;
-        if ( rowNumber === null ) {
-            return null;
-        }
-
-        const colNumber = this.props.tool.activeGridCell.x;
-        if ( colNumber === null ) {
-            return null;
-        }
-
-        const columns = [];
-        models.models().forEach(m => {
-            if (m.isSelected( ) && m.hasResult( )) {
-                columns.push(m.chartDataByRowNumber( rowNumber ));
-            }
-        });
-
-        const chartData = {
-            columns: columns
-        };
-
-        let grid = {};
-        let axis = {};
-
-        const baseModel = models.baseModel();
-        if (baseModel.hasResult()) {
-            chartData.x = 'x';
-            columns.unshift(baseModel.columnXAxis());
-            grid = {
-                x: {
-                    show: true,
-                    lines: [
-                        {
-                            value: baseModel.chartLeftBorderByRowNumber( rowNumber ),
-                            text: 'Eastern model border',
-                            position: 'middle'
-                        }, {
-                            value: baseModel.chartRightBorderByRowNumber( rowNumber ),
-                            text: 'Western model border',
-                            position: 'middle'
-                        },
-                        {
-                            value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
-                            text: 'Selected column',
-                            position: 'middle'
-                        }
-                    ]
-                }
-            };
-
-            axis = {
-                x: {
-                    label: baseModel.labelXAxis()
-                },
-                y: {
-                    label: baseModel.labelYAxis()
-                }
-            };
-        }
-
-        return (
-            <div className="grid-container">
-                <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
-                </section>
-            </div>
-        );
+        // const models = this.props.tool.models;
+        //
+        // if ( models.countModelsWithResults( ) === 0 ) {
+        //     return null;
+        // }
+        //
+        // const rowNumber = this.props.tool.activeGridCell.y;
+        // if ( rowNumber === null ) {
+        //     return null;
+        // }
+        //
+        // const colNumber = this.props.tool.activeGridCell.x;
+        // if ( colNumber === null ) {
+        //     return null;
+        // }
+        //
+        // const columns = [];
+        // models.models().forEach(m => {
+        //     if (m.isSelected( ) && m.hasResult( )) {
+        //         columns.push(m.chartDataByRowNumber( rowNumber ));
+        //     }
+        // });
+        //
+        // const chartData = {
+        //     columns: columns
+        // };
+        //
+        // let grid = {};
+        // let axis = {};
+        //
+        // const baseModel = models.baseModel();
+        // if (baseModel.hasResult()) {
+        //     chartData.x = 'x';
+        //     columns.unshift(baseModel.columnXAxis());
+        //     grid = {
+        //         x: {
+        //             show: true,
+        //             lines: [
+        //                 {
+        //                     value: baseModel.chartLeftBorderByRowNumber( rowNumber ),
+        //                     text: 'Eastern model border',
+        //                     position: 'middle'
+        //                 }, {
+        //                     value: baseModel.chartRightBorderByRowNumber( rowNumber ),
+        //                     text: 'Western model border',
+        //                     position: 'middle'
+        //                 },
+        //                 {
+        //                     value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
+        //                     text: 'Selected column',
+        //                     position: 'middle'
+        //                 }
+        //             ]
+        //         }
+        //     };
+        //
+        //     axis = {
+        //         x: {
+        //             label: baseModel.labelXAxis()
+        //         },
+        //         y: {
+        //             label: baseModel.labelYAxis()
+        //         }
+        //     };
+        // }
+        //
+        // return (
+        //     <div className="grid-container">
+        //         <section className="tile col stretch">
+        //             <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
+        //         </section>
+        //     </div>
+        // );
     }
 
     changeTotalTimeIndex = index => {
-        this.props.dispatch(setSelectedTotalTimeIndex(index));
+        this.props.dispatch(setSelectedTotalTimeIndex( index ));
         this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
     };
 
@@ -255,7 +256,7 @@ export default class T07C extends Component {
                 </div>
                 <div className="grid-container">
                     <section className="tile col col-abs-3">
-                        {/* this.renderMap( model )*/}
+                        {this.renderMap( )}
                     </section>
                     <section className="tile col col-abs-2">
                         <table className="table">

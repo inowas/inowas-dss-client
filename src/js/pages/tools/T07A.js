@@ -162,6 +162,7 @@ export default class T07A extends Component {
     };
 
     setCrossSection = ( cell ) => {
+        console.log(cell);
         this.props.dispatch(setActiveGridCell( cell ));
     };
 
@@ -198,7 +199,7 @@ export default class T07A extends Component {
         }
 
         const columns = [];
-        models.models().forEach(m => {
+        models.models.forEach(m => {
             if (m.isSelected( ) && m.hasResult( )) {
                 columns.push(m.chartDataByRowNumber( rowNumber ));
             }
