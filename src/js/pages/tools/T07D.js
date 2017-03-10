@@ -33,7 +33,7 @@ import ModflowModelResult from '../../model/ModflowModelResult';
 @connect(( store ) => {
     return { tool: store.T07 };
 })
-export default class T07a extends Component {
+export default class T07D extends Component {
 
     static propTypes = {
         dispatch: PropTypes.func.isRequired,
