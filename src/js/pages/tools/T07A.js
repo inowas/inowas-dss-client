@@ -152,7 +152,7 @@ export default class T07A extends Component {
 
     renderSelect( ) {
         return (
-            <select className="layer-select select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
+            <select className="select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
             </select>
         );
@@ -319,7 +319,9 @@ export default class T07A extends Component {
                     </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMaps( models )}
+                    <div className="scroll-vertical">
+                        {this.renderMaps( models )}
+                    </div>
                 </div>
                 {this.renderChart( )}
             </div>

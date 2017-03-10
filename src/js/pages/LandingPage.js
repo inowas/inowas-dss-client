@@ -14,58 +14,59 @@ export default class LandingPage extends React.Component {
             <div className="application-wrapper landingPage-wrapper">
                 <header className="header">
                     <Login/>
-                    <Slider className="app-width">
-                        {/* }<ol className="carousel-indicators">
-                            <li data-target="#startCarousel" data-slide-to="0" className="active"/>
-                            <li data-target="#startCarousel" data-slide-to="1"/>
-                            <li data-target="#startCarousel" data-slide-to="2"/>
-                            <li data-target="#startCarousel" data-slide-to="3"/>
-                        </ol>*/}
+                    <div className="app-width">
+                        <Slider>
+                            {/* }<ol className="carousel-indicators">
+                                <li data-target="#startCarousel" data-slide-to="0" className="active"/>
+                                <li data-target="#startCarousel" data-slide-to="1"/>
+                                <li data-target="#startCarousel" data-slide-to="2"/>
+                                <li data-target="#startCarousel" data-slide-to="3"/>
+                            </ol>*/}
 
-                        <SliderItem>
-                            <div className="caption">
-                                <h2>Web MAR Apps</h2>
-                                <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
-                            </div>
-                            <div className="image-wrapper">
-                                <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326"/>
-                            </div>
-                        </SliderItem>
+                            <SliderItem>
+                                <div className="caption">
+                                    <h2>Web MAR Apps</h2>
+                                    <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
+                                </div>
+                                <div className="image-wrapper">
+                                    <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326"/>
+                                </div>
+                            </SliderItem>
 
-                        <SliderItem>
+                            <SliderItem>
 
-                            <div className="caption">
-                                <h2>Web MAR Tools</h2>
-                                <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
-                            </div>
-                            <div className="image-wrapper">
-                                <img src="../images/landingPage/carousel-slide-02.png" alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
-                            </div>
-                        </SliderItem>
+                                <div className="caption">
+                                    <h2>Web MAR Tools</h2>
+                                    <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
+                                </div>
+                                <div className="image-wrapper">
+                                    <img src="../images/landingPage/carousel-slide-02.png" alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
+                                </div>
+                            </SliderItem>
 
-                        <SliderItem>
+                            <SliderItem>
 
-                            <div className="caption">
-                                <h2>Web MAR Data</h2>
-                                <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
-                            </div>
-                            <div className="image-wrapper">
-                                <img src="../images/landingPage/carousel-slide-03.png" alt="Web MAR Data" width="558" height="326" className="third-slide"/>
-                            </div>
-                        </SliderItem>
+                                <div className="caption">
+                                    <h2>Web MAR Data</h2>
+                                    <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
+                                </div>
+                                <div className="image-wrapper">
+                                    <img src="../images/landingPage/carousel-slide-03.png" alt="Web MAR Data" width="558" height="326" className="third-slide"/>
+                                </div>
+                            </SliderItem>
 
-                        <SliderItem>
-                            <div className="caption">
-                                <h2>Web MAR Wiki</h2>
-                                <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
-                            </div>
-                            <div className="image-wrapper">
-                                <img src="../images/landingPage/carousel-slide-04.png" alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
-                            </div>
-                        </SliderItem>
+                            <SliderItem>
+                                <div className="caption">
+                                    <h2>Web MAR Wiki</h2>
+                                    <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
+                                </div>
+                                <div className="image-wrapper">
+                                    <img src="../images/landingPage/carousel-slide-04.png" alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
+                                </div>
+                            </SliderItem>
 
-                    </Slider>
-
+                        </Slider>
+                    </div>
                 </header>
 
                 <div className="app-width content">

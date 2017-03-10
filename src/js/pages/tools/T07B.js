@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
-import Drawer from '../../components/primitive/Drawer';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import RangeSlider from '../../components/primitive/RangeSlider';
 import Navbar from '../Navbar';
-import ScenarioSelect from '../../components/tools/ScenarioSelect';
 
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
@@ -41,8 +39,8 @@ export default class T07B extends Component {
         tool: PropTypes.object.isRequired
     };
 
-    constructor(props) {
-        super(props);
+    constructor( props ) {
+        super( props );
 
         this.state = {
             navigation: [
@@ -107,7 +105,9 @@ export default class T07B extends Component {
 
         const totalTimes = this.props.tool.totalTimes.totalTimes;
 
-        const totalTime = (totalTimeIndex === null) ? new TotalTime(totalTimes[totalTimes.length - 1]) : new TotalTime(totalTimes[totalTimeIndex]);
+        const totalTime = ( totalTimeIndex === null )
+            ? new TotalTime(totalTimes[totalTimes.length - 1])
+            : new TotalTime(totalTimes[totalTimeIndex]);
 
         this.props.tool.models.forEach(m => {
             if ( m.isSelected( ) === false ) {
@@ -150,9 +150,9 @@ export default class T07B extends Component {
         return null;
     }
 
-    renderSelect( ) {
+    renderLayerSelect( ) {
         return (
-            <select className="layer-select select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
+            <select className="select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
             </select>
         );
@@ -170,18 +170,13 @@ export default class T07B extends Component {
         this.props.dispatch(setActiveGridCell( cell ));
     };
 
-    renderMaps( models ) {
+    renderMaps( model ) {
         const { mapPosition, activeGridCell } = this.props.tool;
-        return models.filter(model => {
-            return model.selected;
-        }).map(( model ) => {
-            return (
-                <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <h2>{model.name}</h2>
-                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
-                </section>
-            );
-        });
+        return (
+            <section className="tile col stretch">
+                <CrossSectionMap model={model} min={model[0].minValue( )} max={model[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+            </section>
+        );
     }
 
     renderChart( ) {
@@ -201,8 +196,8 @@ export default class T07B extends Component {
             return null;
         }
 
-        const columns = [];
-        models.models().forEach(m => {
+        const columns = [ ];
+        models.models( ).forEach(m => {
             if (m.isSelected( ) && m.hasResult( )) {
                 columns.push(m.chartDataByRowNumber( rowNumber ));
             }
@@ -215,10 +210,10 @@ export default class T07B extends Component {
         let grid = {};
         let axis = {};
 
-        const baseModel = models.baseModel();
-        if (baseModel.hasResult()) {
+        const baseModel = models.baseModel( );
+        if (baseModel.hasResult( )) {
             chartData.x = 'x';
-            columns.unshift(baseModel.columnXAxis());
+            columns.unshift(baseModel.columnXAxis( ));
             grid = {
                 x: {
                     show: true,
@@ -231,8 +226,7 @@ export default class T07B extends Component {
                             value: baseModel.chartRightBorderByRowNumber( rowNumber ),
                             text: 'Western model border',
                             position: 'middle'
-                        },
-                        {
+                        }, {
                             value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
                             text: 'Selected column',
                             position: 'middle'
@@ -243,10 +237,10 @@ export default class T07B extends Component {
 
             axis = {
                 x: {
-                    label: baseModel.labelXAxis()
+                    label: baseModel.labelXAxis( )
                 },
                 y: {
-                    label: baseModel.labelYAxis()
+                    label: baseModel.labelYAxis( )
                 }
             };
         }
@@ -254,7 +248,9 @@ export default class T07B extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{
+                        duration: 0
+                    }} element="testchart"/>
                 </section>
             </div>
         );
@@ -262,12 +258,12 @@ export default class T07B extends Component {
 
     changeTotalTimeIndex = index => {
         // this.props.dispatch(setSelectedTotalTime(new TotalTime( value )));
-        this.props.dispatch(setSelectedTotalTimeIndex(index));
+        this.props.dispatch(setSelectedTotalTimeIndex( index ));
         this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
     };
 
     renderSlider( ) {
-        if (!this.props.tool.totalTimes) {
+        if ( !this.props.tool.totalTimes ) {
             return null;
         }
 
@@ -292,34 +288,44 @@ export default class T07B extends Component {
         if ( sliderValue === null ) {
             sliderValue = totalTimes.length - 1;
         }
-        return ( <RangeSlider data={totalTimes} startDate={this.props.tool.totalTimes.start()} step={1} value={sliderValue} onChange={this.changeTotalTimeIndex}/> );
+        return ( <RangeSlider data={totalTimes} startDate={this.props.tool.totalTimes.start( )} step={1} value={sliderValue} onChange={this.changeTotalTimeIndex}/> );
     }
 
     render( ) {
         const { navigation } = this.state;
-        let models = this.props.tool.models.models( );
-        models = models.map(m => {
-            m.thumbnail = 'scenarios_thumb.png';
-            return m;
-        });
+        // let models = this.props.tool.models.models( );
+        // models = models.map(m => {
+        //     m.thumbnail = 'scenarios_thumb.png';
+        //     return m;
+        // });
 
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
-                <Drawer visible>
-                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
-                </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
-                        {this.renderSelect( )}
+                        {this.renderLayerSelect( )}
                     </div>
-                    <div className="tile col stretch">
-                        {this.renderSlider( )}
+                    <div className="tile col col-abs-4 center-horizontal">
+                        <select className="select block col stretch">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                        <Icon className="col" name="minus" />
+                        <select className="select block col stretch">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
                     </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMaps( models )}
+                    {/* this.renderMap( model )*/}
+                </div>
+                <div className="grid-container">
+                    <div className="tile col stretch">
+                        {this.renderSlider( )}
+                    </div>
                 </div>
                 {this.renderChart( )}
             </div>
