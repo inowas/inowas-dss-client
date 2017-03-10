@@ -24,6 +24,7 @@ import LayerVertical from './layer-vertical.svg';
 import Map from './map.svg';
 import MarkerMultiple from './marker-multiple.svg';
 import Marker from './marker.svg';
+import Minus from './minus.svg';
 import Person from './person.svg';
 import Rivers from './rivers.svg';
 import Settings from './settings.svg';
@@ -58,6 +59,7 @@ const icons = {
     map: <Map/>,
     marker_multiple: <MarkerMultiple/>,
     marker: <Marker/>,
+    minus: <Minus/>,
     person: <Person/>,
     rivers: <Rivers/>,
     settings: <Settings/>,

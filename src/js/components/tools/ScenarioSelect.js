@@ -12,8 +12,8 @@ export default class ScenarioSelect extends Component {
     }
 
     renderScenarios( scenarios ) {
-        return scenarios.map(s => {
-            return ( <ScenarioItem key={s.modelId} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
+        return scenarios.map((s, index) => {
+            return ( <ScenarioItem key={index} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
         });
     }
 

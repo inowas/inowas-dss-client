@@ -41,28 +41,31 @@ export default class T07A extends Component {
         tool: PropTypes.object.isRequired
     };
 
-    state = {
-        navigation: [
-            {
-                name: 'Cross section',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Scenarios difference',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Time series',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Overall budget',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }
-        ],
-        sliderValue: 5
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            navigation: [
+                {
+                    name: 'Cross section',
+                    path: 'tools/T07A/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Scenarios difference',
+                    path: 'tools/T07B/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Time series',
+                    path: 'tools/T07C/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Overall budget',
+                    path: 'tools/T07D/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }
+            ]
+        };
+    }
 
     componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
@@ -96,11 +99,6 @@ export default class T07A extends Component {
             console.error( 'Cannot update ModelResults, due resultType is not from Type ResultType.' );
             return;
         }
-
-        // if ( totalTime instanceof TotalTime === false ) {
-        //     console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
-        //     return;
-        // }
 
         const totalTimes = this.props.tool.totalTimes.totalTimes;
 
@@ -149,7 +147,7 @@ export default class T07A extends Component {
 
     renderSelect( ) {
         return (
-            <select className="layer-select select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
+            <select className="select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
             </select>
         );
@@ -252,7 +250,7 @@ export default class T07A extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} element="testchart" />
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
                 </section>
             </div>
         );
@@ -270,22 +268,6 @@ export default class T07A extends Component {
         }
 
         const totalTimes = this.props.tool.totalTimes.totalTimes;
-        // console.log(totalTimes);
-        // if ( totalTimes === null ) {
-        //     return null;
-        // }
-        //
-        // let sliderValue = this.props.tool.selectedTotalTime;
-        // if ( sliderValue === null ) {
-        //     sliderValue = new TotalTime(totalTimes.maxValue( ));
-        // }
-        //
-        // const minValue = totalTimes.minValue( );
-        // const maxValue = totalTimes.maxValue( );
-        // const stepSize = totalTimes.stepSize( );
-        //
-        // return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
-
         let sliderValue = this.props.tool.selectedTotalTimeIndex;
         if ( sliderValue === null ) {
             sliderValue = totalTimes.length - 1;
@@ -316,7 +298,9 @@ export default class T07A extends Component {
                     </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMaps()}
+                    <div className="scroll-vertical">
+                        {this.renderMaps()}
+                    </div>
                 </div>
                 {this.renderChart( )}
             </div>
