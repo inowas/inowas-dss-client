@@ -8,6 +8,7 @@ import ArrowRight from './arrow-right.svg';
 import ArrowUp from './arrow-up.svg';
 import Boundaries from './boundaries.svg';
 import Calculator from './calculator.svg';
+import Checked from './checked.svg';
 import Close from './close.svg';
 import ConstantHead from './constant_head.svg';
 import Dataset from './dataset.svg';
@@ -29,6 +30,7 @@ import Settings from './settings.svg';
 import Share from './share.svg';
 import Tools from './tools.svg';
 import Trash from './trash.svg';
+import Unchecked from './unchecked.svg';
 import World from './world.svg';
 
 const icons = {
@@ -40,6 +42,7 @@ const icons = {
     arrow_up: <ArrowUp/>,
     boundaries: <Boundaries/>,
     calculator: <Calculator/>,
+    checked: <Checked/>,
     close: <Close/>,
     constant_head: <ConstantHead/>,
     dataset: <Dataset/>,
@@ -61,6 +64,7 @@ const icons = {
     share: <Share/>,
     tools: <Tools/>,
     trash: <Trash/>,
+    unchecked: <Unchecked/>,
     world: <World/>
 };
 

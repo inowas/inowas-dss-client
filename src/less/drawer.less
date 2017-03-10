@@ -10,12 +10,12 @@
     background-color: fade(@background-dark, 70%);
     transition: 0.25s left ease-in-out, 0.25s padding-right ease-in-out;
 
-    .body {
+    >.body {
         width: @grid-column + 2 * @grid-gutter;
         height: 100%;
         position: relative;
 
-        .toggle {
+        >.toggle {
             position: absolute;
             bottom: 0;
             left: ~"calc(100% -" (@spacing-small) ~")";
@@ -32,7 +32,7 @@
             box-shadow: @box-shadow;
         }
 
-        .content {
+        >.content {
             position: relative;
             overflow: auto;
             z-index: 1102;

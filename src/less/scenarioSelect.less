@@ -1,10 +1,9 @@
 @import "variables.less";
 
 .scenarioSelect {
-    .scenarioSelect-item {
-        border: @spacing-small solid transparent;
-        padding: @spacing-small;
-        margin-bottom: 2 * @spacing-regular;
+    .item {
+        margin-bottom: @spacing-regular;
+        padding-bottom: @spacing-regular;
         position: relative;
 
         &:not(:last-child) {
@@ -13,38 +12,32 @@
                 position: absolute;
                 display: block;
                 height: 1px;
-                width: ~"calc(100% - " (2 * @spacing-small) ~")";
+                width: 100%;
                 background-color: @grey-semi-bright;
-                margin-top: @spacing-regular + 2 * @spacing-small;
+                bottom: 0;
             }
         }
 
-        &[data-selected=true] {
-            border: @spacing-small solid @accent;
-        }
-
-        .thumbnail {
+        >.thumbnail {
             width: 100%;
             height: auto;
         }
 
-        .input-on-focus {
-            display: block;
-            border: 1px solid transparent;
-            background: transparent;
-            border-radius: 0;
-            width: 100%;
-            padding: @spacing-small @spacing-regular;
-            resize: none;
-
-            &:focus {
-                border: 1px solid @grey-semi;
-            }
+        >.toggle {
+            position: absolute;
+            top: @spacing-small;
+            right: @spacing-small;
+            background-color: @background-bright;
+            box-shadow: @box-shadow;
+            padding: 1px;
+            border: 0;
+            cursor: pointer;
         }
 
-        .name-input {
-            font-size: 2em;
-            margin-bottom: @spacing-regular;
+        &[data-selected=true] {
+            >.toggle {
+                color: @primary;
+            }
         }
     }
 }
