@@ -31,7 +31,7 @@
                 -webkit-text-fill-color: @color-dark !important;
 
                 &:-webkit-autofill {
-                    -webkit-box-shadow: 0 0 0px 1000px @grey-semi-dark inset;
+                    -webkit-box-shadow: 0 0 0 1000px @grey-semi-dark inset;
                 }
             }
         }
@@ -87,6 +87,18 @@
     }
 
     .content {
+        .row {
+            padding-top: 2*@spacing-large;
+            padding-bottom: @spacing-large;
+
+            > h2 {
+                font-size: 40px;
+                margin-bottom: 30px;
+                text-align: center;
+                text-transform: uppercase;
+            }
+        }
+
         .mar {
             .slider {
                 background-position: center 13px;
@@ -153,96 +165,99 @@
             }
         }
 
-        .toolbox-icons {
-            color: @color-dark;
+        .toolbox {
+            text-align: center;
 
-            .slider {
-                text-align: center;
+            .grid-container {
+                align-items: flex-end;
+
+                .panel-body {
+                    margin: @spacing-large;
+                    padding-bottom: @spacing-large;
+                    border-bottom: 3px solid @primary;
+                    position: relative;
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        left: 50%;
+                        bottom: 0;
+                        width: 2 * @spacing-large;
+                        margin-left: -@spacing-large;
+                        height: 2*@spacing-large;
+                        margin-bottom: -@spacing-large;
+                        border-radius: 50%;
+                        background-color: @primary;
+                        color: @color-dark;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+
+                .toolbox-panel-01 .panel-body {
+                    &:after {
+                        content: '1';
+                        transform: scale(0.7);
+                    }
+                }
+
+                .toolbox-panel-02 .panel-body {
+                    &:after {
+                        content: '2';
+                        transform: scale(0.85);
+                    }
+                }
+
+                .toolbox-panel-03 .panel-body {
+                    &:after {
+                        content: '3';
+                    }
+                }
+            }
+
+            .toolbox-icons {
+                color: @color-dark;
+                padding: @spacing-large 0;
+                background-color: @background-dark;
+
+                .slider {
+                    text-align: center;
+
+                    > .item {
+                        padding: 100px @spacing-regular @spacing-large;
+                    }
+
+                    .toolbox-slider-control {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        top: 0;
+                        margin-top: @spacing-large;
+                        z-index: 499;
+
+                        .toolbox-slider-control-item {
+                            border: 0;
+                            background: transparent;
+                            cursor: pointer;
+                            border-radius: 50%;
+                            border: 3px solid transparent;
+                            padding: 0;
+
+                            &[data-active=true] {
+                                border: 3px solid @primary;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
-.top-space {
-    margin-top: 20px;
-}
-
-.row h2 {
-    font-size: 40px;
-    margin-bottom: 30px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
 .row p {
     font-size: 16px;
     line-height: 26px;
-}
-
-.panel {
-    box-shadow: none;
-    background-color: transparent;
-}
-
-.toolbox-panel-01 {
-    background: url("../images/landingPage/toolbox-panel-bg-01.png") no-repeat bottom center transparent;
-    padding-bottom: 28px;
-}
-
-.toolbox-panel-02 {
-    background: url("../images/landingPage/toolbox-panel-bg-02.png") no-repeat bottom center transparent;
-    padding-bottom: 32px;
-}
-
-.toolbox-panel-03 {
-    background: url("../images/landingPage/toolbox-panel-bg-03.png") no-repeat bottom center transparent;
-    padding-bottom: 38px;
-}
-
-.toolbox-panel-01 .panel-heading {
-    background-image: url("../images/landingPage/toolbox-image-01.png");
-}
-
-.toolbox-panel-02 .panel-heading {
-    background-image: url("../images/landingPage/toolbox-image-02.png");
-}
-
-.toolbox-panel-03 .panel-heading {
-    background-image: url("../images/landingPage/toolbox-image-03.png");
-}
-
-.toolbox .panel-heading {
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    height: 250px;
-}
-
-.toolbox .panel-body {
-    height: 80px;
-    padding: 20px 30px 10px;
-}
-
-.panel-body p {
-    font-size: 16px;
-    line-height: 24px;
-}
-
-.toolbox-icons {
-    background-color: #272727;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.toolbox .description {
-    text-align: center;
-    line-height: 26px;
-}
-
-.btn {
-    background-color: #1EB1ED;
-    border: 0;
-    color: #FFFFFF;
-    text-transform: uppercase;
 }
 
 /* GEO DATABASE

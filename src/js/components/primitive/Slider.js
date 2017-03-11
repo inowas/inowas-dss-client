@@ -8,19 +8,38 @@ export default class Slider extends Component {
 
     static propTypes = {
         children: PropTypes.node,
-        className: PropTypes.string
+        className: PropTypes.string,
+        nextPrevNavigation: PropTypes.bool,
+        control: PropTypes.element,
+        interval: PropTypes.number,
+    }
+
+    static defaultProps = {
+        nextPrevNavigation: true,
+        interval: 5000
     }
 
     state = {
         activeIndex: 0
     }
 
+
     componentDidMount( ) {
         this.updateSliderHeight( );
+        this.startInterval();
     }
 
     componentDidUpdate( ) {
         this.updateSliderHeight( );
+    }
+
+    incrementInterval;
+    startInterval = () => {
+        this.incrementInterval = setInterval(this.incrementActive, this.props.interval);
+    }
+
+    stopInterval =() => {
+        clearInterval(this.incrementInterval);
     }
 
     sliderItems = [ ]
@@ -49,6 +68,15 @@ export default class Slider extends Component {
         this.setState({ activeIndex: nextIndex });
     }
 
+    setActive = index => {
+        if ( index < 0 || index >= this.props.children.length ) {
+            // eslint-disable-next-line no-console
+            console.warn( 'Index out of bounds! Received index of ' + index + ' but got just ' + this.props.children.length + ' elements in Slider!' );
+        } else {
+            this.setState({ activeIndex: index });
+        }
+    }
+
     render( ) {
         let index = 0;
         const children = React.Children.map(this.props.children, ( child ) => {
@@ -62,15 +90,28 @@ export default class Slider extends Component {
             });
         });
 
-        const { className } = this.props;
+        let control = this.props.control;
+        if ( control ) {
+            control = React.cloneElement(control, {
+                setActive: this.setActive,
+                activeIndex: this.state.activeIndex
+            });
+        }
+
+        const { className, nextPrevNavigation } = this.props;
 
         return (
             <div ref={( slider ) => {
                 this.slider = slider;
-            }} className={'slider' + ' ' + ( className || '' )}>
+            }} className={'slider' + ' ' + ( className || '' )} onMouseOver={this.stopInterval} onMouseOut={this.startInterval}>
                 {children}
-                <button onClick={this.decrementActive} className="prev-control"><Icon name="arrow_left"/></button>
-                <button onClick={this.incrementActive} className="next-control"><Icon name="arrow_right"/></button>
+                {nextPrevNavigation && (
+                    <div className="next-prev-navigation">
+                        <button onClick={this.decrementActive} className="prev-navigation"><Icon name="arrow_left"/></button>
+                        <button onClick={this.incrementActive} className="next-navigation"><Icon name="arrow_right"/></button>
+                    </div>
+                )}
+                {control}
             </div>
         );
     }
