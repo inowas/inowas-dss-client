@@ -128,8 +128,7 @@ export default class LandingPage extends React.Component {
                                 <img className="toolbox-image" src="../images/landingPage/toolbox-image-01.png" />
                                 <div className="panel-body">
                                     <p>
-                                        <strong>Simple</strong>
-                                        tools derived from data mining and empirical correlations
+                                        <strong>Simple</strong> tools derived from data mining and empirical correlations
                                     </p>
                                 </div>
                             </div>
@@ -137,8 +136,7 @@ export default class LandingPage extends React.Component {
                                 <img className="toolbox-image" src="../images/landingPage/toolbox-image-02.png" />
                                 <div className="panel-body">
                                     <p>
-                                        <strong>Practical</strong>
-                                        implementation of analytical equations of groundwater flow
+                                        <strong>Practical</strong> implementation of analytical equations of groundwater flow
                                     </p>
                                 </div>
                             </div>
@@ -147,8 +145,7 @@ export default class LandingPage extends React.Component {
                                 <img className="toolbox-image" src="../images/landingPage/toolbox-image-03.png" />
                                 <div className="panel-body">
                                     <p>
-                                        <strong>Reliable</strong>
-                                        simulations using complex numerical flow models (i.e. MODFLOW)
+                                        <strong>Reliable</strong> simulations using complex numerical flow models (i.e. MODFLOW)
                                     </p>
                                 </div>
                                 </div>
@@ -297,6 +294,19 @@ export default class LandingPage extends React.Component {
                         <div className="align-center">
                             <a className="button button-primary more" href="http:/wiki.inowas.hydro.tu-dresden.de">Read more</a>
                         </div>
+                    </div>
+
+                    <div className="row documentation">
+                        <h2>Screenshots</h2>
+                        <figure>
+                            <div className="align-center">
+                              <img src="../images/landingPage/screenshot-1.png" width="300" height="188" className="" alt=""/>&nbsp;
+                              <img src="../images/landingPage/screenshot-2.png" width="300" height="188" className="" alt=""/>&nbsp;
+                              <img src="../images/landingPage/screenshot-3.png" width="300" height="188" className="" alt=""/>
+                            </div>
+                        </figure>
+                        <p className="description align-center">Unified, user-friendly and modern graphic user interface that combines modern design elements with powerful server capabilities for a smooth browser-based modeling experience and reliable simulation results.
+                        </p>
                     </div>
 
                 </div>
