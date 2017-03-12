@@ -1,11 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
+import dateFormat from 'dateformat';
 
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
-import RangeSlider from '../../components/primitive/RangeSlider';
+import ArraySlider from '../../components/primitive/ArraySlider';
 import Navbar from '../Navbar';
 
 import '../../../less/4TileTool.less';
@@ -244,16 +245,21 @@ export default class T07B extends Component {
     };
 
     renderSlider( ) {
-        if ( !this.props.tool.totalTimes ) {
+        if (!this.props.tool.totalTimes) {
             return null;
         }
 
-        const totalTimes = this.props.tool.totalTimes.totalTimes;
+        const startDate = new Date(this.props.tool.totalTimes.start());
+        const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
+            return startDate.addDays(t);
+        });
+
         let sliderValue = this.props.tool.selectedTotalTimeIndex;
         if ( sliderValue === null ) {
             sliderValue = totalTimes.length - 1;
         }
-        return ( <RangeSlider data={totalTimes} startDate={this.props.tool.totalTimes.start( )} step={1} value={sliderValue} onChange={this.changeTotalTimeIndex}/> );
+
+        return ( <ArraySlider data={totalTimes} value={sliderValue} onChange={this.changeTotalTimeIndex} formatter={function(value) {return dateFormat(value, 'mm/dd/yyyy');}}/> );
     }
 
     render( ) {
