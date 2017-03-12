@@ -2,7 +2,7 @@ import React from 'react';
 
 import '../../less/landingPage.less';
 
-import Login from '../components/landingPage/Login';
+import Navbar from './Navbar';
 import Footer from '../components/Footer';
 import Slider from '../components/primitive/Slider';
 import SliderItem from '../components/primitive/SliderItem';
@@ -14,8 +14,8 @@ export default class LandingPage extends React.Component {
     render( ) {
         return (
             <div className="application-wrapper landingPage-wrapper">
+                <Navbar />
                 <header className="header">
-                    <Login/>
                     <div className="app-width">
                         <Slider control={<SliderControl><SliderControlItem /><SliderControlItem /><SliderControlItem /><SliderControlItem /></SliderControl>}>
 
