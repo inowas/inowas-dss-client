@@ -33,6 +33,10 @@ export default class Slider extends Component {
         this.updateSliderHeight( );
     }
 
+    componentWillUnmount() {
+        this.stopInterval();
+    }
+
     incrementInterval;
     startInterval = () => {
         this.incrementInterval = setInterval(this.incrementActive, this.props.interval);
