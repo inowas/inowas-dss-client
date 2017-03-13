@@ -17,24 +17,8 @@ export default class BoundingBox {
         this._southWest = southWest;
     }
 
-    set southWest( southWest ) {
-        if ( !( southWest instanceof Coordinate ) ) {
-            throw new Error( 'Expected first parameter to be a Coordinate, but got ' + ( typeof southWest ) );
-        }
-
-        this._southWest = southWest;
-    }
-
     get southWest() {
         return this._southWest;
-    }
-
-    set northEast( northEast ) {
-        if ( !( northEast instanceof Coordinate ) ) {
-            throw new Error( 'Expected first parameter to be a Coordinate, but got ' + ( typeof northEast ) );
-        }
-
-        this._northEast = northEast;
     }
 
     get northEast() {
