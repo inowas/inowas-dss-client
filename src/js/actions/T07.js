@@ -45,8 +45,8 @@ export function fetchModelDetails( id ) {
             dispatch( fetchLayerValues( baseModel.modelId ) );
             dispatch( fetchTotalTimes( baseModel.modelId, new ResultType( 'head' ), new LayerNumber( 3 ) ) );
 
-            const scenarios = action.payload.data.scenarios;
 
+            const scenarios = action.payload.data.scenarios;
             scenarios.forEach( sc => {
                 const scenario = new ModflowModelDetails(
                     sc.model_id,
@@ -61,6 +61,9 @@ export function fetchModelDetails( id ) {
                 dispatch( setModelDetails( scenario ) );
                 dispatch( fetchModelBoundaries( scenario.modelId ) );
             } );
+
+            dispatch( setupT07b() );
+
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -154,7 +157,7 @@ export function updateResultsT07B( modelId1, modelId2, resultType, layerNumber, 
                 promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setResultsT07A( new ModflowModelResult( id, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png' ) ) );
+            dispatch( setResultsT07B(new ModflowModelResult(modelId1, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png' )));
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -213,6 +216,17 @@ export function setResultsT07A( modflowModelResult ) {
 
     return {
         type: 'T07A_SET_MODEL_RESULT',
+        payload: modflowModelResult
+    };
+}
+
+export function setResultsT07B( modflowModelResult ) {
+    if ( modflowModelResult instanceof ModflowModelResult === false ) {
+        throw Error( 'Expected first param to be instance of ModflowModelResult' );
+    }
+
+    return {
+        type: 'T07B_SET_RESULT',
         payload: modflowModelResult
     };
 }
@@ -276,5 +290,18 @@ export function setActiveGridCell( cell ) {
     return {
         type: 'T07_SET_ACTIVE_GRID_CELL',
         payload: cell
+    };
+}
+
+export function setupT07b() {
+    return {
+        type: 'T07B_SETUP'
+    };
+}
+
+export function setSelectedModelIdsT07B( selectedModelIds ) {
+    return {
+        type: 'T07B_SET_SELECTED_MODEL_IDS',
+        payload: selectedModelIds
     };
 }

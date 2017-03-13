@@ -16,6 +16,7 @@ import {
     fetchModelDetails,
     updateResultsT07B,
     setSelectedLayer,
+    setSelectedModelIdsT07B,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
     setMapView,
@@ -26,7 +27,6 @@ import {
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
-import ModflowModelResult from '../../model/ModflowModelResult';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -76,6 +76,13 @@ export default class T07B extends Component {
     };
 
     updateModelResults( resultType, layerNumber, totalTimeIndex ) {
+
+        const selectedModelIds = this.props.tool.t07bSelectedModelIds;
+        if ( selectedModelIds.length !== 2 ) {
+            console.error( 'Cannot update ModelResults, due to the number of selectedModelIds is not equal 2.' );
+            return;
+        }
+
         if ( layerNumber instanceof LayerNumber === false ) {
             console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
             return;
@@ -92,19 +99,7 @@ export default class T07B extends Component {
             ? new TotalTime(totalTimes[totalTimes.length - 1])
             : new TotalTime(totalTimes[totalTimeIndex]);
 
-        this.props.tool.models.forEach(m => {
-            if ( m.isSelected( ) === false ) {
-                return;
-            }
-
-            if ( m.result instanceof ModflowModelResult ) {
-                if (m.result.resultType( ).sameAs( resultType ) && m.result.layerNumber( ).sameAs( layerNumber ) && m.result.totalTime( ).sameAs( totalTime )) {
-                    return;
-                }
-            }
-
-            this.props.dispatch(updateResultsT07B( m.modelId, resultType, layerNumber, totalTime ));
-        });
+        this.props.dispatch(updateResultsT07B( selectedModelIds[0], selectedModelIds[1], resultType, layerNumber, totalTime ));
     }
 
     selectLayer = ( e ) => {
@@ -141,6 +136,40 @@ export default class T07B extends Component {
         );
     }
 
+    renderModelSelect(models){
+        return models.map( m => {
+            return (
+                <option key={m.modelId} value={m.modelId}>{m.name}</option>
+            );
+        });
+    }
+
+    selectModel = (id, e) => {
+        const selectedModelIds = this.props.tool.t07bSelectedModelIds;
+        selectedModelIds[id] = e.target.value;
+        this.props.dispatch( setSelectedModelIdsT07B(selectedModelIds))
+    };
+
+    renderModelsSelect() {
+        if (this.props.tool.t07bSelectedModelIds === null){
+            return;
+        }
+        return (
+            <div>
+            <select className="select block col stretch" onChange={this.selectModel.bind(this, 0)} value={this.props.tool.t07bSelectedModelIds[0]}>
+                {this.renderModelSelect(this.props.tool.models.models)}
+            </select>
+
+            <Icon className="col" name="minus" />
+
+            <select className="select block col stretch" onChange={this.selectModel.bind(this, 1)} value={this.props.tool.t07bSelectedModelIds[1]}>
+                {this.renderModelSelect(this.props.tool.models.models)}
+            </select>
+
+            </div>
+        );
+    }
+
     updateMapView = ( latLng, zoom ) => {
         this.props.dispatch(setMapView( latLng, zoom ));
     };
@@ -153,11 +182,17 @@ export default class T07B extends Component {
         this.props.dispatch(setActiveGridCell( cell ));
     };
 
-    renderMaps( model ) {
-        const { mapPosition, activeGridCell } = this.props.tool;
+    renderMap() {
+
+        if (this.props.tool.t07bDifference === null) {
+            return;
+        }
+
+        const { mapPosition, activeGridCell, t07bDifference } = this.props.tool;
+
         return (
             <section className="tile col stretch">
-                <CrossSectionMap model={model} min={model[0].minValue( )} max={model[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+                <CrossSectionMap mapData={t07bDifference.mapData()} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
             </section>
         );
     }
@@ -276,22 +311,14 @@ export default class T07B extends Component {
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
-                        {this.renderLayerSelect( )}
+                        {this.renderLayerSelect()}
                     </div>
                     <div className="tile col col-abs-4 center-horizontal">
-                        <select className="select block col stretch">
-                            <option>1</option>
-                            <option>2</option>
-                        </select>
-                        <Icon className="col" name="minus" />
-                        <select className="select block col stretch">
-                            <option>1</option>
-                            <option>2</option>
-                        </select>
+                        {this.renderModelsSelect()}
                     </div>
                 </div>
                 <div className="grid-container">
-                    {/* this.renderMap( model )*/}
+                    {this.renderMap()}
                 </div>
                 <div className="grid-container">
                     <div className="tile col stretch">
