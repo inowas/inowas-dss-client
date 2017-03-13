@@ -27,6 +27,7 @@ import {
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
+import ModflowModelDifference from '../../model/ModflowModelDifference';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -198,9 +199,13 @@ export default class T07B extends Component {
     }
 
     renderChart( ) {
-        const models = this.props.tool.models;
 
-        if ( models.countModelsWithResults( ) === 0 ) {
+        const mfDifference = this.props.tool.t07bDifference;
+        if (mfDifference instanceof ModflowModelDifference === false){
+            return null;
+        }
+
+        if (mfDifference.hasResult() == false){
             return null;
         }
 
@@ -214,61 +219,48 @@ export default class T07B extends Component {
             return null;
         }
 
-        const columns = [ ];
-        models.models( ).forEach(m => {
-            if (m.isSelected( ) && m.hasResult( )) {
-                columns.push(m.chartDataByRowNumber( rowNumber ));
-            }
-        });
-
         const chartData = {
-            columns: columns
+            x: 'x',
+            columns: [
+                mfDifference.columnXAxis(),
+                mfDifference.chartDataByRowNumber(rowNumber)
+            ]
         };
 
-        let grid = {};
-        let axis = {};
+        const grid = {
+            x: {
+                show: true,
+                lines: [
+                    {
+                        value: mfDifference.chartLeftBorderByRowNumber( rowNumber ),
+                        text: 'Eastern model border',
+                        position: 'middle'
+                    }, {
+                        value: mfDifference.chartRightBorderByRowNumber( rowNumber ),
+                        text: 'Western model border',
+                        position: 'middle'
+                    }, {
+                        value: mfDifference.coordinateByGridCell( colNumber, rowNumber ).x,
+                        text: 'Selected column',
+                        position: 'middle'
+                    }
+                ]
+            }
+        };
 
-        const baseModel = models.baseModel( );
-        if (baseModel.hasResult( )) {
-            chartData.x = 'x';
-            columns.unshift(baseModel.columnXAxis( ));
-            grid = {
-                x: {
-                    show: true,
-                    lines: [
-                        {
-                            value: baseModel.chartLeftBorderByRowNumber( rowNumber ),
-                            text: 'Eastern model border',
-                            position: 'middle'
-                        }, {
-                            value: baseModel.chartRightBorderByRowNumber( rowNumber ),
-                            text: 'Western model border',
-                            position: 'middle'
-                        }, {
-                            value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
-                            text: 'Selected column',
-                            position: 'middle'
-                        }
-                    ]
-                }
-            };
-
-            axis = {
-                x: {
-                    label: baseModel.labelXAxis( )
-                },
-                y: {
-                    label: baseModel.labelYAxis( )
-                }
-            };
-        }
+        const axis = {
+            x: {
+                label: mfDifference.labelXAxis()
+            },
+            y: {
+                label: mfDifference.labelYAxis()
+            }
+        };
 
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} transition={{
-                        duration: 0
-                    }} element="testchart"/>
+                    <Chart data={chartData} grid={grid} axis={axis} element="testchart"/>
                 </section>
             </div>
         );

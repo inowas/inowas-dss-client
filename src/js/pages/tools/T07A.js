@@ -91,6 +91,7 @@ export default class T07A extends Component {
     };
 
     updateModelResults( resultType, layerNumber, totalTimeIndex ) {
+
         if ( layerNumber instanceof LayerNumber === false ) {
             console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
             return;

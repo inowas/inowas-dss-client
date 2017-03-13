@@ -81,9 +81,9 @@ export default class ModflowModelDifference {
         }
 
 
-        const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
+        const nX = this._gridSize.n_x;
+        const xMin = this._boundingBox.southWest.lng;
+        const xMax = this._boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (leftBorder * dX)) * 1000) / 1000;
@@ -110,9 +110,9 @@ export default class ModflowModelDifference {
             break;
         }
 
-        const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
+        const nX = this._gridSize.n_x;
+        const xMin = this._boundingBox.southWest.lng;
+        const xMax = this._boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (rightBorder * dX)) * 1000) / 1000;
@@ -140,10 +140,11 @@ export default class ModflowModelDifference {
     }
 
     columnXAxis() {
+
         const column = ['x'];
-        const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
+        const nX = this._gridSize.n_x;
+        const xMin = this._boundingBox.southWest.lng;
+        const xMax = this._boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         for (let i = 0; i < nX; i++) {
@@ -154,12 +155,12 @@ export default class ModflowModelDifference {
     }
 
     coordinateByGridCell(col, row) {
-        const nX = this.gridSize.n_x;
-        const nY = this.gridSize.n_y;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
-        const yMin = this.boundingBox.southWest.lat;
-        const yMax = this.boundingBox.northEast.lat;
+        const nX = this._gridSize.n_x;
+        const nY = this._gridSize.n_y;
+        const xMin = this._boundingBox.southWest.lng;
+        const xMax = this._boundingBox.northEast.lng;
+        const yMin = this._boundingBox.southWest.lat;
+        const yMax = this._boundingBox.northEast.lat;
         const dX = (xMax - xMin) / nX;
         const dY = (yMax - yMin) / nY;
 

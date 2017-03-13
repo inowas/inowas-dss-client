@@ -38,7 +38,6 @@ const T07Reducer = ( state = getInitialState(), action ) => {
 
             const modelDetails = action.payload;
             state.models.push( ModflowModel.fromModflowDetails( modelDetails ) );
-            console.log(state.models.count());
             break;
 
         case 'T07_SET_MODEL_BOUNDARIES':

@@ -24,13 +24,15 @@ export function fetchModelDetails( id ) {
                 promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
+
+            console.log(action.payload.data);
             const area = JSON.parse( action.payload.data.base_model.area );
             const boundingBoxPlain = JSON.parse( action.payload.data.base_model.bounding_box );
             const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain.y_min, boundingBoxPlain.x_min ), new Coordinate( boundingBoxPlain.y_max, boundingBoxPlain.x_max ) );
             const gridSize = JSON.parse( action.payload.data.base_model.grid_size );
 
             const baseModel = new ModflowModelDetails(
-                action.payload.data.base_model.model_id,
+                action.payload.data.base_model.base_model_id,
                 action.payload.data.base_model.name,
                 action.payload.data.base_model.description,
                 area,
@@ -43,7 +45,7 @@ export function fetchModelDetails( id ) {
             dispatch( setBounds( boundingBox.toArray() ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.modelId ) );
-            dispatch( fetchTotalTimes( baseModel.modelId, new ResultType( 'head' ), new LayerNumber( 3 ) ) );
+            dispatch( fetchTotalTimes( baseModel.modelId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
 
 
             const scenarios = action.payload.data.scenarios;
