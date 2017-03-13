@@ -10,10 +10,11 @@ export default class CrossSectionMapDataObject {
     _grid;
     _boundaries = [];
     _xCrossSection;
+    _activeGridCells = [];
     _legend;
     _imgUrl;
 
-    static fromProps(area, grid, boundaries, xCrossSection, legend = null, imgUrl = null) {
+    static fromProps(area, grid, boundaries, xCrossSection, activeGridCells, legend = null, imgUrl = null) {
         const self = new CrossSectionMapDataObject();
         self._area = area;
 
@@ -29,6 +30,11 @@ export default class CrossSectionMapDataObject {
             throw new Error( 'Expected fourth parameter to be a BoundingBox, but got ' + ( typeof xCrossSection ) );
         }
         self._xCrossSection = xCrossSection;
+
+        if ( !( activeGridCells instanceof Array ) ) {
+            throw new Error('Expected fifth parameter to be an array, but got ' + (typeof activeGridCells));
+        }
+        self._activeGridCells = activeGridCells;
 
         self._legend = legend;
         self._imgUrl = imgUrl;
@@ -53,6 +59,10 @@ export default class CrossSectionMapDataObject {
 
     get xCrossSection() {
         return this._xCrossSection;
+    }
+
+    get activeGridCells() {
+        return this._activeGridCells;
     }
 
     get legend() {

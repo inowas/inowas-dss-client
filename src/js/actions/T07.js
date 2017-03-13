@@ -24,7 +24,6 @@ export function fetchModelDetails( id ) {
                 promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
-
             console.log(action.payload.data);
             const area = JSON.parse( action.payload.data.base_model.area );
             const boundingBoxPlain = JSON.parse( action.payload.data.base_model.bounding_box );
@@ -65,7 +64,6 @@ export function fetchModelDetails( id ) {
             } );
 
             dispatch( setupT07b() );
-
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -289,10 +287,6 @@ export function setMapView( center, zoom ) {
 }
 
 export function setActiveCoordinate( coordinate ) {
-    if ( !( coordinate instanceof Coordinate ) ) {
-        throw new Error( 'Expected first parameter to be a Coordinate, but got ' + ( typeof coordinate ) );
-    }
-
     return {
         type: 'T07_SET_ACTIVE_COORDINATE',
         payload: coordinate
@@ -309,5 +303,51 @@ export function setSelectedModelIdsT07B( selectedModelIds ) {
     return {
         type: 'T07B_SET_SELECTED_MODEL_IDS',
         payload: selectedModelIds
+    };
+}
+
+export function addTimeSeriesPoint( timeSeriesPoint ) {
+    return {
+        type: 'T07_ADD_TIME_SERIES_POINT',
+        payload: timeSeriesPoint
+    };
+}
+
+export function setTimeSeriesPointSelection( index, selected ) {
+    return {
+        type: 'T07_SET_TIME_SERIES_POINT_SELECTION',
+        payload: {
+            index,
+            selected
+        }
+    };
+}
+
+export function setTimeSeriesPointResult(coordinate, modelId, resultType, layerNumber, timeSeriesResult) {
+    return {
+        type: 'T07_SETTIME_SERIES_POINT_RESULT',
+        payload: {
+            coordinate,
+            modelId,
+            resultType,
+            layerNumber,
+            timeSeriesResult
+        }
+    };
+}
+
+export function fetchTimeSeries(coordinate, modelId, resultType, layerNumber, x, y ) {
+    return dispatch => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( '/scenarioanalysis/result/timeseries/model/' + modelId + '/type/' + resultType.toString() + '/layer' + layerNumber.toString() + '/nx/' + x + '/ny/' + y + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
+            }
+        } ).then( ( { action } ) => {
+            dispatch( setTimeSeriesPointResult(coordinate, modelId, resultType, layerNumber, action.payload.data) );
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
     };
 }

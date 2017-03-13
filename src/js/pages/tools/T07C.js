@@ -2,10 +2,12 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 
+import Drawer from '../../components/primitive/Drawer';
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
+import ScenarioSelect from '../../components/tools/ScenarioSelect';
 
 import '../../../less/4TileTool.less';
 import '../../../less/toolT07.less';
@@ -16,14 +18,18 @@ import {
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
+    toggleModelSelection,
     setMapView,
     setBounds,
-    setActiveGridCell
+    addTimeSeriesPoint,
+    setTimeSeriesPointSelection,
+    fetchTimeSeries
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
+import TimeSeriesPoint from '../../model/TimeSeriesPoint';
 import ModflowModelResult from '../../model/ModflowModelResult';
 
 @connect(( store ) => {
@@ -66,6 +72,18 @@ export default class T07C extends Component {
     componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
+
+    toggleSelection = id => {
+        return ( e ) => {
+            this.props.dispatch(toggleModelSelection( id ));
+            this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
+
+            // manually emit a resize event so the leaflet maps recalculate their container size
+            const event = document.createEvent( 'HTMLEvents' );
+            event.initEvent( 'resize', true, false );
+            e.target.dispatchEvent( event );
+        };
+    };
 
     changeLayerValue = ( layerNumber, resultType ) => {
         this.props.dispatch(setSelectedLayer( layerNumber ));
@@ -147,94 +165,104 @@ export default class T07C extends Component {
         this.props.dispatch(setBounds( bounds ));
     };
 
-    setCrossSection = ( cell ) => {
-        this.props.dispatch(setActiveGridCell( cell ));
+    addPoint = ( coordinate ) => {
+        const point = new TimeSeriesPoint();
+        point.coordinate = coordinate;
+
+        this.props.dispatch(addTimeSeriesPoint( point ));
     };
 
     renderMap( ) {
-        const { models } = this.props.tool;
-        if ( models ) {
-            const model = models.baseModel( );
-            const { mapPosition, activeGridCell } = this.props.tool;
-            return ( <CrossSectionMap mapData={model.mapData(models.globalMinValue( ), models.globalMaxValue( ))} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/> );
+        const { models, mapPosition, timeSeriesPoints } = this.props.tool;
+
+        if ( models.length <= 0 ) {
+            return null;
         }
-        return null;
+
+        const baseModel = models.baseModel;
+
+        const activeCoordinates = timeSeriesPoints.map(p =>{
+            const gridCell = baseModel.grid.coordinateToGridCell(p.coordinate);
+            const boundingBox = baseModel.grid.gridCellToBoundingBox(gridCell);
+            return boundingBox;
+        });
+
+        const model = models.baseModel;
+        return (
+            <CrossSectionMap mapData={model.mapData(null, activeCoordinates, models.globalMinValue(), models.globalMaxValue())} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.addPoint}/>
+        );
+    }
+
+    setTimeSeriesPointSelection = index => {
+        return e => {
+            this.props.dispatch(setTimeSeriesPointSelection(index, e.target.checked));
+        };
+    }
+
+    renderTable() {
+        const { timeSeriesPoints } = this.props.tool;
+        return(<table className="table">
+            <thead>
+                <tr>
+                    <th>Active</th>
+                    <th>Point</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+            </thead>
+            <tbody>
+                {timeSeriesPoints.map((p, index) => {
+                    return(<tr key={index}>
+                        <td><input onChange={this.setTimeSeriesPointSelection(index)} checked={p.selected} type="checkbox"/></td>
+                        <td>{p.name}</td>
+                        <td>{p.coordinate.lat}</td>
+                        <td>{p.coordinate.lng}</td>
+                    </tr>);
+                })}
+            </tbody>
+        </table>);
     }
 
     renderChart( ) {
-        // const models = this.props.tool.models;
-        //
-        // if ( models.countModelsWithResults( ) === 0 ) {
-        //     return null;
-        // }
-        //
-        // const rowNumber = this.props.tool.activeGridCell.y;
-        // if ( rowNumber === null ) {
-        //     return null;
-        // }
-        //
-        // const colNumber = this.props.tool.activeGridCell.x;
-        // if ( colNumber === null ) {
-        //     return null;
-        // }
-        //
-        // const columns = [];
-        // models.models().forEach(m => {
-        //     if (m.isSelected( ) && m.hasResult( )) {
-        //         columns.push(m.chartDataByRowNumber( rowNumber ));
-        //     }
-        // });
-        //
-        // const chartData = {
-        //     columns: columns
-        // };
-        //
-        // let grid = {};
-        // let axis = {};
-        //
-        // const baseModel = models.baseModel();
-        // if (baseModel.hasResult()) {
-        //     chartData.x = 'x';
-        //     columns.unshift(baseModel.columnXAxis());
-        //     grid = {
-        //         x: {
-        //             show: true,
-        //             lines: [
-        //                 {
-        //                     value: baseModel.chartLeftBorderByRowNumber( rowNumber ),
-        //                     text: 'Eastern model border',
-        //                     position: 'middle'
-        //                 }, {
-        //                     value: baseModel.chartRightBorderByRowNumber( rowNumber ),
-        //                     text: 'Western model border',
-        //                     position: 'middle'
-        //                 },
-        //                 {
-        //                     value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
-        //                     text: 'Selected column',
-        //                     position: 'middle'
-        //                 }
-        //             ]
-        //         }
-        //     };
-        //
-        //     axis = {
-        //         x: {
-        //             label: baseModel.labelXAxis()
-        //         },
-        //         y: {
-        //             label: baseModel.labelYAxis()
-        //         }
-        //     };
-        // }
-        //
-        // return (
-        //     <div className="grid-container">
-        //         <section className="tile col stretch">
-        //             <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
-        //         </section>
-        //     </div>
-        // );
+        const {models, timeSeriesPoints, selectedResultType, selectedLayerNumber} = this.props.tool;
+
+
+        const grid = {};
+        const axis = {};
+        const chartData = {
+            columns: []
+        };
+
+        timeSeriesPoints.filter( p => {return p.selected;}).forEach(p => {
+            const resultColumn = [p.name];
+            models.filter(m => {return m.selected;}).forEach(m => {
+                const result = p.results.find(r => {return (m.modelId === r.modelId && selectedResultType.sameAs(r.resultType) &&  selectedLayerNumber.sameAs(r.layerNumber));});
+                if (result && result.timeSeries) {
+                    resultColumn.concat(result.timeSeries.data);
+                } else {
+                    const gridCell = m.grid.coordinateToGridCell(p.coordinate);
+                    this.props.dispatch(fetchTimeSeries(p.coordinate, m.modelId, selectedResultType, selectedLayerNumber, gridCell.x, gridCell.y ));
+                }
+            });
+            chartData.columns.push(resultColumn);
+        });
+
+            // axis = {
+            //     x: {
+            //         label: baseModel.labelXAxis()
+            //     },
+            //     y: {
+            //         label: baseModel.labelYAxis()
+            //     }
+            // };
+
+        return (
+            <div className="grid-container">
+                <section className="tile col stretch">
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
+                </section>
+            </div>
+        );
     }
 
     changeTotalTimeIndex = index => {
@@ -244,10 +272,17 @@ export default class T07C extends Component {
 
     render( ) {
         const { navigation } = this.state;
+        const models = this.props.tool.models.map(m => {
+            m.thumbnail = 'scenarios_thumb.png';
+            return m;
+        });
 
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
+                <Drawer visible>
+                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
+                </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
@@ -259,22 +294,7 @@ export default class T07C extends Component {
                         {this.renderMap( )}
                     </section>
                     <section className="tile col col-abs-2">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Point</th>
-                                    <th>Latitude</th>
-                                    <th>Longitude</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>3535</td>
-                                    <td>34346</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {this.renderTable()}
                     </section>
                 </div>
                 {this.renderChart( )}

@@ -169,6 +169,14 @@ export default class CrossSectionMap extends Component {
         />);
     }
 
+    renderActiveGridCells() {
+        const activeGridCells = this.props.mapData.activeGridCells;
+
+        return activeGridCells.map((c, index) => {
+            return(<Rectangle key={index} bounds={c.toArray()} />);
+        });
+    }
+
     render() {
         const { mapPosition } = this.props;
 
@@ -182,6 +190,7 @@ export default class CrossSectionMap extends Component {
                     {this.renderBoundaries()}
                 </LayersControl>
 
+                {this.renderActiveGridCells()}
                 {this.renderXCrossSection()}
                 <button title="reset view" className="button icon-inside resetView" onClick={this.resetView}><Icon name="marker" /></button>
                 {this.renderLegend()}

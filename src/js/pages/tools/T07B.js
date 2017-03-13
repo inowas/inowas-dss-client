@@ -21,7 +21,7 @@ import {
     setSelectedTotalTimeIndex,
     setMapView,
     setBounds,
-    setActiveGridCell
+    setActiveCoordinate
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -77,7 +77,6 @@ export default class T07B extends Component {
     };
 
     updateModelResults( resultType, layerNumber, totalTimeIndex ) {
-
         const selectedModelIds = this.props.tool.t07bSelectedModelIds;
         if ( selectedModelIds.length !== 2 ) {
             console.error( 'Cannot update ModelResults, due to the number of selectedModelIds is not equal 2.' );
@@ -137,35 +136,35 @@ export default class T07B extends Component {
         );
     }
 
-    renderModelSelect(models){
-        return models.map( m => {
+    renderModelSelect( models ) {
+        return models.map(m => {
             return (
                 <option key={m.modelId} value={m.modelId}>{m.name}</option>
             );
         });
     }
 
-    selectModel = (id, e) => {
+    selectModel = ( id, e ) => {
         const selectedModelIds = this.props.tool.t07bSelectedModelIds;
         selectedModelIds[id] = e.target.value;
-        this.props.dispatch( setSelectedModelIdsT07B(selectedModelIds))
+        this.props.dispatch(setSelectedModelIdsT07B( selectedModelIds ));
     };
 
-    renderModelsSelect() {
-        if (this.props.tool.t07bSelectedModelIds === null){
+    renderModelsSelect( ) {
+        if ( this.props.tool.t07bSelectedModelIds === null ) {
             return;
         }
         return (
             <div>
-            <select className="select block col stretch" onChange={this.selectModel.bind(this, 0)} value={this.props.tool.t07bSelectedModelIds[0]}>
-                {this.renderModelSelect(this.props.tool.models.models)}
-            </select>
+                <select className="select block col stretch" onChange={this.selectModel.bind( this, 0 )} value={this.props.tool.t07bSelectedModelIds[0]}>
+                    {this.renderModelSelect( this.props.tool.models.models )}
+                </select>
 
-            <Icon className="col" name="minus" />
+                <Icon className="col" name="minus"/>
 
-            <select className="select block col stretch" onChange={this.selectModel.bind(this, 1)} value={this.props.tool.t07bSelectedModelIds[1]}>
-                {this.renderModelSelect(this.props.tool.models.models)}
-            </select>
+                <select className="select block col stretch" onChange={this.selectModel.bind( this, 1 )} value={this.props.tool.t07bSelectedModelIds[1]}>
+                    {this.renderModelSelect( this.props.tool.models.models )}
+                </select>
 
             </div>
         );
@@ -179,52 +178,57 @@ export default class T07B extends Component {
         this.props.dispatch(setBounds( bounds ));
     };
 
-    setCrossSection = ( cell ) => {
-        this.props.dispatch(setActiveGridCell( cell ));
+    setActiveCoordinate = ( coordinate ) => {
+        this.props.dispatch(setActiveCoordinate( coordinate ));
     };
 
-    renderMap() {
-
-        if (this.props.tool.t07bDifference === null) {
-            return;
+    renderMap( ) {
+        const { t07bDifference, mapPosition, activeCoordinate } = this.props.tool;
+        if ( !t07bDifference ) {
+            return null;
         }
 
-        const { mapPosition, activeGridCell, t07bDifference } = this.props.tool;
+        let xCrossSection = null;
+        if ( activeCoordinate ) {
+            const activeGridCell = t07bDifference.grid.coordinateToGridCell( activeCoordinate );
+            xCrossSection = t07bDifference.grid.gridCellToXCrossectionBoundingBox( activeGridCell );
+        }
 
         return (
             <section className="tile col stretch">
-                <CrossSectionMap mapData={t07bDifference.mapData()} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+                <CrossSectionMap mapData={t07bDifference.mapData( xCrossSection )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
             </section>
         );
     }
 
     renderChart( ) {
-
+        const { activeCoordinate } = this.props.tool;
         const mfDifference = this.props.tool.t07bDifference;
-        if (mfDifference instanceof ModflowModelDifference === false){
+
+        if(!mfDifference || !activeCoordinate) {
             return null;
         }
 
-        if (mfDifference.hasResult() == false){
+        if (!mfDifference.hasResult()) {
             return null;
         }
 
-        const rowNumber = this.props.tool.activeGridCell.y;
+        const activeGridCell = mfDifference.grid.coordinateToGridCell( activeCoordinate );
+
+
+        const rowNumber = activeGridCell.y;
         if ( rowNumber === null ) {
             return null;
         }
 
-        const colNumber = this.props.tool.activeGridCell.x;
+        const colNumber = activeGridCell.x;
         if ( colNumber === null ) {
             return null;
         }
 
         const chartData = {
             x: 'x',
-            columns: [
-                mfDifference.columnXAxis(),
-                mfDifference.chartDataByRowNumber(rowNumber)
-            ]
+            columns: [mfDifference.columnXAxis( ), mfDifference.chartDataByRowNumber( rowNumber )]
         };
 
         const grid = {
@@ -250,10 +254,10 @@ export default class T07B extends Component {
 
         const axis = {
             x: {
-                label: mfDifference.labelXAxis()
+                label: mfDifference.labelXAxis( )
             },
             y: {
-                label: mfDifference.labelYAxis()
+                label: mfDifference.labelYAxis( )
             }
         };
 
@@ -272,13 +276,13 @@ export default class T07B extends Component {
     };
 
     renderSlider( ) {
-        if (!this.props.tool.totalTimes) {
+        if ( !this.props.tool.totalTimes ) {
             return null;
         }
 
-        const startDate = new Date(this.props.tool.totalTimes.start());
+        const startDate = new Date(this.props.tool.totalTimes.start( ));
         const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
-            return startDate.addDays(t);
+            return startDate.addDays( t );
         });
 
         let sliderValue = this.props.tool.selectedTotalTimeIndex;
@@ -286,7 +290,9 @@ export default class T07B extends Component {
             sliderValue = totalTimes.length - 1;
         }
 
-        return ( <ArraySlider data={totalTimes} value={sliderValue} onChange={this.changeTotalTimeIndex} formatter={function(value) {return dateFormat(value, 'mm/dd/yyyy');}}/> );
+        return ( <ArraySlider data={totalTimes} value={sliderValue} onChange={this.changeTotalTimeIndex} formatter={function( value ) {
+            return dateFormat( value, 'mm/dd/yyyy' );
+        }}/> );
     }
 
     render( ) {
@@ -303,14 +309,14 @@ export default class T07B extends Component {
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
-                        {this.renderLayerSelect()}
+                        {this.renderLayerSelect( )}
                     </div>
                     <div className="tile col col-abs-4 center-horizontal">
-                        {this.renderModelsSelect()}
+                        {this.renderModelsSelect( )}
                     </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMap()}
+                    {this.renderMap( )}
                 </div>
                 <div className="grid-container">
                     <div className="tile col stretch">

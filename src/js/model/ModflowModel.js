@@ -215,13 +215,14 @@ export default class ModflowModel {
         return (this.result instanceof MfResult);
     }
 
-    mapData(xCrossSection, min = null, max = null) {
+    mapData(xCrossSection, activeGridCells, min = null, max = null) {
         if (!this.hasResult()) {
             return MapData.fromProps(
                 this.area,
                 this.grid,
                 this.boundaries,
-                xCrossSection
+                xCrossSection,
+                activeGridCells
             );
         }
 
@@ -237,6 +238,7 @@ export default class ModflowModel {
             this._grid,
             this.boundaries,
             xCrossSection,
+            activeGridCells,
             this.result.legend(min, max),
             this.result.imgUrl(min, max)
         );

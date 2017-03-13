@@ -37,4 +37,11 @@ export default class Coordinate {
         };
     }
 
+    sameAs(coordinate) {
+        if ( !( coordinate instanceof Coordinate ) ) {
+            throw new Error( 'Expected first parameter to be a Coordinate, but got ' + ( typeof coordinate ) );
+        }
+        return (coordinate.lat === this.lat && coordinate.lng === this.lng);
+    }
+
 }

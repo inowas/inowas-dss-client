@@ -1,6 +1,8 @@
 import ModflowModelDifference from '../model/ModflowModelDifference';
 import ModflowModels from '../model/ModflowModelsCollection';
 import ModflowModel from '../model/ModflowModel';
+import Coordinate from '../model/Coordinate';
+import TimeSeriesPoint from '../model/TimeSeriesPoint';
 import TotalTime from '../model/TotalTime';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
@@ -15,14 +17,16 @@ function getInitialState() {
         models: new ModflowModels(),
         t07bDifference: null,
         t07bSelectedModelIds: null,
+        T07BResult: null,
+        timeSeriesPoints: [], // for T07C
         mapPosition: {
-            bounds: [{
+            bounds: [ {
                 lat: -90,
                 lng: -180
             }, {
                 lat: 90,
                 lng: 180
-            }]
+            } ]
         },
         activeCoordinate: null
     };
@@ -44,6 +48,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
                     m.boundaries = action.payload.boundaries;
                     return m;
                 }
+                return null;
             } );
 
             break;
@@ -53,7 +58,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.layerValues = action.payload;
 
             if ( state.selectedLayerNumber === null ) {
-                if (state.layerValues.getLowestHeadLayer() instanceof LayerNumber) {
+                if ( state.layerValues.getLowestHeadLayer() instanceof LayerNumber ) {
                     state.selectedLayerNumber = state.layerValues.getLowestHeadLayer();
                     state.selectedResultType = new ResultType( 'head' );
                     break;
@@ -127,6 +132,10 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             break;
 
         case 'T07_SET_ACTIVE_COORDINATE':
+            if ( !( action.payload instanceof Coordinate ) ) {
+                throw new Error( 'Expected first parameter to be a Coordinate, but got ' + ( typeof action.payload ) );
+            }
+
             state = {
                 ...state,
                 activeCoordinate: action.payload
@@ -135,11 +144,9 @@ const T07Reducer = ( state = getInitialState(), action ) => {
 
         case 'T07B_SETUP':
             state = {...state};
-            if (state.t07bDifference === null){
-
+            if (state.t07bDifference === null) {
                 const models = state.models;
-                if (models.count() > 1){
-
+                if (models.count() > 1) {
                     const model1 = models.models[0];
                     const model2 = models.models[1];
 
@@ -147,15 +154,12 @@ const T07Reducer = ( state = getInitialState(), action ) => {
                         model1.modelId,
                         model2.modelId,
                         model1.area,
-                        model1.boundingBox,
-                        model1.gridSize
+                        model1.grid
                     );
 
                     state.t07bSelectedModelIds = state.t07bDifference.modelIds();
                 }
             }
-
-            console.log(state.t07bDifference);
             break;
 
         case 'T07B_SET_SELECTED_MODEL_IDS':
@@ -168,6 +172,37 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.t07bDifference.updateResult(action.payload);
 
             break;
+
+        case 'T07_ADD_TIME_SERIES_POINT':
+            if ( !( action.payload instanceof TimeSeriesPoint ) ) {
+                throw new Error( 'Expected first parameter to be a TimeSeriesPoint, but got ' + ( typeof action.payload ) );
+            }
+
+            state = { ...state };
+            state.timeSeriesPoints.push( action.payload );
+            break;
+
+        case 'T07_SET_TIME_SERIES_POINT_SELECTION':
+            state = { ...state };
+            state.timeSeriesPoints[ action.payload.index ].selected = action.payload.selected;
+            break;
+
+        case 'T07_SETTIME_SERIES_POINT_RESULT':
+            state = { ...state };
+            const { coordinate, modelId, resultType, layerNumber, timeSeriesResult } = action.payload;
+            const timeSeriesPoint = state.timeSeriesPoints.find( p => { return ( p.coordinate.sameAs( coordinate ) ); } );
+            if ( timeSeriesPoint ) {
+                const result = timeSeriesPoint.results.find( r => {
+                    return ( r.modelId === modelId && r.resultType.sameAs( resultType ) && r.layerNumber.sameAs( layerNumber ) );
+                } );
+
+                if ( result ) {
+
+                } else {
+                    timeSeriesPoint.addResult( timeSeriesResult );
+                }
+            }
+
     }
 
     return state;

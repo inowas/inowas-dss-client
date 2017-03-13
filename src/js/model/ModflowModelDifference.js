@@ -1,3 +1,4 @@
+import Grid from './Grid';
 import MfResult from './ModflowModelResult';
 import MapData from './CrossSectionMapDataObject';
 
@@ -9,20 +10,42 @@ export default class ModflowModelDifference {
     _modelId1;
     _modelId2;
     _area;
-    _boundingBox;
-    _gridSize;
+    _grid;
     _result;
 
-    constructor(modelId1, modelId2, area, boundingBox, gridSize, result = null) {
+    constructor(modelId1, modelId2, area, grid, result = null) {
         this._modelId1 = modelId1;
         this._modelId2 = modelId2;
         this._area = area;
-        this._boundingBox = boundingBox;
-        this._gridSize = gridSize;
+
+        if ( !( grid instanceof Grid ) ) {
+            throw new Error( 'Expected second parameter to be a Grid, but got ' + ( typeof grid ) );
+        }
+        this._grid = grid;
         this._result = result;
     }
 
-    updateResult(result){
+    get grid() {
+        return this._grid;
+    }
+
+    get area() {
+        return this._area;
+    }
+
+    get modelId1() {
+        return this._modelId1;
+    }
+
+    get modelId2() {
+        return this._modelId2;
+    }
+
+    get result() {
+        return this._result;
+    }
+
+    updateResult(result) {
         this._result = result;
     }
 
@@ -81,9 +104,9 @@ export default class ModflowModelDifference {
         }
 
 
-        const nX = this._gridSize.n_x;
-        const xMin = this._boundingBox.southWest.lng;
-        const xMax = this._boundingBox.northEast.lng;
+        const nX = this.grid.nX;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (leftBorder * dX)) * 1000) / 1000;
@@ -110,9 +133,9 @@ export default class ModflowModelDifference {
             break;
         }
 
-        const nX = this._gridSize.n_x;
-        const xMin = this._boundingBox.southWest.lng;
-        const xMax = this._boundingBox.northEast.lng;
+        const nX = this.grid.nX;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (rightBorder * dX)) * 1000) / 1000;
@@ -140,11 +163,10 @@ export default class ModflowModelDifference {
     }
 
     columnXAxis() {
-
         const column = ['x'];
-        const nX = this._gridSize.n_x;
-        const xMin = this._boundingBox.southWest.lng;
-        const xMax = this._boundingBox.northEast.lng;
+        const nX = this.grid.nX;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         for (let i = 0; i < nX; i++) {
@@ -155,12 +177,12 @@ export default class ModflowModelDifference {
     }
 
     coordinateByGridCell(col, row) {
-        const nX = this._gridSize.n_x;
-        const nY = this._gridSize.n_y;
-        const xMin = this._boundingBox.southWest.lng;
-        const xMax = this._boundingBox.northEast.lng;
-        const yMin = this._boundingBox.southWest.lat;
-        const yMax = this._boundingBox.northEast.lat;
+        const nX = this.grid.nX;
+        const nY = this.grid.nY;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
+        const yMin = this.grid.boundingBox.southWest.lat;
+        const yMax = this.grid.boundingBox.northEast.lat;
         const dX = (xMax - xMin) / nX;
         const dY = (yMax - yMin) / nY;
 
@@ -174,12 +196,13 @@ export default class ModflowModelDifference {
         return (this._result instanceof MfResult);
     }
 
-    mapData(min = null, max = null) {
+    mapData(xCrossSection, min = null, max = null) {
         if (this.hasResult() === false) {
             return MapData.fromProps(
-                this._area,
-                this._boundingBox,
-                this._gridSize,
+                this.area,
+                this.grid,
+                [],
+                xCrossSection,
                 []
             );
         }
@@ -193,16 +216,17 @@ export default class ModflowModelDifference {
         }
 
         return MapData.fromProps(
-            this._area,
-            this._boundingBox,
-            this._gridSize,
+            this.area,
+            this.grid,
+            [],
+            xCrossSection,
             [],
             this._result.legend(min, max),
             this._result.imgUrl(min, max)
         );
     }
 
-    modelIds(){
+    modelIds() {
         return [this._modelId1, this._modelId2];
     }
 }
