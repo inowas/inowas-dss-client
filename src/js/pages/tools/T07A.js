@@ -23,7 +23,7 @@ import {
     toggleModelSelection,
     setMapView,
     setBounds,
-    setActiveGridCell
+    setActiveCoordinate
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -163,12 +163,21 @@ export default class T07A extends Component {
         this.props.dispatch(setBounds( bounds ));
     };
 
-    setCrossSection = ( cell ) => {
-        this.props.dispatch(setActiveGridCell( cell ));
+    setActiveCoordinate = ( coordinate ) => {
+        this.props.dispatch(setActiveCoordinate( coordinate ));
     };
 
     renderMaps() {
-        const { models, mapPosition, activeGridCell } = this.props.tool;
+        const { models, mapPosition, activeCoordinate } = this.props.tool;
+        if( models.length <= 0) {
+            return null;
+        }
+
+        let xCrossSection = null;
+        if( activeCoordinate ) {
+            const activeGridCell = models.baseModel.grid.coordinateToGridCell(activeCoordinate);
+            xCrossSection = models.baseModel.grid.gridCellToXCrossectionBoundingBox(activeGridCell);
+        }
 
         return models.filter(model => {
             return model.selected;
@@ -176,25 +185,29 @@ export default class T07A extends Component {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
-                    <CrossSectionMap mapData={model.mapData(models.globalMinValue(), models.globalMaxValue())} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+                    <CrossSectionMap mapData={model.mapData(xCrossSection, models.globalMinValue(), models.globalMaxValue())} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
                 </section>
             );
         });
     }
 
     renderChart( ) {
-        const models = this.props.tool.models;
+        const {activeCoordinate, models} = this.props.tool;
+        if( models.length <= 0 || !activeCoordinate) {
+            return null;
+        }
+        const activeGridCell = models.baseModel.grid.coordinateToGridCell(activeCoordinate);
 
         if ( models.countModelsWithResults( ) === 0 ) {
             return null;
         }
 
-        const rowNumber = this.props.tool.activeGridCell.y;
+        const rowNumber = activeGridCell.y;
         if ( rowNumber === null ) {
             return null;
         }
 
-        const colNumber = this.props.tool.activeGridCell.x;
+        const colNumber = activeGridCell.x;
         if ( colNumber === null ) {
             return null;
         }
@@ -213,7 +226,7 @@ export default class T07A extends Component {
         let grid = {};
         let axis = {};
 
-        const baseModel = models.baseModel();
+        const baseModel = models.baseModel;
         if (baseModel.hasResult()) {
             chartData.x = 'x';
             columns.unshift(baseModel.columnXAxis());

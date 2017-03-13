@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 
 import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay, CircleMarker, LayersControl, LayerGroup } from 'react-leaflet';
 
+import Coordinate from '../../model/Coordinate';
+
 import Icon from './Icon';
 import ColorLegend from './ColorLegend';
 
@@ -15,8 +17,7 @@ export default class CrossSectionMap extends Component {
         updateMapView: PropTypes.func.isRequired,
         updateBounds: PropTypes.func.isRequired,
         mapPosition: PropTypes.object.isRequired,
-        setClickedCell: PropTypes.func.isRequired,
-        activeCell: PropTypes.object
+        clickCoordinate: PropTypes.func.isRequired
     };
 
     state = {
@@ -51,47 +52,34 @@ export default class CrossSectionMap extends Component {
     };
 
     resetView = () => {
-        const boundingBox = this.props.mapData.boundingBox();
+        const boundingBox = this.props.mapData.boundingBox;
 
         this.props.updateBounds(boundingBox.toArray());
     };
 
-    handleClick = e => {
+    clickOnMap = e => {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        const { mapData } = this.props;
-        const boundingBox = mapData.boundingBox();
-        const grid = mapData.gridSize();
-
-        const dlat = ( boundingBox.northEast.lat - boundingBox.southWest.lat) / grid.n_y; // row width of bounding box grid
-        const dlng = ( boundingBox.northEast.lng - boundingBox.southWest.lng) / grid.n_x; // column width of bounding box grid
-
-        const x = Math.floor( ( lng - boundingBox.southWest.lng) / dlng );
-        const y = grid.n_y - 1 - Math.floor( ( lat - boundingBox.southWest.lat) / dlat );
-
-        // Make sure point is inside bounding box
-        if ( y >= 0 && y < grid.n_y && x >= 0 && x < grid.n_x) {
-            this.props.setClickedCell({x, y});
-        }
+        this.props.clickCoordinate(new Coordinate(lat, lng));
     };
 
     renderHeatMap() {
-        if (this.props.mapData.imgUrl() === null) {
+        if (this.props.mapData.imgUrl === null) {
             return null;
         }
 
-        const boundingBox = this.props.mapData.boundingBox().toArray();
+        const boundingBox = this.props.mapData.boundingBox.toArray();
 
         return (
             <LayersControl.Overlay name="Heads" checked>
-                <ImageOverlay url={this.props.mapData.imgUrl()} bounds={boundingBox} opacity={0.5}/>
+                <ImageOverlay url={this.props.mapData.imgUrl} bounds={boundingBox} opacity={0.5}/>
             </LayersControl.Overlay>
         );
     }
 
     renderLegend() {
-        const legend = this.props.mapData.legend();
+        const legend = this.props.mapData.legend;
 
         if (legend === null) {
             return  null;
@@ -103,7 +91,7 @@ export default class CrossSectionMap extends Component {
     }
 
     renderBoundaries() {
-        const boundaries = this.props.mapData.boundaries();
+        const boundaries = this.props.mapData.boundaries;
         if (boundaries.length === 0) {
             return null;
         }
@@ -139,7 +127,7 @@ export default class CrossSectionMap extends Component {
     }
 
     renderBoundingBox() {
-        const boundingBox = this.props.mapData.boundingBox().toArray();
+        const boundingBox = this.props.mapData.boundingBox.toArray();
         const style = this.state.styles.boundingBox;
 
         return (
@@ -156,7 +144,7 @@ export default class CrossSectionMap extends Component {
     }
 
     renderArea() {
-        const area = this.props.mapData.area();
+        const area = this.props.mapData.area;
         return (
             <LayersControl.Overlay name="Area" checked>
                 <GeoJSON data={area} style={this.state.styles.area} />
@@ -164,51 +152,28 @@ export default class CrossSectionMap extends Component {
         );
     }
 
-    renderCrossSectionSelection(lat = true, lng = false) {
-        const activeCell = this.props.activeCell;
-        const gridSize = this.props.mapData.gridSize();
+    renderXCrossSection() {
+        if(!this.props.mapData.xCrossSection) {
+            return null;
+        }
+
         const style = this.state.styles.crossSectionSelection;
-        const boundingBox = this.props.mapData.boundingBox();
 
-        let crossSectionLatRectangle = null;
-        if (activeCell && activeCell.y !== null) {
-            const dlat = ( boundingBox.northEast.lat - boundingBox.southWest.lat) / gridSize.n_y; // row width of bounding box grid
-            const crossSectionLat = (gridSize.n_y - activeCell.y - 1) * dlat + boundingBox.southWest.lat;
-            crossSectionLatRectangle = (<Rectangle
-                bounds={[{lat: crossSectionLat, lng: boundingBox.southWest.lng}, {lat: crossSectionLat + dlat, lng: boundingBox.northEast.lng}]}
-                color={style.color}
-                weight={style.weight}
-                opacity={style.opacity}
-                fillColor={style.fillColor}
-                fillOpacity={style.fillOpacity}
-            />);
-        }
-
-        let crossSectionLngRectangle = null;
-        if (activeCell && activeCell.x !== null) {
-            const dlng = ( boundingBox.northEast.lng - boundingBox.southWest.lng) / gridSize.n_x; // column width of bounding box grid
-            const crossSectionLng = activeCell.x * dlng + boundingBox.southWest.lng;
-            crossSectionLngRectangle = (<Rectangle
-                 bounds={[{lat: boundingBox.southWest.lat, lng: crossSectionLng}, {lat: boundingBox.northEast.lat, lng: crossSectionLng + dlng}]}
-                 color={style.color}
-                 weight={style.weight}
-                 opacity={style.opacity}
-                 fillColor={style.fillColor}
-                 fillOpacity={style.fillOpacity}
-             />);
-        }
-
-        if (lat && lng) {return (<div>{crossSectionLatRectangle}{crossSectionLngRectangle}</div>);}
-        if (lat) {return (<div>{crossSectionLatRectangle}</div>);}
-        if (lng) {return (<div>{crossSectionLngRectangle}</div>);}
-        return null;
+        return (<Rectangle
+            bounds={this.props.mapData.xCrossSection.toArray()}
+            color={style.color}
+            weight={style.weight}
+            opacity={style.opacity}
+            fillColor={style.fillColor}
+            fillOpacity={style.fillOpacity}
+        />);
     }
 
     render() {
         const { mapPosition } = this.props;
 
         return (
-            <Map className="crossSectionMap" {...mapPosition} onClick={this.handleClick} zoomControl={false} onMoveEnd={this.handleMove}>
+            <Map className="crossSectionMap" {...mapPosition} onClick={this.clickOnMap} zoomControl={false} onMoveEnd={this.handleMove}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                 <LayersControl position="topleft">
                     {this.renderArea()}
@@ -217,7 +182,7 @@ export default class CrossSectionMap extends Component {
                     {this.renderBoundaries()}
                 </LayersControl>
 
-                {this.renderCrossSectionSelection()}
+                {this.renderXCrossSection()}
                 <button title="reset view" className="button icon-inside resetView" onClick={this.resetView}><Icon name="marker" /></button>
                 {this.renderLegend()}
             </Map>

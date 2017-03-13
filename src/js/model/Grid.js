@@ -1,41 +1,81 @@
+import BoundingBox from './BoundingBox';
+import Coordinate from './Coordinate';
+import GridCell from './GridCell';
+
 export default class Grid {
-    _x;
-    _y;
+    _nX;
+    _nY;
+    _boundingBox;
 
-    constructor(x, y) {
-        if(typeof x !== 'number') {
-            throw new Error('Expected first parameter to be a number, but got ' + (typeof x));
+    constructor(boundingBox, nX, nY) {
+        if ( !( boundingBox instanceof BoundingBox ) ) {
+            throw new Error( 'Expected first parameter to be a BoundingBox, but got ' + ( typeof boundingBox ) );
         }
 
-        if(typeof y !== 'number') {
-            throw new Error('Expected second parameter to be a number, but got ' + (typeof y));
+        if(typeof nX !== 'number') {
+            throw new Error('Expected second parameter to be a number, but got ' + (typeof nX));
         }
 
-        this._x = x;
-        this._y = y;
-    }
-
-    set x(x) {
-        if(typeof x !== 'number') {
-            throw new Error('Expected first parameter to be a number, but got ' + (typeof x));
+        if(typeof nY !== 'number') {
+            throw new Error('Expected third parameter to be a number, but got ' + (typeof nY));
         }
 
-        this._x = x;
+        this._boundingBox = boundingBox;
+        this._nX = nX;
+        this._nY = nY;
     }
 
-    get x() {
-        return this._x;
+    get boundingBox() {
+        return this._boundingBox;
     }
 
-    set y(y) {
-        if(typeof y !== 'number') {
-            throw new Error('Expected first parameter to be a number, but got ' + (typeof y));
+    get nX() {
+        return this._nX;
+    }
+
+    get nY() {
+        return this._nY;
+    }
+
+    get dLng() {
+        return ( this.boundingBox.northEast.lng - this.boundingBox.southWest.lng) / this.nX;
+    }
+
+    get dLat() {
+        return ( this.boundingBox.northEast.lat - this.boundingBox.southWest.lat) / this.nY;
+    }
+
+    coordinateToGridCell(coordinate) {
+        if ( !( coordinate instanceof Coordinate ) ) {
+            throw new Error( 'Expected first parameter to be a Coordinate, but got ' + ( typeof coordinate ) );
         }
 
-        this._y = y;
+        const x = Math.floor( ( coordinate.lng - this.boundingBox.southWest.lng) / this.dLng );
+        const y = this.nY - 1 - Math.floor( ( coordinate.lat - this.boundingBox.southWest.lat) / this.dLat );
+
+        return new GridCell(x, y);
     }
 
-    get y() {
-        return this._y;
+    gridCellToBoundingBox(gridCell) {
+        if ( !( gridCell instanceof GridCell ) ) {
+            throw new Error( 'Expected first parameter to be a GridCell, but got ' + ( typeof gridCell ) );
+        }
+
+        const southWest = new Coordinate( this.boundingBox.southWest.lat + this.dLat * (this.nY - gridCell.y - 1), this.boundingBox.southWest.lng + this.dLng * gridCell.x);
+        const northEast = new Coordinate( this.boundingBox.southWest.lat + this.dLat * (this.nY - gridCell.y), this.boundingBox.southWest.lng + this.dLng * (gridCell.x + 1));
+
+        return new BoundingBox(southWest, northEast);
     }
+
+    gridCellToXCrossectionBoundingBox(gridCell) {
+        if ( !( gridCell instanceof GridCell ) ) {
+            throw new Error( 'Expected first parameter to be a GridCell, but got ' + ( typeof gridCell ) );
+        }
+
+        const southWest = new Coordinate( this.boundingBox.southWest.lat + this.dLat * (this.nY - gridCell.y - 1), this.boundingBox.southWest.lng );
+        const northEast = new Coordinate( this.boundingBox.southWest.lat + this.dLat * (this.nY - gridCell.y), this.boundingBox.northEast.lng );
+
+        return new BoundingBox(southWest, northEast);
+    }
+
 }
