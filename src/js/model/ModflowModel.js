@@ -1,6 +1,7 @@
 import MfBoundary from './ModflowBoundary';
 import MfResult from './ModflowModelResult';
 import MapData from './CrossSectionMapDataObject';
+import Grid from './Grid';
 
 /**
  * ModflowModel Base Class
@@ -10,8 +11,7 @@ export default class ModflowModel {
     modelId = null;
     name = null;
     description = null;
-    boundingBox = null;
-    gridSize = null;
+    _grid;
     area = null;
     boundaries = [];
     selected = null;
@@ -23,10 +23,13 @@ export default class ModflowModel {
         model.area = details.area;
         model.name = details.name;
         model.description = details.description;
-        model.boundingBox = details.boundingBox;
-        model.gridSize = details.gridSize;
+        model._grid = new Grid(details.boundingBox, details.gridSize.n_x, details.gridSize.n_y);
         model.selected = false;
         return model;
+    }
+
+    get grid() {
+        return this._grid;
     }
 
     constructor(modelId, isBaseModel = false) {
@@ -119,9 +122,9 @@ export default class ModflowModel {
         }
 
 
-        const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
+        const nX = this.grid.nX;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (leftBorder * dX)) * 1000) / 1000;
@@ -148,9 +151,9 @@ export default class ModflowModel {
             break;
         }
 
-        const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
+        const nX = this.grid.nX;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (rightBorder * dX)) * 1000) / 1000;
@@ -179,9 +182,9 @@ export default class ModflowModel {
 
     columnXAxis() {
         const column = ['x'];
-        const nX = this.gridSize.n_x;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
+        const nX = this.grid.nX;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / nX;
 
         for (let i = 0; i < nX; i++) {
@@ -191,13 +194,14 @@ export default class ModflowModel {
         return column;
     }
 
+    // should be moved to grid ~ grid.gridCellToBoundingBox could be used
     coordinateByGridCell(col, row) {
-        const nX = this.gridSize.n_x;
-        const nY = this.gridSize.n_y;
-        const xMin = this.boundingBox.southWest.lng;
-        const xMax = this.boundingBox.northEast.lng;
-        const yMin = this.boundingBox.southWest.lat;
-        const yMax = this.boundingBox.northEast.lat;
+        const nX = this.grid.nX;
+        const nY = this.grid.nY;
+        const xMin = this.grid.boundingBox.southWest.lng;
+        const xMax = this.grid.boundingBox.northEast.lng;
+        const yMin = this.grid.boundingBox.southWest.lat;
+        const yMax = this.grid.boundingBox.northEast.lat;
         const dX = (xMax - xMin) / nX;
         const dY = (yMax - yMin) / nY;
 
@@ -211,13 +215,13 @@ export default class ModflowModel {
         return (this.result instanceof MfResult);
     }
 
-    mapData(min = null, max = null) {
-        if (this.hasResult() === false) {
+    mapData(xCrossSection, min = null, max = null) {
+        if (!this.hasResult()) {
             return MapData.fromProps(
                 this.area,
-                this.boundingBox,
-                this.gridSize,
-                this.boundaries
+                this.grid,
+                this.boundaries,
+                xCrossSection
             );
         }
 
@@ -228,12 +232,11 @@ export default class ModflowModel {
         if (max === null) {
             max = this.result.max();
         }
-
         return MapData.fromProps(
             this.area,
-            this.boundingBox,
-            this.gridSize,
+            this._grid,
             this.boundaries,
+            xCrossSection,
             this.result.legend(min, max),
             this.result.imgUrl(min, max)
         );

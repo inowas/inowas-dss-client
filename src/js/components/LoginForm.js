@@ -14,7 +14,8 @@ export default class LoginForm extends Component {
         password: ''
     }
 
-    submit = ( ) => {
+    submit = ( e ) => {
+        e.preventDefault();
         this.props.login( this.state.identifier, this.state.password );
     }
 

@@ -22,10 +22,7 @@ function getInitialState() {
                 lng: 180
             }]
         },
-        activeGridCell: {
-            x: null,
-            y: null
-        }
+        activeCoordinate: null
     };
 }
 
@@ -127,10 +124,10 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             };
             break;
 
-        case 'T07_SET_ACTIVE_GRID_CELL':
+        case 'T07_SET_ACTIVE_COORDINATE':
             state = {
                 ...state,
-                activeGridCell: action.payload
+                activeCoordinate: action.payload
             };
             break;
     }

@@ -12,6 +12,10 @@ export default class ModflowModelsCollection {
         return this._models;
     }
 
+    get length() {
+        return this._models.length;
+    }
+
     // addModel(model) {
     //     if (model instanceof MfModel) {
     //         this._models.push(model);
@@ -36,7 +40,7 @@ export default class ModflowModelsCollection {
         return this._models.length;
     };
 
-    baseModel() {
+    get baseModel() {
         return this._models.find( m => { return m.isBaseModel; } );
     }
 

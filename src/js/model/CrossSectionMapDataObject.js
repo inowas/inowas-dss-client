@@ -1,47 +1,65 @@
+import Grid from './Grid';
+import BoundingBox from './BoundingBox';
+
 /**
  * CrossSectionMapDataObject Base Class
  */
 export default class CrossSectionMapDataObject {
 
     _area;
-    _boundingBox;
-    _gridSize;
+    _grid;
     _boundaries = [];
+    _xCrossSection;
     _legend;
     _imgUrl;
 
-    static fromProps(area, boundingBox, gridSize, boundaries, legend=null, imgUrl=null) {
+    static fromProps(area, grid, boundaries, xCrossSection, legend = null, imgUrl = null) {
         const self = new CrossSectionMapDataObject();
         self._area = area;
-        self._boundingBox = boundingBox;
-        self._gridSize = gridSize;
+
+        if ( !( grid instanceof Grid ) ) {
+            throw new Error( 'Expected second parameter to be a Grid, but got ' + ( typeof grid ) );
+        }
+        self._grid = grid;
+
         self._boundaries = boundaries;
+
+        // null is possible
+        if ( !( xCrossSection instanceof BoundingBox ) && xCrossSection !== null ) {
+            throw new Error( 'Expected fourth parameter to be a BoundingBox, but got ' + ( typeof xCrossSection ) );
+        }
+        self._xCrossSection = xCrossSection;
+
         self._legend = legend;
         self._imgUrl = imgUrl;
         return self;
     }
 
-    area = () => {
+    get area() {
         return this._area;
-    };
+    }
 
-    boundingBox = () => {
-        return this._boundingBox;
-    };
+    get boundingBox() {
+        return this._grid.boundingBox;
+    }
 
-    gridSize = () => {
-        return this._gridSize;
-    };
+    // gridSize = () => {
+    //     return this._gridSize;
+    // };
 
-    boundaries = () => {
+    get boundaries() {
         return this._boundaries;
-    };
+    }
 
-    legend = () => {
+    get xCrossSection() {
+        return this._xCrossSection;
+    }
+
+    get legend() {
         return this._legend;
-    };
+    }
 
-    imgUrl = () => {
+    get imgUrl() {
         return this._imgUrl;
-    };
+    }
 }
