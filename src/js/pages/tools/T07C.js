@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
+import dateFormat from 'dateformat';
 
 import Drawer from '../../components/primitive/Drawer';
 import CrossSectionMap from '../../components/primitive/CrossSectionMap';
@@ -70,26 +71,30 @@ export default class T07C extends Component {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
 
-    fetchTimeSeriesForPoint( coordinate, modelId, resultType, layerNumber, gridCell, startDate) {
-        this.props.dispatch(fetchTimeSeries(coordinate, modelId, resultType, layerNumber, gridCell.x, gridCell.y, startDate ));
+    fetchTimeSeriesForPoint( coordinate, modelId, resultType, layerNumber, gridCell, startDate ) {
+        this.props.dispatch(fetchTimeSeries( coordinate, modelId, resultType, layerNumber, gridCell.x, gridCell.y, startDate ));
     }
 
-    fetchTimeSeriesForPoints(models, resultType, layerNumber, timeSeriesPoints, startDate) {
-        timeSeriesPoints.filter( p => {return p.selected;}).forEach(p => {
-            models.filter(m => {return m.selected;}).forEach(m => {
-                const gridCell = m.grid.coordinateToGridCell(p.coordinate);
-                this.fetchTimeSeriesForPoint( p.coordinate, m.modelId, resultType, layerNumber, gridCell, startDate);
+    fetchTimeSeriesForPoints( models, resultType, layerNumber, timeSeriesPoints, startDate ) {
+        timeSeriesPoints.filter(p => {
+            return p.selected;
+        }).forEach(p => {
+            models.filter(m => {
+                return m.selected;
+            }).forEach(m => {
+                const gridCell = m.grid.coordinateToGridCell( p.coordinate );
+                this.fetchTimeSeriesForPoint( p.coordinate, m.modelId, resultType, layerNumber, gridCell, startDate );
             });
         });
     }
 
     toggleScenarioSelection = id => {
-        return () => {
+        return ( ) => {
             this.props.dispatch(toggleModelSelection( id ));
 
             // update results
-            const {models, selectedResultType, selectedLayerNumber, timeSeriesPoints, totalTimes} = this.props.tool;
-            this.fetchTimeSeriesForPoints(models, selectedResultType, selectedLayerNumber, timeSeriesPoints, new Date(totalTimes.start));
+            const { models, selectedResultType, selectedLayerNumber, timeSeriesPoints, totalTimes } = this.props.tool;
+            this.fetchTimeSeriesForPoints(models, selectedResultType, selectedLayerNumber, timeSeriesPoints, new Date( totalTimes.start ));
         };
     };
 
@@ -98,8 +103,8 @@ export default class T07C extends Component {
         this.props.dispatch(setSelectedResultType( resultType ));
 
         // update results
-        const {models, timeSeriesPoints, totalTimes} = this.props.tool;
-        this.fetchTimeSeriesForPoints(models, resultType, layerNumber, timeSeriesPoints, new Date(totalTimes.start));
+        const { models, timeSeriesPoints, totalTimes } = this.props.tool;
+        this.fetchTimeSeriesForPoints(models, resultType, layerNumber, timeSeriesPoints, new Date( totalTimes.start ));
     };
 
     selectLayer = ( e ) => {
@@ -147,21 +152,23 @@ export default class T07C extends Component {
     addPoint = ( coordinate ) => {
         const { models } = this.props.tool;
         const grid = models.baseModel.grid;
-        const gridCell = grid.coordinateToGridCell(coordinate);
+        const gridCell = grid.coordinateToGridCell( coordinate );
 
-        if(!gridCell) {
+        if ( !gridCell ) {
             return;
         }
         const { timeSeriesPoints } = this.props.tool;
         // add Point to store
-        const point = new TimeSeriesPoint('Point ' + timeSeriesPoints.length);
+        const point = new TimeSeriesPoint( 'Point ' + timeSeriesPoints.length );
         point.coordinate = coordinate;
         this.props.dispatch(addTimeSeriesPoint( point ));
 
         // fetch data for this point
         const { selectedResultType, selectedLayerNumber, totalTimes } = this.props.tool;
-        models.filter(m => {return m.selected;}).forEach(m => {
-            this.fetchTimeSeriesForPoint( coordinate, m.modelId, selectedResultType, selectedLayerNumber, gridCell, new Date(totalTimes.start));
+        models.filter(m => {
+            return m.selected;
+        }).forEach(m => {
+            this.fetchTimeSeriesForPoint(coordinate, m.modelId, selectedResultType, selectedLayerNumber, gridCell, new Date( totalTimes.start ));
         });
     }
 
@@ -174,87 +181,115 @@ export default class T07C extends Component {
 
         const baseModel = models.baseModel;
 
-        const activeCoordinates = timeSeriesPoints.map(p =>{
-            const gridCell = baseModel.grid.coordinateToGridCell(p.coordinate);
-            const boundingBox = baseModel.grid.gridCellToBoundingBox(gridCell);
+        const activeCoordinates = timeSeriesPoints.map(p => {
+            const gridCell = baseModel.grid.coordinateToGridCell( p.coordinate );
+            const boundingBox = baseModel.grid.gridCellToBoundingBox( gridCell );
             return boundingBox;
         });
 
         const model = models.baseModel;
-        return (
-            <CrossSectionMap mapData={model.mapData(null, activeCoordinates, models.globalMinValue(), models.globalMaxValue())} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.addPoint}/>
-        );
+        return ( <CrossSectionMap mapData={model.mapData(null, activeCoordinates, models.globalMinValue( ), models.globalMaxValue( ))} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.addPoint}/> );
     }
 
     setTimeSeriesPointSelection = index => {
         return e => {
-            this.props.dispatch(setTimeSeriesPointSelection(index, e.target.checked));
+            this.props.dispatch(setTimeSeriesPointSelection( index, e.target.checked ));
         };
     }
 
-    renderTable() {
+    renderTable( ) {
         const { timeSeriesPoints } = this.props.tool;
-        return(<table className="table">
-            <thead>
-                <tr>
-                    <th>Active</th>
-                    <th>Point</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                </tr>
-            </thead>
-            <tbody>
-                {timeSeriesPoints.map((p, index) => {
-                    return(<tr key={index}>
-                        <td><input onChange={this.setTimeSeriesPointSelection(index)} checked={p.selected} type="checkbox"/></td>
-                        <td>{p.name}</td>
-                        <td>{p.coordinate.lat}</td>
-                        <td>{p.coordinate.lng}</td>
-                    </tr>);
-                })}
-            </tbody>
-        </table>);
+        return (
+            <div style={{
+                maxHeight: 300,
+                overflow: 'auto'
+            }}>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Active</th>
+                            <th>Point</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {timeSeriesPoints.map(( p, index ) => {
+                            return (
+                                <tr key={index}>
+                                    <td><input onChange={this.setTimeSeriesPointSelection( index )} checked={p.selected} type="checkbox"/></td>
+                                    <td>{p.name}</td>
+                                    <td>{p.coordinate.lat}</td>
+                                    <td>{p.coordinate.lng}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 
     renderChart( ) {
-        const {models, totalTimes, timeSeriesPoints, selectedResultType, selectedLayerNumber} = this.props.tool;
+        const { models, totalTimes, timeSeriesPoints, selectedResultType, selectedLayerNumber } = this.props.tool;
 
-        if(!models || !totalTimes) {
+        if ( !models || !totalTimes ) {
             return null;
         }
 
-        const grid = {};
-        const axis = {};
         const chartData = {
             x: 'x',
-            columns: []
+            columns: [ ]
         };
 
-        chartData.columns.push(['x'].concat(totalTimes.totalTimes));
+        const xAxisColumn = [ 'x' ];
+        const startDate = new Date( totalTimes.start );
 
-        timeSeriesPoints.filter( p => {return p.selected;}).forEach(p => {
-            models.filter(m => {return m.selected;}).forEach(m => {
-                const result = p.timeSeriesResults.find(r => {return (m.modelId === r.modelId && selectedResultType.sameAs(r.resultType) &&  selectedLayerNumber.sameAs(r.layerNumber));});
-                if (result && result.timeSeries) {
+        totalTimes.totalTimes.forEach(t => {
+            xAxisColumn.push(startDate.addDays( t ));
+        });
+
+        chartData.columns.push( xAxisColumn );
+
+        timeSeriesPoints.filter(p => {
+            return p.selected;
+        }).forEach(p => {
+            models.filter(m => {
+                return m.selected;
+            }).forEach(m => {
+                const result = p.timeSeriesResults.find(r => {
+                    return (m.modelId === r.modelId && selectedResultType.sameAs( r.resultType ) && selectedLayerNumber.sameAs( r.layerNumber ));
+                });
+                if ( result && result.timeSeries ) {
                     const resultColumn = [p.name + ' ' + m.name];
-                    chartData.columns.push(resultColumn.concat(result.timeSeries.values));
+                    chartData.columns.push(resultColumn.concat( result.timeSeries.values ));
                 }
             });
         });
 
-        // axis = {
-        //     x: {
-        //         label: baseModel.labelXAxis()
-        //     },
-        //     y: {
-        //         label: baseModel.labelYAxis()
-        //     }
-        // };
+        const axis = {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    format: function( x ) {
+                        return dateFormat(x, 'mm/dd/yyyy' );
+                    }
+                }
+            }
+        };
+
+        const grid = {
+            x: {
+                show: true
+            }
+        };
 
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{
+                        duration: 0
+                    }} element="testchart"/>
                 </section>
             </div>
         );
@@ -289,7 +324,7 @@ export default class T07C extends Component {
                         {this.renderMap( )}
                     </section>
                     <section className="tile col col-abs-2">
-                        {this.renderTable()}
+                        {this.renderTable( )}
                     </section>
                 </div>
                 {this.renderChart( )}

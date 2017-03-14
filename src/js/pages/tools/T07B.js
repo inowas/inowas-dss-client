@@ -21,13 +21,13 @@ import {
     setSelectedTotalTimeIndex,
     setMapView,
     setBounds,
-    setActiveCoordinate
+    setActiveCoordinate,
+    setupT07b
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
-import ModflowModelDifference from '../../model/ModflowModelDifference';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -67,40 +67,46 @@ export default class T07B extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+        this.props.dispatch(fetchModelDetails(this.props.params.id, dispatch => {
+            dispatch(setupT07b( ));
+        }));
+    }
+
+    componentWillReceiveProps( nextProps ) {
+        const { selectedResultType, selectedLayerNumber, totalTimes, t07bSelectedModelIds } = this.props.tool;
+        const { selectedResultType: nextSelectedResultType, selectedLayerNumber: nextSelectedLayerNumber, totalTimes: nextTotalTimes, t07bSelectedModelIds: nextT07bSelectedModelIds } = nextProps.tool;
+        if ( ( !selectedResultType || !selectedLayerNumber || !totalTimes || !t07bSelectedModelIds ) && nextSelectedResultType && nextSelectedLayerNumber && nextTotalTimes && nextT07bSelectedModelIds ) {
+            this.updateModelResults( nextT07bSelectedModelIds, nextSelectedResultType, nextSelectedLayerNumber, nextTotalTimes, null );
+        }
+    }
+
+    updateModelResults( t07bSelectedModelIds, resultType, layerNumber, totalTimes, totalTimeIndex ) {
+        if ( t07bSelectedModelIds.length !== 2 ) {
+            throw new Error( 'Cannot update ModelResults, due to the number of t07bSelectedModelIds is not equal 2.' );
+        }
+
+        if (!( layerNumber instanceof LayerNumber )) {
+            throw new Error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
+        }
+
+        if ( resultType instanceof ResultType === false ) {
+            throw new Error( 'Cannot update ModelResults, due resultType is not from Type ResultType.' );
+        }
+
+        const totalTime = ( totalTimeIndex === null )
+            ? new TotalTime(totalTimes.totalTimes[totalTimes.totalTimes.length - 1])
+            : new TotalTime(totalTimes.totalTimes[totalTimeIndex]);
+
+        this.props.dispatch(updateResultsT07B( t07bSelectedModelIds[0], t07bSelectedModelIds[1], resultType, layerNumber, totalTime ));
     }
 
     changeLayerValue = ( layerNumber, resultType ) => {
         this.props.dispatch(setSelectedLayer( layerNumber ));
         this.props.dispatch(setSelectedResultType( resultType ));
-        this.updateModelResults( resultType, layerNumber, this.props.tool.selectedTotalTimeIndex );
+
+        const { t07bSelectedModelIds, totalTimes, selectedTotalTimeIndex } = this.props.tool;
+        this.updateModelResults( t07bSelectedModelIds, resultType, layerNumber, totalTimes, selectedTotalTimeIndex );
     };
-
-    updateModelResults( resultType, layerNumber, totalTimeIndex ) {
-        const selectedModelIds = this.props.tool.t07bSelectedModelIds;
-        if ( selectedModelIds.length !== 2 ) {
-            console.error( 'Cannot update ModelResults, due to the number of selectedModelIds is not equal 2.' );
-            return;
-        }
-
-        if ( layerNumber instanceof LayerNumber === false ) {
-            console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
-            return;
-        }
-
-        if ( resultType instanceof ResultType === false ) {
-            console.error( 'Cannot update ModelResults, due resultType is not from Type ResultType.' );
-            return;
-        }
-
-        const totalTimes = this.props.tool.totalTimes.totalTimes;
-
-        const totalTime = ( totalTimeIndex === null )
-            ? new TotalTime(totalTimes[totalTimes.length - 1])
-            : new TotalTime(totalTimes[totalTimeIndex]);
-
-        this.props.dispatch(updateResultsT07B( selectedModelIds[0], selectedModelIds[1], resultType, layerNumber, totalTime ));
-    }
 
     selectLayer = ( e ) => {
         const valueSplitted = e.target.value.split( '_' );
@@ -194,7 +200,7 @@ export default class T07B extends Component {
         let xCrossSection = null;
         if ( activeCoordinate ) {
             const activeGridCell = t07bDifference.grid.coordinateToGridCell( activeCoordinate );
-            if(activeGridCell) {
+            if ( activeGridCell ) {
                 xCrossSection = t07bDifference.grid.gridCellToXCrossectionBoundingBox( activeGridCell );
             }
         }
@@ -220,7 +226,7 @@ export default class T07B extends Component {
 
         const activeGridCell = mfDifference.grid.coordinateToGridCell( activeCoordinate );
 
-        if (!activeGridCell) {
+        if ( !activeGridCell ) {
             return null;
         }
 
@@ -280,7 +286,8 @@ export default class T07B extends Component {
 
     changeTotalTimeIndex = index => {
         this.props.dispatch(setSelectedTotalTimeIndex( index ));
-        this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
+        const { t07bSelectedModelIds, selectedResultType, selectedLayerNumber, totalTimes, selectedTotalTimeIndex } = this.props.tool;
+        this.updateModelResults( t07bSelectedModelIds, selectedResultType, selectedLayerNumber, totalTimes, selectedTotalTimeIndex );
     };
 
     renderSlider( ) {
