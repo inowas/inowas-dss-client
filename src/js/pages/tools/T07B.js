@@ -152,20 +152,23 @@ export default class T07B extends Component {
 
     renderModelsSelect( ) {
         if ( this.props.tool.t07bSelectedModelIds === null ) {
-            return;
+            return null;
         }
         return (
-            <div>
-                <select className="select block col stretch" onChange={this.selectModel.bind( this, 0 )} value={this.props.tool.t07bSelectedModelIds[0]}>
-                    {this.renderModelSelect( this.props.tool.models.models )}
-                </select>
-
-                <Icon className="col" name="minus"/>
-
-                <select className="select block col stretch" onChange={this.selectModel.bind( this, 1 )} value={this.props.tool.t07bSelectedModelIds[1]}>
-                    {this.renderModelSelect( this.props.tool.models.models )}
-                </select>
-
+            <div className="grid-container stretch">
+                <div className="col stretch">
+                    <select className="select block" onChange={this.selectModel.bind( this, 0 )} value={this.props.tool.t07bSelectedModelIds[0]}>
+                        {this.renderModelSelect( this.props.tool.models.models )}
+                    </select>
+                </div>
+                <div className="col center-horizontal">
+                    <Icon className="col" name="minus"/>
+                </div>
+                <div className="col stretch">
+                    <select className="select block" onChange={this.selectModel.bind( this, 1 )} value={this.props.tool.t07bSelectedModelIds[1]}>
+                        {this.renderModelSelect( this.props.tool.models.models )}
+                    </select>
+                </div>
             </div>
         );
     }
@@ -205,16 +208,15 @@ export default class T07B extends Component {
         const { activeCoordinate } = this.props.tool;
         const mfDifference = this.props.tool.t07bDifference;
 
-        if(!mfDifference || !activeCoordinate) {
+        if ( !mfDifference || !activeCoordinate ) {
             return null;
         }
 
-        if (!mfDifference.hasResult()) {
+        if (!mfDifference.hasResult( )) {
             return null;
         }
 
         const activeGridCell = mfDifference.grid.coordinateToGridCell( activeCoordinate );
-
 
         const rowNumber = activeGridCell.y;
         if ( rowNumber === null ) {
@@ -280,7 +282,7 @@ export default class T07B extends Component {
             return null;
         }
 
-        const startDate = new Date(this.props.tool.totalTimes.start( ));
+        const startDate = new Date( this.props.tool.totalTimes.start );
         const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
             return startDate.addDays( t );
         });

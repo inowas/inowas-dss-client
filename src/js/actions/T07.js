@@ -11,6 +11,9 @@ import ModflowModelResult from '../model/ModflowModelResult';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
 import TotalTimes from '../model/TotalTimes';
+import TwoDData from '../model/TwoDData';
+import TimeSeries from '../model/TimeSeries';
+import TimeSeriesResult from '../model/TimeSeriesResult';
 
 function apiKey() {
     return store.getState().user.apiKey;
@@ -24,7 +27,7 @@ export function fetchModelDetails( id ) {
                 promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
-            console.log(action.payload.data);
+            console.log( action.payload.data );
             const area = JSON.parse( action.payload.data.base_model.area );
             const boundingBoxPlain = JSON.parse( action.payload.data.base_model.bounding_box );
             const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain.y_min, boundingBoxPlain.x_min ), new Coordinate( boundingBoxPlain.y_max, boundingBoxPlain.x_max ) );
@@ -45,7 +48,6 @@ export function fetchModelDetails( id ) {
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.modelId ) );
             dispatch( fetchTotalTimes( baseModel.modelId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
-
 
             const scenarios = action.payload.data.scenarios;
             scenarios.forEach( sc => {
@@ -157,7 +159,7 @@ export function updateResultsT07B( modelId1, modelId2, resultType, layerNumber, 
                 promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setResultsT07B(new ModflowModelResult(modelId1, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png' )));
+            dispatch( setResultsT07B( new ModflowModelResult( modelId1, layerNumber, resultType, totalTime, action.payload.data, baseUrl + url + '.png' ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -323,20 +325,17 @@ export function setTimeSeriesPointSelection( index, selected ) {
     };
 }
 
-export function setTimeSeriesPointResult(coordinate, modelId, resultType, layerNumber, timeSeriesResult) {
+export function setTimeSeriesPointResult( coordinate, timeSeriesResult ) {
     return {
-        type: 'T07_SETTIME_SERIES_POINT_RESULT',
+        type: 'T07_SET_TIME_SERIES_POINT_RESULT',
         payload: {
             coordinate,
-            modelId,
-            resultType,
-            layerNumber,
             timeSeriesResult
         }
     };
 }
 
-export function fetchTimeSeries(coordinate, modelId, resultType, layerNumber, x, y ) {
+export function fetchTimeSeries( coordinate, modelId, resultType, layerNumber, x, y, startDate ) {
     return dispatch => {
         return dispatch( {
             type: 'FETCH_DATA',
@@ -344,7 +343,15 @@ export function fetchTimeSeries(coordinate, modelId, resultType, layerNumber, x,
                 promise: ConfiguredAxios.get( '/scenarioanalysis/result/timeseries/model/' + modelId + '/type/' + resultType.toString() + '/layer' + layerNumber.toString() + '/nx/' + x + '/ny/' + y + '.json', { headers: { 'X-AUTH-TOKEN': apiKey() } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setTimeSeriesPointResult(coordinate, modelId, resultType, layerNumber, action.payload.data) );
+            const data = [];
+            Object.keys( action.payload.data ).map( key => {
+                data.push(new TwoDData(key, action.payload.data[key]));
+            } );
+            const timeSeries = new TimeSeries(startDate, data);
+            const timeSeriesResult = new TimeSeriesResult(modelId, resultType, layerNumber);
+            timeSeriesResult.timeSeries = timeSeries;
+
+            dispatch( setTimeSeriesPointResult( coordinate, timeSeriesResult ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );

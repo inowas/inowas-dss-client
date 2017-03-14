@@ -28,7 +28,7 @@ export default class TotalTimes {
         return this._layer;
     }
 
-    start() {
+    get start() {
         return this._start;
     }
 

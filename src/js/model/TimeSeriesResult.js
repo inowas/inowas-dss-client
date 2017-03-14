@@ -46,4 +46,28 @@ export default class TimeSeriesResult {
     get timeSeries() {
         return this._timeSeries;
     }
+
+    sameAs(otherTimeSeriesResult) {
+        if ( !( otherTimeSeriesResult instanceof TimeSeriesResult ) ) {
+            throw new Error( 'Expected first parameter to be a TimeSeriesResult, but got ' + ( typeof otherTimeSeriesResult ) );
+        }
+
+        return (this.modelId === otherTimeSeriesResult.modelId
+            && this.resultType.sameAs(otherTimeSeriesResult.resultType)
+            && this.layerNumber.sameAs(otherTimeSeriesResult.layerNumber));
+    }
+
+    static compare(timeSeriesResult1, timeSeriesResult2) {
+        if ( !( timeSeriesResult1 instanceof TimeSeriesResult ) ) {
+            throw new Error( 'Expected first parameter to be a TimeSeriesResult, but got ' + ( typeof timeSeriesResult1 ) );
+        }
+
+        if ( !( timeSeriesResult2 instanceof TimeSeriesResult ) ) {
+            throw new Error( 'Expected second parameter to be a TimeSeriesResult, but got ' + ( typeof timeSeriesResult2 ) );
+        }
+
+        return (timeSeriesResult1.modelId === timeSeriesResult2.modelId
+            && timeSeriesResult1.resultType.sameAs(timeSeriesResult2.resultType)
+            && timeSeriesResult1.layerNumber.sameAs(timeSeriesResult2.layerNumber));
+    }
 }

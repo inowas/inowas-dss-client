@@ -90,7 +90,7 @@ export default class ModflowModel {
 
         const rowData = this.result.rowData(row);
 
-        if (rowData === null) {
+        if (!rowData) {
             return null;
         }
 
@@ -107,7 +107,7 @@ export default class ModflowModel {
 
         const rowData = this.result.rowData(row);
 
-        if (rowData === null) {
+        if (!rowData) {
             return null;
         }
 
@@ -137,7 +137,7 @@ export default class ModflowModel {
 
         const rowData = this.result.rowData(row);
 
-        if (rowData === null) {
+        if (!rowData) {
             return null;
         }
 

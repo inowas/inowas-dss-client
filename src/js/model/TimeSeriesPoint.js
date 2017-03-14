@@ -1,5 +1,6 @@
 import Coordinate from './Coordinate';
 import TimeSeriesResult from './TimeSeriesResult';
+import {unionWith} from 'lodash';
 
 export default class TimeSeriesPoint {
 
@@ -8,9 +9,9 @@ export default class TimeSeriesPoint {
     _selected;
     _timeSeriesResults = [];
 
-    constructor() {
-        this._name = 'new Point';
-        this._selected = true;
+    constructor( name = 'new Point', selected = true) {
+        this._name = name;
+        this._selected = selected;
     }
 
     set coordinate(coordinate) {
@@ -49,14 +50,14 @@ export default class TimeSeriesPoint {
         return this._selected;
     }
 
-    addResult(timeSeriesResult) {
-        if ( !( timeSeriesResult instanceof TimeSeriesResult ) ) {
-            throw new Error( 'Expected first parameter to be a TimeSeries, but got ' + ( typeof timeSeriesResult ) );
+    addResult(newTimeSeriesResult) {
+        if ( !( newTimeSeriesResult instanceof TimeSeriesResult ) ) {
+            throw new Error( 'Expected first parameter to be a TimeSeriesResult, but got ' + ( typeof newTimeSeriesResult ) );
         }
-        this._timeSeries.push(timeSeriesResult);
+        this._timeSeriesResults = unionWith([newTimeSeriesResult], this.timeSeriesResults, TimeSeriesResult.compare);
     }
 
-    get results() {
+    get timeSeriesResults() {
         return this._timeSeriesResults;
     }
 }

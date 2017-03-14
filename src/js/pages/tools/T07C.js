@@ -14,7 +14,6 @@ import '../../../less/toolT07.less';
 
 import {
     fetchModelDetails,
-    updateResultsT07A,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
@@ -28,9 +27,7 @@ import {
 
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
-import TotalTime from '../../model/TotalTime';
 import TimeSeriesPoint from '../../model/TimeSeriesPoint';
-import ModflowModelResult from '../../model/ModflowModelResult';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -73,55 +70,37 @@ export default class T07C extends Component {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
     }
 
-    toggleSelection = id => {
-        return ( e ) => {
-            this.props.dispatch(toggleModelSelection( id ));
-            this.updateModelResults( this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex );
+    fetchTimeSeriesForPoint( coordinate, modelId, resultType, layerNumber, gridCell, startDate) {
+        this.props.dispatch(fetchTimeSeries(coordinate, modelId, resultType, layerNumber, gridCell.x, gridCell.y, startDate ));
+    }
 
-            // manually emit a resize event so the leaflet maps recalculate their container size
-            const event = document.createEvent( 'HTMLEvents' );
-            event.initEvent( 'resize', true, false );
-            e.target.dispatchEvent( event );
+    fetchTimeSeriesForPoints(models, resultType, layerNumber, timeSeriesPoints, startDate) {
+        timeSeriesPoints.filter( p => {return p.selected;}).forEach(p => {
+            models.filter(m => {return m.selected;}).forEach(m => {
+                const gridCell = m.grid.coordinateToGridCell(p.coordinate);
+                this.fetchTimeSeriesForPoint( p.coordinate, m.modelId, resultType, layerNumber, gridCell, startDate);
+            });
+        });
+    }
+
+    toggleScenarioSelection = id => {
+        return () => {
+            this.props.dispatch(toggleModelSelection( id ));
+
+            // update results
+            const {models, selectedResultType, selectedLayerNumber, timeSeriesPoints, totalTimes} = this.props.tool;
+            this.fetchTimeSeriesForPoints(models, selectedResultType, selectedLayerNumber, timeSeriesPoints, new Date(totalTimes.start));
         };
     };
 
     changeLayerValue = ( layerNumber, resultType ) => {
         this.props.dispatch(setSelectedLayer( layerNumber ));
         this.props.dispatch(setSelectedResultType( resultType ));
-        this.updateModelResults( resultType, layerNumber, this.props.tool.selectedTotalTimeIndex );
+
+        // update results
+        const {models, timeSeriesPoints, totalTimes} = this.props.tool;
+        this.fetchTimeSeriesForPoints(models, resultType, layerNumber, timeSeriesPoints, new Date(totalTimes.start));
     };
-
-    updateModelResults( resultType, layerNumber, totalTimeIndex ) {
-        if ( layerNumber instanceof LayerNumber === false ) {
-            console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
-            return;
-        }
-
-        if ( resultType instanceof ResultType === false ) {
-            console.error( 'Cannot update ModelResults, due resultType is not from Type ResultType.' );
-            return;
-        }
-
-        const totalTimes = this.props.tool.totalTimes.totalTimes;
-
-        const totalTime = ( totalTimeIndex === null )
-            ? new TotalTime(totalTimes[totalTimes.length - 1])
-            : new TotalTime(totalTimes[totalTimeIndex]);
-
-        this.props.tool.models.forEach(m => {
-            if ( m.isSelected( ) === false ) {
-                return;
-            }
-
-            if ( m.result instanceof ModflowModelResult ) {
-                if (m.result.resultType( ).sameAs( resultType ) && m.result.layerNumber( ).sameAs( layerNumber ) && m.result.totalTime( ).sameAs( totalTime )) {
-                    return;
-                }
-            }
-
-            this.props.dispatch(updateResultsT07A( m.modelId, resultType, layerNumber, totalTime ));
-        });
-    }
 
     selectLayer = ( e ) => {
         const valueSplitted = e.target.value.split( '_' );
@@ -166,11 +145,25 @@ export default class T07C extends Component {
     };
 
     addPoint = ( coordinate ) => {
-        const point = new TimeSeriesPoint();
-        point.coordinate = coordinate;
+        const { models } = this.props.tool;
+        const grid = models.baseModel.grid;
+        const gridCell = grid.coordinateToGridCell(coordinate);
 
+        if(!grid.isGridCellInGrid(gridCell)) {
+            return;
+        }
+        const { timeSeriesPoints } = this.props.tool;
+        // add Point to store
+        const point = new TimeSeriesPoint('Point ' + timeSeriesPoints.length);
+        point.coordinate = coordinate;
         this.props.dispatch(addTimeSeriesPoint( point ));
-    };
+
+        // fetch data for this point
+        const { selectedResultType, selectedLayerNumber, totalTimes } = this.props.tool;
+        models.filter(m => {return m.selected;}).forEach(m => {
+            this.fetchTimeSeriesForPoint( coordinate, m.modelId, selectedResultType, selectedLayerNumber, gridCell, new Date(totalTimes.start));
+        });
+    }
 
     renderMap( ) {
         const { models, mapPosition, timeSeriesPoints } = this.props.tool;
@@ -224,37 +217,39 @@ export default class T07C extends Component {
     }
 
     renderChart( ) {
-        const {models, timeSeriesPoints, selectedResultType, selectedLayerNumber} = this.props.tool;
+        const {models, totalTimes, timeSeriesPoints, selectedResultType, selectedLayerNumber} = this.props.tool;
 
+        if(!models || !totalTimes) {
+            return null;
+        }
 
         const grid = {};
         const axis = {};
         const chartData = {
+            x: 'x',
             columns: []
         };
 
+        chartData.columns.push(['x'].concat(totalTimes.totalTimes));
+
         timeSeriesPoints.filter( p => {return p.selected;}).forEach(p => {
-            const resultColumn = [p.name];
             models.filter(m => {return m.selected;}).forEach(m => {
-                const result = p.results.find(r => {return (m.modelId === r.modelId && selectedResultType.sameAs(r.resultType) &&  selectedLayerNumber.sameAs(r.layerNumber));});
+                const result = p.timeSeriesResults.find(r => {return (m.modelId === r.modelId && selectedResultType.sameAs(r.resultType) &&  selectedLayerNumber.sameAs(r.layerNumber));});
                 if (result && result.timeSeries) {
-                    resultColumn.concat(result.timeSeries.data);
-                } else {
-                    const gridCell = m.grid.coordinateToGridCell(p.coordinate);
-                    this.props.dispatch(fetchTimeSeries(p.coordinate, m.modelId, selectedResultType, selectedLayerNumber, gridCell.x, gridCell.y ));
+                    const resultColumn = [p.name + ' ' + m.name];
+                    chartData.columns.push(resultColumn.concat(result.timeSeries.values));
                 }
             });
-            chartData.columns.push(resultColumn);
         });
 
-            // axis = {
-            //     x: {
-            //         label: baseModel.labelXAxis()
-            //     },
-            //     y: {
-            //         label: baseModel.labelYAxis()
-            //     }
-            // };
+        // axis = {
+        //     x: {
+        //         label: baseModel.labelXAxis()
+        //     },
+        //     y: {
+        //         label: baseModel.labelYAxis()
+        //     }
+        // };
 
         return (
             <div className="grid-container">
@@ -281,7 +276,7 @@ export default class T07C extends Component {
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
                 <Drawer visible>
-                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
+                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleScenarioSelection}/>
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">

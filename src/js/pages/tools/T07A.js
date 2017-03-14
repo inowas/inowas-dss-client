@@ -91,7 +91,6 @@ export default class T07A extends Component {
     };
 
     updateModelResults( resultType, layerNumber, totalTimeIndex ) {
-
         if ( layerNumber instanceof LayerNumber === false ) {
             console.error( 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.' );
             return;
@@ -282,7 +281,7 @@ export default class T07A extends Component {
             return null;
         }
 
-        const startDate = new Date(this.props.tool.totalTimes.start());
+        const startDate = new Date(this.props.tool.totalTimes.start);
         const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
             return startDate.addDays(t);
         });

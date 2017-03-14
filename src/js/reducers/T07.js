@@ -187,20 +187,12 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.timeSeriesPoints[ action.payload.index ].selected = action.payload.selected;
             break;
 
-        case 'T07_SETTIME_SERIES_POINT_RESULT':
+        case 'T07_SET_TIME_SERIES_POINT_RESULT':
             state = { ...state };
-            const { coordinate, modelId, resultType, layerNumber, timeSeriesResult } = action.payload;
+            const { coordinate, timeSeriesResult } = action.payload;
             const timeSeriesPoint = state.timeSeriesPoints.find( p => { return ( p.coordinate.sameAs( coordinate ) ); } );
             if ( timeSeriesPoint ) {
-                const result = timeSeriesPoint.results.find( r => {
-                    return ( r.modelId === modelId && r.resultType.sameAs( resultType ) && r.layerNumber.sameAs( layerNumber ) );
-                } );
-
-                if ( result ) {
-
-                } else {
-                    timeSeriesPoint.addResult( timeSeriesResult );
-                }
+                timeSeriesPoint.addResult(timeSeriesResult);
             }
 
     }

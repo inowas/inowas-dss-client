@@ -8,7 +8,7 @@ export default class TimeSeries {
             throw new Error( 'Expected first parameter to be a Date-Value, but got ' + ( typeof start ) );
         }
 
-        if ( typeof data !== 'array' ) {
+        if ( !( data instanceof Array ) ) {
             throw new Error( 'Expected second parameter to be an array, but got ' + ( typeof data ) );
         }
 
@@ -22,5 +22,11 @@ export default class TimeSeries {
 
     get data() {
         return this._data;
+    }
+
+    get values() {
+        return this.data.map(d => {
+            return d.value;
+        });
     }
 }

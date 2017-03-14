@@ -78,4 +78,12 @@ export default class Grid {
         return new BoundingBox(southWest, northEast);
     }
 
+    isGridCellInGrid(gridCell) {
+        if ( !( gridCell instanceof GridCell ) ) {
+            throw new Error( 'Expected first parameter to be a GridCell, but got ' + ( typeof gridCell ) );
+        }
+
+        return (gridCell.y >= 0 && gridCell.y < this.nY && gridCell.x >= 0 && gridCell.x < this.nX);
+    }
+
 }
