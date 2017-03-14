@@ -151,9 +151,12 @@ export default class T07B extends Component {
     }
 
     selectModel = ( id, e ) => {
-        const selectedModelIds = this.props.tool.t07bSelectedModelIds;
-        selectedModelIds[id] = e.target.value;
-        this.props.dispatch(setSelectedModelIdsT07B( selectedModelIds ));
+        const t07bSelectedModelIds = this.props.tool.t07bSelectedModelIds;
+        t07bSelectedModelIds[id] = e.target.value;
+        this.props.dispatch(setSelectedModelIdsT07B( t07bSelectedModelIds ));
+
+        const { selectedResultType, selectedLayerNumber, totalTimes, selectedTotalTimeIndex } = this.props.tool;
+        this.updateModelResults( t07bSelectedModelIds, selectedResultType, selectedLayerNumber, totalTimes, selectedTotalTimeIndex );
     };
 
     renderModelsSelect( ) {
