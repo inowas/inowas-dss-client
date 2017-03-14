@@ -194,7 +194,9 @@ export default class T07B extends Component {
         let xCrossSection = null;
         if ( activeCoordinate ) {
             const activeGridCell = t07bDifference.grid.coordinateToGridCell( activeCoordinate );
-            xCrossSection = t07bDifference.grid.gridCellToXCrossectionBoundingBox( activeGridCell );
+            if(activeGridCell) {
+                xCrossSection = t07bDifference.grid.gridCellToXCrossectionBoundingBox( activeGridCell );
+            }
         }
 
         return (
@@ -217,6 +219,10 @@ export default class T07B extends Component {
         }
 
         const activeGridCell = mfDifference.grid.coordinateToGridCell( activeCoordinate );
+
+        if (!activeGridCell) {
+            return null;
+        }
 
         const rowNumber = activeGridCell.y;
         if ( rowNumber === null ) {

@@ -53,7 +53,6 @@ export default class CrossSectionMap extends Component {
 
     resetView = () => {
         const boundingBox = this.props.mapData.boundingBox;
-
         this.props.updateBounds(boundingBox.toArray());
     };
 

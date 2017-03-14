@@ -175,7 +175,9 @@ export default class T07A extends Component {
         let xCrossSection = null;
         if( activeCoordinate ) {
             const activeGridCell = models.baseModel.grid.coordinateToGridCell(activeCoordinate);
-            xCrossSection = models.baseModel.grid.gridCellToXCrossectionBoundingBox(activeGridCell);
+            if(activeGridCell) {
+                xCrossSection = models.baseModel.grid.gridCellToXCrossectionBoundingBox(activeGridCell);
+            }
         }
 
         return models.filter(model => {
@@ -195,7 +197,12 @@ export default class T07A extends Component {
         if( models.length <= 0 || !activeCoordinate) {
             return null;
         }
+
         const activeGridCell = models.baseModel.grid.coordinateToGridCell(activeCoordinate);
+
+        if (!activeGridCell) {
+            return null;
+        }
 
         if ( models.countModelsWithResults( ) === 0 ) {
             return null;
@@ -243,7 +250,7 @@ export default class T07A extends Component {
                             position: 'middle'
                         },
                         {
-                            value: baseModel.coordinateByGridCell( colNumber, rowNumber ).x,
+                            value: activeCoordinate.lng,
                             text: 'Selected column',
                             position: 'middle'
                         }

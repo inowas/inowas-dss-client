@@ -53,7 +53,12 @@ export default class Grid {
         const x = Math.floor( ( coordinate.lng - this.boundingBox.southWest.lng) / this.dLng );
         const y = this.nY - 1 - Math.floor( ( coordinate.lat - this.boundingBox.southWest.lat) / this.dLat );
 
-        return new GridCell(x, y);
+        const gridCell = new GridCell(x, y);
+
+        if (this.isGridCellInGrid(gridCell)) {
+            return gridCell;
+        }
+        return null;
     }
 
     gridCellToBoundingBox(gridCell) {

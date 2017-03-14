@@ -149,7 +149,7 @@ export default class T07C extends Component {
         const grid = models.baseModel.grid;
         const gridCell = grid.coordinateToGridCell(coordinate);
 
-        if(!grid.isGridCellInGrid(gridCell)) {
+        if(!gridCell) {
             return;
         }
         const { timeSeriesPoints } = this.props.tool;
