@@ -245,6 +245,16 @@ export default class T07C extends Component {
         );
     }
 
+    labelXAxis = ( resultType ) => {
+        if (resultType.toString() == 'head'){
+            return 'Groundwater Head [m]'
+        }
+
+        if (resultType.toString() == 'drawdown'){
+            return 'Groundwater DrawDown [m]'
+        }
+    };
+
     renderChart( ) {
         const { models, totalTimes, timeSeriesPoints, selectedResultType, selectedLayerNumber } = this.props.tool;
 
@@ -287,9 +297,12 @@ export default class T07C extends Component {
                 type: 'timeseries',
                 tick: {
                     format: function( x ) {
-                        return dateFormat( x, 'mm/dd/yyyy' );
-                    }
-                }
+                        return dateFormat(x, 'mm/dd/yyyy' );
+                    }},
+                label: 'Date'
+            },
+            y: {
+                label: this.labelXAxis(selectedResultType)
             }
         };
 
