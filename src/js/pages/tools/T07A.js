@@ -351,10 +351,7 @@ export default class T07A extends Component {
 
     render( ) {
         const { navigation } = this.state;
-        const models = this.props.tool.models.map(m => {
-            m.thumbnail = 'scenarios_thumb.png';
-            return m;
-        });
+        const models = this.props.tool.models;
 
         return (
             <div className="toolT07 app-width">

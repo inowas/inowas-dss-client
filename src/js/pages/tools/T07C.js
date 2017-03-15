@@ -246,12 +246,12 @@ export default class T07C extends Component {
     }
 
     labelXAxis = ( resultType ) => {
-        if (resultType.toString() == 'head'){
-            return 'Groundwater Head [m]'
+        if (resultType.toString() == 'head') {
+            return 'Groundwater Head [m]';
         }
 
-        if (resultType.toString() == 'drawdown'){
-            return 'Groundwater DrawDown [m]'
+        if (resultType.toString() == 'drawdown') {
+            return 'Groundwater DrawDown [m]';
         }
     };
 
@@ -330,10 +330,7 @@ export default class T07C extends Component {
 
     render( ) {
         const { navigation } = this.state;
-        const models = this.props.tool.models.map(m => {
-            m.thumbnail = 'scenarios_thumb.png';
-            return m;
-        });
+        const models = this.props.tool.models;
 
         return (
             <div className="toolT07 app-width">

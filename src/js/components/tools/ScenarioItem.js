@@ -16,16 +16,16 @@ export default class ScenarioItem extends React.Component {
 
     render( ) {
         const { scenario, toggleSelection } = this.props;
-        const { name, description, selected, thumbnail } = scenario;
-        const image = require( '../../../images/' + thumbnail );
+        const { name, description, selected } = scenario;
         return (
             <div className="item" data-selected={selected} onClick={toggleSelection}>
                 <button className="toggle"><Icon name={selected
                 ? 'checked'
                 : 'unchecked'}/></button>
-                <img className="thumbnail" src={image}/>
-                <h3>{name}</h3>
-                <p>{description}</p>
+                <div className="content">
+                    <h3>{name}</h3>
+                    <p>{description}</p>
+                </div>
             </div>
         );
     }

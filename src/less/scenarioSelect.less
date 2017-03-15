@@ -3,26 +3,32 @@
 .scenarioSelect {
     display: flex;
     .item {
-        position: relative;
         flex: 1;
+        display: flex;
+        align-items: flex-start;
         max-width: 25%;
         padding: 0;
         margin: @spacing-regular;
-
-        >.thumbnail {
-            width: 100%;
-            height: auto;
-        }
+        padding-right: @spacing-regular;
 
         >.toggle {
-            position: absolute;
-            top: @spacing-small;
-            right: @spacing-small;
             background-color: @background-bright;
-            box-shadow: @box-shadow;
-            padding: 1px;
             border: 0;
             cursor: pointer;
+            margin-right: @spacing-small;
+        }
+
+        >.content {
+            flex: 1;
+
+            h3 {
+                margin-top: 0;
+                text-align: left;
+            }
+        }
+
+        &:not(:last-child) {
+            border-right: 1px solid @grey-semi;
         }
 
         &[data-selected=true] {
