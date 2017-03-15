@@ -206,8 +206,24 @@ export default class T07A extends Component {
         });
     }
 
+    labelYAxis = ( resultType ) => {
+        if (resultType.toString() === 'head') {
+            return 'Groundwater Head [m]';
+        }
+
+        if (resultType.toString() === 'drawdown') {
+            return 'Groundwater DrawDown [m]';
+        }
+
+        return '';
+    };
+
+    labelXAxis = () => {
+        return ('Longitude');
+    };
+
     renderChart( ) {
-        const {activeCoordinate, models} = this.props.tool;
+        const {activeCoordinate, models, selectedResultType } = this.props.tool;
         if( models.length <= 0 || !activeCoordinate) {
             return null;
         }
@@ -274,10 +290,10 @@ export default class T07A extends Component {
 
             axis = {
                 x: {
-                    label: baseModel.labelXAxis()
+                    label: this.labelXAxis()
                 },
                 y: {
-                    label: baseModel.labelYAxis()
+                    label: this.labelYAxis( selectedResultType )
                 }
             };
         }

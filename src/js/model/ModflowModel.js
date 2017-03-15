@@ -158,27 +158,6 @@ export default class ModflowModel {
         return Math.round((xMin + (rightBorder * dX)) * 1000) / 1000;
     }
 
-    labelYAxis() {
-        if (this.hasResult()) {
-            if (this.result.resultType().toString() === 'head') {
-                return 'Groundwater Head [m]';
-            }
-
-            if (this.result.resultType().toString() === 'drawdown') {
-                return 'Groundwater DrawDown [m]';
-            }
-        }
-
-        return '';
-    }
-
-    labelXAxis() {
-        if (this.hasResult()) {
-            return ('Longitude');
-        }
-        return null;
-    }
-
     columnXAxis() {
         const column = ['x'];
         const nX = this.grid.nX;
