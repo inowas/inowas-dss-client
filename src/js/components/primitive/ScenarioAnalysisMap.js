@@ -118,7 +118,7 @@ export default class ScenarioAnalysisMap extends Component {
         });
 
         return (
-            <LayersControl.Overlay name="Wells" checked>
+            <LayersControl.Overlay name="Wells">
                 <LayerGroup>
                     {wells}
                 </LayerGroup>
@@ -131,7 +131,7 @@ export default class ScenarioAnalysisMap extends Component {
         const style = this.state.styles.boundingBox;
 
         return (
-            <LayersControl.Overlay name="BoundingBox" checked>
+            <LayersControl.Overlay name="BoundingBox">
                 <Rectangle
                     bounds={boundingBox}
                     color={style.color}
