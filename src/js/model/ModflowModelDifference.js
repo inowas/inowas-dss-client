@@ -146,7 +146,7 @@ export default class ModflowModelDifference {
                 return 'Groundwater Head [m]';
             }
 
-            if (this._result._resultType().toString() === 'drawdown') {
+            if (this._result.resultType().toString() === 'drawdown') {
                 return 'Groundwater DrawDown [m]';
             }
         }

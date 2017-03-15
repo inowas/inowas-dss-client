@@ -251,6 +251,8 @@ export default class T07B extends Component {
             return null;
         }
 
+        console.log(mfDifference);
+
         const chartData = {
             x: 'x',
             columns: [mfDifference.columnXAxis( ), mfDifference.chartDataByRowNumber( rowNumber )]
