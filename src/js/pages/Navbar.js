@@ -9,13 +9,14 @@ import Icon from '../components/primitive/Icon';
 import '../../less/navbar.less';
 
 @connect(( store ) => {
-    return { user: store.user };
+    return { user: store.user, routing: store.routing };
 })
 export default class NavBar extends React.Component {
 
     static propTypes = {
         dispatch: PropTypes.func.isRequired,
         user: PropTypes.object.isRequired,
+        routing: PropTypes.object.isRequired,
         links: PropTypes.array
     };
 
@@ -29,22 +30,24 @@ export default class NavBar extends React.Component {
 
     renderLinks( links ) {
         return links.filter(l => {return l;}).map(( l, index ) => {
+            const active = this.props.routing.locationBeforeTransitions.pathname === l.path;
+
             let navElement = (
-                <span className="nav-element">
+                <span className="nav-element" data-active={active}>
                     {l.icon}{l.name}
                 </span>
             );
 
             if ( l.path ) {
                 navElement = (
-                    <Link className="nav-element" to={l.path}>
+                    <Link className="nav-element" to={l.path} data-active={active}>
                         {l.icon}{l.name}
                     </Link>
                 );
 
                 if (l.path.includes( 'http' )) {
                     navElement = (
-                        <a className="nav-element" href={l.path} target="_blank">
+                        <a className="nav-element" href={l.path} target="_blank" data-active={active}>
                             {l.icon}{l.name}
                         </a>
                     );

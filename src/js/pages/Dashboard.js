@@ -138,7 +138,7 @@ export default class Dashboard extends React.Component {
                     <td>{model.project}</td>
                     <td>{model.application}</td>
                     <td>{dateFormat(createdAt, 'mm/dd/yyyy HH:MM')}</td>
-                    <td>{model.user_id}</td>
+                    <td>{model.user_name}</td>
                     <td>
                         {!model.fake && <Link className="link" to={basePath + model.model_id}>use it <Icon name="arrow_right"/></Link>}
                     </td>

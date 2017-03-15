@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer as routing } from 'react-router-redux';
 
 import appState from './applicationStateReducer';
 import model from './modelReducer';
@@ -26,6 +27,7 @@ import scenarioAnalysis from './scenarioAnalysisReducer';
 import user from './userReducer';
 
 export default combineReducers({
+    routing,
     user,
     appState,
     dashboard,

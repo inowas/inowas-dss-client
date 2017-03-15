@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 import * as tools from './pages/tools';
 
@@ -29,11 +30,12 @@ Date.prototype.addDays = function(days) {
     return dat;
 };
 
-const app = document.getElementById('app');
+const history = syncHistoryWithStore( hashHistory, store );
 
+const app = document.getElementById('app');
 ReactDOM.render(
     <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={history}>
         <Route path="/">
             <IndexRoute component={LandingPage}/>
             <Route path="impressum" component={Impressum}/>

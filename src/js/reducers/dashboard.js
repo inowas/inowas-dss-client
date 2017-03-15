@@ -7,7 +7,7 @@ const initialState = {
         path: 'tools/T02/',
         models: [ {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -16,7 +16,7 @@ const initialState = {
             fake: false
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'Ralf Junghanns',
+            user_name: 'Ralf Junghanns',
             name: 'Long Bien (Hanoi) infiltration basins',
             description: 'Description',
             project: 'INOWAS',
@@ -25,7 +25,7 @@ const initialState = {
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'José Bonilla',
+            user_name: 'José Bonilla',
             name: 'Heredia wetland infiltration',
             description: 'Description',
             project: 'AyA Costa Rica',
@@ -34,7 +34,7 @@ const initialState = {
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'Catalin Stefan',
+            user_name: 'Catalin Stefan',
             name: 'Soil-aquifer-treatment at Yavne 2',
             description: 'Description',
             project: 'SHAFDAN',
@@ -43,7 +43,7 @@ const initialState = {
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'Jens Fahl',
+            user_name: 'Jens Fahl',
             name: 'Soil-aquifer-treatment at Yavne 4',
             description: 'Description',
             project: 'SHAFDAN',
@@ -52,7 +52,7 @@ const initialState = {
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'Ralf Junghanns',
+            user_name: 'Ralf Junghanns',
             name: 'Mendoza reclamation basins',
             description: 'Description',
             project: 'INOWAS',
@@ -61,7 +61,7 @@ const initialState = {
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'Felix Barquero',
+            user_name: 'Felix Barquero',
             name: 'Rapid infiltration basin in Pirna',
             description: 'Description',
             project: 'INOWAS',
@@ -70,7 +70,7 @@ const initialState = {
             fake: true
         }, {
             model_id: 'b6295521-01da-4f80-9ba4-2b1804b23ec1',
-            user_id: 'Thomas Fichtner',
+            user_name: 'Thomas Fichtner',
             name: 'Pirna infiltration tank',
             description: 'Description',
             project: 'INOWAS',
@@ -84,7 +84,7 @@ const initialState = {
         path: 'tools/T06/',
         models: [ {
             model_id: '06_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -98,7 +98,7 @@ const initialState = {
         path: 'tools/T07A/',
         models: [ {
             model_id: '07_1',
-            user_id: 'Jana Glass',
+            user_name: 'Jana Glass',
             name: 'Infiltration basins Hanoi city',
             description: 'Description',
             project: 'INOWAS',
@@ -107,7 +107,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_2',
-            user_id: 'Ralf Junghanns',
+            user_name: 'Ralf Junghanns',
             name: 'MAR recharge wells in Long Bien',
             description: 'Description',
             project: 'INOWAS',
@@ -116,7 +116,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_3',
-            user_id: 'Catalin Stefan',
+            user_name: 'Catalin Stefan',
             name: 'MAR feasibility study',
             description: 'Description',
             project: 'IWAS Vietnam',
@@ -125,7 +125,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_4',
-            user_id: 'Vu Thanh Tam',
+            user_name: 'Vu Thanh Tam',
             name: 'Artificial recharge project in Vietnam',
             description: 'Description',
             project: 'CWRPI',
@@ -134,7 +134,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_5',
-            user_id: 'Ngo Van Tuan',
+            user_name: 'Ngo Van Tuan',
             name: 'Modeling scenarios with MAR',
             description: 'Description',
             project: 'PC-8-26',
@@ -143,7 +143,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_6',
-            user_id: 'Jana Glass',
+            user_name: 'Jana Glass',
             name: 'MAR feasibility study',
             description: 'Description',
             project: 'INOWAS',
@@ -152,7 +152,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_7',
-            user_id: 'Tran Thi Viet Nga',
+            user_name: 'Tran Thi Viet Nga',
             name: 'Hanoi base model',
             description: 'Description',
             project: 'HUCE project',
@@ -161,7 +161,7 @@ const initialState = {
             fake: true
         }, {
             model_id: '07_8',
-            user_id: 'Tran Thi Viet Nga',
+            user_name: 'Tran Thi Viet Nga',
             name: 'Copy of Hanoi base model',
             description: 'Description',
             project: 'HUCE project',
@@ -175,7 +175,7 @@ const initialState = {
         path: 'tools/T09A/',
         models: [ {
             model_id: '09a_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -189,7 +189,7 @@ const initialState = {
         path: 'tools/T09B/',
         models: [ {
             model_id: '09B_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -203,7 +203,7 @@ const initialState = {
         path: 'tools/T09C/',
         models: [ {
             model_id: '09C_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -217,7 +217,7 @@ const initialState = {
         path: 'tools/T09D/',
         models: [ {
             model_id: '09D_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -231,7 +231,7 @@ const initialState = {
         path: 'tools/T13A/',
         models: [ {
             model_id: '13A_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -245,7 +245,7 @@ const initialState = {
         path: 'tools/T13B/',
         models: [ {
             model_id: '13B_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -259,7 +259,7 @@ const initialState = {
         path: 'tools/T13C/',
         models: [ {
             model_id: '13C_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -273,7 +273,7 @@ const initialState = {
         path: 'tools/T13E/',
         models: [ {
             model_id: '13E_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -287,7 +287,7 @@ const initialState = {
         path: 'tools/T14A/',
         models: [ {
             model_id: '14A_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -301,7 +301,7 @@ const initialState = {
         path: 'tools/T14A/',
         models: [ {
             model_id: '14B_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -315,7 +315,7 @@ const initialState = {
         path: 'tools/T14C/',
         models: [ {
             model_id: '14C_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -329,7 +329,7 @@ const initialState = {
         path: 'tools/T14D/',
         models: [ {
             model_id: '14D_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
@@ -343,7 +343,7 @@ const initialState = {
         path: 'tools/T17/',
         models: [ {
             model_id: '17_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'Global MAR portal',
             description: 'Description',
             project: 'INOWAS',
@@ -357,7 +357,7 @@ const initialState = {
         path: 'tools/T18/',
         models: [ {
             model_id: '18_1',
-            user_id: 'ADMIN',
+            user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
