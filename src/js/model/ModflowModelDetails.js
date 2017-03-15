@@ -1,3 +1,5 @@
+import BoundingBox from './BoundingBox';
+
 export default class ModflowModelDetails {
 
     modelId = null;
@@ -13,7 +15,12 @@ export default class ModflowModelDetails {
         this.name = name;
         this.description = description;
         this.area = area;
+
+        if(!(boundingBox instanceof BoundingBox)) {
+            throw new Error('Expected fifth parameter to be a BoundingBox, but got ' + (typeof boundingBox));
+        }
         this.boundingBox = boundingBox;
+
         this.gridSize = gridSize;
         this.isBaseModel = isBaseModel;
     }

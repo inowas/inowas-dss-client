@@ -19,7 +19,7 @@
         }
     }
 
-    .prev-control, .next-control {
+    .prev-navigation, .next-navigation {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -36,19 +36,44 @@
         cursor: pointer;
     }
 
-    &:hover .prev-control, &:hover .next-control {
+    &:hover .prev-navigation, &:hover .next-navigation {
         opacity: 1;
     }
 
-    .prev-control {
+    .prev-navigation {
         left: 0;
         text-align: left;
         background-image: linear-gradient(to right, fade(@background-dark, 50%), transparent);
     }
 
-    .next-control {
+    .next-navigation {
         right: 0;
         text-align: right;
         background-image: linear-gradient(to left, fade(@background-dark, 50%), transparent);
+    }
+
+    .slider-control {
+        position: absolute;
+        bottom: 0;
+        padding-bottom: @spacing-large;
+        left: 5%;
+        right: 5%;
+        text-align: center;
+        z-index: 499;
+
+        .slider-control-item {
+            background-color: @background-bright;
+            width: @spacing-large;
+            height: @spacing-regular;
+            margin: 0px @spacing-small;
+            cursor: pointer;
+            border: 0;
+            padding: 0;
+            box-shadow: @box-shadow;
+
+            &[data-active=true] {
+                background-color: @accent;
+            }
+        }
     }
 }

@@ -1,6 +1,9 @@
 import T02 from './T02';
 import T06 from './T06';
-import T07 from './T07';
+import T07A from './T07A';
+import T07B from './T07B';
+import T07C from './T07C';
+import T07D from './T07D';
 import T09A from './T09A';
 import T09B from './T09B';
 import T09C from './T09C';
@@ -21,7 +24,10 @@ import T18 from './T18';
 
 exports.T02 = T02;
 exports.T06 = T06;
-exports.T07 = T07;
+exports.T07A = T07A;
+exports.T07B = T07B;
+exports.T07C = T07C;
+exports.T07D = T07D;
 exports.T09A = T09A;
 exports.T09B = T09B;
 exports.T09C = T09C;

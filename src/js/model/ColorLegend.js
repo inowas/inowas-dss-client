@@ -1,3 +1,5 @@
+import { uniqBy } from 'lodash';
+
 export default class ColorLegend {
 
     // 'purple', 'red', 'yellow', 'lime', 'aqua', 'blue'
@@ -21,17 +23,28 @@ export default class ColorLegend {
         if (min) {this._min = min;}
         if (max) {this._max = max;}
 
-        const nrOfColors = this._spectrum.length;
-        const delta = (this._max - this._min) / 6;
+        return this.calculateLegend();
+    }
 
-        const legend = [];
+    calculateLegend(decimals=0) {
+
+        const factor = Math.pow(10, decimals);
+
+        const nrOfColors = this._spectrum.length;
+        const delta = (this._max - this._min) / nrOfColors;
+
+        let legend = [];
         for (let i = 0; i < nrOfColors; i++) {
             const value = this._min + delta * i;
             const color = this._spectrum[i];
             legend.unshift({
                 color: color,
-                value: value
+                value: Math.round(value*factor)/factor
             });
+        }
+
+        if (nrOfColors > uniqBy(legend, 'value').length){
+            legend = this.calculateLegend(decimals+1);
         }
 
         return legend;

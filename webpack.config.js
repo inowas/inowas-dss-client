@@ -69,8 +69,13 @@ module.exports = {
                 svgo: {
                     // svgo options
                     plugins: [{
-                        removeTitle: false,
-                        removeStyleElement: true
+                        removeStyleElement: true,
+                        cleanupAttrs: true,
+                        cleanupIDs: true,
+                        mergePaths: true,
+                        removeUselessStrokeAndFill: true,
+                        removeUnusedNS: true,
+                        cleanupNumericValues: true
                     }],
                     floatPrecision: 3,
                     pretty: true
@@ -78,7 +83,7 @@ module.exports = {
             },
             include: /icons/
         }, {
-            test: /\.(png|jpg|jpeg|gif|svg)$/,
+            test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
             loader: 'file-loader?publicPath=../&name=images/[name].[ext]',
             exclude: /icons/
         }]

@@ -53,6 +53,7 @@
     "react-leaflet": "^1.0.2",
     "react-mixin": "^2.0.2",
     "react-router": "^3.0.0",
+    "react-router-redux": "^4.0.8",
     "react-svg-loader": "^1.1.1",
     "style-loader": "^0.13.1",
     "unique-id-mixin": "^1.0.0",

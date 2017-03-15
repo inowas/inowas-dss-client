@@ -1,6 +1,7 @@
 import React from 'react';
 
 import '../../../less/scenarioSelect.less';
+import Icon from '../primitive/Icon';
 
 export default class ScenarioItem extends React.Component {
 
@@ -9,20 +10,22 @@ export default class ScenarioItem extends React.Component {
         toggleSelection: React.PropTypes.func.isRequired
     }
 
-    toggleSelection = () => {
-        this.props.toggleSelection(this.props.scenario.id);
+    toggleSelection = ( ) => {
+        this.props.toggleSelection( this.props.scenario.id );
     }
 
-    render() {
-        const {scenario, toggleSelection} = this.props;
-        const {name, description, selected, thumbnail} = scenario;
-        const image = require('../../../images/' + thumbnail);
+    render( ) {
+        const { scenario, toggleSelection } = this.props;
+        const { name, description, selected, thumbnail } = scenario;
+        const image = require( '../../../images/' + thumbnail );
         return (
-            <div className="scenarioSelect-item" data-selected={selected}>
-                  <img className="thumbnail" src={image} />
-                  <input  className="name-input input-on-focus" defaultValue={name} />
-                  <textarea className="description-input input-on-focus" defaultValue={description} />
-                  <button onClick={toggleSelection} className="button">Toggle Selection</button>
+            <div className="item" data-selected={selected} onClick={toggleSelection}>
+                <button className="toggle"><Icon name={selected
+                ? 'checked'
+                : 'unchecked'}/></button>
+                <img className="thumbnail" src={image}/>
+                <h3>{name}</h3>
+                <p>{description}</p>
             </div>
         );
     }

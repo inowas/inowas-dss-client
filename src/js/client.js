@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 import * as tools from './pages/tools';
 
@@ -23,17 +24,22 @@ String.prototype.replaceAll = function(search, replacement) {
         .join(replacement);
 };
 
+String.prototype.trimLeft = function(charlist = '\s') {
+    return this.replace(new RegExp('^[' + charlist + ']+'), '');
+};
+
 Date.prototype.addDays = function(days) {
     const dat = new Date(this.valueOf());
     dat.setDate(dat.getDate() + days);
     return dat;
 };
 
-const app = document.getElementById('app');
+const history = syncHistoryWithStore( hashHistory, store );
 
+const app = document.getElementById('app');
 ReactDOM.render(
     <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={history}>
         <Route path="/">
             <IndexRoute component={LandingPage}/>
             <Route path="impressum" component={Impressum}/>
@@ -43,7 +49,10 @@ ReactDOM.render(
                 <Route path="modflow/:modelId" component={Modflow}/>
                 <Route path="T02(/:id)" component={tools.T02}/>
                 <Route path="T06(/:id)" component={tools.T06}/>
-                <Route path="T07/:id" component={tools.T07}/>
+                <Route path="T07A/:id" component={tools.T07A}/>
+                <Route path="T07B/:id" component={tools.T07B}/>
+                <Route path="T07C/:id" component={tools.T07C}/>
+                <Route path="T07D/:id" component={tools.T07D}/>
                 <Route path="T09A(/:id)" component={tools.T09A}/>
                 <Route path="T09B(/:id)" component={tools.T09B}/>
                 <Route path="T09C(/:id)" component={tools.T09C}/>

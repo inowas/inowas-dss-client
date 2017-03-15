@@ -1,12 +1,15 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
+import dateFormat from 'dateformat';
 
-import CrossSectionMap from '../../components/primitive/CrossSectionMap';
+import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
 import Drawer from '../../components/primitive/Drawer';
+import Accordion from '../../components/primitive/Accordion';
+import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
-import RangeSlider from '../../components/primitive/RangeSlider';
+import ArraySlider from '../../components/primitive/ArraySlider';
 import Navbar from '../Navbar';
 import ScenarioSelect from '../../components/tools/ScenarioSelect';
 
@@ -15,25 +18,26 @@ import '../../../less/toolT07.less';
 
 import {
     fetchModelDetails,
-    updateResults,
+    updateResultsT07A,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
     toggleModelSelection,
     setMapView,
     setBounds,
-    setActiveGridCell
+    setActiveCoordinate
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
 import ModflowModelResult from '../../model/ModflowModelResult';
+import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 @connect(( store ) => {
     return { tool: store.T07 };
 })
-export default class T07 extends Component {
+export default class T07A extends Component {
 
     static propTypes = {
         dispatch: PropTypes.func.isRequired,
@@ -41,28 +45,31 @@ export default class T07 extends Component {
         tool: PropTypes.object.isRequired
     };
 
-    state = {
-        navigation: [
-            {
-                name: 'Cross section',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Scenarios difference',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Time series',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                name: 'Overall budget',
-                path: '',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }
-        ],
-        sliderValue: 5
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            navigation: [
+                {
+                    name: 'Cross section',
+                    path: 'tools/T07A/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Scenarios difference',
+                    path: 'tools/T07B/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Time series',
+                    path: 'tools/T07C/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }, {
+                    name: 'Overall budget',
+                    path: 'tools/T07D/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched"/>
+                }
+            ]
+        };
+    }
 
     componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
@@ -97,11 +104,6 @@ export default class T07 extends Component {
             return;
         }
 
-        // if ( totalTime instanceof TotalTime === false ) {
-        //     console.error( 'Cannot update ModelResults, due totalTime is not from Type TotalTime.' );
-        //     return;
-        // }
-
         const totalTimes = this.props.tool.totalTimes.totalTimes;
 
         const totalTime = (totalTimeIndex === null) ? new TotalTime(totalTimes[totalTimes.length - 1]) : new TotalTime(totalTimes[totalTimeIndex]);
@@ -117,7 +119,7 @@ export default class T07 extends Component {
                 }
             }
 
-            this.props.dispatch(updateResults( m.modelId, resultType, layerNumber, totalTime ));
+            this.props.dispatch(updateResultsT07A( m.modelId, resultType, layerNumber, totalTime ));
         });
     }
 
@@ -149,7 +151,7 @@ export default class T07 extends Component {
 
     renderSelect( ) {
         return (
-            <select className="layer-select" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
+            <select className="select block" onChange={this.selectLayer} value={this.props.tool.selectedLayerNumber + '_' + this.props.tool.selectedResultType}>
                 {this.renderSelectOptgroups( this.props.tool.layerValues )}
             </select>
         );
@@ -163,40 +165,75 @@ export default class T07 extends Component {
         this.props.dispatch(setBounds( bounds ));
     };
 
-    setCrossSection = ( cell ) => {
-        this.props.dispatch(setActiveGridCell( cell ));
+    setActiveCoordinate = ( coordinate ) => {
+        this.props.dispatch(setActiveCoordinate( coordinate ));
     };
 
-    renderMaps( models ) {
-        const { mapPosition, activeGridCell } = this.props.tool;
+    renderMaps() {
+        const { models, mapPosition, activeCoordinate } = this.props.tool;
+        if( models.length <= 0) {
+            return null;
+        }
+
+        let xCrossSection = null;
+        if( activeCoordinate ) {
+            const activeGridCell = models.baseModel.grid.coordinateToGridCell(activeCoordinate);
+            if(activeGridCell) {
+                xCrossSection = models.baseModel.grid.gridCellToXCrossectionBoundingBox(activeGridCell);
+            }
+        }
+
+        const min = models.globalMinValue();
+        const max = models.globalMaxValue();
+
         return models.filter(model => {
             return model.selected;
         }).map(( model ) => {
+            const mapData = new ScenarioAnalysisMapData({
+                area: model.area,
+                grid: model.grid,
+                boundaries: model.boundaries,
+                xCrossSection,
+                legend: model.result ? model.result.legend(min, max) : null,
+                heatMapUrl: model.result ? model.result.imgUrl(min, max) : null
+            });
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
-                    <CrossSectionMap model={model} min={models[0].minValue( )} max={models[0].maxValue( )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} setClickedCell={this.setCrossSection} activeCell={activeGridCell}/>
+                    <h2>{model.name}</h2>
+                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
                 </section>
             );
         });
     }
 
     renderChart( ) {
-        const models = this.props.tool.models;
+        const {activeCoordinate, models} = this.props.tool;
+        if( models.length <= 0 || !activeCoordinate) {
+            return null;
+        }
+
+        const activeGridCell = models.baseModel.grid.coordinateToGridCell(activeCoordinate);
+
+        if (!activeGridCell) {
+            return null;
+        }
 
         if ( models.countModelsWithResults( ) === 0 ) {
             return null;
         }
 
-        const rowNumber = this.props.tool.activeGridCell.y;
+        const rowNumber = activeGridCell.y;
         if ( rowNumber === null ) {
             return null;
         }
 
-        const columns = [ ];
-        let leftBorder = 0;
-        let rightBorder = 0;
+        const colNumber = activeGridCell.x;
+        if ( colNumber === null ) {
+            return null;
+        }
 
-        models.models( ).forEach(m => {
+        const columns = [];
+        models.models.forEach(m => {
             if (m.isSelected( ) && m.hasResult( )) {
                 columns.push(m.chartDataByRowNumber( rowNumber ));
             }
@@ -205,28 +242,42 @@ export default class T07 extends Component {
         const chartData = {
             columns: columns
         };
+
         let grid = {};
+        let axis = {};
 
-        const baseModel = models.models( )[ 0 ];
-
-        if (baseModel.hasResult( )) {
-            leftBorder = baseModel.chartLeftBorderByRowNumber( rowNumber );
-            rightBorder = baseModel.chartRightBorderByRowNumber( rowNumber );
-
+        const baseModel = models.baseModel;
+        if (baseModel.hasResult()) {
+            chartData.x = 'x';
+            columns.unshift(baseModel.columnXAxis());
             grid = {
                 x: {
                     show: true,
                     lines: [
                         {
-                            value: leftBorder,
+                            value: baseModel.chartLeftBorderByRowNumber( rowNumber ),
                             text: 'Eastern model border',
                             position: 'middle'
                         }, {
-                            value: rightBorder,
+                            value: baseModel.chartRightBorderByRowNumber( rowNumber ),
                             text: 'Western model border',
+                            position: 'middle'
+                        },
+                        {
+                            value: activeCoordinate.lng,
+                            text: 'Selected column',
                             position: 'middle'
                         }
                     ]
+                }
+            };
+
+            axis = {
+                x: {
+                    label: baseModel.labelXAxis()
+                },
+                y: {
+                    label: baseModel.labelYAxis()
                 }
             };
         }
@@ -234,7 +285,7 @@ export default class T07 extends Component {
         return (
             <div className="grid-container">
                 <section className="tile col stretch">
-                    <Chart data={chartData} grid={grid} element="testchart" type="pie"/>
+                    <Chart data={chartData} grid={grid} axis={axis} transition={{duration: 0}} element="testchart" />
                 </section>
             </div>
         );
@@ -251,34 +302,22 @@ export default class T07 extends Component {
             return null;
         }
 
-        const totalTimes = this.props.tool.totalTimes.totalTimes;
-        // console.log(totalTimes);
-        // if ( totalTimes === null ) {
-        //     return null;
-        // }
-        //
-        // let sliderValue = this.props.tool.selectedTotalTime;
-        // if ( sliderValue === null ) {
-        //     sliderValue = new TotalTime(totalTimes.maxValue( ));
-        // }
-        //
-        // const minValue = totalTimes.minValue( );
-        // const maxValue = totalTimes.maxValue( );
-        // const stepSize = totalTimes.stepSize( );
-        //
-        // return ( <RangeSlider min={minValue} max={maxValue} step={stepSize} value={sliderValue.toInt( )} onChange={this.updateSliderValue}/> );
+        const startDate = new Date(this.props.tool.totalTimes.start);
+        const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
+            return startDate.addDays(t);
+        });
 
         let sliderValue = this.props.tool.selectedTotalTimeIndex;
         if ( sliderValue === null ) {
             sliderValue = totalTimes.length - 1;
         }
-        return ( <RangeSlider data={totalTimes} startDate={this.props.tool.totalTimes.start()} step={1} value={sliderValue} onChange={this.changeTotalTimeIndex}/> );
+
+        return ( <ArraySlider data={totalTimes} value={sliderValue} onChange={this.changeTotalTimeIndex} formatter={function(value) {return dateFormat(value, 'mm/dd/yyyy');}}/> );
     }
 
     render( ) {
         const { navigation } = this.state;
-        let models = this.props.tool.models.models( );
-        models = models.map(m => {
+        const models = this.props.tool.models.map(m => {
             m.thumbnail = 'scenarios_thumb.png';
             return m;
         });
@@ -291,7 +330,16 @@ export default class T07 extends Component {
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
-                    <div className="tile col col-abs-1">
+                    <div className="tile col stretch">
+                        <Accordion firstActive={0}>
+                            <AccordionItem heading="Scenarios">
+                                <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </div>
+                <div className="grid-container">
+                    <div className="tile col col-abs-1 center-horizontal">
                         {this.renderSelect( )}
                     </div>
                     <div className="tile col stretch">
@@ -299,7 +347,9 @@ export default class T07 extends Component {
                     </div>
                 </div>
                 <div className="grid-container">
-                    {this.renderMaps( models )}
+                    <div className="scroll-vertical">
+                        {this.renderMaps()}
+                    </div>
                 </div>
                 {this.renderChart( )}
             </div>
