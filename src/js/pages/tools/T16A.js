@@ -7,7 +7,7 @@ import Background from '../../components/tools/Background'
 import Chart from '../../components/tools/ChartT16A'
 import Sieves from '../../components/tools/Sieves'
 import HydroData from '../../components/tools/HydroData'
-import {changeSieve, changeParameter, calculate, reset} from '../../actions/T16A'
+import {changeHydroData, changeSieve, changeParameter, calculate, reset} from '../../actions/T16A'
 
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
@@ -18,23 +18,20 @@ import Navbar from '../Navbar';
 export default class T16A extends React.Component {
 
     handleChange = ( e ) => {
+        const param = e.target.name.split( '_' );
+
+        const parameter = {};
+        parameter.id = param[1];
+        parameter[param[2]] = e.target.value;
+
         if (e.target.name.startsWith( 'parameter' )) {
-            const param = e.target.name.split( '_' );
-
-            const parameter = {};
-            parameter.id = param[1];
-            parameter[param[2]] = e.target.value;
-
             this.props.dispatch(changeParameter( parameter ));
         }
         if (e.target.name.startsWith('sieve')) {
-            const param = e.target.name.split('_');
-
-            let parameter = {};
-            parameter.id = param[1];
-            parameter[param[2]] = e.target.value;
-
             this.props.dispatch(changeSieve(parameter))
+        }
+        if (e.target.name.startsWith('hydroData')) {
+            this.props.dispatch(changeHydroData(parameter))
         }
     };
 
@@ -89,7 +86,8 @@ export default class T16A extends React.Component {
                         <h2>SIEVING</h2>
                         <h3>After wet separation</h3>
                         <h3 style={styleheader}>Select sieves</h3>
-                        <Sieves data={this.props.tool.sieves} info={this.props.tool.info} handleChange={this.handleChange} handleReset={this.handleReset}/>
+                        <Sieves data={this.props.tool.sieves} info={this.props.tool.info} dSampSieve={this.props.tool.dSampSieve}
+                                handleChange={this.handleChange} handleReset={this.handleReset}/>
                         <h3>{params}</h3>
 
                     </section>

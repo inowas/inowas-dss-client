@@ -1,6 +1,13 @@
+export function changeHydroData(parameter){
+    return {
+        type: 'CHANGE_TOOL_T16A_HYDRODATA',
+        payload: parameter
+    }
+}
+
 export function changeSieve(parameter){
     return {
-        type: 'CHANGE_TOOL_T16A_Sieve',
+        type: 'CHANGE_TOOL_T16A_SIEVE',
         payload: parameter
     }
 }

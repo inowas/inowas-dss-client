@@ -25,7 +25,7 @@ export default class Dashboard extends React.Component {
 
     state = {
         active: null,
-        popupVisible: true, // TODO remove popup
+        popupVisible: false, // TODO remove popup
         navigation: [{
             name: 'Documentation',
             path: '',

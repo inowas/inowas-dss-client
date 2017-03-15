@@ -4,7 +4,7 @@ import applyParameterUpdate from './applyParameterUpdate';
 function getInitialState() {
     return {
         background: {
-            'image': '/images/tools/T16A.png'
+            'image': '/images/tools/T16.png'
         },
         chart: {
             data: [],
@@ -20,56 +20,67 @@ function getInitialState() {
             start: "2017-01-20T01:10",
             d10: 0
         },
+        dSampSieve: {
+            id: 'dSampSieve',
+            name: 'Dry Sample',
+            min: 1,
+            validMin: function(x) {return x > 0},
+            max: 10000,
+            value: 177.05,
+            stepSize: 10,
+            decimals: 1,
+            inputType: 'NUMBER'
+        },
         hydroData: [{
             datetime: "2000-12-20T01:10",
             time: "00:00:30",
-            reading: 2,
-            temp: 1
+            reading: 1.0215,
+            temp: 20.7
         },{
             datetime: "2000-12-20T01:10",
             time: "00:01:00",
-            reading: 2,
-            temp: 1
+            reading: 1.02,
+            temp: 20.7
         },{
             datetime: "2000-12-20T01:10",
             time: "00:02:00",
-            reading: 2,
-            temp: 1
+            reading: 1.016,
+            temp: 20.7
         },{
             datetime: "2000-12-20T01:10",
             time: "00:05:00",
-            reading: 2,
-            temp: 1
+            reading: 1.013,
+            temp: 20.7
         },{
             datetime: "2000-12-20T01:10",
             time: "00:15:00",
-            reading: 2,
-            temp: 1
+            reading: 1.011,
+            temp: 20.7
         },{
             datetime: "2000-12-20T01:10",
             time: "00:45:00",
-            reading: 2,
-            temp: 1
+            reading: 1.0085,
+            temp: 20.7
         },{
             datetime: "2000-12-20T01:10",
             time: "02:00:00",
-            reading: 2,
-            temp: 1
+            reading: 1.0065,
+            temp: 21
         },{
             datetime: "2000-12-20T01:10",
             time: "06:00:00",
-            reading: 2,
-            temp: 1
+            reading: 1.0045,
+            temp: 20.8
         },{
             datetime: "2000-12-20T01:10",
-            time: "00:00:00",
-            reading: 2,
-            temp: 1
+            time: "23:59:59",
+            reading: 1.0015,
+            temp: 20.6
         }],
         sieves: [{
             id: '35.5',
             name: '35.5mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 0,
@@ -79,94 +90,96 @@ function getInitialState() {
         },{
             id: '16',
             name: '16mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 452.2,
+            value: 0,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '8',
-            name: '4mm',
-            min: 1,
+            name: '8mm',
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 441.6,
+            value: 0,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '4',
             name: '4mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 361.8,
+            value: 0.1,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '2',
             name: '2mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 228.6,
+            value: 2.5,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '1',
             name: '1mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 202.2,
+            value: 8.0,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '0.5',
             name: '0.5mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 228.9,
+            value: 19.3,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '0.25',
             name: '0.25mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 218.1,
+            value: 117.6,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         },{
             id: '0.125',
             name: '0.125mm',
-            min: 1,
+            min: 0,
             validMin: function(x) {return x > 0},
             max: 1000,
-            value: 324.5,
-            stepSize: 10,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: 'lt0.125',
-            name: '<0.125mm',
-            min: 1,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 86.2,
+            value: 14.2,
             stepSize: 10,
             decimals: 1,
             inputType: 'NUMBER'
         }],
+        parametersWet: {
+            rhoS: 2.690,
+            Mh: 51.670,
+            Fm: 0.5,
+            h: 16,
+            h0: 1.5,
+            Lh: 14.5,
+            VA: 64.5,
+            Az: 29.2,
+            Smin: 0.995,
+            Smax: 1.030
+        },
         parameters: [{
             order: 0,
             id: 'CH',
@@ -228,18 +241,39 @@ const T16AReducer = (state = getInitialState(), action) => {
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CHANGE_TOOL_T16A_Sieve':
+        case 'CHANGE_TOOL_T16A_HYDRODATA':
         {
             state = { ...state,
             };
 
             const newParam = action.payload;
-            var param = state.sieves.find(p => {return p.id === newParam.id});
-            applyParameterUpdate(param, newParam);
+            state.hydroData.find(p => {
+                return p.time === newParam.id
+            }).reading = newParam.reading;
 
             calculateAndModifyState(state);
             break;
         }
+        case 'CHANGE_TOOL_T16A_SIEVE':
+            {
+                const newParam = action.payload;
+                if (newParam.id === 'dSampSieve') {
+                    state = {
+                    ...state,
+                    };
+                    state.dSampSieve.value = newParam.value;
+                } else {
+                    state = {
+                    ...state,
+                    };
+                    var param = state.sieves.find(p => {
+                        return p.id === newParam.id
+                    });
+                    applyParameterUpdate(param, newParam);
+                }
+                calculateAndModifyState(state);
+                break;
+            }
     }
     return state;
 };
@@ -257,13 +291,17 @@ function calculateAndModifyState(state) {
             return p.id == 'T'
         })
         .value;
+
     //calculation of total dry mass
     state.info.total = 0;
     state.sieves.map(param => {
-        state.info.total = state.info.total + param.value
+        console.log(param.value);
+        state.info.total = Number(state.info.total) + Number(param.value)
     });
     //calculation of graph data
-    state.chart.data = calc.calculateDiagramData(state.sieves, state.info.total);
+    state.chart.data = calc.calculateDiagramData(state.sieves, state.info.total, state.dSampSieve,
+        state.hydroData, state.parametersWet);
+
     //calculation of d10
     state.info.d10 =  calc.calculated10(state.chart.data);
     state.info.K = calc.calculatek(CH, T, state.info.d10);

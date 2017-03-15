@@ -19,19 +19,19 @@ export default class Parameters extends React.Component {
 
         return <tr key={param.time} className="parameter">
             <td>
-                <input name={'parameter_' + param.id + '_time'} className="input-readingtime" type="datetime-local" step='10'
+                <input name={'hydroData_' + param.time + '_time'} className="input-readingtime" type="datetime-local" step='10'
                        value={param.datetime} onChange={this.handleChange}/>
             </td>
             <td>
-                <input name={'parameter_' + param.id + '_time'} className="input-readingtime" type="time" step='10'
+                <input name={'hydroData_' + param.time + '_time'} className="input-readingtime" type="time" step='10'
                        value={param.time} onChange={this.handleChange}/>
             </td>
             <td>
-                <input name={'parameter_' + param.id + '_reading'} className="parameter-max input input-xs" type="number" step='10'
+                <input name={'hydroData_' + param.time + '_reading'} className="parameter-max input input-xs" type="number" step='10'
                        value={Number(param.reading)} onChange={this.handleChange}/>
             </td>
             <td>
-                <input name={'parameter_' + param.id + '_temp'} className="parameter-max input input-xs" type="number" step='10'
+                <input name={'hydroData_' + param.time + '_temp'} className="parameter-max input input-xs" type="number" step='10'
                        value={Number(param.temp)} onChange={this.handleChange}/>
             </td>
             <td>°c</td>
@@ -51,8 +51,8 @@ export default class Parameters extends React.Component {
                             <input type="datetime-local" className="input-start" step='10'
                                    value={info.start} onChange={this.handleChange}/>
                             <strong>Dry Sample</strong>
-                            <input type="datetime-local" className="input-start" step='10'
-                                   value={info.start} onChange={this.handleChange}/>
+                            <input type="number" className="input-start" step='10'
+                                   />
                         </p>
                     </div>
                     <table className="parameters-sieve">
