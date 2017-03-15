@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import CrossSectionMap from '../../components/primitive/CrossSectionMap';
+import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
 import Drawer from '../../components/primitive/Drawer';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
@@ -30,6 +30,7 @@ import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
 import ModflowModelResult from '../../model/ModflowModelResult';
+import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -180,13 +181,24 @@ export default class T07A extends Component {
             }
         }
 
+        const min = models.globalMinValue();
+        const max = models.globalMaxValue();
+
         return models.filter(model => {
             return model.selected;
         }).map(( model ) => {
+            const mapData = new ScenarioAnalysisMapData({
+                area: model.area,
+                grid: model.grid,
+                boundaries: model.boundaries,
+                xCrossSection,
+                legend: model.result ? model.result.legend(min, max) : null,
+                heatMapUrl: model.result ? model.result.imgUrl(min, max) : null
+            });
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
-                    <CrossSectionMap mapData={model.mapData(xCrossSection, [], models.globalMinValue(), models.globalMaxValue())} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
+                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
                 </section>
             );
         });

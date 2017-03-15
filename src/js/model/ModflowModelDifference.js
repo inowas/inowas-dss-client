@@ -1,6 +1,5 @@
 import Grid from './Grid';
 import MfResult from './ModflowModelResult';
-import MapData from './CrossSectionMapDataObject';
 
 /**
  * ModflowModelDifference Base Class
@@ -196,35 +195,35 @@ export default class ModflowModelDifference {
         return (this._result instanceof MfResult);
     }
 
-    mapData(xCrossSection, min = null, max = null) {
-        if (this.hasResult() === false) {
-            return MapData.fromProps(
-                this.area,
-                this.grid,
-                [],
-                xCrossSection,
-                []
-            );
-        }
-
-        if (min === null) {
-            min = this._result.min();
-        }
-
-        if (max === null) {
-            max = this._result.max();
-        }
-
-        return MapData.fromProps(
-            this.area,
-            this.grid,
-            [],
-            xCrossSection,
-            [],
-            this._result.legend(min, max),
-            this._result.imgUrl(min, max)
-        );
-    }
+    // mapData(xCrossSection, min = null, max = null) {
+    //     if (this.hasResult() === false) {
+    //         return MapData.fromProps(
+    //             this.area,
+    //             this.grid,
+    //             [],
+    //             xCrossSection,
+    //             []
+    //         );
+    //     }
+    //
+    //     if (min === null) {
+    //         min = this._result.min();
+    //     }
+    //
+    //     if (max === null) {
+    //         max = this._result.max();
+    //     }
+    //
+    //     return MapData.fromProps(
+    //         this.area,
+    //         this.grid,
+    //         [],
+    //         xCrossSection,
+    //         [],
+    //         this._result.legend(min, max),
+    //         this._result.imgUrl(min, max)
+    //     );
+    // }
 
     modelIds() {
         return [this._modelId1, this._modelId2];

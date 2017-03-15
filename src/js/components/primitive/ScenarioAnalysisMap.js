@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { Map, TileLayer, Rectangle, GeoJSON, ImageOverlay, CircleMarker, LayersControl, LayerGroup } from 'react-leaflet';
 
 import Coordinate from '../../model/Coordinate';
+import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 import Icon from './Icon';
 import ColorLegend from './ColorLegend';
@@ -10,10 +11,10 @@ import ColorLegend from './ColorLegend';
 import '../../../less/leaflet.less';
 import '../../../less/crossSectionMap.less';
 
-export default class CrossSectionMap extends Component {
+export default class ScenarioAnalysisMap extends Component {
 
     static propTypes = {
-        mapData: PropTypes.object.isRequired,
+        mapData: PropTypes.instanceOf(ScenarioAnalysisMapData).isRequired,
         updateMapView: PropTypes.func.isRequired,
         updateBounds: PropTypes.func.isRequired,
         mapPosition: PropTypes.object.isRequired,
@@ -64,7 +65,7 @@ export default class CrossSectionMap extends Component {
     };
 
     renderHeatMap() {
-        if (this.props.mapData.imgUrl === null) {
+        if (!this.props.mapData.heatMapUrl) {
             return null;
         }
 
@@ -72,7 +73,7 @@ export default class CrossSectionMap extends Component {
 
         return (
             <LayersControl.Overlay name="Heads" checked>
-                <ImageOverlay url={this.props.mapData.imgUrl} bounds={boundingBox} opacity={0.5}/>
+                <ImageOverlay url={this.props.mapData.heatMapUrl} bounds={boundingBox} opacity={0.5}/>
             </LayersControl.Overlay>
         );
     }
@@ -91,7 +92,7 @@ export default class CrossSectionMap extends Component {
 
     renderBoundaries() {
         const boundaries = this.props.mapData.boundaries;
-        if (boundaries.length === 0) {
+        if (!boundaries || boundaries.length === 0) {
             return null;
         }
 
@@ -168,11 +169,31 @@ export default class CrossSectionMap extends Component {
         />);
     }
 
-    renderActiveGridCells() {
-        const activeGridCells = this.props.mapData.activeGridCells;
+    renderTimeSeriesGridCells() {
+        const timeSeriesGridCells = this.props.mapData.timeSeriesGridCells;
 
-        return activeGridCells.map((c, index) => {
-            return(<Rectangle key={index} bounds={c.toArray()} />);
+        if(!timeSeriesGridCells) {
+            return null;
+        }
+
+        return timeSeriesGridCells.map((c, index) => {
+            return(<div>
+                <Rectangle
+                    key={'rectangle_' + index}
+                    bounds={c.boundingBox.toArray()}
+                    fillColor={c.backgroundColor}
+                    fillOpacity={c.opacity}
+                    stroke={false}
+                />
+                <CircleMarker
+                    key={'circle_' + index}
+                    center={c.coordinate.toLatLng()}
+                    radius={5}
+                    stroke={false}
+                    fillColor={c.markerColor}
+                    fillOpacity={c.opacity}
+                />
+            </div>);
         });
     }
 
@@ -189,7 +210,7 @@ export default class CrossSectionMap extends Component {
                     {this.renderBoundaries()}
                 </LayersControl>
 
-                {this.renderActiveGridCells()}
+                {this.renderTimeSeriesGridCells()}
                 {this.renderXCrossSection()}
                 <button title="reset view" className="button icon-inside resetView" onClick={this.resetView}><Icon name="marker" /></button>
                 {this.renderLegend()}

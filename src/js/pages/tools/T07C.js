@@ -4,7 +4,7 @@ import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
 import Drawer from '../../components/primitive/Drawer';
-import CrossSectionMap from '../../components/primitive/CrossSectionMap';
+import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
@@ -29,6 +29,8 @@ import {
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TimeSeriesPoint from '../../model/TimeSeriesPoint';
+import TimeSeriesGridCell from '../../model/TimeSeriesGridCell';
+import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -179,16 +181,27 @@ export default class T07C extends Component {
             return null;
         }
 
-        const baseModel = models.baseModel;
+        const model = models.baseModel;
 
-        const activeCoordinates = timeSeriesPoints.map(p => {
-            const gridCell = baseModel.grid.coordinateToGridCell( p.coordinate );
-            const boundingBox = baseModel.grid.gridCellToBoundingBox( gridCell );
-            return boundingBox;
+        // convert timeSeriesPoints to timeSeriesGridCells
+        const timeSeriesGridCells = timeSeriesPoints.map(p => {
+            const gridCell = model.grid.coordinateToGridCell( p.coordinate );
+            const boundingBox = model.grid.gridCellToBoundingBox( gridCell );
+
+            return new TimeSeriesGridCell({
+                boundingBox,
+                coordinate: p.coordinate,
+                opacity: p.selected ? 0.9 : 0.2
+            });
         });
 
-        const model = models.baseModel;
-        return ( <CrossSectionMap mapData={model.mapData(null, activeCoordinates, models.globalMinValue( ), models.globalMaxValue( ))} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.addPoint}/> );
+        const mapData = new ScenarioAnalysisMapData({
+            area: model.area,
+            grid: model.grid,
+            // boundaries: model.boundaries,
+            timeSeriesGridCells
+        });
+        return ( <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.addPoint}/> );
     }
 
     setTimeSeriesPointSelection = index => {

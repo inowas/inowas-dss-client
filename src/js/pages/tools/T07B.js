@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import CrossSectionMap from '../../components/primitive/CrossSectionMap';
+import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import ArraySlider from '../../components/primitive/ArraySlider';
@@ -28,6 +28,7 @@ import {
 import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import TotalTime from '../../model/TotalTime';
+import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 @connect(( store ) => {
     return { tool: store.T07 };
@@ -208,9 +209,15 @@ export default class T07B extends Component {
             }
         }
 
+        const mapData = new ScenarioAnalysisMapData({
+            area: t07bDifference.area,
+            grid: t07bDifference.grid,
+            xCrossSection
+        });
+
         return (
             <section className="tile col stretch">
-                <CrossSectionMap mapData={t07bDifference.mapData( xCrossSection )} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
+                <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
             </section>
         );
     }

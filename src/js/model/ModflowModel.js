@@ -1,6 +1,5 @@
 import MfBoundary from './ModflowBoundary';
 import MfResult from './ModflowModelResult';
-import MapData from './CrossSectionMapDataObject';
 import Grid from './Grid';
 
 /**
@@ -213,34 +212,5 @@ export default class ModflowModel {
 
     hasResult() {
         return (this.result instanceof MfResult);
-    }
-
-    mapData(xCrossSection, activeGridCells, min = null, max = null) {
-        if (!this.hasResult()) {
-            return MapData.fromProps(
-                this.area,
-                this.grid,
-                this.boundaries,
-                xCrossSection,
-                activeGridCells
-            );
-        }
-
-        if (min === null) {
-            min = this.result.min();
-        }
-
-        if (max === null) {
-            max = this.result.max();
-        }
-        return MapData.fromProps(
-            this.area,
-            this._grid,
-            this.boundaries,
-            xCrossSection,
-            activeGridCells,
-            this.result.legend(min, max),
-            this.result.imgUrl(min, max)
-        );
     }
 }
