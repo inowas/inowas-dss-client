@@ -8,6 +8,7 @@ import {groupBy} from 'lodash';
 
 import {changeCondition} from '../../actions/T06';
 import Header from '../../components/tools/Header';
+import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
 
 @connect((store) => {
@@ -15,10 +16,12 @@ import Navbar from '../Navbar';
 })
 export default class T06 extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.handleChange = this.handleChange.bind(this);
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t06-mar-method-selection/',
+            icon: <Icon name="file"/>
+        }]
     }
 
     handleChange = (e) => {
@@ -107,9 +110,10 @@ export default class T06 extends React.Component {
     }
 
     render() {
+        const { navigation } = this.state;
         return (
             <div className="app-width tool-T06">
-                <Navbar links={[]} />
+                <Navbar links={navigation} />
                 <Header title={'T06. MAR method selection'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">

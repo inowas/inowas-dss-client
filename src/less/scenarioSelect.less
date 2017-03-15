@@ -1,22 +1,13 @@
 @import "variables.less";
 
 .scenarioSelect {
+    display: flex;
     .item {
-        margin-bottom: @spacing-regular;
-        padding-bottom: @spacing-regular;
         position: relative;
-
-        &:not(:last-child) {
-            &::after {
-                content: '';
-                position: absolute;
-                display: block;
-                height: 1px;
-                width: 100%;
-                background-color: @grey-semi-bright;
-                bottom: 0;
-            }
-        }
+        flex: 1;
+        max-width: 25%;
+        padding: 0;
+        margin: @spacing-regular;
 
         >.thumbnail {
             width: 100%;
@@ -37,22 +28,6 @@
         &[data-selected=true] {
             >.toggle {
                 color: @primary;
-            }
-        }
-    }
-}
-
-.accordion-item {
-    .scenarioSelect {
-        display: flex;
-
-        .item {
-            flex: 1;
-            padding: 0;
-            margin: @spacing-regular;
-
-            &::after {
-                display: none;
             }
         }
     }
