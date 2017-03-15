@@ -63,11 +63,11 @@ export default class T07A extends Component {
                     name: 'Time series',
                     path: 'tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }, {
+                } /* , {
                     name: 'Overall budget',
                     path: 'tools/T07D/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }
+                }*/
             ]
         };
     }
@@ -77,7 +77,7 @@ export default class T07A extends Component {
     }
 
     componentWillReceiveProps(props) {
-        if (props.tool.resize){
+        if (props.tool.resize) {
             // manually emit a resize event so the leaflet maps recalculate their container size
             const event = document.createEvent( 'HTMLEvents' );
             event.initEvent( 'resize', true, false );
