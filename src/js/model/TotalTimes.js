@@ -52,4 +52,8 @@ export default class TotalTimes {
         const totalTimes = this._totalTimes.sort( (a, b) => { return a - b; } );
         return (totalTimes[1] - totalTimes[0]);
     }
+
+    get length() {
+        return this._totalTimes.length;
+    }
 }

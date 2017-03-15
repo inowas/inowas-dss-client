@@ -18,13 +18,14 @@ import '../../../less/toolT07.less';
 import {
     fetchModelDetails,
     updateResultsT07A,
+    resizeDone,
+    reloadDone,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
     toggleModelSelection,
     setMapView,
-    setBounds,
-    setActiveCoordinate
+    setBounds
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -72,6 +73,23 @@ export default class T07A extends Component {
 
     componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.tool.resize){
+            // manually emit a resize event so the leaflet maps recalculate their container size
+            const event = document.createEvent( 'HTMLEvents' );
+            event.initEvent( 'resize', true, false );
+            document.dispatchEvent( event );
+            this.props.dispatch( resizeDone() );
+        }
+
+        if (props.tool.reload) {
+            if (this.props.tool.totalTimes && this.props.tool.selectedLayerNumber && this.props.tool.selectedResultType) {
+                this.updateModelResults(this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex);
+                this.props.dispatch( reloadDone() );
+            }
+        }
     }
 
     toggleSelection = id => {

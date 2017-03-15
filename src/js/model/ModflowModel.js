@@ -27,6 +27,16 @@ export default class ModflowModel {
         return model;
     }
 
+    static fromProps( modelId, isBaseModel, area, name, description, boundingBox, nx, ny, selected){
+        const model = new ModflowModel(modelId, isBaseModel);
+        model.area = area;
+        model.name = name;
+        model.description = description;
+        model._grid = new Grid(boundingBox, nx, ny);
+        model.selected = selected;
+        return model;
+    }
+
     get grid() {
         return this._grid;
     }

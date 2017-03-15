@@ -1,6 +1,5 @@
 import ModflowModelDifference from '../model/ModflowModelDifference';
 import ModflowModels from '../model/ModflowModelsCollection';
-import ModflowModel from '../model/ModflowModel';
 import Coordinate from '../model/Coordinate';
 import TimeSeriesPoint from '../model/TimeSeriesPoint';
 import TotalTime from '../model/TotalTime';
@@ -9,6 +8,8 @@ import LayerNumber from '../model/LayerNumber';
 
 function getInitialState() {
     return {
+        resize: false,
+        reload: false,
         layerValues: null,
         selectedLayerNumber: null,
         selectedResultType: null,
@@ -34,11 +35,20 @@ function getInitialState() {
 
 const T07Reducer = ( state = getInitialState(), action ) => {
     switch ( action.type ) {
-        case 'T07_SET_MODEL_DETAILS':
+        case 'T07_ADD_MODEL':
             state = { ...state };
+            state.models.push( action.payload );
+            state.resize = true;
+            break;
 
-            const modelDetails = action.payload;
-            state.models.push( ModflowModel.fromModflowDetails( modelDetails ) );
+        case 'T07_RELOAD_DONE':
+            state = { ...state};
+            state.reload = false;
+            break;
+
+        case 'T07_RESIZE_DONE':
+            state = { ...state};
+            state.resize = false;
             break;
 
         case 'T07_SET_MODEL_BOUNDARIES':
@@ -70,9 +80,14 @@ const T07Reducer = ( state = getInitialState(), action ) => {
         case 'T07_SET_TOTAL_TIMES':
             state = { ...state };
             state.totalTimes = action.payload;
+            state.reload = true;
 
             if ( state.selectedTotalTime === null ) {
                 state.selectedTotalTime = new TotalTime( state.totalTimes.totalTimes[ state.totalTimes.totalTimes.length - 1 ] );
+            }
+
+            if ( state.selectedTotalTimeIndex === null ) {
+                state.selectedTotalTimeIndex = state.totalTimes.length-1;
             }
 
             break;
@@ -86,11 +101,6 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state = { ...state };
             state.selectedResultType = action.payload;
             break;
-
-        // case 'T07_SET_SELECTED_TOTAL_TIME':
-        //     state = { ...state };
-        //     state.selectedTotalTime = action.payload;
-        //     break;
 
         case 'T07_SET_SELECTED_TOTAL_TIME_INDEX':
             state = { ...state };
