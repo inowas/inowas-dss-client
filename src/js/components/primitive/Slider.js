@@ -12,21 +12,32 @@ export default class Slider extends Component {
         nextPrevNavigation: PropTypes.bool,
         control: PropTypes.element,
         interval: PropTypes.number,
+        activeIndex: PropTypes.number
     }
 
     static defaultProps = {
         nextPrevNavigation: true,
-        interval: 5000
-    }
-
-    state = {
+        interval: 5000,
         activeIndex: 0
     }
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeIndex: props.activeIndex
+        };
+    }
 
     componentDidMount( ) {
         this.updateSliderHeight( );
         this.startInterval();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.activeIndex !== this.props.activeIndex) {
+            this.setActive(nextProps.activeIndex);
+        }
     }
 
     componentDidUpdate( ) {

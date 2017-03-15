@@ -5,11 +5,32 @@ import '../../less/landingPage.less';
 import Navbar from './Navbar';
 import Footer from '../components/Footer';
 import Slider from '../components/primitive/Slider';
+import Popup from '../components/primitive/Popup';
 import SliderItem from '../components/primitive/SliderItem';
 import SliderControl from '../components/primitive/SliderControl';
 import SliderControlItem from '../components/primitive/SliderControlItem';
 
 export default class LandingPage extends React.Component {
+
+    state = {
+        screenshotsPopupVisible: false,
+        screenshotsSliderIndex: 0
+    }
+
+    openScreenshotsPopup = (index) => {
+        return () => {
+            this.setState({
+                screenshotsSliderIndex: index,
+                screenshotsPopupVisible: true
+            });
+        };
+    }
+
+    closeScreenshotsPopup = () => {
+        this.setState({
+            screenshotsPopupVisible: false
+        });
+    }
 
     render( ) {
         return (
@@ -296,15 +317,38 @@ export default class LandingPage extends React.Component {
                         </div>
                     </div>
 
-                    <div className="row documentation">
+                    <div className="row screenshots">
                         <h2>Screenshots</h2>
-                        <figure>
-                            <div className="align-center">
-                              <img src="../images/landingPage/screenshot-1.png" width="300" height="188" className="" alt=""/>&nbsp;
-                              <img src="../images/landingPage/screenshot-2.png" width="300" height="188" className="" alt=""/>&nbsp;
-                              <img src="../images/landingPage/screenshot-3.png" width="300" height="188" className="" alt=""/>
+                        <div className="grid-container">
+                            <div className="col col-rel-1 stretch">
+                                <img  onClick={this.openScreenshotsPopup(0)} src="../images/landingPage/screenshot-1.png"/>
                             </div>
-                        </figure>
+                            <div className="col col-rel-1 stretch">
+                                <img  onClick={this.openScreenshotsPopup(1)} src="../images/landingPage/screenshot-2.png"/>
+                            </div>
+                            <div className="col col-rel-1 stretch">
+                                <img  onClick={this.openScreenshotsPopup(2)} src="../images/landingPage/screenshot-3.png"/>
+                            </div>
+                        </div>
+
+                        <Popup visible={this.state.screenshotsPopupVisible} close={this.closeScreenshotsPopup} width={'80%'}>
+                            <Slider activeIndex={this.state.screenshotsSliderIndex} control={<SliderControl><SliderControlItem /><SliderControlItem /><SliderControlItem /></SliderControl>}>
+
+                                <SliderItem>
+                                    <img src="../images/landingPage/screenshot-1.png"/>
+                                </SliderItem>
+
+                                <SliderItem>
+                                    <img src="../images/landingPage/screenshot-2.png"/>
+                                </SliderItem>
+
+                                <SliderItem>
+                                    <img src="../images/landingPage/screenshot-3.png"/>
+                                </SliderItem>
+
+                            </Slider>
+                        </Popup>
+
                         <p className="description align-center">Unified, user-friendly and modern graphic user interface that combines modern design elements with powerful server capabilities for a smooth browser-based modeling experience and reliable simulation results.
                         </p>
                     </div>
