@@ -61,10 +61,10 @@ export default class Dashboard extends React.Component {
             }, {
                 name: 'T09_c Saltwater intrusion / Upconing',
                 path: 'tools/T09C'
-            }, {
+            }, /* {
                 name: 'T09_d Saltwater intrusion / Critical well discharge',
                 path: 'tools/T09D'
-            }, {
+            },*/ {
                 name: 'T13_a Travel time / Aquifer with no-flow and fixed-head boundaries',
                 path: 'tools/T13A'
             }, {

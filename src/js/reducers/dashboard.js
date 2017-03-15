@@ -211,7 +211,7 @@ const initialState = {
             created_at: '2017-03-09T19:15:00+00:00',
             fake: false
         } ]
-    }, {
+    }, /* {
         slug: 'T09D',
         name: 'Saltwater intrusion // Critical well discharge',
         path: 'tools/T09D/',
@@ -225,7 +225,7 @@ const initialState = {
             created_at: '2017-03-09T19:16:00+00:00',
             fake: false
         } ]
-    }, {
+    },*/ {
         slug: 'T13A',
         name: 'Travel time through unconfined aquifer // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge',
         path: 'tools/T13A/',

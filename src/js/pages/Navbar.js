@@ -37,7 +37,7 @@ export default class NavBar extends React.Component {
                 active = true;
                 const currentPathFragments = currentPath.trimLeft('/').split('/');
                 const linkPathFragments = l.path.trimLeft('/').split('/');
-                for (let i = recursionDepth; i < Math.min(currentPathFragments.length, linkPathFragments.length); i++) {
+                for (let i = recursionDepth; i < Math.max(currentPathFragments.length, linkPathFragments.length); i++) {
                     if (currentPathFragments[i] !== linkPathFragments[i]) {
                         active = false;
                         break;
