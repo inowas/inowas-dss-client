@@ -5,6 +5,8 @@ import dateFormat from 'dateformat';
 
 import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
 import Drawer from '../../components/primitive/Drawer';
+import Accordion from '../../components/primitive/Accordion';
+import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import ArraySlider from '../../components/primitive/ArraySlider';
@@ -327,6 +329,15 @@ export default class T07A extends Component {
                     <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
                 </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
+                <div className="grid-container">
+                    <div className="tile col stretch">
+                        <Accordion firstActive={0}>
+                            <AccordionItem heading="Scenarios">
+                                <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </div>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
                         {this.renderSelect( )}

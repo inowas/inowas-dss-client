@@ -212,7 +212,8 @@ export default class T07B extends Component {
         const mapData = new ScenarioAnalysisMapData({
             area: t07bDifference.area,
             grid: t07bDifference.grid,
-            xCrossSection
+            xCrossSection,
+            heatMapUrl: t07bDifference.result ? t07bDifference.result.imgUrl(t07bDifference.result.min(), t07bDifference.result.max()) : null
         });
 
         return (
