@@ -24,6 +24,10 @@ String.prototype.replaceAll = function(search, replacement) {
         .join(replacement);
 };
 
+String.prototype.trimLeft = function(charlist = '\s') {
+    return this.replace(new RegExp('^[' + charlist + ']+'), '');
+};
+
 Date.prototype.addDays = function(days) {
     const dat = new Date(this.valueOf());
     dat.setDate(dat.getDate() + days);

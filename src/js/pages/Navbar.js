@@ -28,9 +28,26 @@ export default class NavBar extends React.Component {
         this.props.dispatch(logout( ));
     }
 
-    renderLinks( links ) {
+    renderLinks( links, recursionDepth = 0 ) {
         return links.filter(l => {return l;}).map(( l, index ) => {
-            const active = this.props.routing.locationBeforeTransitions.pathname === l.path;
+            let active = false;
+            const currentPath = this.props.routing.locationBeforeTransitions.pathname;
+
+            if (currentPath && l.path) {
+                active = true;
+                const currentPathFragments = currentPath.trimLeft('/').split('/');
+                const linkPathFragments = l.path.trimLeft('/').split('/');
+                for (let i = recursionDepth; i < Math.min(currentPathFragments.length, linkPathFragments.length); i++) {
+                    if (currentPathFragments[i] !== linkPathFragments[i]) {
+                        active = false;
+                        break;
+                    }
+                }
+
+                if(l.path.trimLeft('/') === 'tools') {
+                    active = l.path.trimLeft('/') === currentPath.trimLeft('/');
+                }
+            }
 
             let navElement = (
                 <span className="nav-element" data-active={active}>
@@ -57,7 +74,7 @@ export default class NavBar extends React.Component {
             return (
                 <li key={index} className="nav-item">
                     {navElement}
-                    {l.sub && <ul className="nav-list">{this.renderLinks( l.sub )}</ul>}
+                    {l.sub && <ul className="nav-list">{this.renderLinks( l.sub, recursionDepth + 1 )}</ul>}
                 </li>
             );
         });
