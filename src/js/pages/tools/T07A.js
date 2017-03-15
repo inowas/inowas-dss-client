@@ -25,7 +25,8 @@ import {
     setSelectedTotalTimeIndex,
     toggleModelSelection,
     setMapView,
-    setBounds
+    setBounds,
+    setActiveCoordinate
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -182,7 +183,7 @@ export default class T07A extends Component {
         this.props.dispatch(setBounds( bounds ));
     };
 
-    setActiveCoordinate = ( coordinate ) => {
+    setActiveCoordinateHandler = ( coordinate ) => {
         this.props.dispatch(setActiveCoordinate( coordinate ));
     };
 
@@ -217,7 +218,7 @@ export default class T07A extends Component {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
-                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
+                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinateHandler}/>
                 </section>
             );
         });
