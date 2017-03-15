@@ -9,11 +9,20 @@ import Parameters from '../../components/tools/Parameters';
 import { changeParameter, calculate, reset } from '../../actions/T14B';
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
+import Icon from '../../components/primitive/Icon';
 
 @connect(( store ) => {
     return { tool: store.T14B };
 })
 export default class T14B extends React.Component {
+
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t14-pumping-induced-river-drawdown/',
+            icon: <Icon name="file"/>
+        }]
+    }
 
     handleChange = ( e ) => {
         if (e.target.name.startsWith( 'parameter' )) {
@@ -36,9 +45,10 @@ export default class T14B extends React.Component {
     }
 
     render( ) {
+        const { navigation } = this.state;
         return (
             <div className="app-width">
-                <Navbar links={[ ]}/>
+                <Navbar links={navigation}/>
                 <Header title={'T14_b. Fully penetrating stream with semipervious layer (Hantush, 1965)'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">

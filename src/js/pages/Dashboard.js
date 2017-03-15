@@ -50,9 +50,6 @@ export default class Dashboard extends React.Component {
                 name: 'T06 MAR method selection',
                 path: 'tools/T06'
             }, {
-                name: 'T07 Scenario Analysis',
-                path: 'tools/T07'
-            }, {
                 name: 'T09_a Saltwater intrusion / Depth of freshwater-saltwater interface (Ghyben-Herzberg)',
                 path: 'tools/T09A'
             }, {

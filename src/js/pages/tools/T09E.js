@@ -9,6 +9,7 @@ import Chart from '../../components/tools/ChartT09E';
 import Parameters from '../../components/tools/Parameters';
 import {changeSettings, changeParameter, calculate, reset} from '../../actions/T09E';
 import Navbar from '../Navbar';
+import Icon from '../../components/primitive/Icon';
 
 import Header from '../../components/tools/Header';
 
@@ -16,6 +17,14 @@ import Header from '../../components/tools/Header';
     return {tool: store.T09E};
 })
 export default class T09F extends React.Component {
+
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+            icon: <Icon name="file"/>
+        }]
+    }
 
     handleChange = (e) => {
         if (e.target.name === 'settings') {
@@ -42,9 +51,10 @@ export default class T09F extends React.Component {
     }
 
     render() {
+        const { navigation } = this.state;
         return (
             <div className="app-width">
-                <Navbar links={[]} />
+                <Navbar links={navigation} />
                 <Header title={'T09_e. Saltwater intrusion // Sea level rise'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">

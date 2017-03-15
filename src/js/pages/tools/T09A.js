@@ -9,12 +9,21 @@ import Parameters from '../../components/tools/Parameters';
 import {changeParameter, calculate, reset} from '../../actions/T09A';
 
 import Header from '../../components/tools/Header';
+import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
 
 @connect((store) => {
     return {tool: store.T09A};
 })
 export default class T09A extends React.Component {
+
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+            icon: <Icon name="file"/>
+        }]
+    }
 
     handleChange = (e) => {
         if (e.target.name === 'settings') {
@@ -41,9 +50,10 @@ export default class T09A extends React.Component {
     }
 
     render() {
+        const { navigation } = this.state;
         return (
             <div className="app-width">
-                <Navbar links={[]} />
+                <Navbar links={navigation} />
                 <Header title={'T09_a. Saltwater intrusion // Depth of freshwater - saltwater interface (Ghyben-Herzberg relation)'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
