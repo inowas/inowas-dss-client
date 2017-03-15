@@ -18,11 +18,17 @@ export default class Popup extends Component {
         visible: false
     }
 
+    close = e => {
+        if(e.target === this.wrapper) {
+            this.props.close();
+        }
+    }
+
     render( ) {
         const { visible, children, close, className, width } = this.props;
         if ( visible ) {
             return (
-                <div className={'popup center-vertical center-horizontal' + ' ' + ( className || '' )}>
+                <div ref={( wrapper ) => {this.wrapper = wrapper;}} className={'popup center-vertical center-horizontal' + ' ' + ( className || '' )} onClick={this.close}>
                     <div className="content tile" style={{width}}>
                         <div className="header">
                             <button className="link" onClick={close}><Icon name="close"/></button>

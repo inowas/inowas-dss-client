@@ -4,7 +4,6 @@ import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
 import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
-import Drawer from '../../components/primitive/Drawer';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
@@ -325,9 +324,6 @@ export default class T07A extends Component {
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
-                <Drawer visible>
-                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
-                </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col stretch">
