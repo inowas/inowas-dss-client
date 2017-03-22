@@ -5,8 +5,8 @@ import '../../../less/4TileTool.less';
 
 import Background from '../../components/tools/Background'
 import Chart from '../../components/tools/ChartT16A'
-import Sieves from '../../components/tools/Sieves'
-import HydroData from '../../components/tools/HydroData'
+import Sieves from '../../components/tools/T16_Sieves'
+import HydroData from '../../components/tools/T16_HydroData'
 import {enterSieve, changeStandard, changeHydroData, changeSieve,
     changeParameter, calculate, reset} from '../../actions/T16A'
 
