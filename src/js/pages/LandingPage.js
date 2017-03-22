@@ -266,11 +266,14 @@ export default class LandingPage extends React.Component {
                     <div className="row geo-database">
                         <h2>Geo Database</h2>
 
+                        {/* <!--
                         <p className="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                        --> */}
                         <figure>
                             <img src="../images/landingPage/geo-database-image.png" width="700" height="315" className="" alt=""/>
                         </figure>
 
+                        {/* <!--
                         <div className="grid-container">
                             <div className="col col-rel-1 stretch">
                                 <div className="panel geo-panel-01">
@@ -299,6 +302,7 @@ export default class LandingPage extends React.Component {
                                 </div>
                             </div>
                         </div>
+                         --> */}
 
                         <div className="align-center">
                             <a className="button button-primary more" href="https://kb.inowas.hydro.tu-dresden.de">Read more</a>
