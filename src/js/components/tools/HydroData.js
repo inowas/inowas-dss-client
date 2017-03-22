@@ -3,9 +3,12 @@ import React from 'react';
 import '../../../less/toolParameters.less';
 import '../../../less/input-range.less';
 import '../../../less/toolT16.less';
+import Popup from '../primitive/Popup';
 
 export default class Parameters extends React.Component {
-
+    state = {
+        popupVisible: false
+    };
     handleChange = e => {
         if (this.props.handleChange)
             this.props.handleChange(e);
@@ -36,7 +39,34 @@ export default class Parameters extends React.Component {
             </td>
             <td>°c</td>
         </tr>
-    }
+    };
+    closePopup = () => {
+        this.setState({
+            popupVisible: false
+        });
+    };
+    showPopup = () => {
+        this.setState({
+            popupVisible: true
+        });
+    };
+    hydroCharac() {
+        return <table className="parameters-sieve">
+            <tbody>
+            <tr className="parameter">
+                <td className="table-sieve-bottom">Hydrometer Data</td>
+            </tr>
+            <tr className="parameter">
+            <td className="parameter-label">Height of hydrometer bulb</td>
+            <td>
+                <input />
+            </td>
+            <td>cm</td>
+            </tr>
+            </tbody>
+        </table>
+
+    };
     render() {
         const params = this.props.data.map(param => {
             return this.renderNumber(param);
@@ -45,6 +75,12 @@ export default class Parameters extends React.Component {
         return (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
+                    <div className="popup-div">
+                        <button className=" link popups" onClick={this.showPopup}>
+                            <span>Hydrometer Characterstics</span>
+                        </button>
+                    </div>
+
                     <div>
                         <p className="input-t16a">
                             <strong>Start</strong>
@@ -66,6 +102,10 @@ export default class Parameters extends React.Component {
                             {params}
                         </tbody>
                     </table>
+                    <Popup visible={this.state.popupVisible} close={this.closePopup}>
+                        <h2>Hydrometer Characterstics</h2>
+                        {this.hydroCharac()}
+                    </Popup>
                 </div>
             </div>
         )

@@ -84,7 +84,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 0,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -94,7 +94,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 0,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -104,7 +104,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 0,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -114,7 +114,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 0.1,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -124,7 +124,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 2.5,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -134,7 +134,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 8.0,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -144,7 +144,7 @@ function getInitialState() {
             validMin: function(x) {return x > 0},
             max: 1000,
             value: 19.3,
-            stepSize: 10,
+            stepSize: 0.1,
             decimals: 1,
             inputType: 'NUMBER'
         },{
@@ -179,6 +179,19 @@ function getInitialState() {
             Az: 29.2,
             Smin: 0.995,
             Smax: 1.030
+        },
+        DIN: {
+            selected: false,
+            name: 'DIN',
+            sievesize: ['63 mm','31.5 mm','16 mm','8 mm','4 mm','2 mm','1 mm','0.5 mm','0.25 mm','0.125 mm',
+                '0.063 mm']
+        },
+
+        ASTM: {
+            selected: false,
+            name: 'ASTM',
+            sievesize: ['75 mm','50 mm','37.5 mm','25 mm','19 mm','9.5 mm','4.75 mm','2.0 mm',
+                '0.85 mm','0.425 mm','0.250 mm','0.150 mm','0.106 mm','0.075 mm']
         },
         parameters: [{
             order: 0,
@@ -274,6 +287,37 @@ const T16AReducer = (state = getInitialState(), action) => {
                 calculateAndModifyState(state);
                 break;
             }
+
+        case 'CHANGE_TOOL_T16A_STANDARD':
+        {
+            const newParam = action.payload.name.split('_');
+
+            state = {
+                    ...state,
+                };
+            if (newParam[1] === 'DIN') {
+                state.DIN.selected = true;
+                state.ASTM.selected = false;
+            }
+            if (newParam[1] === 'ASTM') {
+                state.ASTM.selected = true;
+                state.DIN.selected = false;
+            }
+            calculateAndModifyState(state);
+            break;
+        }
+
+        case 'CHANGE_TOOL_T16A_NEWSIEVE':
+        {
+            const newSieve = action.payload;
+
+            state = {
+                ...state,
+            };
+            state.sieves.push(newSieve);
+            calculateAndModifyState(state);
+            break;
+        }
     }
     return state;
 };

@@ -2,9 +2,13 @@ import React from 'react';
 import '../../../less/toolParameters.less';
 import '../../../less/input-range.less';
 import '../../../less/toolT16.less';
+import Popup from '../primitive/Popup';
 
-export default class Parameters extends React.Component {
+export default class Sieves extends React.Component {
 
+    state = {
+        popupVisible: false
+    };
     handleChange = e => {
         if (this.props.handleChange)
             this.props.handleChange(e);
@@ -31,9 +35,55 @@ export default class Parameters extends React.Component {
                 </td>
                 <td>g</td>
             </tr>
-    }
-
+    };
+    closePopup = () => {
+        this.setState({
+            popupVisible: false
+        });
+    };
+    showPopup = () => {
+        this.setState({
+            popupVisible: true
+        });
+    };
+    selectSieve() {
+        var standard = [];
+        if (this.props.DIN.selected === true) {
+            var standard = this.props.DIN.sievesize.map(s => {
+                return <li key={'sievesize_'+s}>
+                    <label><input name={'size '+s} className="input" type="checkbox"
+                                  onChange={this.handleChange}/>{s}</label>
+                </li>
+            })
+        }
+        if (this.props.ASTM.selected === true) {
+            var standard = this.props.ASTM.sievesize.map(s => {
+                return <li key={'sievesize_'+s}>
+                    <label><input name={'size '+s} className="input" type="checkbox"
+                                  onChange={this.handleChange}/>{s}</label>
+                </li>
+            })
+        }
+        return (
+            <div className="popup-div">
+            <ul className="popup-ul">
+            <li>
+                <label className="label">
+                <input onChange={this.handleChange} className="input" name="standard" value={'standard_' + this.props.DIN.name}
+                       type="radio"/>DIN 18123:2010-03</label>
+                <label className="label">
+                    <input onChange={this.handleChange} className="input" name="standard" value={'standard_' + this.props.ASTM.name}
+                           type="radio"/>ASTM D6913</label>
+            </li>
+            </ul>
+            <div className="popup-col"><ul className="ul left">{standard}</ul></div>
+            </div>
+        )
+    };
     render() {
+        const styleheader = {
+            color: '#1EB1ED'
+        };
         const params = this.props.data.map(param => {
             return this.renderNumber(param);
         });
@@ -41,6 +91,11 @@ export default class Parameters extends React.Component {
         return (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
+                    <div className="popup-div">
+                    <button className=" link popups" onClick={this.showPopup}>
+                        <span>Select Sieve</span>
+                    </button>
+                    </div>
                     <table className="parameters-dSamp">
                         <tbody>
                         <tr key={dSampSieve.id} className="parameter">
@@ -76,6 +131,11 @@ export default class Parameters extends React.Component {
                             </tr>
                         </tbody>
                     </table>
+                    <Popup visible={this.state.popupVisible} close={this.closePopup}>
+                        <h2>Select Sieve</h2>
+                        {this.selectSieve()}
+                    </Popup>
+
                 </div>
             </div>
         )
