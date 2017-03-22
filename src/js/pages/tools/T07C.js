@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import Drawer from '../../components/primitive/Drawer';
 import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
+import Accordion from '../../components/primitive/Accordion';
+import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
@@ -60,11 +61,11 @@ export default class T07C extends Component {
                     name: 'Time series',
                     path: 'tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }, {
+                } /* , {
                     name: 'Overall budget',
                     path: 'tools/T07D/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }
+                } */
             ]
         };
     }
@@ -191,13 +192,14 @@ export default class T07C extends Component {
             return new TimeSeriesGridCell({
                 boundingBox,
                 coordinate: p.coordinate,
-                opacity: p.selected ? 0.9 : 0.2
+                opacity: p.selected
+                    ? 0.9
+                    : 0.2
             });
         });
 
         const mapData = new ScenarioAnalysisMapData({
-            area: model.area,
-            grid: model.grid,
+            area: model.area, grid: model.grid,
             // boundaries: model.boundaries,
             timeSeriesGridCells
         });
@@ -243,6 +245,16 @@ export default class T07C extends Component {
         );
     }
 
+    labelXAxis = ( resultType ) => {
+        if (resultType.toString() == 'head') {
+            return 'Groundwater Head [m]';
+        }
+
+        if (resultType.toString() == 'drawdown') {
+            return 'Groundwater DrawDown [m]';
+        }
+    };
+
     renderChart( ) {
         const { models, totalTimes, timeSeriesPoints, selectedResultType, selectedLayerNumber } = this.props.tool;
 
@@ -286,8 +298,11 @@ export default class T07C extends Component {
                 tick: {
                     format: function( x ) {
                         return dateFormat(x, 'mm/dd/yyyy' );
-                    }
-                }
+                    }},
+                label: 'Date'
+            },
+            y: {
+                label: this.labelXAxis(selectedResultType)
             }
         };
 
@@ -315,18 +330,21 @@ export default class T07C extends Component {
 
     render( ) {
         const { navigation } = this.state;
-        const models = this.props.tool.models.map(m => {
-            m.thumbnail = 'scenarios_thumb.png';
-            return m;
-        });
+        const models = this.props.tool.models;
 
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
-                <Drawer visible>
-                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleScenarioSelection}/>
-                </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
+                <div className="grid-container">
+                    <div className="tile col stretch">
+                        <Accordion firstActive={0}>
+                            <AccordionItem heading="Scenarios">
+                                <ScenarioSelect scenarios={models} toggleSelection={this.toggleScenarioSelection}/>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </div>
                 <div className="grid-container">
                     <div className="tile col col-abs-1 center-horizontal">
                         {this.renderSelect( )}

@@ -1,58 +1,39 @@
 @import "variables.less";
 
 .scenarioSelect {
+    display: flex;
     .item {
-        margin-bottom: @spacing-regular;
-        padding-bottom: @spacing-regular;
-        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        max-width: 25%;
+        padding: 0;
+        margin: @spacing-regular;
+        padding-right: @spacing-regular;
 
-        &:not(:last-child) {
-            &::after {
-                content: '';
-                position: absolute;
-                display: block;
-                height: 1px;
-                width: 100%;
-                background-color: @grey-semi-bright;
-                bottom: 0;
+        >.toggle {
+            background-color: @background-bright;
+            border: 0;
+            cursor: pointer;
+            margin-right: @spacing-small;
+        }
+
+        >.content {
+            flex: 1;
+
+            h3 {
+                margin-top: 0;
+                text-align: left;
             }
         }
 
-        >.thumbnail {
-            width: 100%;
-            height: auto;
-        }
-
-        >.toggle {
-            position: absolute;
-            top: @spacing-small;
-            right: @spacing-small;
-            background-color: @background-bright;
-            box-shadow: @box-shadow;
-            padding: 1px;
-            border: 0;
-            cursor: pointer;
+        &:not(:last-child) {
+            border-right: 1px solid @grey-semi;
         }
 
         &[data-selected=true] {
             >.toggle {
                 color: @primary;
-            }
-        }
-    }
-}
-
-.accordion-item {
-    .scenarioSelect {
-        display: flex;
-
-        .item {
-            flex: 1;
-            padding: 0;
-            margin: @spacing-regular;
-
-            &::after {
-                display: none;
             }
         }
     }

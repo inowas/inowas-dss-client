@@ -10,11 +10,20 @@ import Parameters from '../../components/tools/Parameters';
 import { changeSettings, changeParameter, calculate, reset } from '../../actions/T13C';
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
+import Icon from '../../components/primitive/Icon';
 
 @connect(( store ) => {
     return { tool: store.T13C };
 })
 export default class T13C extends React.Component {
+
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
+            icon: <Icon name="file"/>
+        }]
+    }
 
     handleChange = ( e ) => {
         if ( e.target.name === 'settings' ) {
@@ -41,9 +50,10 @@ export default class T13C extends React.Component {
     }
 
     render( ) {
+        const { navigation } = this.state;
         return (
             <div className="app-width">
-                <Navbar links={[ ]}/>
+                <Navbar links={navigation}/>
                 <Header title={'T13_C. Travel time // Aquifer system with two fixed head boundary conditions'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">

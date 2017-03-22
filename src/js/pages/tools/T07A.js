@@ -4,7 +4,6 @@ import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
 import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
-import Drawer from '../../components/primitive/Drawer';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
@@ -19,6 +18,8 @@ import '../../../less/toolT07.less';
 import {
     fetchModelDetails,
     updateResultsT07A,
+    resizeDone,
+    reloadDone,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
@@ -62,17 +63,34 @@ export default class T07A extends Component {
                     name: 'Time series',
                     path: 'tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }, {
+                } /* , {
                     name: 'Overall budget',
                     path: 'tools/T07D/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }
+                }*/
             ]
         };
     }
 
     componentWillMount( ) {
         this.props.dispatch(fetchModelDetails( this.props.params.id ));
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.tool.resize) {
+            // manually emit a resize event so the leaflet maps recalculate their container size
+            const event = document.createEvent( 'HTMLEvents' );
+            event.initEvent( 'resize', true, false );
+            document.dispatchEvent( event );
+            this.props.dispatch( resizeDone() );
+        }
+
+        if (props.tool.reload) {
+            if (this.props.tool.totalTimes && this.props.tool.selectedLayerNumber && this.props.tool.selectedResultType) {
+                this.updateModelResults(this.props.tool.selectedResultType, this.props.tool.selectedLayerNumber, this.props.tool.selectedTotalTimeIndex);
+                this.props.dispatch( reloadDone() );
+            }
+        }
     }
 
     toggleSelection = id => {
@@ -165,7 +183,7 @@ export default class T07A extends Component {
         this.props.dispatch(setBounds( bounds ));
     };
 
-    setActiveCoordinate = ( coordinate ) => {
+    setActiveCoordinateHandler = ( coordinate ) => {
         this.props.dispatch(setActiveCoordinate( coordinate ));
     };
 
@@ -200,14 +218,30 @@ export default class T07A extends Component {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
-                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
+                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinateHandler}/>
                 </section>
             );
         });
     }
 
+    labelYAxis = ( resultType ) => {
+        if (resultType.toString() === 'head') {
+            return 'Groundwater Head [m]';
+        }
+
+        if (resultType.toString() === 'drawdown') {
+            return 'Groundwater DrawDown [m]';
+        }
+
+        return '';
+    };
+
+    labelXAxis = () => {
+        return ('Longitude');
+    };
+
     renderChart( ) {
-        const {activeCoordinate, models} = this.props.tool;
+        const {activeCoordinate, models, selectedResultType } = this.props.tool;
         if( models.length <= 0 || !activeCoordinate) {
             return null;
         }
@@ -274,10 +308,10 @@ export default class T07A extends Component {
 
             axis = {
                 x: {
-                    label: baseModel.labelXAxis()
+                    label: this.labelXAxis()
                 },
                 y: {
-                    label: baseModel.labelYAxis()
+                    label: this.labelYAxis( selectedResultType )
                 }
             };
         }
@@ -317,17 +351,11 @@ export default class T07A extends Component {
 
     render( ) {
         const { navigation } = this.state;
-        const models = this.props.tool.models.map(m => {
-            m.thumbnail = 'scenarios_thumb.png';
-            return m;
-        });
+        const models = this.props.tool.models;
 
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation}/>
-                <Drawer visible>
-                    <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
-                </Drawer>
                 <Header title={'T07. Scenario Analysis'}/>
                 <div className="grid-container">
                     <div className="tile col stretch">

@@ -27,6 +27,16 @@ export default class ModflowModel {
         return model;
     }
 
+    static fromProps( modelId, isBaseModel, area, name, description, boundingBox, nx, ny, selected){
+        const model = new ModflowModel(modelId, isBaseModel);
+        model.area = area;
+        model.name = name;
+        model.description = description;
+        model._grid = new Grid(boundingBox, nx, ny);
+        model.selected = selected;
+        return model;
+    }
+
     get grid() {
         return this._grid;
     }
@@ -156,27 +166,6 @@ export default class ModflowModel {
         const dX = (xMax - xMin) / nX;
 
         return Math.round((xMin + (rightBorder * dX)) * 1000) / 1000;
-    }
-
-    labelYAxis() {
-        if (this.hasResult()) {
-            if (this.result.resultType().toString() === 'head') {
-                return 'Groundwater Head [m]';
-            }
-
-            if (this.result.resultType().toString() === 'drawdown') {
-                return 'Groundwater DrawDown [m]';
-            }
-        }
-
-        return '';
-    }
-
-    labelXAxis() {
-        if (this.hasResult()) {
-            return ('Longitude');
-        }
-        return null;
     }
 
     columnXAxis() {

@@ -5,8 +5,8 @@ import Coordinate from '../model/Coordinate';
 import BoundingBox from '../model/BoundingBox';
 import ModflowBoundary from '../model/ModflowBoundary';
 import ModflowLayerValues from '../model/ModflowLayerValues';
+import ModflowModel from '../model/ModflowModel';
 import ModflowModelBoundaries from '../model/ModflowModelBoundaries';
-import ModflowModelDetails from '../model/ModflowModelDetails';
 import ModflowModelResult from '../model/ModflowModelResult';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
@@ -30,14 +30,23 @@ export function setTotalTimes( totalTimes ) {
     };
 }
 
-export function setModelDetails( details ) {
-    if ( details instanceof ModflowModelDetails === false ) {
-        throw Error( 'Expected first param to be instance of ModflowModelDetails' );
-    }
+export function addModel( model ) {
 
     return {
-        type: 'T07_SET_MODEL_DETAILS',
-        payload: details
+        type: 'T07_ADD_MODEL',
+        payload: model
+    };
+}
+
+export function reloadDone( ) {
+    return {
+        type: 'T07_RELOAD_DONE'
+    };
+}
+
+export function resizeDone( ) {
+    return {
+        type: 'T07_RESIZE_DONE'
     };
 }
 
@@ -179,37 +188,43 @@ export function fetchModelDetails( id, onSuccess ) {
             const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain.y_min, boundingBoxPlain.x_min ), new Coordinate( boundingBoxPlain.y_max, boundingBoxPlain.x_max ) );
             const gridSize = JSON.parse( action.payload.data.base_model.grid_size );
 
-            const baseModel = new ModflowModelDetails(
+            const baseModel = ModflowModel.fromProps(
                 action.payload.data.base_model.base_model_id,
+                true,
+                area,
                 action.payload.data.base_model.name,
                 action.payload.data.base_model.description,
-                area,
                 boundingBox,
-                gridSize,
+                gridSize.n_x,
+                gridSize.n_y,
                 true
             );
 
-            dispatch( setModelDetails( baseModel ) );
+            dispatch( addModel( baseModel ) );
             dispatch( setBounds( boundingBox.toArray() ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.modelId ) );
             dispatch( fetchTotalTimes( baseModel.modelId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
 
             const scenarios = action.payload.data.scenarios;
-            scenarios.forEach( sc => {
-                const scenario = new ModflowModelDetails(
+            for (let i=0; i<scenarios.length; i++){
+                const sc = scenarios[i];
+                const scenario = ModflowModel.fromProps(
                     sc.model_id,
+                    false,
+                    area,
                     sc.name,
                     sc.description,
-                    area,
                     boundingBox,
-                    gridSize,
-                    false
+                    gridSize.n_x,
+                    gridSize.n_y,
+                    i===(scenarios.length-1)
                 );
 
-                dispatch( setModelDetails( scenario ) );
+                dispatch( addModel( scenario ) );
                 dispatch( fetchModelBoundaries( scenario.modelId ) );
-            } );
+            }
+
             (onSuccess && onSuccess(dispatch));
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console

@@ -34,7 +34,7 @@ export default class Dashboard extends React.Component {
             name: 'Datasets',
             path: 'https://kb.inowas.hydro.tu-dresden.de',
             icon: <Icon name="dataset"/>
-        }, {
+        }/* , {
             name: 'Projects',
             icon: <Icon name="folder"/>
         }, {
@@ -42,57 +42,8 @@ export default class Dashboard extends React.Component {
             icon: <Icon name="layer_vertical"/>
         }, {
             name: 'Tools',
-            icon: <Icon name="layer_horizontal_hatched"/>,
-            sub: [{
-                name: 'T02 Groundwater mounding (Hantush)',
-                path: 'tools/T02'
-            }, {
-                name: 'T06 MAR method selection',
-                path: 'tools/T06'
-            }, {
-                name: 'T07 Scenario Analysis',
-                path: 'tools/T07'
-            }, {
-                name: 'T09_a Saltwater intrusion / Depth of freshwater-saltwater interface (Ghyben-Herzberg)',
-                path: 'tools/T09A'
-            }, {
-                name: 'T09_b Saltwater intrusion / Shape of freshwater-saltwater interface (Glover)',
-                path: 'tools/T09B'
-            }, {
-                name: 'T09_c Saltwater intrusion / Upconing',
-                path: 'tools/T09C'
-            }, {
-                name: 'T09_d Saltwater intrusion / Critical well discharge',
-                path: 'tools/T09D'
-            }, {
-                name: 'T13 Calculation of the travel time',
-                path: 'tools/T13'
-            }, {
-                name: 'T14_a Fully penetrating stream with no streambed resistance',
-                path: 'tools/T14A'
-            }, {
-                name: 'T14_b Fully penetrating stream with semipervious layer',
-                path: 'tools/T14B'
-            }, {
-                name: 'T14_c Partially penetrating stream with streambed resistance',
-                path: 'tools/T14C'
-            }, {
-                name: 'T14_d Partially penetrating stream in an aquitard overlying a pumped aquifer',
-                path: 'tools/T14D'
-            }, {
-                name: 'T16_a Saturated hydraulic conductivity based on grain size distribution',
-                path: 'tools/T16A'
-            }, {
-                name: 'T18 SAT basin design',
-                path: 'tools/T18'
-            }, {
-                name: 'T03 Numerical model setup (MODFLOW)',
-                path: 'tools/modflow/list'
-            }, {
-                name: 'T17 Global Mar portal',
-                path: 'tools/T17'
-            }]
-        }]
+            icon: <Icon name="layer_horizontal_hatched"/>
+        }*/]
     }
 
     componentDidMount() {

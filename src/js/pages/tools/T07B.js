@@ -58,11 +58,11 @@ export default class T07B extends Component {
                     name: 'Time series',
                     path: 'tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }, {
+                } /* , {
                     name: 'Overall budget',
                     path: 'tools/T07D/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                }
+                } */
             ]
         };
     }
@@ -223,19 +223,34 @@ export default class T07B extends Component {
         );
     }
 
+    labelYAxis = ( resultType ) => {
+        if (resultType.toString() === 'head') {
+            return 'Groundwater Head [m]';
+        }
+
+        if (resultType.toString() === 'drawdown') {
+            return 'Groundwater DrawDown [m]';
+        }
+
+        return '';
+    };
+
+    labelXAxis = () => {
+        return ('Longitude');
+    };
+
     renderChart( ) {
-        const { activeCoordinate } = this.props.tool;
-        const mfDifference = this.props.tool.t07bDifference;
+        const { activeCoordinate, t07bDifference, selectedResultType } = this.props.tool;
 
-        if ( !mfDifference || !activeCoordinate ) {
+        if ( !t07bDifference || !activeCoordinate ) {
             return null;
         }
 
-        if (!mfDifference.hasResult( )) {
+        if (!t07bDifference.hasResult( )) {
             return null;
         }
 
-        const activeGridCell = mfDifference.grid.coordinateToGridCell( activeCoordinate );
+        const activeGridCell = t07bDifference.grid.coordinateToGridCell( activeCoordinate );
 
         if ( !activeGridCell ) {
             return null;
@@ -253,7 +268,7 @@ export default class T07B extends Component {
 
         const chartData = {
             x: 'x',
-            columns: [mfDifference.columnXAxis( ), mfDifference.chartDataByRowNumber( rowNumber )]
+            columns: [t07bDifference.columnXAxis( ), t07bDifference.chartDataByRowNumber( rowNumber )]
         };
 
         const grid = {
@@ -261,15 +276,15 @@ export default class T07B extends Component {
                 show: true,
                 lines: [
                     {
-                        value: mfDifference.chartLeftBorderByRowNumber( rowNumber ),
+                        value: t07bDifference.chartLeftBorderByRowNumber( rowNumber ),
                         text: 'Eastern model border',
                         position: 'middle'
                     }, {
-                        value: mfDifference.chartRightBorderByRowNumber( rowNumber ),
+                        value: t07bDifference.chartRightBorderByRowNumber( rowNumber ),
                         text: 'Western model border',
                         position: 'middle'
                     }, {
-                        value: mfDifference.coordinateByGridCell( colNumber, rowNumber ).x,
+                        value: t07bDifference.coordinateByGridCell( colNumber, rowNumber ).x,
                         text: 'Selected column',
                         position: 'middle'
                     }
@@ -279,10 +294,10 @@ export default class T07B extends Component {
 
         const axis = {
             x: {
-                label: mfDifference.labelXAxis( )
+                label: this.labelXAxis()
             },
             y: {
-                label: mfDifference.labelYAxis( )
+                label: this.labelYAxis( selectedResultType )
             }
         };
 
@@ -323,11 +338,6 @@ export default class T07B extends Component {
 
     render( ) {
         const { navigation } = this.state;
-        // let models = this.props.tool.models.models( );
-        // models = models.map(m => {
-        //     m.thumbnail = 'scenarios_thumb.png';
-        //     return m;
-        // });
 
         return (
             <div className="toolT07 app-width">

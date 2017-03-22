@@ -177,7 +177,7 @@ export default class ScenarioAnalysisMap extends Component {
         }
 
         return timeSeriesGridCells.map((c, index) => {
-            return(<div>
+            return(<div key={index}>
                 <Rectangle
                     key={'rectangle_' + index}
                     bounds={c.boundingBox.toArray()}
