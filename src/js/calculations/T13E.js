@@ -1,7 +1,7 @@
-export function calculateDiagramData(Qw, hL, h0, x_min, x_max, d_x) {
+export function calculateDiagramData(Qw, ne, hL, h0, x_min, x_max, d_x) {
     const xi = x_max;
     function calcT(x) {
-        return ((0.95*h0 + 0.05*hL)*3.14159*(xi * xi - x * x)/Qw)/(60*60*24);
+        return ((0.95*h0 + 0.05*hL)*3.14159*(xi * xi - x * x)*ne/Qw);
     }
 
     var data = [];
@@ -10,7 +10,6 @@ export function calculateDiagramData(Qw, hL, h0, x_min, x_max, d_x) {
             x,
             t: calcT(x)
         });
-     console.log(x);
     }
     return data;
 }
