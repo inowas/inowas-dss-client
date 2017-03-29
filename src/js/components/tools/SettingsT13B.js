@@ -13,9 +13,7 @@ export default class Settings extends React.Component {
         };
         const settings = this.props.data;
         return (
-/*
-This can be used to keep radio buttons left and right
-            <div>
+            <div className="padding-30">
                 <p>
                     Would you like to proceed with the left or the right side of the flow domain
                 </p>
@@ -31,9 +29,9 @@ This can be used to keep radio buttons left and right
                     </div>
                 </div>
             </div>
-*/
-
-            <div>
+/*
+this can be used to align up and down
+            <div className="padding-30">
                 <p>
                     Would you like to proceed with the left or the right side of the flow domain
                 </p>
@@ -51,6 +49,8 @@ This can be used to keep radio buttons left and right
                     </div>
                 </div>
             </div>
+
+*/
         )
     }
 }

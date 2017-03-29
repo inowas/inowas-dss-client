@@ -13,6 +13,7 @@ export default class Info extends React.Component {
                     <p>
                         The regional system is divided into the two subdomains on either side of the water divide.
                         The water divide is located at <strong>{this.props.data.xwd}m</strong>.
+                        Use Default to change the water divide.
                     </p>
                 </div>
             </div>

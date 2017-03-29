@@ -31,7 +31,6 @@ export default class T13A extends React.Component {
             const parameter = {};
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
-
             this.props.dispatch(changeParameter(parameter));
         }
     };

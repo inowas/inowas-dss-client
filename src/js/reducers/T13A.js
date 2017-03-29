@@ -16,70 +16,70 @@ function getInitialState() {
         },
         parameters: [{
             order: 0,
-            id: 'w',
-            name: 'Percolation rate, w(m/d)',
-            min: 0,
-            max: 10,
-            value: 0.1,
-            stepSize: 0.1,
-            decimals: 1
+            id: 'W',
+            name: 'Average infiltration rate, W(m/d)',
+            min: 0.001,
+            max: 0.01,
+            value: 0.009,
+            stepSize: 0.0001,
+            decimals: 4
         }, {
             order: 1,
             id: 'K',
             name: 'Hydraulic conductivity, K (m/d)',
-            min: 0,
-            max: 100,
-            value: 10,
-            stepSize: 1,
-            decimals: 1
+            min: 10e-2,
+            max: 10e2,
+            value: 10.1,
+            stepSize: 10,
+            decimals: 2
         }, {
             order: 2,
             id: 'ne',
             name: 'Effective porosity, n (-)',
             min: 0,
-            max: 5,
+            max: 0.5,
             value: 0.35,
-            stepSize: 0.05,
+            stepSize: 0.01,
             decimals: 1
         }, {
             order: 3,
             id: 'L',
             name: 'Aquifer length, L´ (m)',
             min: 0,
-            max: 5000,
-            value: 1000,
+            max: 1000,
+            value: 500,
             stepSize: 10,
             decimals: 0
         }, {
             order: 4,
             id: 'hL',
-            name: 'Fixed head boundary, hL (m)',
+            name: 'Downstream fixed head boundary, hL (m)',
             min: 0,
             max: 10,
             value: 2,
-            stepSize: 0.1,
+            stepSize: 0.5,
             decimals: 1
         }, {
             order: 5,
             id: 'xi',
-            name: 'Distance to initial position, xi (m)',
-            min: 1,
-            max: 500,
+            name: 'Initial position, xi (m)',
+            min: 0,
+            max: 1000,
             value: 50,
-            stepSize: 1,
+            stepSize: 10,
             decimals: 0
         }, {
             order: 6,
             id: 'xe',
-            name: 'Distance to arrival location, xe (m)',
+            name: 'Arrival location, xe (m)',
             min: 1,
-            max: 1500,
-            value: 1000,
-            stepSize: 1,
+            max: 1000,
+            value: 500,
+            stepSize: 10,
             decimals: 0
         }]
     }
-};
+}
 const T13AReducer = (state = getInitialState(), action) => {
     switch (action.type) {
         case 'RESET_TOOL_T13A':
@@ -117,6 +117,21 @@ const T13AReducer = (state = getInitialState(), action) => {
                     xe.value = L.value;
                 }
 
+                if (xi.value > L.value) {
+                    xi.value = L.value;
+                }
+                //setting boundaries of ne and K
+                let ne = state.parameters.find(p => {return p.id == 'ne'});
+                if (ne.max > 0.5) {
+                    ne.max = 0.5;
+                }
+                if (ne.max < 0.0) {
+                    ne.max = 0.0;
+                }
+                let K = state.parameters.find(p => {return p.id == 'K'});
+                if (K.max > 10e3) {
+                    K.max = 10e3;
+                }
                 calculateAndModifyState(state);
                 break;
             }
@@ -126,7 +141,7 @@ const T13AReducer = (state = getInitialState(), action) => {
 
 function calculateAndModifyState(state) {
     const w = state.parameters.find(p => {
-            return p.id == 'w'
+            return p.id == 'W'
         })
         .value;
     const K = state.parameters.find(p => {
