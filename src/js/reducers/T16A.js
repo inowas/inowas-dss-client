@@ -77,121 +77,160 @@ function getInitialState() {
             reading: 1.0015,
             temp: 20.6
         }],
-        sieves: [{
-            id: '35.5',
-            name: '35.5mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 0,
+        sieves: [],
+        parametersWet: [{
+            def: 'Density of solid',
+            name: 'rhoS',
+            value: 2.690,
+            stepSize: 0.01,
+            unit: 'g/cm3'
+        }, {
+            def: 'Dry mass of soil fraction',
+            name: 'Mh',
+            value: 51.670,
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '16',
-            name: '16mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 0,
+            unit: 'g'
+        }, {
+            def: 'Meniscus factor',
+            name: 'Fm',
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '8',
-            name: '8mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 0,
+            value: 0.5,
+        }, {
+            def: 'Hydrometer bulb height',
+            name: 'h',
+            value: 16,
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '4',
-            name: '4mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 0.1,
+            unit: 'cm'
+        }, {
+            def: 'Distance between the base of the stem and the bottom of scale',
+            name: 'h0',
+            value: 1.5,
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '2',
-            name: '2mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 2.5,
+            unit: 'cm'
+        }, {
+            def: 'Length of the scale',
+            name: 'Lh',
+            value: 14.5,
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '1',
-            name: '1mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 8.0,
+            unit: 'cm'
+        }, {
+            def: 'Content of the hydrometer',
+            name: 'VA',
+            value: 64.5,
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '0.5',
-            name: '0.5mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 19.3,
+            unit: 'cm'
+        }, {
+            def: 'Cross sectional area of the cylinder',
+            name: 'Az',
+            value: 29.2,
             stepSize: 0.1,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '0.25',
-            name: '0.25mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 117.6,
-            stepSize: 10,
-            decimals: 1,
-            inputType: 'NUMBER'
-        },{
-            id: '0.125',
-            name: '0.125mm',
-            min: 0,
-            validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 14.2,
-            stepSize: 10,
-            decimals: 1,
-            inputType: 'NUMBER'
+            unit: 'cm2'
+        }, {
+            def: 'Minimum scale',
+            name:'Smin',
+            value: 0.995,
+            stepSize: 0.001,
+            unit: 'g/cm3'
+        }, {
+            def: 'Maximum scale',
+            name:'Smax',
+            value: 1.030,
+            stepSize: 0.001,
+            unit: 'g/cm3'
         }],
-        parametersWet: {
-            rhoS: 2.690,
-            Mh: 51.670,
-            Fm: 0.5,
-            h: 16,
-            h0: 1.5,
-            Lh: 14.5,
-            VA: 64.5,
-            Az: 29.2,
-            Smin: 0.995,
-            Smax: 1.030
-        },
         DIN: {
             selected: false,
             name: 'DIN',
-            sievesize: ['63 mm','31.5 mm','16 mm','8 mm','4 mm','2 mm','1 mm','0.5 mm','0.25 mm','0.125 mm',
-                '0.063 mm']
+            sievesize: [{
+                name: '63 mm',
+                selected: true
+            },{
+                name: '31.5 mm',
+                selected: true
+            },{
+                name:'16 mm',
+                selected: true
+            },{
+                name:'8 mm',
+                selected: true
+            },{
+                name:'4 mm',
+                selected: true
+            },{
+                name:'2 mm',
+                selected: true
+            },{
+                name:'1 mm',
+                selected: true
+            },{
+                name:'0.5 mm',
+                selected: true
+            },{
+                name:'0.25 mm',
+                selected: true
+            },{
+                name:'0.125 mm',
+                selected: true
+            },{
+                name:'0.063 mm',
+                selected: true
+            }]
         },
 
         ASTM: {
             selected: false,
             name: 'ASTM',
-            sievesize: ['75 mm','50 mm','37.5 mm','25 mm','19 mm','9.5 mm','4.75 mm','2.0 mm',
-                '0.85 mm','0.425 mm','0.250 mm','0.150 mm','0.106 mm','0.075 mm']
+            sievesize: [{
+                name:'75 mm',
+                selected: false
+            },{
+                name:'50 mm',
+                selected: false
+            },{
+                name:'37.5 mm',
+                selected: false
+            },{
+                name:'25 mm',
+                selected: false
+            },{
+                name:'19 mm',
+                selected: false
+            },{
+                name:'9.5 mm',
+                selected: false
+            },{
+                name:'4.75 mm',
+                selected: false
+            },{
+                name:'2 mm',
+                selected: true
+            },{
+                name:'0.85 mm',
+                selected: false
+            },{
+                name:'0.425 mm',
+                selected: false
+            },{
+                name:'0.250 mm',
+                selected: false
+            },{
+                name:'0.150 mm',
+                selected: false
+            },{
+                name:'0.106 mm',
+                selected: false
+            },{
+                name:'0.075 mm',
+                selected: false
+            }]
+        },
+        Custom: {
+            selected: false,
+            name: 'Custom',
+            sievesize: [],
+            customSize: {
+                value: 0.0
+            }
         },
         parameters: [{
             order: 0,
@@ -239,6 +278,7 @@ const T16AReducer = (state = getInitialState(), action) => {
             {
                 state = { ...state
                 };
+                selectedSieves(state);
                 calculateAndModifyState(state);
                 break;
             }
@@ -288,6 +328,18 @@ const T16AReducer = (state = getInitialState(), action) => {
                 break;
             }
 
+        case 'CHANGE_TOOL_T16A_PARAMETERWET':
+        {
+            state = { ...state,
+            };
+
+            const newParam = action.payload;
+            state.parametersWet.find(p => {
+                return p.name === newParam.name
+            }).value = newParam.value;
+            calculateAndModifyState(state);
+            break;
+        }
         case 'CHANGE_TOOL_T16A_STANDARD':
         {
             const newParam = action.payload.name.split('_');
@@ -298,10 +350,17 @@ const T16AReducer = (state = getInitialState(), action) => {
             if (newParam[1] === 'DIN') {
                 state.DIN.selected = true;
                 state.ASTM.selected = false;
+                state.Custom.selected = false;
             }
             if (newParam[1] === 'ASTM') {
                 state.ASTM.selected = true;
                 state.DIN.selected = false;
+                state.Custom.selected = false;
+            }
+            if (newParam[1] === 'Custom') {
+                state.Custom.selected = true;
+                state.DIN.selected = false;
+                state.ASTM.selected = false;
             }
             calculateAndModifyState(state);
             break;
@@ -314,7 +373,31 @@ const T16AReducer = (state = getInitialState(), action) => {
             state = {
                 ...state,
             };
-            state.sieves.push(newSieve);
+            if (newSieve.id === 'DIN') {
+                state.DIN.sievesize.find(p => {
+                return p.name === newSieve.name
+                }).selected = newSieve.selected;
+            }
+            if (newSieve.id === 'ASTM') {
+                state.ASTM.sievesize.find(p => {
+                    return p.name === newSieve.name
+                }).selected = newSieve.selected;
+            }
+            if (newSieve.id === 'Custom') {
+                if(newSieve.value) {
+                    state.Custom.customSize.value = newSieve.value
+                } else if (newSieve.name) {
+                    state.Custom.sievesize.find(p => {
+                        return p.name === newSieve.name
+                    }).selected = newSieve.selected;
+                } else {
+                    state.Custom.sievesize.push({
+                        name: state.Custom.customSize.value + ' mm',
+                        selected: false
+                    })
+                }
+            }
+            selectedSieves(state);
             calculateAndModifyState(state);
             break;
         }
@@ -322,6 +405,82 @@ const T16AReducer = (state = getInitialState(), action) => {
     return state;
 };
 
+function selectedSieves (state) {
+    state.sieves = [];
+    state.DIN.sievesize.map(s => {
+        const name = s.name.split(' ');
+        if (s.selected === true){
+            const newSieve = {
+                id: name[0],
+                name: name[0]+name[1],
+                min: 0,
+                validMin: function(x) {return x > 0},
+                max: 1000,
+                value: 0,
+                stepSize: 0.1,
+                decimals: 3,
+                inputType: 'NUMBER'
+            };
+            state.sieves.push(newSieve);
+        }
+    });
+    state.ASTM.sievesize.map(s => {
+        const name = s.name.split(' ');
+        if (s.selected === true) {
+            const newSieve = {
+                id: name[0],
+                name: name[0] + name[1],
+                min: 0,
+                validMin: function (x) {
+                    return x > 0
+                },
+                max: 1000,
+                value: 0,
+                stepSize: 0.1,
+                decimals: 3,
+                inputType: 'NUMBER'
+            };
+            state.sieves.push(newSieve);
+        }
+    });
+    state.Custom.sievesize.map(s => {
+        const name = s.name.split(' ');
+        if (s.selected === true) {
+            const newSieve = {
+                id: name[0],
+                name: name[0] + name[1],
+                min: 0,
+                validMin: function (x) {
+                    return x > 0
+                },
+                max: 1000,
+                value: 0,
+                stepSize: 0.1,
+                decimals: 3,
+                inputType: 'NUMBER'
+            };
+            state.sieves.push(newSieve);
+        }
+    });
+    const sortedSieves = state.sieves.sort((a, b) => {
+        if (Number(a.id) < Number(b.id)) {
+            return 1
+        }
+        return -1;
+    });
+    // incase someone selects same sieve in both DIN and ASTM
+    const filteredSieves = sortedSieves.filter((a,index) =>{
+        let returnvalue = true;
+        for (let i = 0; i < index; i++) {
+            if (a.id == sortedSieves[i].id) {
+                returnvalue = false
+            }
+        }
+        return returnvalue;
+    });
+    state.sieves = filteredSieves;
+    return state
+}
 function calculateAndModifyState(state) {
     const CH = state.parameters.find(p => {
             return p.id == 'CH'

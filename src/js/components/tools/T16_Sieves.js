@@ -50,40 +50,56 @@ export default class Sieves extends React.Component {
         var standard = [];
         if (this.props.DIN.selected === true) {
             var standard = this.props.DIN.sievesize.map(s => {
-                return <li key={'sievesize_'+s}>
-                    <label><input name={'size '+s} className="input" type="checkbox"
-                                  onChange={this.handleChange}/>{s}</label>
+                return <li key={'sievesize_'+s.name}>
+                    <label><input name={'selectSieve '+s.name+' DIN'} className="input" type="checkbox" checked={s.selected}
+                                  onChange={this.handleChange}/>{s.name}</label>
                 </li>
             })
         }
         if (this.props.ASTM.selected === true) {
             var standard = this.props.ASTM.sievesize.map(s => {
-                return <li key={'sievesize_'+s}>
-                    <label><input name={'size '+s} className="input" type="checkbox"
-                                  onChange={this.handleChange}/>{s}</label>
+                return <li key={'sievesize_'+s.name}>
+                    <label><input name={'selectSieve '+s.name+' ASTM'} className="input" type="checkbox" checked={s.selected}
+                                  onChange={this.handleChange}/>{s.name}</label>
                 </li>
             })
+        }
+        if (this.props.Custom.selected === true) {
+            var standard = this.props.Custom.sievesize.map(s => {
+                return <li key={'sievesize_'+s.name}>
+                    <label><input name={'selectSieve '+s.name+' Custom'} className="input" type="checkbox" checked={s.selected}
+                                  onChange={this.handleChange}/>{s.name}</label>
+                </li>
+            });
+            standard.push(
+                <li key={'customSize'}>
+                    <label>Size<input name={'customSieve'} className="input_cus"
+                                      type="text" onChange={this.handleChange}/>mm</label>
+                    <input name="submitSieve" type="submit" onClick={this.handleChange}/>
+                </li>
+            )
         }
         return (
             <div className="popup-div">
             <ul className="popup-ul">
             <li>
                 <label className="label">
-                <input onChange={this.handleChange} className="input" name="standard" value={'standard_' + this.props.DIN.name}
-                       type="radio"/>DIN 18123:2010-03</label>
+                    <input onChange={this.handleChange} className="input" name="standard" value={'standard_' + this.props.DIN.name}
+                           checked={this.props.DIN.selected} type="radio"/>DIN 18123:2010-03</label>
                 <label className="label">
                     <input onChange={this.handleChange} className="input" name="standard" value={'standard_' + this.props.ASTM.name}
-                           type="radio"/>ASTM D6913</label>
+                           checked={this.props.ASTM.selected} type="radio"/>ASTM D6913</label>
+                <label className="label">
+                    <input onChange={this.handleChange} className="input" name="standard" value={'standard_' + this.props.Custom.name}
+                           checked={this.props.Custom.selected} type="radio"/>Custom</label>
             </li>
             </ul>
             <div className="popup-col"><ul className="ul left">{standard}</ul></div>
+
             </div>
         )
     };
     render() {
-        const styleheader = {
-            color: '#1EB1ED'
-        };
         const params = this.props.data.map(param => {
             return this.renderNumber(param);
         });
@@ -109,24 +125,24 @@ export default class Sieves extends React.Component {
                         </tr>
                         </tbody>
                     </table>
-                    <table className="parameters-sieve">
+                    <table className="table-t16a-sieve">
                         <tbody>
                             <tr>
-                                <th  className="table-sieve-bottom"><strong>Sieve</strong></th>
-                                <th  className="table-sieve-bottom"><strong>Mass</strong></th>
-                                <th  className="table-sieve-bottom"><strong>Unit</strong></th>
+                                <th  className="th"><strong>Sieve</strong></th>
+                                <th  className="th"><strong>Mass</strong></th>
+                                <th  className="th"><strong>Unit</strong></th>
                             </tr>
                                 {params}
                                 <tr className="parameter">
-                                    <td className="parameter-label">{'<0.125mm'}</td>
+                                    <td className="parameter-label">{'pan'}</td>
                                     <td className="parameter-max input input-xs">
                                         {this.subtraction()}
                                     </td>
                                     <td>g</td>
                                 </tr>
                             <tr>
-                                <td className="table-sieve-top" ><strong>Total</strong></td>
-                                <td className="table-sieve-top" >{this.props.info.total}</td>
+                                <td className="tb" ><strong>Total</strong></td>
+                                <td className="tb" >{this.props.info.total}</td>
                                 <td>g</td>
                             </tr>
                         </tbody>

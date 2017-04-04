@@ -1,3 +1,10 @@
+export function changeParWet(parameter){
+    return {
+        type: 'CHANGE_TOOL_T16A_PARAMETERWET',
+        payload: parameter
+    }
+}
+
 export function enterSieve(parameter){
     return {
         type: 'CHANGE_TOOL_T16A_NEWSIEVE',
