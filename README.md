@@ -9,7 +9,7 @@
 
 * run dev server: `yarn run dev`
 * run eslint: `yarn run lint`
-* run tests: `test`
+* run tests: `yarn run test`
 * update autocompletion for custom components: `yarn run generate`
 * add npm package as dev-dependency: `yarn add -D <package name>`
 * upgrade dependencies: `yarn upgrade`
