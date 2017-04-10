@@ -1,17 +1,34 @@
-import React, {PropTypes, Component} from 'react';
-import { connect } from 'react-redux';
-import { authenticate } from '../actions/user';
-
-import LoginForm from '../components/LoginForm';
-
 import '../less/login.less';
 
-@connect(( store ) => {
-    return { user: store.user };
-})
-export default class Login extends Component {
+import React, { Component, PropTypes } from 'react';
+
+import LoginForm from '../components/LoginForm';
+import { authenticate } from '../actions/user';
+import { connect } from 'react-redux';
+import { isUserLoggedIn } from '../reducers/user';
+import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
+
+class Login extends Component {
     static propTypes = {
         dispatch: PropTypes.func.isRequired
+    }
+
+    constructor(props) {
+        super(props);
+        this.checkAuthentication(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.checkAuthentication(nextProps);
+    }
+
+    checkAuthentication(props) {
+        // eslint-disable-next-line no-shadow
+        const { userLoggedIn, push } = props;
+        if ( userLoggedIn ) {
+            push( '/' );
+        }
     }
 
     login = ( identifier, password ) => {
@@ -26,3 +43,12 @@ export default class Login extends Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {userLoggedIn: isUserLoggedIn( state )};
+};
+
+// eslint-disable-next-line no-class-assign
+Login = withRouter( connect(mapStateToProps, { push })( Login ));
+
+export default Login;

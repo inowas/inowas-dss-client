@@ -12,9 +12,18 @@ class AppForAuthenticatedUser extends Component {
         children: PropTypes.node
     }
 
-    componentWillMount( ) {
+    constructor(props) {
+        super(props);
+        this.checkAuthentication(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.checkAuthentication(nextProps);
+    }
+
+    checkAuthentication(props) {
         // eslint-disable-next-line no-shadow
-        const { userLoggedIn, push } = this.props;
+        const { userLoggedIn, push } = props;
         if ( !userLoggedIn ) {
             push( '/login' );
         }

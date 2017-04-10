@@ -8,7 +8,7 @@
         "generate": "rc-autocomplete",
         "lint": "eslint src",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors"
+        "build": "rimraf dist && webpack --config ./webpack.production.config.babel.js --progress --profile --colors"
     },
     "repository": {
         "type": "git",
