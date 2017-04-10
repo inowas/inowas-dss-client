@@ -16,4 +16,4 @@
 
 ## Build
 
-* run build for production: `yarn run build` (not working yet)
+* run build for production: `yarn run build`

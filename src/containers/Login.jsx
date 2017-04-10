@@ -11,19 +11,21 @@ import { withRouter } from 'react-router';
 
 class Login extends Component {
     static propTypes = {
-        dispatch: PropTypes.func.isRequired
+        userLoggedIn: PropTypes.bool.isRequired,
+        push: PropTypes.func.isRequired,
+        authenticate: PropTypes.func.isRequired
     }
 
-    constructor(props) {
-        super(props);
-        this.checkAuthentication(this.props);
+    constructor( props ) {
+        super( props );
+        this.checkAuthentication( this.props );
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.checkAuthentication(nextProps);
+    componentWillReceiveProps( nextProps ) {
+        this.checkAuthentication( nextProps );
     }
 
-    checkAuthentication(props) {
+    checkAuthentication( props ) {
         // eslint-disable-next-line no-shadow
         const { userLoggedIn, push } = props;
         if ( userLoggedIn ) {
@@ -31,14 +33,13 @@ class Login extends Component {
         }
     }
 
-    login = ( identifier, password ) => {
-        this.props.dispatch(authenticate( identifier, password ));
-    }
-
     render( ) {
+        // eslint-disable-next-line no-shadow
+        const { authenticate } = this.props;
+
         return (
             <div className="login-container center-horizontal center-vertical">
-                <LoginForm className="tile" login={this.login}/>
+                <LoginForm className="tile" login={authenticate}/>
             </div>
         );
     }
@@ -49,6 +50,6 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-Login = withRouter( connect(mapStateToProps, { push })( Login ));
+Login = withRouter( connect(mapStateToProps, { push, authenticate })( Login ));
 
 export default Login;

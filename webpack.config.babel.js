@@ -5,7 +5,6 @@ import { DefinePlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnE
 import DashboardPlugin from 'webpack-dashboard/plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
-// import ImageminPlugin from 'imagemin-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
@@ -40,91 +39,89 @@ export default {
         new DefinePlugin( {
             'process.env.NODE_ENV': JSON.stringify( 'development' )
         } ),
-        new ExtractTextPlugin( 'style/styles.min.css' ),
+        new ExtractTextPlugin( 'styles.css' ),
         new FaviconsWebpackPlugin( 'images/favicon.png' ),
-        // new ImageminPlugin( {
-        //     pngquant: {
-        //         quality: '95-100'
-        //     }
-        // } ),
         new DashboardPlugin()
     ],
     module: {
-        rules: [ /* {
-            test: /\.jsx?$/,
-            enforce: 'pre',
-            exclude: /node_modules/,
-            loader: 'eslint-loader',
-            options: {
-                configFile: '.eslintrc',
-                failOnWarning: false,
-                failOnError: false
-            }
-        }, */ {
-            test: /\.jsx?$/,
-            use: [ 'source-map-loader' ],
-            enforce: 'pre'
-        }, {
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            include: __dirname
-        }, {
-            test: /\.less$/,
-            use: ExtractTextPlugin.extract( {
-                fallback: 'style-loader',
+        rules: [
+            /* {
+                        test: /\.jsx?$/,
+                        enforce: 'pre',
+                        exclude: /node_modules/,
+                        loader: 'eslint-loader',
+                        options: {
+                            configFile: '.eslintrc',
+                            failOnWarning: false,
+                            failOnError: false
+                        }
+                    }, */
+            {
+                test: /\.jsx?$/,
+                use: [ 'source-map-loader' ],
+                enforce: 'pre'
+            }, {
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                include: __dirname
+            }, {
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract( {
+                    fallback: 'style-loader',
+                    use: [ {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            importLoaders: 2
+                        }
+                    }, {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }, {
+                        loader: 'less-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    } ]
+                } )
+            }, {
+                test: /\.(png|jpe?g|gif|svg)$/,
+                exclude: /icons/,
                 use: [ {
-                    loader: 'css-loader',
+                    loader: 'file-loader',
                     options: {
-                        sourceMap: true,
-                        importLoaders: 2
-                    }
-                }, {
-                    loader: 'postcss-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                }, {
-                    loader: 'less-loader',
-                    options: {
-                        sourceMap: true
+                        name: 'images/[name]---[hash:base64:5].[ext]'
                     }
                 } ]
-            } )
-        }, {
-            test: /\.(png|jpe?g|gif|svg)$/,
-            exclude: /icons/,
-            use: [ {
-                loader: 'file-loader',
-                options: {
-                    name: 'images/[name]---[hash:base64:5].[ext]'
-                }
-            } ]
-        }, {
-            test: /\.svg$/,
-            include: /icons/,
-            use: [ {
-                loader: 'babel-loader'
             }, {
-                loader: 'react-svg-loader',
-                query: {
-                    jsx: true,
-                    svgo: {
-                        plugins: [ {
-                            removeStyleElement: true,
-                            cleanupAttrs: true,
-                            cleanupIDs: true,
-                            mergePaths: true,
-                            removeUselessStrokeAndFill: true,
-                            removeUnusedNS: true,
-                            cleanupNumericValues: true
-                        } ],
-                        floatPrecision: 2,
-                        pretty: true
+                test: /\.svg$/,
+                include: /icons/,
+                use: [ {
+                    loader: 'babel-loader'
+                }, {
+                    loader: 'react-svg-loader',
+                    query: {
+                        jsx: true,
+                        svgo: {
+                            plugins: [ {
+                                removeStyleElement: true,
+                                cleanupAttrs: true,
+                                cleanupIDs: true,
+                                mergePaths: true,
+                                removeUselessStrokeAndFill: true,
+                                removeUnusedNS: true,
+                                cleanupNumericValues: true
+                            } ],
+                            floatPrecision: 2,
+                            pretty: true
+                        }
                     }
-                }
-            } ]
-        } ]
+                } ]
+            }
+        ]
     },
     resolve: {
         modules: [ path.resolve( __dirname, './src' ), 'node_modules' ],
