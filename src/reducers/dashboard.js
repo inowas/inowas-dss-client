@@ -79,6 +79,20 @@ const initialState = {
             fake: true
         } ]
     }, {
+        slug: 'T03',
+        name: 'Scenario Editor',
+        path: 'tools/T03/',
+        models: [ {
+            model_id: '03_1',
+            user_name: 'ADMIN',
+            name: 'DEFAULT MODEL',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A01',
+            created_at: '2017-03-09T18:51:00+00:00',
+            fake: false
+        } ]
+    }, {
         slug: 'T06',
         name: 'MAR method selection',
         path: 'tools/T06/',

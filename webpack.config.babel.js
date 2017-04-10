@@ -3,13 +3,12 @@
 import { DefinePlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin } from 'webpack';
 
 import DashboardPlugin from 'webpack-dashboard/plugin';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
 export default {
-    devtool: '#inline-source-map',
+    devtool: 'eval-source-map',
     devServer: {
         historyApiFallback: true,
         hot: true,
@@ -39,7 +38,6 @@ export default {
         new DefinePlugin( {
             'process.env.NODE_ENV': JSON.stringify( 'development' )
         } ),
-        new ExtractTextPlugin( 'styles.css' ),
         new FaviconsWebpackPlugin( 'images/favicon.png' ),
         new DashboardPlugin()
     ],
@@ -67,26 +65,25 @@ export default {
                 include: __dirname
             }, {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract( {
-                    fallback: 'style-loader',
-                    use: [ {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            importLoaders: 2
-                        }
-                    }, {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }, {
-                        loader: 'less-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    } ]
-                } )
+                use: [ {
+                    loader: 'style-loader'
+                }, {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true,
+                        importLoaders: 2
+                    }
+                }, {
+                    loader: 'postcss-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: 'less-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                } ]
             }, {
                 test: /\.(png|jpe?g|gif|svg)$/,
                 exclude: /icons/,

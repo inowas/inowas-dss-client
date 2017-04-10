@@ -14,6 +14,7 @@ const routes = (
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard}/>
             <Route path="T02(/:id)" component={tools.T02}/>
+            <Route path="T03(/:id)" component={tools.T03}/>
             <Route path="T06(/:id)" component={tools.T06}/>
             <Route path="T07A/:id" component={tools.T07A}/>
             <Route path="T07B/:id" component={tools.T07B}/>
