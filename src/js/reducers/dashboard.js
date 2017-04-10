@@ -351,7 +351,9 @@ const initialState = {
             created_at: '2017-03-09T19:38:00+00:00',
             fake: false
         } ]
-    }, {
+    },
+        /*
+        {
         slug: 'T16A',
         name: 'Saturated hydraulic conductivity based on grain size distribution',
         path: 'tools/T16A/',
@@ -365,7 +367,9 @@ const initialState = {
             created_at: '2017-03-09T19:39:00+00:00',
             fake: false
         } ]
-    }, {
+        },
+        */
+    {
         slug: 'T17',
         name: 'Global MAR portal',
         path: 'tools/T17/',
