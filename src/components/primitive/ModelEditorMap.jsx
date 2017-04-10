@@ -14,6 +14,7 @@ import {
 // import Coordinate from '../../model/Coordinate';
 
 import Icon from './Icon';
+import FloatingToolbox from './FloatingToolbox';
 
 import '../../less/leaflet.less';
 import '../../less/modelEditorMap.less';
@@ -31,6 +32,7 @@ export default class ModelEditorMap extends Component {
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                     <button title="reset view" className="button icon-inside resetView" onClick={this.resetView}><Icon name="marker"/></button>
                 </Map>
+                <FloatingToolbox />
             </div>
         );
     }
