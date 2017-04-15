@@ -80,12 +80,11 @@ export function calculateDiagramData(sieves, total, dSampSieve, hydroData, param
     return data;
 }
 
-export function calculated10(data) {
+export function calculateD(data, percentage) {
     for (let i = 0; i < data.length; i += 1) {
-        if (data[i].Percentage <= 10 && data[i-1].Percentage >= 10){
-            console.log(i);
+        if (data[i].Percentage <= percentage && data[i-1].Percentage >= percentage){
             // return data[i-1].D+((data[i].D - data[i-1].D) (10-data[i-1].Percentage) /(data[i].Percentage - data[i-1].Percentage));
-            return data[i-1].D+((data[i].D - data[i-1].D)*(10-data[i-1].Percentage) /(data[i].Percentage - data[i-1].Percentage));
+            return data[i-1].D+((data[i].D - data[i-1].D)*(percentage-data[i-1].Percentage) /(data[i].Percentage - data[i-1].Percentage));
         }
     }
 }

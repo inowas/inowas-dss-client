@@ -18,7 +18,14 @@ function getInitialState() {
             K: 0,
             total: 0,
             start: "2017-01-20T01:10",
-            d10: 0
+            d5: 0,
+            d10: 0,
+            d17: 0,
+            d20: 0,
+            d30: 0,
+            d50: 0,
+            d60: 0,
+            U: 0
         },
         dSampSieve: {
             id: 'dSampSieve',
@@ -505,8 +512,15 @@ function calculateAndModifyState(state) {
     state.chart.data = calc.calculateDiagramData(state.sieves, state.info.total, state.dSampSieve,
         state.hydroData, state.parametersWet);
 
-    //calculation of d10
-    state.info.d10 =  calc.calculated10(state.chart.data);
+    //calculation of d
+    state.info.d5 =  calc.calculateD(state.chart.data, 5);
+    state.info.d10 =  calc.calculateD(state.chart.data, 10);
+    state.info.d17 =  calc.calculateD(state.chart.data, 17);
+    state.info.d20 =  calc.calculateD(state.chart.data, 20);
+    state.info.d30 =  calc.calculateD(state.chart.data, 30);
+    state.info.d50 =  calc.calculateD(state.chart.data, 50);
+    state.info.d60 =  calc.calculateD(state.chart.data, 60);
+    state.info.U =  state.info.d60/state.info.d10;
     state.info.K = calc.calculatek(CH, T, state.info.d10);
     return state;
 }

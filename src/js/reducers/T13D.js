@@ -1,11 +1,8 @@
-import * as calc from '../calculations/T13C';
+import * as calc from '../calculations/T13D';
 import applyParameterUpdate from './applyParameterUpdate';
 
 function getInitialState() {
     return {
-        background: {
-            'image': '/images/tools/T13C.png'
-        },
         chart: {
             data: [],
             options: {
@@ -13,6 +10,9 @@ function getInitialState() {
                     domain: [0, 'auto']
                 }
             }
+        },
+        settings: {
+            selected: ''
         },
         info: {
           xwd: 0
@@ -24,9 +24,9 @@ function getInitialState() {
             name: 'Average infiltration rate, W(m/d)',
             min: 0.001,
             max: 0.01,
-            value: 0.009,
+            value: 0.00112,
             stepSize: 0.0001,
-            decimals: 4,
+            decimals: 5,
             disable: false
         }, {
             order: 1,
@@ -34,83 +34,59 @@ function getInitialState() {
             name: 'Hydraulic conductivity, K (m/d)',
             min: 10e-2,
             max: 10e2,
-            value: 10.1,
+            value: 30.2,
             stepSize: 10,
             decimals: 2,
             disable: false
         }, {
             order: 2,
-            id: 'ne',
-            name: 'Effective porosity, n (-)',
-            min: 0,
-            max: 0.5,
-            value: 0.35,
-            stepSize: 0.01,
-            decimals: 1,
-        }, {
-            order: 3,
             id: 'L',
             name: 'Aquifer length, L´ (m)',
             min: 0,
             max: 1000,
-            value: 500,
+            value: 1000,
             stepSize: 10,
             decimals: 0,
+            disable: false
         }, {
-            order: 4,
+            order: 3,
             id: 'hL',
             name: 'Downstream head, hL´ (m)',
             min: 0,
             max: 10,
-            value: 1,
+            value: 2,
             stepSize: 0.1,
             decimals: 1,
+            disable: false
         }, {
-            order: 5,
+            order: 4,
             id: 'h0',
             name: 'Upstream head, h0 (m)',
             min: 0,
             max: 10,
-            value: 10,
+            value: 5,
             stepSize: 0.1,
             decimals: 1,
-        }, {
-            order: 6,
-            id: 'xi',
-            name: 'Initial position, xi (m)',
-            min: 0,
-            max: 1000,
-            value: 50,
-            stepSize: 10,
-            decimals: 0,
-        }, {
-            order: 7,
-            id: 'xe',
-            name: 'Arrival location, xe (m)',
-            min: 1,
-            max: 1000,
-            value: 500,
-            stepSize: 10,
-            decimals: 0,
+            disable: false
         }]
     }
-};
-const T13CReducer = (state = getInitialState(), action) => {
+}
+const T13BReducer = (state = getInitialState(), action) => {
     switch (action.type) {
-        case 'RESET_TOOL_T13C':
+        case 'RESET_TOOL_T13B':
             {
                 state = getInitialState();
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CALCULATE_TOOL_T13C':
+        case 'CALCULATE_TOOL_T13B':
             {
                 state = { ...state
                 };
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CHANGE_TOOL_T13C_PARAMETER':
+        case 'CHANGE_TOOL_T13B_PARAMETER':
             {
                 state = { ...state,
                 };
@@ -119,29 +95,7 @@ const T13CReducer = (state = getInitialState(), action) => {
                 var param = state.parameters.find(p => {return p.id === newParam.id});
                 applyParameterUpdate(param, newParam);
 
-                // check xi <= xe <= L
-                let xe = state.parameters.find(p => {return p.id == 'xe'}),
-                xi = state.parameters.find(p => {return p.id == 'xi'}),
-                L = state.parameters.find(p => {return p.id == 'L'});
-
-                if (xe.value < xi.value) {
-                    xe.value = xi.value;
-                }
-
-                if (xe.value > L.value) {
-                    xe.value = L.value;
-                }
-                if (xi.value > L.value) {
-                    xi.value = L.value;
-                }
                 //setting boundaries of ne and K
-                let ne = state.parameters.find(p => {return p.id == 'ne'});
-                if (ne.max > 0.5) {
-                    ne.max = 0.5;
-                }
-                if (ne.max < 0.0) {
-                    ne.max = 0.0;
-                }
                 let K = state.parameters.find(p => {return p.id == 'K'});
                 if (K.max > 10e3) {
                     K.max = 10e3;
@@ -163,10 +117,6 @@ function calculateAndModifyState(state) {
             return p.id == 'K'
         })
         .value;
-    const ne = state.parameters.find(p => {
-            return p.id == 'ne'
-        })
-        .value;
     const L = state.parameters.find(p => {
             return p.id == 'L'
         })
@@ -179,17 +129,8 @@ function calculateAndModifyState(state) {
         return p.id == 'h0'
     })
         .value;
-    const xi = state.parameters.find(p => {
-            return p.id == 'xi'
-        })
-        .value;
-    const xe = state.parameters.find(p => {
-            return p.id == 'xe'
-        })
-        .value;
     state.info.xwd = calc.calculateXwd(L, K, w, hL, h0).toFixed(1);
-    const L1 = L + Math.abs(state.info.xwd);
-    state.chart.data = calc.calculateDiagramData(w, K, ne, L1, hL, xi, xe, 10);
+    const xwd = state.info.xwd;
     return state;
 }
-export default T13CReducer;
+export default T13BReducer;
