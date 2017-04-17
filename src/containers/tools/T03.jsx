@@ -1,11 +1,18 @@
+import * as actions from '../../actions/T03';
+
 import React, { Component, PropTypes } from 'react';
 
+import ModelEditorMap from '../../components/primitive/ModelEditorMap';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
+import { getActiveTool } from '../../reducers/T03/ui';
 import { withRouter } from 'react-router';
-import ModelEditorMap from '../../components/primitive/ModelEditorMap';
 
 class T03 extends Component {
+
+    static propTypes = {
+        tool: PropTypes.string
+    }
 
     state = {
         navigation: [ ]
@@ -17,7 +24,7 @@ class T03 extends Component {
         return (
             <div className="toolT03">
                 <Navbar links={navigation}/>
-                <ModelEditorMap />
+                <ModelEditorMap {...this.props}/>
             </div>
         );
     }
@@ -25,10 +32,12 @@ class T03 extends Component {
 }
 
 const mapStateToProps = state => {
-    return { };
+    return {
+        tool: getActiveTool( state.T03.ui )
+    };
 };
 
 // eslint-disable-next-line no-class-assign
-T03 = withRouter( connect(mapStateToProps, { })( T03 ));
+T03 = withRouter( connect( mapStateToProps, actions )( T03 ));
 
 export default T03;

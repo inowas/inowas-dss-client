@@ -1,12 +1,12 @@
 @import "variables.less";
 
 .accordion {
-    .accordion-item {
+    > .accordion-item {
         border: 0;
         border-radius: 0;
         box-shadow: none;
 
-        .accordion-item-header {
+        > .accordion-item-header {
             background: transparent;
             border: 0;
             border-bottom: 1px solid @grey-semi-bright;
@@ -45,9 +45,13 @@
         .accordion-item-body {
             display: none;
             border-bottom: 1px solid @grey-semi-bright;
+
+            > .accordion-item-empty {
+                min-height: 2em;
+            }
         }
 
-        &[data-active=true] .accordion-item-body {
+        &[data-active=true] > .accordion-item-body {
             display: block;
         }
     }

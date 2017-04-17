@@ -1,36 +1,35 @@
-import React from "react"
-import { hideBoundaryProperties } from "../../actions/ApplicationActions"
+import React from 'react';
+import { hideBoundaryProperties } from '../../actions/ApplicationActions';
 
 export default class MapOverlay extends React.Component {
 
-    enableMap() {
-        this.context.map._handlers.forEach(function (handler) {
-            handler.enable();
+    enableMap( ) {
+        this.context.map._handlers.forEach( function( handler ) {
+            handler.enable( );
         });
     }
 
-    disableMap() {
-        this.context.map._handlers.forEach(function (handler) {
-            handler.disable();
+    disableMap( ) {
+        this.context.map._handlers.forEach( function( handler ) {
+            handler.disable( );
         });
     }
 
-    hide() {
-        this.enableMap();
-        hideBoundaryProperties();
+    hide( ) {
+        this.enableMap( );
+        hideBoundaryProperties( );
     }
 
-
-    render() {
-        if (this.props.appState.boundaryProperties){
-            this.disableMap();
+    render( ) {
+        if ( this.props.appState.boundaryProperties ) {
+            this.disableMap( );
             return (
                 <div>
-                    <div className="map-overlay-darkner"></div>
+                    <div className="map-overlay-darkner" />
                     <div className="map-overlay">
                         <div className="panel panel-primary">
                             <div className="panel-heading">
-                                <span className="glyphicon glyphicon-remove" onClick={ this.hide.bind(this) } />
+                                <span className="glyphicon glyphicon-remove" onClick={this.hide.bind( this )}/>
                             </div>
 
                             <div className="panel-body">
