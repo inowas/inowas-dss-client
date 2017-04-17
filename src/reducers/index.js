@@ -6,6 +6,7 @@ import appState from './applicationStateReducer';
 import dashboard from './dashboard';
 // import models from './modelsReducer';
 import T02 from './T02';
+import T03 from './T03';
 import T06 from './T06';
 import T07 from './T07';
 import T09A from './T09A';
@@ -35,6 +36,7 @@ const rootReducer = combineReducers( {
     // model,
     // scenarioAnalysis,
     T02,
+    T03,
     T06,
     T07,
     T09A,

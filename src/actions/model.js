@@ -1,5 +1,5 @@
 import axios from '../axios';
-import store from '../store'
+import store from '../store';
 
 const getApiKey = function() {
     return store.getState().user.apiKey;
@@ -19,7 +19,7 @@ export function fetchModelBoundary( id ) {
     const apiKey = getApiKey();
     return {
         type: 'FETCH_MODEL_BOUNDARY',
-        payload: axios.get('/modflow/boundaries/'+ id +'.json', {
+        payload: axios.get('/modflow/boundaries/' + id + '.json', {
             headers: {'X-AUTH-TOKEN': apiKey}
         })
     };
@@ -29,7 +29,7 @@ export function fetchModelById(id) {
     const apiKey = getApiKey();
     return {
         type: 'FETCH_MODEL',
-        payload: axios.get('/modflow/models/'+ id +'.json', {
+        payload: axios.get('/modflow/models/' + id + '.json', {
             headers: {'X-AUTH-TOKEN': apiKey}
         })
     };
@@ -47,23 +47,21 @@ export function fetchModelMap() {
 
 export function calculateModel(tool, modelId) {
     const apiKey = getApiKey();
-    if ( tool=='modflow' ){
+    if ( tool == 'modflow' ) {
         return {
             type: 'CALCULATE_MODEL',
-            payload: axios.post('modflow/calculation/'+ modelId +'.json', {},{
+            payload: axios.post('modflow/calculation/' + modelId + '.json', {}, {
                 headers: {'X-AUTH-TOKEN': apiKey}
             })
         };
     }
 
-    if ( tool=='scenarioanalysis' ){
+    if ( tool == 'scenarioanalysis' ) {
         return {
             type: 'CALCULATE_MODEL',
-            payload: axios.post('scenarioanalysis/calculation/'+ modelId +'.json', {},{
+            payload: axios.post('scenarioanalysis/calculation/' + modelId + '.json', {}, {
                 headers: {'X-AUTH-TOKEN': apiKey}
             })
         };
     }
-
-
 }
