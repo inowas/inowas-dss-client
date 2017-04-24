@@ -1,7 +1,7 @@
 import { Plugins } from 'inline-style-linter';
 import Radium from 'radium';
 import lintStyles from 'radium-plugin-linter';
-import prefixAll from 'radium-plugin-prefix-all';
+// import prefixAll from 'radium-plugin-prefix-all';
 import validityPseudosPlugin from 'radium-plugin-validity-pseudos';
 
 function ConfiguredRadium( component ) {
@@ -14,7 +14,7 @@ function ConfiguredRadium( component ) {
             lintStyles,
             validityPseudosPlugin,
             Radium.Plugins.prefix,
-            prefixAll,
+            // prefixAll,
             Radium.Plugins.checkProps
         ],
         linter: {

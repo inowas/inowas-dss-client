@@ -10,17 +10,26 @@
     background-color: fade(@grey-dark, 70%);
 
     .floatingTool {
-        position: fixed;
-        top: @spacing-large + @navbar-height;
+        position: absolute;
+        top: @spacing-large;
         left: 2 * @grid-column + 3 * @grid-gutter;
+        bottom: @spacing-large;
+        overflow: hidden;
         right: @spacing-large;
         z-index: 1800;
         box-shadow: @box-shadow;
         background-color: @background-bright;
         padding: @spacing-regular;
+        display: flex;
+        flex-direction: column;
 
         .header {
             text-align: right;
+        }
+
+        .content {
+            flex: 1;
+            position: relative;
         }
     }
 }

@@ -16,10 +16,17 @@ export default class ListItem extends Component {
     getStyles( ) {
         return {
             listItem: {
-                padding: styleGlobals.dimensions.spacing.medium,
-                cursor: this.props.clickAction
-                    ? 'pointer'
-                    : 'normal'
+                base: {
+                    padding: styleGlobals.dimensions.spacing.medium,
+                },
+
+                link: {
+                    cursor: 'pointer',
+
+                    ':hover': {
+                        color: '#000000'
+                    }
+                }
             },
 
             icon: {
@@ -47,7 +54,7 @@ export default class ListItem extends Component {
         const styles = this.getStyles( );
 
         return (
-            <li {...rest} onClick={clickAction} style={[ styles.listItem, style ]}>
+            <li {...rest} onClick={clickAction} style={[ style, styles.listItem.base, (!clickAction || styles.listItem.link) ]}>
                 {this.renderIcon( icon, styles.icon )}
                 {children}
             </li>
