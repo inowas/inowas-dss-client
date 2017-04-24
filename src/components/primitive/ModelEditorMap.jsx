@@ -17,6 +17,18 @@ export default class ModelEditorMap extends Component {
         setActiveTool: PropTypes.func
     };
 
+    state = {
+        properties: [{
+            slug: 'setup',
+            name: 'Setup',
+            icon: <Icon name="settings"/>
+        }, {
+            slug: 'boundaries',
+            name: 'Boundaries',
+            icon: <Icon name="marker"/>
+        }]
+    }
+
     componentDidMount( ) {
         // manually emit a resize event so the leaflet maps recalculate their container size
         const event = document.createEvent( 'HTMLEvents' );
@@ -56,6 +68,7 @@ export default class ModelEditorMap extends Component {
 
     render( ) {
         const { setActiveTool } = this.props;
+        const { properties } = this.state;
 
         return (
             <div className="modelEditorMap-wrapper">
@@ -64,7 +77,7 @@ export default class ModelEditorMap extends Component {
                     <button title="reset view" className="button icon-inside resetView" onClick={this.resetView}><Icon name="marker"/></button>
                 </Map>
                 {this.renderTool( )}
-                <FloatingToolbox onToolClick={setActiveTool}/>
+                <FloatingToolbox items={properties} onToolClick={setActiveTool}/>
             </div>
         );
     }

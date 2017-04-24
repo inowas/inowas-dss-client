@@ -1,12 +1,27 @@
-import React from "react";
+import React, { Component, PropTypes } from 'react';
 
-export default class List extends React.Component {
+import ConfiguredRadium from 'ConfiguredRadium';
 
-    render() {
+const styles = {
+    list: {
+        listStyle: 'none',
+        padding: 0,
+        margin: 0
+    }
+};
+
+@ConfiguredRadium
+export default class List extends Component {
+
+    static propTypes = {
+        children: PropTypes.node
+    }
+
+    render( ) {
         return (
-            <div className="list-group">
+            <ul style={styles.list}>
                 {this.props.children}
-            </div>
+            </ul>
         );
     }
 
