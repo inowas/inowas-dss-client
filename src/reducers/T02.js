@@ -1,9 +1,10 @@
 import applyParameterUpdate from './applyParameterUpdate';
+import image from '../images/tools/T02.png';
 
 function getInitialState() {
     return {
         background: {
-            'image': '/images/tools/T02.png'
+            'image': image
         },
         settings: {
             variable: 'x'
@@ -119,7 +120,7 @@ const T02Reducer = (state = getInitialState(), action) => {
             };
 
             const newParam = action.payload;
-            var param = state.parameters.find(p => {
+            const param = state.parameters.find(p => {
                 return p.id === newParam.id
             });
             applyParameterUpdate(param, newParam);
