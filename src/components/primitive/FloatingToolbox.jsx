@@ -27,7 +27,7 @@ export default class FloatingToolbox extends Component {
             <Accordion className="floatingToolbox col-abs-2">
                 <AccordionItem heading="Toolbox">
                     <List>
-                        {items.map( i => <ListItem icon={i.icon} clickAction={this.onClick(i.slug)}>{i.name}</ListItem>)}
+                        {items.map( i => <ListItem key={i.slug} icon={i.icon} clickAction={this.onClick(i.slug)}>{i.name}</ListItem>)}
                     </List>
                 </AccordionItem>
             </Accordion>

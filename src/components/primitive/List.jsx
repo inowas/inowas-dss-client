@@ -14,12 +14,15 @@ const styles = {
 export default class List extends Component {
 
     static propTypes = {
-        children: PropTypes.node
+        children: PropTypes.node,
+        style: PropTypes.object
     }
 
     render( ) {
+        const {style, ...rest} = this.props;
+
         return (
-            <ul style={styles.list}>
+            <ul {...rest} style={[style, styles.list]}>
                 {this.props.children}
             </ul>
         );

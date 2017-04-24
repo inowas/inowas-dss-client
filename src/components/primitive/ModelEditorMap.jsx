@@ -7,6 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import FloatingTool from './FloatingTool';
 import FloatingToolbox from './FloatingToolbox';
 import Icon from './Icon';
+import T03Boundaries from '../../containers/tools/T03Boundaries';
 
 // import Coordinate from '../../model/Coordinate';
 
@@ -18,15 +19,17 @@ export default class ModelEditorMap extends Component {
     };
 
     state = {
-        properties: [{
-            slug: 'setup',
-            name: 'Setup',
-            icon: <Icon name="settings"/>
-        }, {
-            slug: 'boundaries',
-            name: 'Boundaries',
-            icon: <Icon name="marker"/>
-        }]
+        properties: [
+            {
+                slug: 'setup',
+                name: 'Setup',
+                icon: <Icon name="settings"/>
+            }, {
+                slug: 'boundaries',
+                name: 'Boundaries',
+                icon: <Icon name="marker"/>
+            }
+        ]
     }
 
     componentDidMount( ) {
@@ -37,28 +40,40 @@ export default class ModelEditorMap extends Component {
     }
 
     enableMap = ( ) => {
-        this.refs.map.leafletElement._handlers.forEach( function( handler ) {
-            handler.enable( );
-        });
+        if ( this.refs.map ) {
+            this.refs.map.leafletElement._handlers.forEach( function( handler ) {
+                handler.enable( );
+            });
+        }
     }
 
     disableMap = ( ) => {
-        this.refs.map.leafletElement._handlers.forEach( function( handler ) {
-            handler.disable( );
-        });
+        if ( this.refs.map ) {
+            this.refs.map.leafletElement._handlers.forEach( function( handler ) {
+                handler.disable( );
+            });
+        }
     }
 
-    unsetActiveTool = () => {
-        this.props.setActiveTool('');
+    unsetActiveTool = ( ) => {
+        this.props.setActiveTool( '' );
     }
 
     renderTool( ) {
         const { tool } = this.props;
 
+        let node = tool;
+
+        switch ( tool ) {
+            case 'boundaries':
+                node = <T03Boundaries/>;
+                break;
+        }
+
         if ( tool ) {
             return (
                 <FloatingTool enableMap={this.enableMap} disableMap={this.disableMap} close={this.unsetActiveTool}>
-                    {tool}
+                    {node}
                 </FloatingTool>
             );
         }

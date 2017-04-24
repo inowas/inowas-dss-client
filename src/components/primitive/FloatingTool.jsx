@@ -30,7 +30,9 @@ export default class FloatingTool extends Component {
                     <div className="header">
                         <button className="link" onClick={close}><Icon name="close"/></button>
                     </div>
-                    {children}
+                    <div className="content">
+                        {children}
+                    </div>
                 </div>
             </div>
         );
