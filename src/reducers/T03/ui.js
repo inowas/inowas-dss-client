@@ -1,6 +1,6 @@
 function getInitialState() {
     return {
-        activeTool: null,
+        activeTool: 'setup',
         activeBoundary: null
     };
 }
