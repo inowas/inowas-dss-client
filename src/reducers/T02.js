@@ -14,8 +14,8 @@ function getInitialState() {
             id: 'w',
             name: 'Percolation rate, w(m/d)',
             min: 0,
-            validMin: function (x) {
-                return x >= 0
+            validMin: function(x) {
+                return x >= 0;
             },
             max: 10,
             value: 0.045,
@@ -26,8 +26,8 @@ function getInitialState() {
             id: 'L',
             name: 'Basin length, L (m)',
             min: 0,
-            validMin: function (x) {
-                return x > 0
+            validMin: function(x) {
+                return x > 0;
             },
             max: 100,
             value: 40,
@@ -38,8 +38,8 @@ function getInitialState() {
             id: 'W',
             name: 'Basin width, W (m)',
             min: 0,
-            validMin: function (x) {
-                return x > 0
+            validMin: function(x) {
+                return x > 0;
             },
             max: 100,
             value: 20,
@@ -50,8 +50,8 @@ function getInitialState() {
             id: 'hi',
             name: 'Initial groundwater Level, hi (m)',
             min: 0,
-            validMin: function (x) {
-                return x >= 0
+            validMin: function(x) {
+                return x >= 0;
             },
             max: 100,
             value: 35,
@@ -62,12 +62,12 @@ function getInitialState() {
             id: 'Sy',
             name: 'Specific yield, Sy (-)',
             min: 0.000,
-            validMin: function (x) {
-                return x > 0
+            validMin: function(x) {
+                return x > 0;
             },
             max: 0.5,
-            validMax: function (x) {
-                return x <= 0.5
+            validMax: function(x) {
+                return x <= 0.5;
             },
             value: 0.085,
             stepSize: 0.001,
@@ -77,12 +77,12 @@ function getInitialState() {
             id: 'K',
             name: 'Hydraulic conductivity, K (m/d)',
             min: 0.1,
-            validMin: function (x) {
-                return x > 0
+            validMin: function(x) {
+                return x > 0;
             },
             max: 10,
-            validMax: function (x) {
-                return x <= 100000
+            validMax: function(x) {
+                return x <= 100000;
             },
             value: 1.83,
             stepSize: 0.1,
@@ -92,15 +92,15 @@ function getInitialState() {
             id: 't',
             name: 'Infiltration time, t (d)',
             min: 0,
-            validMin: function (x) {
-                return x > 0
+            validMin: function(x) {
+                return x > 0;
             },
             max: 100,
             value: 1.5,
             stepSize: 1,
             decimals: 1
         }]
-    }
+    };
 }
 
 const T02Reducer = (state = getInitialState(), action) => {
@@ -121,7 +121,7 @@ const T02Reducer = (state = getInitialState(), action) => {
 
             const newParam = action.payload;
             const param = state.parameters.find(p => {
-                return p.id === newParam.id
+                return p.id === newParam.id;
             });
             applyParameterUpdate(param, newParam);
             break;
