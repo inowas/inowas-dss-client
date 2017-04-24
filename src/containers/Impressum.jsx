@@ -8,6 +8,10 @@ import Slider from '../components/primitive/Slider';
 import SliderItem from '../components/primitive/SliderItem';
 import SliderControl from '../components/primitive/SliderControl';
 import SliderControlItem from '../components/primitive/SliderControlItem';
+import carouselSlide01 from '../images/landingPage/carousel-slide-01.png';
+import carouselSlide02 from '../images/landingPage/carousel-slide-02.png';
+import carouselSlide03 from '../images/landingPage/carousel-slide-03.png';
+import carouselSlide04 from '../images/landingPage/carousel-slide-04.png';
 
 export default class Impressum extends Component {
 
@@ -25,7 +29,7 @@ export default class Impressum extends Component {
                                     <p>Web-based applications for planning, management and optimization of managed aquifer recharge (MAR) schemes</p>
                                 </div>
                                 <div className="image-wrapper">
-                                    <img src="../images/landingPage/carousel-slide-01.png" alt="Web MAR Apps" width="558" height="326"/>
+                                    <img src={carouselSlide01} alt="Web MAR Apps" width="558" height="326"/>
                                 </div>
                             </SliderItem>
 
@@ -35,7 +39,7 @@ export default class Impressum extends Component {
                                     <p>Free web-based modeling tools for simulation of processes ocurring during managed aquifer recharge</p>
                                 </div>
                                 <div className="image-wrapper">
-                                    <img src="../images/landingPage/carousel-slide-02.png" alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
+                                    <img src={carouselSlide02} alt="Web MAR Tools" width="558" height="326" className="second-slide"/>
                                 </div>
                             </SliderItem>
 
@@ -45,7 +49,7 @@ export default class Impressum extends Component {
                                     <p>Free web-based geospatial information system to upload, manage and share MAR-related geospatial and time series data</p>
                                 </div>
                                 <div className="image-wrapper">
-                                    <img src="../images/landingPage/carousel-slide-03.png" alt="Web MAR Data" width="558" height="326" className="third-slide"/>
+                                    <img src={carouselSlide03} alt="Web MAR Data" width="558" height="326" className="third-slide"/>
                                 </div>
                             </SliderItem>
 
@@ -55,7 +59,7 @@ export default class Impressum extends Component {
                                     <p>Detailed documentation of all applications, tools and database components, including practical examples and references for further read.</p>
                                 </div>
                                 <div className="image-wrapper">
-                                    <img src="../images/landingPage/carousel-slide-04.png" alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
+                                    <img src={carouselSlide04} alt="Web MAR Wiki" width="558" height="326" className="fourth-slide"/>
                                 </div>
                             </SliderItem>
 

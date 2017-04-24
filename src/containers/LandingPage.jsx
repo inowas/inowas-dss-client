@@ -1,22 +1,22 @@
-import React from 'react';
-
 import '../less/landingPage.less';
 
-import Navbar from './Navbar';
 import Footer from '../components/Footer';
-import Slider from '../components/primitive/Slider';
+import Navbar from './Navbar';
 import Popup from '../components/primitive/Popup';
-import SliderItem from '../components/primitive/SliderItem';
+import React from 'react';
+import Slider from '../components/primitive/Slider';
 import SliderControl from '../components/primitive/SliderControl';
 import SliderControlItem from '../components/primitive/SliderControlItem';
-
+import SliderItem from '../components/primitive/SliderItem';
 import carouselSlide01 from '../images/landingPage/carousel-slide-01.png';
 import carouselSlide02 from '../images/landingPage/carousel-slide-02.png';
 import carouselSlide03 from '../images/landingPage/carousel-slide-03.png';
 import carouselSlide04 from '../images/landingPage/carousel-slide-04.png';
-import toolBoxImage01 from '../images/landingPage/toolbox-image-01.png';
-import toolBoxImage02 from '../images/landingPage/toolbox-image-02.png';
-import toolBoxImage03 from '../images/landingPage/toolbox-image-03.png';
+import documentationImage from '../images/landingPage/documentation-image.png';
+import geoDatabaseImage from '../images/landingPage/geo-database-image.png';
+import screenshot01 from '../images/landingPage/screenshot-1.png';
+import screenshot02 from '../images/landingPage/screenshot-2.png';
+import screenshot03 from '../images/landingPage/screenshot-3.png';
 import toolBoxIcon01 from '../images/landingPage/toolbox-icon-01.png';
 import toolBoxIcon02 from '../images/landingPage/toolbox-icon-02.png';
 import toolBoxIcon03 from '../images/landingPage/toolbox-icon-03.png';
@@ -26,11 +26,9 @@ import toolBoxIcon06 from '../images/landingPage/toolbox-icon-06.png';
 import toolBoxIcon07 from '../images/landingPage/toolbox-icon-07.png';
 import toolBoxIcon08 from '../images/landingPage/toolbox-icon-08.png';
 import toolBoxIcon09 from '../images/landingPage/toolbox-icon-09.png';
-import geoDatabaseImage from '../images/landingPage/geo-database-image.png';
-import documentationImage from '../images/landingPage/documentation-image.png';
-import screenshot01 from '../images/landingPage/screenshot-1.png';
-import screenshot02 from '../images/landingPage/screenshot-2.png';
-import screenshot03 from '../images/landingPage/screenshot-3.png';
+import toolBoxImage01 from '../images/landingPage/toolbox-image-01.png';
+import toolBoxImage02 from '../images/landingPage/toolbox-image-02.png';
+import toolBoxImage03 from '../images/landingPage/toolbox-image-03.png';
 
 export default class LandingPage extends React.Component {
 

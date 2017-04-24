@@ -13,7 +13,7 @@ export default class Slider extends Component {
     render( ) {
         return (
             <footer className="footer">
-                <div className="content grid-container">
+                <div className="content app-width grid-container">
                     <nav className="col col-abs-1">
                         <ul className="nav">
                             <li>
