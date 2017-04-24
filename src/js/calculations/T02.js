@@ -9,7 +9,7 @@ export function calculateDiagramData(variable, w, L, W, hi, Sy, K, t, x_min, x_m
 
     // eq 2
     function S(alpha, beta) {
-        return numericallyIntegrate(0, 1, 0.05, function(tau) {
+        return numericallyIntegrate(0, 1, 0.001, function(tau) {
             if (tau != 0) {
                 const sqrttau = Math.sqrt(tau);
                 return erf(alpha / sqrttau) * erf(beta / sqrttau);
