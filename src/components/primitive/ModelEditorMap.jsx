@@ -8,8 +8,8 @@ import FloatingTool from './FloatingTool';
 import FloatingToolbox from './FloatingToolbox';
 import Icon from './Icon';
 import T03Boundaries from '../../containers/tools/T03Boundaries';
+import T03Setup from '../../containers/tools/T03Setup';
 
-// import Coordinate from '../../model/Coordinate';
 
 export default class ModelEditorMap extends Component {
 
@@ -68,6 +68,9 @@ export default class ModelEditorMap extends Component {
             case 'boundaries':
                 node = <T03Boundaries/>;
                 break;
+            case 'setup':
+                node = <T03Setup/>;
+                break;
         }
 
         if ( tool ) {
@@ -87,7 +90,7 @@ export default class ModelEditorMap extends Component {
 
         return (
             <div className="modelEditorMap-wrapper">
-                <Map ref="map" center={[ 51.505, -0.09 ]} zoom={13} className="modelEditorMap" zoomControl={false}>
+                <Map ref="map" center={[ 0, 0 ]} zoom={2} className="modelEditorMap" zoomControl={false}>
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                     <button title="reset view" className="button icon-inside resetView" onClick={this.resetView}><Icon name="marker"/></button>
                 </Map>

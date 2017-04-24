@@ -1,4 +1,4 @@
-import * as actions from '../../actions/T03';
+import { setActiveTool, setActiveBoundary } from '../../actions/T03';
 
 import React, { Component, PropTypes } from 'react';
 
@@ -78,6 +78,7 @@ class T03Boundaries extends Component {
         const {
             style,
             boundary,
+            // eslint-disable-next-line no-shadow
             setActiveBoundary,
             ...rest
         } = this.props;
@@ -100,6 +101,6 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-T03Boundaries = connect( mapStateToProps, actions )( T03Boundaries );
+T03Boundaries = connect( mapStateToProps, { setActiveBoundary } )( T03Boundaries );
 
 export default T03Boundaries;
