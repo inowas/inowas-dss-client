@@ -3,18 +3,36 @@ export function calculatek(CH, T, d10) {
 }
 
 export function calculateDiagramData(sieves, total, dSampSieve, hydroData, parametersWet) {
-
-    const rhoS = parametersWet.rhoS;
-    const Mh = parametersWet.Mh;
-    const Fm = parametersWet.Fm;
-    const h = parametersWet.h;
-    const h0= parametersWet.h0;
-    const Lh= parametersWet.Lh;
-    const VA =  parametersWet.VA;
-    const Az = parametersWet.Az;
-    const Smin= parametersWet.Smin;
-    const Smax= parametersWet.Smax;
-
+    const rhoS = parametersWet.find(p => {
+        return p.name == 'rhoS'
+    }).value;
+    const Mh = parametersWet.find(p => {
+        return p.name == 'Mh'
+    }).value;
+    const Fm = parametersWet.find(p => {
+        return p.name == 'Fm'
+    }).value;
+    const h = parametersWet.find(p => {
+        return p.name == 'h'
+    }).value;
+    const h0 = parametersWet.find(p => {
+        return p.name == 'h0'
+    }).value;
+    const Lh = parametersWet.find(p => {
+        return p.name == 'Lh'
+    }).value;
+    const VA = parametersWet.find(p => {
+        return p.name == 'VA'
+    }).value;
+    const Az = parametersWet.find(p => {
+        return p.name == 'Az'
+    }).value;
+    const Smin = parametersWet.find(p => {
+        return p.name == 'Smin'
+    }).value;
+    const Smax = parametersWet.find(p => {
+        return p.name == 'Smax'
+    }).value;
     var tot = 0;
     function calcPercentage(val) {
         tot = tot + val;
@@ -62,12 +80,11 @@ export function calculateDiagramData(sieves, total, dSampSieve, hydroData, param
     return data;
 }
 
-export function calculated10(data) {
+export function calculateD(data, percentage) {
     for (let i = 0; i < data.length; i += 1) {
-        if (data[i].Percentage <= 10 && data[i-1].Percentage >= 10){
-            console.log(i);
+        if (data[i].Percentage <= percentage && data[i-1].Percentage >= percentage){
             // return data[i-1].D+((data[i].D - data[i-1].D) (10-data[i-1].Percentage) /(data[i].Percentage - data[i-1].Percentage));
-            return data[i-1].D+((data[i].D - data[i-1].D)*(10-data[i-1].Percentage) /(data[i].Percentage - data[i-1].Percentage));
+            return data[i-1].D+((data[i].D - data[i-1].D)*(percentage-data[i-1].Percentage) /(data[i].Percentage - data[i-1].Percentage));
         }
     }
 }

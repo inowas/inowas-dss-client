@@ -53,7 +53,7 @@ function getInitialState() {
         }, {
             order: 4,
             id: 'hL',
-            name: 'Downstream fixed head boundary, hL (m)',
+            name: 'Downstream fixed head boundary, hL´ (m)',
             min: 0,
             max: 10,
             value: 2,

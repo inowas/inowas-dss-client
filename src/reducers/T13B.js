@@ -27,9 +27,9 @@ function getInitialState() {
             name: 'Average infiltration rate, W(m/d)',
             min: 0.001,
             max: 0.01,
-            value: 0.009,
+            value: 0.00112,
             stepSize: 0.0001,
-            decimals: 4,
+            decimals: 5,
             disable: false
         }, {
             order: 1,
@@ -37,7 +37,7 @@ function getInitialState() {
             name: 'Hydraulic conductivity, K (m/d)',
             min: 10e-2,
             max: 10e2,
-            value: 10.1,
+            value: 30.2,
             stepSize: 10,
             decimals: 2,
             disable: false
@@ -47,17 +47,17 @@ function getInitialState() {
             name: 'Aquifer length, L´ (m)',
             min: 0,
             max: 1000,
-            value: 500,
+            value: 1000,
             stepSize: 10,
             decimals: 0,
             disable: false
         }, {
             order: 3,
             id: 'hL',
-            name: 'Downstream head, hL (m)',
+            name: 'Downstream head, hL´ (m)',
             min: 0,
             max: 10,
-            value: 1,
+            value: 2,
             stepSize: 0.1,
             decimals: 1,
             disable: false
@@ -67,7 +67,7 @@ function getInitialState() {
             name: 'Upstream head, h0 (m)',
             min: 0,
             max: 10,
-            value: 10,
+            value: 5,
             stepSize: 0.1,
             decimals: 1,
             disable: false
@@ -79,7 +79,7 @@ function getInitialState() {
             max: 0.5,
             value: 0.35,
             stepSize: 0.01,
-            decimals: 1,
+            decimals: 2,
             disable: true
         }, {
             order: 6,
@@ -97,7 +97,7 @@ function getInitialState() {
             name: 'Arrival location, xe (m)',
             min: 1,
             max: 1000,
-            value: 500,
+            value: 200,
             stepSize: 10,
             decimals: 0,
             disable: true

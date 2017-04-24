@@ -8,7 +8,7 @@ function getInitialState() {
         }, {
             name: 'Perennial Rivers',
             category: 'Source of water',
-            selected: false,
+            selected: true,
             applicable_methods: ['Ponds', 'Flooding', 'Ditches', 'EI', 'IBF', 'ASR', 'ASTR', 'W-S-B', 'SS Dam', 'RD', 'Sand dam']
         }, {
             name: 'Storage Dams/ Reservoir',
