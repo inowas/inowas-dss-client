@@ -1,33 +1,56 @@
-import React from 'react';
-import {showBoundaryProperties} from '../../actions/ApplicationActions';
+import React, { Component, PropTypes } from 'react';
 
-export default class ListItem extends React.Component {
+import ConfiguredRadium from 'ConfiguredRadium';
+import styleGlobals from 'styleGlobals';
 
-    sBoundaryProperties(bType) {
-        showBoundaryProperties(bType);
+@ConfiguredRadium
+export default class ListItem extends Component {
+
+    static propTypes = {
+        children: PropTypes.node,
+        icon: PropTypes.element,
+        style: PropTypes.object,
+        clickAction: PropTypes.func
     }
 
-    getClassNames(active) {
-        if (active) {
-            return 'list-group-item active';
+    getStyles( ) {
+        return {
+            listItem: {
+                padding: styleGlobals.dimensions.spacing.medium,
+                cursor: this.props.clickAction
+                    ? 'pointer'
+                    : 'normal'
+            },
+
+            icon: {
+                marginRight: '1em'
+            }
+        };
+    }
+
+    renderIcon( icon, style ) {
+        if ( icon ) {
+            return React.cloneElement(icon, { style });
         }
-
-        return 'list-group-item';
+        return null;
     }
 
-    render() {
+    render( ) {
+        const {
+            icon,
+            children,
+            style,
+            clickAction,
+            ...rest
+        } = this.props;
+
+        const styles = this.getStyles( );
+
         return (
-            <span className={'list-item ' + this.getClassNames(this.props.active)} onClick={this
-                .sBoundaryProperties
-                .bind(this, this.props.type)}>
-                {this.props.icon}
-                {this.props.children}
-                <span className="badge">{this
-                        .props
-                        .boundaries
-                        .filter(b => b.type == this.props.type)
-                        .length}</span>
-            </span>
+            <li {...rest} onClick={clickAction} style={[ styles.listItem, style ]}>
+                {this.renderIcon( icon, styles.icon )}
+                {children}
+            </li>
         );
     }
 }

@@ -13,7 +13,7 @@ export default class Icon extends Component {
     }
 
     render() {
-        const { name, className } = this.props;
+        const { name, className, ...rest } = this.props;
         const icon = icons[name];
         if (icon === undefined) {
             // eslint-disable-next-line no-console
@@ -22,7 +22,7 @@ export default class Icon extends Component {
         }
 
         return (
-            <span className={'icon' + ' ' + (className || '')}>
+            <span {...rest} className={'icon' + ' ' + (className || '')}>
                 {icon}
             </span>
         );
