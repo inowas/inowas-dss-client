@@ -1,4 +1,6 @@
 import React from 'react';
+import image13B from '../../images/tools/T13B.png';
+import image13C from '../../images/tools/T13C.png';
 
 export default class Settings extends React.Component {
     image() {
@@ -6,14 +8,14 @@ export default class Settings extends React.Component {
         if (this.props.data.xwd >= 0) {
             object= {
                 name: 'Tool 13B',
-                img: '/images/tools/T13B.png',
-                href: "#/tools/T13B"
+                img: image13B,
+                href: "../T13B/13B_1"
             }
         } else {
             object= {
                 name: 'Tool 13C',
-                img: '/images/tools/T13C.png',
-                href: "#/tools/T13C"
+                img: image13C,
+                href: "../T13C/13C_1"
             }
         }
         return object;

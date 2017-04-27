@@ -225,7 +225,7 @@ const initialState = {
             created_at: '2017-03-09T19:16:00+00:00',
             fake: false
         } ]
-    },*/ {
+    }, {
         slug: 'T13A',
         name: 'Travel time through unconfined aquifer // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge',
         path: 'tools/T13A/',
@@ -273,6 +273,20 @@ const initialState = {
         path: 'tools/T13E/',
         models: [ {
             model_id: '13E_1',
+            user_name: 'ADMIN',
+            name: 'DEFAULT MODEL',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A04',
+            created_at: '2017-03-09T19:24:00+00:00',
+            fake: false
+        } ]
+    },*/ {
+        slug: 'T13',
+        name: 'Travel time through unconfined aquifer',
+        path: 'tools/T13/',
+        models: [ {
+            model_id: '13',
             user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
