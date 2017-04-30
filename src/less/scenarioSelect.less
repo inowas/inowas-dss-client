@@ -1,0 +1,40 @@
+@import "variables.less";
+
+.scenarioSelect {
+    display: flex;
+    .item {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        max-width: 25%;
+        padding: 0;
+        margin: @spacing-regular;
+        padding-right: @spacing-regular;
+
+        >.toggle {
+            background-color: @background-bright;
+            border: 0;
+            cursor: pointer;
+            margin-right: @spacing-small;
+        }
+
+        >.content {
+            flex: 1;
+
+            h3 {
+                margin-top: 0;
+                text-align: left;
+            }
+        }
+
+        &:not(:last-child) {
+            border-right: 1px solid @grey-semi;
+        }
+
+        &[data-selected=true] {
+            >.toggle {
+                color: @primary;
+            }
+        }
+    }
+}

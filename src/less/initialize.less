@@ -1,0 +1,83 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+:focus {
+  outline: 0;
+}
+
+::-moz-selection {
+  background: @accent;
+  text-shadow: none;
+  color: @color-bright;
+}
+
+::selection {
+  background: @accent;
+  text-shadow: none;
+  color: @color-bright;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+}
+
+svg {
+  fill: currentColor;
+}
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid @grey-dark;
+  margin: @spacing-small 0;
+  padding: 0;
+}
+
+form {
+  margin: 0;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+label {
+  cursor: pointer;
+}
+
+input + label {
+  margin-left: 0.5em;
+}
+
+p {
+    margin: 0;
+    padding-bottom: 1em;
+}
+
+p:last-child {
+    padding-bottom: 0;
+}

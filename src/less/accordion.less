@@ -1,0 +1,54 @@
+@import "variables.less";
+
+.accordion {
+    .accordion-item {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+
+        .accordion-item-header {
+            background: transparent;
+            border: 0;
+            border-bottom: 1px solid @grey-semi-bright;
+            border-radius: 0;
+            padding: @spacing-small @spacing-regular;
+            cursor: pointer;
+            color: @color-bright;
+            display: flex;
+            align-items: flex-end;
+            width: 100%;
+            text-align: left;
+            user-select: none;
+
+            .accordion-item-heading {
+                flex: 1;
+                text-transform: uppercase;
+            }
+
+            .icon {
+                height: 1.75em;
+                width: 1.75em;
+
+                &:not(:last-child) {
+                    margin-right: 0.75em;
+                }
+            }
+        }
+
+        .primary > .accordion-item-heading > .btn {
+            padding: @spacing-regular @spacing-large;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .accordion-item-body {
+            display: none;
+            border-bottom: 1px solid @grey-semi-bright;
+        }
+
+        &[data-active=true] .accordion-item-body {
+            display: block;
+        }
+    }
+}

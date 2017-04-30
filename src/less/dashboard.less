@@ -1,89 +1,48 @@
-.sidebar {
-    float: left;
-    width: 360px;
-    position: fixed;
-    top: 52px;
-    /*	bottom: 0;
-	z-index: 1000;
-*/
-    display: block;
-    padding: 20px 20px 40px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: #FFFFFF;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.1);
-}
+@import "variables.less";
 
-h1.sidebar-title,
-h2.section-title {
-    font-size: 18px;
-    line-height: 1;
-    margin-bottom: 20px;
-    text-align: center;
-    text-transform: uppercase;
-}
+.dashboard {
+    padding-top: @spacing-large;
 
-.nav-sidebar button.accordion {
-    background-color: transparent;
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    border-bottom: 1px solid #DCDCDC;
-    color: #4C4C4C;
-    cursor: pointer;
-    display: block;
-    font-size: 12px;
-    line-height: 1.5;
-    outline: none;
-    padding: 3px 0;
-    text-align: left;
-    text-transform: uppercase;
-    transition: 0.4s;
-    width: 100%;
-}
+    .toolbar {
+        .toolbar-search {
+            input {
+                width: 100%;
+            }
+        }
 
-.nav-sidebar button.accordion:hover {
-    background-color: #F5F5F5;
-}
+        .toolbar-edit {
+            margin: 0;
+            padding: 0;
+            list-style: none;
 
-.nav-sidebar button.accordion::after {
-    content: url("../images/icons/arrow-right.svg");
-    float: right;
-    padding: 3px 8px 0 0;
-}
+            & > li {
+                display: inline-block;
+                padding: @spacing-small @spacing-regular;
 
-.nav-sidebar button.accordion.active::after {
-    content: url("../images/icons/arrow-down.svg");
-    float: right;
-    padding: 0;
-}
+                .icon {
+                    margin-right: 0.5em;
+                }
+            }
+        }
 
-.nav-sidebar .panel {
-    box-shadow: 0 1px 0 #DCDCDC;
-    display: none;
-    height: auto;
-    padding: 10px 20px;
-}
+        .toolbar-public {
+            margin: 0;
+            padding: 0;
+            list-style: none;
 
-.nav-sidebar .panel.show {
-    display: block;
-}
+            & > li {
+                display: inline-block;
+                padding: @spacing-small @spacing-regular;
 
-.nav-sidebar .panel > li {
-    padding: 3px 12px;
-}
+                &:not(:last-child) {
+                    padding-right: 0;
 
-.nav-sidebar .panel > li > a {
-    color: #4C4C4C;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.nav-sidebar .panel > li:hover > a {
-    color: #000000;
-}
-
-.nav-sidebar i[class^="flaticon-"]::before {
-    color: #4C4C4C;
-    font-size: 20px;
+                    &::after {
+                        content: '|';
+                        margin-left: @spacing-regular;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,0 +1,31 @@
+@import "variables.less";
+
+.parameters {
+    width: 100%;
+    border-spacing: @spacing-small;
+    border-collapse: separate;
+}
+
+.parameter-label {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.parameter-inputs {
+    width: 60%;
+}
+
+.parameter-max,
+.parameter-min {
+    width: 50px;
+    appearance: none;
+    margin-bottom: @spacing-small;
+}
+
+.parameter-min {
+    float: left;
+}
+
+.parameter-max {
+    float: right;
+}

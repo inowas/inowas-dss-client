@@ -1,0 +1,37 @@
+@import "variables.less";
+
+.footer {
+    background-color: @background-dark;
+    color: @color-dark;
+    margin-top: @grid-gutter;
+    padding-top: @spacing-large;
+    padding-bottom: @spacing-large;
+
+    .content {
+        overflow: visible;
+
+        a {
+            &:hover {
+                color: #FFFFFF;
+            }
+        }
+
+        .nav {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            li {
+                padding-bottom: @spacing-small;
+
+                &:last-child {
+                    padding-bottom: 0;
+                }
+            }
+        }
+
+        h3 {
+            text-align: left;
+        }
+    }
+}

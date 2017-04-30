@@ -1,0 +1,22 @@
+@import "variables.less";
+
+.loginForm {
+    padding: @spacing-regular;
+
+    .label {
+        display: block;
+    }
+
+    .input {
+        margin-right: 2em;
+        display: block;
+        width: 100%;
+        background-color: @grey-semi-dark;
+        color: @color-dark;
+        -webkit-text-fill-color: @color-dark !important;
+
+        &:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 100px @grey-semi-dark inset;
+        }
+    }
+}
