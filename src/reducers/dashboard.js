@@ -296,6 +296,20 @@ const initialState = {
             fake: false
         } ]
     }, {
+        slug: 'T14',
+        name: 'Pumping-induced river drawdown',
+        path: 'tools/T14/',
+        models: [ {
+            model_id: '14',
+            user_name: 'ADMIN',
+            name: 'DEFAULT MODEL',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A04',
+            created_at: '2017-03-09T19:24:00+00:00',
+            fake: false
+        } ]
+    }, /*{
         slug: 'T14A',
         name: 'Pumping-induced river drawdown // Fully penetrating stream with no streambed resistance (Jenkins, 1968)',
         path: 'tools/T14A/',
@@ -312,7 +326,7 @@ const initialState = {
     }, {
         slug: 'T14B',
         name: 'Pumping-induced river drawdown // Fully penetrating stream with semipervious layer (Hantush, 1965)',
-        path: 'tools/T14A/',
+        path: 'tools/T14B/',
         models: [ {
             model_id: '14B_1',
             user_name: 'ADMIN',
@@ -351,7 +365,7 @@ const initialState = {
             created_at: '2017-03-09T19:38:00+00:00',
             fake: false
         } ]
-    }, {
+    }, */{
         slug: 'T17',
         name: 'Global MAR portal',
         path: 'tools/T17/',
