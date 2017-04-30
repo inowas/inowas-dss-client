@@ -4,6 +4,7 @@ import T07A from './T07A';
 import T07B from './T07B';
 import T07C from './T07C';
 import T07D from './T07D';
+import T09 from './T09';
 import T09A from './T09A';
 import T09B from './T09B';
 import T09C from './T09C';
@@ -30,6 +31,7 @@ export default {
     T07B,
     T07C,
     T07D,
+    T09,
     T09A,
     T09B,
     T09C,

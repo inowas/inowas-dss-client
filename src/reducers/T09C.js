@@ -1,10 +1,11 @@
 import * as calc from '../calculations/T09C';
 import applyParameterUpdate from './applyParameterUpdate';
+import image from '../images/tools/T09C.png';
 
 function getInitialState() {
     return {
         background: {
-            'image': '/images/tools/T09C.png'
+            'image': image
         },
         chart: {
             data: [],
@@ -117,6 +118,13 @@ const T09CReducer = (state = getInitialState(), action) => {
                     return p.id === newParam.id
                 });
                 applyParameterUpdate(param, newParam);
+                // check df <= ds
+                let df = state.parameters.find(p => {return p.id == 'df'}),
+                    ds = state.parameters.find(p => {return p.id == 'ds'})
+
+                if (df.value > ds.value) {
+                    df.value = ds.value;
+                }
                 calculateAndModifyState(state);
                 break;
             }
