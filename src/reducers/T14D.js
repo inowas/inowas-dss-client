@@ -1,10 +1,11 @@
 import * as calc from '../calculations/T14D';
 import applyParameterUpdate from './applyParameterUpdate';
+import image from '../images/tools/T14D.png';
 
 function getInitialState() {
     return {
         background: {
-            'image': '/images/tools/T14D.png'
+            'image': image
         },
         chart: {
             data: [],

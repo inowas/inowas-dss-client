@@ -1,10 +1,11 @@
 import * as calc from '../calculations/T14C';
 import applyParameterUpdate from './applyParameterUpdate';
+import image from '../images/tools/T14C.png';
 
 function getInitialState() {
     return {
         background: {
-            'image': '/images/tools/T14C.png'
+            'image': image
         },
         chart: {
             data: [],
@@ -36,7 +37,7 @@ function getInitialState() {
             max: 500,
             value: 365,
             stepSize: 1,
-            decimals: 1
+            decimals: 0
         }, {
             order: 2,
             id: 'S',
@@ -71,17 +72,17 @@ function getInitialState() {
         }, {
             order: 5,
             id: 'W',
-            name: 'width of stream , W (m)',
-            min: 100,
+            name: 'Width of stream , W (m)',
+            min: 1,
             validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 400,
-            stepSize: 100,
-            decimals: 0
+            max: 10,
+            value: 2.5,
+            stepSize: 0.1,
+            decimals: 1
         }, {
             order: 6,
             id: 'Kdash',
-            name: 'Permeability of the semipervious layer, K\' (m/s)',
+            name: 'Permeability of the semipervious layer, K\' (m/d)',
             min: 0.1,
             validMin: function(x) {return x > 0},
             max: 1,
@@ -92,12 +93,12 @@ function getInitialState() {
             order: 7,
             id: 'bdash',
             name: 'Thickness of the semipervious layer, b\' (m)',
-            min: 100,
+            min: 1,
             validMin: function(x) {return x > 0},
-            max: 1000,
-            value: 100,
-            stepSize: 10,
-            decimals: 0
+            max: 10,
+            value: 1,
+            stepSize: 0.1,
+            decimals: 1
         }]
     }
 };

@@ -30,6 +30,7 @@ const routes = (
             <Route path="T13C(/:id)" component={tools.T13C}/>
             <Route path="T13D(/:id)" component={tools.T13D}/>
             <Route path="T13E(/:id)" component={tools.T13E}/>
+            <Route path="T14(/:id)" component={tools.T14}/>
             <Route path="T14A(/:id)" component={tools.T14A}/>
             <Route path="T14B(/:id)" component={tools.T14B}/>
             <Route path="T14C(/:id)" component={tools.T14C}/>
