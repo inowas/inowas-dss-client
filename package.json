@@ -68,7 +68,7 @@
         "radium-plugin-validity-pseudos": "^1.0.0",
         "react-addons-transition-group": "^15.4.2",
         "react-autocomplete-cli": "^0.0.3",
-        "react-c3js": "^0.1.16",
+        "react-c3js": "<=0.1.13",
         "react-hot-loader": "next",
         "react-iframe": "^0.0.4",
         "react-leaflet": "^1.1.4",

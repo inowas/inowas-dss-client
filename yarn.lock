@@ -5683,9 +5683,9 @@ react-autocomplete-cli@^0.0.3:
     shelljs "^0.7.0"
     yargs "^4.7.1"
 
-react-c3js@^0.1.16:
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/react-c3js/-/react-c3js-0.1.16.tgz#c56a4ed77e8db9ef601e986d526428216a7dbe5a"
+react-c3js@<=0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/react-c3js/-/react-c3js-0.1.13.tgz#0baf29360a87879e802fdd96289edbf8308d1cdb"
   dependencies:
     c3 "^0.4.11"
 
