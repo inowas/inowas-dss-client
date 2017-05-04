@@ -28,8 +28,17 @@ export default class ColorLegend {
 
     calculateLegend(decimals=0) {
 
-        const factor = Math.pow(10, decimals);
+        if ((this._max - this._min) === 0) {
+            let legend = [];
+            legend.unshift({
+                color: this._spectrum[0],
+                value: 0
+            });
 
+            return legend;
+        }
+
+        const factor = Math.pow(10, decimals);
         const nrOfColors = this._spectrum.length;
         const delta = (this._max - this._min) / nrOfColors;
 
