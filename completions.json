@@ -1,0 +1,667 @@
+{
+  "components": {
+    "App.jsx": {
+      "attributes": [
+        "children"
+      ],
+      "props": {
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "Footer.jsx": {},
+    "LoginForm.jsx": {
+      "attributes": [
+        "login",
+        "className"
+      ],
+      "props": {
+        "login": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "ModelOverview.jsx": {},
+    "BoundariesList.jsx": {},
+    "BoundaryListItem.jsx": {},
+    "BoundaryTypes.jsx": {},
+    "ModelList.jsx": {},
+    "ModelListItem.jsx": {},
+    "Models.jsx": {},
+    "ObservationPointListItem.jsx": {},
+    "ObservationPointsList.jsx": {},
+    "StressPeriodListItem.jsx": {},
+    "StressPeriodsList.jsx": {},
+    "MapOverlay.jsx": {},
+    "MapToolBox.jsx": {},
+    "ModFlowMap.jsx": {},
+    "ModelListMap.jsx": {},
+    "ScenarioAnalysisMap.jsx": {
+      "attributes": [
+        "mapData",
+        "updateMapView",
+        "updateBounds",
+        "mapPosition",
+        "clickCoordinate"
+      ],
+      "props": {
+        "mapData": {
+          "type": {
+            "name": "instanceOf",
+            "value": "ScenarioAnalysisMapData"
+          },
+          "required": true,
+          "description": ""
+        },
+        "updateMapView": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        },
+        "updateBounds": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        },
+        "mapPosition": {
+          "type": {
+            "name": "object"
+          },
+          "required": true,
+          "description": ""
+        },
+        "clickCoordinate": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        }
+      }
+    },
+    "ScenarioListItem.jsx": {},
+    "ScenarioMapOverlay.jsx": {},
+    "ScenarioMapToolBox.jsx": {},
+    "ScenarioSelect.jsx": {
+      "attributes": [
+        "scenarios",
+        "toggleSelection"
+      ],
+      "props": {
+        "scenarios": {
+          "type": {
+            "name": "array"
+          },
+          "required": true,
+          "description": ""
+        },
+        "toggleSelection": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        }
+      }
+    },
+    "BoundaryContent": {},
+    "BoundaryProperties": {},
+    "BoundarySidebar": {},
+    "ObservationPoint": {},
+    "ScenarioBoundaryContent": {},
+    "ScenarioBoundaryProperties": {},
+    "StressPeriods": {},
+    "RiverProperties": {},
+    "ScenarioWellProperties": {},
+    "SoilDiagram": {},
+    "WellProperties": {},
+    "Accordion.jsx": {
+      "attributes": [
+        "className",
+        "children",
+        "firstActive"
+      ],
+      "props": {
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        },
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": true,
+          "description": ""
+        },
+        "firstActive": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "0",
+            "computed": false
+          }
+        }
+      }
+    },
+    "AccordionItem.jsx": {
+      "attributes": [
+        "icon",
+        "className",
+        "heading",
+        "children",
+        "index",
+        "active",
+        "toggleActive"
+      ],
+      "props": {
+        "icon": {
+          "type": {
+            "name": "object"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        },
+        "heading": {
+          "type": {
+            "name": "string"
+          },
+          "required": true,
+          "description": ""
+        },
+        "children": {
+          "type": {
+            "name": "object"
+          },
+          "required": true,
+          "description": ""
+        },
+        "index": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": ""
+        },
+        "active": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "toggleActive": {
+          "type": {
+            "name": "func"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "ArraySlider.jsx": {
+      "attributes": [
+        "data",
+        "value",
+        "onChange",
+        "formatter"
+      ],
+      "props": {
+        "data": {
+          "type": {
+            "name": "array"
+          },
+          "required": true,
+          "description": ""
+        },
+        "value": {
+          "type": {
+            "name": "number"
+          },
+          "required": true,
+          "description": ""
+        },
+        "onChange": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        },
+        "formatter": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        }
+      }
+    },
+    "ColorLegend.jsx": {
+      "attributes": [
+        "legend"
+      ],
+      "props": {
+        "legend": {
+          "type": {
+            "name": "array"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "Drawer.jsx": {
+      "attributes": [
+        "visible",
+        "className",
+        "children"
+      ],
+      "props": {
+        "visible": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        },
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "Icon.jsx": {
+      "attributes": [
+        "name",
+        "className"
+      ],
+      "props": {
+        "name": {
+          "type": {
+            "name": "string"
+          },
+          "required": true,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "List.jsx": {},
+    "ListItem.jsx": {},
+    "Popup.jsx": {
+      "attributes": [
+        "visible",
+        "children",
+        "className",
+        "close",
+        "width"
+      ],
+      "props": {
+        "visible": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "false",
+            "computed": false
+          }
+        },
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        },
+        "close": {
+          "type": {
+            "name": "func"
+          },
+          "required": false,
+          "description": ""
+        },
+        "width": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "ScaffoldDividedFixed.jsx": {
+      "attributes": [
+        "left",
+        "right"
+      ],
+      "props": {
+        "left": {
+          "type": {
+            "name": "node"
+          },
+          "required": true,
+          "description": ""
+        },
+        "right": {
+          "type": {
+            "name": "node"
+          },
+          "required": true,
+          "description": ""
+        }
+      }
+    },
+    "Slider.jsx": {
+      "attributes": [
+        "children",
+        "className",
+        "nextPrevNavigation",
+        "control",
+        "interval",
+        "activeIndex"
+      ],
+      "props": {
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        },
+        "nextPrevNavigation": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "true",
+            "computed": false
+          }
+        },
+        "control": {
+          "type": {
+            "name": "element"
+          },
+          "required": false,
+          "description": ""
+        },
+        "interval": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "5000",
+            "computed": false
+          }
+        },
+        "activeIndex": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "0",
+            "computed": false
+          }
+        }
+      }
+    },
+    "SliderControl.jsx": {
+      "attributes": [
+        "children",
+        "activeIndex",
+        "setActive",
+        "className"
+      ],
+      "props": {
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        },
+        "activeIndex": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": ""
+        },
+        "setActive": {
+          "type": {
+            "name": "func"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'slider-control'",
+            "computed": false
+          }
+        }
+      }
+    },
+    "SliderControlItem.jsx": {
+      "attributes": [
+        "children",
+        "active",
+        "setActive",
+        "className"
+      ],
+      "props": {
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        },
+        "active": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "false",
+            "computed": false
+          }
+        },
+        "setActive": {
+          "type": {
+            "name": "func"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'slider-control-item'",
+            "computed": false
+          }
+        }
+      }
+    },
+    "SliderItem.jsx": {
+      "attributes": [
+        "children",
+        "active",
+        "className"
+      ],
+      "props": {
+        "children": {
+          "type": {
+            "name": "node"
+          },
+          "required": false,
+          "description": ""
+        },
+        "active": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+    },
+    "StackedNav.jsx": {
+      "attributes": [
+        "className",
+        "children"
+      ],
+      "props": {
+        "className": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": ""
+        },
+        "children": {
+          "type": {
+            "name": "array"
+          },
+          "required": true,
+          "description": ""
+        }
+      }
+    },
+    "Background.jsx": {},
+    "ChartT02.jsx": {},
+    "ChartT09A.jsx": {},
+    "ChartT09B.jsx": {},
+    "ChartT09C.jsx": {},
+    "ChartT09D.jsx": {},
+    "ChartT09E.jsx": {},
+    "ChartT13A.jsx": {},
+    "ChartT13B.jsx": {},
+    "ChartT13C.jsx": {},
+    "ChartT13E.jsx": {},
+    "ChartT14A.jsx": {},
+    "ChartT14B.jsx": {},
+    "ChartT14C.jsx": {},
+    "ChartT14D.jsx": {},
+    "ChartT16A.jsx": {},
+    "ChartT18.jsx": {},
+    "Header.jsx": {},
+    "InfoT09C.jsx": {},
+    "InfoT13B.jsx": {},
+    "InfoT13C.jsx": {},
+    "InfoT18.jsx": {},
+    "Parameters.jsx": {},
+    "ScenarioItem.jsx": {
+      "attributes": [
+        "scenario",
+        "toggleSelection"
+      ],
+      "props": {
+        "scenario": {
+          "type": {
+            "name": "object"
+          },
+          "required": true,
+          "description": ""
+        },
+        "toggleSelection": {
+          "type": {
+            "name": "func"
+          },
+          "required": true,
+          "description": ""
+        }
+      }
+    },
+    "SettingsT02.jsx": {},
+    "SettingsT09D.jsx": {},
+    "SettingsT13B.jsx": {}
+  }
+}

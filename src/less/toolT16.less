@@ -5,6 +5,7 @@
   background-color: @grey-bright;
   border: 0;
   margin-left: 5px;
+  margin-right: 15px;
 }
 .input-readingtime {
   width: auto;
@@ -12,30 +13,53 @@
   float: left;
 }
 .input-t16a {
-  margin-left: 10px;
-  margin-right: auto;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 5px;
+  margin-bottom: 8px;
 }
 
-.parameters-sieve {
+.table-t16a-sieve,
+.table-t16a-hydro{
   width: 80%;
   margin-left: auto;
   margin-right: auto;
   border-spacing: @spacing-small;
   border-collapse: separate;
   border: 1px solid #ddd;
+  .th {
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  .tb {
+    text-align: center;
+    border-top: 1px solid #ddd;
+  }
+}
+.table-t16a-hydro{
+  text-align: center;
+  .input-readingtime {
+    width: auto;
+    border: 0;
+    float: right;
+  }
+  .input-hydrodata {
+    width: 60px;
+    text-align: left;
+  }
+}
+.popup-hydrodata{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-spacing: @spacing-small;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
 }
 
 .parameters-dSamp {
   width: 80%;
   margin-bottom: 5px;
-}
-.table-sieve-bottom {
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-}
-.table-sieve-top {
-  text-align: center;
-  border-top: 1px solid #ddd;
 }
 .parameter-min {
   margin-bottom: @spacing-small;
@@ -60,8 +84,8 @@
   border-bottom: 2px solid #ddd;
   .label{
     font-size: small;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
   }
   .input{
     margin-right: 10px;
@@ -78,6 +102,17 @@
     .input{
       margin-right: 10px;
     }
+    .input_cus{
+      margin-left: 5px;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      margin-right: 5px;
+      background-color: @grey-bright;
+      border: 0;
+      padding: 5px;
+      border-radius: @border-radius;
+
+    }
   }
   .left{
     float: left;
@@ -85,4 +120,8 @@
   .right{
     float: right;
   }
+}
+
+.col-hydro {
+  width: 37.6%;
 }
