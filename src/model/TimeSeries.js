@@ -26,7 +26,7 @@ export default class TimeSeries {
 
     get values() {
         return this.data.map(d => {
-            return d.value[1];
+            return d.value;
         });
     }
 }
