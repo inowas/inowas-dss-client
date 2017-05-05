@@ -1,10 +1,18 @@
-import { setName, setDescription, setTimeUnit, setLengthUnit, addAreaCoordinate, setAreaLatitude, setAreaLongitude } from '../../actions/T03';
-
 import React, { Component, PropTypes } from 'react';
+import {
+    addAreaCoordinate,
+    setAreaLatitude,
+    setAreaLongitude,
+    setDescription,
+    setLengthUnit,
+    setName,
+    setTimeUnit
+} from '../../actions/T03';
+import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../../reducers/T03/model';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import { connect } from 'react-redux';
-import { getName, getDescription, getTimeUnit, getLengthUnit, getArea } from '../../reducers/T03/model';
+import styleGlobals from 'styleGlobals';
 
 const styles = {
     container: {
@@ -13,9 +21,19 @@ const styles = {
         top: 0,
         right: 0,
         bottom: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
+        padding: styleGlobals.dimensions.spacing.large
+    },
+
+    generalTr: {
+        padding: styleGlobals.dimensions.spacing.small
+    },
+
+    labelTr: {
+        textAlign: 'right'
+    },
+
+    addCoordinateWrapper: {
+        marginTop: '2em'
     }
 };
 
@@ -70,6 +88,29 @@ class T03Setup extends Component {
         };
     }
 
+    renderArea( area ) {
+        return (
+            <div>
+                <h3>Area</h3>
+                <table className="table">
+                    <tbody>
+                        <tr>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                        </tr>
+                        {area.map(( c, index ) => <tr key={index}>
+                            <td><input className="input-on-focus" value={c.lat} onChange={this.coordinateChangeLatitudeAction( index )}/></td>
+                            <td><input className="input-on-focus" value={c.lng} onChange={this.coordinateChangeLongitudeAction( index )}/></td>
+                        </tr>)}
+                    </tbody>
+                </table>
+                <div style={styles.addCoordinateWrapper}>
+                    <button className="button" onClick={this.addCoordinateClickAction}>Add coordinate!</button>
+                </div>
+            </div>
+        );
+    }
+
     render( ) {
         const {
             style,
@@ -82,20 +123,21 @@ class T03Setup extends Component {
 
         return (
             <div style={[ style, styles.container ]}>
+                <h3>General</h3>
                 <table>
                     <tbody>
                         <tr>
-                            <td>Name</td>
-                            <td><input value={name} onChange={this.nameChangeAction} placeholder="Name"/></td>
+                            <td style={[ styles.generalTr, styles.labelTr ]}>Name</td>
+                            <td style={styles.generalTr}><input className="input" value={name} onChange={this.nameChangeAction} placeholder="Name"/></td>
                         </tr>
                         <tr>
-                            <td>Description</td>
-                            <td><input value={description} onChange={this.descriptionChangeAction} placeholder="Description"/></td>
+                            <td style={[ styles.generalTr, styles.labelTr ]}>Description</td>
+                            <td style={styles.generalTr}><input className="input" value={description} onChange={this.descriptionChangeAction} placeholder="Description"/></td>
                         </tr>
                         <tr>
-                            <td>Time Unit</td>
-                            <td>
-                                <select value={timeUnit} onChange={this.timeUnitChangeAction}>
+                            <td style={[ styles.generalTr, styles.labelTr ]}>Time Unit</td>
+                            <td style={styles.generalTr}>
+                                <select className="select" value={timeUnit} onChange={this.timeUnitChangeAction}>
                                     <option value="s">Second</option>
                                     <option value="min">Minute</option>
                                     <option value="h">Hour</option>
@@ -105,9 +147,9 @@ class T03Setup extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <td>Length Unit</td>
-                            <td>
-                                <select value={lengthUnit} onChange={this.lengthUnitChangeAction}>
+                            <td style={[ styles.generalTr, styles.labelTr ]}>Length Unit</td>
+                            <td style={styles.generalTr}>
+                                <select className="select" value={lengthUnit} onChange={this.lengthUnitChangeAction}>
                                     <option value="cm">Centimeter</option>
                                     <option value="m">Meter</option>
                                     <option value="ft">Feet</option>
@@ -116,22 +158,7 @@ class T03Setup extends Component {
                         </tr>
                     </tbody>
                 </table>
-                <div>
-                    Area:
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                            </tr>
-                            {area.map(( c, index ) => <tr key={index}>
-                                <td><input value={c.lat} onChange={this.coordinateChangeLatitudeAction( index )}/></td>
-                                <td>{c.lng}</td>
-                            </tr>)}
-                        </tbody>
-                    </table>
-                    <button onClick={this.addCoordinateClickAction}>Add coordinate!</button>
-                </div>
+                {this.renderArea( area )}
             </div>
         );
     }
@@ -148,6 +175,14 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-T03Setup = connect(mapStateToProps, { setName, setDescription, setTimeUnit, setLengthUnit, addAreaCoordinate, setAreaLatitude, setAreaLongitude })( T03Setup );
+T03Setup = connect(mapStateToProps, {
+    setName,
+    setDescription,
+    setTimeUnit,
+    setLengthUnit,
+    addAreaCoordinate,
+    setAreaLatitude,
+    setAreaLongitude
+})( T03Setup );
 
 export default T03Setup;

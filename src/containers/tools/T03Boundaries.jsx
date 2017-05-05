@@ -1,4 +1,4 @@
-import { setActiveTool, setActiveBoundary } from '../../actions/T03';
+import { setActiveBoundary } from '../../actions/T03';
 
 import React, { Component, PropTypes } from 'react';
 

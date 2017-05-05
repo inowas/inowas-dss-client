@@ -1,5 +1,5 @@
 .input-max,
-.input{
+.input {
   background-color: @grey-bright;
   border: 0;
   padding: @spacing-small @spacing-regular;
@@ -16,6 +16,18 @@
 .input-max:disabled{
   visibility: hidden;
 }
+
 .input-xs {
   padding: 0;
+}
+
+.input-on-focus {
+    border: 0;
+    background: transparent;
+    padding: @spacing-small @spacing-regular;
+}
+
+.input-on-focus:focus {
+    background-color: @grey-bright;
+    border-radius: @border-radius;
 }
