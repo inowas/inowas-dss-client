@@ -22,7 +22,7 @@ import T14A from './T14A';
 import T14B from './T14B';
 import T14C from './T14C';
 import T14D from './T14D';
-import T16A from './T16A';
+import T16 from './T16';
 import T18 from './T18';
 // import scenarioAnalysis from './scenarioAnalysisReducer';
 import user from './user';
@@ -52,7 +52,7 @@ const rootReducer = combineReducers( {
     T14B,
     T14C,
     T14D,
-    T16A,
+    T16,
     T18
 } );
 
