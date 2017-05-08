@@ -78,7 +78,7 @@ export default class Parameters extends React.Component {
                 <input disabled={disable} id={param.id + '_range'} name={'parameter_' + param.id + '_value'} className="parameter-input" type="range" min={param.min} max={param.max} step={param.stepSize} value={param.value} onChange={this.handleChange}/>
             </td>
             <td>
-                <input disabled={disable} name={'parameter_' + param.id + '_value'} className="parameter-max input input-xs" type="number" step={param.stepSize} value={Number(param.value).toFixed(param.decimals)} onChange={this.handleChange}/>
+                <input disabled={disable} name={'parameter_' + param.id + '_value'} className="parameter-max input input-xs" type="number" step={param.stepSize} min={param.min} max={param.max} value={Number(param.value).toFixed(param.decimals)} onChange={this.handleChange}/>
             </td>
         </tr>);
     }
