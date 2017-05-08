@@ -20,10 +20,12 @@ export default function applyParameterUpdate(param, newParam) {
         if (param.hasOwnProperty('max') && newValue > param.max) {
             valid = false;
         }
-
-        if (valid) {
-            param.value = newValue;
-        }
+        // this part is not required anymore.
+        // Out of range part is included /components/tools/parameters.jsx
+        // if (valid) {
+        //     param.value = newValue;
+        // }
+        param.value = newValue;
     }
     return param;
 }

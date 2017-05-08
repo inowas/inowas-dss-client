@@ -12,6 +12,7 @@ import {enterSieve, changeStandard, changeHydroData, changeSieve,
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
 import Icon from '../../components/primitive/Icon';
+import Info from '../../components/tools/InfoT16';
 
 @connect(( store ) => {
     return { tool: store.T16 };
@@ -100,7 +101,9 @@ export default class T16A extends React.Component {
                 </div>
 
                 <div className="grid-container">
-                    <section className="tile col col-abs-2" />
+                    <section className="tile col col-abs-2">
+                        <Info data={this.props.tool.info}/>
+                    </section>
                     <section className="tile col col-rel-1">
                         <h2>SIEVING</h2>
                         <h3>After wet separation</h3>

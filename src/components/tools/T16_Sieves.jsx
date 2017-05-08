@@ -46,6 +46,7 @@ export default class Sieves extends React.Component {
             popupVisible: true
         });
     };
+    //Popup window
     selectSieve() {
         var standard = [];
         if (this.props.DIN.selected === true) {
@@ -133,13 +134,13 @@ export default class Sieves extends React.Component {
                             <th  className="th"><strong>Unit</strong></th>
                         </tr>
                         {params}
-                        <tr className="parameter">
+                  {/*      <tr className="parameter">
                             <td className="parameter-label">{'pan'}</td>
                             <td className="parameter-max input input-xs">
                                 {this.subtraction()}
                             </td>
                             <td>g</td>
-                        </tr>
+                        </tr>*/}
                         <tr>
                             <td className="tb" ><strong>Total</strong></td>
                             <td className="tb" >{this.props.info.total}</td>

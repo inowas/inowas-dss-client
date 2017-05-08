@@ -97,8 +97,8 @@ export default class Parameters extends React.Component {
                             <strong>Start</strong>
                             <input type="datetime-local" className="input-start" step='10'
                                    value={info.start} onChange={this.handleChange}/>
-                            <strong>Dry Sample</strong>
-                            <input type="number" className="parameter-max input input-xs"/>
+                            {/*<strong>Dry Sample</strong>*/}
+                            {/*<input type="number" className="parameter-max input input-xs"/>*/}
                         </p>
                     </div>
                     <table className="table-t16a-hydro">
