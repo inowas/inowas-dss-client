@@ -5,6 +5,7 @@ import {
     setAreaLongitude,
     setDescription,
     setLengthUnit,
+    setMapMode,
     setName,
     setTimeUnit
 } from '../../actions/T03';
@@ -21,7 +22,8 @@ const styles = {
         top: 0,
         right: 0,
         bottom: 0,
-        padding: styleGlobals.dimensions.spacing.large
+        padding: styleGlobals.dimensions.spacing.large,
+        overflow: 'auto'
     },
 
     generalTr: {
@@ -53,7 +55,8 @@ class T03Setup extends Component {
         setLengthUnit: PropTypes.func,
         addAreaCoordinate: PropTypes.func,
         setAreaLatitude: PropTypes.func,
-        setAreaLongitude: PropTypes.func
+        setAreaLongitude: PropTypes.func,
+        setMapMode: PropTypes.func
     }
 
     nameChangeAction = ( e ) => {
@@ -88,10 +91,16 @@ class T03Setup extends Component {
         };
     }
 
-    renderArea( area ) {
+    editAreaOnMap = ( ) => {
+        this.props.setMapMode( 'area' );
+    }
+
+    // eslint-disable-next-line no-shadow
+    renderArea( area, editAreaOnMap ) {
         return (
             <div>
                 <h3>Area</h3>
+                <button onClick={editAreaOnMap} className="button">Edit on Map</button>
                 <table className="table">
                     <tbody>
                         <tr>
@@ -158,7 +167,7 @@ class T03Setup extends Component {
                         </tr>
                     </tbody>
                 </table>
-                {this.renderArea( area )}
+                {this.renderArea( area, this.editAreaOnMap )}
             </div>
         );
     }
@@ -182,7 +191,8 @@ T03Setup = connect(mapStateToProps, {
     setLengthUnit,
     addAreaCoordinate,
     setAreaLatitude,
-    setAreaLongitude
+    setAreaLongitude,
+    setMapMode
 })( T03Setup );
 
 export default T03Setup;

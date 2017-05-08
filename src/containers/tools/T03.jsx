@@ -1,18 +1,15 @@
 import * as actions from '../../actions/T03';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/model';
+import { getMapMode, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
 
 import ModelEditorMap from '../../components/primitive/ModelEditorMap';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
-import { getActiveTool } from '../../reducers/T03/ui';
 import { withRouter } from 'react-router';
 
 class T03 extends Component {
-
-    static propTypes = {
-        tool: PropTypes.string
-    }
 
     state = {
         navigation: [ ]
@@ -33,10 +30,18 @@ class T03 extends Component {
 
 const mapStateToProps = state => {
     return {
-        tool: getActiveTool( state.T03.ui )
+        mapMode: getMapMode( state.T03.ui ),
+        area: getArea( state.T03.model ),
+        firstAreaCoordinate: getFirstAreaCoordinate( state.T03.model ),
+        lastAreaCoordinate: getLastAreaCoordinate( state.T03.model ),
+        mapPosition: getMapPosition( state.T03.ui ),
+        mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
+        draggedAreaCoordinate: getDraggedAreaCoordinate( state.T03.ui ),
+        activeAreaCoordinate: getActiveAreaCoordinate( state.T03.ui )
     };
 };
 
+// TODO get id from router param (this is why we'll need withRouter)
 // eslint-disable-next-line no-class-assign
 T03 = withRouter( connect( mapStateToProps, actions )( T03 ));
 
