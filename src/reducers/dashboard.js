@@ -183,119 +183,7 @@ const initialState = {
             created_at: '2017-03-09T19:24:00+00:00',
             fake: false
         } ]
-    }, /*{
-        slug: 'T09A',
-        name: 'Saltwater intrusion // Depth of freshwater - saltwater interface (Ghyben-Herzberg relation)',
-        path: 'tools/T09A/',
-        models: [ {
-            model_id: '09A_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A07',
-            created_at: '2017-03-09T19:09:00+00:00',
-            fake: false
-        } ]
     }, {
-        slug: 'T09B',
-        name: 'Saltwater intrusion // Shape of freshwater-saltwater interface (Glover equation)',
-        path: 'tools/T09B/',
-        models: [ {
-            model_id: '09B_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A07',
-            created_at: '2017-03-09T19:12:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T09C',
-        name: 'Saltwater intrusion // Upconing',
-        path: 'tools/T09C/',
-        models: [ {
-            model_id: '09C_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A07',
-            created_at: '2017-03-09T19:15:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T09D',
-        name: 'Saltwater intrusion // Critical well discharge',
-        path: 'tools/T09D/',
-        models: [ {
-            model_id: '09D_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A07',
-            created_at: '2017-03-09T19:16:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T13A',
-        name: 'Travel time through unconfined aquifer // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge',
-        path: 'tools/T13A/',
-        models: [ {
-            model_id: '13A_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:18:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T13B',
-        name: 'Travel time through unconfined aquifer // Aquifer system with two fixed head boundary conditions, a flow divide within the system and constant groundwater recharge',
-        path: 'tools/T13B/',
-        models: [ {
-            model_id: '13B_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:21:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T13C',
-        name: 'Travel time through unconfined aquifer // Aquifer system with two fixed head boundary conditions, a flow divide outside of the system and constant groundwater recharge',
-        path: 'tools/T13C/',
-        models: [ {
-            model_id: '13C_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:23:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T13E',
-        name: 'Travel time through unconfined aquifer // Aquifer system with one pumping well at constant rate, no groundwater recharge',
-        path: 'tools/T13E/',
-        models: [ {
-            model_id: '13E_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:24:00+00:00',
-            fake: false
-        } ]
-    },*/ {
         slug: 'T13',
         name: 'Travel time through unconfined aquifer',
         path: 'tools/T13/',
@@ -323,63 +211,21 @@ const initialState = {
             created_at: '2017-03-09T19:24:00+00:00',
             fake: false
         } ]
-    }, /*{
-        slug: 'T14A',
-        name: 'Pumping-induced river drawdown // Fully penetrating stream with no streambed resistance (Jenkins, 1968)',
-        path: 'tools/T14A/',
+    }, {
+        slug: 'T16',
+        name: 'Calculation of hydraulic conductivity',
+        path: 'tools/T16/',
         models: [ {
-            model_id: '14A_1',
+            model_id: '16',
             user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
             description: 'Description',
             project: 'INOWAS',
-            application: 'A05',
-            created_at: '2017-03-09T19:27:00+00:00',
+            application: 'A04',
+            created_at: '2017-03-09T19:41:00+00:00',
             fake: false
         } ]
     }, {
-        slug: 'T14B',
-        name: 'Pumping-induced river drawdown // Fully penetrating stream with semipervious layer (Hantush, 1965)',
-        path: 'tools/T14B/',
-        models: [ {
-            model_id: '14B_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A05',
-            created_at: '2017-03-09T19:28:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T14C',
-        name: 'Pumping-induced river drawdown // Partially penetrating stream with streambed resistance (Hunt, 1999)',
-        path: 'tools/T14C/',
-        models: [ {
-            model_id: '14C_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A05',
-            created_at: '2017-03-09T19:37:00+00:00',
-            fake: false
-        } ]
-    }, {
-        slug: 'T14D',
-        name: 'Pumping-induced river drawdown // Partially penetrating stream in an aquitard overlying a pumped aquifer (Hunt, 2003)',
-        path: 'tools/T14D/',
-        models: [ {
-            model_id: '14D_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A05',
-            created_at: '2017-03-09T19:38:00+00:00',
-            fake: false
-        } ]
-    }, */{
         slug: 'T17',
         name: 'Global MAR portal',
         path: 'tools/T17/',

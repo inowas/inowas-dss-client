@@ -36,7 +36,7 @@ const routes = (
             <Route path="T14B(/:id)" component={tools.T14B}/>
             <Route path="T14C(/:id)" component={tools.T14C}/>
             <Route path="T14D(/:id)" component={tools.T14D}/>
-            <Route path="T16A(/:id)" component={tools.T16A}/>
+            <Route path="T16(/:id)" component={tools.T16}/>
             <Route path="T17(/:id)" component={tools.T17}/>
             <Route path="T18(/:id)" component={tools.T18}/>
         </Route>
