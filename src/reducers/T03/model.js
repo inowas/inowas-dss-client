@@ -59,6 +59,14 @@ const model = ( state = getInitialState(), action ) => {
                 } )
             };
 
+        case 'T03_MODEL_DELETE_AREA_COORDINATE':
+            return {  ...state,
+                area: [
+                    ...state.area.slice(0, action.payload),
+                    ...state.area.slice(action.payload + 1, state.area.length)
+                ]
+            };
+
         default:
             return state;
     }
@@ -71,3 +79,5 @@ export const getDescription = state => state.description;
 export const getTimeUnit = state => state.timeUnit;
 export const getLengthUnit = state => state.lengthUnit;
 export const getArea = state => state.area;
+export const getFirstAreaCoordinate = state => state.area[0];
+export const getLastAreaCoordinate = state => state.area[state.area.length - 1];

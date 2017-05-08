@@ -1,14 +1,42 @@
-export function setActiveTool( tool ) {
+export function setMapMode( mode ) {
     return {
-        type: 'T03_UI_SET_ACTIVE_TOOL',
-        payload: tool
+        type: 'T03_UI_SET_MAP_MODE',
+        payload: mode
     };
 }
 
-export function setActiveBoundary( boundaryID ) {
+export function setActiveBoundary( boundary ) {
     return {
         type: 'T03_UI_SET_ACTIVE_BOUNDARY',
-        payload: boundaryID
+        payload: boundary
+    };
+}
+
+export function setMapPosition( position ) {
+    return {
+        type: 'T03_UI_SET_MAP_POSITION',
+        payload: position
+    };
+}
+
+export function setMousePositionOnMap( position ) {
+    return {
+        type: 'T03_UI_SET_MOUSE_POSITION_ON_MAP',
+        payload: position
+    };
+}
+
+export function setDraggedAreaCoordinate( index ) {
+    return {
+        type: 'T03_UI_SET_DRAGGED_AREA_COORDINATE',
+        payload: index
+    };
+}
+
+export function setActiveAreaCoordinate( index ) {
+    return {
+        type: 'T03_UI_SET_ACTIVE_AREA_COORDINATE',
+        payload: index
     };
 }
 
@@ -67,5 +95,12 @@ export function setAreaLongitude( index, lng ) {
             index,
             lng
         }
+    };
+}
+
+export function deleteAreaCoordinate( index ) {
+    return {
+        type: 'T03_MODEL_DELETE_AREA_COORDINATE',
+        payload: index
     };
 }

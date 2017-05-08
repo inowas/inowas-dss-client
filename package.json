@@ -44,6 +44,7 @@
         "babel-preset-react": "^6.23.0",
         "babel-preset-stage-2": "^6.22.0",
         "babel-register": "^6.24.0",
+        "color": "^1.0.3",
         "css-loader": "^0.28.0",
         "eslint": "^3.16.0",
         "eslint-import-resolver-webpack": "^0.8.1",

@@ -32,4 +32,20 @@
             position: relative;
         }
     }
+
+    &[data-minimized=true] {
+        background-color: transparent;
+        left: @spacing-large;
+        bottom: @spacing-large;
+        top: 50%;
+        right: auto;
+        width: 2 * @grid-column + @grid-gutter;
+
+        .floatingTool {
+            left: 0;
+            top: 0;
+            right: 0;
+            max-height: 100%;
+        }
+    }
 }
