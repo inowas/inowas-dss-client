@@ -91,9 +91,7 @@ export default class Dashboard extends React.Component {
     renderDataTable( ) {
         const { active } = this.state;
         const { tools } = this.props.dashboardStore;
-        const activeTool = tools.find(t => {
-            return t.slug === active;
-        });
+        const activeTool = tools.find(t => t.slug === active);
 
         if ( active ) {
             return (
@@ -105,10 +103,10 @@ export default class Dashboard extends React.Component {
                         </div>
                         <ul className="col stretch toolbar-edit">
                             <li>
-                                <button className="link" onClick={this.showPopup}>
+                                <Link className="link" to={activeTool.path}>
                                     <Icon name="add"/>
                                     <span>Add new</span>
-                                </button>
+                                </Link>
                             </li>
                             <li>
                                 <button className="link" onClick={this.showPopup}>

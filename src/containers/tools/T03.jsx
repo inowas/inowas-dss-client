@@ -1,6 +1,6 @@
 import * as actions from '../../actions/T03';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/model';
 import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
 
@@ -10,6 +10,19 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 class T03 extends Component {
+
+    static propTypes = {
+        id: PropTypes.string,
+        setState: PropTypes.func
+    }
+
+    constructor(props) {
+        super(props);
+
+        if (props.id !== null) {
+            props.setState('initial');
+        }
+    }
 
     state = {
         navigation: [ ]
@@ -28,7 +41,7 @@ class T03 extends Component {
 
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T03.ui ),
         area: getArea( state.T03.model ),
@@ -37,7 +50,8 @@ const mapStateToProps = state => {
         mapPosition: getMapPosition( state.T03.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
         draggedAreaCoordinate: getDraggedAreaCoordinate( state.T03.ui ),
-        activeAreaCoordinate: getActiveAreaCoordinate( state.T03.ui )
+        activeAreaCoordinate: getActiveAreaCoordinate( state.T03.ui ),
+        id: params.id
     };
 };
 

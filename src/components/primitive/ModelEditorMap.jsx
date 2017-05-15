@@ -374,6 +374,7 @@ export default class ModelEditorMap extends Component {
         switch ( state ) {
             case 'boundariesOverlay':
                 return <T03Boundaries/>;
+            case 'initial':
             case 'general':
                 return <T03General/>;
             case 'area':
@@ -428,7 +429,7 @@ export default class ModelEditorMap extends Component {
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
                 {this.renderToolWrapper( state )}
                 {this.renderTitle( state )}
-                <FloatingToolbox items={properties} onToolClick={setState}/>
+                {state !== 'initial' && <FloatingToolbox items={properties} onToolClick={setState}/>}
             </div>
         );
     }
