@@ -68,12 +68,13 @@ export function setLengthUnit( lengthUnit ) {
     };
 }
 
-export function addAreaCoordinate( lat, lng ) {
+export function addAreaCoordinate( lat, lng, index ) {
     return {
         type: 'T03_MODEL_ADD_AREA_COORDINATE',
         payload: {
             lat,
-            lng
+            lng,
+            index
         }
     };
 }

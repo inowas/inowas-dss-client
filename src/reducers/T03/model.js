@@ -29,6 +29,19 @@ const model = ( state = getInitialState(), action ) => {
             return state;
 
         case 'T03_MODEL_ADD_AREA_COORDINATE':
+            if ( action.payload.index !== undefined ) {
+                return {
+                    ...state,
+                    area: [
+                        ...state.area.slice( 0, action.payload.index ),
+                        {
+                            lat: action.payload.lat,
+                            lng: action.payload.lng
+                        },
+                        ...state.area.slice( action.payload.index, state.area.length )
+                    ]
+                };
+            }
             return { ...state, area: [ ...state.area, action.payload ] };
 
         case 'T03_MODEL_SET_AREA_LATITUDE':
@@ -60,10 +73,10 @@ const model = ( state = getInitialState(), action ) => {
             };
 
         case 'T03_MODEL_DELETE_AREA_COORDINATE':
-            return {  ...state,
+            return { ...state,
                 area: [
-                    ...state.area.slice(0, action.payload),
-                    ...state.area.slice(action.payload + 1, state.area.length)
+                    ...state.area.slice( 0, action.payload ),
+                    ...state.area.slice( action.payload + 1, state.area.length )
                 ]
             };
 
@@ -79,5 +92,5 @@ export const getDescription = state => state.description;
 export const getTimeUnit = state => state.timeUnit;
 export const getLengthUnit = state => state.lengthUnit;
 export const getArea = state => state.area;
-export const getFirstAreaCoordinate = state => state.area[0];
-export const getLastAreaCoordinate = state => state.area[state.area.length - 1];
+export const getFirstAreaCoordinate = state => state.area[ 0 ];
+export const getLastAreaCoordinate = state => state.area[ state.area.length - 1 ];

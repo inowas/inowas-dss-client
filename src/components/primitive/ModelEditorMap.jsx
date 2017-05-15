@@ -41,10 +41,12 @@ export default class ModelEditorMap extends Component {
         draggedAreaCoordinate: PropTypes.number,
         setAreaLatitude: PropTypes.func,
         setAreaLongitude: PropTypes.func,
-        activeAreaCoordinate: PropTypes.object
+        activeAreaCoordinate: PropTypes.number,
+        setActiveAreaCoordinate: PropTypes.func
     };
 
     state = {
+        // TODO move to container
         properties: [
             {
                 slug: 'setup',
@@ -58,25 +60,6 @@ export default class ModelEditorMap extends Component {
         ],
 
         styles: {
-            crossSectionSelection: {
-                color: '#000',
-                weight: 0.5,
-                opacity: 0.5,
-                fillColor: '#000',
-                fillOpacity: 0.5
-            },
-            inactive: {
-                color: '#000',
-                weight: 0,
-                fillColor: '#000',
-                fillOpacity: 0.7
-            },
-            active: {
-                color: '#ff7800',
-                weight: 0,
-                fillColor: '#000',
-                fillOpacity: 0
-            },
             boundingBox: {
                 color: '#000',
                 weight: 0.5,
@@ -89,17 +72,6 @@ export default class ModelEditorMap extends Component {
                 fillColor: 'blue',
                 fillOpacity: 0.1
             },
-            hasNoWell: {
-                color: '#000',
-                weight: 0,
-                fillOpacity: 0
-            },
-            hasWell: {
-                color: 'blue',
-                weight: 1,
-                fillColor: 'darkblue',
-                fillOpacity: 1
-            },
             controlPoint: {
                 radius: 7,
                 color: 'blue',
@@ -110,6 +82,14 @@ export default class ModelEditorMap extends Component {
             },
             activeControlPoint: {
                 fillColor: 'yellow'
+            },
+            addControlPoint: {
+                radius: 7,
+                color: 'blue',
+                stroke: 0,
+                weight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.3
             },
             wells: {
                 cw: {
@@ -305,9 +285,41 @@ export default class ModelEditorMap extends Component {
         }
     }
 
+    insertAreaCoordinate = ( lat, lng, index ) => {
+        return ( ) => {
+            this.props.addAreaCoordinate( lat, lng, index );
+        };
+    }
+
+    renderAreaAddControlPoints( area ) {
+        return area.map(( c, index ) => {
+            const nextIndex = ( area.length <= index + 1 )
+                ? 0
+                : ( index + 1 );
+
+            const nextC = area[nextIndex];
+
+            const position = {
+                lat: ( c.lat + nextC.lat ) / 2,
+                lng: ( c.lng + nextC.lng ) / 2
+            };
+
+            return ( <CircleMarker onClick={this.insertAreaCoordinate( position.lat, position.lng, nextIndex )} key={index} center={position} {...this.state.styles.addControlPoint}/> );
+        });
+    }
+
+    setActiveAreaCoordinate = index => {
+        return ( ) => {
+            const { setActiveAreaCoordinate, mapMode} = this.props;
+            if (mapMode === 'area-edit') {
+                setActiveAreaCoordinate( index );
+            }
+        };
+    }
+
     renderAreaControlPoints( area, activeAreaCoordinate ) {
         return area.map(( c, index ) => {
-            return ( <CircleMarker onMouseDown={this.coordinateDragStart( index )} key={index} center={c} {...this.state.styles.controlPoint} fillColor={( index === activeAreaCoordinate ) && this.state.styles.activeControlPoint.fillColor}/> );
+            return ( <CircleMarker onMouseOver={this.setActiveAreaCoordinate(index)} onMouseOut={this.setActiveAreaCoordinate(null)} onMouseDown={this.coordinateDragStart( index )} key={index} center={c} {...this.state.styles.controlPoint} fillColor={( index === activeAreaCoordinate ) && this.state.styles.activeControlPoint.fillColor}/> );
         });
     }
 
@@ -352,6 +364,7 @@ export default class ModelEditorMap extends Component {
                 {this.renderArea( area )}
                 {( mapMode === 'area-draw' && area.length > 0 && <Polyline positions={[ firstAreaCoordinate, mousePositionOnMap, lastAreaCoordinate ]}/> )}
                 {mapMode === 'area-draw' && <CircleMarker center={mousePositionOnMap} {...this.state.styles.controlPoint}/>}
+                {mapMode === 'area-edit' && area.length > 0 && this.renderAreaAddControlPoints( area )}
                 {[ 'area', 'area-draw', 'area-edit' ].indexOf( mapMode ) !== -1 && this.renderAreaControlPoints( area, activeAreaCoordinate )}
             </Map>
         );
@@ -376,7 +389,7 @@ export default class ModelEditorMap extends Component {
         const minimized = ( [ 'area', 'area-draw', 'area-edit' ].indexOf( mapMode ) !== -1 );
         const tool = this.renderTool( mapMode );
 
-        if (tool) {
+        if ( tool ) {
             return (
                 <FloatingTool minimized={minimized} enableMap={this.enableMap} disableMap={this.disableMap} close={this.unsetActiveTool}>
                     {tool}

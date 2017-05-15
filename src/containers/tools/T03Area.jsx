@@ -69,9 +69,16 @@ class T03Area extends Component {
         };
     }
 
+    deleteAreaCoordinate = index => {
+        return () => {
+            this.props.deleteAreaCoordinate(index);
+            this.props.setActiveAreaCoordinate( null );
+        };
+    }
+
     render( ) {
         // eslint-disable-next-line no-shadow
-        const { style, area, setMapMode, mapMode, deleteAreaCoordinate } = this.props;
+        const { style, area, setMapMode, mapMode } = this.props;
 
         return (
             <div style={[ style, styles.container ]}>
@@ -90,7 +97,7 @@ class T03Area extends Component {
                         {area.map(( c, index ) => <tr key={index} onMouseOver={this.setActiveAreaCoordinate( index )} onMouseOut={this.setActiveAreaCoordinate( null )}>
                             <td><input className="input-on-focus" value={c.lat} onChange={this.coordinateChangeLatitudeAction( index )}/></td>
                             <td><input className="input-on-focus" value={c.lng} onChange={this.coordinateChangeLongitudeAction( index )}/></td>
-                            <td><button onClick={() => deleteAreaCoordinate(index)} className="button"><Icon name="trash" /></button></td>
+                            <td><button onClick={this.deleteAreaCoordinate(index)} className="button"><Icon name="trash" /></button></td>
                         </tr>)}
                     </tbody>
                 </table>
