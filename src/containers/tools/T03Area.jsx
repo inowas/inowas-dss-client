@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { addAreaCoordinate, setActiveAreaCoordinate, setAreaLatitude, setAreaLongitude, setMapMode, deleteAreaCoordinate } from '../../actions/T03';
+import { addAreaCoordinate, setActiveAreaCoordinate, setAreaLatitude, setAreaLongitude, setState, deleteAreaCoordinate } from '../../actions/T03';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import { connect } from 'react-redux';
 import { getArea } from '../../reducers/T03/model';
-import { getMapMode } from '../../reducers/T03/ui';
+import { getState } from '../../reducers/T03/ui';
 import styleGlobals from 'styleGlobals';
 import Icon from '../../components/primitive/Icon';
 
@@ -41,8 +41,8 @@ class T03Area extends Component {
         addAreaCoordinate: PropTypes.func,
         setAreaLatitude: PropTypes.func,
         setAreaLongitude: PropTypes.func,
-        setMapMode: PropTypes.func,
-        mapMode: PropTypes.string,
+        setState: PropTypes.func,
+        state: PropTypes.string,
         setActiveAreaCoordinate: PropTypes.func,
         deleteAreaCoordinate: PropTypes.func
     }
@@ -78,14 +78,14 @@ class T03Area extends Component {
 
     render( ) {
         // eslint-disable-next-line no-shadow
-        const { style, area, setMapMode, mapMode } = this.props;
+        const { style, area, setState, state } = this.props;
 
         return (
             <div style={[ style, styles.container ]}>
                 <h3>Area</h3>
-                {([ 'area-draw', 'area-edit' ].indexOf( mapMode ) === -1 && <button className="button" onClick={( ) => setMapMode( 'area-draw' )}>draw</button>)}
-                {([ 'area-draw', 'area-edit' ].indexOf( mapMode ) === -1 && area.length > 0 && <button className="button" onClick={( ) => setMapMode( 'area-edit' )}>edit</button>)}
-                {([ 'area-draw', 'area-edit' ].indexOf( mapMode ) !== -1 && <button className="button" onClick={( ) => setMapMode( 'area' )}>finish</button>)}
+                {([ 'area-draw', 'area-edit' ].indexOf( state ) === -1 && <button className="button" onClick={( ) => setState( 'area-draw' )}>draw</button>)}
+                {([ 'area-draw', 'area-edit' ].indexOf( state ) === -1 && area.length > 0 && <button className="button" onClick={( ) => setState( 'area-edit' )}>edit</button>)}
+                {([ 'area-draw', 'area-edit' ].indexOf( state ) !== -1 && <button className="button" onClick={( ) => setState( 'area' )}>finish</button>)}
 
                 <table className="table">
                     <tbody>
@@ -109,11 +109,11 @@ class T03Area extends Component {
 const mapStateToProps = state => {
     return {
         area: getArea( state.T03.model ),
-        mapMode: getMapMode( state.T03.ui )
+        state: getState( state.T03.ui )
     };
 };
 
 // eslint-disable-next-line no-class-assign
-T03Area = connect(mapStateToProps, { addAreaCoordinate, setAreaLatitude, setAreaLongitude, setMapMode, setActiveAreaCoordinate, deleteAreaCoordinate })( T03Area );
+T03Area = connect(mapStateToProps, { addAreaCoordinate, setAreaLatitude, setAreaLongitude, setState, setActiveAreaCoordinate, deleteAreaCoordinate })( T03Area );
 
 export default T03Area;
