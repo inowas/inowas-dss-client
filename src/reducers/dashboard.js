@@ -82,7 +82,7 @@ const initialState = {
         slug: 'T03',
         name: 'Scenario Editor',
         path: 'tools/T03/',
-        models: [ {
+        models: [ /* {
             model_id: '03_1',
             user_name: 'ADMIN',
             name: 'DEFAULT MODEL',
@@ -91,7 +91,7 @@ const initialState = {
             application: 'A01',
             created_at: '2017-03-09T18:51:00+00:00',
             fake: false
-        } ]
+        } */ ]
     }, {
         slug: 'T06',
         name: 'MAR method selection',
