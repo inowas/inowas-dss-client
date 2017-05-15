@@ -4,6 +4,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import List from './List';
 import ListItem from './ListItem';
 import { uniqBy } from 'lodash';
+import levenshtein from 'levenshtein';
 
 const styles = {
     wrapper: {
@@ -43,7 +44,8 @@ export default class FilterableList extends Component {
     }
 
     state = {
-        filterType: ''
+        filterType: '',
+        searchTerm: ''
     }
 
     setFilterType = type => {
@@ -53,9 +55,19 @@ export default class FilterableList extends Component {
     }
 
     itemClickAction = id => {
-        return () => {
-            this.props.clickAction(id);
+        return ( ) => {
+            this.props.clickAction( id );
         };
+    }
+
+    setSearchTerm = e => {
+        this.setState({ searchTerm: e.target.value });
+    }
+
+    renderFilterButton( text, onClick, index = 0 ) {
+        return (
+            <button key={index} onClick={onClick} style={styles.filterButton.base}>{text}</button>
+        );
     }
 
     render( ) {
@@ -64,7 +76,7 @@ export default class FilterableList extends Component {
             list,
             ...rest
         } = this.props;
-        const { filterType } = this.state;
+        const { filterType, searchTerm } = this.state;
 
         const filter = uniqBy( list, 'type' );
 
@@ -73,14 +85,34 @@ export default class FilterableList extends Component {
             filteredList = list.filter(i => ( i.type === filterType ));
         }
 
+        if ( searchTerm ) {
+            const listWithLevenshteinDistance = filteredList.map(i => {
+                const leven = new levenshtein( i.name, searchTerm );
+                return {
+                    ...i,
+                    levenshtein: leven.distance
+                };
+            });
+
+            listWithLevenshteinDistance.sort(( a, b ) => {
+                return a.levenshtein - b.levenshtein;
+            });
+
+            filteredList = listWithLevenshteinDistance;
+        }
+
         return (
             <div {...rest} style={[ style, styles.wrapper ]}>
-                <div> filter:
-                    <button onClick={this.setFilterType( null )} style={styles.filterButton.base}>all</button>
-                    {filter.map(( f, index ) => <button onClick={this.setFilterType( f.type )} key={index} style={styles.filterButton.base}>{f.type}</button>)}
+                <div>
+                    filter: {this.renderFilterButton( 'all', this.setFilterType( null ), filter.length )}
+                    {filter.map(( f, index ) => this.renderFilterButton( f.type, this.setFilterType( f.type ), index ))}
+
+                    <div>
+                        <input className="input" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
+                    </div>
                 </div>
                 <List style={styles.list}>
-                    {filteredList.map(( i, index ) => <ListItem clickAction={this.itemClickAction(i.name)} key={index}>{i.name}</ListItem>)}
+                    {filteredList.map(( i, index ) => <ListItem clickAction={this.itemClickAction( i.name )} key={index}>{i.name}</ListItem>)}
                 </List>
             </div>
         );
