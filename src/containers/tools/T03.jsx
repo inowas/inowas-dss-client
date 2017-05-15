@@ -55,7 +55,6 @@ const mapStateToProps = (state, { params }) => {
     };
 };
 
-// TODO get id from router param (this is why we'll need withRouter)
 // eslint-disable-next-line no-class-assign
 T03 = withRouter( connect( mapStateToProps, actions )( T03 ));
 

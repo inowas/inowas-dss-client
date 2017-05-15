@@ -1,22 +1,22 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import '../../less/stackedNav.less';
 
-export default class StackedNav extends React.Component {
+export default class StackedNav extends Component {
+
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.array.isRequired
+    }
 
     render() {
-        const {className, children} = this.props;
+        const {className, children, ...rest} = this.props;
 
         return (
-            <div className={'nav-stacked tile col col-abs-2' + ' ' + (className || '')}>
+            <div {...rest} className={'nav-stacked tile col col-abs-2' + ' ' + (className || '')}>
                 {children}
             </div>
         );
     }
 
-}
-
-StackedNav.propTypes = {
-    className: React.PropTypes.string,
-    children: React.PropTypes.array.isRequired
 }
