@@ -1,3 +1,9 @@
+/**
+ * Takes an array of objects like [{name, type}]
+ *
+ * @author Martin Wudenka
+ */
+
 import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
