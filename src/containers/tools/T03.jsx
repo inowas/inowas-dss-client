@@ -19,7 +19,7 @@ class T03 extends Component {
     constructor(props) {
         super(props);
 
-        if (props.id !== null) {
+        if (props.id === undefined || props.id === null ) {
             props.setState('initial');
         }
     }

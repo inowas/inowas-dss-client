@@ -53,9 +53,21 @@ export default class ModelEditorMap extends Component {
                 name: 'General',
                 icon: <Icon name="settings"/>
             }, {
+                slug: 'soilmodel',
+                name: 'Soilmodel',
+                icon: <Icon name="layer_horizontal_hatched"/>
+            }, {
                 slug: 'boundariesOverlay',
                 name: 'Boundaries',
                 icon: <Icon name="marker"/>
+            }, {
+                slug: 'modelRun',
+                name: 'Model Run',
+                icon: <Icon name="calculator"/>
+            }, {
+                slug: 'results',
+                name: 'Results',
+                icon: <Icon name="dataset"/>
             }
         ],
 
