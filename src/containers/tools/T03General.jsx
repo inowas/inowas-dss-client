@@ -40,7 +40,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class T03Setup extends Component {
+class T03General extends Component {
 
     static propTypes = {
         style: PropTypes.object,
@@ -184,7 +184,7 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-T03Setup = connect(mapStateToProps, {
+T03General = connect(mapStateToProps, {
     setName,
     setDescription,
     setTimeUnit,
@@ -193,6 +193,6 @@ T03Setup = connect(mapStateToProps, {
     setAreaLatitude,
     setAreaLongitude,
     setState
-})( T03Setup );
+})( T03General );
 
-export default T03Setup;
+export default T03General;

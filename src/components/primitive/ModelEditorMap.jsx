@@ -11,7 +11,7 @@ import FloatingToolbox from './FloatingToolbox';
 import Icon from './Icon';
 import T03Area from '../../containers/tools/T03Area';
 import T03Boundaries from '../../containers/tools/T03Boundaries';
-import T03Setup from '../../containers/tools/T03Setup';
+import T03General from '../../containers/tools/T03General';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
@@ -49,8 +49,8 @@ export default class ModelEditorMap extends Component {
         // TODO move to container
         properties: [
             {
-                slug: 'setup',
-                name: 'Setup',
+                slug: 'general',
+                name: 'General',
                 icon: <Icon name="settings"/>
             }, {
                 slug: 'boundariesOverlay',
@@ -374,8 +374,8 @@ export default class ModelEditorMap extends Component {
         switch ( state ) {
             case 'boundariesOverlay':
                 return <T03Boundaries/>;
-            case 'setup':
-                return <T03Setup/>;
+            case 'general':
+                return <T03General/>;
             case 'area':
             case 'area-draw':
             case 'area-edit':
