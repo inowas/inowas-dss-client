@@ -2,10 +2,10 @@ import '../../less/floatingToolbox.less';
 
 import React, { Component, PropTypes } from 'react';
 
-import Accordion from './Accordion';
-import AccordionItem from './AccordionItem';
-import List from './List';
-import ListItem from './ListItem';
+import Accordion from '../primitive/Accordion';
+import AccordionItem from '../primitive/AccordionItem';
+import List from '../primitive/List';
+import ListItem from '../primitive/ListItem';
 
 export default class FloatingToolbox extends Component {
 

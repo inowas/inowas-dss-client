@@ -8,7 +8,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import FloatingTitle from './FloatingTitle';
 import FloatingTool from './FloatingTool';
 import FloatingToolbox from './FloatingToolbox';
-import Icon from './Icon';
+import Icon from '../primitive/Icon';
 import T03Area from '../../containers/tools/T03Area';
 import T03Boundaries from '../../containers/tools/T03Boundaries';
 import T03General from '../../containers/tools/T03General';

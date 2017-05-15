@@ -2,7 +2,7 @@ import '../../less/floatingTool.less';
 
 import React, { Component, PropTypes } from 'react';
 
-import Icon from './Icon';
+import Icon from '../primitive/Icon';
 
 export default class FloatingTool extends Component {
 
