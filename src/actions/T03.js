@@ -1,4 +1,4 @@
-export function setMapMode( mode ) {
+export function setState( mode ) {
     return {
         type: 'T03_UI_SET_MAP_MODE',
         payload: mode

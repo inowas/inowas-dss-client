@@ -5,7 +5,7 @@ import {
     setAreaLongitude,
     setDescription,
     setLengthUnit,
-    setMapMode,
+    setState,
     setName,
     setTimeUnit
 } from '../../actions/T03';
@@ -56,7 +56,7 @@ class T03Setup extends Component {
         addAreaCoordinate: PropTypes.func,
         setAreaLatitude: PropTypes.func,
         setAreaLongitude: PropTypes.func,
-        setMapMode: PropTypes.func
+        setState: PropTypes.func
     }
 
     nameChangeAction = ( e ) => {
@@ -92,7 +92,7 @@ class T03Setup extends Component {
     }
 
     editAreaOnMap = ( ) => {
-        this.props.setMapMode( 'area' );
+        this.props.setState( 'area' );
     }
 
     // eslint-disable-next-line no-shadow
@@ -192,7 +192,7 @@ T03Setup = connect(mapStateToProps, {
     addAreaCoordinate,
     setAreaLatitude,
     setAreaLongitude,
-    setMapMode
+    setState
 })( T03Setup );
 
 export default T03Setup;

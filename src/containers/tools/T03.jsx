@@ -2,7 +2,7 @@ import * as actions from '../../actions/T03';
 
 import React, { Component } from 'react';
 import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/model';
-import { getMapMode, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
+import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
 
 import ModelEditorMap from '../../components/primitive/ModelEditorMap';
 import Navbar from '../Navbar';
@@ -30,7 +30,7 @@ class T03 extends Component {
 
 const mapStateToProps = state => {
     return {
-        mapMode: getMapMode( state.T03.ui ),
+        state: getState( state.T03.ui ),
         area: getArea( state.T03.model ),
         firstAreaCoordinate: getFirstAreaCoordinate( state.T03.model ),
         lastAreaCoordinate: getLastAreaCoordinate( state.T03.model ),

@@ -1,6 +1,6 @@
 function getInitialState() {
     return {
-        mapMode: null,
+        state: null,
         activeBoundary: null,
         mapPosition: {
             center: [
@@ -20,7 +20,7 @@ function getInitialState() {
 const ui = ( state = getInitialState(), action ) => {
     switch ( action.type ) {
         case 'T03_UI_SET_MAP_MODE':
-            return { ...state, mapMode: action.payload };
+            return { ...state, state: action.payload };
 
         case 'T03_UI_SET_ACTIVE_BOUNDARY':
             return { ...state, activeBoundary: action.payload };
@@ -44,7 +44,7 @@ const ui = ( state = getInitialState(), action ) => {
 
 export default ui;
 
-export const getMapMode = state => state.mapMode;
+export const getState = state => state.state;
 export const getActiveBoundary = state => state.activeBoundary;
 export const getMapPosition = state => state.mapPosition;
 export const getMousePositionOnMap = state => state.mousePositionOnMap;

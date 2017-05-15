@@ -27,8 +27,8 @@ const styles = {
 export default class ModelEditorMap extends Component {
 
     static propTypes = {
-        mapMode: PropTypes.string, // TODO better use oneOf
-        setMapMode: PropTypes.func,
+        state: PropTypes.string, // TODO better use oneOf
+        setState: PropTypes.func,
         addAreaCoordinate: PropTypes.func,
         setMapPosition: PropTypes.func,
         area: PropTypes.array,
@@ -195,7 +195,7 @@ export default class ModelEditorMap extends Component {
     }
 
     unsetActiveTool = ( ) => {
-        this.props.setMapMode( null );
+        this.props.setState( null );
     }
 
     addAreaCoordinate = e => {
@@ -310,8 +310,8 @@ export default class ModelEditorMap extends Component {
 
     setActiveAreaCoordinate = index => {
         return ( ) => {
-            const { setActiveAreaCoordinate, mapMode} = this.props;
-            if (mapMode === 'area-edit') {
+            const { setActiveAreaCoordinate, state} = this.props;
+            if (state === 'area-edit') {
                 setActiveAreaCoordinate( index );
             }
         };
@@ -332,7 +332,7 @@ export default class ModelEditorMap extends Component {
 
     renderMap( ) {
         const {
-            mapMode,
+            state,
             area,
             mapPosition,
             firstAreaCoordinate,
@@ -347,7 +347,7 @@ export default class ModelEditorMap extends Component {
             onMouseMove: ( ) => {}
         };
 
-        switch ( mapMode ) {
+        switch ( state ) {
             case 'area-draw':
                 handler.onClick = this.addAreaCoordinate;
                 handler.onMouseMove = this.setMousePosition;
@@ -362,16 +362,16 @@ export default class ModelEditorMap extends Component {
             <Map ref="map" {...mapPosition} className="modelEditorMap" zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                 {this.renderArea( area )}
-                {( mapMode === 'area-draw' && area.length > 0 && <Polyline positions={[ firstAreaCoordinate, mousePositionOnMap, lastAreaCoordinate ]}/> )}
-                {mapMode === 'area-draw' && <CircleMarker center={mousePositionOnMap} {...this.state.styles.controlPoint}/>}
-                {mapMode === 'area-edit' && area.length > 0 && this.renderAreaAddControlPoints( area )}
-                {[ 'area', 'area-draw', 'area-edit' ].indexOf( mapMode ) !== -1 && this.renderAreaControlPoints( area, activeAreaCoordinate )}
+                {( state === 'area-draw' && area.length > 0 && <Polyline positions={[ firstAreaCoordinate, mousePositionOnMap, lastAreaCoordinate ]}/> )}
+                {state === 'area-draw' && <CircleMarker center={mousePositionOnMap} {...this.state.styles.controlPoint}/>}
+                {state === 'area-edit' && area.length > 0 && this.renderAreaAddControlPoints( area )}
+                {[ 'area', 'area-draw', 'area-edit' ].indexOf( state ) !== -1 && this.renderAreaControlPoints( area, activeAreaCoordinate )}
             </Map>
         );
     }
 
-    renderTool( mapMode ) {
-        switch ( mapMode ) {
+    renderTool( state ) {
+        switch ( state ) {
             case 'boundariesOverlay':
                 return <T03Boundaries/>;
             case 'setup':
@@ -385,9 +385,9 @@ export default class ModelEditorMap extends Component {
         }
     }
 
-    renderToolWrapper( mapMode ) {
-        const minimized = ( [ 'area', 'area-draw', 'area-edit' ].indexOf( mapMode ) !== -1 );
-        const tool = this.renderTool( mapMode );
+    renderToolWrapper( state ) {
+        const minimized = ( [ 'area', 'area-draw', 'area-edit' ].indexOf( state ) !== -1 );
+        const tool = this.renderTool( state );
 
         if ( tool ) {
             return (
@@ -400,10 +400,10 @@ export default class ModelEditorMap extends Component {
         return null;
     }
 
-    renderTitle( mapMode ) {
+    renderTitle( state ) {
         let title;
 
-        switch ( mapMode ) {
+        switch ( state ) {
             case 'area':
                 title = 'Edit the area';
                 break;
@@ -419,16 +419,16 @@ export default class ModelEditorMap extends Component {
     }
 
     render( ) {
-        const { setMapMode, mapMode } = this.props;
+        const { setState, state } = this.props;
         const { properties } = this.state;
 
         return (
             <div className="modelEditorMap-wrapper">
                 {this.renderMap( )}
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
-                {this.renderToolWrapper( mapMode )}
-                {this.renderTitle( mapMode )}
-                <FloatingToolbox items={properties} onToolClick={setMapMode}/>
+                {this.renderToolWrapper( state )}
+                {this.renderTitle( state )}
+                <FloatingToolbox items={properties} onToolClick={setState}/>
             </div>
         );
     }
