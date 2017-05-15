@@ -1,11 +1,12 @@
-import { setActiveBoundary } from '../../actions/T03';
-
 import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
+import Tab from '../../components/primitive/Tab';
+import Tabs from '../../components/primitive/Tabs';
 import { connect } from 'react-redux';
 import { getActiveBoundary } from '../../reducers/T03/ui';
+import { setActiveBoundary } from '../../actions/T03';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
@@ -76,8 +77,7 @@ class T03Boundaries extends Component {
     render( ) {
         const { boundaries } = this.state;
         const {
-            style,
-            boundary,
+            style, boundary,
             // eslint-disable-next-line no-shadow
             setActiveBoundary,
             ...rest
@@ -87,6 +87,10 @@ class T03Boundaries extends Component {
             <div {...rest} style={[ style, styles.container ]}>
                 <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/>
                 <div>
+                    <Tabs>
+                        <Tab title="Eins">1 egjnegjeng</Tab>
+                        <Tab title="Zwei">2 ermgerrmgi</Tab>
+                    </Tabs>
                     {boundary}
                 </div>
             </div>
@@ -101,6 +105,6 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-T03Boundaries = connect( mapStateToProps, { setActiveBoundary } )( T03Boundaries );
+T03Boundaries = connect(mapStateToProps, { setActiveBoundary })( T03Boundaries );
 
 export default T03Boundaries;
