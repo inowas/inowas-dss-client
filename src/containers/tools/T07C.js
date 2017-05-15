@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
@@ -246,13 +246,15 @@ export default class T07C extends Component {
     }
 
     labelXAxis = ( resultType ) => {
-        if (resultType.toString() == 'head') {
+        if (resultType.toString() === 'head') {
             return 'Groundwater Head [m]';
         }
 
-        if (resultType.toString() == 'drawdown') {
+        if (resultType.toString() === 'drawdown') {
             return 'Groundwater DrawDown [m]';
         }
+
+        return null;
     };
 
     renderChart( ) {

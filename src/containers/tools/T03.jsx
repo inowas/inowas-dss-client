@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/model';
 import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
 
-import ModelEditorMap from '../../components/primitive/ModelEditorMap';
+import ModelEditorMap from '../../components/modflow/ModelEditorMap';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';

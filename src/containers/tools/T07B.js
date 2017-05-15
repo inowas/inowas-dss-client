@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import ArraySlider from '../../components/primitive/ArraySlider';
