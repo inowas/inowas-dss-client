@@ -1,6 +1,6 @@
 function getInitialState() {
     return {
-        state: null,
+        state: 'general',
         activeBoundary: null,
         mapPosition: {
             center: [

@@ -87,9 +87,10 @@ class T03Boundaries extends Component {
             <div {...rest} style={[ style, styles.container ]}>
                 <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/>
                 <div>
+                    <h3>Tabdemo</h3>
                     <Tabs>
-                        <Tab title="Eins">1 egjnegjeng</Tab>
-                        <Tab title="Zwei">2 ermgerrmgi</Tab>
+                        <Tab title="Eins">Tab 1 Lorem Ipsum ...</Tab>
+                        <Tab title="Zwei">Tab 2 Lorem Ipsum ...</Tab>
                     </Tabs>
                     {boundary}
                 </div>

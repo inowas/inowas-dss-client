@@ -1,12 +1,20 @@
 import React, { Component, PropTypes } from 'react';
-import { addAreaCoordinate, setActiveAreaCoordinate, setAreaLatitude, setAreaLongitude, setState, deleteAreaCoordinate } from '../../actions/T03';
+import {
+    addAreaCoordinate,
+    deleteAreaCoordinate,
+    setActiveAreaCoordinate,
+    setAreaLatitude,
+    setAreaLongitude,
+    setState
+} from '../../actions/T03';
 
 import ConfiguredRadium from 'ConfiguredRadium';
+import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
-import { getArea } from '../../reducers/T03/model';
+import { getArea } from '../../reducers/T03/general';
 import { getState } from '../../reducers/T03/ui';
 import styleGlobals from 'styleGlobals';
-import Icon from '../../components/primitive/Icon';
+import { withRouter } from 'react-router';
 
 const styles = {
     container: {
@@ -15,7 +23,7 @@ const styles = {
         top: 0,
         right: 0,
         bottom: 0,
-        padding: styleGlobals.dimensions.spacing.large,
+        // padding: styleGlobals.dimensions.spacing.large,
         overflow: 'auto'
     },
 
@@ -25,10 +33,6 @@ const styles = {
 
     labelTr: {
         textAlign: 'right'
-    },
-
-    addCoordinateWrapper: {
-        marginTop: '2em'
     }
 };
 
@@ -44,7 +48,8 @@ class T03Area extends Component {
         setState: PropTypes.func,
         state: PropTypes.string,
         setActiveAreaCoordinate: PropTypes.func,
-        deleteAreaCoordinate: PropTypes.func
+        deleteAreaCoordinate: PropTypes.func,
+        id: PropTypes.string
     }
 
     addCoordinateClickAction = ( ) => {
@@ -70,8 +75,8 @@ class T03Area extends Component {
     }
 
     deleteAreaCoordinate = index => {
-        return () => {
-            this.props.deleteAreaCoordinate(index);
+        return ( ) => {
+            this.props.deleteAreaCoordinate( index );
             this.props.setActiveAreaCoordinate( null );
         };
     }
@@ -81,8 +86,11 @@ class T03Area extends Component {
         const { style, area, setState, state } = this.props;
 
         return (
-            <div style={[ style, styles.container ]}>
+            <div style={[ styles.container, style ]}>
                 <h3>Area</h3>
+                <div>
+                    <button className="link" onClick={( ) => setState( 'general' )}>back to GENERAL<Icon name="arrow_right" /></button>
+                </div>
                 {([ 'area-draw', 'area-edit' ].indexOf( state ) === -1 && <button className="button" onClick={( ) => setState( 'area-draw' )}>draw</button>)}
                 {([ 'area-draw', 'area-edit' ].indexOf( state ) === -1 && area.length > 0 && <button className="button" onClick={( ) => setState( 'area-edit' )}>edit</button>)}
                 {([ 'area-draw', 'area-edit' ].indexOf( state ) !== -1 && <button className="button" onClick={( ) => setState( 'area' )}>finish</button>)}
@@ -92,12 +100,14 @@ class T03Area extends Component {
                         <tr>
                             <th>Latitude</th>
                             <th>Longitude</th>
-                            <th />
+                            <th/>
                         </tr>
                         {area.map(( c, index ) => <tr key={index} onMouseOver={this.setActiveAreaCoordinate( index )} onMouseOut={this.setActiveAreaCoordinate( null )}>
                             <td><input className="input-on-focus" value={c.lat} onChange={this.coordinateChangeLatitudeAction( index )}/></td>
                             <td><input className="input-on-focus" value={c.lng} onChange={this.coordinateChangeLongitudeAction( index )}/></td>
-                            <td><button onClick={this.deleteAreaCoordinate(index)} className="button"><Icon name="trash" /></button></td>
+                            <td>
+                                <button onClick={this.deleteAreaCoordinate( index )} className="button"><Icon name="trash"/></button>
+                            </td>
                         </tr>)}
                     </tbody>
                 </table>
@@ -106,14 +116,22 @@ class T03Area extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, { params }) => {
     return {
-        area: getArea( state.T03.model ),
-        state: getState( state.T03.ui )
+        area: getArea( state.T03.model.general ),
+        state: getState( state.T03.ui ),
+        id: params.id
     };
 };
 
 // eslint-disable-next-line no-class-assign
-T03Area = connect(mapStateToProps, { addAreaCoordinate, setAreaLatitude, setAreaLongitude, setState, setActiveAreaCoordinate, deleteAreaCoordinate })( T03Area );
+T03Area = withRouter( connect(mapStateToProps, {
+    addAreaCoordinate,
+    setAreaLatitude,
+    setAreaLongitude,
+    setState,
+    setActiveAreaCoordinate,
+    deleteAreaCoordinate
+})( T03Area ));
 
 export default T03Area;

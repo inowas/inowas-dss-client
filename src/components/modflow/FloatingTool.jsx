@@ -11,7 +11,8 @@ export default class FloatingTool extends Component {
         close: PropTypes.func.isRequired,
         enableMap: PropTypes.func,
         disableMap: PropTypes.func,
-        minimized: PropTypes.bool
+        minimized: PropTypes.bool,
+        closeable: PropTypes.bool
     }
 
     componentWillMount( ) {
@@ -35,15 +36,20 @@ export default class FloatingTool extends Component {
     }
 
     render( ) {
-        const { children, close, minimized } = this.props;
+        const { children, close, minimized, closeable } = this.props;
 
         if ( children ) {
             return (
                 <div className="floatingTool-wrapper" data-minimized={minimized}>
                     <div className="floatingTool">
-                        <div className="header">
-                            <button className="link" onClick={close}><Icon name="close"/></button>
-                        </div>
+                        {(() => {
+                            if (closeable) {
+                                return (<div className="header">
+                                    <button className="link" onClick={close}><Icon name="close"/></button>
+                                </div>);
+                            }
+                            return null;
+                        })()}
                         <div className="content">
                             {children}
                         </div>
