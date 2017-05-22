@@ -5,6 +5,8 @@ import { Map, TileLayer } from 'react-leaflet';
 import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
+import EditableArea from './EditableArea';
+import EditableWells from './EditableWells';
 import FloatingTitle from './FloatingTitle';
 import FloatingTool from './FloatingTool';
 import FloatingToolbox from './FloatingToolbox';
@@ -13,7 +15,6 @@ import T03Area from '../../containers/tools/T03Area';
 import T03Boundaries from '../../containers/tools/T03Boundaries';
 import T03General from '../../containers/tools/T03General';
 import styleGlobals from 'styleGlobals';
-import EditableArea from './EditableArea';
 
 const styles = {
     resetViewButton: {
@@ -27,71 +28,6 @@ const styles = {
         weight: 0.5,
         fillColor: 'blue',
         fillOpacity: 0.1
-    },
-    wells: {
-        cw: {
-            radius: 3,
-            color: 'black',
-            weight: 1,
-            fillColor: 'darkgreen',
-            fillOpacity: 0.7
-        },
-        iw: {
-            radius: 3,
-            color: 'black',
-            weight: 1,
-            fillColor: 'darkgreen',
-            fillOpacity: 0.7
-        },
-        sniw: {
-            radius: 5,
-            color: 'red',
-            weight: 2,
-            fillColor: 'darkgreen',
-            fillOpacity: 0.7
-        },
-        puw: {
-            radius: 3,
-            color: 'black',
-            weight: 1,
-            fillColor: 'darkblue',
-            fillOpacity: 0.7
-        },
-        snpw: {
-            radius: 5,
-            color: 'red',
-            weight: 2,
-            fillColor: 'darkblue',
-            fillOpacity: 0.7
-        },
-        prw: {
-            radius: 3,
-            color: 'black',
-            weight: 1,
-            fillColor: 'darkblue',
-            fillOpacity: 0.7
-        },
-        smw: {
-            radius: 5,
-            color: 'black',
-            weight: 1,
-            fillColor: 'red',
-            fillOpacity: 1
-        },
-        snw: {
-            radius: 5,
-            color: 'black',
-            weight: 1,
-            fillColor: 'yellow',
-            fillOpacity: 1
-        },
-        snifw: {
-            radius: 5,
-            color: '#63b3ea',
-            weight: 2,
-            fillColor: '#bbdff6',
-            fillOpacity: 0.7
-        }
     },
     river: {
         color: '#000',
@@ -121,7 +57,12 @@ export default class ModelEditorMap extends Component {
         setAreaLongitude: PropTypes.func,
         activeAreaControlPoint: PropTypes.number,
         setActiveAreaControlPoint: PropTypes.func,
-        initial: PropTypes.bool
+        boundaries: PropTypes.array,
+        initial: PropTypes.bool,
+        activeBoundary: PropTypes.string,
+        draggedBoundary: PropTypes.string,
+        setDraggedBoundary: PropTypes.func,
+        updateBoundary: PropTypes.func,
     };
 
     state = {
@@ -251,7 +192,12 @@ export default class ModelEditorMap extends Component {
             draggedAreaControlPoint,
             setDraggedAreaControlPoint,
             setAreaLatitude,
-            setAreaLongitude
+            setAreaLongitude,
+            boundaries,
+            activeBoundary,
+            draggedBoundary,
+            setDraggedBoundary,
+            updateBoundary
         } = this.props;
 
         const handler = {
@@ -259,7 +205,6 @@ export default class ModelEditorMap extends Component {
             onClick: ( ) => {},
             onMouseMove: this.setMousePosition
         };
-
         switch ( state ) {
             case 'area-draw':
                 handler.onClick = this.addAreaControlPoint;
@@ -279,10 +224,22 @@ export default class ModelEditorMap extends Component {
             }
         })( );
 
+        const wellsState = (( ) => {
+            switch ( state ) {
+                case 'wells-edit':
+                    return 'edit';
+                default:
+                    return 'minimal';
+            }
+        })( );
+
         return (
             <Map ref="map" {...mapPosition} className="modelEditorMap" zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                 <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    ? this.refs.map.leafletElement
+                    : null}/>
+                <EditableWells state={wellsState} draggedBoundary={draggedBoundary} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'well' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
             </Map>

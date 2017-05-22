@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setActiveBoundary, updateBoundary } from '../../actions/T03';
+import { setActiveBoundary, updateBoundary, setState } from '../../actions/T03';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
@@ -40,19 +40,20 @@ class T03Boundaries extends Component {
         boundary: PropTypes.string,
         setActiveBoundary: PropTypes.func,
         updateBoundary: PropTypes.func,
-        boundaries: PropTypes.array
+        boundaries: PropTypes.array,
+        setState: PropTypes.func
     }
 
     renderProperties( activeBoundary ) {
         // eslint-disable-next-line no-shadow
-        const { updateBoundary } = this.props;
+        const { updateBoundary, setState } = this.props;
         if ( activeBoundary ) {
             switch ( activeBoundary.type ) {
                 case 'well':
                     return (
                         <Tabs>
                             <Tab title="Summary">
-                                <WellProperties well={activeBoundary} updateWell={updateBoundary}/>
+                                <WellProperties setState={setState} well={activeBoundary} updateWell={updateBoundary}/>
                             </Tab>
                             <Tab title="Pumping Rates">Tab 2 Lorem Ipsum ...</Tab>
                         </Tabs>
@@ -102,6 +103,6 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-T03Boundaries = connect(mapStateToProps, { setActiveBoundary, updateBoundary })( T03Boundaries );
+T03Boundaries = connect(mapStateToProps, { setActiveBoundary, updateBoundary, setState })( T03Boundaries );
 
 export default T03Boundaries;

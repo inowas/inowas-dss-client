@@ -50,7 +50,7 @@ export default class EditableArea extends Component {
     }
 
     componentDidMount( ) {
-        document.addEventListener( 'mouseup', this.ControlPointDragEnd );
+        document.addEventListener( 'mouseup', this.controlPointDragEnd );
     }
 
     componentWillReceiveProps( nextProps ) {
@@ -58,7 +58,7 @@ export default class EditableArea extends Component {
     }
 
     componentWillUnmount( ) {
-        document.removeEventListener( 'mouseup', this.ControlPointDragEnd );
+        document.removeEventListener( 'mouseup', this.controlPointDragEnd );
     }
 
     addAreaControlPoint = e => {
@@ -78,7 +78,7 @@ export default class EditableArea extends Component {
         }
     }
 
-    ControlPointDragStart = index => {
+    controlPointDragStart = index => {
         return ( ) => {
             const { draggedControlPoint, leafletElement, setDraggedControlPoint } = this.props;
             if ( draggedControlPoint === null && leafletElement ) {
@@ -88,7 +88,7 @@ export default class EditableArea extends Component {
         };
     }
 
-    ControlPointDragEnd = ( ) => {
+    controlPointDragEnd = ( ) => {
         const { draggedControlPoint, leafletElement, setDraggedControlPoint } = this.props;
         if ( draggedControlPoint !== null && leafletElement ) {
             leafletElement.dragging.enable( );

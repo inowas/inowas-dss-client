@@ -13,10 +13,17 @@ export function setState( mode ) {
     };
 }
 
-export function setActiveBoundary( boundary ) {
+export function setActiveBoundary( id ) {
     return {
         type: 'T03_UI_SET_ACTIVE_BOUNDARY',
-        payload: boundary
+        payload: id
+    };
+}
+
+export function setDraggedBoundary( id ) {
+    return {
+        type: 'T03_UI_SET_DRAGGED_BOUNDARY',
+        payload: id
     };
 }
 

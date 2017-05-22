@@ -2,6 +2,7 @@ function getInitialState() {
     return {
         state: 'general',
         activeBoundary: null,
+        draggedBoundary: null,
         mapPosition: {
             center: [
                 0, 0
@@ -25,6 +26,9 @@ const ui = ( state = getInitialState(), action ) => {
         case 'T03_UI_SET_ACTIVE_BOUNDARY':
             return { ...state, activeBoundary: action.payload };
 
+        case 'T03_UI_SET_DRAGGED_BOUNDARY':
+            return { ...state, draggedBoundary: action.payload };
+
         case 'T03_UI_SET_MAP_POSITION':
             return { ...state, mapPosition: action.payload };
 
@@ -46,6 +50,7 @@ export default ui;
 
 export const getState = state => state.state;
 export const getActiveBoundary = state => state.activeBoundary;
+export const getDraggedBoundary = state => state.draggedBoundary;
 export const getMapPosition = state => state.mapPosition;
 export const getMousePositionOnMap = state => state.mousePositionOnMap;
 export const getDraggedAreaControlPoint = state => state.draggedAreaControlPoint;
