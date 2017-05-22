@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    addAreaCoordinate,
-    deleteAreaCoordinate,
-    setActiveAreaCoordinate,
+    addAreaControlPoint,
+    deleteAreaControlPoint,
+    setActiveAreaControlPoint,
     setAreaLatitude,
     setAreaLongitude,
     setState
@@ -42,42 +42,42 @@ class T03Area extends Component {
     static propTypes = {
         style: PropTypes.object,
         area: PropTypes.array,
-        addAreaCoordinate: PropTypes.func,
+        addAreaControlPoint: PropTypes.func,
         setAreaLatitude: PropTypes.func,
         setAreaLongitude: PropTypes.func,
         setState: PropTypes.func,
         state: PropTypes.string,
-        setActiveAreaCoordinate: PropTypes.func,
-        deleteAreaCoordinate: PropTypes.func,
+        setActiveAreaControlPoint: PropTypes.func,
+        deleteAreaControlPoint: PropTypes.func,
         id: PropTypes.string
     }
 
-    addCoordinateClickAction = ( ) => {
-        this.props.addAreaCoordinate( 0, 0 );
+    addControlPointClickAction = ( ) => {
+        this.props.addAreaControlPoint( 0, 0 );
     }
 
-    coordinateChangeLatitudeAction = ( index ) => {
+    ControlPointChangeLatitudeAction = ( index ) => {
         return ( e ) => {
             this.props.setAreaLatitude( index, e.target.value );
         };
     }
 
-    coordinateChangeLongitudeAction = ( index ) => {
+    ControlPointChangeLongitudeAction = ( index ) => {
         return ( e ) => {
             this.props.setAreaLongitude( index, e.target.value );
         };
     }
 
-    setActiveAreaCoordinate = index => {
+    setActiveAreaControlPoint = index => {
         return ( ) => {
-            this.props.setActiveAreaCoordinate( index );
+            this.props.setActiveAreaControlPoint( index );
         };
     }
 
-    deleteAreaCoordinate = index => {
+    deleteAreaControlPoint = index => {
         return ( ) => {
-            this.props.deleteAreaCoordinate( index );
-            this.props.setActiveAreaCoordinate( null );
+            this.props.deleteAreaControlPoint( index );
+            this.props.setActiveAreaControlPoint( null );
         };
     }
 
@@ -102,11 +102,11 @@ class T03Area extends Component {
                             <th>Longitude</th>
                             <th/>
                         </tr>
-                        {area.map(( c, index ) => <tr key={index} onMouseOver={this.setActiveAreaCoordinate( index )} onMouseOut={this.setActiveAreaCoordinate( null )}>
-                            <td><input className="input-on-focus" value={c.lat} onChange={this.coordinateChangeLatitudeAction( index )}/></td>
-                            <td><input className="input-on-focus" value={c.lng} onChange={this.coordinateChangeLongitudeAction( index )}/></td>
+                        {area.map(( c, index ) => <tr key={index} onMouseOver={this.setActiveAreaControlPoint( index )} onMouseOut={this.setActiveAreaControlPoint( null )}>
+                            <td><input className="input-on-focus" value={c.lat} onChange={this.ControlPointChangeLatitudeAction( index )}/></td>
+                            <td><input className="input-on-focus" value={c.lng} onChange={this.ControlPointChangeLongitudeAction( index )}/></td>
                             <td>
-                                <button onClick={this.deleteAreaCoordinate( index )} className="button"><Icon name="trash"/></button>
+                                <button onClick={this.deleteAreaControlPoint( index )} className="button"><Icon name="trash"/></button>
                             </td>
                         </tr>)}
                     </tbody>
@@ -126,12 +126,12 @@ const mapStateToProps = (state, { params }) => {
 
 // eslint-disable-next-line no-class-assign
 T03Area = withRouter( connect(mapStateToProps, {
-    addAreaCoordinate,
+    addAreaControlPoint,
     setAreaLatitude,
     setAreaLongitude,
     setState,
-    setActiveAreaCoordinate,
-    deleteAreaCoordinate
+    setActiveAreaControlPoint,
+    deleteAreaControlPoint
 })( T03Area ));
 
 export default T03Area;

@@ -1,8 +1,8 @@
 import * as actions from '../../actions/T03';
 
 import React, { Component, PropTypes } from 'react';
-import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/general';
-import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
+import { getArea } from '../../reducers/T03/general';
+import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaControlPoint, getActiveAreaControlPoint } from '../../reducers/T03/ui';
 
 import ModelEditorMap from '../../components/modflow/ModelEditorMap';
 import Navbar from '../Navbar';
@@ -40,12 +40,10 @@ const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T03.ui ),
         area: getArea( state.T03.model.general ),
-        firstAreaCoordinate: getFirstAreaCoordinate( state.T03.model.general ),
-        lastAreaCoordinate: getLastAreaCoordinate( state.T03.model.general ),
         mapPosition: getMapPosition( state.T03.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
-        draggedAreaCoordinate: getDraggedAreaCoordinate( state.T03.ui ),
-        activeAreaCoordinate: getActiveAreaCoordinate( state.T03.ui ),
+        draggedAreaControlPoint: getDraggedAreaControlPoint( state.T03.ui ),
+        activeAreaControlPoint: getActiveAreaControlPoint( state.T03.ui ),
         id: params.id
     };
 };

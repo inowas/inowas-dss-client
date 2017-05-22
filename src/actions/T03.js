@@ -34,16 +34,16 @@ export function setMousePositionOnMap( position ) {
     };
 }
 
-export function setDraggedAreaCoordinate( index ) {
+export function setDraggedAreaControlPoint( index ) {
     return {
-        type: 'T03_UI_SET_DRAGGED_AREA_COORDINATE',
+        type: 'T03_UI_SET_DRAGGED_AREA_CONTROL_POINT',
         payload: index
     };
 }
 
-export function setActiveAreaCoordinate( index ) {
+export function setActiveAreaControlPoint( index ) {
     return {
-        type: 'T03_UI_SET_ACTIVE_AREA_COORDINATE',
+        type: 'T03_UI_SET_ACTIVE_AREA_CONTROL_POINT',
         payload: index
     };
 }
@@ -91,9 +91,9 @@ export function setArea( area ) {
     };
 }
 
-export function addAreaCoordinate( lat, lng, index ) {
+export function addAreaControlPoint( lat, lng, index ) {
     return {
-        type: 'T03_MODEL_ADD_AREA_COORDINATE',
+        type: 'T03_MODEL_ADD_AREA_CONTROL_POINT',
         payload: {
             lat,
             lng,
@@ -122,9 +122,9 @@ export function setAreaLongitude( index, lng ) {
     };
 }
 
-export function deleteAreaCoordinate( index ) {
+export function deleteAreaControlPoint( index ) {
     return {
-        type: 'T03_MODEL_DELETE_AREA_COORDINATE',
+        type: 'T03_MODEL_DELETE_AREA_CONTROL_POINT',
         payload: index
     };
 }
