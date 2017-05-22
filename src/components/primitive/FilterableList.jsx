@@ -120,7 +120,7 @@ export default class FilterableList extends Component {
                     </div>
                 </div>
                 <List style={styles.list}>
-                    {filteredList.map(( i, index ) => <ListItem clickAction={this.itemClickAction( i.name )} key={index}>{i.name}</ListItem>)}
+                    {filteredList.map(( i, index ) => <ListItem clickAction={this.itemClickAction( i.id )} key={index}>{i.name}</ListItem>)}
                 </List>
             </div>
         );
