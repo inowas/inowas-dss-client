@@ -1,7 +1,7 @@
 import * as actions from '../../actions/T03';
 
 import React, { Component, PropTypes } from 'react';
-import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/model';
+import { getArea, getFirstAreaCoordinate, getLastAreaCoordinate } from '../../reducers/T03/general';
 import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaCoordinate, getActiveAreaCoordinate } from '../../reducers/T03/ui';
 
 import ModelEditorMap from '../../components/modflow/ModelEditorMap';
@@ -13,15 +13,8 @@ class T03 extends Component {
 
     static propTypes = {
         id: PropTypes.string,
-        setState: PropTypes.func
-    }
-
-    constructor(props) {
-        super(props);
-
-        if (props.id === undefined || props.id === null ) {
-            props.setState('initial');
-        }
+        setState: PropTypes.func,
+        push: PropTypes.func
     }
 
     state = {
@@ -30,11 +23,13 @@ class T03 extends Component {
 
     render( ) {
         const { navigation } = this.state;
+        const { id } = this.props;
+        const initial = ( id === undefined || id === null );
 
         return (
             <div className="toolT03">
                 <Navbar links={navigation}/>
-                <ModelEditorMap {...this.props}/>
+                <ModelEditorMap {...this.props} initial={initial}/>
             </div>
         );
     }
@@ -44,9 +39,9 @@ class T03 extends Component {
 const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T03.ui ),
-        area: getArea( state.T03.model ),
-        firstAreaCoordinate: getFirstAreaCoordinate( state.T03.model ),
-        lastAreaCoordinate: getLastAreaCoordinate( state.T03.model ),
+        area: getArea( state.T03.model.general ),
+        firstAreaCoordinate: getFirstAreaCoordinate( state.T03.model.general ),
+        lastAreaCoordinate: getLastAreaCoordinate( state.T03.model.general ),
         mapPosition: getMapPosition( state.T03.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
         draggedAreaCoordinate: getDraggedAreaCoordinate( state.T03.ui ),

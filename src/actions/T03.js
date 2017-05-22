@@ -1,3 +1,6 @@
+import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/T03/model';
+import { push } from 'react-router-redux';
+
 export function setState( mode ) {
     return {
         type: 'T03_UI_SET_MAP_MODE',
@@ -68,6 +71,13 @@ export function setLengthUnit( lengthUnit ) {
     };
 }
 
+export function setArea( area ) {
+    return {
+        type: 'T03_MODEL_SET_AREA',
+        payload: area
+    };
+}
+
 export function addAreaCoordinate( lat, lng, index ) {
     return {
         type: 'T03_MODEL_ADD_AREA_COORDINATE',
@@ -103,5 +113,25 @@ export function deleteAreaCoordinate( index ) {
     return {
         type: 'T03_MODEL_DELETE_AREA_COORDINATE',
         payload: index
+    };
+}
+
+export function createModel() {
+    // TODO POST to api
+    // api should redirect to GET and send validated model
+    return ( dispatch, getState ) => {
+        const id = 'random_new_id';
+        const name = getName( getState().T03.model );
+        const description = getDescription( getState().T03.model );
+        const area = getArea( getState().T03.model );
+        const timeUnit = getTimeUnit( getState().T03.model );
+        const lengthUnit = getLengthUnit( getState().T03.model );
+
+        dispatch( push( '/tools/T03/' + id ) );
+        dispatch( setName( name ) );
+        dispatch( setDescription( description ) );
+        dispatch( setArea( area ) );
+        dispatch( setTimeUnit( timeUnit ) );
+        dispatch( setLengthUnit( lengthUnit ) );
     };
 }

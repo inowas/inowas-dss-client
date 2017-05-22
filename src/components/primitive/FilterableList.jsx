@@ -80,6 +80,8 @@ export default class FilterableList extends Component {
         const {
             style,
             list,
+            // eslint-disable-next-line no-unused-vars
+            clickAction,
             ...rest
         } = this.props;
         const { filterType, searchTerm } = this.state;

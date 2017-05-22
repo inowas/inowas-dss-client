@@ -42,7 +42,8 @@ export default class ModelEditorMap extends Component {
         setAreaLatitude: PropTypes.func,
         setAreaLongitude: PropTypes.func,
         activeAreaCoordinate: PropTypes.number,
-        setActiveAreaCoordinate: PropTypes.func
+        setActiveAreaCoordinate: PropTypes.func,
+        initial: PropTypes.bool
     };
 
     state = {
@@ -386,7 +387,6 @@ export default class ModelEditorMap extends Component {
         switch ( state ) {
             case 'boundariesOverlay':
                 return <T03Boundaries/>;
-            case 'initial':
             case 'general':
                 return <T03General/>;
             case 'area':
@@ -398,13 +398,14 @@ export default class ModelEditorMap extends Component {
         }
     }
 
-    renderToolWrapper( state ) {
+    renderToolWrapper( state, initial ) {
         const minimized = ( [ 'area', 'area-draw', 'area-edit' ].indexOf( state ) !== -1 );
+        const closeable = !initial;
         const tool = this.renderTool( state );
 
         if ( tool ) {
             return (
-                <FloatingTool minimized={minimized} enableMap={this.enableMap} disableMap={this.disableMap} close={this.unsetActiveTool}>
+                <FloatingTool minimized={minimized} enableMap={this.enableMap} disableMap={this.disableMap} close={this.unsetActiveTool} closeable={closeable}>
                     {tool}
                 </FloatingTool>
             );
@@ -432,16 +433,16 @@ export default class ModelEditorMap extends Component {
     }
 
     render( ) {
-        const { setState, state } = this.props;
+        const { setState, state, initial } = this.props;
         const { properties } = this.state;
 
         return (
             <div className="modelEditorMap-wrapper">
                 {this.renderMap( )}
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
-                {this.renderToolWrapper( state )}
+                {this.renderToolWrapper( state, initial )}
                 {this.renderTitle( state )}
-                {state !== 'initial' && <FloatingToolbox items={properties} onToolClick={setState}/>}
+                {!initial && <FloatingToolbox items={properties} onToolClick={setState}/>}
             </div>
         );
     }
