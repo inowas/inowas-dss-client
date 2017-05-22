@@ -2,8 +2,16 @@ import * as actions from '../../actions/T03';
 
 import React, { Component, PropTypes } from 'react';
 import { getArea } from '../../reducers/T03/general';
-import { getState, getMapPosition, getMousePositionOnMap, getDraggedAreaControlPoint, getActiveAreaControlPoint } from '../../reducers/T03/ui';
-
+import {
+    getState,
+    getMapPosition,
+    getMousePositionOnMap,
+    getDraggedAreaControlPoint,
+    getActiveAreaControlPoint,
+    getActiveBoundary,
+    getDraggedBoundary
+} from '../../reducers/T03/ui';
+import { getBoundaries } from '../../reducers/T03/boundaries';
 import ModelEditorMap from '../../components/modflow/ModelEditorMap';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
@@ -44,7 +52,10 @@ const mapStateToProps = (state, { params }) => {
         mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
         draggedAreaControlPoint: getDraggedAreaControlPoint( state.T03.ui ),
         activeAreaControlPoint: getActiveAreaControlPoint( state.T03.ui ),
-        id: params.id
+        boundaries: getBoundaries( state.T03.model.boundaries ),
+        id: params.id,
+        activeBoundary: getActiveBoundary( state.T03.ui ),
+        draggedBoundary: getDraggedBoundary( state.T03.ui )
     };
 };
 
