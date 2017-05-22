@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import { setActiveBoundary, updateBoundary } from '../../actions/T03';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
 import Tab from '../../components/primitive/Tab';
 import Tabs from '../../components/primitive/Tabs';
+import WellProperties from '../../components/modflow/WellProperties';
 import { connect } from 'react-redux';
 import { getActiveBoundary } from '../../reducers/T03/ui';
-import { setActiveBoundary } from '../../actions/T03';
+import { getBoundaries } from '../../reducers/T03/boundaries';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
@@ -20,9 +22,13 @@ const styles = {
     },
 
     list: {
-        width: '40%',
+        flex: '1 1 40%',
         borderRight: '1px solid ' + styleGlobals.colors.graySemilight,
         marginRight: styleGlobals.dimensions.spacing.large
+    },
+
+    properties: {
+        flex: '1 1 60%'
     }
 };
 
@@ -32,68 +38,56 @@ class T03Boundaries extends Component {
     static propTypes = {
         style: PropTypes.object,
         boundary: PropTypes.string,
-        setActiveBoundary: PropTypes.func
+        setActiveBoundary: PropTypes.func,
+        updateBoundary: PropTypes.func,
+        boundaries: PropTypes.array
     }
 
-    state = {
-        boundaries: [
-            {
-                name: 'Well 1',
-                type: 'well'
-            }, {
-                name: 'Well 2',
-                type: 'well'
-            }, {
-                name: 'Well 3',
-                type: 'well'
-            }, {
-                name: 'Well 4',
-                type: 'well'
-            }, {
-                name: 'Well 5',
-                type: 'well'
-            }, {
-                name: 'Well 6',
-                type: 'well'
-            }, {
-                name: 'River 1',
-                type: 'river'
-            }, {
-                name: 'River 2',
-                type: 'river'
-            }, {
-                name: 'River 3',
-                type: 'river'
-            }, {
-                name: 'River 4',
-                type: 'river'
-            }, {
-                name: 'River 5',
-                type: 'river'
+    renderProperties( activeBoundary ) {
+        // eslint-disable-next-line no-shadow
+        const { updateBoundary } = this.props;
+        if ( activeBoundary ) {
+            switch ( activeBoundary.type ) {
+                case 'well':
+                    return (
+                        <Tabs>
+                            <Tab title="Summary">
+                                <WellProperties well={activeBoundary} updateWell={updateBoundary}/>
+                            </Tab>
+                            <Tab title="Pumping Rates">Tab 2 Lorem Ipsum ...</Tab>
+                        </Tabs>
+                    );
+                default:
+                    return null;
             }
-        ]
+        }
+
+        return null;
     }
 
     render( ) {
-        const { boundaries } = this.state;
         const {
             style, boundary,
             // eslint-disable-next-line no-shadow
             setActiveBoundary,
+            boundaries,
+            // eslint-disable-next-line no-shadow, no-unused-vars
+            updateBoundary,
             ...rest
         } = this.props;
 
+        const activeBoundary = boundaries.find(b => {
+            return b.id === boundary;
+        });
+
         return (
             <div {...rest} style={[ style, styles.container ]}>
-                <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/>
-                <div>
-                    <h3>Tabdemo</h3>
-                    <Tabs>
-                        <Tab title="Eins">Tab 1 Lorem Ipsum ...</Tab>
-                        <Tab title="Zwei">Tab 2 Lorem Ipsum ...</Tab>
-                    </Tabs>
-                    {boundary}
-                </div>
+                <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/> {(activeBoundary === undefined || (
+                    <div style={styles.properties}>
+                        <h3>{activeBoundary.name}</h3>
+                        {this.renderProperties( activeBoundary )}
+                    </div>
+                ))}
             </div>
         );
     }
@@ -101,11 +95,12 @@ class T03Boundaries extends Component {
 
 const mapStateToProps = state => {
     return {
-        boundary: getActiveBoundary( state.T03.ui )
+        boundary: getActiveBoundary( state.T03.ui ),
+        boundaries: getBoundaries( state.T03.model.boundaries )
     };
 };
 
 // eslint-disable-next-line no-class-assign
-T03Boundaries = connect(mapStateToProps, { setActiveBoundary })( T03Boundaries );
+T03Boundaries = connect(mapStateToProps, { setActiveBoundary, updateBoundary })( T03Boundaries );
 
 export default T03Boundaries;

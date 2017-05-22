@@ -1,5 +1,10 @@
-import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/T03/model';
+import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/T03/general';
+import { getBoundary } from '../reducers/T03/boundaries';
 import { push } from 'react-router-redux';
+
+/**
+ * UI
+ */
 
 export function setState( mode ) {
     return {
@@ -42,6 +47,14 @@ export function setActiveAreaCoordinate( index ) {
         payload: index
     };
 }
+
+/**
+ * MODEL
+ */
+
+/**
+ * GENERAL
+ */
 
 export function setName( name ) {
     return {
@@ -121,11 +134,11 @@ export function createModel() {
     // api should redirect to GET and send validated model
     return ( dispatch, getState ) => {
         const id = 'random_new_id';
-        const name = getName( getState().T03.model );
-        const description = getDescription( getState().T03.model );
-        const area = getArea( getState().T03.model );
-        const timeUnit = getTimeUnit( getState().T03.model );
-        const lengthUnit = getLengthUnit( getState().T03.model );
+        const name = getName( getState().T03.model.general );
+        const description = getDescription( getState().T03.model.general );
+        const area = getArea( getState().T03.model.general );
+        const timeUnit = getTimeUnit( getState().T03.model.general );
+        const lengthUnit = getLengthUnit( getState().T03.model.general );
 
         dispatch( push( '/tools/T03/' + id ) );
         dispatch( setName( name ) );
@@ -133,5 +146,32 @@ export function createModel() {
         dispatch( setArea( area ) );
         dispatch( setTimeUnit( timeUnit ) );
         dispatch( setLengthUnit( lengthUnit ) );
+    };
+}
+
+/**
+ * BOUNDARIES
+ */
+
+export function addBoundary(boundary) {
+    return {
+        type: 'T03_MODEL_ADD_BOUNDARY',
+        payload: boundary
+    };
+}
+
+export function updateBoundary(boundary) {
+    return {
+        type: 'T03_MODEL_UPDATE_BOUNDARY',
+        payload: boundary
+    };
+}
+
+export function saveBoundary(id) {
+    // TODO POST to api
+    return (dispatch, getState) => {
+        const boundary = getBoundary(getState().T03.model.boundaries, id);
+
+        dispatch(updateBoundary(boundary));
     };
 }

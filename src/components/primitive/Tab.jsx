@@ -12,7 +12,8 @@ export default class Tab extends Component {
     }
 
     render( ) {
-        const { children, active, ...rest } = this.props;
+        // eslint-disable-next-line no-unused-vars
+        const { children, active, title, ...rest } = this.props;
 
         if (active) {
             return (
