@@ -82,12 +82,13 @@ class T03Boundaries extends Component {
 
         return (
             <div {...rest} style={[ style, styles.container ]}>
-                <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/> {(activeBoundary === undefined || (
+                <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/>
+                {activeBoundary === undefined || (
                     <div style={styles.properties}>
                         <h3>{activeBoundary.name}</h3>
                         {this.renderProperties( activeBoundary )}
                     </div>
-                ))}
+                )}
             </div>
         );
     }

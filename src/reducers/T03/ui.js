@@ -12,8 +12,8 @@ function getInitialState() {
             lat: null,
             lng: null
         },
-        draggedAreaCoordinate: null,
-        activeAreaCoordinate: null
+        draggedAreaControlPoint: null,
+        activeAreaControlPoint: null
     };
 }
 
@@ -31,11 +31,11 @@ const ui = ( state = getInitialState(), action ) => {
         case 'T03_UI_SET_MOUSE_POSITION_ON_MAP':
             return { ...state, mousePositionOnMap: action.payload };
 
-        case 'T03_UI_SET_DRAGGED_AREA_COORDINATE':
-            return { ...state, draggedAreaCoordinate: action.payload };
+        case 'T03_UI_SET_DRAGGED_AREA_CONTROL_POINT':
+            return { ...state, draggedAreaControlPoint: action.payload };
 
-        case 'T03_UI_SET_ACTIVE_AREA_COORDINATE':
-            return { ...state, activeAreaCoordinate: action.payload };
+        case 'T03_UI_SET_ACTIVE_AREA_CONTROL_POINT':
+            return { ...state, activeAreaControlPoint: action.payload };
 
         default:
             return state;
@@ -48,5 +48,5 @@ export const getState = state => state.state;
 export const getActiveBoundary = state => state.activeBoundary;
 export const getMapPosition = state => state.mapPosition;
 export const getMousePositionOnMap = state => state.mousePositionOnMap;
-export const getDraggedAreaCoordinate = state => state.draggedAreaCoordinate;
-export const getActiveAreaCoordinate = state => state.activeAreaCoordinate;
+export const getDraggedAreaControlPoint = state => state.draggedAreaControlPoint;
+export const getActiveAreaControlPoint = state => state.activeAreaControlPoint;
