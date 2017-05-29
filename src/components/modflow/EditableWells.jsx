@@ -113,8 +113,8 @@ export default class EditableWells extends Component {
 
     wellDragStart = id => {
         return ( ) => {
-            const { draggedBoundary, leafletElement, setDraggedBoundary } = this.props;
-            if ( draggedBoundary === null && leafletElement ) {
+            const { draggedBoundary, leafletElement, setDraggedBoundary, state } = this.props;
+            if ( state === 'edit' && draggedBoundary === null && leafletElement ) {
                 leafletElement.dragging.disable( );
                 setDraggedBoundary( id );
             }

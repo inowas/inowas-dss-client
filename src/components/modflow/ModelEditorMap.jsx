@@ -12,10 +12,11 @@ import FloatingToolbox from './FloatingToolbox';
 import Icon from '../primitive/Icon';
 import T03Area from '../../containers/tools/T03Area';
 import T03Boundaries from '../../containers/tools/T03Boundaries';
+import T03Boundary from '../../containers/tools/T03Boundary';
 import T03General from '../../containers/tools/T03General';
 import styleGlobals from 'styleGlobals';
 
-const RadiumMap = ConfiguredRadium(Map);
+const RadiumMap = ConfiguredRadium( Map );
 
 const styles = {
     wrapper: {
@@ -106,11 +107,7 @@ export default class ModelEditorMap extends Component {
     }
 
     componentDidMount( ) {
-        // manually emit a resize event so the leaflet maps recalculate their container size
-        // const event = document.createEvent( 'HTMLEvents' );
-        // event.initEvent( 'resize', true, false );
-        // document.dispatchEvent( event );
-
+        // center mapPosition to area if no mapPosition is specified
         const { mapPosition, area } = this.props;
 
         if ( mapPosition === null && area.length > 0 ) {
@@ -257,7 +254,14 @@ export default class ModelEditorMap extends Component {
             }
         })( );
 
-        const mergedWithDefaultsMapPosition = mapPosition ? mapPosition : { center: [ 0, 0 ], zoom: 2 };
+        const mergedWithDefaultsMapPosition = mapPosition
+            ? mapPosition
+            : {
+                center: [
+                    0, 0
+                ],
+                zoom: 2
+            };
 
         return (
             <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
@@ -282,13 +286,15 @@ export default class ModelEditorMap extends Component {
             case 'area-draw':
             case 'area-edit':
                 return <T03Area/>;
+            case 'wells-edit':
+                return <T03Boundary/>;
             default:
                 return null;
         }
     }
 
     renderToolWrapper( state, initial ) {
-        const minimized = ( [ 'area', 'area-draw', 'area-edit' ].indexOf( state ) !== -1 );
+        const minimized = ( [ 'area', 'area-draw', 'area-edit', 'wells-edit' ].indexOf( state ) !== -1 );
         const closeable = !initial;
         const tool = this.renderTool( state );
 
