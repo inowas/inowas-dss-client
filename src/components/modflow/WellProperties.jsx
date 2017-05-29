@@ -16,8 +16,8 @@ export default class WellProperties extends Component {
             const updatedWell = {
                 ...well
             };
-            let value = e.target.value;
 
+            let value = e.target.value;
             // handle multiple select inputs -> get all selected options as array
             if ( e.target.tagName.toLowerCase( ) === 'select' && e.target.multiple ) {
                 value = [ ];
