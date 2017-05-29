@@ -170,6 +170,20 @@ const initialState = {
             fake: true
         } ]
     }, {
+        slug: 'T08',
+        name: ' 1D transport model (Ogata-Banks)',
+        path: 'tools/T08/',
+        models: [ {
+            model_id: '08',
+            user_name: 'ADMIN',
+            name: 'DEFAULT MODEL',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A04',
+            created_at: '2017-03-09T19:24:00+00:00',
+            fake: false
+        } ]
+    }, {
         slug: 'T09',
         name: 'Simple saltwater intrusion equations',
         path: 'tools/T09/',

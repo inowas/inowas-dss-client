@@ -8,6 +8,7 @@ import dashboard from './dashboard';
 import T02 from './T02';
 import T06 from './T06';
 import T07 from './T07';
+import T08 from './T08';
 import T09A from './T09A';
 import T09B from './T09B';
 import T09C from './T09C';
@@ -38,6 +39,7 @@ const rootReducer = combineReducers( {
     T02,
     T06,
     T07,
+    T08,
     T09A,
     T09B,
     T09C,

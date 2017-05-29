@@ -31,6 +31,7 @@ export default function applyParameterUpdate(param, newParam) {
 }
 
 function validateAndSetNewProperty(param, newParam, property, validator) {
+    console.log(param,newParam,property)
     // check if both parameters have this property
     if(param.hasOwnProperty(property) && newParam.hasOwnProperty(property)) {
         let newValue = Number(newParam[property]);

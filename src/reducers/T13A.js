@@ -41,7 +41,7 @@ function getInitialState() {
             max: 0.5,
             value: 0.35,
             stepSize: 0.01,
-            decimals: 1
+            decimals: 2
         }, {
             order: 3,
             id: 'L',
