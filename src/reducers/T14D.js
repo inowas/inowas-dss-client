@@ -82,7 +82,7 @@ function getInitialState() {
         }, {
             order: 6,
             id: 'Kdash',
-            name: 'Permeability of the semipervious layer, K\' (m/s)',
+            name: 'Permeability of the semipervious layer, K\' (m/d)',
             min: 0.1,
             validMin: function(x) {return x > 0},
             max: 1,
