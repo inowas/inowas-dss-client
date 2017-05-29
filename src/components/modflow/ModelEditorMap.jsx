@@ -1,5 +1,4 @@
 import '../../less/leaflet.less';
-import '../../less/modelEditorMap.less';
 
 import { Map, TileLayer } from 'react-leaflet';
 import React, { Component, PropTypes } from 'react';
@@ -16,7 +15,21 @@ import T03Boundaries from '../../containers/tools/T03Boundaries';
 import T03General from '../../containers/tools/T03General';
 import styleGlobals from 'styleGlobals';
 
+const RadiumMap = ConfiguredRadium(Map);
+
 const styles = {
+    wrapper: {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: styleGlobals.dimensions.navBarHeight,
+        bottom: 0,
+        overflow: 'hidden'
+    },
+    map: {
+        height: '100%',
+        position: 'relative'
+    },
     resetViewButton: {
         zIndex: 1100,
         position: 'absolute',
@@ -62,7 +75,7 @@ export default class ModelEditorMap extends Component {
         activeBoundary: PropTypes.string,
         draggedBoundary: PropTypes.string,
         setDraggedBoundary: PropTypes.func,
-        updateBoundary: PropTypes.func,
+        updateBoundary: PropTypes.func
     };
 
     state = {
@@ -94,9 +107,15 @@ export default class ModelEditorMap extends Component {
 
     componentDidMount( ) {
         // manually emit a resize event so the leaflet maps recalculate their container size
-        const event = document.createEvent( 'HTMLEvents' );
-        event.initEvent( 'resize', true, false );
-        document.dispatchEvent( event );
+        // const event = document.createEvent( 'HTMLEvents' );
+        // event.initEvent( 'resize', true, false );
+        // document.dispatchEvent( event );
+
+        const { mapPosition, area } = this.props;
+
+        if ( mapPosition === null && area.length > 0 ) {
+            this.centerMapPositionToArea( );
+        }
     }
 
     enableMap = ( ) => {
@@ -203,11 +222,16 @@ export default class ModelEditorMap extends Component {
         const handler = {
             onMoveEnd: this.setMapPosition,
             onClick: ( ) => {},
-            onMouseMove: this.setMousePosition
+            onMouseMove: ( ) => {}
         };
         switch ( state ) {
             case 'area-draw':
                 handler.onClick = this.addAreaControlPoint;
+                handler.onMouseMove = this.setMousePosition;
+                break;
+            case 'area-edit':
+            case 'wells-edit':
+                handler.onMouseMove = this.setMousePosition;
                 break;
         }
 
@@ -233,8 +257,10 @@ export default class ModelEditorMap extends Component {
             }
         })( );
 
+        const mergedWithDefaultsMapPosition = mapPosition ? mapPosition : { center: [ 0, 0 ], zoom: 2 };
+
         return (
-            <Map ref="map" {...mapPosition} className="modelEditorMap" zoomControl={false} {...handler}>
+            <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                 <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
@@ -242,7 +268,7 @@ export default class ModelEditorMap extends Component {
                 <EditableWells state={wellsState} draggedBoundary={draggedBoundary} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'well' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
-            </Map>
+            </RadiumMap>
         );
     }
 
@@ -300,7 +326,7 @@ export default class ModelEditorMap extends Component {
         const { properties } = this.state;
 
         return (
-            <div className="modelEditorMap-wrapper">
+            <div style={styles.wrapper}>
                 {this.renderMap( )}
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
                 {this.renderToolWrapper( state, initial )}

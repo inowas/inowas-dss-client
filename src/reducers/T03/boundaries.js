@@ -2,8 +2,8 @@ const initialState = [ {
     id: '234234',
     name: 'Well 1',
     type: 'well',
-    lat: 0,
-    lng: 0,
+    lat: 51.055207338584964,
+    lng: 13.743896484375002,
     affectedLayers: [ 0, 2 ]
 }, {
     id: '2wefdw34234',

@@ -1,5 +1,6 @@
 {
-  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:import/recommended", "plugin:import/react"],
+  # "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:import/recommended", "plugin:import/react"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "babel-eslint", // https://github.com/babel/babel-eslint
   "settings": {
       "import/resolver": "webpack"
