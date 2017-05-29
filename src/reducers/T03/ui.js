@@ -3,12 +3,7 @@ function getInitialState() {
         state: 'general',
         activeBoundary: null,
         draggedBoundary: null,
-        mapPosition: {
-            center: [
-                0, 0
-            ],
-            zoom: 2
-        },
+        mapPosition: null,
         mousePositionOnMap: {
             lat: null,
             lng: null

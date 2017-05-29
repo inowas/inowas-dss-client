@@ -131,8 +131,8 @@ export default class EditableWells extends Component {
 
     renderWells( ) {
         const { wells, activeBoundary } = this.props;
-        return wells.map(w => {
-            return ( <CircleMarker onMouseDown={this.wellDragStart(w.id)} center={{
+        return wells.map((w, index) => {
+            return ( <CircleMarker key={index} onMouseDown={this.wellDragStart(w.id)} center={{
                 lat: w.lat,
                 lng: w.lng
             }} {...styles.cw} fillColor={w.id === activeBoundary && styles.activeWell.fillColor} /> );

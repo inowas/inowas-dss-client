@@ -156,7 +156,7 @@ export default class EditableArea extends Component {
         const { area, activeControlPoint, state } = this.props;
         if ( [ 'default', 'draw', 'edit' ].indexOf( state ) !== -1 ) {
             return area.map(( c, index ) => {
-                return ( <CircleMarker onMouseOver={this.setActiveAreaControlPoint( index )} onMouseOut={this.setActiveAreaControlPoint( null )} onMouseDown={this.ControlPointDragStart( index )} key={index} center={c} {...styles.controlPoint} fillColor={( index === activeControlPoint ) && styles.activeControlPoint.fillColor}/> );
+                return ( <CircleMarker onMouseOver={this.setActiveAreaControlPoint( index )} onMouseOut={this.setActiveAreaControlPoint( null )} onMouseDown={this.controlPointDragStart( index )} key={index} center={c} {...styles.controlPoint} fillColor={( index === activeControlPoint ) && styles.activeControlPoint.fillColor}/> );
             });
         }
         return null;
