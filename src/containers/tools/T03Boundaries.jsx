@@ -7,6 +7,7 @@ import FilterableList from '../../components/primitive/FilterableList';
 import Tab from '../../components/primitive/Tab';
 import Tabs from '../../components/primitive/Tabs';
 import WellProperties from '../../components/modflow/WellProperties';
+import RiverProperties from '../../components/modflow/RiverProperties';
 import { connect } from 'react-redux';
 import { getActiveBoundary } from '../../reducers/T03/ui';
 import { getArea } from '../../reducers/T03/general';
@@ -84,6 +85,15 @@ class T03Boundaries extends Component {
                                 <WellProperties setState={setState} well={activeBoundary} updateWell={updateBoundary}/>
                             </Tab>
                             <Tab title="Pumping Rates">Tab 2 Lorem Ipsum ...</Tab>
+                        </Tabs>
+                    );
+                case 'river':
+                    return (
+                        <Tabs>
+                            <Tab title="Summary">
+                                <RiverProperties setState={setState} river={activeBoundary} updateRiver={updateBoundary}/>
+                            </Tab>
+                            <Tab title="OB 1">Tab 2 Lorem Ipsum ...</Tab>
                         </Tabs>
                     );
                 default:
