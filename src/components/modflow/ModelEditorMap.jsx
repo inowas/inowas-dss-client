@@ -6,11 +6,13 @@ import React, { Component, PropTypes } from 'react';
 import ConfiguredRadium from 'ConfiguredRadium';
 import EditableArea from './EditableArea';
 import EditableWells from './EditableWells';
+import EditableLine from './EditableLine';
 import FloatingTitle from './FloatingTitle';
 import FloatingTool from './FloatingTool';
 import FloatingToolbox from './FloatingToolbox';
 import Icon from '../primitive/Icon';
 import T03Area from '../../containers/tools/T03Area';
+import T03River from '../../containers/tools/T03River';
 import T03Boundaries from '../../containers/tools/T03Boundaries';
 import T03Boundary from '../../containers/tools/T03Boundary';
 import T03General from '../../containers/tools/T03General';
@@ -74,9 +76,16 @@ export default class ModelEditorMap extends Component {
         boundaries: PropTypes.array,
         initial: PropTypes.bool,
         activeBoundary: PropTypes.string,
-        draggedBoundary: PropTypes.string,
+        draggedBoundary: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
         setDraggedBoundary: PropTypes.func,
-        updateBoundary: PropTypes.func
+        updateBoundary: PropTypes.func,
+        addBoundaryControlPoint: PropTypes.func,
+        updateBoundaryControlPoint: PropTypes.func,
+        activeBoundaryControlPoint: PropTypes.number,
+        setActiveBoundaryControlPoint: PropTypes.func
     };
 
     state = {
@@ -196,6 +205,12 @@ export default class ModelEditorMap extends Component {
         this.props.addAreaControlPoint( lat, lng );
     };
 
+    addBoundaryControlPoint = e => {
+        const latlng = e.latlng;
+
+        this.props.addBoundaryControlPoint( latlng );
+    }
+
     renderMap( ) {
         const {
             state,
@@ -213,7 +228,11 @@ export default class ModelEditorMap extends Component {
             activeBoundary,
             draggedBoundary,
             setDraggedBoundary,
-            updateBoundary
+            updateBoundary,
+            addBoundaryControlPoint,
+            updateBoundaryControlPoint,
+            activeBoundaryControlPoint,
+            setActiveBoundaryControlPoint
         } = this.props;
 
         const handler = {
@@ -226,8 +245,13 @@ export default class ModelEditorMap extends Component {
                 handler.onClick = this.addAreaControlPoint;
                 handler.onMouseMove = this.setMousePosition;
                 break;
+            case 'river-draw':
+                handler.onMouseMove = this.setMousePosition;
+                handler.onClick = this.addBoundaryControlPoint;
+                break;
             case 'area-edit':
             case 'wells-edit':
+            case 'river-edit':
                 handler.onMouseMove = this.setMousePosition;
                 break;
         }
@@ -269,6 +293,27 @@ export default class ModelEditorMap extends Component {
                 <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
+                {boundaries.filter( b => b.type === 'river' ).map((r, index) => {
+                    const riverState = (( ) => {
+                        if (r.id === activeBoundary) {
+                            switch ( state ) {
+                                case 'river':
+                                    return 'default';
+                                case 'river-draw':
+                                    return 'draw';
+                                case 'river-edit':
+                                    return 'edit';
+                                default:
+                                    return 'minimal';
+                            }
+                        }
+                        return 'minimal';
+                    })( );
+
+                    return ( <EditableLine key={index} state={riverState} line={r.geometry} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                        ? this.refs.map.leafletElement
+                        : null}/> );
+                })}
                 <EditableWells state={wellsState} draggedBoundary={draggedBoundary} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'well' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
@@ -286,6 +331,10 @@ export default class ModelEditorMap extends Component {
             case 'area-draw':
             case 'area-edit':
                 return <T03Area/>;
+            case 'river':
+            case 'river-draw':
+            case 'river-edit':
+                return <T03River/>;
             case 'wells-edit':
                 return <T03Boundary/>;
             default:
@@ -294,7 +343,7 @@ export default class ModelEditorMap extends Component {
     }
 
     renderToolWrapper( state, initial ) {
-        const minimized = ( [ 'area', 'area-draw', 'area-edit', 'wells-edit' ].indexOf( state ) !== -1 );
+        const minimized = ( [ 'area', 'area-draw', 'area-edit', 'wells-edit', 'river', 'river-draw', 'river-edit' ].indexOf( state ) !== -1 );
         const closeable = !initial;
         const tool = this.renderTool( state );
 
@@ -311,7 +360,6 @@ export default class ModelEditorMap extends Component {
 
     renderTitle( state ) {
         let title;
-
         switch ( state ) {
             case 'area':
                 title = 'Edit the area';
@@ -320,6 +368,12 @@ export default class ModelEditorMap extends Component {
                 title = 'Click the map to set a control point';
                 break;
             case 'area-edit':
+                title = 'Click, hold and move the control points';
+                break;
+            case 'wells-edit':
+                title = 'Click, hold and move the wells';
+                break;
+            case 'river-edit':
                 title = 'Click, hold and move the control points';
                 break;
         }

@@ -1,5 +1,6 @@
 import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/T03/general';
 import { getBoundary } from '../reducers/T03/boundaries';
+import { getActiveBoundary } from '../reducers/T03/ui';
 import { push } from 'react-router-redux';
 
 /**
@@ -55,6 +56,13 @@ export function setActiveAreaControlPoint( index ) {
     };
 }
 
+export function setActiveBoundaryControlPoint( index ) {
+    return {
+        type: 'T03_UI_SET_ACTIVE_BOUNDARY_CONTROL_POINT',
+        payload: index
+    };
+}
+
 /**
  * MODEL
  */
@@ -100,11 +108,21 @@ export function setArea( area ) {
 
 export function addAreaControlPoint( lat, lng, index ) {
     return {
-        type: 'T03_MODEL_ADD_AREA_CONTROL_POINT',
+        type: 'T03_MODEL_AREA_ADD_CONTROL_POINT',
         payload: {
             lat,
             lng,
             index
+        }
+    };
+}
+
+export function updateAreaControlPoint( index, controlPoint ) {
+    return {
+        type: 'T03_MODEL_AREA_UPDATE_CONTROL_POINT',
+        payload: {
+            index,
+            controlPoint
         }
     };
 }
@@ -160,25 +178,66 @@ export function createModel() {
  * BOUNDARIES
  */
 
-export function addBoundary(boundary) {
+export function addBoundary( boundary ) {
     return {
         type: 'T03_MODEL_ADD_BOUNDARY',
         payload: boundary
     };
 }
 
-export function updateBoundary(boundary) {
+export function updateBoundary( boundary ) {
     return {
         type: 'T03_MODEL_UPDATE_BOUNDARY',
         payload: boundary
     };
 }
 
-export function saveBoundary(id) {
-    // TODO POST to api
-    return (dispatch, getState) => {
-        const boundary = getBoundary(getState().T03.model.boundaries, id);
+export function addBoundaryControlPoint( controlPoint, index ) {
+    return ( dispatch, getState ) => {
+        const id = getBoundary( getState().T03.model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
+        dispatch( {
+            type: 'T03_MODEL_ADD_BOUNDARY_CONTROL_POINT',
+            payload: {
+                id,
+                index,
+                controlPoint
+            }
+        } );
+    };
+}
 
-        dispatch(updateBoundary(boundary));
+export function updateBoundaryControlPoint( index, controlPoint ) {
+    return ( dispatch, getState ) => {
+        const id = getBoundary( getState().T03.model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
+        dispatch( {
+            type: 'T03_MODEL_UPDATE_BOUNDARY_CONTROL_POINT',
+            payload: {
+                id,
+                index,
+                controlPoint
+            }
+        } );
+    };
+}
+
+export function deleteBoundaryControlPoint( index ) {
+    return ( dispatch, getState ) => {
+        const id = getBoundary( getState().T03.model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
+        dispatch( {
+            type: 'T03_MODEL_DELETE_BOUNDARY_CONTROL_POINT',
+            payload: {
+                id,
+                index
+            }
+        } );
+    };
+}
+
+export function saveBoundary( id ) {
+    // TODO POST to api
+    return ( dispatch, getState ) => {
+        const boundary = getBoundary( getState().T03.model.boundaries, id );
+
+        dispatch( updateBoundary( boundary ) );
     };
 }

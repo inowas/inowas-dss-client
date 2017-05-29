@@ -9,7 +9,8 @@ function getInitialState() {
             lng: null
         },
         draggedAreaControlPoint: null,
-        activeAreaControlPoint: null
+        activeAreaControlPoint: null,
+        activeBoundaryControlPoint: null
     };
 }
 
@@ -36,6 +37,9 @@ const ui = ( state = getInitialState(), action ) => {
         case 'T03_UI_SET_ACTIVE_AREA_CONTROL_POINT':
             return { ...state, activeAreaControlPoint: action.payload };
 
+        case 'T03_UI_SET_ACTIVE_BOUNDARY_CONTROL_POINT':
+            return { ...state, activeBoundaryControlPoint: action.payload };
+
         default:
             return state;
     }
@@ -50,3 +54,4 @@ export const getMapPosition = state => state.mapPosition;
 export const getMousePositionOnMap = state => state.mousePositionOnMap;
 export const getDraggedAreaControlPoint = state => state.draggedAreaControlPoint;
 export const getActiveAreaControlPoint = state => state.activeAreaControlPoint;
+export const getActiveBoundaryControlPoint = state => state.activeBoundaryControlPoint;

@@ -119,7 +119,7 @@ const model = ( state = getInitialState(), action ) => {
         case 'T03_MODEL_SET_AREA':
             return { ...state, area: action.payload };
 
-        case 'T03_MODEL_ADD_AREA_CONTROL_POINT':
+        case 'T03_MODEL_AREA_ADD_CONTROL_POINT':
             if ( action.payload.index !== undefined ) {
                 return {
                     ...state,
@@ -135,6 +135,18 @@ const model = ( state = getInitialState(), action ) => {
             }
             return { ...state, area: [ ...state.area, action.payload ] };
 
+        case 'T03_MODEL_AREA_UPDATE_CONTROL_POINT':
+            return {
+                ...state,
+                area: state.area.map((c, index) => {
+                    if (index === action.payload.index) {
+                        return action.payload.controlPoint;
+                    }
+                    return c;
+                })
+            };
+
+        // TODO remove
         case 'T03_MODEL_SET_AREA_LATITUDE':
             return { ...state,
                 area: state.area.map( ( c, index ) => {
@@ -149,6 +161,7 @@ const model = ( state = getInitialState(), action ) => {
                 } )
             };
 
+        // TODO remove
         case 'T03_MODEL_SET_AREA_LONGITUDE':
             return { ...state,
                 area: state.area.map( ( c, index ) => {

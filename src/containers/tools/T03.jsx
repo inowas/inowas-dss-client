@@ -9,7 +9,8 @@ import {
     getDraggedAreaControlPoint,
     getActiveAreaControlPoint,
     getActiveBoundary,
-    getDraggedBoundary
+    getDraggedBoundary,
+    getActiveBoundaryControlPoint
 } from '../../reducers/T03/ui';
 import { getBoundaries } from '../../reducers/T03/boundaries';
 import ModelEditorMap from '../../components/modflow/ModelEditorMap';
@@ -55,7 +56,8 @@ const mapStateToProps = (state, { params }) => {
         boundaries: getBoundaries( state.T03.model.boundaries ),
         id: params.id,
         activeBoundary: getActiveBoundary( state.T03.ui ),
-        draggedBoundary: getDraggedBoundary( state.T03.ui )
+        draggedBoundary: getDraggedBoundary( state.T03.ui ),
+        activeBoundaryControlPoint: getActiveBoundaryControlPoint( state.T03.ui )
     };
 };
 
