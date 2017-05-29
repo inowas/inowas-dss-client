@@ -113,7 +113,7 @@ export function fetchModelBoundaries( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/boundaries.json', {
+                promise: ConfiguredAxios.get( '/modflowmodels/' + id + '/boundaries.json', {
                     headers: {
                         'X-AUTH-TOKEN': getApiKey( getState() )
                     }
@@ -124,7 +124,7 @@ export function fetchModelBoundaries( id ) {
             const boundaries = action.payload.data;
 
             boundaries.map( b => {
-                return ModflowBoundary.fromParameters( b.boundary_id, b.name, b.type, JSON.parse( b.geometry ), b.metadata );
+                return ModflowBoundary.fromParameters( b.id, b.name, b.type, b.geometry, b.metadata );
             } );
 
             const payload = new ModflowModelBoundaries( modelId, boundaries );
@@ -174,21 +174,21 @@ export function setupT07b() {
     };
 }
 
-export function fetchModelDetails( id, onSuccess ) {
+export function fetchDetails(id, onSuccess ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/scenarioanalyses/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
             }
         } ).then( ( { action } ) => {
-            const area = JSON.parse( action.payload.data.base_model.area );
-            const boundingBoxPlain = JSON.parse( action.payload.data.base_model.bounding_box );
+            const area = action.payload.data.geometry;
+            const boundingBoxPlain = action.payload.data.bounding_box;
             const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain.y_min, boundingBoxPlain.x_min ), new Coordinate( boundingBoxPlain.y_max, boundingBoxPlain.x_max ) );
-            const gridSize = JSON.parse( action.payload.data.base_model.grid_size );
+            const gridSize = action.payload.data.grid_size;
 
             const baseModel = ModflowModel.fromProps(
-                action.payload.data.base_model.base_model_id,
+                action.payload.data.base_model.id,
                 true,
                 area,
                 action.payload.data.base_model.name,
@@ -209,7 +209,7 @@ export function fetchModelDetails( id, onSuccess ) {
             for ( let i = 0; i < scenarios.length; i++ ) {
                 const sc = scenarios[ i ];
                 const scenario = ModflowModel.fromProps(
-                    sc.model_id,
+                    sc.id,
                     false,
                     area,
                     sc.name,

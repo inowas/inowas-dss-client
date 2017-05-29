@@ -16,7 +16,7 @@ import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
 import {
-    fetchModelDetails,
+    fetchDetails,
     updateResultsT07A,
     resizeDone,
     reloadDone,
@@ -73,7 +73,7 @@ export default class T07A extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+        this.props.dispatch(fetchDetails( this.props.params.id ));
     }
 
     componentWillReceiveProps(props) {

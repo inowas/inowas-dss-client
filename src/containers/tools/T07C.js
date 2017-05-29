@@ -15,7 +15,7 @@ import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
 import {
-    fetchModelDetails,
+    fetchDetails,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
@@ -71,7 +71,7 @@ export default class T07C extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+        this.props.dispatch(fetchDetails( this.props.params.id ));
     }
 
     fetchTimeSeriesForPoint( coordinate, modelId, resultType, layerNumber, gridCell, startDate ) {
