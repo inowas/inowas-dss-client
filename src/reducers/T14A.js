@@ -32,10 +32,10 @@ function getInitialState() {
             order: 1,
             id: 't',
             name: 'Duration of pumping, t (d)',
-            min: 100,
+            min: 1,
             validMin: function(x) {return x > 1},
             max: 500,
-            value: 365,
+            value: 5,
             stepSize: 1,
             decimals: 1
         }, {

@@ -8,6 +8,7 @@ import dashboard from './dashboard';
 import T02 from './T02';
 import T06 from './T06';
 import T07 from './T07';
+import T08 from './T08';
 import T09A from './T09A';
 import T09B from './T09B';
 import T09C from './T09C';
@@ -22,7 +23,7 @@ import T14A from './T14A';
 import T14B from './T14B';
 import T14C from './T14C';
 import T14D from './T14D';
-import T16A from './T16A';
+import T16 from './T16';
 import T18 from './T18';
 // import scenarioAnalysis from './scenarioAnalysisReducer';
 import user from './user';
@@ -38,6 +39,7 @@ const rootReducer = combineReducers( {
     T02,
     T06,
     T07,
+    T08,
     T09A,
     T09B,
     T09C,
@@ -52,7 +54,7 @@ const rootReducer = combineReducers( {
     T14B,
     T14C,
     T14D,
-    T16A,
+    T16,
     T18
 } );
 

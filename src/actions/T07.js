@@ -6,7 +6,7 @@ import ModflowBoundary from '../model/ModflowBoundary';
 import ModflowLayerValues from '../model/ModflowLayerValues';
 import ModflowModel from '../model/ModflowModel';
 import ModflowModelBoundaries from '../model/ModflowModelBoundaries';
-import ModflowModelResult from '../model/ModflowModelResult';
+import ModflowCalculationResult from '../model/ModflowModelResult';
 import ResultType from '../model/ResultType';
 import TimeSeries from '../model/TimeSeries';
 import TimeSeriesResult from '../model/TimeSeriesResult';
@@ -67,25 +67,25 @@ export function setLayerValues( layerValues ) {
     };
 }
 
-export function setResultsT07A( modflowModelResult ) {
-    if ( modflowModelResult instanceof ModflowModelResult === false ) {
-        throw Error( 'Expected first param to be instance of ModflowModelResult' );
+export function setResultsT07A( modflowCalculationResult ) {
+    if ( modflowCalculationResult instanceof ModflowCalculationResult === false ) {
+        throw Error( 'Expected first param to be instance of ModflowCalculationResult' );
     }
 
     return {
         type: 'T07A_SET_MODEL_RESULT',
-        payload: modflowModelResult
+        payload: modflowCalculationResult
     };
 }
 
-export function setResultsT07B( modflowModelResult ) {
-    if ( modflowModelResult instanceof ModflowModelResult === false ) {
-        throw Error( 'Expected first param to be instance of ModflowModelResult' );
+export function setResultsT07B( modflowCalculationResult ) {
+    if ( modflowCalculationResult instanceof ModflowCalculationResult === false ) {
+        throw Error( 'Expected first param to be instance of ModflowCalculationResult' );
     }
 
     return {
         type: 'T07B_SET_RESULT',
-        payload: modflowModelResult
+        payload: modflowCalculationResult
     };
 }
 
@@ -113,7 +113,7 @@ export function fetchModelBoundaries( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/boundaries.json', {
+                promise: ConfiguredAxios.get( '/modflowmodels/' + id + '/boundaries.json', {
                     headers: {
                         'X-AUTH-TOKEN': getApiKey( getState() )
                     }
@@ -124,7 +124,7 @@ export function fetchModelBoundaries( id ) {
             const boundaries = action.payload.data;
 
             boundaries.map( b => {
-                return ModflowBoundary.fromParameters( b.boundary_id, b.name, b.type, JSON.parse( b.geometry ), b.metadata );
+                return ModflowBoundary.fromParameters( b.id, b.name, b.type, b.geometry, b.metadata );
             } );
 
             const payload = new ModflowModelBoundaries( modelId, boundaries );
@@ -136,15 +136,15 @@ export function fetchModelBoundaries( id ) {
     };
 }
 
-export function fetchLayerValues( id ) {
+export function fetchLayerValues( calculationId ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/layervalues.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/layervalues.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setLayerValues( new ModflowLayerValues( id, action.payload.data ) ) );
+            dispatch( setLayerValues( new ModflowLayerValues( calculationId, action.payload.data ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -152,15 +152,15 @@ export function fetchLayerValues( id ) {
     };
 }
 
-export function fetchTotalTimes( id, type, layer ) {
+export function fetchTotalTimes( calculationId, type, layer ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/model/' + id + '/calculation/times/type/' + type.toString() + '/layer/' + layer.toString() + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/times.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setTotalTimes( new TotalTimes( id, type, layer, action.payload.data.start_date, action.payload.data.end_date, action.payload.data.total_times ) ) );
+            dispatch( setTotalTimes( new TotalTimes( calculationId, type, layer, action.payload.data.start_date_time, action.payload.data.end_date_time, action.payload.data.total_times ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -174,21 +174,21 @@ export function setupT07b() {
     };
 }
 
-export function fetchModelDetails( id, onSuccess ) {
+export function fetchDetails(id, onSuccess ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/scenarioanalyses/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
             }
         } ).then( ( { action } ) => {
-            const area = JSON.parse( action.payload.data.base_model.area );
-            const boundingBoxPlain = JSON.parse( action.payload.data.base_model.bounding_box );
+            const area = action.payload.data.geometry;
+            const boundingBoxPlain = action.payload.data.bounding_box;
             const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain.y_min, boundingBoxPlain.x_min ), new Coordinate( boundingBoxPlain.y_max, boundingBoxPlain.x_max ) );
-            const gridSize = JSON.parse( action.payload.data.base_model.grid_size );
+            const gridSize = action.payload.data.grid_size;
 
             const baseModel = ModflowModel.fromProps(
-                action.payload.data.base_model.base_model_id,
+                action.payload.data.base_model.id,
                 true,
                 area,
                 action.payload.data.base_model.name,
@@ -196,20 +196,21 @@ export function fetchModelDetails( id, onSuccess ) {
                 boundingBox,
                 gridSize.n_x,
                 gridSize.n_y,
+                action.payload.data.base_model.calculation_id,
                 true
             );
 
             dispatch( addModel( baseModel ) );
             dispatch( setBounds( boundingBox.toArray() ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
-            dispatch( fetchLayerValues( baseModel.modelId ) );
-            dispatch( fetchTotalTimes( baseModel.modelId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
+            dispatch( fetchLayerValues( baseModel.calculationId ) );
+            dispatch( fetchTotalTimes( baseModel.calculationId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
 
             const scenarios = action.payload.data.scenarios;
             for ( let i = 0; i < scenarios.length; i++ ) {
                 const sc = scenarios[ i ];
                 const scenario = ModflowModel.fromProps(
-                    sc.model_id,
+                    sc.id,
                     false,
                     area,
                     sc.name,
@@ -217,6 +218,7 @@ export function fetchModelDetails( id, onSuccess ) {
                     boundingBox,
                     gridSize.n_x,
                     gridSize.n_y,
+                    sc.calculation_id,
                     i === ( scenarios.length - 1 )
                 );
 
@@ -232,18 +234,18 @@ export function fetchModelDetails( id, onSuccess ) {
     };
 }
 
-export function updateResultsT07A( id, resultType, layerNumber, totalTime ) {
+export function updateResultsT07A( calculationId, resultType, layerNumber, totalTime ) {
     const imageURL = config.baseURL + '/image';
-    const url = '/scenarioanalysis/model/' + id + '/calculation/result/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
+    const url = '/calculations/' + calculationId + '/results/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/totims/' + totalTime.toString();
 
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( url, { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setResultsT07A( new ModflowModelResult( id, layerNumber, resultType, totalTime, action.payload.data, imageURL + url + '.png' ) ) );
+            dispatch( setResultsT07A( new ModflowCalculationResult( calculationId, layerNumber, resultType, totalTime, action.payload.data, imageURL + url + '.png' ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -251,9 +253,9 @@ export function updateResultsT07A( id, resultType, layerNumber, totalTime ) {
     };
 }
 
-export function updateResultsT07B( modelId1, modelId2, resultType, layerNumber, totalTime ) {
+export function updateResultsT07B( calculation1, calculation2, resultType, layerNumber, totalTime ) {
     const imageURL = config.baseURL + '/image';
-    const url = '/scenarioanalysis/result/difference/models/' + modelId1 + '/' + modelId2 + '/type/' + resultType.toString() + '/layer/' + layerNumber.toString() + '/totim/' + totalTime.toString();
+    const url = '/calculations/' + calculation1 + '/results/difference/' + calculation2 + '/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/totims/' + totalTime.toString();
 
     return ( dispatch, getState ) => {
         return dispatch( {
@@ -262,7 +264,7 @@ export function updateResultsT07B( modelId1, modelId2, resultType, layerNumber, 
                 promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
             }
         } ).then( ( { action } ) => {
-            dispatch( setResultsT07B( new ModflowModelResult( modelId1, layerNumber, resultType, totalTime, action.payload.data, imageURL + url + '.png' ) ) );
+            dispatch( setResultsT07B( new ModflowCalculationResult( calculation1, layerNumber, resultType, totalTime, action.payload.data, imageURL + url + '.png' ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
@@ -347,12 +349,12 @@ export function setTimeSeriesPointResult( coordinate, timeSeriesResult ) {
     };
 }
 
-export function fetchTimeSeries( coordinate, modelId, resultType, layerNumber, x, y, startDate ) {
+export function fetchTimeSeries( coordinate, calculationId, resultType, layerNumber, x, y, startDate ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/result/timeseries/model/' + modelId + '/type/' + resultType.toString() + '/layer' + layerNumber.toString() + '/nx/' + x + '/ny/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState())}})
             }
         } ).then( ( { action } ) => {
             const data = [];
@@ -360,7 +362,7 @@ export function fetchTimeSeries( coordinate, modelId, resultType, layerNumber, x
                 data.push( new TwoDData( key, action.payload.data[ key ] ) );
             } );
             const timeSeries = new TimeSeries( startDate, data );
-            const timeSeriesResult = new TimeSeriesResult( modelId, resultType, layerNumber );
+            const timeSeriesResult = new TimeSeriesResult( calculationId, resultType, layerNumber );
             timeSeriesResult.timeSeries = timeSeries;
 
             dispatch( setTimeSeriesPointResult( coordinate, timeSeriesResult ) );

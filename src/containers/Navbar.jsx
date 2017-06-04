@@ -29,9 +29,7 @@ export default class NavBar extends React.Component {
     }
 
     renderLinks( links, recursionDepth = 0 ) {
-        return links.filter(l => {
-            return l;
-        }).map(( l, index ) => {
+        return links.filter(l => l).map(( l, index ) => {
             let active = false;
             const currentPath = this.props.routing.locationBeforeTransitions.pathname;
 

@@ -1,11 +1,15 @@
 import React from 'react';
 import {inputType} from '../../inputType';
+import Popup from '../primitive/Popup';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
 
 export default class Parameters extends React.Component {
 
+    state = {
+        popupVisible: false
+    };
     handleChange = e => {
         if (this.props.handleChange)            {this.props.handleChange(e);}
     };
@@ -13,53 +17,6 @@ export default class Parameters extends React.Component {
     handleReset = e => {
         if (this.props.handleReset)            {this.props.handleReset(e);}
     };
-
-    renderParam(param) {
-        if (!param.inputType) {
-            return this.renderSlider(param);
-        }
-
-        switch (param.inputType) {
-            case inputType.NUMBER:
-                return this.renderNumber(param);
-                break;
-            case inputType.RADIO_SELECT:
-                return this.renderRadioSelect(param);
-                break;
-            case inputType.SLIDER:
-                return this.renderSlider(param);
-                break;
-            default:
-        }
-    }
-
-    renderNumber(param) {
-        return (<tr key={param.id} className="parameter">
-            <td className="parameter-label">{param.label}</td>
-            <td>
-                <input name={'parameter_' + param.id + '_value'} type="number" min={param.min} max={param.max} step={param.stepSize} value={Number(param.value).toFixed(param.decimals)} onChange={this.handleChange}/>
-            </td>
-        </tr>);
-    }
-
-    renderRadioOption(param, option) {
-        return (<label key={option.id}>
-            <input name={'parameter_' + param.id + '_value'} value={option.value} type="radio" checked={param.value == option.value} onChange={this.handleChange}/> {option.label}
-        </label>);
-    }
-
-    renderRadioSelect(param) {
-        const options = param
-            .options
-            .map(option => {
-                return this.renderRadioOption(param, option);
-            });
-
-        return (<tr key={param.id} className="parameter">
-            <td className="parameter-label">{param.label}</td>
-            <td>{options}</td>
-        </tr>);
-    }
 
     renderSlider(param) {
         // Should do some refactoring
@@ -85,21 +42,30 @@ export default class Parameters extends React.Component {
         </tr>);
     }
 
-    render() {
-        const sortedParameters = this
-            .props
-            .data
-            .sort((a, b) => {
-                if (a.order > b.order) {
-                    return 1;
-                }
-                return -1;
-            });
-
-        const params = sortedParameters.map(param => {
-            return this.renderParam(param);
+    closePopup = () => {
+        this.setState({
+            popupVisible: false
         });
+    };
+    showPopup = () => {
+        this.setState({
+            popupVisible: true
+        });
+    };
 
+    render() {
+        const styleupdate = {
+            marginTop: "20px"
+        };
+        const stylelink = {
+            marginLeft: "70px"
+        };
+        const params = this.props.data.slice(0,8).map(param => {
+            return this.renderSlider(param);
+        });
+        const params_Kd = this.props.data.slice(8,10).map(param => {
+            return this.renderSlider(param);
+        });
         return (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -108,8 +74,12 @@ export default class Parameters extends React.Component {
                             {params}
                         </tbody>
                     </table>
+                    <div className="popup-div">
+                        <button style={stylelink} className="link popups" onClick={this.showPopup}>
+                            <span>Calculate Kd</span>
+                        </button>
+                    </div>
                 </div>
-
                 <div className="col col-rel-0-5">
                     <ul className="nav nav-stacked" role="navigation">
                         <li>
@@ -117,6 +87,17 @@ export default class Parameters extends React.Component {
                         </li>
                     </ul>
                 </div>
+                <Popup visible={this.state.popupVisible} close={this.closePopup}>
+                    <h2>Calculate Kd</h2>
+                    <div className="col-textalign stretch parameters-wrapper">
+                        <table className="parameters">
+                            <tbody>
+                            {params_Kd}
+                            </tbody>
+                        </table>
+                        <button  style={styleupdate} type="Button" onClick={this.closePopup}>Calculate</button>
+                    </div>
+                </Popup>
             </div>
         );
     }

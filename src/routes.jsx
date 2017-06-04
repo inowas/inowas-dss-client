@@ -19,6 +19,7 @@ const routes = (
             <Route path="T07B/:id" component={tools.T07B}/>
             <Route path="T07C/:id" component={tools.T07C}/>
             <Route path="T07D/:id" component={tools.T07D}/>
+            <Route path="T08/:id" component={tools.T08}/>
             <Route path="T09(/:id)" component={tools.T09}/>
             <Route path="T09A(/:id)" component={tools.T09A}/>
             <Route path="T09B(/:id)" component={tools.T09B}/>
@@ -36,7 +37,7 @@ const routes = (
             <Route path="T14B(/:id)" component={tools.T14B}/>
             <Route path="T14C(/:id)" component={tools.T14C}/>
             <Route path="T14D(/:id)" component={tools.T14D}/>
-            <Route path="T16A(/:id)" component={tools.T16A}/>
+            <Route path="T16(/:id)" component={tools.T16}/>
             <Route path="T17(/:id)" component={tools.T17}/>
             <Route path="T18(/:id)" component={tools.T18}/>
         </Route>

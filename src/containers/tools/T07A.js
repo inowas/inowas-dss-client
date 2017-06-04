@@ -16,7 +16,7 @@ import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
 import {
-    fetchModelDetails,
+    fetchDetails,
     updateResultsT07A,
     resizeDone,
     reloadDone,
@@ -53,15 +53,15 @@ export default class T07A extends Component {
             navigation: [
                 {
                     name: 'Cross section',
-                    path: 'tools/T07A/' + props.params.id,
+                    path: '/tools/T07A/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 }, {
                     name: 'Scenarios difference',
-                    path: 'tools/T07B/' + props.params.id,
+                    path: '/tools/T07B/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 }, {
                     name: 'Time series',
-                    path: 'tools/T07C/' + props.params.id,
+                    path: '/tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 } /* , {
                     name: 'Overall budget',
@@ -73,7 +73,7 @@ export default class T07A extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+        this.props.dispatch(fetchDetails( this.props.params.id ));
     }
 
     componentWillReceiveProps(props) {
@@ -137,7 +137,7 @@ export default class T07A extends Component {
                 }
             }
 
-            this.props.dispatch(updateResultsT07A( m.modelId, resultType, layerNumber, totalTime ));
+            this.props.dispatch(updateResultsT07A( m.calculationId, resultType, layerNumber, totalTime ));
         });
     }
 

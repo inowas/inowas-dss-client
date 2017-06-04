@@ -1,7 +1,6 @@
 import ConfiguredAxios from 'ConfiguredAxios';
 
 export function login(username, apiKey) {
-    console.log(apiKey);
     return {
         type: 'LOGIN',
         payload: {

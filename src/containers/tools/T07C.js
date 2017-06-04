@@ -15,7 +15,7 @@ import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
 import {
-    fetchModelDetails,
+    fetchDetails,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
@@ -51,19 +51,19 @@ export default class T07C extends Component {
             navigation: [
                 {
                     name: 'Cross section',
-                    path: 'tools/T07A/' + props.params.id,
+                    path: '/tools/T07A/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 }, {
                     name: 'Scenarios difference',
-                    path: 'tools/T07B/' + props.params.id,
+                    path: '/tools/T07B/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 }, {
                     name: 'Time series',
-                    path: 'tools/T07C/' + props.params.id,
+                    path: '/tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 } /* , {
                     name: 'Overall budget',
-                    path: 'tools/T07D/' + props.params.id,
+                    path: '/tools/T07D/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
                 } */
             ]
@@ -71,7 +71,7 @@ export default class T07C extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+        this.props.dispatch(fetchDetails( this.props.params.id ));
     }
 
     fetchTimeSeriesForPoint( coordinate, modelId, resultType, layerNumber, gridCell, startDate ) {

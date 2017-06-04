@@ -73,20 +73,20 @@ function getInitialState() {
 }
 const T13BReducer = (state = getInitialState(), action) => {
     switch (action.type) {
-        case 'RESET_TOOL_T13B':
+        case 'RESET_TOOL_T13D':
             {
                 state = getInitialState();
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CALCULATE_TOOL_T13B':
+        case 'CALCULATE_TOOL_T13D':
             {
                 state = { ...state
                 };
                 calculateAndModifyState(state);
                 break;
             }
-        case 'CHANGE_TOOL_T13B_PARAMETER':
+        case 'CHANGE_TOOL_T13D_PARAMETER':
             {
                 state = { ...state,
                 };
