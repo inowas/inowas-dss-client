@@ -1,4 +1,4 @@
 export default {
     //baseURL: 'https://api.inowas.hydro.tu-dresden.de'
-    baseURL: 'http://modflow.railsdev.de'
+    baseURL: 'https://api.inowas.hydro.tu-dresden.de'
 };

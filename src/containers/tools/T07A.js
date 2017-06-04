@@ -137,7 +137,7 @@ export default class T07A extends Component {
                 }
             }
 
-            this.props.dispatch(updateResultsT07A( m.modelId, resultType, layerNumber, totalTime ));
+            this.props.dispatch(updateResultsT07A( m.calculationId, resultType, layerNumber, totalTime ));
         });
     }
 
