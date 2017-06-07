@@ -37,8 +37,8 @@ class T03 extends Component {
 
         return (
             <div className="toolT03">
-                <Navbar links={navigation}/>
-                <ModelEditorMap {...this.props} initial={initial}/>
+                <Navbar links={navigation} />
+                <ModelEditorMap {...this.props} initial={initial} />
             </div>
         );
     }
