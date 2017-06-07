@@ -1,4 +1,4 @@
-import '../../less/floatingToolbox.less';
+// import '../../less/floatingToolbox.less';
 
 import React, { Component, PropTypes } from 'react';
 
@@ -6,7 +6,9 @@ import Accordion from '../primitive/Accordion';
 import AccordionItem from '../primitive/AccordionItem';
 import List from '../primitive/List';
 import ListItem from '../primitive/ListItem';
+import ConfiguredRadium from 'ConfiguredRadium';
 
+@ConfiguredRadium
 export default class FloatingToolbox extends Component {
 
     static propTypes = {

@@ -2,17 +2,25 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 
-import Accordion from '../components/primitive/Accordion';
-import AccordionItem from '../components/primitive/AccordionItem';
 import { Link } from 'react-router';
 import Icon from '../components/primitive/Icon';
 import Popup from '../components/primitive/Popup';
-import StackedNav from '../components/primitive/StackedNav';
 import { fetchDashboardModelsT07 } from '../actions/dashboard';
 import Navbar from './Navbar';
+import Menu from '../components/primitive/Menu';
+import ConfiguredRadium from 'ConfiguredRadium';
+import styleGlobals from 'styleGlobals';
 
 import '../less/dashboard.less';
 
+const styles = {
+    menu: {
+        width: 2 * styleGlobals.dimensions.gridColumn + styleGlobals.dimensions.gridGutter,
+        marginRight: styleGlobals.dimensions.gridGutter
+    }
+};
+
+@ConfiguredRadium
 @connect(( store ) => {
     return ({ dashboardStore: store.dashboard });
 })
@@ -26,15 +34,16 @@ export default class Dashboard extends React.Component {
     state = {
         active: 'T07',
         popupVisible: false,
-        navigation: [{
-            name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/',
-            icon: <Icon name="file"/>
-        }, {
-            name: 'Datasets',
-            path: 'https://kb.inowas.hydro.tu-dresden.de',
-            icon: <Icon name="dataset"/>
-        }/* , {
+        navigation: [
+            {
+                name: 'Documentation',
+                path: 'https://wiki.inowas.hydro.tu-dresden.de/',
+                icon: <Icon name="file"/>
+            }, {
+                name: 'Datasets',
+                path: 'https://kb.inowas.hydro.tu-dresden.de',
+                icon: <Icon name="dataset"/>
+            }/* , {
             name: 'Projects',
             icon: <Icon name="folder"/>
         }, {
@@ -43,10 +52,11 @@ export default class Dashboard extends React.Component {
         }, {
             name: 'Tools',
             icon: <Icon name="layer_horizontal_hatched"/>
-        }*/]
+        }*/
+        ]
     }
 
-    componentDidMount() {
+    componentDidMount( ) {
         this.props.dispatch(fetchDashboardModelsT07( ));
     }
 
@@ -59,29 +69,20 @@ export default class Dashboard extends React.Component {
         };
     }
 
-    renderTools( tools ) {
-        return tools.map(( tool, index ) => {
-            return (
-                <li key={index}>
-                    <button onClick={this.setToolSelection( tool.slug )} className="link" href="#">{tool.slug + ': ' + tool.name}</button>
-                </li>
-            );
-        });
-    }
-
     renderTableRows( basePath, models ) {
         return models.map(( model, index ) => {
-            const createdAt = new Date(model.created_at);
+            const createdAt = new Date( model.created_at );
             return (
                 <tr key={index}>
                     <td>{index}</td>
                     <td>{model.name}</td>
                     <td>{model.project}</td>
                     <td>{model.application}</td>
-                    <td>{dateFormat(createdAt, 'mm/dd/yyyy HH:MM')}</td>
+                    <td>{dateFormat( createdAt, 'mm/dd/yyyy HH:MM' )}</td>
                     <td>{model.user_name}</td>
                     <td>
-                        {!model.fake && <Link className="link" to={basePath + model.id}>use it <Icon name="arrow_right"/></Link>}
+                        {!model.fake && <Link className="link" to={basePath + model.id}>use it
+                            <Icon name="arrow_right"/></Link>}
                     </td>
                 </tr>
             );
@@ -91,7 +92,7 @@ export default class Dashboard extends React.Component {
     renderDataTable( ) {
         const { active } = this.state;
         const { tools } = this.props.dashboardStore;
-        const activeTool = tools.find(t => t.slug === active);
+        const activeTool = tools.find( t => t.slug === active );
 
         if ( active ) {
             return (
@@ -159,43 +160,40 @@ export default class Dashboard extends React.Component {
         return null;
     }
 
-    closePopup = () => {
-        this.setState({
-            popupVisible: false
-        });
+    closePopup = ( ) => {
+        this.setState({ popupVisible: false });
     }
 
-    showPopup = () => {
-        this.setState({
-            popupVisible: true
-        });
+    showPopup = ( ) => {
+        this.setState({ popupVisible: true });
     }
 
     render( ) {
-        const {navigation} = this.state;
+        const { navigation } = this.state;
         const { tools } = this.props.dashboardStore;
+
+        const menuItems = [{
+            name: 'Projects',
+            icon: <Icon name="folder"/>,
+            items: [{
+                name: 'Inowas'
+            }]
+        }, {
+            name: 'Tools',
+            icon: <Icon name="tools"/>,
+            items: tools.map(t => {
+                return {
+                    name: t.slug + ': ' + t.name,
+                    onClick: this.setToolSelection( t.slug )
+                };
+            })
+        }];
 
         return (
             <div className="dashboard">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 <div className="app-width grid-container">
-                    <StackedNav>
-                        <h2>Dashboard</h2>
-                        <Accordion firstActive={1}>
-                            <AccordionItem icon={< Icon name = "folder" />} heading="Projects">
-                                <ul className="nav-sub">
-                                    <li>
-                                        <a className="link" href="#">Inowas</a>
-                                    </li>
-                                </ul>
-                            </AccordionItem>
-                            <AccordionItem icon={< Icon name = "tools" />} heading="Tools">
-                                <ul className="nav-sub">
-                                    {this.renderTools( tools )}
-                                </ul>
-                            </AccordionItem>
-                        </Accordion>
-                    </StackedNav>
+                    <Menu firstActive={1} title="Dashboard" items={menuItems} style={styles.menu} />
                     {this.renderDataTable( )}
                 </div>
                 <Popup visible={this.state.popupVisible} close={this.closePopup}>

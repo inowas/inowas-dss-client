@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import ConfiguredRadium from 'ConfiguredRadium';
 
-import '../../less/accordion.less';
-
+@ConfiguredRadium
 export default class Accordion extends Component {
 
     static propTypes = {
-        className: PropTypes.string,
+        style: PropTypes.object,
         children: PropTypes.node.isRequired,
         firstActive: PropTypes.number
     }
@@ -33,7 +33,7 @@ export default class Accordion extends Component {
     }
 
     render( ) {
-        const { className } = this.props;
+        const { style } = this.props;
 
         let index = 0;
         const children = React.Children.map(this.props.children, ( child ) => {
@@ -47,7 +47,7 @@ export default class Accordion extends Component {
         });
 
         return (
-            <div className={'accordion' + ' ' + className}>
+            <div style={[style]}>
                 {children}
             </div>
         );
