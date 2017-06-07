@@ -1,15 +1,17 @@
 import { applyMiddleware, compose, createStore } from 'redux';
-import { browserHistory } from 'react-router';
-import {routerMiddleware} from 'react-router-redux';
-// import { autoRehydrate, persistStore } from 'redux-persist';
 
+import { browserHistory } from 'react-router';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import promiseMiddleware from 'redux-promise-middleware';
 import rootReducer from '../reducers';
+import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import unauthorizedMiddleware from './unauthorizedMiddleware';
+// import { autoRehydrate, persistStore } from 'redux-persist';
+
 
 // middleware always needed
-const middleware = [ promiseMiddleware(), thunk, routerMiddleware(browserHistory) ];
+const middleware = [ promiseMiddleware(), thunk, routerMiddleware( browserHistory ), unauthorizedMiddleware() ];
 if ( process.env.NODE_ENV !== 'production' ) {
     // middleware just for developement
     const { logger } = require( 'redux-logger' );

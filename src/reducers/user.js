@@ -19,6 +19,7 @@ const user = ( state = initialState(), action ) => {
                     apiKey: action.payload.apiKey
                 };
             }
+        case 'UNAUTHORIZED':
         case 'LOGOUT':
             {
                 localStorage.removeItem( 'apiKey' );
