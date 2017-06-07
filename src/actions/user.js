@@ -42,7 +42,7 @@ export function loadUserInformation() {
         return dispatch({
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/users/profile', { headers: { 'X-AUTH-TOKEN': getApiKey( getState())}})
+                promise: ConfiguredAxios.get( '/users/profile', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user )}})
             }
         }).then( ( { action } ) => {
             dispatch( setUserInformation( action.payload.data ) );

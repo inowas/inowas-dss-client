@@ -1,8 +1,8 @@
 import '../less/navbar.less';
 
 import React, { PropTypes } from 'react';
-import { authenticate, logout, loadUserInformation } from '../actions/user';
-import { isUserLoggedIn, getName } from '../reducers/user';
+import { authenticate, loadUserInformation, logout } from '../actions/user';
+import { getApiKey, getName, isUserLoggedIn } from '../reducers/user';
 
 import Icon from '../components/primitive/Icon';
 import { Link } from 'react-router';
@@ -19,15 +19,30 @@ class NavBar extends React.Component {
         authenticate: PropTypes.func.isRequired,
         logout: PropTypes.func.isRequired,
         name: PropTypes.string,
-        loadUserInformation: PropTypes.func.isRequired
+        loadUserInformation: PropTypes.func.isRequired,
+        apiKey: PropTypes.string
     };
 
-    componentWillMount() {
+    componentDidMount( ) {
+        const { userLoggedIn } = this.props;
+        if ( userLoggedIn ) {
+            this.loadUserInformation( );
+        }
+    }
+
+    componentDidUpdate( prevProps ) {
+        const { apiKey, userLoggedIn } = this.props;
+        if ( apiKey !== prevProps.apiKey && userLoggedIn ) {
+            this.loadUserInformation( );
+        }
+    }
+
+    loadUserInformation( ) {
         // eslint-disable-next-line no-shadow
         const { name, loadUserInformation } = this.props;
 
-        if (!name || name === '') {
-            loadUserInformation();
+        if ( !name || name === '' ) {
+            loadUserInformation( );
         }
     }
 
@@ -153,9 +168,10 @@ class NavBar extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = ( state, ownProps ) => {
     return {
         userLoggedIn: isUserLoggedIn( state.user ),
+        apiKey: getApiKey( state.user ),
         routing: state.routing,
         name: getName( state.user ),
         ...ownProps
