@@ -3,10 +3,10 @@ import ConfiguredAxios from 'ConfiguredAxios';
 import Coordinate from '../model/Coordinate';
 import LayerNumber from '../model/LayerNumber';
 import ModflowBoundary from '../model/ModflowBoundary';
+import ModflowCalculationResult from '../model/ModflowModelResult';
 import ModflowLayerValues from '../model/ModflowLayerValues';
 import ModflowModel from '../model/ModflowModel';
 import ModflowModelBoundaries from '../model/ModflowModelBoundaries';
-import ModflowCalculationResult from '../model/ModflowModelResult';
 import ResultType from '../model/ResultType';
 import TimeSeries from '../model/TimeSeries';
 import TimeSeriesResult from '../model/TimeSeriesResult';
@@ -115,7 +115,7 @@ export function fetchModelBoundaries( id ) {
             payload: {
                 promise: ConfiguredAxios.get( '/modflowmodels/' + id + '/boundaries.json', {
                     headers: {
-                        'X-AUTH-TOKEN': getApiKey( getState() )
+                        'X-AUTH-TOKEN': getApiKey( getState().user )
                     }
                 } )
             }
@@ -141,7 +141,7 @@ export function fetchLayerValues( calculationId ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/layervalues.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/layervalues.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setLayerValues( new ModflowLayerValues( calculationId, action.payload.data ) ) );
@@ -157,7 +157,7 @@ export function fetchTotalTimes( calculationId, type, layer ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/times.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/times.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setTotalTimes( new TotalTimes( calculationId, type, layer, action.payload.data.start_date_time, action.payload.data.end_date_time, action.payload.data.total_times ) ) );
@@ -174,7 +174,7 @@ export function setupT07b() {
     };
 }
 
-export function fetchDetails(id, onSuccess ) {
+export function fetchDetails( id, onSuccess ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
@@ -242,7 +242,7 @@ export function updateResultsT07A( calculationId, resultType, layerNumber, total
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( url, { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( url, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setResultsT07A( new ModflowCalculationResult( calculationId, layerNumber, resultType, totalTime, action.payload.data, imageURL + url + '.png' ) ) );
@@ -261,7 +261,7 @@ export function updateResultsT07B( calculation1, calculation2, resultType, layer
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( url + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setResultsT07B( new ModflowCalculationResult( calculation1, layerNumber, resultType, totalTime, action.payload.data, imageURL + url + '.png' ) ) );
@@ -354,7 +354,7 @@ export function fetchTimeSeries( coordinate, calculationId, resultType, layerNum
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState())}})
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             const data = [];
