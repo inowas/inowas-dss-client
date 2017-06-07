@@ -8,11 +8,11 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
 export default {
-    devtool: 'eval-source-map',
+    devtool: 'inline-source-map',
     devServer: {
         historyApiFallback: true,
         hot: true,
-        stats: 'errors-only'
+        stats: 'minimal'
     },
     entry: [
         'webpack-dev-server/client?http://localhost:8080',

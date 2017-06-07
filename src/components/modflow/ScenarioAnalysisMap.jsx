@@ -98,8 +98,8 @@ export default class ScenarioAnalysisMap extends Component {
 
         const wells = boundaries.map( b => {
             if (b.type === 'well') {
-                const geometry = JSON.parse(b.geometry);
-                const metadata = JSON.parse(b.metadata);
+                const geometry = b.geometry;
+                const metadata = b.metadata;
 
                 const style = this.state.styles.wells[metadata.well_type];
                 return (
