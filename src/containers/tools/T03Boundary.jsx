@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import { connect } from 'react-redux';
-import { getActiveBoundary } from '../../reducers/T03/ui';
-import { getBoundary } from '../../reducers/T03/boundaries';
+import { getActiveBoundary } from '../../reducers/ModelEditor/ui';
+import { getBoundary } from '../../reducers/ModelEditor/boundaries';
 import { updateBoundary, setState } from '../../actions/T03';
 import Icon from '../../components/primitive/Icon';
 

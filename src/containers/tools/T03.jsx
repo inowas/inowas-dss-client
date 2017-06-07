@@ -1,7 +1,7 @@
 import * as actions from '../../actions/T03';
 
 import React, { Component, PropTypes } from 'react';
-import { getArea } from '../../reducers/T03/general';
+import { getArea } from '../../reducers/ModelEditor/general';
 import {
     getState,
     getMapPosition,
@@ -11,8 +11,8 @@ import {
     getActiveBoundary,
     getDraggedBoundary,
     getActiveBoundaryControlPoint
-} from '../../reducers/T03/ui';
-import { getBoundaries } from '../../reducers/T03/boundaries';
+} from '../../reducers/ModelEditor/ui';
+import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
 import ModelEditorMap from '../../components/modflow/ModelEditorMap';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';

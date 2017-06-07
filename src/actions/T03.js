@@ -1,6 +1,6 @@
-import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/T03/general';
-import { getBoundary } from '../reducers/T03/boundaries';
-import { getActiveBoundary } from '../reducers/T03/ui';
+import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/ModelEditor/general';
+import { getBoundary } from '../reducers/ModelEditor/boundaries';
+import { getActiveBoundary } from '../reducers/ModelEditor/ui';
 import { push } from 'react-router-redux';
 
 /**

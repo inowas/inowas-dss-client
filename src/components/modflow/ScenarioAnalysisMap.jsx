@@ -96,7 +96,7 @@ export default class ScenarioAnalysisMap extends Component {
             return null;
         }
 
-        const wells = boundaries.map( b => {
+        const wells = boundaries.map( (b, index) => {
             if (b.type === 'well') {
                 const geometry = b.geometry;
                 const metadata = b.metadata;
@@ -104,7 +104,7 @@ export default class ScenarioAnalysisMap extends Component {
                 const style = this.state.styles.wells[metadata.well_type];
                 return (
                    <CircleMarker
-                       key={b.boundary_id}
+                       key={index}
                        center={[geometry.coordinates[1], geometry.coordinates[0]]}
                        radius={style.radius}
                        color={style.color}

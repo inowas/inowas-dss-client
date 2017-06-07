@@ -8,8 +8,8 @@ import {
 
 import ControlPointList from '../../components/modflow/ControlPointList';
 import { connect } from 'react-redux';
-import { getArea } from '../../reducers/T03/general';
-import { getState } from '../../reducers/T03/ui';
+import { getArea } from '../../reducers/ModelEditor/general';
+import { getState } from '../../reducers/ModelEditor/ui';
 
 const mapStateToProps = state => {
     return {

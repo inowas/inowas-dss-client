@@ -179,7 +179,7 @@ export function fetchDetails( id, onSuccess ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalyses/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/scenarioanalyses/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             const area = action.payload.data.geometry;

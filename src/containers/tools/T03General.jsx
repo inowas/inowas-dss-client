@@ -10,7 +10,7 @@ import {
     setState,
     setTimeUnit,
 } from '../../actions/T03';
-import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../../reducers/T03/general';
+import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../../reducers/ModelEditor/general';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';

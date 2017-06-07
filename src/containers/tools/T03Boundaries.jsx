@@ -9,9 +9,9 @@ import Tabs from '../../components/primitive/Tabs';
 import WellProperties from '../../components/modflow/WellProperties';
 import RiverProperties from '../../components/modflow/RiverProperties';
 import { connect } from 'react-redux';
-import { getActiveBoundary } from '../../reducers/T03/ui';
-import { getArea } from '../../reducers/T03/general';
-import { getBoundaries } from '../../reducers/T03/boundaries';
+import { getActiveBoundary } from '../../reducers/ModelEditor/ui';
+import { getArea } from '../../reducers/ModelEditor/general';
+import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 

@@ -8,8 +8,8 @@ import {
 
 import ControlPointList from '../../components/modflow/ControlPointList';
 import { connect } from 'react-redux';
-import { getBoundary } from '../../reducers/T03/boundaries';
-import { getState, getActiveBoundary } from '../../reducers/T03/ui';
+import { getBoundary } from '../../reducers/ModelEditor/boundaries';
+import { getState, getActiveBoundary } from '../../reducers/ModelEditor/ui';
 
 const mapStateToProps = state => {
     return {

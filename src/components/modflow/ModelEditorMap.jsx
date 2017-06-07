@@ -391,7 +391,7 @@ export default class ModelEditorMap extends Component {
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
                 {this.renderToolWrapper( state, initial )}
                 {this.renderTitle( state )}
-                {!initial && <FloatingToolbox items={properties} onToolClick={setState}/>}
+                <FloatingToolbox items={properties} onToolClick={setState}/>
             </div>
         );
     }
