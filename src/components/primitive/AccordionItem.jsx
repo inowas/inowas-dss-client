@@ -34,6 +34,14 @@ const styles = {
         marginLeft: 16,
         width: 20,
         height: 20
+    },
+
+    contentNotLast: {
+        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
+    },
+
+    contentEmpty: {
+        height: 20
     }
 };
 
@@ -47,11 +55,12 @@ export default class AccordionItem extends Component {
         children: PropTypes.node,
         index: PropTypes.number,
         active: PropTypes.bool,
-        toggleActive: PropTypes.func
+        toggleActive: PropTypes.func,
+        last: PropTypes.bool
     }
 
     render( ) {
-        const { active, style, children, toggleActive, icon } = this.props;
+        const { active, style, children, toggleActive, icon, last } = this.props;
 
         return (
             <div>
@@ -69,8 +78,8 @@ export default class AccordionItem extends Component {
                 {(( ) => {
                     if ( active ) {
                         return (
-                            <div>
-                                {children || ( <div className="accordion-item-empty"/> )}
+                            <div style={[last || styles.contentNotLast]}>
+                                {children || ( <div style={styles.contentEmpty} /> )}
                             </div>
                         );
                     }

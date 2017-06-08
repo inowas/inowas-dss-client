@@ -28,7 +28,8 @@ const styles = {
 
     title: {
         textAlign: 'center',
-        fontSize: 16
+        fontSize: 16,
+        borderBottom: 0
     },
 
     list: {
@@ -40,6 +41,10 @@ const styles = {
     listItem: {
         paddingTop: 6,
         paddingBottom: 6
+    },
+
+    disabled: {
+        opacity: 0.5
     }
 
 };
@@ -63,14 +68,14 @@ export default class Menu extends Component {
                     <AccordionItem style={styles.title} heading={title}>
                         <Accordion firstActive={firstActive}>
                             {items.map(( i, index ) => (
-                                <AccordionItem icon={i.icon} heading={i.name} key={index}>
+                                <AccordionItem style={[i.disabled && styles.disabled]} icon={i.icon} heading={i.name} key={index}>
                                     <ul style={styles.list}>
-                                        {i.items.map(( i2, index2 ) => (
-                                            <li style={styles.listItem} key={index2}>
+                                        {i.items && i.items.map(( i2, index2 ) => (
+                                            <li style={[styles.listItem, (i.disabled || i2.disabled) && styles.disabled]} key={index2}>
                                                 {(( ) => {
                                                     if ( i2.onClick ) {
                                                         return (
-                                                            <button onClick={i2.onClick} className="link">
+                                                            <button onClick={i2.onClick} className="link" disabled={i.disabled || i2.disabled}>
                                                                 {i2.name}
                                                             </button>
                                                         );

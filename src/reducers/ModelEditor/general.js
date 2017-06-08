@@ -97,29 +97,32 @@ function getInitialState() {
 }
 const createGeneralReducer = tool => {
     const general = ( state = getInitialState(), action ) => {
+        if (action.tool !== tool) {
+            return state;
+        }
         switch ( action.type ) {
-            case tool + '_MODEL_SET_NAME':
+            case 'MODEL_EDITOR_MODEL_SET_NAME':
                 return { ...state, name: action.payload };
 
-            case tool + '_MODEL_SET_DESCRIPTION':
+            case 'MODEL_EDITOR_MODEL_SET_DESCRIPTION':
                 return { ...state, description: action.payload };
 
-            case tool + '_MODEL_SET_TIME_UNIT':
+            case 'MODEL_EDITOR_MODEL_SET_TIME_UNIT':
                 if ( [ 's', 'min', 'h', 'd', 'yrs' ].indexOf( action.payload !== -1 ) ) {
                     return { ...state, timeUnit: action.payload };
                 }
                 return state;
 
-            case tool + '_MODEL_SET_LENGTH_UNIT':
+            case 'MODEL_EDITOR_MODEL_SET_LENGTH_UNIT':
                 if ( [ 'cm', 'm', 'ft' ].indexOf( action.payload !== -1 ) ) {
                     return { ...state, lengthUnit: action.payload };
                 }
                 return state;
 
-            case tool + '_MODEL_SET_AREA':
+            case 'MODEL_EDITOR_MODEL_SET_AREA':
                 return { ...state, area: action.payload };
 
-            case tool + '_MODEL_AREA_ADD_CONTROL_POINT':
+            case 'MODEL_EDITOR_MODEL_AREA_ADD_CONTROL_POINT':
                 if ( action.payload.index !== undefined ) {
                     return {
                         ...state,
@@ -135,7 +138,7 @@ const createGeneralReducer = tool => {
                 }
                 return { ...state, area: [ ...state.area, action.payload ] };
 
-            case tool + '_MODEL_AREA_UPDATE_CONTROL_POINT':
+            case 'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL_POINT':
                 return {
                     ...state,
                     area: state.area.map( ( c, index ) => {
@@ -147,7 +150,7 @@ const createGeneralReducer = tool => {
                 };
 
             // TODO remove
-            case tool + '_MODEL_SET_AREA_LATITUDE':
+            case 'MODEL_EDITOR_MODEL_SET_AREA_LATITUDE':
                 return { ...state,
                     area: state.area.map( ( c, index ) => {
                         if ( index !== action.payload.index ) {
@@ -162,7 +165,7 @@ const createGeneralReducer = tool => {
                 };
 
             // TODO remove
-            case tool + '_MODEL_SET_AREA_LONGITUDE':
+            case 'MODEL_EDITOR_MODEL_SET_AREA_LONGITUDE':
                 return { ...state,
                     area: state.area.map( ( c, index ) => {
                         if ( index !== action.payload.index ) {
@@ -176,7 +179,7 @@ const createGeneralReducer = tool => {
                     } )
                 };
 
-            case tool + '_MODEL_DELETE_AREA_CONTROL_POINT':
+            case 'MODEL_EDITOR_MODEL_DELETE_AREA_CONTROL_POINT':
                 return { ...state,
                     area: [
                         ...state.area.slice( 0, action.payload ),

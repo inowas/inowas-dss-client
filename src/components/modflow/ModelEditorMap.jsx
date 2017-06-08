@@ -7,15 +7,13 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import EditableArea from './EditableArea';
 import EditableWells from './EditableWells';
 import EditableLine from './EditableLine';
-import FloatingTitle from './FloatingTitle';
-import FloatingTool from './FloatingTool';
-import FloatingToolbox from './FloatingToolbox';
+import FloatingToast from './FloatingToast';
+import FloatingMapToolBox from './FloatingMapToolBox';
+import Tool from './Tool';
+import Menu from '../primitive/Menu';
 import Icon from '../primitive/Icon';
-import T03Area from '../../containers/tools/T03Area';
-import T03River from '../../containers/tools/T03River';
-import T03Boundaries from '../../containers/tools/T03Boundaries';
-import T03Boundary from '../../containers/tools/T03Boundary';
-import T03General from '../../containers/tools/T03General';
+import ModelEditorBoundaries from '../../containers/tools/ModelEditorBoundaries';
+import ModelEditorGeneral from '../../containers/tools/ModelEditorGeneral';
 import styleGlobals from 'styleGlobals';
 
 const RadiumMap = ConfiguredRadium( Map );
@@ -50,6 +48,35 @@ const styles = {
         weight: 0.5,
         fillColor: 'blue',
         fillOpacity: 0
+    },
+    overlayWrapper: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    },
+    overlay: {
+        width: styleGlobals.dimensions.appWidth,
+        padding: styleGlobals.dimensions.gridGutter,
+        maxHeight: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        display: 'flex'
+    },
+    menu: {
+        width: styleGlobals.dimensions.gridColumn,
+        marginLeft: styleGlobals.dimensions.gridGutter,
+        marginRight: styleGlobals.dimensions.gridGutter,
+        marginBottom: 'auto', // pin element to top
+        position: 'relative',
+        zIndex: 1100
+    },
+    tool: {
+        width: 4 * styleGlobals.dimensions.gridColumn + 3 * styleGlobals.dimensions.gridGutter,
+        marginRight: styleGlobals.dimensions.gridGutter,
+        position: 'relative',
+        zIndex: 1100
     }
 };
 
@@ -57,6 +84,7 @@ const styles = {
 export default class ModelEditorMap extends Component {
 
     static propTypes = {
+        tool: PropTypes.string.isRequired,
         state: PropTypes.string, // TODO better use oneOf
         setState: PropTypes.func,
         addAreaControlPoint: PropTypes.func,
@@ -76,51 +104,41 @@ export default class ModelEditorMap extends Component {
         boundaries: PropTypes.array,
         initial: PropTypes.bool,
         activeBoundary: PropTypes.string,
-        draggedBoundary: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
+        draggedBoundary: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
         setDraggedBoundary: PropTypes.func,
         updateBoundary: PropTypes.func,
         addBoundaryControlPoint: PropTypes.func,
         updateBoundaryControlPoint: PropTypes.func,
         activeBoundaryControlPoint: PropTypes.number,
-        setActiveBoundaryControlPoint: PropTypes.func
+        setActiveBoundaryControlPoint: PropTypes.func,
+        deleteAreaControlPoint: PropTypes.func
     };
 
-    state = {
-        // TODO move to container
-        properties: [
-            {
-                slug: 'general',
-                name: 'General',
-                icon: <Icon name="settings"/>
-            }, {
-                slug: 'soilmodel',
-                name: 'Soilmodel',
-                icon: <Icon name="layer_horizontal_hatched"/>
-            }, {
-                slug: 'boundariesOverlay',
-                name: 'Boundaries',
-                icon: <Icon name="marker"/>
-            }, {
-                slug: 'modelRun',
-                name: 'Model Run',
-                icon: <Icon name="calculator"/>
-            }, {
-                slug: 'results',
-                name: 'Results',
-                icon: <Icon name="dataset"/>
-            }
-        ]
-    }
-
     componentDidMount( ) {
-        // center mapPosition to area if no mapPosition is specified
-        const { mapPosition, area } = this.props;
+        const { mapPosition, area, state } = this.props;
 
+        // center mapPosition to area if no mapPosition is specified
         if ( mapPosition === null && area.length > 0 ) {
             this.centerMapPositionToArea( );
+        }
+
+        // enable or disable Map depending on state
+        if ( [ 'general', 'boundariesOverlay' ].indexOf( state ) !== -1 ) {
+            this.disableMap( );
+        } else {
+            this.enableMap( );
+        }
+    }
+
+    componentDidUpdate( prevProps ) {
+        // enable or disable Map depending on state
+        const { state } = this.props;
+        if ( state !== prevProps.state ) {
+            if ( [ 'general', 'boundariesOverlay' ].indexOf( state ) !== -1 ) {
+                this.disableMap( );
+            } else {
+                this.enableMap( );
+            }
         }
     }
 
@@ -232,7 +250,8 @@ export default class ModelEditorMap extends Component {
             addBoundaryControlPoint,
             updateBoundaryControlPoint,
             activeBoundaryControlPoint,
-            setActiveBoundaryControlPoint
+            setActiveBoundaryControlPoint,
+            deleteAreaControlPoint
         } = this.props;
 
         const handler = {
@@ -264,6 +283,8 @@ export default class ModelEditorMap extends Component {
                     return 'draw';
                 case 'area-edit':
                     return 'edit';
+                case 'area-delete':
+                    return 'delete';
                 default:
                     return 'minimal';
             }
@@ -290,108 +311,248 @@ export default class ModelEditorMap extends Component {
         return (
             <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
-                <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} deleteControlPoint={deleteAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
-                    : null}/>
-                {boundaries.filter( b => b.type === 'river' ).map((r, index) => {
-                    const riverState = (( ) => {
-                        if (r.id === activeBoundary) {
-                            switch ( state ) {
-                                case 'river':
-                                    return 'default';
-                                case 'river-draw':
-                                    return 'draw';
-                                case 'river-edit':
-                                    return 'edit';
-                                default:
-                                    return 'minimal';
+                    : null}/> {boundaries.filter( b => b.type === 'river' ).map(( r, index ) => {
+                        const riverState = (( ) => {
+                            if ( r.id === activeBoundary ) {
+                                switch ( state ) {
+                                    case 'river':
+                                        return 'default';
+                                    case 'river-draw':
+                                        return 'draw';
+                                    case 'river-edit':
+                                        return 'edit';
+                                    default:
+                                        return 'minimal';
+                                }
                             }
-                        }
-                        return 'minimal';
-                    })( );
+                            return 'minimal';
+                        })( );
 
-                    return ( <EditableLine key={index} state={riverState} line={r.geometry} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                        return ( <EditableLine key={index} state={riverState} line={r.geometry} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                         ? this.refs.map.leafletElement
                         : null}/> );
-                })}
+                    })}
                 <EditableWells state={wellsState} draggedBoundary={draggedBoundary} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'well' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
+                <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
             </RadiumMap>
         );
     }
 
-    renderTool( state ) {
+    renderTool( ) {
+        const { tool, state } = this.props;
         switch ( state ) {
             case 'boundariesOverlay':
-                return <T03Boundaries/>;
+                return <ModelEditorBoundaries tool={tool}/>;
             case 'general':
-                return <T03General/>;
-            case 'area':
-            case 'area-draw':
-            case 'area-edit':
-                return <T03Area/>;
-            case 'river':
-            case 'river-draw':
-            case 'river-edit':
-                return <T03River/>;
-            case 'wells-edit':
-                return <T03Boundary/>;
+                return <ModelEditorGeneral tool={tool}/>;
             default:
                 return null;
         }
     }
 
-    renderToolWrapper( state, initial ) {
-        const minimized = ( [ 'area', 'area-draw', 'area-edit', 'wells-edit', 'river', 'river-draw', 'river-edit' ].indexOf( state ) !== -1 );
+    renderToolWrapper( ) {
+        const { initial } = this.props;
         const closeable = !initial;
-        const tool = this.renderTool( state );
+        const tool = this.renderTool( );
 
         if ( tool ) {
             return (
-                <FloatingTool minimized={minimized} enableMap={this.enableMap} disableMap={this.disableMap} close={this.unsetActiveTool} closeable={closeable}>
+                <Tool style={styles.tool} close={this.unsetActiveTool} closeable={closeable}>
                     {tool}
-                </FloatingTool>
+                </Tool>
             );
         }
 
         return null;
     }
 
-    renderTitle( state ) {
-        let title;
+    renderToast( ) {
+        const { state } = this.props;
+        let text;
         switch ( state ) {
             case 'area':
-                title = 'Edit the area';
+                text = 'Edit the area';
                 break;
             case 'area-draw':
-                title = 'Click the map to set a control point';
+                text = 'Click the map to set a control point';
                 break;
             case 'area-edit':
-                title = 'Click, hold and move the control points';
+                text = 'Click, hold and move the control points';
                 break;
             case 'wells-edit':
-                title = 'Click, hold and move the wells';
+                text = 'Click, hold and move the wells';
                 break;
             case 'river-edit':
-                title = 'Click, hold and move the control points';
+                text = 'Click, hold and move the control points';
                 break;
         }
 
-        return ( <FloatingTitle title={title}/> );
+        return (
+            <FloatingToast>{text}</FloatingToast>
+        );
+    }
+
+    setState = slug => {
+        const { setState } = this.props;
+
+        return ( ) => {
+            setState( slug );
+        };
     }
 
     render( ) {
-        const { setState, state, initial } = this.props;
-        const { properties } = this.state;
+        const { state, initial } = this.props;
+        const menuItems = [
+            {
+                name: 'Model Setup',
+                icon: <Icon name="settings"/>,
+                items: [
+                    {
+                        name: 'Model Properties',
+                        onClick: this.setState( 'general' )
+                    }
+                ]
+            }, {
+                name: 'Soil model',
+                icon: <Icon name="layer_horizontal_hatched"/>,
+                disabled: initial,
+                items: [
+                    {
+                        name: 'Model Layer Setup',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Layer Properties',
+                        onClick: this.setState( '' )
+                    }
+                ]
+            }, {
+                name: 'Boundary Conditions',
+                icon: <Icon name="marker"/>,
+                disabled: initial,
+                items: [
+                    {
+                        name: 'Time Variant Specified Head',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: '(CHD)',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Wells (WEL)',
+                        onClick: this.setState( 'boundariesOverlay' )
+                    }, {
+                        name: 'Recharge (RCH)',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'River (RIV)',
+                        onClick: this.setState( 'boundariesOverlay' )
+                    }, {
+                        name: 'General Head Coundary (GHB)',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Evapotranspiration (EVT)',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Drain (DRN)',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Lake (Lak)',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Streamflow Routing (SFR2)',
+                        onClick: this.setState( '' )
+                    }
+                ]
+            }, {
+                name: 'Model Run',
+                icon: <Icon name="calculator"/>,
+                disabled: initial,
+                items: [
+                    {
+                        name: 'Time Discretization',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'PCG Solver Parameters',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Rewetting Parameters',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'RUN MODEL',
+                        onClick: this.setState( '' )
+                    }
+                ]
+            }, {
+                name: 'Result Analysis',
+                icon: <Icon name="dataset"/>,
+                disabled: initial,
+                items: [
+                    {
+                        name: 'View Model Results',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Volumetric Budget',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Model Calibration',
+                        onClick: this.setState( '' )
+                    }, {
+                        name: 'Export Results',
+                        onClick: this.setState( '' )
+                    }
+                ]
+            }
+        ];
+
+        const areaActions = [
+            {
+                title: 'Add',
+                onClick: state === 'area-draw'
+                    ? this.setState( 'area' )
+                    : this.setState( 'area-draw' ),
+                icon: <Icon name={state === 'area-draw'
+                        ? 'success'
+                        : 'add'}/>
+            }, {
+                title: 'Edit',
+                onClick: state === 'area-edit'
+                    ? this.setState( 'area' )
+                    : this.setState( 'area-edit' ),
+                icon: <Icon name={state === 'area-edit'
+                        ? 'success'
+                        : 'edit'}/>
+            }, {
+                title: 'Delete',
+                onClick: state === 'area-delete'
+                    ? this.setState( 'area' )
+                    : this.setState( 'area-delete' ),
+                icon: <Icon name={state === 'area-delete'
+                        ? 'success'
+                        : 'trash'}/>
+            }
+        ];
 
         return (
             <div style={styles.wrapper}>
                 {this.renderMap( )}
-                <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
-                {this.renderToolWrapper( state, initial )}
-                {this.renderTitle( state )}
-                <FloatingToolbox items={properties} onToolClick={setState}/>
+                {(( ) => {
+                    if ( state === null || [ 'general', 'boundariesOverlay' ].indexOf( state ) !== -1 ) {
+                        return (
+                            <div style={styles.overlayWrapper}>
+                                <div style={styles.overlay}>
+                                    <Menu style={styles.menu} title="Menu" items={menuItems}/> {this.renderToolWrapper( )}
+                                </div>
+                            </div>
+                        );
+                    } else if ( [ 'area', 'area-draw', 'area-edit', 'area-delete' ].indexOf( state ) !== -1 ) {
+                        return ( <FloatingMapToolBox actions={areaActions} save={this.setState( 'general' )}/> );
+                    }
+                    return null;
+                })( )}
+                {this.renderToast( )}
             </div>
         );
     }

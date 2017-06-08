@@ -16,29 +16,32 @@ function getInitialState() {
 
 const createUiReducer = tool => {
     const ui = ( state = getInitialState(), action ) => {
+        if (action.tool !== tool) {
+            return state;
+        }
         switch ( action.type ) {
-            case tool + '_UI_SET_MAP_MODE':
+            case 'MODEL_EDITOR_UI_SET_MAP_MODE':
                 return { ...state, state: action.payload };
 
-            case tool + '_UI_SET_ACTIVE_BOUNDARY':
+            case 'MODEL_EDITOR_UI_SET_ACTIVE_BOUNDARY':
                 return { ...state, activeBoundary: action.payload };
 
-            case tool + '_UI_SET_DRAGGED_BOUNDARY':
+            case 'MODEL_EDITOR_UI_SET_DRAGGED_BOUNDARY':
                 return { ...state, draggedBoundary: action.payload };
 
-            case tool + '_UI_SET_MAP_POSITION':
+            case 'MODEL_EDITOR_UI_SET_MAP_POSITION':
                 return { ...state, mapPosition: action.payload };
 
-            case tool + '_UI_SET_MOUSE_POSITION_ON_MAP':
+            case 'MODEL_EDITOR_UI_SET_MOUSE_POSITION_ON_MAP':
                 return { ...state, mousePositionOnMap: action.payload };
 
-            case tool + '_UI_SET_DRAGGED_AREA_CONTROL_POINT':
+            case 'MODEL_EDITOR_UI_SET_DRAGGED_AREA_CONTROL_POINT':
                 return { ...state, draggedAreaControlPoint: action.payload };
 
-            case tool + '_UI_SET_ACTIVE_AREA_CONTROL_POINT':
+            case 'MODEL_EDITOR_UI_SET_ACTIVE_AREA_CONTROL_POINT':
                 return { ...state, activeAreaControlPoint: action.payload };
 
-            case tool + '_UI_SET_ACTIVE_BOUNDARY_CONTROL_POINT':
+            case 'MODEL_EDITOR_UI_SET_ACTIVE_BOUNDARY_CONTROL_POINT':
                 return { ...state, activeBoundaryControlPoint: action.payload };
 
             default:

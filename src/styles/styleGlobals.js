@@ -4,6 +4,7 @@ const styleGlobals = {
     colors: {
         primary: '#1EB1ED',
         accent: '#ED8D05',
+        font: '#4C4C4C',
         background: '#FEFEFE',
         backgroundWrapper: '#EFF3F6',
 

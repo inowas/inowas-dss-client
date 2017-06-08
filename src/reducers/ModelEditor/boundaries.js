@@ -114,11 +114,14 @@ const initialState = [ {
 
 const createBoundariesReducer = tool => {
     const boundaries = ( state = initialState, action ) => {
+        if (action.tool !== tool) {
+            return state;
+        }
         switch ( action.type ) {
-            case tool + '_MODEL_ADD_BOUNDARY':
+            case 'MODEL_EDITOR_MODEL_ADD_BOUNDARY':
                 return [ ...state, action.payload ];
 
-            case tool + '_MODEL_UPDATE_BOUNDARY':
+            case 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY':
                 return state.map( b => {
                     if ( b.id === action.payload.id ) {
                         return { ...b, ...action.payload };
@@ -127,7 +130,7 @@ const createBoundariesReducer = tool => {
                     return b;
                 } );
 
-            case tool + '_MODEL_ADD_BOUNDARY_CONTROL_POINT':
+            case 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT':
                 return state.map( b => {
                     if ( b.id === action.payload.id ) {
                         if ( action.payload.index !== undefined ) {
@@ -152,7 +155,7 @@ const createBoundariesReducer = tool => {
                     return b;
                 } );
 
-            case tool + '_MODEL_UPDATE_BOUNDARY_CONTROL_POINT':
+            case 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT':
                 return state.map( b => {
                     if ( b.id === action.payload.id ) {
                         return {
@@ -170,7 +173,7 @@ const createBoundariesReducer = tool => {
                     return b;
                 } );
 
-            case tool + '_MODEL_DELETE_BOUNDARY_CONTROL_POINT':
+            case 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY_CONTROL_POINT':
                 return state.map( b => {
                     if ( b.id === action.payload.id ) {
                         return {

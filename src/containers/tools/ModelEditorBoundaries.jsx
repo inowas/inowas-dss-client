@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { addBoundary, setActiveBoundary, setState, updateBoundary } from '../../actions/T03';
+import { addBoundary, setActiveBoundary, setState, updateBoundary } from '../../actions/modelEditor';
 import { maxBy, minBy } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -17,11 +17,6 @@ import uuid from 'uuid';
 
 const styles = {
     container: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
         display: 'flex'
     },
 
@@ -44,7 +39,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class T03Boundaries extends Component {
+class ModelEditorBoundaries extends Component {
 
     static propTypes = {
         style: PropTypes.object,
@@ -130,15 +125,34 @@ class T03Boundaries extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, {tool}) => {
     return {
-        boundary: getActiveBoundary( state.T03.ui ),
-        boundaries: getBoundaries( state.T03.model.boundaries ),
-        area: getArea( state.T03.model.general )
+        boundary: getActiveBoundary( state[tool].ui ),
+        boundaries: getBoundaries( state[tool].model.boundaries ),
+        area: getArea( state[tool].model.general )
     };
 };
 
-// eslint-disable-next-line no-class-assign
-T03Boundaries = connect(mapStateToProps, { setActiveBoundary, updateBoundary, setState, addBoundary })( T03Boundaries );
+const actions = {
+    setActiveBoundary, updateBoundary, setState, addBoundary
+};
 
-export default T03Boundaries;
+const mapDispatchToProps = (dispatch, { tool }) => {
+    const wrappedActions = {};
+    for (const key in actions) {
+        if(actions.hasOwnProperty(key)) {
+            // eslint-disable-next-line no-loop-func
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
+            };
+        }
+    }
+
+    return wrappedActions;
+};
+
+// eslint-disable-next-line no-class-assign
+ModelEditorBoundaries = connect(mapStateToProps, mapDispatchToProps)( ModelEditorBoundaries );
+
+export default ModelEditorBoundaries;

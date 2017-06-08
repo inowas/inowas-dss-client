@@ -29,6 +29,7 @@ import Person from './person.svg';
 import Rivers from './rivers.svg';
 import Settings from './settings.svg';
 import Share from './share.svg';
+import Success from './success.svg';
 import Tools from './tools.svg';
 import Trash from './trash.svg';
 import Unchecked from './unchecked.svg';
@@ -64,6 +65,7 @@ const icons = {
     rivers: <Rivers/>,
     settings: <Settings/>,
     share: <Share/>,
+    success: <Success/>,
     tools: <Tools/>,
     trash: <Trash/>,
     unchecked: <Unchecked/>,

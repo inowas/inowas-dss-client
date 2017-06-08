@@ -1,30 +1,32 @@
 import { CircleMarker, Polygon, Polyline } from 'react-leaflet';
 import React, { Component, PropTypes } from 'react';
+import styleGlobals from 'styleGlobals';
 
 const styles = {
     area: {
-        color: '#000',
-        weight: 0.5,
-        fillColor: 'blue',
-        fillOpacity: 0.1
+        color: styleGlobals.colors.primary,
+        weight: 1,
+        fillColor: 'transparent',
     },
     controlPoint: {
         radius: 7,
-        color: 'blue',
         stroke: 0,
         weight: 1,
-        fillColor: 'blue',
+        fillColor: styleGlobals.colors.primary,
         fillOpacity: 0.7
     },
+    drawHelperLine: {
+        color: styleGlobals.colors.accent,
+        weight: 1
+    },
     activeControlPoint: {
-        fillColor: 'yellow'
+        fillColor: styleGlobals.colors.accent
     },
     addControlPoint: {
         radius: 7,
-        color: 'blue',
         stroke: 0,
         weight: 1,
-        fillColor: 'blue',
+        fillColor: styleGlobals.colors.primary,
         fillOpacity: 0.3
     }
 };
@@ -32,11 +34,12 @@ const styles = {
 export default class EditableArea extends Component {
 
     static propTypes = {
-        state: PropTypes.oneOf([ 'minimal', 'default', 'draw', 'edit' ]),
+        state: PropTypes.oneOf([ 'minimal', 'default', 'draw', 'edit', 'delete' ]),
         area: PropTypes.array,
         activeControlPoint: PropTypes.number,
         setActiveControlPoint: PropTypes.func.isRequired,
         addControlPoint: PropTypes.func.isRequired,
+        deleteControlPoint: PropTypes.func.isREquired,
         draggedControlPoint: PropTypes.number,
         setDraggedControlPoint: PropTypes.func.isRequired,
         setControlPointLatitude: PropTypes.func.isRequired,
@@ -102,19 +105,22 @@ export default class EditableArea extends Component {
         };
     }
 
-    setActiveAreaControlPoint = index => {
+    deleteControlPoint = index => {
         return ( ) => {
-            const { setActiveControlPoint, state } = this.props;
-            if ( state === 'area-edit' ) {
-                setActiveControlPoint( index );
-            }
+            this.props.deleteControlPoint( index );
+        };
+    }
+
+    setActiveControlPoint = index => {
+        return ( ) => {
+            this.props.setActiveControlPoint( index );
         };
     }
 
     renderDrawHelperPoint( ) {
         const { state, mousePosition } = this.props;
         if ( state === 'draw' ) {
-            return ( <CircleMarker center={mousePosition} {...styles.controlPoint}/> );
+            return ( <CircleMarker center={mousePosition} {...styles.controlPoint} {...styles.activeControlPoint}/> );
         }
         return null;
     }
@@ -126,7 +132,7 @@ export default class EditableArea extends Component {
                 area[0],
                 mousePosition,
                 area[area.length - 1]
-            ]}/> );
+            ]} {...styles.drawHelperLine}/> );
         }
         return null;
     }
@@ -154,9 +160,23 @@ export default class EditableArea extends Component {
 
     renderControlPoints( ) {
         const { area, activeControlPoint, state } = this.props;
-        if ( [ 'default', 'draw', 'edit' ].indexOf( state ) !== -1 ) {
+        if ( [ 'default', 'draw', 'edit', 'delete' ].indexOf( state ) !== -1 ) {
             return area.map(( c, index ) => {
-                return ( <CircleMarker onMouseOver={this.setActiveAreaControlPoint( index )} onMouseOut={this.setActiveAreaControlPoint( null )} onMouseDown={this.controlPointDragStart( index )} key={index} center={c} {...styles.controlPoint} fillColor={( index === activeControlPoint ) && styles.activeControlPoint.fillColor}/> );
+                const handler = (( ) => {
+                    if ( state === 'edit' ) {
+                        return {
+                            onMouseDown: this.controlPointDragStart( index )
+                        };
+                    }
+
+                    if ( state === 'delete' ) {
+                        return {onClick: this.deleteControlPoint( index )};
+                    }
+
+                    return { };
+                })( );
+
+                return ( <CircleMarker {...handler} onMouseOver={this.setActiveControlPoint( index )} onMouseOut={this.setActiveControlPoint( null )} key={index} center={c} {...styles.controlPoint} fillColor={( index === activeControlPoint ) && styles.activeControlPoint.fillColor}/> );
             });
         }
         return null;

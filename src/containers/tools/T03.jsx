@@ -1,4 +1,4 @@
-import * as actions from '../../actions/T03';
+import * as actions from '../../actions/modelEditor';
 
 import React, { Component, PropTypes } from 'react';
 import { getArea } from '../../reducers/ModelEditor/general';
@@ -38,7 +38,7 @@ class T03 extends Component {
         return (
             <div className="toolT03">
                 <Navbar links={navigation} />
-                <ModelEditorMap {...this.props} initial={initial} />
+                <ModelEditorMap {...this.props} initial={initial} tool={'T03'} />
             </div>
         );
     }
@@ -61,7 +61,23 @@ const mapStateToProps = (state, { params }) => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    // wrap actions in dispatch and apply T03 as first argument
+    const wrappedActions = {};
+    for (const key in actions) {
+        if(actions.hasOwnProperty(key)) {
+            // eslint-disable-next-line no-loop-func
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key]('T03', ...args));
+            };
+        }
+    }
+
+    return wrappedActions;
+};
+
 // eslint-disable-next-line no-class-assign
-T03 = withRouter( connect( mapStateToProps, actions )( T03 ));
+T03 = withRouter( connect( mapStateToProps, mapDispatchToProps )( T03 ));
 
 export default T03;
