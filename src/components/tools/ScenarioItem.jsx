@@ -2,6 +2,7 @@ import React from 'react';
 
 import '../../less/scenarioSelect.less';
 import Icon from '../primitive/Icon';
+import { Link } from 'react-router';
 
 export default class ScenarioItem extends React.Component {
 
@@ -16,7 +17,7 @@ export default class ScenarioItem extends React.Component {
 
     render( ) {
         const { scenario, toggleSelection } = this.props;
-        const { name, description, selected } = scenario;
+        const { name, description, selected, modelId } = scenario;
         return (
             <div className="item" data-selected={selected} onClick={toggleSelection}>
                 <button className="toggle"><Icon name={selected
@@ -25,6 +26,7 @@ export default class ScenarioItem extends React.Component {
                 <div className="content">
                     <h3>{name}</h3>
                     <p>{description}</p>
+                    <Link to={'/tools/T07E/' + modelId}>Edit</Link>
                 </div>
             </div>
         );
