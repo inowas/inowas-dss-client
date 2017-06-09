@@ -14,6 +14,8 @@ import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '..
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
+import LengthUnit from '../../model/LengthUnit';
+import TimeUnit from '../../model/TimeUnit';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
@@ -53,8 +55,8 @@ class ModelEditorGeneral extends Component {
         style: PropTypes.object,
         name: PropTypes.string,
         description: PropTypes.string,
-        timeUnit: PropTypes.string,
-        lengthUnit: PropTypes.string,
+        timeUnit: PropTypes.instanceOf( TimeUnit ),
+        lengthUnit: PropTypes.instanceOf( LengthUnit ),
         area: PropTypes.array,
         setName: PropTypes.func,
         setDescription: PropTypes.func,
@@ -77,11 +79,11 @@ class ModelEditorGeneral extends Component {
     }
 
     timeUnitChangeAction = ( e ) => {
-        this.props.setTimeUnit( e.target.value );
+        // this.props.setTimeUnit( e.target.value );
     }
 
     lengthUnitChangeAction = ( e ) => {
-        this.props.setLengthUnit( e.target.value );
+        // this.props.setLengthUnit( e.target.value );
     }
 
     addCoordinateClickAction = ( ) => {
@@ -220,12 +222,12 @@ const actions = {
 
 const mapDispatchToProps = (dispatch, { tool }) => {
     const wrappedActions = {};
-    for (const key in actions) {
-        if(actions.hasOwnProperty(key)) {
+    for ( const key in actions ) {
+        if (actions.hasOwnProperty( key )) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
-                const args = Array.prototype.slice.call(arguments);
-                dispatch(actions[key](tool, ...args));
+            wrappedActions[key] = function( ) {
+                const args = Array.prototype.slice.call( arguments );
+                dispatch(actions[key]( tool, ...args ));
             };
         }
     }
@@ -234,6 +236,6 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 // eslint-disable-next-line no-class-assign
-ModelEditorGeneral = withRouter( connect(mapStateToProps, mapDispatchToProps)( ModelEditorGeneral ));
+ModelEditorGeneral = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorGeneral ));
 
 export default ModelEditorGeneral;

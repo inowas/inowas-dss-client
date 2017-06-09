@@ -118,6 +118,9 @@ const createBoundariesReducer = tool => {
             return state;
         }
         switch ( action.type ) {
+            case 'MODEL_EDITOR_MODEL_SET_BOUNDARIES':
+                return action.payload;
+
             case 'MODEL_EDITOR_MODEL_ADD_BOUNDARY':
                 return [ ...state, action.payload ];
 

@@ -8,7 +8,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
 export default {
-    devtool: 'inline-source-map',
+    devtool: "#inline-source-map",
     devServer: {
         historyApiFallback: true,
         hot: true,
@@ -24,7 +24,8 @@ export default {
     output: {
         path: path.resolve( __dirname, 'build/' ),
         filename: '[name].js',
-        publicPath: '/'
+        publicPath: '/',
+        sourceMapFilename: '[name].map'
     },
     plugins: [
         new HtmlWebpackPlugin( {

@@ -1,6 +1,11 @@
-import { getName, getDescription, getArea, getTimeUnit, getLengthUnit } from '../reducers/ModelEditor/general';
-import { getBoundary } from '../reducers/ModelEditor/boundaries';
+import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../reducers/ModelEditor/general';
+
+import ConfiguredAxios from 'ConfiguredAxios';
+import LengthUnit from '../model/LengthUnit';
+import TimeUnit from '../model/TimeUnit';
 import { getActiveBoundary } from '../reducers/ModelEditor/ui';
+import { getApiKey } from '../reducers/user';
+import { getBoundary } from '../reducers/ModelEditor/boundaries';
 import { push } from 'react-router-redux';
 
 /**
@@ -180,6 +185,35 @@ export function deleteAreaControlPoint( tool, index ) {
     };
 }
 
+export function loadModel( tool, id ) {
+    return ( dispatch, getState ) => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( '/modflowmodels/' + id, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+            }
+        } ).then( ( { action } ) => {
+            const data = action.payload.data;
+            dispatch( setName( tool, data.name ) );
+            dispatch( setDescription( tool, data.description ) );
+            dispatch( setTimeUnit( tool, TimeUnit.fromNumber( data.time_unit ) ) );
+            dispatch( setLengthUnit( tool, LengthUnit.fromNumber( data.length_unit ) ) );
+            dispatch( setArea( tool, data.geometry.coordinates[ 0 ].map( c => ( { lat: c[ 1 ], lng: c[ 0 ] } ) ) ) );
+            dispatch( setMapPosition( tool, {bounds: [{
+                lat: data.bounding_box.y_min,
+                lng: data.bounding_box.x_min,
+            }, {
+                lat: data.bounding_box.y_max,
+                lng: data.bounding_box.x_max,
+            }]} ) );
+            // TODO
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    };
+}
+
 export function createModel( tool ) {
     // TODO POST to api
     // api should redirect to GET and send validated model
@@ -203,6 +237,14 @@ export function createModel( tool ) {
 /**
  * BOUNDARIES
  */
+
+export function setBoundaries( tool, boundaries ) {
+    return {
+        type: 'MODEL_EDITOR_MODEL_SET_BOUNDARIES',
+        tool,
+        payload: boundaries
+    };
+}
 
 export function addBoundary( tool, boundary ) {
     return {
@@ -278,5 +320,29 @@ export function saveBoundary( tool, id ) {
         const boundary = getBoundary( getState().T03.model.boundaries, id );
 
         dispatch( updateBoundary( tool, boundary ) );
+    };
+}
+
+export function loadBoundaries( tool, id ) {
+    return ( dispatch, getState ) => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( '/modflowmodels/' + id + '/boundaries', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+            }
+        } ).then( ( { action } ) => {
+            const data = action.payload.data;
+            dispatch( setBoundaries( tool, data.map( b => ( {
+                id: b.id,
+                name: b.name,
+                affectedLayers: b.affected_layers,
+                type: b.type === 'well' ? 'WEL' : 'undefined',
+                lat: b.geometry.coordinates[ 1 ],
+                lng: b.geometry.coordinates[ 0 ]
+            } ) ) ) );
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
     };
 }

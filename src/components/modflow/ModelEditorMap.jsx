@@ -1,5 +1,7 @@
 import '../../less/leaflet.less';
 
+// TODO break into smaller parts
+
 import { Map, TileLayer } from 'react-leaflet';
 import React, { Component, PropTypes } from 'react';
 
@@ -86,8 +88,11 @@ export default class ModelEditorMap extends Component {
 
     static propTypes = {
         tool: PropTypes.string.isRequired,
+        id: PropTypes.string,
         state: PropTypes.string, // TODO better use oneOf
         setState: PropTypes.func,
+        loadModel: PropTypes.func.isRequired,
+        loadBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
         area: PropTypes.array,
@@ -119,7 +124,12 @@ export default class ModelEditorMap extends Component {
     };
 
     componentDidMount( ) {
-        const { mapPosition, area, state } = this.props;
+        const { mapPosition, area, state, initial } = this.props;
+
+        // load Model
+        if (!initial) {
+            this.loadModel();
+        }
 
         // center mapPosition to area if no mapPosition is specified
         if ( mapPosition === null && area.length > 0 ) {
@@ -144,6 +154,12 @@ export default class ModelEditorMap extends Component {
                 this.enableMap( );
             }
         }
+    }
+
+    loadModel() {
+        const { id, loadModel, loadBoundaries } = this.props;
+        loadModel( id );
+        loadBoundaries( id );
     }
 
     enableMap = ( ) => {

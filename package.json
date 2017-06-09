@@ -4,7 +4,7 @@
     "description": "The client for the inowas-dss",
     "main": "./src/index.jsx",
     "scripts": {
-        "dev": "webpack-dashboard -- webpack-dev-server --config webpack.config.babel.js",
+        "dev": "webpack-dashboard -- webpack-dev-server -d --config webpack.config.babel.js",
         "generate": "rc-autocomplete",
         "lint": "eslint src",
         "test": "echo \"Error: no test specified\" && exit 1",

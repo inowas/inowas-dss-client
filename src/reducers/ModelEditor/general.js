@@ -1,9 +1,12 @@
+import TimeUnit from '../../model/TimeUnit';
+import LengthUnit from '../../model/LengthUnit';
+
 function getInitialState() {
     return {
         name: '',
         description: '',
-        timeUnit: '',
-        lengthUnit: '',
+        timeUnit: 0,
+        lengthUnit: 0,
         area: [ {
             lat: 51.0834688793963,
             lng: 13.677635192871096
@@ -97,7 +100,7 @@ function getInitialState() {
 }
 const createGeneralReducer = tool => {
     const general = ( state = getInitialState(), action ) => {
-        if (action.tool !== tool) {
+        if ( action.tool !== tool ) {
             return state;
         }
         switch ( action.type ) {
@@ -108,14 +111,14 @@ const createGeneralReducer = tool => {
                 return { ...state, description: action.payload };
 
             case 'MODEL_EDITOR_MODEL_SET_TIME_UNIT':
-                if ( [ 's', 'min', 'h', 'd', 'yrs' ].indexOf( action.payload !== -1 ) ) {
-                    return { ...state, timeUnit: action.payload };
+                if ( action.payload instanceof TimeUnit ) {
+                    return { ...state, timeUnit: action.payload.toNumber };
                 }
                 return state;
 
             case 'MODEL_EDITOR_MODEL_SET_LENGTH_UNIT':
-                if ( [ 'cm', 'm', 'ft' ].indexOf( action.payload !== -1 ) ) {
-                    return { ...state, lengthUnit: action.payload };
+                if ( action.payload instanceof LengthUnit ) {
+                    return { ...state, lengthUnit: action.payload.toNumber };
                 }
                 return state;
 
@@ -199,6 +202,6 @@ export default createGeneralReducer;
 
 export const getName = state => state.name;
 export const getDescription = state => state.description;
-export const getTimeUnit = state => state.timeUnit;
-export const getLengthUnit = state => state.lengthUnit;
+export const getTimeUnit = state => TimeUnit.fromNumber( state.timeUnit );
+export const getLengthUnit = state => LengthUnit.fromNumber( state.lengthUnit );
 export const getArea = state => state.area;
