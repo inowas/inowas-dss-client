@@ -1,16 +1,18 @@
 /**
- * Takes an array of objects like [{name, type}]
+ * Takes an array of objects like [{id, name, type}]
  *
  * @author Martin Wudenka
  */
 
 import React, { Component, PropTypes } from 'react';
 
+import Accordion from './Accordion';
+import AccordionItem from './AccordionItem';
 import ConfiguredRadium from 'ConfiguredRadium';
 import List from './List';
 import ListItem from './ListItem';
-import { uniqBy } from 'lodash';
-import levenshtein from 'levenshtein';
+import { groupBy } from 'lodash';
+import Levenshtein from 'levenshtein';
 
 const styles = {
     wrapper: {
@@ -19,22 +21,19 @@ const styles = {
         flexDirection: 'column'
     },
 
-    filterButton: {
-        base: {
-            background: 'transparent',
-            display: 'inline-block',
-            border: 0,
-            borderRadius: 0,
-            cursor: 'pointer',
-            textDecoration: 'underline',
+    searchWrapper: {
+        marginBottom: 6
+    },
 
-            ':hover': {
-                color: '#000000'
-            }
-        }
+    group: {
+        background: '#EEEEEE',
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderBottom: 0
     },
 
     list: {
+        background: '#FBFBFB',
         flex: 1,
         overflow: 'auto'
     }
@@ -46,23 +45,23 @@ export default class FilterableList extends Component {
     static propTypes = {
         list: PropTypes.array.isRequired,
         style: PropTypes.object,
-        clickAction: PropTypes.func
+        itemClickAction: PropTypes.func,
+        groupClickAction: PropTypes.func
     }
 
     state = {
-        filterType: '',
         searchTerm: ''
-    }
-
-    setFilterType = type => {
-        return ( ) => {
-            this.setState({ filterType: type });
-        };
     }
 
     itemClickAction = id => {
         return ( ) => {
-            this.props.clickAction( id );
+            this.props.itemClickAction( id );
+        };
+    }
+
+    groupClickAction = type => {
+        return ( ) => {
+            this.props.groupClickAction( type );
         };
     }
 
@@ -70,58 +69,52 @@ export default class FilterableList extends Component {
         this.setState({ searchTerm: e.target.value });
     }
 
-    renderFilterButton( text, onClick, index = 0 ) {
-        return (
-            <button key={index} onClick={onClick} style={styles.filterButton.base}>{text}</button>
-        );
-    }
-
     render( ) {
-        const {
-            style,
-            list,
-            // eslint-disable-next-line no-unused-vars
-            clickAction,
-            ...rest
-        } = this.props;
-        const { filterType, searchTerm } = this.state;
+        const { style, list } = this.props;
+        const { searchTerm } = this.state;
 
-        const filter = uniqBy( list, 'type' );
-
-        let filteredList = list;
-        if ( filterType ) {
-            filteredList = list.filter(i => ( i.type === filterType ));
-        }
+        let workingList = list;
 
         if ( searchTerm ) {
-            const listWithLevenshteinDistance = filteredList.map(i => {
-                const leven = new levenshtein( i.name, searchTerm );
+            const listWithLevenshteinDistance = list.map(i => {
+                const leven = new Levenshtein( i.name, searchTerm );
                 return {
                     ...i,
                     levenshtein: leven.distance
                 };
-            });
-
-            listWithLevenshteinDistance.sort(( a, b ) => {
+            }).sort(( a, b ) => {
                 return a.levenshtein - b.levenshtein;
             });
 
-            filteredList = listWithLevenshteinDistance;
+            workingList = listWithLevenshteinDistance;
         }
 
-        return (
-            <div {...rest} style={[ style, styles.wrapper ]}>
-                <div>
-                    filter: {this.renderFilterButton( 'all', this.setFilterType( null ), filter.length )}
-                    {filter.map(( f, index ) => this.renderFilterButton( f.type, this.setFilterType( f.type ), index ))}
+        workingList = groupBy( workingList, 'type' );
 
-                    <div>
-                        <input className="input" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
-                    </div>
+        return (
+            <div style={[ style, styles.wrapper ]}>
+                <div style={styles.searchWrapper}>
+                    <input className="input" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
                 </div>
-                <List style={styles.list}>
-                    {filteredList.map(( i, index ) => <ListItem clickAction={this.itemClickAction( i.id )} key={index}>{i.name}</ListItem>)}
-                </List>
+                <div style={styles.content}>
+                    <Accordion>
+                        {(( ) => {
+                            const items = [ ];
+                            for ( const key in workingList ) {
+                                if (workingList.hasOwnProperty( key )) {
+                                    items.push(
+                                        <AccordionItem onClick={this.groupClickAction( key )} style={styles.group} key={key} heading={key + ' (' + workingList[key].length + ')'}>
+                                            <List style={styles.list}>
+                                                {workingList[key].map( b => <ListItem clickAction={this.itemClickAction( b.id )} key={b.id}>{b.name}</ListItem>)}
+                                            </List>
+                                        </AccordionItem>
+                                    );
+                                }
+                            }
+                            return items;
+                        })( )}
+                    </Accordion>
+                </div>
             </div>
         );
     }

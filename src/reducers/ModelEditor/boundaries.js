@@ -1,14 +1,14 @@
 const initialState = [ {
     id: '234234',
     name: 'Well 1',
-    type: 'well',
+    type: 'WEL',
     lat: 51.055207338584964,
     lng: 13.743896484375002,
     affectedLayers: [ 0, 2 ]
 }, {
     id: '2wefdw34234',
     name: 'River 1',
-    type: 'river',
+    type: 'RIV',
     geometry: [ {
         lat: 51.07786109126113,
         lng: 13.670082092285158
@@ -129,6 +129,12 @@ const createBoundariesReducer = tool => {
 
                     return b;
                 } );
+
+            case 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY':
+                return [
+                    ...state.slice(0, state.findIndex(b => (b.id === action.payload))),
+                    ...state.slice(state.findIndex(b => (b.id === action.payload)) + 1, state.length)
+                ];
 
             case 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT':
                 return state.map( b => {

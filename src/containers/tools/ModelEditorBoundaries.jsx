@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { addBoundary, setActiveBoundary, setState, updateBoundary } from '../../actions/modelEditor';
+import { addBoundary, setActiveBoundary, setActiveBoundaryType, setState, updateBoundary } from '../../actions/modelEditor';
 import { maxBy, minBy } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -9,11 +9,12 @@ import Tabs from '../../components/primitive/Tabs';
 import WellProperties from '../../components/modflow/WellProperties';
 import RiverProperties from '../../components/modflow/RiverProperties';
 import { connect } from 'react-redux';
-import { getActiveBoundary } from '../../reducers/ModelEditor/ui';
+import { getActiveBoundary, getActiveBoundaryType } from '../../reducers/ModelEditor/ui';
 import { getArea } from '../../reducers/ModelEditor/general';
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+import BoundariesOverview from '../../components/modflow/BoundariesOverview';
 
 const styles = {
     container: {
@@ -21,20 +22,14 @@ const styles = {
     },
 
     left: {
-        flex: '1 1 40%',
-        maxWidth: '40%',
-        borderRight: '1px solid ' + styleGlobals.colors.graySemilight,
-        marginRight: styleGlobals.dimensions.spacing.large,
+        width: styleGlobals.dimensions.gridColumn,
+        marginRight: styleGlobals.dimensions.gridGutter,
         display: 'flex',
         flexDirection: 'column'
     },
 
-    list: {
-        flex: 1
-    },
-
     properties: {
-        flex: '1 1 60%'
+        flex: 1
     }
 };
 
@@ -44,7 +39,9 @@ class ModelEditorBoundaries extends Component {
     static propTypes = {
         style: PropTypes.object,
         boundary: PropTypes.string,
+        boundaryType: PropTypes.string,
         setActiveBoundary: PropTypes.func.isRequired,
+        setActiveBoundaryType: PropTypes.func.isRequired,
         updateBoundary: PropTypes.func.isRequired,
         addBoundary: PropTypes.func.isRequired,
         boundaries: PropTypes.array,
@@ -70,10 +67,11 @@ class ModelEditorBoundaries extends Component {
 
     renderProperties( activeBoundary ) {
         // eslint-disable-next-line no-shadow
-        const { updateBoundary, setState } = this.props;
+        const { updateBoundary, setState, boundaryType, boundaries } = this.props;
+
         if ( activeBoundary ) {
             switch ( activeBoundary.type ) {
-                case 'well':
+                case 'WEL':
                     return (
                         <Tabs>
                             <Tab title="Summary">
@@ -82,7 +80,7 @@ class ModelEditorBoundaries extends Component {
                             <Tab title="Pumping Rates">Tab 2 Lorem Ipsum ...</Tab>
                         </Tabs>
                     );
-                case 'river':
+                case 'RIV':
                     return (
                         <Tabs>
                             <Tab title="Summary">
@@ -91,12 +89,21 @@ class ModelEditorBoundaries extends Component {
                             <Tab title="OB 1">Tab 2 Lorem Ipsum ...</Tab>
                         </Tabs>
                     );
-                default:
-                    return null;
             }
         }
 
-        return null;
+        if ( boundaryType ) {
+            return ( <BoundariesOverview boundaries={boundaries.filter(b => ( b.type === boundaryType ))} type={boundaryType} setState={setState} /> );
+        }
+
+        return ( <BoundariesOverview boundaries={boundaries}/> );
+    }
+
+    setActiveBoundaryType = type => {
+        // eslint-disable-next-line no-shadow
+        const { setActiveBoundary, setActiveBoundaryType } = this.props;
+        setActiveBoundary( null );
+        setActiveBoundaryType( type );
     }
 
     render( ) {
@@ -110,41 +117,41 @@ class ModelEditorBoundaries extends Component {
         return (
             <div style={[ style, styles.container ]}>
                 <div style={styles.left}>
-                    <FilterableList style={styles.list} clickAction={setActiveBoundary} list={boundaries}/>
-                    <button onClick={this.addBoundary( 'well' )} className="button">Add Well</button>
-                    <button onClick={this.addBoundary( 'river' )} className="button">Add River</button>
+                    <FilterableList itemClickAction={setActiveBoundary} groupClickAction={this.setActiveBoundaryType} list={boundaries}/>
                 </div>
-                {activeBoundary === undefined || (
-                    <div style={styles.properties}>
-                        <h3>{activeBoundary.name}</h3>
-                        {this.renderProperties( activeBoundary )}
-                    </div>
-                )}
+                <div style={styles.properties}>
+                    {this.renderProperties( activeBoundary )}
+                </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state, {tool}) => {
+const mapStateToProps = (state, { tool }) => {
     return {
         boundary: getActiveBoundary( state[tool].ui ),
+        boundaryType: getActiveBoundaryType( state[tool].ui ),
         boundaries: getBoundaries( state[tool].model.boundaries ),
         area: getArea( state[tool].model.general )
     };
 };
 
 const actions = {
-    setActiveBoundary, updateBoundary, setState, addBoundary
+    setActiveBoundary,
+    setActiveBoundaryType,
+    updateBoundary,
+    setState,
+    addBoundary
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
     const wrappedActions = {};
-    for (const key in actions) {
-        if(actions.hasOwnProperty(key)) {
+    for ( const key in actions ) {
+        if (actions.hasOwnProperty( key )) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
-                const args = Array.prototype.slice.call(arguments);
-                dispatch(actions[key](tool, ...args));
+            wrappedActions[key] = function( ) {
+                const args = Array.prototype.slice.call( arguments );
+                dispatch(actions[key]( tool, ...args ));
             };
         }
     }
@@ -153,6 +160,6 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 // eslint-disable-next-line no-class-assign
-ModelEditorBoundaries = connect(mapStateToProps, mapDispatchToProps)( ModelEditorBoundaries );
+ModelEditorBoundaries = connect( mapStateToProps, mapDispatchToProps )( ModelEditorBoundaries );
 
 export default ModelEditorBoundaries;

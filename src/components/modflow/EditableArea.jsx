@@ -39,7 +39,7 @@ export default class EditableArea extends Component {
         activeControlPoint: PropTypes.number,
         setActiveControlPoint: PropTypes.func.isRequired,
         addControlPoint: PropTypes.func.isRequired,
-        deleteControlPoint: PropTypes.func.isREquired,
+        deleteControlPoint: PropTypes.func.isRequired,
         draggedControlPoint: PropTypes.number,
         setDraggedControlPoint: PropTypes.func.isRequired,
         setControlPointLatitude: PropTypes.func.isRequired,

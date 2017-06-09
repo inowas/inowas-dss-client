@@ -1,6 +1,7 @@
 function getInitialState() {
     return {
         state: 'general',
+        activeBoundaryType: null,
         activeBoundary: null,
         draggedBoundary: null,
         mapPosition: null,
@@ -25,6 +26,9 @@ const createUiReducer = tool => {
 
             case 'MODEL_EDITOR_UI_SET_ACTIVE_BOUNDARY':
                 return { ...state, activeBoundary: action.payload };
+
+            case 'MODEL_EDITOR_UI_SET_ACTIVE_BOUNDARY_TYPE':
+                return { ...state, activeBoundaryType: action.payload };
 
             case 'MODEL_EDITOR_UI_SET_DRAGGED_BOUNDARY':
                 return { ...state, draggedBoundary: action.payload };
@@ -56,6 +60,7 @@ export default createUiReducer;
 
 export const getState = state => state.state;
 export const getActiveBoundary = state => state.activeBoundary;
+export const getActiveBoundaryType = state => state.activeBoundaryType;
 export const getDraggedBoundary = state => state.draggedBoundary;
 export const getMapPosition = state => state.mapPosition;
 export const getMousePositionOnMap = state => state.mousePositionOnMap;

@@ -56,15 +56,27 @@ export default class AccordionItem extends Component {
         index: PropTypes.number,
         active: PropTypes.bool,
         toggleActive: PropTypes.func,
-        last: PropTypes.bool
+        last: PropTypes.bool,
+        onClick: PropTypes.func,
+    }
+
+    handleClick = () => {
+        const { toggleActive, onClick } = this.props;
+        if (toggleActive) {
+            toggleActive();
+        }
+
+        if (onClick) {
+            onClick();
+        }
     }
 
     render( ) {
-        const { active, style, children, toggleActive, icon, last } = this.props;
+        const { active, style, children, icon, last } = this.props;
 
         return (
             <div>
-                <div style={[styles.header, style]} onClick={toggleActive}>
+                <div style={[styles.header, style]} onClick={this.handleClick}>
                     {icon && React.cloneElement(icon, {
                         style: [icon.props.style, styles.icon]
                     })}

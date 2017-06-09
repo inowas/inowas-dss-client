@@ -58,7 +58,7 @@ export default class WellProperties extends Component {
                         <td>Latitude:</td>
                         <td>
                             <input onChange={this.updateWell( 'lat' )} value={well.lat} type="number" className="input" placeholder="Latitude"/>
-                            <button onClick={() => setState('wells-edit')} className="link">Edit on Map<Icon name="arrow_right"/></button>
+                            <button onClick={() => setState('wells')} className="link">Edit on Map<Icon name="arrow_right"/></button>
                         </td>
                     </tr>
                     <tr>

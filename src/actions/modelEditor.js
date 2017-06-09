@@ -23,6 +23,14 @@ export function setActiveBoundary( tool, id ) {
     };
 }
 
+export function setActiveBoundaryType( tool, type ) {
+    return {
+        type: 'MODEL_EDITOR_UI_SET_ACTIVE_BOUNDARY_TYPE',
+        tool,
+        payload: type
+    };
+}
+
 export function setDraggedBoundary( tool, id ) {
     return {
         type: 'MODEL_EDITOR_UI_SET_DRAGGED_BOUNDARY',
@@ -209,6 +217,14 @@ export function updateBoundary( tool, boundary ) {
         type: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY',
         tool,
         payload: boundary
+    };
+}
+
+export function deleteBoundary( tool, id ) {
+    return {
+        type: 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY',
+        tool,
+        payload: id
     };
 }
 

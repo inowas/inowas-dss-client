@@ -27,13 +27,6 @@ const styles = {
         marginBottom: 'auto'
     },
 
-    heading: {
-        fontSize: 16,
-        fontWeight: 600,
-        padding: 0,
-        margin: 0
-    },
-
     content: {
         flex: 1,
         overflowY: 'auto',
@@ -152,7 +145,6 @@ class ModelEditorGeneral extends Component {
 
         return (
             <div style={[ style, styles.container ]}>
-                <h3 style={styles.heading}>Model Properties</h3>
                 <div style={styles.content}>
                     <table>
                         <tbody>

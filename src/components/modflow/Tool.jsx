@@ -12,6 +12,13 @@ const styles = {
         position: 'relative'
     },
 
+    heading: {
+        fontSize: 16,
+        fontWeight: 600,
+        padding: 0,
+        margin: 0
+    },
+
     close: {
         textAlign: 'right',
         position: 'absolute',
@@ -27,15 +34,18 @@ export default class Tool extends Component {
         children: PropTypes.node,
         close: PropTypes.func.isRequired,
         closeable: PropTypes.bool,
-        style: PropTypes.object
+        style: PropTypes.object,
+        heading: PropTypes.string
     }
 
     render( ) {
-        const { children, close, closeable, style } = this.props;
+        const { children, close, closeable, style, heading } = this.props;
 
         if ( children ) {
             return (
                 <div style={[ styles.wrapper, style ]}>
+                    <h3 style={styles.heading}>{heading}</h3>
+
                     {(( ) => {
                         if ( closeable ) {
                             return (
