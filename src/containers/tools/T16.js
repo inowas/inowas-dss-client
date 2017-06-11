@@ -4,18 +4,29 @@ import { connect } from 'react-redux';
 import '../../less/4TileTool.less';
 
 import Background from '../../components/tools/Background';
-import Chart from '../../components/tools/ChartT16A';
+import Chart from '../../components/tools/ChartT16';
 import Sieves from '../../components/tools/T16_Sieves';
 import HydroData from '../../components/tools/T16_HydroData';
 import {enterSieve, changeStandard, changeHydroData, changeSieve,
-    changeParameter, calculate, reset, changeParWet} from '../../actions/T16A'
+    changeParameter, calculate, reset, changeParWet} from '../../actions/T16'
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
+import Icon from '../../components/primitive/Icon';
+import Info from '../../components/tools/InfoT16';
 
 @connect(( store ) => {
-    return { tool: store.T16A };
+    return { tool: store.T16 };
 })
 export default class T16A extends React.Component {
+
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t16-calculation-of-hydraulic-conductivity/',
+            icon: <Icon name="file"/>
+        }]
+    }
+
 
     handleChange = ( e ) => {
         const param = e.target.name.split( '_' );
@@ -90,7 +101,9 @@ export default class T16A extends React.Component {
                 </div>
 
                 <div className="grid-container">
-                    <section className="tile col col-abs-2" />
+                    <section className="tile col col-abs-2">
+                        <Info data={this.props.tool.info}/>
+                    </section>
                     <section className="tile col col-rel-1">
                         <h2>SIEVING</h2>
                         <h3>After wet separation</h3>

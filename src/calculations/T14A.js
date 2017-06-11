@@ -6,7 +6,7 @@ export function calculateDiagramData(Qw, S, T, d, t_min, t_max, d_t) {
     }
 
     let data = [];
-    for (let t = t_min; t < t_max; t += d_t) {
+    for (let t = t_min; t <= t_max; t += d_t) {
         data.push({
             t: t,
             dQ: calcdQ(t)

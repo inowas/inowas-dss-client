@@ -4,6 +4,7 @@ import '../../less/toolParameters.less';
 import '../../less/input-range.less';
 import '../../less/toolT16.less';
 import Popup from '../primitive/Popup';
+import image from '../../images/tools/Hydrometer.png';
 
 export default class Parameters extends React.Component {
     state = {
@@ -97,8 +98,8 @@ export default class Parameters extends React.Component {
                             <strong>Start</strong>
                             <input type="datetime-local" className="input-start" step='10'
                                    value={info.start} onChange={this.handleChange}/>
-                            <strong>Dry Sample</strong>
-                            <input type="number" className="parameter-max input input-xs"/>
+                            {/*<strong>Dry Sample</strong>*/}
+                            {/*<input type="number" className="parameter-max input input-xs"/>*/}
                         </p>
                     </div>
                     <table className="table-t16a-hydro">
@@ -113,8 +114,15 @@ export default class Parameters extends React.Component {
                         </tbody>
                     </table>
                     <Popup visible={this.state.popupVisible} close={this.closePopup}>
-                        <h2>Hydrometer Characterstics</h2>
-                        {this.hydroCharac()}
+                        <div className="grid-container">
+                            <section>
+                                <h2>Hydrometer Characterstics</h2>
+                                {this.hydroCharac()}
+                            </section>
+                            <section>
+                                <img className="popup-img" src={image}/>
+                            </section>
+                        </div>
                     </Popup>
                 </div>
             </div>

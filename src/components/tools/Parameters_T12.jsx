@@ -14,53 +14,6 @@ export default class Parameters extends React.Component {
         if (this.props.handleReset)            {this.props.handleReset(e);}
     };
 
-    renderParam(param) {
-        if (!param.inputType) {
-            return this.renderSlider(param);
-        }
-
-        switch (param.inputType) {
-            case inputType.NUMBER:
-                return this.renderNumber(param);
-                break;
-            case inputType.RADIO_SELECT:
-                return this.renderRadioSelect(param);
-                break;
-            case inputType.SLIDER:
-                return this.renderSlider(param);
-                break;
-            default:
-        }
-    }
-
-    renderNumber(param) {
-        return (<tr key={param.id} className="parameter">
-            <td className="parameter-label">{param.label}</td>
-            <td>
-                <input name={'parameter_' + param.id + '_value'} type="number" min={param.min} max={param.max} step={param.stepSize} value={Number(param.value).toFixed(param.decimals)} onChange={this.handleChange}/>
-            </td>
-        </tr>);
-    }
-
-    renderRadioOption(param, option) {
-        return (<label key={option.id}>
-            <input name={'parameter_' + param.id + '_value'} value={option.value} type="radio" checked={param.value == option.value} onChange={this.handleChange}/> {option.label}
-        </label>);
-    }
-
-    renderRadioSelect(param) {
-        const options = param
-            .options
-            .map(option => {
-                return this.renderRadioOption(param, option);
-            });
-
-        return (<tr key={param.id} className="parameter">
-            <td className="parameter-label">{param.label}</td>
-            <td>{options}</td>
-        </tr>);
-    }
-
     renderSlider(param) {
         // Should do some refactoring
         if (!param.label && param.name)            {param.label = param.name;}
@@ -97,12 +50,13 @@ export default class Parameters extends React.Component {
             });
 
         const params = sortedParameters.map(param => {
-            return this.renderParam(param);
+            return this.renderSlider(param);
         });
 
         return (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
+                    <h2>Parameters</h2>
                     <table className="parameters">
                         <tbody>
                             {params}
@@ -110,7 +64,7 @@ export default class Parameters extends React.Component {
                     </table>
                 </div>
 
-                <div className="col col-rel-0-5">
+                <div>
                     <ul className="nav nav-stacked" role="navigation">
                         <li>
                             <button onClick={this.handleReset} className="button button-accent">Default</button>

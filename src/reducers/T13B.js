@@ -145,7 +145,6 @@ const T13BReducer = (state = getInitialState(), action) => {
                 const newParam = action.payload;
                 var param = state.parameters.find(p => {return p.id === newParam.id});
                 applyParameterUpdate(param, newParam);
-
                 // check xi <= xe <= L
                 let xe = state.parameters.find(p => {return p.id == 'xe'}),
                 xi = state.parameters.find(p => {return p.id == 'xi'}),
@@ -176,6 +175,7 @@ const T13BReducer = (state = getInitialState(), action) => {
                 }
 
                 calculateAndModifyState(state);
+                console.log('I reach ehre')
                 break;
             }
     }
