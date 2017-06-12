@@ -3,6 +3,7 @@ import '../less/landingPage.less';
 import Footer from '../components/Footer';
 import Navbar from './Navbar';
 import Popup from '../components/primitive/Popup';
+import Icon from '../components/primitive/Icon';
 import React from 'react';
 import Slider from '../components/primitive/Slider';
 import SliderControl from '../components/primitive/SliderControl';
@@ -282,11 +283,13 @@ export default class LandingPage extends React.Component {
                     <div className="align-center">
                         <a className="button button-primary more" href="https://wiki.inowas.hydro.tu-dresden.de/category/tools/">Read more</a>
                     </div>
-                    {/*
+
                     <div className="row geo-database">
                         <h2>Geo Database</h2>
 
-                        <p className="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                        <p className="description">
+                            A new MAR information system was developed for the storage, management and visualisation of geo-referenced and time series data used for the planning of MAR applications.
+                        </p>
                         <figure>
                             <img src={geoDatabaseImage} width="700" height="315" className="" alt=""/>
                         </figure>
@@ -294,27 +297,33 @@ export default class LandingPage extends React.Component {
                         <div className="grid-container">
                             <div className="col col-rel-1 stretch">
                                 <div className="panel geo-panel-01">
-                                    <div className="panel-heading"/>
+                                    <div className="panel-heading">
+                                        <Icon name="archive" />
+                                    </div>
                                     <div className="panel-body">
-                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                                        <p>The INOWAS Information System was designed considering the necessity to handle different forms of information, including various geographical data types, time-series and others.</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="col col-rel-1 stretch">
                                 <div className="panel geo-panel-02">
-                                    <div className="panel-heading"/>
+                                    <div className="panel-heading">
+                                        <Icon name="folder_open" />
+                                    </div>
                                     <div className="panel-body">
-                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                                        <p>Data can be uploaded as raster, shape or raw text files and can be visualised in different ways: as data table, as simple graph or geo-referenced map.</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="col col-rel-1 stretch">
                                 <div className="panel geo-panel-03">
-                                    <div className="panel-heading"/>
+                                    <div className="panel-heading">
+                                        <Icon name="dataset" />
+                                    </div>
                                     <div className="panel-body">
-                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                                        <p>The data model which is used in the INOWAS Information System is based on the ISO 19156:2011 – “Geographic information — Observations and measurements” standard.</p>
                                     </div>
                                 </div>
                             </div>
@@ -325,7 +334,6 @@ export default class LandingPage extends React.Component {
                         </div>
 
                     </div>
-                    */}
 
                     <div className="row documentation">
                         <h2>Documentation</h2>
