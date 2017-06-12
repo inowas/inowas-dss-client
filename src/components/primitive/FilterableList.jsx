@@ -13,6 +13,7 @@ import List from './List';
 import ListItem from './ListItem';
 import { groupBy } from 'lodash';
 import Levenshtein from 'levenshtein';
+import Input from './Input';
 
 const styles = {
     wrapper: {
@@ -102,7 +103,7 @@ export default class FilterableList extends Component {
         return (
             <div style={[ style, styles.wrapper ]}>
                 <div style={styles.searchWrapper}>
-                    <input className="input" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
+                    <Input type="search" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
                 </div>
                 <div style={styles.content}>
                     <Accordion>

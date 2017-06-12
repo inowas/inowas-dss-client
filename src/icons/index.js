@@ -28,6 +28,7 @@ import Marker from './marker.svg';
 import Minus from './minus.svg';
 import Person from './person.svg';
 import Rivers from './rivers.svg';
+import Search from './search.svg';
 import Settings from './settings.svg';
 import Share from './share.svg';
 import Success from './success.svg';
@@ -65,6 +66,7 @@ const icons = {
     minus: <Minus/>,
     person: <Person/>,
     rivers: <Rivers/>,
+    search: <Search/>,
     settings: <Settings/>,
     share: <Share/>,
     success: <Success/>,
