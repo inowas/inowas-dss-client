@@ -1,5 +1,5 @@
 /**
- * Takes an array of objects like [{id, name, type}]
+ * Takes an array of objects shape of [{id, name, type}]
  *
  * @author Martin Wudenka
  */
@@ -30,6 +30,14 @@ const styles = {
         paddingLeft: 16,
         paddingRight: 16,
         borderBottom: 0
+    },
+
+    overview: {
+        fontWeight: 600,
+        paddingTop: 8,
+        paddingBottom: 8,
+        textTransform: 'uppercase',
+        cursor: 'pointer'
     },
 
     list: {
@@ -98,6 +106,9 @@ export default class FilterableList extends Component {
                 </div>
                 <div style={styles.content}>
                     <Accordion>
+                        <div style={[styles.group, styles.overview]} onClick={this.groupClickAction( null )}>
+                            Overview
+                        </div>
                         {(( ) => {
                             const items = [ ];
                             for ( const key in workingList ) {
