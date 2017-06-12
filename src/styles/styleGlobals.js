@@ -23,7 +23,8 @@ const styleGlobals = {
             large: 20,
             medium: 10,
             small: 5
-        }
+        },
+        borderRadius: 3
     },
 
     boxShadow: '0 0 2px ' + color('#404040').fade(0.3)

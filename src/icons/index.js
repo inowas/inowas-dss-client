@@ -9,6 +9,7 @@ import ArrowUp from './arrow-up.svg';
 import Boundaries from './boundaries.svg';
 import Calculator from './calculator.svg';
 import Checked from './checked.svg';
+import Clone from './clone.svg';
 import Close from './close.svg';
 import ConstantHead from './constant_head.svg';
 import Dataset from './dataset.svg';
@@ -45,6 +46,7 @@ const icons = {
     boundaries: <Boundaries/>,
     calculator: <Calculator/>,
     checked: <Checked/>,
+    clone: <Clone/>,
     close: <Close/>,
     constant_head: <ConstantHead/>,
     dataset: <Dataset/>,

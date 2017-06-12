@@ -1,38 +1,48 @@
+import '../less/dashboard.less';
+
 import React, { PropTypes } from 'react';
+import { fetchInstances, setActiveTool, setPublic } from '../actions/dashboard';
+import { getActiveToolSlug, getPublic } from '../reducers/dashboard/ui';
+import { getTool, getTools } from '../reducers/dashboard/tools';
+
+import ConfiguredRadium from 'ConfiguredRadium';
+import Icon from '../components/primitive/Icon';
+import { Link } from 'react-router';
+import Menu from '../components/primitive/Menu';
+import Navbar from './Navbar';
+import Popup from '../components/primitive/Popup';
+import Table from '../components/primitive/table/Table';
+import Td from '../components/primitive/table/Td';
+import Tr from '../components/primitive/table/Tr';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
-
-import { Link } from 'react-router';
-import Icon from '../components/primitive/Icon';
-import Popup from '../components/primitive/Popup';
-import { fetchDashboardModelsT07 } from '../actions/dashboard';
-import Navbar from './Navbar';
-import Menu from '../components/primitive/Menu';
-import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
-
-import '../less/dashboard.less';
+import Button from '../components/primitive/Button';
 
 const styles = {
     menu: {
         width: 2 * styleGlobals.dimensions.gridColumn + styleGlobals.dimensions.gridGutter,
         marginRight: styleGlobals.dimensions.gridGutter
+    },
+
+    linkActive: {
+        textDecoration: 'underline'
     }
 };
 
 @ConfiguredRadium
-@connect(( store ) => {
-    return ({ dashboardStore: store.dashboard });
-})
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
 
     static propTypes = {
-        dispatch: PropTypes.func.isRequired,
-        dashboardStore: PropTypes.object.isRequired
+        tools: PropTypes.array,
+        activeTool: PropTypes.object,
+        publicInstances: PropTypes.bool,
+        setActiveTool: PropTypes.func.isRequired,
+        fetchInstances: PropTypes.func.isRequired,
+        setPublic: PropTypes.func.isRequired
     };
 
     state = {
-        active: 'T07',
         popupVisible: false,
         navigation: [
             {
@@ -57,107 +67,122 @@ export default class Dashboard extends React.Component {
     }
 
     componentDidMount( ) {
-        this.props.dispatch(fetchDashboardModelsT07( ));
+        // eslint-disable-next-line no-shadow
+        const { fetchInstances, publicInstances } = this.props;
+        fetchInstances( publicInstances );
     }
 
-    setToolSelection = ( slug ) => {
+    componentDidUpdate( prevProps ) {
+        // eslint-disable-next-line no-shadow
+        const { publicInstances, fetchInstances } = this.props;
+
+        if ( publicInstances !== prevProps.publicInstances ) {
+            fetchInstances( publicInstances );
+        }
+    }
+
+    setToolSelection = slug => {
         return ( ) => {
-            if ( slug === 'T07' ) {
-                this.props.dispatch(fetchDashboardModelsT07( ));
-            }
-            this.setState({ active: slug });
+            this.props.setActiveTool( slug );
         };
     }
 
-    renderTableRows( basePath, models ) {
-        return models.map(( model, index ) => {
-            const createdAt = new Date( model.created_at );
+    renderTableRows( basePath, instances ) {
+        const { publicInstances } = this.props;
+        return instances.filter( i => i.public === publicInstances ).map(( i, index ) => {
             return (
-                <tr key={index}>
-                    <td>{index}</td>
-                    <td>{model.name}</td>
-                    <td>{model.project}</td>
-                    <td>{model.application}</td>
-                    <td>{dateFormat( createdAt, 'mm/dd/yyyy HH:MM' )}</td>
-                    <td>{model.user_name}</td>
-                    <td>
-                        {!model.fake && <Link className="link" to={basePath + model.id}>use it
-                            <Icon name="arrow_right"/></Link>}
-                    </td>
-                </tr>
+                <Tr key={index}>
+                    <Td>{index}</Td>
+                    <Td>{i.name}</Td>
+                    <Td>{i.project}</Td>
+                    <Td>{i.application}</Td>
+                    <Td>{dateFormat( new Date( i.created_at ), 'mm/dd/yyyy HH:MM' )}</Td>
+                    <Td>{i.user_name}</Td>
+                    <Td>
+
+                        {!i.fake && <button className="link" to={basePath + i.id}>
+                            <Icon name="clone"/>
+                            clone
+                        </button>}
+                        {!i.fake && !publicInstances && <button className="link" to={basePath + i.id}>
+                            <Icon name="trash"/>
+                            delete
+                        </button>}
+                        {!i.fake && <Link className="link" to={basePath + i.id}>
+                            view
+                            <Icon name="arrow_right"/>
+                        </Link>}
+                    </Td>
+                </Tr>
             );
         });
     }
 
     renderDataTable( ) {
-        const { active } = this.state;
-        const { tools } = this.props.dashboardStore;
-        const activeTool = tools.find( t => t.slug === active );
+        // eslint-disable-next-line no-shadow
+        const { activeTool, setPublic, publicInstances } = this.props;
 
-        if ( active ) {
-            return (
-                <div className="tile col col-abs-3 stretch">
-                    <h2 className="section-title">Models of {activeTool.slug}</h2>
-                    <div className="grid-container toolbar">
-                        <div className="col col-rel-1 toolbar-search">
-                            <input className="input" placeholder="Search..." type="text"/>
-                        </div>
-                        <ul className="col stretch toolbar-edit">
-                            <li>
-                                <Link className="link" to={activeTool.path}>
-                                    <Icon name="add"/>
-                                    <span>Add new</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <button className="link" onClick={this.showPopup}>
-                                    <Icon name="import"/>
-                                    <span>Import</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button className="link" onClick={this.showPopup}>
-                                    <Icon name="share"/>
-                                    <span>Share</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button className="link" onClick={this.showPopup}>
-                                    <Icon name="trash"/>
-                                    <span>Delete</span>
-                                </button>
-                            </li>
-                        </ul>
-                        <ul className="col toolbar-public">
-                            {/* <li>
-                                <a className="link" href="#">Personal</a>
-                            </li>*/}
-                            <li>
-                                <button className="link">Public</button>
-                            </li>
-                        </ul>
+        return (
+            <div className="tile col col-abs-3 stretch">
+                <h2 className="section-title">Instances of {activeTool.slug}</h2>
+                <div className="grid-container toolbar">
+                    <div className="col col-rel-1 toolbar-search">
+                        <input className="input" placeholder="Search..." type="text"/>
                     </div>
-
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Name</th>
-                                <th>Project</th>
-                                <th>Application</th>
-                                <th>Date created</th>
-                                <th>Created by</th>
-                                <th/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.renderTableRows( activeTool.path, activeTool.models )}
-                        </tbody>
-                    </table>
+                    <ul className="col stretch toolbar-edit">
+                        <li>
+                            <Link className="link" to={activeTool.path}>
+                                <Icon name="add"/>
+                                <span>Add new</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Button type="link" onClick={this.showPopup}>
+                                <Icon name="import"/>
+                                <span>Import</span>
+                            </Button>
+                        </li>
+                        <li>
+                            <Button type="link" onClick={this.showPopup}>
+                                <Icon name="share"/>
+                                <span>Share</span>
+                            </Button>
+                        </li>
+                        <li>
+                            <Button type="link" onClick={this.showPopup}>
+                                <Icon name="trash"/>
+                                <span>Delete</span>
+                            </Button>
+                        </li>
+                    </ul>
+                    <ul className="col toolbar-public">
+                        <li>
+                            <Button style={[( publicInstances || styles.linkActive )]} onClick={( ) => setPublic( false )} type="link">Private</Button>
+                        </li>
+                        <li>
+                            <Button style={[( publicInstances && styles.linkActive )]} onClick={( ) => setPublic( true )} type="link">Public</Button>
+                        </li>
+                    </ul>
                 </div>
-            );
-        }
-        return null;
+
+                <Table>
+                    <thead>
+                        <Tr head>
+                            <Td head>No.</Td>
+                            <Td head>Name</Td>
+                            <Td head>Project</Td>
+                            <Td head>Application</Td>
+                            <Td head>Date created</Td>
+                            <Td head>Created by</Td>
+                            <Td head/>
+                        </Tr>
+                    </thead>
+                    <tbody>
+                        {this.renderTableRows( activeTool.path, activeTool.instances )}
+                    </tbody>
+                </Table>
+            </div>
+        );
     }
 
     closePopup = ( ) => {
@@ -170,31 +195,34 @@ export default class Dashboard extends React.Component {
 
     render( ) {
         const { navigation } = this.state;
-        const { tools } = this.props.dashboardStore;
+        const { tools } = this.props;
 
-        const menuItems = [{
-            name: 'Projects',
-            icon: <Icon name="folder"/>,
-            items: [{
-                name: 'Inowas'
-            }]
-        }, {
-            name: 'Tools',
-            icon: <Icon name="tools"/>,
-            items: tools.map(t => {
-                return {
-                    name: t.slug + ': ' + t.name,
-                    onClick: this.setToolSelection( t.slug )
-                };
-            })
-        }];
+        const menuItems = [
+            {
+                name: 'Projects',
+                icon: <Icon name="folder"/>,
+                items: [
+                    {
+                        name: 'Inowas'
+                    }
+                ]
+            }, {
+                name: 'Tools',
+                icon: <Icon name="tools"/>,
+                items: tools.map(t => {
+                    return {
+                        name: t.slug + ': ' + t.name,
+                        onClick: this.setToolSelection( t.slug )
+                    };
+                })
+            }
+        ];
 
         return (
             <div className="dashboard">
                 <Navbar links={navigation}/>
                 <div className="app-width grid-container">
-                    <Menu firstActive={1} title="Dashboard" items={menuItems} style={styles.menu} />
-                    {this.renderDataTable( )}
+                    <Menu firstActive={1} title="Dashboard" items={menuItems} style={styles.menu}/> {this.renderDataTable( )}
                 </div>
                 <Popup visible={this.state.popupVisible} close={this.closePopup}>
                     <h2>Warning</h2>
@@ -206,3 +234,16 @@ export default class Dashboard extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        tools: getTools( state.dashboard.tools ),
+        activeTool: getTool(state.dashboard.tools, getActiveToolSlug( state.dashboard.ui )),
+        publicInstances: getPublic( state.dashboard.ui )
+    };
+};
+
+// eslint-disable-next-line no-class-assign
+Dashboard = connect(mapStateToProps, { setActiveTool, fetchInstances, setPublic })( Dashboard );
+
+export default Dashboard;
