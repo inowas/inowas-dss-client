@@ -372,3 +372,21 @@ export function fetchTimeSeries( coordinate, calculationId, resultType, layerNum
         } );
     };
 }
+
+
+export function cloneScenario( id ) {
+    return ( dispatch, getState ) => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                // TODO
+                promise: ConfiguredAxios.post( 'scenarioanalysis...', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+            }
+        } ).then( ( { action } ) => {
+            console.warn(action.payload.data);
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    };
+}

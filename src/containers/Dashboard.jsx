@@ -1,7 +1,7 @@
 import '../less/dashboard.less';
 
 import React, { PropTypes } from 'react';
-import { fetchInstances, setActiveTool, setPublic } from '../actions/dashboard';
+import { fetchInstances, setActiveTool, setPublic, cloneToolInstance } from '../actions/dashboard';
 import { getActiveToolSlug, getPublic } from '../reducers/dashboard/ui';
 import { getTool, getTools } from '../reducers/dashboard/tools';
 
@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 import styleGlobals from 'styleGlobals';
 import Button from '../components/primitive/Button';
+import Radium from 'radium';
 
 const styles = {
     menu: {
@@ -27,6 +28,12 @@ const styles = {
 
     linkActive: {
         textDecoration: 'underline'
+    },
+
+    tableRow: {
+        ':hover': {
+            backgroundColor: 'red'
+        }
     }
 };
 
@@ -39,7 +46,8 @@ class Dashboard extends React.Component {
         publicInstances: PropTypes.bool,
         setActiveTool: PropTypes.func.isRequired,
         fetchInstances: PropTypes.func.isRequired,
-        setPublic: PropTypes.func.isRequired
+        setPublic: PropTypes.func.isRequired,
+        cloneToolInstance: PropTypes.func.isRequired
     };
 
     state = {
@@ -68,16 +76,16 @@ class Dashboard extends React.Component {
 
     componentDidMount( ) {
         // eslint-disable-next-line no-shadow
-        const { fetchInstances, publicInstances } = this.props;
-        fetchInstances( publicInstances );
+        const { activeTool, fetchInstances, publicInstances } = this.props;
+        fetchInstances( activeTool.slug, publicInstances );
     }
 
     componentDidUpdate( prevProps ) {
         // eslint-disable-next-line no-shadow
-        const { publicInstances, fetchInstances } = this.props;
+        const { activeTool, publicInstances, fetchInstances } = this.props;
 
         if ( publicInstances !== prevProps.publicInstances ) {
-            fetchInstances( publicInstances );
+            fetchInstances( activeTool.slug, publicInstances );
         }
     }
 
@@ -88,10 +96,12 @@ class Dashboard extends React.Component {
     }
 
     renderTableRows( basePath, instances ) {
-        const { publicInstances } = this.props;
-        return instances.filter( i => i.public === publicInstances ).map(( i, index ) => {
+        // eslint-disable-next-line no-shadow
+        const { publicInstances, cloneToolInstance } = this.props;
+        return instances.map(( i, index ) => {
+            const key = 'tableRow_' + index;
             return (
-                <Tr key={index}>
+                <Tr key={key} style={styles.tableRow} ref={key}>
                     <Td>{index}</Td>
                     <Td>{i.name}</Td>
                     <Td>{i.project}</Td>
@@ -99,15 +109,14 @@ class Dashboard extends React.Component {
                     <Td>{dateFormat( new Date( i.created_at ), 'mm/dd/yyyy HH:MM' )}</Td>
                     <Td>{i.user_name}</Td>
                     <Td>
-
-                        {!i.fake && <button className="link" to={basePath + i.id}>
+                        {!i.fake && <Button onClick={( ) => cloneToolInstance( i.id )} type="link">
                             <Icon name="clone"/>
                             clone
-                        </button>}
-                        {!i.fake && !publicInstances && <button className="link" to={basePath + i.id}>
+                        </Button>}
+                        {!i.fake && !publicInstances && <Button type="link">
                             <Icon name="trash"/>
                             delete
-                        </button>}
+                        </Button>}
                         {!i.fake && <Link className="link" to={basePath + i.id}>
                             view
                             <Icon name="arrow_right"/>
@@ -244,6 +253,6 @@ const mapStateToProps = state => {
 };
 
 // eslint-disable-next-line no-class-assign
-Dashboard = connect(mapStateToProps, { setActiveTool, fetchInstances, setPublic })( Dashboard );
+Dashboard = connect(mapStateToProps, { setActiveTool, fetchInstances, setPublic, cloneToolInstance })( Dashboard );
 
 export default Dashboard;

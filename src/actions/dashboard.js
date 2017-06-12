@@ -30,7 +30,7 @@ export function fetchInstances( tool, publicInstances = false ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/tools/' + tool + '/' + ( publicInstances ? '/public' : '' ), { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+                promise: ConfiguredAxios.get( '/tools/' + tool + ( publicInstances ? '/public' : '' ), { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setInstances( tool, action.payload.data ) );
@@ -46,9 +46,10 @@ export function cloneToolInstance( id ) {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/tools/clone/' + id, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+                promise: ConfiguredAxios.post( '/tools/' + id + '/clone', {}, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
+            console.warn(action.payload.data);
             // dispatch( setInstances( tool, action.payload.data ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console

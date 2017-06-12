@@ -26,7 +26,8 @@ import {
     toggleModelSelection,
     setMapView,
     setBounds,
-    setActiveCoordinate
+    setActiveCoordinate,
+    cloneScenario
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -240,6 +241,12 @@ export default class T07A extends Component {
         return ('Longitude');
     };
 
+    cloneScenario( ) {
+        return id => {
+            this.props.dispatch( cloneScenario(id));
+        };
+    }
+
     renderChart( ) {
         const {activeCoordinate, models, selectedResultType } = this.props.tool;
         if( models.length <= 0 || !activeCoordinate) {
@@ -361,7 +368,7 @@ export default class T07A extends Component {
                     <div className="tile col stretch">
                         <Accordion firstActive={0}>
                             <AccordionItem heading="Scenarios">
-                                <ScenarioSelect scenarios={models} toggleSelection={this.toggleSelection}/>
+                                <ScenarioSelect clone={this.cloneScenario()} scenarios={models} toggleSelection={this.toggleSelection}/>
                             </AccordionItem>
                         </Accordion>
                     </div>

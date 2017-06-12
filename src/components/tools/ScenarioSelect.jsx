@@ -8,12 +8,14 @@ export default class ScenarioSelect extends Component {
 
     static propTypes = {
         scenarios: PropTypes.array.isRequired,
+        clone: PropTypes.func.isRequired,
         toggleSelection: PropTypes.func.isRequired
     }
 
     renderScenarios( scenarios ) {
+        const { clone } = this.props;
         return scenarios.map((s, index) => {
-            return ( <ScenarioItem key={index} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
+            return ( <ScenarioItem clone={clone} key={index} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
         });
     }
 
