@@ -282,7 +282,7 @@ export default class LandingPage extends React.Component {
                     <div className="align-center">
                         <a className="button button-primary more" href="https://wiki.inowas.hydro.tu-dresden.de/category/tools/">Read more</a>
                     </div>
-
+                    {/*
                     <div className="row geo-database">
                         <h2>Geo Database</h2>
 
@@ -325,6 +325,7 @@ export default class LandingPage extends React.Component {
                         </div>
 
                     </div>
+                    */}
 
                     <div className="row documentation">
                         <h2>Documentation</h2>
