@@ -74,8 +74,8 @@ export default class T07C extends Component {
         this.props.dispatch(fetchDetails( this.props.params.id ));
     }
 
-    fetchTimeSeriesForPoint( coordinate, modelId, resultType, layerNumber, gridCell, startDate ) {
-        this.props.dispatch(fetchTimeSeries( coordinate, modelId, resultType, layerNumber, gridCell.x, gridCell.y, startDate ));
+    fetchTimeSeriesForPoint( coordinate, calculationId, resultType, layerNumber, gridCell, startDate ) {
+        this.props.dispatch(fetchTimeSeries( coordinate, calculationId, resultType, layerNumber, gridCell.x, gridCell.y, startDate ));
     }
 
     fetchTimeSeriesForPoints( models, resultType, layerNumber, timeSeriesPoints, startDate ) {
@@ -86,7 +86,7 @@ export default class T07C extends Component {
                 return m.selected;
             }).forEach(m => {
                 const gridCell = m.grid.coordinateToGridCell( p.coordinate );
-                this.fetchTimeSeriesForPoint( p.coordinate, m.modelId, resultType, layerNumber, gridCell, startDate );
+                this.fetchTimeSeriesForPoint( p.coordinate, m.calculationId, resultType, layerNumber, gridCell, startDate );
             });
         });
     }
@@ -171,9 +171,9 @@ export default class T07C extends Component {
         models.filter(m => {
             return m.selected;
         }).forEach(m => {
-            this.fetchTimeSeriesForPoint(coordinate, m.modelId, selectedResultType, selectedLayerNumber, gridCell, new Date( totalTimes.start ));
+            this.fetchTimeSeriesForPoint(coordinate, m.calculationId, selectedResultType, selectedLayerNumber, gridCell, new Date( totalTimes.start ));
         });
-    }
+    };
 
     renderMap( ) {
         const { models, mapPosition, timeSeriesPoints } = this.props.tool;
@@ -210,7 +210,7 @@ export default class T07C extends Component {
         return e => {
             this.props.dispatch(setTimeSeriesPointSelection( index, e.target.checked ));
         };
-    }
+    };
 
     renderTable( ) {
         const { timeSeriesPoints } = this.props.tool;
@@ -283,7 +283,7 @@ export default class T07C extends Component {
                 return m.selected;
             }).forEach(m => {
                 const result = p.timeSeriesResults.find(r => {
-                    return (m.modelId === r.modelId && selectedResultType.sameAs( r.resultType ) && selectedLayerNumber.sameAs( r.layerNumber ));
+                    return (m.calculationId === r.calculationId && selectedResultType.sameAs( r.resultType ) && selectedLayerNumber.sameAs( r.layerNumber ));
                 });
                 if ( result && result.timeSeries ) {
                     const resultColumn = [p.name + ' ' + m.name];

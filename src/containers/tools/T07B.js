@@ -146,7 +146,7 @@ export default class T07B extends Component {
     renderModelSelect( models ) {
         return models.map(m => {
             return (
-                <option key={m.modelId} value={m.modelId}>{m.name}</option>
+                <option key={m.calculationId} value={m.calculationId}>{m.name}</option>
             );
         });
     }
@@ -161,9 +161,10 @@ export default class T07B extends Component {
     };
 
     renderModelsSelect( ) {
-        if ( this.props.tool.t07bSelectedModelIds === null ) {
+        if ( this.props.tool.t07bSelectedModelIds === null) {
             return null;
         }
+
         return (
             <div className="grid-container stretch">
                 <div className="col stretch">

@@ -202,7 +202,7 @@ export function fetchDetails(id, onSuccess ) {
 
             dispatch( addModel( baseModel ) );
             dispatch( setBounds( boundingBox.toArray() ) );
-            dispatch( fetchModelBoundaries( baseModel.modelId ) );
+            dispatch( fetchModelBoundaries( baseModel.calculationId ) );
             dispatch( fetchLayerValues( baseModel.calculationId ) );
             dispatch( fetchTotalTimes( baseModel.calculationId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
 
@@ -223,7 +223,7 @@ export function fetchDetails(id, onSuccess ) {
                 );
 
                 dispatch( addModel( scenario ) );
-                dispatch( fetchModelBoundaries( scenario.modelId ) );
+                dispatch( fetchModelBoundaries( scenario.calculationId ) );
             }
 
             ( onSuccess && onSuccess( dispatch ) );
@@ -255,7 +255,7 @@ export function updateResultsT07A( calculationId, resultType, layerNumber, total
 
 export function updateResultsT07B( calculation1, calculation2, resultType, layerNumber, totalTime ) {
     const imageURL = config.baseURL + '/image';
-    const url = '/calculations/' + calculation1 + '/results/difference/' + calculation2 + '/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/totims/' + totalTime.toString();
+    const url = '/calculations/' + calculation1 + '/results/differences/' + calculation2 + '/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/totims/' + totalTime.toString();
 
     return ( dispatch, getState ) => {
         return dispatch( {
@@ -354,7 +354,7 @@ export function fetchTimeSeries( coordinate, calculationId, resultType, layerNum
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState())}})
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState())}})
             }
         } ).then( ( { action } ) => {
             const data = [];

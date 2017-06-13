@@ -36,7 +36,7 @@ export default class ModflowModelsCollection {
 
     push = ( model ) => {
         // don't just push, because we don't wan't duplicates
-        this._models = unionBy([model], this._models.reverse(), 'modelId').reverse();
+        this._models = unionBy([model], this._models.reverse(), 'calculationId').reverse();
         return this._models.length;
     };
 

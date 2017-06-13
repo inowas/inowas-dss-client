@@ -4,13 +4,13 @@ import LayerNumber from './LayerNumber';
 
 export default class TimeSeriesResult {
 
-    _modelId;
+    _calculationId;
     _resultType;
     _layerNumber;
     _timeSeries;
 
-    constructor(modelId, resultType, layerNumber) {
-        this._modelId = modelId;
+    constructor(calculationId, resultType, layerNumber) {
+        this._calculationId = calculationId;
 
         if ( !( resultType instanceof ResultType ) ) {
             throw new Error( 'Expected first parameter to be a ResultType, but got ' + ( typeof resultType ) );
@@ -23,8 +23,8 @@ export default class TimeSeriesResult {
         this._layerNumber = layerNumber;
     }
 
-    get modelId() {
-        return this._modelId;
+    get calculationId() {
+        return this._calculationId;
     }
 
     get resultType() {
@@ -52,7 +52,7 @@ export default class TimeSeriesResult {
             throw new Error( 'Expected first parameter to be a TimeSeriesResult, but got ' + ( typeof otherTimeSeriesResult ) );
         }
 
-        return (this.modelId === otherTimeSeriesResult.modelId
+        return (this.calculationId === otherTimeSeriesResult.calculationId
             && this.resultType.sameAs(otherTimeSeriesResult.resultType)
             && this.layerNumber.sameAs(otherTimeSeriesResult.layerNumber));
     }
@@ -66,7 +66,7 @@ export default class TimeSeriesResult {
             throw new Error( 'Expected second parameter to be a TimeSeriesResult, but got ' + ( typeof timeSeriesResult2 ) );
         }
 
-        return (timeSeriesResult1.modelId === timeSeriesResult2.modelId
+        return (timeSeriesResult1.calculationId === timeSeriesResult2.calculationId
             && timeSeriesResult1.resultType.sameAs(timeSeriesResult2.resultType)
             && timeSeriesResult1.layerNumber.sameAs(timeSeriesResult2.layerNumber));
     }
