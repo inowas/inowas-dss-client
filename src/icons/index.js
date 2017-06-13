@@ -2,6 +2,7 @@ import React from 'react';
 
 import AddMultiple from './add-multiple.svg';
 import Add from './add.svg';
+import Archive from './archive.svg';
 import ArrowDown from './arrow-down.svg';
 import ArrowLeft from './arrow-left.svg';
 import ArrowRight from './arrow-right.svg';
@@ -15,6 +16,7 @@ import Dataset from './dataset.svg';
 import Edit from './edit.svg';
 import ExclamationMark from './exclamation-mark.svg';
 import File from './file.svg';
+import FolderOpen from './folder-open.svg';
 import Folder from './folder.svg';
 import ImportIcon from './import.svg';
 import LayerHorizontalHatched from './layer-horizontal-hatched.svg';
@@ -37,6 +39,7 @@ import World from './world.svg';
 const icons = {
     add_multiple: <AddMultiple/>,
     add: <Add/>,
+    archive: <Archive/>,
     arrow_down: <ArrowDown/>,
     arrow_left: <ArrowLeft/>,
     arrow_right: <ArrowRight/>,
@@ -50,6 +53,7 @@ const icons = {
     edit: <Edit/>,
     exclamation_mark: <ExclamationMark/>,
     file: <File/>,
+    folder_open: <FolderOpen/>,
     folder: <Folder/>,
     import: <ImportIcon/>,
     layer_horizontal_hatched: <LayerHorizontalHatched/>,
