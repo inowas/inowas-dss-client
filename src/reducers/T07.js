@@ -54,7 +54,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
         case 'T07_SET_MODEL_BOUNDARIES':
             state = { ...state };
             state.models.map( m => {
-                if ( m.calculationId === action.payload.calculationId ) {
+                if ( m.modelId === action.payload.modelId ) {
                     m.boundaries = action.payload.boundaries;
                     return m;
                 }

@@ -202,7 +202,7 @@ export function fetchDetails(id, onSuccess ) {
 
             dispatch( addModel( baseModel ) );
             dispatch( setBounds( boundingBox.toArray() ) );
-            dispatch( fetchModelBoundaries( baseModel.calculationId ) );
+            dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.calculationId ) );
             dispatch( fetchTotalTimes( baseModel.calculationId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
 
@@ -223,7 +223,7 @@ export function fetchDetails(id, onSuccess ) {
                 );
 
                 dispatch( addModel( scenario ) );
-                dispatch( fetchModelBoundaries( scenario.calculationId ) );
+                dispatch( fetchModelBoundaries( scenario.modelId ) );
             }
 
             ( onSuccess && onSuccess( dispatch ) );
