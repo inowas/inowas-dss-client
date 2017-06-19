@@ -11,19 +11,24 @@ import AccordionItem from './AccordionItem';
 import ConfiguredRadium from 'ConfiguredRadium';
 import List from './List';
 import ListItem from './ListItem';
-import { groupBy } from 'lodash';
+import { groupBy, keys } from 'lodash';
 import Levenshtein from 'levenshtein';
 import Input from './Input';
 
 const styles = {
     wrapper: {
-        height: '100%',
         display: 'flex',
         flexDirection: 'column'
     },
 
     searchWrapper: {
         marginBottom: 6
+    },
+
+    content: {
+        flex: 1,
+        minHeight: 0,
+        overflow: 'auto'
     },
 
     group: {
@@ -55,7 +60,8 @@ export default class FilterableList extends Component {
         list: PropTypes.array.isRequired,
         style: PropTypes.object,
         itemClickAction: PropTypes.func,
-        groupClickAction: PropTypes.func
+        groupClickAction: PropTypes.func,
+        activeType: PropTypes.string
     }
 
     state = {
@@ -79,7 +85,7 @@ export default class FilterableList extends Component {
     }
 
     render( ) {
-        const { style, list } = this.props;
+        const { style, list, activeType } = this.props;
         const { searchTerm } = this.state;
 
         let workingList = list;
@@ -98,33 +104,27 @@ export default class FilterableList extends Component {
             workingList = listWithLevenshteinDistance;
         }
 
-        workingList = groupBy( workingList, 'type' );
+        const groupedList = groupBy( workingList, 'type' );
+        const keyList = keys(groupedList);
+        const firstActive = keyList.indexOf(activeType);
 
         return (
-            <div style={[ style, styles.wrapper ]}>
+            <div style={[ styles.wrapper, style ]}>
                 <div style={styles.searchWrapper}>
                     <Input type="search" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
                 </div>
                 <div style={styles.content}>
-                    <Accordion>
-                        <div style={[styles.group, styles.overview]} onClick={this.groupClickAction( null )}>
-                            Overview
-                        </div>
-                        {(( ) => {
-                            const items = [ ];
-                            for ( const key in workingList ) {
-                                if (workingList.hasOwnProperty( key )) {
-                                    items.push(
-                                        <AccordionItem onClick={this.groupClickAction( key )} style={styles.group} key={key} heading={key + ' (' + workingList[key].length + ')'}>
-                                            <List style={styles.list}>
-                                                {workingList[key].map( b => <ListItem clickAction={this.itemClickAction( b.id )} key={b.id}>{b.name}</ListItem>)}
-                                            </List>
-                                        </AccordionItem>
-                                    );
-                                }
-                            }
-                            return items;
-                        })( )}
+                    <div style={[styles.group, styles.overview]} onClick={this.groupClickAction( null )}>
+                        Overview
+                    </div>
+                    <Accordion firstActive={firstActive}>
+                        {keyList.map(key => (
+                            <AccordionItem onClick={this.groupClickAction( key )} style={styles.group} key={key} heading={key + ' (' + groupedList[key].length + ')'}>
+                                <List style={styles.list}>
+                                    {groupedList[key].map( b => <ListItem clickAction={this.itemClickAction( b.id )} key={b.id}>{b.name}</ListItem>)}
+                                </List>
+                            </AccordionItem>
+                        ))}
                     </Accordion>
                 </div>
             </div>

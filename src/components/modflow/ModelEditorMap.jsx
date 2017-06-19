@@ -444,7 +444,7 @@ export default class ModelEditorMap extends Component {
     }
 
     render( ) {
-        const { state, initial } = this.props;
+        const { state, initial, setState, setActiveBoundaryType } = this.props;
         const menuItems = [
             {
                 name: 'Model Setup',
@@ -481,7 +481,10 @@ export default class ModelEditorMap extends Component {
                         onClick: this.setState( null )
                     }, {
                         name: 'Wells (WEL)',
-                        onClick: this.setState( 'boundariesOverlay' )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'WEL' );
+                        }
                     }, {
                         name: 'Recharge (RCH)',
                         onClick: this.setState( null )

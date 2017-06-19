@@ -9,7 +9,10 @@ const styles = {
         backgroundColor: styleGlobals.colors.background,
         padding: '16px 20px 20px 20px',
         boxShadow: styleGlobals.boxShadow,
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
     },
 
     heading: {
@@ -24,6 +27,13 @@ const styles = {
         position: 'absolute',
         right: 16,
         top: 16
+    },
+
+    content: {
+        flex: 1,
+        marginTop: 0,
+        marginBottom: 0,
+        minHeight: 0
     }
 };
 
@@ -44,7 +54,7 @@ export default class Tool extends Component {
         if ( children ) {
             return (
                 <div style={[ styles.wrapper, style ]}>
-                    <h3 style={styles.heading}>{heading}</h3>
+                    <h3 style={[ styles.heading ]}>{heading}</h3>
 
                     {(( ) => {
                         if ( closeable ) {
@@ -57,7 +67,9 @@ export default class Tool extends Component {
                         return null;
                     })( )}
 
-                    {children}
+                    <div style={[ styles.content ]}>
+                        {children}
+                    </div>
                 </div>
             );
         }

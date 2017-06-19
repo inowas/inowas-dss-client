@@ -67,8 +67,8 @@ export default class BoundariesOverview extends Component {
                         </Tr>
                     </thead>
                     <tbody>
-                        {boundaries.map(b => (
-                            <Tr>
+                        {boundaries.map((b, index) => (
+                            <Tr key={index}>
                                 <Td>{b.name}</Td>
                                 <Td>{b.type}</Td>
                                 {type === 'WEL' && <Td>{b.lat}</Td>}

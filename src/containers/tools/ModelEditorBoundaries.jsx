@@ -18,14 +18,16 @@ import BoundariesOverview from '../../components/modflow/BoundariesOverview';
 
 const styles = {
     container: {
-        display: 'flex'
+        display: 'flex',
+        maxHeight: '100%'
     },
 
     left: {
         width: styleGlobals.dimensions.gridColumn,
         marginRight: styleGlobals.dimensions.gridGutter,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        maxHeight: '100%'
     },
 
     properties: {
@@ -108,16 +110,16 @@ class ModelEditorBoundaries extends Component {
 
     render( ) {
         // eslint-disable-next-line no-shadow
-        const { style, boundary, boundaries, setActiveBoundary } = this.props;
+        const { style, boundary, boundaries, setActiveBoundary, boundaryType } = this.props;
 
         const activeBoundary = boundaries.find(b => {
             return b.id === boundary;
         });
 
         return (
-            <div style={[ style, styles.container ]}>
+            <div style={[ styles.container, style ]}>
                 <div style={styles.left}>
-                    <FilterableList itemClickAction={setActiveBoundary} groupClickAction={this.setActiveBoundaryType} list={boundaries}/>
+                    <FilterableList itemClickAction={setActiveBoundary} groupClickAction={this.setActiveBoundaryType} list={boundaries} activeType={boundaryType}/>
                 </div>
                 <div style={styles.properties}>
                     {this.renderProperties( activeBoundary )}
