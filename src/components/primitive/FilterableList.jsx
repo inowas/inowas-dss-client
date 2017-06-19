@@ -106,7 +106,7 @@ export default class FilterableList extends Component {
 
         const groupedList = groupBy( workingList, 'type' );
         const keyList = keys(groupedList);
-        const firstActive = keyList.indexOf(activeType);
+        const firstActive = keyList.indexOf(activeType) !== -1 ? keyList.indexOf(activeType) : 0;
 
         return (
             <div style={[ styles.wrapper, style ]}>

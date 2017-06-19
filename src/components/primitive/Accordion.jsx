@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+
 import ConfiguredRadium from 'ConfiguredRadium';
 
 @ConfiguredRadium
@@ -22,8 +23,17 @@ export default class Accordion extends Component {
         };
     }
 
+    componentDidUpdate( prevProps ) {
+        const { firstActive } = this.props;
+
+        if ( firstActive !== prevProps.firstActive ) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ activeIndex: firstActive });
+        }
+    }
+
     toggleActiveItem = ( index ) => {
-        return () => {
+        return ( ) => {
             let newIndex = index;
             if ( index === this.state.activeIndex ) {
                 newIndex = null;
@@ -42,13 +52,13 @@ export default class Accordion extends Component {
             return React.cloneElement(child, {
                 index: currentIndex,
                 active,
-                last: (currentIndex + 1 === this.props.children.length || !(this.props.children instanceof Array) ),
-                toggleActive: this.toggleActiveItem(currentIndex)
+                last: (currentIndex + 1 === this.props.children.length || !( this.props.children instanceof Array )),
+                toggleActive: this.toggleActiveItem( currentIndex )
             });
         });
 
         return (
-            <div style={[style]}>
+            <div style={[ style ]}>
                 {children}
             </div>
         );
