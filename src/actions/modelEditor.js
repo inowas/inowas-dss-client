@@ -336,9 +336,11 @@ export function loadBoundaries( tool, id ) {
                 id: b.id,
                 name: b.name,
                 affectedLayers: b.affected_layers,
-                type: b.type === 'well' ? 'WEL' : 'undefined',
+                type: b.type === 'well' ? 'wel' : b.type,
                 lat: b.geometry.coordinates[ 1 ],
-                lng: b.geometry.coordinates[ 0 ]
+                lng: b.geometry.coordinates[ 0 ],
+                wellType: b.type === 'well' ? b.metadata.well_type : 'undefined',
+                pumpingRates: []
             } ) ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console

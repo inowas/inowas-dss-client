@@ -74,6 +74,7 @@
         "react-hot-loader": "next",
         "react-iframe": "^0.0.4",
         "react-leaflet": "^1.1.4",
+        "react-select": "^1.0.0-rc.5",
         "react-svg-loader": "^1.1.1",
         "recharts": "^0.21.2",
         "redux-devtools-extension": "^2.13.0",

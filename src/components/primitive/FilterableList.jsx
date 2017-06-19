@@ -80,8 +80,8 @@ export default class FilterableList extends Component {
         };
     }
 
-    setSearchTerm = e => {
-        this.setState({ searchTerm: e.target.value });
+    setSearchTerm = value => {
+        this.setState({ searchTerm: value });
     }
 
     render( ) {

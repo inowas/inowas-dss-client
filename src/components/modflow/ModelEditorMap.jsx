@@ -253,7 +253,7 @@ export default class ModelEditorMap extends Component {
         const { addBoundary, boundaries } = this.props;
         addBoundary({
             name: 'new Well ' + boundaries.length,
-            type: 'WEL',
+            type: 'wel',
             id: uuid(),
             lat: e.latlng.lat,
             lng: e.latlng.lng
@@ -380,7 +380,7 @@ export default class ModelEditorMap extends Component {
                         ? this.refs.map.leafletElement
                         : null}/> );
                     })}
-                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setState={setState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'WEL' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setState={setState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
@@ -474,38 +474,59 @@ export default class ModelEditorMap extends Component {
                 disabled: initial,
                 items: [
                     {
-                        name: 'Time Variant Specified Head',
-                        onClick: this.setState( null )
-                    }, {
-                        name: '(CHD)',
-                        onClick: this.setState( null )
+                        name: 'Time Variant Specified Head (CHD)',
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'chd' );
+                        }
                     }, {
                         name: 'Wells (WEL)',
                         onClick: () => {
                             setState( 'boundariesOverlay' );
-                            setActiveBoundaryType( 'WEL' );
+                            setActiveBoundaryType( 'wel' );
                         }
                     }, {
                         name: 'Recharge (RCH)',
-                        onClick: this.setState( null )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'rch' );
+                        }
                     }, {
                         name: 'River (RIV)',
-                        onClick: this.setState( 'boundariesOverlay' )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'riv' );
+                        }
                     }, {
                         name: 'General Head Coundary (GHB)',
-                        onClick: this.setState( null )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'ghb' );
+                        }
                     }, {
                         name: 'Evapotranspiration (EVT)',
-                        onClick: this.setState( null )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'evt' );
+                        }
                     }, {
                         name: 'Drain (DRN)',
-                        onClick: this.setState( null )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'drn' );
+                        }
                     }, {
                         name: 'Lake (Lak)',
-                        onClick: this.setState( null )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'lak' );
+                        }
                     }, {
                         name: 'Streamflow Routing (SFR2)',
-                        onClick: this.setState( null )
+                        onClick: () => {
+                            setState( 'boundariesOverlay' );
+                            setActiveBoundaryType( 'sfr2' );
+                        }
                     }
                 ]
             }, {

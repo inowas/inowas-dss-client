@@ -53,7 +53,7 @@ export default class BoundariesOverview extends Component {
                     <span style={[ styles.type ]}>{type}
                         ({boundaries.length})</span>
                     <button style={styles.headerButton.button} className="link"><Icon style={styles.headerButton.icon} name="add"/>Add new</button>
-                    {type === 'WEL' && <button onClick={( ) => setState( 'wells' )} style={styles.headerButton.button} className="link"><Icon style={styles.headerButton.icon} name="marker"/>View on Map</button>}
+                    {type === 'wel' && <button onClick={( ) => setState( 'wells' )} style={styles.headerButton.button} className="link"><Icon style={styles.headerButton.icon} name="marker"/>View on Map</button>}
                 </div>
 
                 <Table>
@@ -61,9 +61,10 @@ export default class BoundariesOverview extends Component {
                         <Tr head>
                             <Td head>Name</Td>
                             <Td head>Type</Td>
-                            {type === 'WEL' && <Td head>Latitude (X)</Td>}
-                            {type === 'WEL' && <Td head>Longitude (Y)</Td>}
-                            {type === 'WEL' && <Td head>Layers</Td>}
+                            {type === 'wel' && <Td head>Well Type</Td>}
+                            {type === 'wel' && <Td head>Latitude (X)</Td>}
+                            {type === 'wel' && <Td head>Longitude (Y)</Td>}
+                            {type === 'wel' && <Td head>Layers</Td>}
                         </Tr>
                     </thead>
                     <tbody>
@@ -71,9 +72,10 @@ export default class BoundariesOverview extends Component {
                             <Tr key={index}>
                                 <Td>{b.name}</Td>
                                 <Td>{b.type}</Td>
-                                {type === 'WEL' && <Td>{b.lat}</Td>}
-                                {type === 'WEL' && <Td>{b.lng}</Td>}
-                                {type === 'WEL' && <Td>{b.affectedLayers}</Td>}
+                                {type === 'wel' && <Td>{b.wellType}</Td>}
+                                {type === 'wel' && <Td>{b.lat}</Td>}
+                                {type === 'wel' && <Td>{b.lng}</Td>}
+                                {type === 'wel' && <Td>{b.affectedLayers}</Td>}
                             </Tr>
                         ))}
                     </tbody>

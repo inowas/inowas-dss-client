@@ -4,8 +4,6 @@ import { maxBy, minBy } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
-import Tab from '../../components/primitive/Tab';
-import Tabs from '../../components/primitive/Tabs';
 import WellProperties from '../../components/modflow/WellProperties';
 import RiverProperties from '../../components/modflow/RiverProperties';
 import { connect } from 'react-redux';
@@ -73,23 +71,13 @@ class ModelEditorBoundaries extends Component {
 
         if ( activeBoundary ) {
             switch ( activeBoundary.type ) {
-                case 'WEL':
+                case 'wel':
                     return (
-                        <Tabs>
-                            <Tab title="Summary">
-                                <WellProperties setState={setState} well={activeBoundary} updateWell={updateBoundary}/>
-                            </Tab>
-                            <Tab title="Pumping Rates">Tab 2 Lorem Ipsum ...</Tab>
-                        </Tabs>
+                        <WellProperties setState={setState} well={activeBoundary} updateWell={updateBoundary}/>
                     );
                 case 'RIV':
                     return (
-                        <Tabs>
-                            <Tab title="Summary">
-                                <RiverProperties setState={setState} river={activeBoundary} updateRiver={updateBoundary}/>
-                            </Tab>
-                            <Tab title="OB 1">Tab 2 Lorem Ipsum ...</Tab>
-                        </Tabs>
+                        <RiverProperties setState={setState} river={activeBoundary} updateRiver={updateBoundary}/>
                     );
             }
         }

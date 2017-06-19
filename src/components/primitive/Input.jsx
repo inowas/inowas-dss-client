@@ -33,6 +33,7 @@ const Input = ConfiguredRadium( function( props ) {
     const {
         type,
         style,
+        onChange,
         ...rest
     } = props;
     return (
@@ -40,7 +41,7 @@ const Input = ConfiguredRadium( function( props ) {
             {type === 'search'
                 ? <Icon name="search" style={[styles.icon]}/>
                 : null}
-            <input style={[styles.input]} {...rest} type={type}/>
+            <input style={[styles.input]} onChange={e => onChange(e.target.value)} {...rest} type={type}/>
         </div>
     );
 });
@@ -69,7 +70,8 @@ Input.propTypes = {
         'url',
         'week'
     ]),
-    style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
+    style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+    onChange: PropTypes.func
 };
 
 Input.defaultProps = {
