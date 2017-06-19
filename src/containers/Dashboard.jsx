@@ -18,7 +18,8 @@ import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 import styleGlobals from 'styleGlobals';
 import Button from '../components/primitive/Button';
-import Radium from 'radium';
+
+const RadiumLink = ConfiguredRadium(Link);
 
 const styles = {
     menu: {
@@ -30,10 +31,29 @@ const styles = {
         textDecoration: 'underline'
     },
 
-    tableRow: {
-        ':hover': {
-            backgroundColor: 'red'
-        }
+    lastTd: {
+        position: 'relative',
+        width: 0,
+        padding: 0
+    },
+
+    actionWrapper: {
+        position: 'absolute',
+        right: 0,
+        width: 500
+    },
+
+    actionContent: {
+        paddingLeft: 50,
+        paddingTop: styleGlobals.dimensions.spacing.small,
+        paddingRight: styleGlobals.dimensions.spacing.small,
+        paddingBottom: styleGlobals.dimensions.spacing.small - 1,
+        background: 'linear-gradient(to right, transparent, ' + styleGlobals.colors.background + ' 50px)',
+        float: 'right'
+    },
+
+    action: {
+        marginLeft: styleGlobals.dimensions.spacing.large
     }
 };
 
@@ -71,7 +91,8 @@ class Dashboard extends React.Component {
             name: 'Tools',
             icon: <Icon name="layer_horizontal_hatched"/>
         }*/
-        ]
+        ],
+        hoveredInstance: null
     }
 
     componentDidMount( ) {
@@ -84,7 +105,7 @@ class Dashboard extends React.Component {
         // eslint-disable-next-line no-shadow
         const { activeTool, publicInstances, fetchInstances } = this.props;
 
-        if ( publicInstances !== prevProps.publicInstances ) {
+        if ( activeTool.slug !== prevProps.activeTool.slug || publicInstances !== prevProps.publicInstances ) {
             fetchInstances( activeTool.slug, publicInstances );
         }
     }
@@ -99,28 +120,39 @@ class Dashboard extends React.Component {
         // eslint-disable-next-line no-shadow
         const { publicInstances, cloneToolInstance } = this.props;
         return instances.map(( i, index ) => {
-            const key = 'tableRow_' + index;
             return (
-                <Tr key={key} style={styles.tableRow} ref={key}>
+                <Tr key={index} onMouseEnter={( ) => this.setState({ hoveredInstance: index })} onMouseLeave={( ) => this.setState({ hoveredInstance: null })}>
                     <Td>{index}</Td>
                     <Td>{i.name}</Td>
                     <Td>{i.project}</Td>
                     <Td>{i.application}</Td>
                     <Td>{dateFormat( new Date( i.created_at ), 'mm/dd/yyyy HH:MM' )}</Td>
                     <Td>{i.user_name}</Td>
-                    <Td>
-                        {!i.fake && <Button onClick={( ) => cloneToolInstance( i.id )} type="link">
-                            <Icon name="clone"/>
-                            clone
-                        </Button>}
-                        {!i.fake && !publicInstances && <Button type="link">
-                            <Icon name="trash"/>
-                            delete
-                        </Button>}
-                        {!i.fake && <Link className="link" to={basePath + i.id}>
-                            view
-                            <Icon name="arrow_right"/>
-                        </Link>}
+                    <Td style={[ styles.lastTd ]}>
+                        {(( ) => {
+                            if ( this.state.hoveredInstance === index ) {
+                                return (
+                                    <div style={[ styles.actionWrapper ]}>
+                                        <div style={[ styles.actionContent ]}>
+                                            {!i.fake && <Button style={[ styles.action ]} onClick={( ) => cloneToolInstance( i.id )} type="link">
+                                                <Icon name="clone"/>
+                                                clone
+                                            </Button>}
+                                            {!i.fake && !publicInstances && <Button style={[ styles.action ]} type="link">
+                                                <Icon name="trash"/>
+                                                delete
+                                            </Button>}
+                                            {!i.fake && <RadiumLink style={[ styles.action ]} className="link" to={basePath + i.id}>
+                                                view
+                                                <Icon name="arrow_right"/>
+                                            </RadiumLink>}
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            return null;
+                        })( )}
                     </Td>
                 </Tr>
             );
@@ -183,7 +215,7 @@ class Dashboard extends React.Component {
                             <Td head>Application</Td>
                             <Td head>Date created</Td>
                             <Td head>Created by</Td>
-                            <Td head/>
+                            <Td style={[ styles.lastTd ]} head/>
                         </Tr>
                     </thead>
                     <tbody>

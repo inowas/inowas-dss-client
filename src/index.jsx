@@ -1,16 +1,16 @@
 import 'babel-polyfill';
+import 'nativeExtensions/date';
+import 'nativeExtensions/string';
 
 import { Router, browserHistory } from 'react-router';
+import { render, unmountComponentAtNode } from 'react-dom';
 
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import React from 'react';
+import {StyleRoot} from 'radium';
 import configureStore from './store/configureStore';
-import { render, unmountComponentAtNode } from 'react-dom';
 import { syncHistoryWithStore } from 'react-router-redux';
-
-import 'nativeExtensions/date';
-import 'nativeExtensions/string';
 
 const store = configureStore( );
 const history = syncHistoryWithStore( browserHistory, store );
@@ -22,7 +22,9 @@ const renderApp = ( ) => {
     render( (
         <AppContainer>
             <Provider store={store}>
-                <Router history={history} routes={routes}/>
+                <StyleRoot>
+                    <Router history={history} routes={routes}/>
+                </StyleRoot>
             </Provider>
         </AppContainer>
     ), root );
