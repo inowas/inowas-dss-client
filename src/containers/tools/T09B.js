@@ -12,6 +12,7 @@ import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
 
+
 @connect((store) => {
     return {tool: store.T09B};
 })
@@ -71,3 +72,4 @@ export default class T09B extends React.Component {
         );
     }
 }
+

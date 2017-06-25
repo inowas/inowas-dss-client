@@ -1,0 +1,50 @@
+@import "variables.less";
+
+.floatingTool-wrapper {
+    position: fixed;
+    z-index: 1100;
+    left: 0;
+    top: @navbar-height;
+    right: 0;
+    bottom: 0;
+    background-color: fade(@grey-dark, 70%);
+
+    .floatingTool {
+        position: absolute;
+        top: @spacing-large;
+        left: 2 * @grid-column + 3 * @grid-gutter;
+        bottom: @spacing-large;
+        overflow: hidden;
+        right: @spacing-large;
+        z-index: 1800;
+        box-shadow: @box-shadow;
+        background-color: @background-bright;
+        padding: @spacing-regular;
+        display: flex;
+        flex-direction: column;
+
+        .header {
+            text-align: right;
+        }
+
+        .content {
+            flex: 1;
+            position: relative;
+        }
+    }
+
+    &[data-minimized=true] {
+        background-color: transparent;
+        left: @spacing-large;
+        top: 50%;
+        right: auto;
+        width: 2 * @grid-column + @grid-gutter;
+
+        .floatingTool {
+            left: 0;
+            top: 0;
+            right: 0;
+            max-height: 100%;
+        }
+    }
+}

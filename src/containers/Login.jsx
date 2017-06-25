@@ -46,7 +46,9 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-    return {userLoggedIn: isUserLoggedIn( state )};
+    return {
+        userLoggedIn: isUserLoggedIn( state.user )
+    };
 };
 
 // eslint-disable-next-line no-class-assign

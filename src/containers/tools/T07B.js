@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import ArraySlider from '../../components/primitive/ArraySlider';
@@ -13,7 +13,7 @@ import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
 import {
-    fetchModelDetails,
+    fetchDetails,
     updateResultsT07B,
     setSelectedLayer,
     setSelectedModelIdsT07B,
@@ -68,7 +68,7 @@ export default class T07B extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails(this.props.params.id, dispatch => {
+        this.props.dispatch(fetchDetails(this.props.params.id, dispatch => {
             dispatch(setupT07b( ));
         }));
     }

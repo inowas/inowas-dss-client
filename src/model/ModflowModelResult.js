@@ -1,11 +1,11 @@
 import Legend from './ColorLegend';
 
 /**
- * ModflowModelResult
+ * ModflowCalculationResult
  */
-export default class ModflowModelResult {
+export default class ModflowCalculationResult {
 
-    _modelId;
+    _calculationId;
     _layerNumber;
     _resultType;
     _totalTime;
@@ -15,8 +15,8 @@ export default class ModflowModelResult {
     _max;
     _legend;
 
-    constructor( modelId, layerNumber, resultType, totalTime, data, imgUrl ) {
-        this._modelId = modelId;
+    constructor( calculationId, layerNumber, resultType, totalTime, data, imgUrl ) {
+        this._calculationId = calculationId;
         this._layerNumber = layerNumber;
         this._resultType = resultType;
         this._totalTime = totalTime;
@@ -27,8 +27,8 @@ export default class ModflowModelResult {
         this._legend = new Legend( this._min, this._max );
     }
 
-    modelId() {
-        return this._modelId;
+    get calculationId() {
+        return this._calculationId;
     }
 
     layerNumber() {

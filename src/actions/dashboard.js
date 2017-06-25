@@ -13,7 +13,7 @@ export function fetchDashboardModelsT07() {
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/scenarioanalysis/public/projects.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState() ) } } )
+                promise: ConfiguredAxios.get( '/scenarioanalyses/public', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             dispatch( setDashboardModelsT07( action.payload.data ) );

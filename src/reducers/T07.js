@@ -109,8 +109,9 @@ const T07Reducer = ( state = getInitialState(), action ) => {
 
         case 'T07A_SET_MODEL_RESULT':
             state = { ...state };
+            console.log(action.payload);
             state.models.map( m => {
-                if ( m.modelId === action.payload.modelId() ) {
+                if ( m.calculationId === action.payload.calculationId ) {
                     m.result = action.payload;
                     return m;
                 }

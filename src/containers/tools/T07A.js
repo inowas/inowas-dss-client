@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import dateFormat from 'dateformat';
 
-import ScenarioAnalysisMap from '../../components/primitive/ScenarioAnalysisMap';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Header from '../../components/tools/Header';
@@ -16,7 +16,7 @@ import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
 import {
-    fetchModelDetails,
+    fetchDetails,
     updateResultsT07A,
     resizeDone,
     reloadDone,
@@ -73,7 +73,7 @@ export default class T07A extends Component {
     }
 
     componentWillMount( ) {
-        this.props.dispatch(fetchModelDetails( this.props.params.id ));
+        this.props.dispatch(fetchDetails( this.props.params.id ));
     }
 
     componentWillReceiveProps(props) {
@@ -137,7 +137,7 @@ export default class T07A extends Component {
                 }
             }
 
-            this.props.dispatch(updateResultsT07A( m.modelId, resultType, layerNumber, totalTime ));
+            this.props.dispatch(updateResultsT07A( m.calculationId, resultType, layerNumber, totalTime ));
         });
     }
 

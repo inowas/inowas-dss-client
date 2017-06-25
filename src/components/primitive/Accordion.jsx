@@ -34,6 +34,7 @@ export default class Accordion extends Component {
 
     render( ) {
         const { className } = this.props;
+
         let index = 0;
         const children = React.Children.map(this.props.children, ( child ) => {
             const currentIndex = index++;
