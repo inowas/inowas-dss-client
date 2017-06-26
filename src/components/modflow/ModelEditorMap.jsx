@@ -92,7 +92,7 @@ export default class ModelEditorMap extends Component {
         state: PropTypes.string, // TODO better use oneOf
         setState: PropTypes.func,
         loadModel: PropTypes.func.isRequired,
-        loadBoundaries: PropTypes.func.isRequired,
+        fetchBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
         area: PropTypes.array,
@@ -157,9 +157,9 @@ export default class ModelEditorMap extends Component {
     }
 
     loadModel() {
-        const { id, loadModel, loadBoundaries } = this.props;
+        const { id, loadModel, fetchBoundaries } = this.props;
         loadModel( id );
-        loadBoundaries( id );
+        fetchBoundaries( id );
     }
 
     enableMap = ( ) => {

@@ -7,6 +7,9 @@ import { getActiveBoundary } from '../reducers/ModelEditor/ui';
 import { getApiKey } from '../reducers/user';
 import { getBoundary } from '../reducers/ModelEditor/boundaries';
 import { push } from 'react-router-redux';
+import Boundary from '../model/Boundary';
+import BoundaryType from '../model/BoundaryType';
+import BoundaryMetadata from '../model/BoundaryMetadata';
 
 /**
  * UI
@@ -199,13 +202,15 @@ export function loadModel( tool, id ) {
             dispatch( setTimeUnit( tool, TimeUnit.fromNumber( data.time_unit ) ) );
             dispatch( setLengthUnit( tool, LengthUnit.fromNumber( data.length_unit ) ) );
             dispatch( setArea( tool, data.geometry.coordinates[ 0 ].map( c => ( { lat: c[ 1 ], lng: c[ 0 ] } ) ) ) );
-            dispatch( setMapPosition( tool, {bounds: [{
-                lat: data.bounding_box.y_min,
-                lng: data.bounding_box.x_min,
-            }, {
-                lat: data.bounding_box.y_max,
-                lng: data.bounding_box.x_max,
-            }]} ) );
+            dispatch( setMapPosition( tool, {
+                bounds: [ {
+                    lat: data.bounding_box.y_min,
+                    lng: data.bounding_box.x_min,
+                }, {
+                    lat: data.bounding_box.y_max,
+                    lng: data.bounding_box.x_max,
+                } ]
+            } ) );
             // TODO
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
@@ -323,7 +328,7 @@ export function saveBoundary( tool, id ) {
     };
 }
 
-export function loadBoundaries( tool, id ) {
+export function fetchBoundaries( tool, id ) {
     return ( dispatch, getState ) => {
         return dispatch( {
             type: 'FETCH_DATA',
@@ -332,16 +337,35 @@ export function loadBoundaries( tool, id ) {
             }
         } ).then( ( { action } ) => {
             const data = action.payload.data;
-            dispatch( setBoundaries( tool, data.map( b => ( {
-                id: b.id,
-                name: b.name,
-                affectedLayers: b.affected_layers,
-                type: b.type === 'well' ? 'wel' : b.type,
-                lat: b.geometry.coordinates[ 1 ],
-                lng: b.geometry.coordinates[ 0 ],
-                wellType: b.type === 'well' ? b.metadata.well_type : 'undefined',
-                pumpingRates: []
-            } ) ) ) );
+            dispatch( setBoundaries( tool, data.map( b => {
+                const type = new BoundaryType( b.type === 'well' ? 'wel' : b.type ); // TODO remove when api updated
+                return new Boundary(
+                    b.id,
+                    b.name,
+                    type,
+                    b.geometry,
+                    b.metadata.layer /* TODO */,
+                    type.slug === 'wel' ? new BoundaryMetadata( { wellType: b.metadata.well_type } ) : null
+                );
+            } ) ) );
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    };
+}
+
+export function fetchBoundary( tool, id, bid ) {
+    return ( dispatch, getState ) => {
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.get( '/modflowmodels/' + id + '/boundaries/' + bid, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+            }
+        } ).then( ( { action } ) => {
+            const data = action.payload.data;
+            const type = new BoundaryType( data.type === 'well' ? 'wel' : data.type ); // TODO remove when api updated
+            dispatch( updateBoundary( tool, new Boundary( data.id, data.name, type, data.geometry, data.metadata.layer /* TODO */, type.slug === 'wel' ? new BoundaryMetadata( { wellType: data.metadata.well_type } ) : null, data.observation_points ) ) );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );

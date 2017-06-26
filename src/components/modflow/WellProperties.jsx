@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
+import Boundary from '../../model/Boundary';
+import BoundaryMetadata from '../../model/BoundaryMetadata';
+import Button from '../primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../primitive/Icon';
 import Input from '../primitive/Input';
@@ -10,7 +13,6 @@ import Tr from '../primitive/table/Tr';
 import dateFormat from 'dateformat';
 import styleGlobals from 'styleGlobals';
 import { uniqueId } from 'lodash';
-import Button from '../primitive/Button';
 
 const styles = {
     wrapper: {
@@ -74,14 +76,60 @@ export default class WellProperties extends Component {
                 ...well
             };
 
-            if ( value instanceof Array ) {
-                updatedWell[property] = value.map( v => v.value );
+            if ( property === 'affectedLayers' ) {
+                updatedWell[property] = [ value ];
             } else {
                 updatedWell[property] = value;
             }
 
             this.props.updateWell( updatedWell );
         };
+    }
+
+    updateWellName = value => {
+        const { well, updateWell } = this.props;
+
+        return updateWell(new Boundary(
+            well.id, value, well.type, well.geometry, well.affectedLayers, well.metadata, well.observationPoints
+        ));
+    }
+
+    updateWellType = value => {
+        const { well, updateWell } = this.props;
+
+        return updateWell(new Boundary(
+            well.id, well.name, well.type, well.geometry, well.affectedLayers, new BoundaryMetadata({ wellType: value }), well.observationPoints
+        ));
+    }
+
+    updateLatitude = value => {
+        const { well, updateWell } = this.props;
+
+        return updateWell(new Boundary(
+            well.id, well.name, well.type, {
+                ...well.geometry,
+                coordinates: [ well.geometry.coordinates[0], value ]
+            }, well.affectedLayers, well.metadata, well.observationPoints
+        ));
+    }
+
+    updateLongitude = value => {
+        const { well, updateWell } = this.props;
+
+        return updateWell(new Boundary(
+            well.id, well.name, well.type, {
+                ...well.geometry,
+                coordinates: [value, well.geometry.coordinates[1]]
+            }, well.affectedLayers, well.metadata, well.observationPoints
+        ));
+    }
+
+    updateAffectedLayers = value => {
+        const { well, updateWell } = this.props;
+
+        return updateWell(new Boundary(
+            well.id, well.name, well.type, well.geometry, [value.value], well.metadata, well.observationPoints
+        ));
     }
 
     render( ) {
@@ -93,17 +141,20 @@ export default class WellProperties extends Component {
                     <h3 style={[ styles.heading ]}>Properties</h3>
                     <div style={[ styles.inputBlock ]}>
                         <label style={[ styles.label ]} htmlFor={nameInputId}>Well Name</label>
-                        <Input style={[ styles.input ]} id={nameInputId} onChange={this.updateWell( 'name' )} value={well.name} type="text" placeholder="name"/>
+                        <Input style={[ styles.input ]} id={nameInputId} onChange={this.updateWellName} value={well.name} type="text" placeholder="name"/>
                     </div>
                     <div style={[ styles.inputBlock ]}>
                         <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
-                        <Select style={[ styles.input ]} id={typeInputId} value={well.wellType} onChange={this.updateWell( 'wellType' )} options={[
+                        <Select style={[ styles.input ]} id={typeInputId} value={well.metadata.toObject.wellType} onChange={this.updateWellType} options={[
                             {
-                                value: 'iw',
-                                label: 'Irrigation Well'
+                                label: 'Public Well',
+                                value: 'puw'
                             }, {
-                                value: 'puw',
-                                label: 'Public Well'
+                                label: 'Infiltration Well',
+                                value: 'iw'
+                            }, {
+                                label: 'Observation Well',
+                                value: 'ow'
                             }
                         ]}/>
                     </div>
@@ -111,15 +162,15 @@ export default class WellProperties extends Component {
                         <label style={[ styles.label ]}>Coordinates
                             <button disabled onClick={( ) => setState( 'wells-move' )} className="link"><Icon name="marker"/>Get from Map</button>
                         </label>
-                        <Input style={[ styles.input ]} onChange={this.updateWell( 'lat' )} value={well.lat} type="number" placeholder="Latitude"/>
-                        <Input style={[ styles.input ]} onChange={this.updateWell( 'lng' )} value={well.lng} type="number" placeholder="Longitude"/>
+                        <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
+                        <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>
                     </div>
                 </div>
                 <div style={[ styles.column, styles.columnNotLast ]}>
                     <h3 style={[ styles.heading ]}>Active Layer</h3>
                     <div style={[ styles.inputBlock ]}>
                         <label style={[ styles.label ]} htmlFor={layerInputId}>Select Layer</label>
-                        <Select style={[ styles.input ]} id={layerInputId} value={well.affectedLayers} multi onChange={this.updateWell( 'affectedLayers' )} options={[
+                        <Select style={[ styles.input ]} id={layerInputId} value={well.affectedLayers ? well.affectedLayers[0] : undefined} onChange={this.updateAffectedLayers} options={[
                             {
                                 value: 0,
                                 label: 'Layer 1'
@@ -146,16 +197,22 @@ export default class WellProperties extends Component {
                                 </Td>
                             </Tr>
                         </thead>
-                        <tbody>
-                            {well.pumpingRates.map(pr => (
-                                <Tr>
-                                    <Td>{dateFormat( new Date( pr.start ), 'mm/dd/yyyy HH:MM' )}</Td>
-                                    <Td>{pr.rate}</Td>
-                                </Tr>
-                            ))}
-                        </tbody>
+                        {well.observationPoints
+                            ? <tbody>
+                                    {well.observationPoints[0].values.map(pr => (
+                                        <Tr>
+                                            <Td>{dateFormat( new Date(pr[0]), 'mm/dd/yyyy HH:MM' )}</Td>
+                                            <Td>{pr[1]}</Td>
+                                        </Tr>
+                                    ))}
+                                </tbody>
+                            : null}
                     </Table>
-                    <Button type="link" disabled><Icon name="add" /> Add</Button>
+                    {well.observationPoints
+                        ? null
+                        : <div>Loading</div>}
+                    <Button type="link" disabled><Icon name="add"/>
+                        Add</Button>
                 </div>
             </div>
 

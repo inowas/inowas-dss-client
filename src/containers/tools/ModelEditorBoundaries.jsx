@@ -1,18 +1,26 @@
 import React, { Component, PropTypes } from 'react';
-import { addBoundary, setActiveBoundary, setActiveBoundaryType, setState, updateBoundary } from '../../actions/modelEditor';
+import {
+    addBoundary,
+    fetchBoundary,
+    setActiveBoundary,
+    setActiveBoundaryType,
+    setState,
+    updateBoundary
+} from '../../actions/modelEditor';
+import { getActiveBoundary, getActiveBoundaryType } from '../../reducers/ModelEditor/ui';
+import { getBoundaries, getBoundary } from '../../reducers/ModelEditor/boundaries';
 import { maxBy, minBy } from 'lodash';
 
+import BoundariesOverview from '../../components/modflow/BoundariesOverview';
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
-import WellProperties from '../../components/modflow/WellProperties';
 import RiverProperties from '../../components/modflow/RiverProperties';
+import WellProperties from '../../components/modflow/WellProperties';
 import { connect } from 'react-redux';
-import { getActiveBoundary, getActiveBoundaryType } from '../../reducers/ModelEditor/ui';
 import { getArea } from '../../reducers/ModelEditor/general';
-import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
-import BoundariesOverview from '../../components/modflow/BoundariesOverview';
+import { withRouter } from 'react-router';
 
 const styles = {
     container: {
@@ -38,7 +46,8 @@ class ModelEditorBoundaries extends Component {
 
     static propTypes = {
         style: PropTypes.object,
-        boundary: PropTypes.string,
+        id: PropTypes.string,
+        boundary: PropTypes.object,
         boundaryType: PropTypes.string,
         setActiveBoundary: PropTypes.func.isRequired,
         setActiveBoundaryType: PropTypes.func.isRequired,
@@ -46,7 +55,26 @@ class ModelEditorBoundaries extends Component {
         addBoundary: PropTypes.func.isRequired,
         boundaries: PropTypes.array,
         setState: PropTypes.func.isRequired,
-        area: PropTypes.array
+        area: PropTypes.array,
+        fetchBoundary: PropTypes.func.isRequired
+    }
+
+    componentDidMount( ) {
+        // eslint-disable-next-line no-shadow
+        const { boundary, id, fetchBoundary } = this.props;
+
+        if ( boundary ) {
+            fetchBoundary( id, boundary.id );
+        }
+    }
+
+    componentDidUpdate( prevProps ) {
+        // eslint-disable-next-line no-shadow
+        const { boundary, id, fetchBoundary } = this.props;
+
+        if ( boundary && ( !prevProps.boundary || boundary.id !== prevProps.boundary.id )) {
+            fetchBoundary( id, boundary.id );
+        }
     }
 
     addBoundary = type => {
@@ -65,25 +93,21 @@ class ModelEditorBoundaries extends Component {
         };
     }
 
-    renderProperties( activeBoundary ) {
+    renderProperties( ) {
         // eslint-disable-next-line no-shadow
-        const { updateBoundary, setState, boundaryType, boundaries } = this.props;
+        const { boundary, updateBoundary, setState, boundaryType, boundaries } = this.props;
 
-        if ( activeBoundary ) {
-            switch ( activeBoundary.type ) {
+        if ( boundary ) {
+            switch ( boundary.type.slug ) {
                 case 'wel':
-                    return (
-                        <WellProperties setState={setState} well={activeBoundary} updateWell={updateBoundary}/>
-                    );
-                case 'RIV':
-                    return (
-                        <RiverProperties setState={setState} river={activeBoundary} updateRiver={updateBoundary}/>
-                    );
+                    return ( <WellProperties setState={setState} well={boundary} updateWell={updateBoundary}/> );
+                case 'riv':
+                    return ( <RiverProperties setState={setState} river={boundary} updateRiver={updateBoundary}/> );
             }
         }
 
         if ( boundaryType ) {
-            return ( <BoundariesOverview boundaries={boundaries.filter(b => ( b.type === boundaryType ))} type={boundaryType} setState={setState} /> );
+            return ( <BoundariesOverview boundaries={boundaries.filter(b => ( b.type === boundaryType ))} type={boundaryType} setState={setState}/> );
         }
 
         return ( <BoundariesOverview boundaries={boundaries}/> );
@@ -98,31 +122,28 @@ class ModelEditorBoundaries extends Component {
 
     render( ) {
         // eslint-disable-next-line no-shadow
-        const { style, boundary, boundaries, setActiveBoundary, boundaryType } = this.props;
-
-        const activeBoundary = boundaries.find(b => {
-            return b.id === boundary;
-        });
+        const { style, boundaries, setActiveBoundary, boundaryType } = this.props;
 
         return (
             <div style={[ styles.container, style ]}>
                 <div style={styles.left}>
-                    <FilterableList itemClickAction={setActiveBoundary} groupClickAction={this.setActiveBoundaryType} list={boundaries} activeType={boundaryType}/>
+                    <FilterableList itemClickAction={setActiveBoundary} groupClickAction={this.setActiveBoundaryType} list={boundaries.map( b => b.toObject )} activeType={boundaryType}/>
                 </div>
                 <div style={styles.properties}>
-                    {this.renderProperties( activeBoundary )}
+                    {this.renderProperties( )}
                 </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state, { tool }) => {
+const mapStateToProps = (state, { tool, params }) => {
     return {
-        boundary: getActiveBoundary( state[tool].ui ),
+        boundary: getBoundary(state[tool].model.boundaries, getActiveBoundary( state[tool].ui )),
         boundaryType: getActiveBoundaryType( state[tool].ui ),
         boundaries: getBoundaries( state[tool].model.boundaries ),
-        area: getArea( state[tool].model.general )
+        area: getArea( state[tool].model.general ),
+        id: params.id
     };
 };
 
@@ -131,7 +152,8 @@ const actions = {
     setActiveBoundaryType,
     updateBoundary,
     setState,
-    addBoundary
+    addBoundary,
+    fetchBoundary
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
@@ -150,6 +172,6 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 // eslint-disable-next-line no-class-assign
-ModelEditorBoundaries = connect( mapStateToProps, mapDispatchToProps )( ModelEditorBoundaries );
+ModelEditorBoundaries = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorBoundaries ));
 
 export default ModelEditorBoundaries;
