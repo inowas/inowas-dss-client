@@ -5,14 +5,33 @@ import Icon from './Icon';
 
 const styles = {
     wrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        border: '1px solid ' + styleGlobals.colors.graySemilight,
-        borderRadius: styleGlobals.dimensions.borderRadius,
 
-        ':hover': {
-            border: '1px solid ' + styleGlobals.colors.graySemidark,
+        base: {
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: styleGlobals.dimensions.borderRadius
+        },
+
+        default: {
+            border: '1px solid ' + styleGlobals.colors.graySemilight,
+
+            ':hover': {
+                border: '1px solid ' + styleGlobals.colors.graySemidark
+            }
+        },
+
+        visibleOnFocus: {
+            border: '1px solid transparent',
+
+            ':focus': {
+                border: '1px solid ' + styleGlobals.colors.graySemilight
+            },
+
+            ':hover': {
+                border: '1px solid ' + styleGlobals.colors.graySemidark
+            }
         }
+
     },
 
     input: {
@@ -34,10 +53,11 @@ const Input = ConfiguredRadium( function( props ) {
         type,
         style,
         onChange,
+        appearance,
         ...rest
     } = props;
     return (
-        <div style={[ styles.wrapper, style ]}>
+        <div style={[ styles.wrapper.base, styles.wrapper[appearance], style ]}>
             {type === 'search'
                 ? <Icon name="search" style={[styles.icon]}/>
                 : null}
@@ -70,12 +90,14 @@ Input.propTypes = {
         'url',
         'week'
     ]),
+    appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
     style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
     onChange: PropTypes.func
 };
 
 Input.defaultProps = {
-    type: 'text'
+    type: 'text',
+    appearance: 'default'
 };
 
 export default Input;
