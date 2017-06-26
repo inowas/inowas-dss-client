@@ -47,6 +47,14 @@ const styles = {
 
     input: {
         marginTop: 5
+    },
+
+    dateInputWrapper: {
+        display: 'flex'
+    },
+
+    dateInput: {
+        flex: 1
     }
 };
 
@@ -201,8 +209,13 @@ export default class WellProperties extends Component {
                             ? <tbody>
                                     {well.observationPoints[0].values.map(pr => (
                                         <Tr>
-                                            <Td>{dateFormat( new Date(pr[0]), 'mm/dd/yyyy HH:MM' )}</Td>
-                                            <Td>{pr[1]}</Td>
+                                            <Td>
+                                                <div style={[styles.dateInputWrapper]}>
+                                                    <Input style={[styles.dateInput]} type="date" appearance="visibleOnFocus" value={dateFormat( new Date(pr[0]), 'yyyy-mm-dd' )} />
+                                                    <Input style={[styles.dateInput]} type="time" appearance="visibleOnFocus" value={dateFormat( new Date(pr[0]), 'HH:MM' )} />
+                                                </div>
+                                            </Td>
+                                            <Td><Input type="number" appearance="visibleOnFocus" value={pr[1]} /></Td>
                                         </Tr>
                                     ))}
                                 </tbody>
