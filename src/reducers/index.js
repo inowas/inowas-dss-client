@@ -15,6 +15,7 @@ import T09B from './T09B';
 import T09C from './T09C';
 import T09D from './T09D';
 import T09E from './T09E';
+import T12 from './T12';
 import T13A from './T13A';
 import T13B from './T13B';
 import T13C from './T13C';
@@ -47,6 +48,7 @@ const rootReducer = combineReducers( {
     T09C,
     T09D,
     T09E,
+    T12,
     T13A,
     T13B,
     T13C,

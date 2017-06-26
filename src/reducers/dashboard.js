@@ -212,6 +212,20 @@ const initialState = {
             fake: false
         } ]
     }, {
+        slug: 'T12',
+        name: 'Clogging estimation by MFI-Index',
+        path: 'tools/T12/',
+        models: [ {
+            model_id: '12',
+            user_name: 'ADMIN',
+            name: 'DEFAULT MODEL',
+            description: 'Description',
+            project: 'INOWAS',
+            application: 'A04',
+            created_at: '2017-03-09T19:24:00+00:00',
+            fake: false
+        } ]
+    }, {
         slug: 'T13',
         name: 'Travel time through unconfined aquifer',
         path: 'tools/T13/',

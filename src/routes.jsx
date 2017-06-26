@@ -27,6 +27,7 @@ const routes = (
             <Route path="T09C(/:id)" component={tools.T09C}/>
             <Route path="T09D(/:id)" component={tools.T09D}/>
             <Route path="T09E(/:id)" component={tools.T09E}/>
+            <Route path="T12(/:id)" component={tools.T12}/>
             <Route path="T13(/:id)" component={tools.T13}/>
             <Route path="T13A(/:id)" component={tools.T13A}/>
             <Route path="T13B(/:id)" component={tools.T13B}/>

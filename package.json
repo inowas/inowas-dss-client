@@ -46,7 +46,7 @@
         "babel-register": "^6.24.0",
         "color": "^1.0.3",
         "css-loader": "^0.28.0",
-        "eslint": "^3.16.0",
+        "eslint": "^3.19.0",
         "eslint-import-resolver-webpack": "^0.8.1",
         "eslint-loader": "^1.6.1",
         "eslint-plugin-import": "^2.2.0",
