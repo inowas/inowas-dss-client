@@ -59,7 +59,9 @@ export default class T08 extends React.Component {
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Chart data={this.props.tool.chart.data} settings={this.props.tool.settings} options={this.props.tool.chart.options}/>
+                        <Chart data={this.props.tool.chart.data} settings={this.props.tool.settings}
+                               c0 = {this.props.tool.parameters[0]} info={this.props.tool.info}
+                               options={this.props.tool.chart.options}/>
                     </section>
                 </div>
 
@@ -69,7 +71,8 @@ export default class T08 extends React.Component {
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
+                        <Parameters data={this.props.tool.parameters} settings ={this.props.tool.settings}
+                                    handleChange={this.handleChange} handleReset={this.handleReset}/>
                     </section>
                 </div>
             </div>

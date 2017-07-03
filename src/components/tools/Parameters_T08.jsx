@@ -54,6 +54,7 @@ export default class Parameters extends React.Component {
     };
 
     render() {
+        const settings = this.props.settings;
         const styleupdate = {
             marginTop: "20px"
         };

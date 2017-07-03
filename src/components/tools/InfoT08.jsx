@@ -20,12 +20,27 @@ export default class Info extends React.Component {
                         <div>
                             <input name="settings" id="radio1" type="radio" value="Case1" checked={settings.case === 'Case1'}
                                    style={styleupdate} onChange={this.handleChange}/>
-                            <label htmlFor="radio1">Fixed T, variable L</label>
+                            <label htmlFor="radio1">Variable T, Fixed L</label>
                         </div>
                         <div>
                             <input name="settings" id="radio2" type="radio" value="Case2" checked={settings.case === 'Case2'}
                                    style={styleupdate} onChange={this.handleChange}/>
-                            <label htmlFor="radio1">Variable T, fixed L</label>
+                            <label htmlFor="radio2">Fixed T, Variable L</label>
+                        </div>
+                    </div>
+                </div>
+                <h3>Select the type of infiltration</h3>
+                <div className="center-vertical center-horizontal">
+                    <div className="radio-group">
+                        <div>
+                            <input name="settings2" id="radio3" type="radio" checked= {true}
+                                   style={styleupdate} />
+                            <label htmlFor="radio3">Continous infiltration</label>
+                        </div>
+                        <div>
+                            <input name="settings2" id="radio4" type="radio" checked= {false}
+                                   style={styleupdate} />
+                            <label htmlFor="radio4">One-time infiltration</label>
                         </div>
                     </div>
                 </div>
