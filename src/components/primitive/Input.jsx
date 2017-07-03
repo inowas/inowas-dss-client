@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 import Icon from './Icon';
+import dateFormat from 'dateformat';
 
 const styles = {
     wrapper: {
@@ -34,9 +35,14 @@ const styles = {
 
     },
 
+    datetimeWrapper: {
+        maxWidth: '100%'
+    },
+
     input: {
         padding: 8,
         flex: 1,
+        maxWidth: '100%',
         border: 0,
         background: 'transparent'
     },
@@ -48,56 +54,89 @@ const styles = {
     }
 };
 
-const Input = ConfiguredRadium( function( props ) {
-    const {
-        type,
-        style,
-        onChange,
-        appearance,
-        ...rest
-    } = props;
-    return (
-        <div style={[ styles.wrapper.base, styles.wrapper[appearance], style ]}>
-            {type === 'search'
-                ? <Icon name="search" style={[styles.icon]}/>
-                : null}
-            <input style={[styles.input]} onChange={e => onChange(e.target.value)} {...rest} type={type}/>
-        </div>
-    );
-});
+@ConfiguredRadium
+export default class Input extends Component {
 
-Input.propTypes = {
-    type: PropTypes.oneOf([
-        'checkbox',
-        'color',
-        'date',
-        'datetime-local',
-        'email',
-        'file',
-        'hidden',
-        'image',
-        'month',
-        'number',
-        'password',
-        'radio',
-        'range',
-        'reset',
-        'search',
-        'submit',
-        'tel',
-        'text',
-        'time',
-        'url',
-        'week'
-    ]),
-    appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
-    style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
-    onChange: PropTypes.func
-};
+    static propTypes = {
+        type: PropTypes.oneOf([
+            'checkbox',
+            'color',
+            'date',
+            'datetime',
+            'datetime-local',
+            'email',
+            'file',
+            'hidden',
+            'image',
+            'month',
+            'number',
+            'password',
+            'radio',
+            'range',
+            'reset',
+            'search',
+            'submit',
+            'tel',
+            'text',
+            'time',
+            'url',
+            'week'
+        ]),
+        appearance: PropTypes.oneOf([ 'default', 'visibleOnFocus' ]),
+        style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+        onChange: PropTypes.func,
+        value: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.object ])
+    }
 
-Input.defaultProps = {
-    type: 'text',
-    appearance: 'default'
-};
+    static defaultProps = {
+        type: 'text',
+        appearance: 'default'
+    };
 
-export default Input;
+    defaultHandleChange = e => {
+        this.props.onChange( e.target.value );
+    }
+
+    datetimeHandleDateChange = e => {
+        const { onChange, value } = this.props;
+        const dateArray = e.target.value.split( '-' );
+        onChange(new Date(Date.UTC(dateArray[0], dateArray[1] - 1, dateArray[2], value.getUTCHours( ), value.getUTCMinutes( ))));
+    }
+
+    datetimeHandleTimeChange = e => {
+        const { onChange, value } = this.props;
+        const timeArray = e.target.value.split( ':' );
+        onChange(new Date(Date.UTC(value.getUTCFullYear( ), value.getUTCMonth( ), value.getUTCDate( ), timeArray[0], timeArray[1])));
+    }
+
+    render( ) {
+        const {
+            type,
+            style,
+            appearance,
+            value,
+            onChange, // eslint-disable-line no-unused-vars
+            ...rest
+        } = this.props;
+
+        return (
+            <div style={[ styles.wrapper.base, styles.wrapper[appearance], style ]}>
+                {type === 'search'
+                    ? <Icon name="search" style={[ styles.icon ]}/>
+                    : null}
+                {(( ) => {
+                    if ( type === 'datetime' ) {
+                        return (
+                            <div style={[styles.datetimeWrapper]}>
+                                <input style={[ styles.input ]} onChange={this.datetimeHandleDateChange} type="date" value={dateFormat( value, 'yyyy-mm-dd', true )} {...rest}/>
+                                <input style={[ styles.input ]} onChange={this.datetimeHandleTimeChange} type="time" value={dateFormat( value, 'HH:MM', true )} {...rest}/>
+                            </div>
+                        );
+                    }
+
+                    return ( <input style={[ styles.input ]} onChange={this.defaultHandleChange} type={type} value={value} {...rest}/> );
+                })( )}
+            </div>
+        );
+    }
+}

@@ -158,7 +158,10 @@ export default class EditableLine extends Component {
     renderLine( ) {
         const { line } = this.props;
         if ( line.length > 1 ) {
-            return ( <Polyline positions={line} {...styles.line}/> );
+            return ( <Polyline positions={line.map(c => ({
+                lat: c[1],
+                lng: c[0]
+            }))} {...styles.line}/> );
         }
         return null;
     }

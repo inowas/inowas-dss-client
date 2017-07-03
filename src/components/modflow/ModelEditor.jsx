@@ -18,6 +18,9 @@ import ModelEditorBoundaries from '../../containers/tools/ModelEditorBoundaries'
 import ModelEditorGeneral from '../../containers/tools/ModelEditorGeneral';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+import Boundary from '../../model/Boundary';
+import BoundaryType from '../../model/BoundaryType';
+import BoundaryMetadata from '../../model/BoundaryMetadata';
 
 const RadiumMap = ConfiguredRadium( Map );
 
@@ -84,13 +87,13 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class ModelEditorMap extends Component {
+export default class ModelEditor extends Component {
 
     static propTypes = {
         tool: PropTypes.string.isRequired,
         id: PropTypes.string,
         state: PropTypes.string, // TODO better use oneOf
-        setState: PropTypes.func,
+        setEditorState: PropTypes.func,
         loadModel: PropTypes.func.isRequired,
         fetchBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
@@ -179,7 +182,7 @@ export default class ModelEditorMap extends Component {
     }
 
     unsetActiveTool = ( ) => {
-        this.props.setState( null );
+        this.props.setEditorState( null );
     }
 
     // TODO move to separate file
@@ -251,13 +254,22 @@ export default class ModelEditorMap extends Component {
 
     addWell = e => {
         const { addBoundary, boundaries } = this.props;
-        addBoundary({
-            name: 'new Well ' + boundaries.length,
-            type: 'wel',
-            id: uuid(),
-            lat: e.latlng.lat,
-            lng: e.latlng.lng
-        });
+        addBoundary( new Boundary(
+            uuid(),
+            'new Well ' + boundaries.length,
+            new BoundaryType('wel'),
+            {
+                type: 'Point',
+                coordinates: [e.latlng.lng, e.latlng.lat]
+            }
+        ));
+        // addBoundary({
+        //     name: 'new Well ' + boundaries.length,
+        //     type: 'wel',
+        //     id: uuid(),
+        //     lat: e.latlng.lat,
+        //     lng: e.latlng.lng
+        // });
     }
 
     renderMap( ) {
@@ -265,7 +277,7 @@ export default class ModelEditorMap extends Component {
             state,
             area,
             mapPosition,
-            setState,
+            setEditorState,
             mousePositionOnMap,
             activeAreaControlPoint,
             addAreaControlPoint,
@@ -359,28 +371,29 @@ export default class ModelEditorMap extends Component {
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                 <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} deleteControlPoint={deleteAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
-                    : null}/> {boundaries.filter( b => b.type === 'river' ).map(( r, index ) => {
-                        const riverState = (( ) => {
-                            if ( r.id === activeBoundary ) {
-                                switch ( state ) {
-                                    case 'river':
-                                        return 'default';
-                                    case 'river-draw':
-                                        return 'draw';
-                                    case 'river-edit':
-                                        return 'edit';
-                                    default:
-                                        return 'minimal';
-                                }
+                    : null}/>
+                {boundaries.filter( b => b.type.slug === 'riv' ).map(( r, index ) => {
+                    const riverState = (( ) => {
+                        if ( r.id === activeBoundary ) {
+                            switch ( state ) {
+                                case 'river':
+                                    return 'default';
+                                case 'river-draw':
+                                    return 'draw';
+                                case 'river-edit':
+                                    return 'edit';
+                                default:
+                                    return 'minimal';
                             }
-                            return 'minimal';
-                        })( );
+                        }
+                        return 'minimal';
+                    })( );
 
-                        return ( <EditableLine key={index} state={riverState} line={r.geometry} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                        ? this.refs.map.leafletElement
-                        : null}/> );
-                    })}
-                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setState={setState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    return ( <EditableLine key={index} state={riverState} line={r.geometry.coordinates} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    ? this.refs.map.leafletElement
+                    : null}/> );
+                })}
+                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setEditorState={setEditorState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type.slug === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
@@ -435,16 +448,16 @@ export default class ModelEditorMap extends Component {
         );
     }
 
-    setState = slug => {
-        const { setState } = this.props;
+    setEditorState = slug => {
+        const { setEditorState } = this.props;
 
         return ( ) => {
-            setState( slug );
+            setEditorState( slug );
         };
     }
 
     render( ) {
-        const { state, initial, setState, setActiveBoundaryType } = this.props;
+        const { state, initial, setEditorState, setActiveBoundaryType } = this.props;
         const menuItems = [
             {
                 name: 'Model Setup',
@@ -452,7 +465,7 @@ export default class ModelEditorMap extends Component {
                 items: [
                     {
                         name: 'Model Properties',
-                        onClick: this.setState( 'general' )
+                        onClick: this.setEditorState( 'general' )
                     }
                 ]
             }, {
@@ -462,10 +475,10 @@ export default class ModelEditorMap extends Component {
                 items: [
                     {
                         name: 'Model Layer Setup',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'Layer Properties',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }
                 ]
             }, {
@@ -476,55 +489,55 @@ export default class ModelEditorMap extends Component {
                     {
                         name: 'Time Variant Specified Head (CHD)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'chd' );
                         }
                     }, {
                         name: 'Wells (WEL)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'wel' );
                         }
                     }, {
                         name: 'Recharge (RCH)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'rch' );
                         }
                     }, {
                         name: 'River (RIV)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'riv' );
                         }
                     }, {
                         name: 'General Head Coundary (GHB)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'ghb' );
                         }
                     }, {
                         name: 'Evapotranspiration (EVT)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'evt' );
                         }
                     }, {
                         name: 'Drain (DRN)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'drn' );
                         }
                     }, {
                         name: 'Lake (Lak)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'lak' );
                         }
                     }, {
                         name: 'Streamflow Routing (SFR2)',
                         onClick: () => {
-                            setState( 'boundariesOverlay' );
+                            setEditorState( 'boundariesOverlay' );
                             setActiveBoundaryType( 'sfr2' );
                         }
                     }
@@ -536,16 +549,16 @@ export default class ModelEditorMap extends Component {
                 items: [
                     {
                         name: 'Time Discretization',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'PCG Solver Parameters',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'Rewetting Parameters',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'RUN MODEL',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }
                 ]
             }, {
@@ -555,16 +568,16 @@ export default class ModelEditorMap extends Component {
                 items: [
                     {
                         name: 'View Model Results',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'Volumetric Budget',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'Model Calibration',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }, {
                         name: 'Export Results',
-                        onClick: this.setState( null )
+                        onClick: this.setEditorState( null )
                     }
                 ]
             }
@@ -574,24 +587,24 @@ export default class ModelEditorMap extends Component {
             {
                 title: 'Add',
                 onClick: state === 'area-draw'
-                    ? this.setState( 'area' )
-                    : this.setState( 'area-draw' ),
+                    ? this.setEditorState( 'area' )
+                    : this.setEditorState( 'area-draw' ),
                 icon: <Icon name={state === 'area-draw'
                         ? 'success'
                         : 'add'}/>
             }, {
                 title: 'Edit',
                 onClick: state === 'area-edit'
-                    ? this.setState( 'area' )
-                    : this.setState( 'area-edit' ),
+                    ? this.setEditorState( 'area' )
+                    : this.setEditorState( 'area-edit' ),
                 icon: <Icon name={state === 'area-edit'
                         ? 'success'
                         : 'edit'}/>
             }, {
                 title: 'Delete',
                 onClick: state === 'area-delete'
-                    ? this.setState( 'area' )
-                    : this.setState( 'area-delete' ),
+                    ? this.setEditorState( 'area' )
+                    : this.setEditorState( 'area-delete' ),
                 icon: <Icon name={state === 'area-delete'
                         ? 'success'
                         : 'trash'}/>
@@ -602,35 +615,47 @@ export default class ModelEditorMap extends Component {
             {
                 title: 'Add',
                 onClick: state === 'wells-add'
-                    ? this.setState( 'wells' )
-                    : this.setState( 'wells-add' ),
+                    ? this.setEditorState( 'wells' )
+                    : this.setEditorState( 'wells-add' ),
                 icon: <Icon name={state === 'wells-add'
                         ? 'success'
                         : 'add'}/>
             }, {
                 title: 'Move',
                 onClick: state === 'wells-move'
-                    ? this.setState( 'wells' )
-                    : this.setState( 'wells-move' ),
+                    ? this.setEditorState( 'wells' )
+                    : this.setEditorState( 'wells-move' ),
                 icon: <Icon name={state === 'wells-move'
                         ? 'success'
                         : 'marker'}/>
             }, {
                 title: 'Edit',
                 onClick: state === 'wells-edit'
-                    ? this.setState( 'wells' )
-                    : this.setState( 'wells-edit' ),
+                    ? this.setEditorState( 'wells' )
+                    : this.setEditorState( 'wells-edit' ),
                 icon: <Icon name={state === 'wells-edit'
                         ? 'success'
                         : 'edit'}/>
             }, {
                 title: 'Delete',
                 onClick: state === 'wells-delete'
-                    ? this.setState( 'wells' )
-                    : this.setState( 'wells-delete' ),
+                    ? this.setEditorState( 'wells' )
+                    : this.setEditorState( 'wells-delete' ),
                 icon: <Icon name={state === 'wells-delete'
                         ? 'success'
                         : 'trash'}/>
+            }
+        ];
+
+        const riverActions = [
+            {
+                title: 'Add',
+                onClick: state === 'river-add'
+                    ? this.setEditorState( 'river' )
+                    : this.setEditorState( 'river-add' ),
+                icon: <Icon name={state === 'river-add'
+                        ? 'success'
+                        : 'add'}/>
             }
         ];
 
@@ -647,9 +672,11 @@ export default class ModelEditorMap extends Component {
                             </div>
                         );
                     } else if ( [ 'area', 'area-draw', 'area-edit', 'area-delete' ].indexOf( state ) !== -1 ) {
-                        return ( <FloatingMapToolBox actions={areaActions} save={this.setState( 'general' )}/> );
+                        return ( <FloatingMapToolBox actions={areaActions} save={this.setEditorState( 'general' )}/> );
                     } else if ( [ 'wells', 'wells-add', 'wells-move', 'wells-edit', 'wells-delete' ].indexOf( state ) !== -1 ) {
-                        return ( <FloatingMapToolBox actions={wellActions} save={this.setState( 'boundariesOverlay' )}/> );
+                        return ( <FloatingMapToolBox actions={wellActions} save={this.setEditorState( 'boundariesOverlay' )}/> );
+                    } else if ( [ 'river', 'river-add' ].indexOf( state ) !== -1 ) {
+                        return ( <FloatingMapToolBox actions={riverActions} save={this.setEditorState( 'boundariesOverlay' )}/> );
                     }
                     return null;
                 })( )}

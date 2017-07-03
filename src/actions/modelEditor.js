@@ -15,9 +15,9 @@ import BoundaryMetadata from '../model/BoundaryMetadata';
  * UI
  */
 
-export function setState( tool, mode ) {
+export function setEditorState( tool, mode ) {
     return {
-        type: 'MODEL_EDITOR_UI_SET_MAP_MODE',
+        type: 'MODEL_EDITOR_UI_SET_STATE',
         tool,
         payload: mode
     };
@@ -277,7 +277,7 @@ export function deleteBoundary( tool, id ) {
 
 export function addBoundaryControlPoint( tool, controlPoint, index ) {
     return ( dispatch, getState ) => {
-        const id = getBoundary( getState().T03.model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
+        const id = getBoundary( getState()[ tool ].model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
         dispatch( {
             type: 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT',
             tool,
@@ -292,7 +292,7 @@ export function addBoundaryControlPoint( tool, controlPoint, index ) {
 
 export function updateBoundaryControlPoint( tool, index, controlPoint ) {
     return ( dispatch, getState ) => {
-        const id = getBoundary( getState().T03.model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
+        const id = getBoundary( getState()[ tool ].model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
         dispatch( {
             type: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT',
             tool,
@@ -307,7 +307,7 @@ export function updateBoundaryControlPoint( tool, index, controlPoint ) {
 
 export function deleteBoundaryControlPoint( tool, index ) {
     return ( dispatch, getState ) => {
-        const id = getBoundary( getState().T03.model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
+        const id = getBoundary( getState()[ tool ].model.boundaries, getActiveBoundary( getState().T03.ui ) ).id;
         dispatch( {
             type: 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY_CONTROL_POINT',
             tool,
@@ -319,12 +319,31 @@ export function deleteBoundaryControlPoint( tool, index ) {
     };
 }
 
-export function saveBoundary( tool, id ) {
-    // TODO POST to api
-    return ( dispatch, getState ) => {
-        const boundary = getBoundary( getState().T03.model.boundaries, id );
+export function updatePumpingRate( tool, boundaryId, observationPointId, index, datetime, pumpingRate ) {
+    return {
+        type: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_PUMPING_RATE',
+        tool,
+        payload: {
+            boundaryId,
+            observationPointId,
+            index,
+            datetime,
+            pumpingRate
+        }
+    };
+}
 
-        dispatch( updateBoundary( tool, boundary ) );
+export function addPumpingRate( tool, boundaryId, observationPointId, index, datetime, pumpingRate ) {
+    return {
+        type: 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE',
+        tool,
+        payload: {
+            boundaryId,
+            observationPointId,
+            index,
+            datetime,
+            pumpingRate
+        }
     };
 }
 
@@ -367,6 +386,25 @@ export function fetchBoundary( tool, id, bid ) {
             const type = new BoundaryType( data.type === 'well' ? 'wel' : data.type ); // TODO remove when api updated
             dispatch( updateBoundary( tool, new Boundary( data.id, data.name, type, data.geometry, data.metadata.layer /* TODO */, type.slug === 'wel' ? new BoundaryMetadata( { wellType: data.metadata.well_type } ) : null, data.observation_points ) ) );
         } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    };
+}
+
+export function saveBoundary( tool, id, bid ) {
+    return ( dispatch, getState ) => {
+        const boundary = getBoundary( getState()[ tool ].model.boundaries, bid );
+
+        return dispatch( {
+            type: 'FETCH_DATA',
+            payload: {
+                promise: ConfiguredAxios.put( '/modflowmodels/' + id + '/boundaries/' + bid, boundary.toObject, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+            }
+        } ).then( ( { action } ) => {
+            console.warn(action);
+            // dispatch( updateBoundary( tool, new Boundary( bid, name, boundary.type, geometry, boundary.affectedLayers /* TODO */, boundary.metadata, boundary.observation_points ) ) );
+        }).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );
         } );

@@ -54,7 +54,7 @@ const styles = {
             // textDecoration: 'none',
             display: 'inline-block',
             fontWeight: 300,
-            color: styleGlobals.colors.font,
+            color: styleGlobals.colors.primary,
 
             ':hover': {
                 color: Color( styleGlobals.colors.font ).darken( 0.9 ).string( )

@@ -82,7 +82,7 @@ export default class EditableWells extends Component {
             'delete',
             'default'
         ]),
-        setState: PropTypes.func.isRequired,
+        setEditorState: PropTypes.func.isRequired,
         wells: PropTypes.array,
         setActiveBoundary: PropTypes.func.isRequired,
         activeBoundary: PropTypes.string,
@@ -149,7 +149,7 @@ export default class EditableWells extends Component {
     editWell = id => {
         return ( ) => {
             this.props.setActiveBoundary( id );
-            this.props.setState( 'boundariesOverlay' );
+            this.props.setEditorState( 'boundariesOverlay' );
         };
     }
 
@@ -198,8 +198,8 @@ export default class EditableWells extends Component {
             })( );
 
             return ( <CircleMarker key={index} onMouseOver={this.setActiveBoundary( w.id )} onMouseOut={this.setActiveBoundary( null )} {...handler} center={{
-                lat: w.lat,
-                lng: w.lng
+                lat: w.geometry.coordinates[1],
+                lng: w.geometry.coordinates[0]
             }} {...styles.cw} fillColor={w.id === activeBoundary && styles.activeWell.fillColor}/> );
         });
     }

@@ -7,7 +7,7 @@ import {
     setDescription,
     setLengthUnit,
     setName,
-    setState,
+    setEditorState,
     setTimeUnit
 } from '../../actions/modelEditor';
 import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../../reducers/ModelEditor/general';
@@ -65,7 +65,7 @@ class ModelEditorGeneral extends Component {
         addAreaCoordinate: PropTypes.func,
         setAreaLatitude: PropTypes.func,
         setAreaLongitude: PropTypes.func,
-        setState: PropTypes.func,
+        setEditorState: PropTypes.func,
         createModel: PropTypes.func,
         id: PropTypes.string
     }
@@ -103,7 +103,7 @@ class ModelEditorGeneral extends Component {
     }
 
     editAreaOnMap = ( ) => {
-        this.props.setState( 'area' );
+        this.props.setEditorState( 'area' );
     }
 
     // eslint-disable-next-line no-shadow
@@ -216,7 +216,7 @@ const actions = {
     addAreaCoordinate,
     setAreaLatitude,
     setAreaLongitude,
-    setState,
+    setEditorState,
     createModel
 };
 

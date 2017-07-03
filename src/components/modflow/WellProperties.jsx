@@ -10,21 +10,36 @@ import Select from '../primitive/Select';
 import Table from '../primitive/table/Table';
 import Td from '../primitive/table/Td';
 import Tr from '../primitive/table/Tr';
-import dateFormat from 'dateformat';
 import styleGlobals from 'styleGlobals';
 import { uniqueId } from 'lodash';
 
 const styles = {
     wrapper: {
-        display: 'flex'
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+
+    columns: {
+        display: 'flex',
+        flex: 1
     },
 
     column: {
-        flex: 1
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: '100%'
     },
 
     columnNotLast: {
         marginRight: styleGlobals.dimensions.gridGutter
+    },
+
+    columnBody: {
+        flex: 1,
+        minHeight: 0,
+        overflow: 'auto'
     },
 
     heading: {
@@ -39,6 +54,11 @@ const styles = {
         marginTop: 20
     },
 
+    iconInButton: {
+        marginRight: styleGlobals.dimensions.spacing.small,
+        color: styleGlobals.colors.font
+    },
+
     label: {
         fontWeight: 600,
         paddingLeft: 8,
@@ -49,12 +69,21 @@ const styles = {
         marginTop: 5
     },
 
-    dateInputWrapper: {
-        display: 'flex'
+    pumpingRatesActions: {
+        textAlign: 'right'
     },
 
     dateInput: {
-        flex: 1
+        maxWidth: 125
+    },
+
+    rateInput: {
+        maxWidth: 70
+    },
+
+    saveButtonWrapper: {
+        textAlign: 'right',
+        marginTop: styleGlobals.dimensions.spacing.medium
     }
 };
 
@@ -64,7 +93,10 @@ export default class WellProperties extends Component {
     static propTypes = {
         well: PropTypes.object.isRequired,
         updateWell: PropTypes.func.isRequired,
-        setState: PropTypes.func.isRequired
+        setEditorState: PropTypes.func.isRequired,
+        updatePumpingRate: PropTypes.func.isRequired,
+        addPumpingRate: PropTypes.func.isRequired,
+        saveWell: PropTypes.func.isRequired
     }
 
     constructor( props ) {
@@ -97,135 +129,162 @@ export default class WellProperties extends Component {
     updateWellName = value => {
         const { well, updateWell } = this.props;
 
-        return updateWell(new Boundary(
-            well.id, value, well.type, well.geometry, well.affectedLayers, well.metadata, well.observationPoints
-        ));
+        return updateWell(new Boundary( well.id, value, well.type, well.geometry, well.affectedLayers, well.metadata, well.observationPoints ));
     }
 
     updateWellType = value => {
         const { well, updateWell } = this.props;
 
-        return updateWell(new Boundary(
-            well.id, well.name, well.type, well.geometry, well.affectedLayers, new BoundaryMetadata({ wellType: value }), well.observationPoints
-        ));
+        return updateWell(new Boundary( well.id, well.name, well.type, well.geometry, well.affectedLayers, new BoundaryMetadata({ wellType: value }), well.observationPoints ));
     }
 
     updateLatitude = value => {
         const { well, updateWell } = this.props;
 
-        return updateWell(new Boundary(
-            well.id, well.name, well.type, {
-                ...well.geometry,
-                coordinates: [ well.geometry.coordinates[0], value ]
-            }, well.affectedLayers, well.metadata, well.observationPoints
-        ));
+        return updateWell(new Boundary( well.id, well.name, well.type, {
+            ...well.geometry,
+            coordinates: [ well.geometry.coordinates[0], value ]
+        }, well.affectedLayers, well.metadata, well.observationPoints ));
     }
 
     updateLongitude = value => {
         const { well, updateWell } = this.props;
 
-        return updateWell(new Boundary(
-            well.id, well.name, well.type, {
-                ...well.geometry,
-                coordinates: [value, well.geometry.coordinates[1]]
-            }, well.affectedLayers, well.metadata, well.observationPoints
-        ));
+        return updateWell(new Boundary( well.id, well.name, well.type, {
+            ...well.geometry,
+            coordinates: [value, well.geometry.coordinates[1]]
+        }, well.affectedLayers, well.metadata, well.observationPoints ));
     }
 
     updateAffectedLayers = value => {
         const { well, updateWell } = this.props;
 
-        return updateWell(new Boundary(
-            well.id, well.name, well.type, well.geometry, [value.value], well.metadata, well.observationPoints
-        ));
+        return updateWell(new Boundary( well.id, well.name, well.type, well.geometry, [value.value], well.metadata, well.observationPoints ));
+    }
+
+    updatePumpingRateTime = index => {
+        return datetime => {
+            const { updatePumpingRate, well } = this.props;
+
+            const pumpingRate = well.observationPoints[0].values[index][1 ];
+
+            updatePumpingRate( well.id, well.observationPoints[0].id, index, datetime.toISOString( ), pumpingRate );
+        };
+    }
+
+    updatePumpingRatePumpingRate = index => {
+        return pumpingRate => {
+            const { updatePumpingRate, well } = this.props;
+
+            const datetime = well.observationPoints[0].values[index][0 ];
+
+            updatePumpingRate( well.id, well.observationPoints[0].id, index, datetime, pumpingRate );
+        };
+    }
+
+    addPumpingRate = ( ) => {
+        const { updatePumpingRate, well } = this.props;
+
+        updatePumpingRate( well.id, well.observationPoints[0].id, well.observationPoints[0].values.length, new Date( ).toISOString( ), 0 );
+    }
+
+    saveWell = ( ) => {
+        const { saveWell, well } = this.props;
+        saveWell( well.id );
     }
 
     render( ) {
-        const { well, setState } = this.props;
+        const { well, setEditorState } = this.props;
         const { nameInputId, typeInputId, layerInputId } = this.state;
         return (
             <div style={[ styles.wrapper ]}>
-                <div style={[ styles.column, styles.columnNotLast ]}>
-                    <h3 style={[ styles.heading ]}>Properties</h3>
-                    <div style={[ styles.inputBlock ]}>
-                        <label style={[ styles.label ]} htmlFor={nameInputId}>Well Name</label>
-                        <Input style={[ styles.input ]} id={nameInputId} onChange={this.updateWellName} value={well.name} type="text" placeholder="name"/>
+                <div style={[ styles.columns ]}>
+                    <div style={[ styles.column, styles.columnNotLast ]}>
+                        <h3 style={[ styles.heading ]}>Properties</h3>
+                        <div style={[ styles.inputBlock ]}>
+                            <label style={[ styles.label ]} htmlFor={nameInputId}>Well Name</label>
+                            <Input style={[ styles.input ]} id={nameInputId} onChange={this.updateWellName} value={well.name} type="text" placeholder="name"/>
+                        </div>
+                        <div style={[ styles.inputBlock ]}>
+                            <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
+                            <Select style={[ styles.input ]} id={typeInputId} value={well.metadata ? well.metadata.toObject.wellType : ''} onChange={this.updateWellType} options={[
+                                {
+                                    label: 'Public Well',
+                                    value: 'puw'
+                                }, {
+                                    label: 'Infiltration Well',
+                                    value: 'iw'
+                                }, {
+                                    label: 'Observation Well',
+                                    value: 'ow'
+                                }
+                            ]}/>
+                        </div>
+                        <div style={[ styles.inputBlock ]}>
+                            <label style={[ styles.label ]}>Coordinates
+                                <button disabled onClick={( ) => setEditorState( 'wells-move' )} className="link"><Icon name="marker"/>Get from Map</button>
+                            </label>
+                            <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
+                            <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>
+                        </div>
                     </div>
-                    <div style={[ styles.inputBlock ]}>
-                        <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
-                        <Select style={[ styles.input ]} id={typeInputId} value={well.metadata.toObject.wellType} onChange={this.updateWellType} options={[
-                            {
-                                label: 'Public Well',
-                                value: 'puw'
-                            }, {
-                                label: 'Infiltration Well',
-                                value: 'iw'
-                            }, {
-                                label: 'Observation Well',
-                                value: 'ow'
-                            }
-                        ]}/>
+                    <div style={[ styles.column, styles.columnNotLast ]}>
+                        <h3 style={[ styles.heading ]}>Active Layer</h3>
+                        <div style={[ styles.inputBlock ]}>
+                            <label style={[ styles.label ]} htmlFor={layerInputId}>Select Layer</label>
+                            <Select style={[ styles.input ]} id={layerInputId} value={well.affectedLayers
+                                ? well.affectedLayers[0]
+                                : undefined} onChange={this.updateAffectedLayers} options={[
+                                    {
+                                        value: 0,
+                                        label: 'Layer 1'
+                                    }, {
+                                        value: 1,
+                                        label: 'Layer 2'
+                                    }, {
+                                        value: 2,
+                                        label: 'Layer 3'
+                                    }
+                                ]}/>
+                        </div>
                     </div>
-                    <div style={[ styles.inputBlock ]}>
-                        <label style={[ styles.label ]}>Coordinates
-                            <button disabled onClick={( ) => setState( 'wells-move' )} className="link"><Icon name="marker"/>Get from Map</button>
-                        </label>
-                        <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
-                        <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>
+                    <div style={[ styles.column ]}>
+                        <h3 style={[ styles.heading ]}>Pumping Rates</h3>
+                        <div style={styles.pumpingRatesActions}>
+                            <Button onClick={this.addPumpingRate} type="link"><Icon name="add" style={[ styles.iconInButton ]}/>
+                                Add</Button>
+                        </div>
+                        <div style={[ styles.columnBody ]}>
+                            <Table>
+                                <thead>
+                                    <Tr head>
+                                        <Td head>
+                                            Start Time
+                                        </Td>
+                                        <Td head>
+                                            Rate (m³/d)
+                                        </Td>
+                                    </Tr>
+                                </thead>
+                                {well.observationPoints
+                                    ? <tbody>
+                                            {well.observationPoints[0].values.map(( pr, index ) => (
+                                                <Tr key={index}>
+                                                    <Td><Input onChange={this.updatePumpingRateTime( index )} style={[ styles.dateInput ]} type="datetime" appearance="visibleOnFocus" value={new Date(pr[0])}/></Td>
+                                                    <Td><Input onChange={this.updatePumpingRatePumpingRate( index )} style={[ styles.rateInput ]} type="number" appearance="visibleOnFocus" value={pr[1]}/></Td>
+                                                </Tr>
+                                            ))}
+                                        </tbody>
+                                    : null}
+                            </Table>
+                            {well.observationPoints
+                                ? null
+                                : <div>Loading</div>}
+                        </div>
                     </div>
                 </div>
-                <div style={[ styles.column, styles.columnNotLast ]}>
-                    <h3 style={[ styles.heading ]}>Active Layer</h3>
-                    <div style={[ styles.inputBlock ]}>
-                        <label style={[ styles.label ]} htmlFor={layerInputId}>Select Layer</label>
-                        <Select style={[ styles.input ]} id={layerInputId} value={well.affectedLayers ? well.affectedLayers[0] : undefined} onChange={this.updateAffectedLayers} options={[
-                            {
-                                value: 0,
-                                label: 'Layer 1'
-                            }, {
-                                value: 1,
-                                label: 'Layer 2'
-                            }, {
-                                value: 2,
-                                label: 'Layer 3'
-                            }
-                        ]}/>
-                    </div>
-                </div>
-                <div style={[ styles.column ]}>
-                    <h3 style={[ styles.heading ]}>Pumping Rates</h3>
-                    <Table>
-                        <thead>
-                            <Tr head>
-                                <Td head>
-                                    Start Time
-                                </Td>
-                                <Td head>
-                                    Rate (m³/d)
-                                </Td>
-                            </Tr>
-                        </thead>
-                        {well.observationPoints
-                            ? <tbody>
-                                    {well.observationPoints[0].values.map(pr => (
-                                        <Tr>
-                                            <Td>
-                                                <div style={[styles.dateInputWrapper]}>
-                                                    <Input style={[styles.dateInput]} type="date" appearance="visibleOnFocus" value={dateFormat( new Date(pr[0]), 'yyyy-mm-dd' )} />
-                                                    <Input style={[styles.dateInput]} type="time" appearance="visibleOnFocus" value={dateFormat( new Date(pr[0]), 'HH:MM' )} />
-                                                </div>
-                                            </Td>
-                                            <Td><Input type="number" appearance="visibleOnFocus" value={pr[1]} /></Td>
-                                        </Tr>
-                                    ))}
-                                </tbody>
-                            : null}
-                    </Table>
-                    {well.observationPoints
-                        ? null
-                        : <div>Loading</div>}
-                    <Button type="link" disabled><Icon name="add"/>
-                        Add</Button>
+                <div style={[styles.saveButtonWrapper]}>
+                    <Button onClick={this.saveWell}>Save</Button>
                 </div>
             </div>
 

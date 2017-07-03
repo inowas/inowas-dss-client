@@ -4,8 +4,11 @@ import {
     fetchBoundary,
     setActiveBoundary,
     setActiveBoundaryType,
-    setState,
-    updateBoundary
+    setEditorState,
+    updateBoundary,
+    updatePumpingRate,
+    addPumpingRate,
+    saveBoundary
 } from '../../actions/modelEditor';
 import { getActiveBoundary, getActiveBoundaryType } from '../../reducers/ModelEditor/ui';
 import { getBoundaries, getBoundary } from '../../reducers/ModelEditor/boundaries';
@@ -54,9 +57,12 @@ class ModelEditorBoundaries extends Component {
         updateBoundary: PropTypes.func.isRequired,
         addBoundary: PropTypes.func.isRequired,
         boundaries: PropTypes.array,
-        setState: PropTypes.func.isRequired,
+        setEditorState: PropTypes.func.isRequired,
         area: PropTypes.array,
-        fetchBoundary: PropTypes.func.isRequired
+        fetchBoundary: PropTypes.func.isRequired,
+        updatePumpingRate: PropTypes.func.isRequired,
+        addPumpingRate: PropTypes.func.isRequired,
+        saveBoundary: PropTypes.func.isRequired
     }
 
     componentDidMount( ) {
@@ -72,7 +78,7 @@ class ModelEditorBoundaries extends Component {
         // eslint-disable-next-line no-shadow
         const { boundary, id, fetchBoundary } = this.props;
 
-        if ( boundary && ( !prevProps.boundary || boundary.id !== prevProps.boundary.id )) {
+        if (boundary && ( !prevProps.boundary || boundary.id !== prevProps.boundary.id )) {
             fetchBoundary( id, boundary.id );
         }
     }
@@ -93,21 +99,33 @@ class ModelEditorBoundaries extends Component {
         };
     }
 
-    renderProperties( ) {
+    saveBoundary = bid => {
         // eslint-disable-next-line no-shadow
-        const { boundary, updateBoundary, setState, boundaryType, boundaries } = this.props;
+        const { saveBoundary, id } = this.props;
+        saveBoundary( id, bid );
+    }
+
+    renderProperties( ) {
+        const {
+            boundary, updateBoundary, // eslint-disable-line no-shadow
+            setEditorState, // eslint-disable-line no-shadow
+            boundaryType,
+            boundaries,
+            updatePumpingRate, // eslint-disable-line no-shadow
+            addPumpingRate // eslint-disable-line no-shadow
+        } = this.props;
 
         if ( boundary ) {
             switch ( boundary.type.slug ) {
                 case 'wel':
-                    return ( <WellProperties setState={setState} well={boundary} updateWell={updateBoundary}/> );
+                    return ( <WellProperties setEditorState={setEditorState} well={boundary} updateWell={updateBoundary} updatePumpingRate={updatePumpingRate} addPumpingRate={addPumpingRate} saveWell={this.saveBoundary}/> );
                 case 'riv':
-                    return ( <RiverProperties setState={setState} river={boundary} updateRiver={updateBoundary}/> );
+                    return ( <RiverProperties setEditorState={setEditorState} river={boundary} updateRiver={updateBoundary}/> );
             }
         }
 
         if ( boundaryType ) {
-            return ( <BoundariesOverview boundaries={boundaries.filter(b => ( b.type === boundaryType ))} type={boundaryType} setState={setState}/> );
+            return ( <BoundariesOverview boundaries={boundaries.filter(b => ( b.type.slug === boundaryType ))} type={boundaryType} setEditorState={setEditorState}/> );
         }
 
         return ( <BoundariesOverview boundaries={boundaries}/> );
@@ -151,9 +169,12 @@ const actions = {
     setActiveBoundary,
     setActiveBoundaryType,
     updateBoundary,
-    setState,
+    setEditorState,
     addBoundary,
-    fetchBoundary
+    fetchBoundary,
+    updatePumpingRate,
+    addPumpingRate,
+    saveBoundary
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
