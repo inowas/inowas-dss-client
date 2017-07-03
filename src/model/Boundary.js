@@ -81,7 +81,7 @@ export default class Boundary {
         return {
             id: this._id,
             name: this._name,
-            type: this._type.slug,
+            type: this._type ? this._type.slug : '',
             geometry: this._geometry,
             affectedLayers: this._affectedLayers,
             metadata: this._metadata ? this._metadata.toObject : undefined,

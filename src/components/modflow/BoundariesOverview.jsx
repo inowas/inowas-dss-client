@@ -8,15 +8,29 @@ import Icon from '../primitive/Icon';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
+    wrapper: {
+        maxHeight: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+
     header: {
         display: 'flex',
-        marginTop: 10,
-        marginBottom: 10
+        flex: 1,
+        marginBottom: 10,
+        minHeight: 30
+    },
+
+    body: {
+        minHeight: 0,
+        flex: 1,
+        overflow: 'auto'
     },
 
     type: {
         flex: 1,
         border: '1px solid ' + styleGlobals.colors.graySemilight,
+        borderRadius: styleGlobals.dimensions.borderRadius,
         marginRight: 14,
         paddingTop: 6,
         paddingBottom: 6,
@@ -41,45 +55,46 @@ export default class BoundariesOverview extends Component {
     static propTypes = {
         type: PropTypes.string,
         boundaries: PropTypes.array,
-        setState: PropTypes.func
+        setEditorState: PropTypes.func
     }
 
     render( ) {
-        const { boundaries, type, setState } = this.props;
+        const { boundaries, type, setEditorState } = this.props;
 
         return (
-            <div>
+            <div style={[ styles.wrapper ]}>
                 <div style={[ styles.header ]}>
                     <span style={[ styles.type ]}>{type}
                         ({boundaries.length})</span>
                     <button style={styles.headerButton.button} className="link"><Icon style={styles.headerButton.icon} name="add"/>Add new</button>
-                    {type === 'wel' && <button onClick={( ) => setState( 'wells' )} style={styles.headerButton.button} className="link"><Icon style={styles.headerButton.icon} name="marker"/>View on Map</button>}
+                    {type === 'wel' && <button onClick={( ) => setEditorState( 'wells' )} style={styles.headerButton.button} className="link"><Icon style={styles.headerButton.icon} name="marker"/>View on Map</button>}
                 </div>
-
-                <Table>
-                    <thead>
-                        <Tr head>
-                            <Td head>Name</Td>
-                            <Td head>Type</Td>
-                            {type === 'wel' && <Td head>Well Type</Td>}
-                            {type === 'wel' && <Td head>Latitude (X)</Td>}
-                            {type === 'wel' && <Td head>Longitude (Y)</Td>}
-                            {type === 'wel' && <Td head>Layers</Td>}
-                        </Tr>
-                    </thead>
-                    <tbody>
-                        {boundaries.map((b, index) => (
-                            <Tr key={index}>
-                                <Td>{b.name}</Td>
-                                <Td>{b.type}</Td>
-                                {type === 'wel' && <Td>{b.wellType}</Td>}
-                                {type === 'wel' && <Td>{b.lat}</Td>}
-                                {type === 'wel' && <Td>{b.lng}</Td>}
-                                {type === 'wel' && <Td>{b.affectedLayers}</Td>}
+                <div style={[ styles.body ]}>
+                    <Table>
+                        <thead>
+                            <Tr head>
+                                <Td head>Name</Td>
+                                {!type && <Td head>Type</Td>}
+                                {type === 'wel' && <Td head>Well Type</Td>}
+                                {type === 'wel' && <Td head>Latitude (X)</Td>}
+                                {type === 'wel' && <Td head>Longitude (Y)</Td>}
+                                {type === 'wel' && <Td head>Layers</Td>}
                             </Tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {boundaries.map(( b, index ) => (
+                                <Tr key={index}>
+                                    <Td>{b.name}</Td>
+                                    {!type && <Td>{b.type.fullName}</Td>}
+                                    {type === 'wel' && <Td>{b.metadata.toObject.wellType}</Td>}
+                                    {type === 'wel' && <Td>{b.geometry.coordinates[1]}</Td>}
+                                    {type === 'wel' && <Td>{b.geometry.coordinates[0]}</Td>}
+                                    {type === 'wel' && <Td>{b.affectedLayers}</Td>}
+                                </Tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
             </div>
         );
     }

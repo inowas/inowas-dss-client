@@ -13,7 +13,7 @@ import {
     getActiveBoundaryControlPoint
 } from '../../reducers/ModelEditor/ui';
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
-import ModelEditorMap from '../../components/modflow/ModelEditorMap';
+import ModelEditor from '../../components/modflow/ModelEditor';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -22,7 +22,7 @@ class T03 extends Component {
 
     static propTypes = {
         id: PropTypes.string,
-        setState: PropTypes.func,
+        setEditorState: PropTypes.func,
         push: PropTypes.func
     }
 
@@ -38,7 +38,7 @@ class T03 extends Component {
         return (
             <div className="toolT03">
                 <Navbar links={navigation} />
-                <ModelEditorMap {...this.props} initial={initial} tool={'T03'} />
+                <ModelEditor {...this.props} initial={initial} tool={'T03'} />
             </div>
         );
     }

@@ -84,7 +84,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class ModelEditorMap extends Component {
+export default class ModelEditor extends Component {
 
     static propTypes = {
         tool: PropTypes.string.isRequired,
@@ -359,28 +359,29 @@ export default class ModelEditorMap extends Component {
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
                 <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} deleteControlPoint={deleteAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
-                    : null}/> {boundaries.filter( b => b.type === 'river' ).map(( r, index ) => {
-                        const riverState = (( ) => {
-                            if ( r.id === activeBoundary ) {
-                                switch ( state ) {
-                                    case 'river':
-                                        return 'default';
-                                    case 'river-draw':
-                                        return 'draw';
-                                    case 'river-edit':
-                                        return 'edit';
-                                    default:
-                                        return 'minimal';
-                                }
+                    : null}/>
+                {boundaries.filter( b => b.type.slug === 'riv' ).map(( r, index ) => {
+                    const riverState = (( ) => {
+                        if ( r.id === activeBoundary ) {
+                            switch ( state ) {
+                                case 'river':
+                                    return 'default';
+                                case 'river-draw':
+                                    return 'draw';
+                                case 'river-edit':
+                                    return 'edit';
+                                default:
+                                    return 'minimal';
                             }
-                            return 'minimal';
-                        })( );
+                        }
+                        return 'minimal';
+                    })( );
 
-                        return ( <EditableLine key={index} state={riverState} line={r.geometry} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                        ? this.refs.map.leafletElement
-                        : null}/> );
-                    })}
-                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setState={setState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    return ( <EditableLine key={index} state={riverState} line={r.geometry.coordinates} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    ? this.refs.map.leafletElement
+                    : null}/> );
+                })}
+                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setState={setState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type.slug === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
                     ? this.refs.map.leafletElement
                     : null}/>
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
@@ -634,6 +635,18 @@ export default class ModelEditorMap extends Component {
             }
         ];
 
+        const riverActions = [
+            {
+                title: 'Add',
+                onClick: state === 'river-add'
+                    ? this.setState( 'river' )
+                    : this.setState( 'river-add' ),
+                icon: <Icon name={state === 'river-add'
+                        ? 'success'
+                        : 'add'}/>
+            }
+        ];
+
         return (
             <div style={styles.wrapper}>
                 {this.renderMap( )}
@@ -650,6 +663,8 @@ export default class ModelEditorMap extends Component {
                         return ( <FloatingMapToolBox actions={areaActions} save={this.setState( 'general' )}/> );
                     } else if ( [ 'wells', 'wells-add', 'wells-move', 'wells-edit', 'wells-delete' ].indexOf( state ) !== -1 ) {
                         return ( <FloatingMapToolBox actions={wellActions} save={this.setState( 'boundariesOverlay' )}/> );
+                    } else if ( [ 'river', 'river-add' ].indexOf( state ) !== -1 ) {
+                        return ( <FloatingMapToolBox actions={riverActions} save={this.setState( 'boundariesOverlay' )}/> );
                     }
                     return null;
                 })( )}

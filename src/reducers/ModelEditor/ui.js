@@ -21,7 +21,7 @@ const createUiReducer = tool => {
             return state;
         }
         switch ( action.type ) {
-            case 'MODEL_EDITOR_UI_SET_MAP_MODE':
+            case 'MODEL_EDITOR_UI_SET_STATE':
                 return { ...state, state: action.payload };
 
             case 'MODEL_EDITOR_UI_SET_ACTIVE_BOUNDARY':

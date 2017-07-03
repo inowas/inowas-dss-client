@@ -2,16 +2,16 @@ import React, { Component, PropTypes } from 'react';
 
 import Icon from '../primitive/Icon';
 
-export default class WellProperties extends Component {
+export default class RiverProperties extends Component {
 
     static propTypes = {
         river: PropTypes.object.isRequired,
         updateRiver: PropTypes.func.isRequired,
-        setState: PropTypes.func.isRequired
+        setEditorState: PropTypes.func.isRequired
     }
 
     render( ) {
-        const { river, setState } = this.props;
+        const { river, setEditorState } = this.props;
         return (
             <div>
                 <h3>Geometry</h3>
@@ -24,11 +24,11 @@ export default class WellProperties extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {river.geometry.map((c, index) => {
+                        {river.geometry.coordinates.map((c, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{c.lat}</td>
-                                    <td>{c.lng}</td>
+                                    <td>{c[1]}</td>
+                                    <td>{c[0]}</td>
                                 </tr>
                             );
                         })}
