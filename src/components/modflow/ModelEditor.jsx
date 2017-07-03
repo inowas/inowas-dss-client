@@ -20,7 +20,6 @@ import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import Boundary from '../../model/Boundary';
 import BoundaryType from '../../model/BoundaryType';
-import BoundaryMetadata from '../../model/BoundaryMetadata';
 
 const RadiumMap = ConfiguredRadium( Map );
 
@@ -263,13 +262,6 @@ export default class ModelEditor extends Component {
                 coordinates: [e.latlng.lng, e.latlng.lat]
             }
         ));
-        // addBoundary({
-        //     name: 'new Well ' + boundaries.length,
-        //     type: 'wel',
-        //     id: uuid(),
-        //     lat: e.latlng.lat,
-        //     lng: e.latlng.lng
-        // });
     }
 
     renderMap( ) {
