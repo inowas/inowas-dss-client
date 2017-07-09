@@ -17,18 +17,19 @@ function getInitialState() {
         },
         settings: {
             retardation: true,
-            case: 'Case1'
+            case: 'Case2'
         },
         info: {
             R: 0,
             DL: 0,
-            vx: 0
+            vx: 0,
+            C: 0
         },
 
         parameters: [{
             order: 0,
             id: 'C0',
-            name: 'Initial concentration of the solute [mg/l]',
+            name: 'Initial concentration of the solute, C0 [mg/l]',
             min: 0.0,
             max: 1000.0,
             value: 725,
@@ -37,7 +38,7 @@ function getInitialState() {
         }, {
             order: 1,
             id: 'x',
-            name: 'Distance from constant point conc. [m]',
+            name: 'Distance from the injection point, x [m]',
             min: 0,
             max: 100,
             value: 15,
@@ -46,7 +47,7 @@ function getInitialState() {
         }, {
             order: 2,
             id: 't',
-            name: 'Time since introduction of constant point conc. [d]',
+            name: 'Time since injection, t [d]',
             min: 0,
             max: 500,
             value: 365,
@@ -55,7 +56,7 @@ function getInitialState() {
         }, {
             order: 3,
             id: 'K',
-            name: 'Hydraulic conductivity [m/d]',
+            name: 'Hydraulic conductivity, K [m/d]',
             min: 1e-2,
             max: 1e+2,
             value: 2.592,
@@ -64,16 +65,16 @@ function getInitialState() {
         }, {
             order: 4,
             id: 'I',
-            name: 'Hydraulic gradient [-]',
+            name: 'Hydraulic gradient, I [-]',
             min: 0,
-            max: 0.1,
+            max: 0.01,
             value: 0.002,
             stepSize: 0.001,
             decimals: 3
         }, {
             order: 5,
             id: 'ne',
-            name: 'Effective porosity, n (-)',
+            name: 'Effective porosity, n [-]',
             min: 0,
             max: 0.5,
             value: 0.23,
@@ -82,7 +83,7 @@ function getInitialState() {
         }, {
             order: 6,
             id: 'alphaL',
-            name: 'Longitudinal dispersivity [m]',
+            name: 'Longitudinal dispersivity, alpha [m]',
             min: 0.1,
             max: 10,
             value: 0.923,
@@ -91,7 +92,7 @@ function getInitialState() {
         }, {
             order: 7,
             id: 'Kd',
-            name: 'Sorption partition coefficient []',
+            name: 'Sorption partition coefficient, Kd []',
             min: 0.0,
             max: 0.1,
             value: 0.01,
@@ -100,7 +101,7 @@ function getInitialState() {
         }, {
             order: 8,
             id: 'Corg',
-            name: 'Organic carbon content in the soil []',
+            name: 'Organic carbon content in the soil, Corg []',
             min: 0,
             max: 0.1,
             value: 0.001,
@@ -109,7 +110,7 @@ function getInitialState() {
         }, {
             order: 9,
             id: 'Kow',
-            name: 'Octanol/water partition coefficient []',
+            name: 'Octanol/water partition coefficient, Kow []',
             min: 0,
             max: 10,
             value: 2.25,
@@ -141,6 +142,9 @@ const T08Reducer = (state = getInitialState(), action) => {
                 const newParam = action.payload;
                 var param = state.parameters.find(p => {return p.id === newParam.id});
                 applyParameterUpdate(param, newParam);
+                if(param.order >= 8) {
+                    calculateKdAndModifyState(state);
+                }
                 calculateAndModifyState(state);
                 break;
             }
@@ -156,7 +160,21 @@ const T08Reducer = (state = getInitialState(), action) => {
     }
     return state;
 };
+function calculateKdAndModifyState(state) {
+    const Kow = state.parameters.find(p => {
+        return p.id == 'Kow'
+    })
+        .value;
+    const Corg = state.parameters.find(p => {
+        return p.id == 'Corg'
+    })
+        .value;
 
+    state.parameters.find(p => {
+        return p.id == 'Kd'
+    })
+        .value = calc.calculate_kd(Kow, Corg);
+}
 function calculateAndModifyState(state) {
     const C0 = state.parameters.find(p => {
             return p.id == 'C0'
@@ -182,20 +200,6 @@ function calculateAndModifyState(state) {
             return p.id == 't'
         })
         .value;
-    const Kow = state.parameters.find(p => {
-        return p.id == 'Kow'
-    })
-        .value;
-    const Corg = state.parameters.find(p => {
-        return p.id == 'Corg'
-    })
-        .value;
-
-    state.parameters.find(p => {
-        return p.id == 'Kd'
-    })
-        .value = calc.calculate_kd(Kow, Corg);
-
     const Kd = state.parameters.find(p => {
         return p.id == 'Kd'
     })
@@ -207,7 +211,7 @@ function calculateAndModifyState(state) {
     state.info.vx = calc.calculate_vx(K, ne, I);
     state.info.DL = calc.calculate_DL(alphaL,state.info.vx);
     state.info.R = calc.calculate_R(ne, Kd);
-    state.chart.data = calc.calculateDiagramData(C0, state.info.vx,state.info.DL,state.info.R, x, t, state.settings.case);
+    state.chart.data = calc.calculateDiagramData(C0, state.info, x, t, state.settings.case);
 
     return state;
 }

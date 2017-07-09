@@ -22,7 +22,10 @@ export default class Sieves extends React.Component {
         if (!param.label && param.name)
             param.label = param.name;
         return <tr key={param.id} className="parameter">
-            <td className="parameter-label">{param.id}</td>
+            <td>
+                <input name={'use_' + param.id + '_data'} type="radio" checked={param.checked === 'true'}
+                       onChange={this.handleChange}/>
+            </td>
             <td>
                 <input name={'mfi_' + param.id + '_t'} className="parameter-max input input-xs"
                        type="number" step={param.stepSize} value={Number(param.t).toFixed(param.decimals)}
@@ -66,7 +69,8 @@ export default class Sieves extends React.Component {
         </table>
     };
     render() {
-        const params = this.props.data.map(param => {
+        const data = this.props.data;
+        const params = data.map(param => {
             return this.renderNumber(param);
         });
         return (

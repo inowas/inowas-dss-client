@@ -12,7 +12,7 @@ function getInitialState() {
         parameters: [{
             order: 0,
             id: 'w',
-            name: 'Percolation rate, w(m/d)',
+            name: 'Percolation rate, w (m/d)',
             min: 0,
             validMin: function(x) {
                 return x >= 0;

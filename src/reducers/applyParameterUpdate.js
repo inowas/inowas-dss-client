@@ -10,22 +10,22 @@ export default function applyParameterUpdate(param, newParam) {
     //make sure min <= value <= max
     if (param.hasOwnProperty('value') && newParam.hasOwnProperty('value')) {
         let newValue = Number(newParam.value);
-
-        let valid = true;
+        param.value = newValue;
+        //let valid = true;
 
         if (param.hasOwnProperty('min') && newValue < param.min) {
-            valid = false;
+            param.min = newValue
         }
 
         if (param.hasOwnProperty('max') && newValue > param.max) {
-            valid = false;
+            param.max = newValue
         }
         // this part is not required anymore.
         // Out of range part is included /components/tools/parameters.jsx
         // if (valid) {
         //     param.value = newValue;
         // }
-        param.value = newValue;
+
     }
     return param;
 }
