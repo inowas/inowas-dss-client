@@ -40,10 +40,12 @@ export default class Chart extends React.Component {
                             <div className="diagram-labels-bottom-right">
                                 <div className="diagram-label">
                                     <p>
-                                        MFi&nbsp;=&nbsp;<strong>{this.props.info.MFI.toFixed(2)}</strong>
+                                        MFi&nbsp;=&nbsp;<strong>{this.props.info.MFI.toFixed(2)}</strong>&nbsp;
+                                        s/l<sup>2</sup>
                                     </p>
                                     <p>
-                                        V<sub>c</sub>&nbsp;=&nbsp;<strong>{this.props.info.vc.toFixed(2)}</strong>
+                                        V<sub>c</sub>&nbsp;=&nbsp;<strong>{this.props.info.vc.toFixed(2)}</strong>&nbsp;
+                                        m/year
                                     </p>
                                 </div>
                             </div>

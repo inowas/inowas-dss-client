@@ -7,7 +7,7 @@ import Background from '../../components/tools/Background';
 import Chart from '../../components/tools/ChartT12';
 import MFI from '../../components/tools/T12_MFI';
 import Parameters from '../../components/tools/Parameters_T12';
-import {changeMFI, changeParameter, changeCorrections, calculate, reset} from '../../actions/T12'
+import {changeMFI, changeParameter, changeCorrections, calculate, reset, useDataInGraph} from '../../actions/T12'
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
 import Icon from '../../components/primitive/Icon';
@@ -36,8 +36,10 @@ export default class T12 extends React.Component {
             this.props.dispatch(changeParameter( parameter ));
         }
         if (e.target.name.startsWith('mfi')) {
-            console.log(parameter);
             this.props.dispatch(changeMFI(parameter));
+        }
+        if (e.target.name.startsWith('use')) {
+            this.props.dispatch(useDataInGraph(parameter));
         }
         if (e.target.name.startsWith('corr')) {
             const param = e.target.name.split(' ');

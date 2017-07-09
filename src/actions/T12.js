@@ -4,7 +4,12 @@ export function changeMFI(parameter){
         payload: parameter
     }
 }
-
+export function useDataInGraph(parameter){
+    return {
+        type: 'CHANGE_TOOL_T12_USEDATA',
+        payload: parameter
+    }
+}
 export function changeParameter(parameter){
     return {
         type: 'CHANGE_TOOL_T12_PARAMETER',

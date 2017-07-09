@@ -26,24 +26,35 @@ function getInitialState() {
             t: 10,
             V: 0.25,
             stepSize: 0.1,
+            checked: 'true',
             decimals: 2
         }, {
             id: '2',
             t: 23,
             V: 0.5,
             stepSize: 0.1,
+            checked: 'true',
             decimals: 2
         }, {
             id: '3',
             t: 35,
             V: 0.75,
             stepSize: 0.1,
+            checked: 'true',
             decimals: 2
         },{
             id: '4',
             t: 48,
             V: 1.0,
             stepSize: 0.1,
+            checked: 'true',
+            decimals: 2
+        },{
+            id: '5',
+            t: 0,
+            V: 0,
+            stepSize: 0.1,
+            checked: 'false',
             decimals: 2
         }],
         corrections: [{
@@ -83,18 +94,18 @@ function getInitialState() {
         },
         parameters: [{
             order: 0,
-            id: 'V',
-            name: 'Infiltrated water/year',
+            id: 'ueq',
+            name: "Infiltration duration, ueq [h]",
             min: 1,
             validMin: function(x) {return x > 0},
-            max: 1000000,
-            value: 500000,
-            stepSize: 100,
+            max: 10000,
+            value: 5000,
+            stepSize: 1,
             decimals: 0
         }, {
             order: 1,
             id: 'IR',
-            name: 'Infiltration rate',
+            name: 'Infiltration rate, Vb [m3/d]',
             min: 1,
             validMin: function(x) {return x > 0},
             max: 1000,
@@ -104,7 +115,7 @@ function getInitialState() {
         }, {
             order: 2,
             id: 'K',
-            name: 'Hydraulic conductivity',
+            name: 'Hydraulic conductivity, K [m/d]',
             min: 1,
             validMin: function(x) {return x > 0},
             max: 100,
@@ -148,15 +159,30 @@ const T12Reducer = (state = getInitialState(), action) => {
             };
 
             const newParam = action.payload;
+            console.log(state.mfi)
             var param = state.mfi.find(p => {
-                return p.id === newParam.id
+                return Number(p.id) === Number(newParam.id)
             });
-            console.log(param,newParam);
             if (!newParam.V && newParam.t) param.t = newParam.t;
             if (!newParam.t && newParam.V) param.V = newParam.V;
+            addEmptyEntry(state);
             calculateAndModifyState(state);
             break;
         }
+        case 'CHANGE_TOOL_T12_USEDATA': {
+        state = {
+            ...state,
+        };
+
+        const newParam = action.payload;
+        var param = state.mfi.find(p => {
+            return Number(p.id) === Number(newParam.id)
+        });
+            if (param.checked === 'false') {param.checked = 'true'}
+            else {param.checked = 'false'}
+        calculateAndModifyState(state);
+        break;
+    }
         case 'CHANGE_TOOL_T12_CORRECTIONS':
         {
             state = { ...state,
@@ -172,6 +198,20 @@ const T12Reducer = (state = getInitialState(), action) => {
     }
     return state;
 };
+function addEmptyEntry(state) {
+    const data = state.mfi;
+    if (data[data.length-1].t != 0 || data[data.length -1].V != 0) {
+        const newEntry = {
+            id: data.length+1,
+            t: 0,
+            V: 0,
+            stepSize: 0.1,
+            checked: 'false',
+            decimals: 2
+        };
+        state.mfi.push(newEntry);
+    }
+}
 function calculateAndModifyState(state) {
     //calculation of graph data
     const data = calc.calculateData(state.mfi);
@@ -200,8 +240,8 @@ function calculateAndModifyState(state) {
         return p.id == 'K'
     })
         .value;
-    const V = state.parameters.find(p => {
-        return p.id == 'V'
+    const ueq = state.parameters.find(p => {
+        return p.id == 'ueq'
     })
         .value;
     const IR = state.parameters.find(p => {
@@ -211,7 +251,7 @@ function calculateAndModifyState(state) {
     const D50 = (10**(-3)*(K/150)**0.6);
     const EPS = D50/6;
     state.info.MFIcor2 = MFIcor1*((D*10**(-6))**2/EPS**2);
-    state.info.vc = 2*10**(-2)*state.info.MFIcor2*(V/IR)*(1/(K/150)**1.2);
+    state.info.vc = 2*10**(-6)*state.info.MFIcor2*(ueq)*(IR**2/(K/150)**1.2);
     state.chart.data = calc.calculateDiagramData(data,state.info);
     return state;
 }

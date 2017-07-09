@@ -4,10 +4,12 @@ export function calculateData(mfi) {
     }
     let data = [];
     mfi.map(param => {
-        data.push({
-            V: param.V,
-            tV: calctV(param.V, param.t)
-        });
+        if (param.checked === 'true') {
+            data.push({
+                V: param.V,
+                tV: calctV(param.V, param.t)
+            });
+        }
     });
     return data;
 }
