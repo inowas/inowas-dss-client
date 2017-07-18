@@ -12,7 +12,9 @@ export default {
     devServer: {
         historyApiFallback: true,
         hot: true,
-        stats: 'minimal'
+        stats: 'minimal',
+        host: "0.0.0.0",
+        disableHostCheck: true
     },
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
