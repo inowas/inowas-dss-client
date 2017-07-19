@@ -20,6 +20,8 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import {getRequestStatus, isLoading} from "../../reducers/webData";
+import { Map, TileLayer, Polygon } from 'react-leaflet';
+
 
 const styles = {
     container: {
@@ -114,6 +116,10 @@ class ModelEditorGeneral extends Component {
         return (
             <div>
                 <h3>Area</h3>
+                <Map className="crossSectionMap" zoomControl={false} center={[0,0]} zoom={2}>
+                    <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+                    <Polygon positions={area} />
+                </Map>
                 <button onClick={editAreaOnMap} className="link">Edit on Map
                     <Icon name="arrow_right"/></button>
                 <table className="table">
