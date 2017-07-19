@@ -4,7 +4,7 @@
     "description": "The client for the inowas-dss",
     "main": "./src/index.jsx",
     "scripts": {
-        "dev": "webpack-dashboard -- webpack-dev-server -d --config webpack.config.babel.js",
+        "dev": "webpack-dev-server -d --config webpack.config.babel.js",
         "generate": "rc-autocomplete",
         "lint": "eslint src",
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,6 +29,7 @@
         "react-router-redux": "^4.0.8",
         "redux": "^3.6.0",
         "redux-promise-middleware": "^4.2.0",
+        "redux-saga": "^0.15.4",
         "redux-thunk": "^2.2.0"
     },
     "devDependencies": {
@@ -85,9 +86,8 @@
         "stats-webpack-plugin": "^0.4.3",
         "style-loader": "^0.16.1",
         "url-loader": "^0.5.7",
-        "uuid": "^3.0.1",
+        "uuid": "^3.1.0",
         "webpack": "^2.2.1",
-        "webpack-dashboard": "0.2.1",
         "webpack-dev-server": "^2.5.1"
     }
 }

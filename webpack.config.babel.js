@@ -2,7 +2,6 @@
 
 import { DefinePlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin } from 'webpack';
 
-import DashboardPlugin from 'webpack-dashboard/plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
@@ -42,7 +41,6 @@ export default {
             'process.env.NODE_ENV': JSON.stringify( 'development' )
         } ),
         new FaviconsWebpackPlugin( 'images/favicon.png' ),
-        new DashboardPlugin()
     ],
     module: {
         rules: [

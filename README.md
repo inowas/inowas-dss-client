@@ -17,3 +17,9 @@
 ## Build
 
 * run build for production: `yarn run build`
+
+### Docker
+
+```
+$ docker run --rm -it -p 8080:8080 -p 3000:3000 --volume $(pwd):/app sandrokeil/typescript yarn run dev
+```
