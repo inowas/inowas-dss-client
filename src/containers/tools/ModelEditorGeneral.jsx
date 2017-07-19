@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
     addAreaCoordinate,
     createModel,
+    updateModel,
     setAreaLatitude,
     setAreaLongitude,
     setDescription,
@@ -11,7 +12,6 @@ import {
     setTimeUnit
 } from '../../actions/modelEditor';
 import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../../reducers/ModelEditor/general';
-
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import LengthUnit from '../../model/LengthUnit';
@@ -19,6 +19,7 @@ import TimeUnit from '../../model/TimeUnit';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
+import {getRequestStatus, isLoading} from "../../reducers/webData";
 
 const styles = {
     container: {
@@ -67,6 +68,8 @@ class ModelEditorGeneral extends Component {
         setAreaLongitude: PropTypes.func,
         setEditorState: PropTypes.func,
         createModel: PropTypes.func,
+        updateModel: PropTypes.func,
+        webData: PropTypes.object,
         id: PropTypes.string
     }
 
@@ -141,9 +144,15 @@ class ModelEditorGeneral extends Component {
             lengthUnit,
             area,
             id,
+            createModel,
+            updateModel,
             // eslint-disable-next-line no-shadow
-            createModel
+            webData
         } = this.props;
+
+        // TODO prevent onClick triggers if disabled and make that css works
+        const disabled = isLoading(webData.UpdateModel) ? 'disabled' : '';
+        const btnClass = isLoading(webData.UpdateModel) ? 'button button-accent is-disabled' : 'button button-accent';
 
         return (
             <div style={[ style, styles.container ]}>
@@ -187,9 +196,9 @@ class ModelEditorGeneral extends Component {
                 <div>
                     {(( ) => {
                         if ( id === undefined || id === null ) {
-                            return <button onClick={createModel} className="button button-accent">Create Model</button>;
+                            return <button disabled={disabled} onClick={createModel} className={btnClass}>Create Model</button>;
                         }
-                        return <button className="button button-accent">Save (yet to be implemented)</button>;
+                        return <button disabled={disabled} onClick={() => updateModel(id)} className={btnClass}>Save (yet to be implemented)</button>;
                     })( )}
                 </div>
             </div>
@@ -204,7 +213,8 @@ const mapStateToProps = (state, { tool, params }) => {
         timeUnit: getTimeUnit( state[tool].model.general ),
         lengthUnit: getLengthUnit( state[tool].model.general ),
         area: getArea( state[tool].model.general ),
-        id: params.id
+        id: params.id,
+        webData: getRequestStatus(state)
     };
 };
 
@@ -217,7 +227,8 @@ const actions = {
     setAreaLatitude,
     setAreaLongitude,
     setEditorState,
-    createModel
+    createModel,
+    updateModel
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

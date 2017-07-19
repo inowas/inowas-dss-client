@@ -10,6 +10,8 @@ import { push } from 'react-router-redux';
 import Boundary from '../model/Boundary';
 import BoundaryType from '../model/BoundaryType';
 import BoundaryMetadata from '../model/BoundaryMetadata';
+import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel} from "./messageBox";
+import uuid from "uuid";
 
 /**
  * UI
@@ -220,22 +222,44 @@ export function loadModel( tool, id ) {
 }
 
 export function createModel( tool ) {
-    // TODO POST to api
-    // api should redirect to GET and send validated model
     return ( dispatch, getState ) => {
-        const id = 'random_new_id';
+        const id = uuid.v4();
         const name = getName( getState().T03.model.general );
         const description = getDescription( getState().T03.model.general );
-        const area = getArea( getState().T03.model.general );
+        const geometry = getArea( getState().T03.model.general );
         const timeUnit = getTimeUnit( getState().T03.model.general );
         const lengthUnit = getLengthUnit( getState().T03.model.general );
+
+        // TODO validate and fullfill data
+        const boundingBox = {};
+        const gridSize = {};
 
         dispatch( push( '/tools/' + tool + '/' + id ) );
         dispatch( setName( tool, name ) );
         dispatch( setDescription( tool, description ) );
-        dispatch( setArea( tool, area ) );
+        dispatch( setArea( tool, geometry ) );
         dispatch( setTimeUnit( tool, timeUnit ) );
         dispatch( setLengthUnit( tool, lengthUnit ) );
+        dispatch( sendCommandCreateModflowModel( id, name, description, geometry, boundingBox, gridSize, timeUnit, lengthUnit ));
+    };
+}
+
+export function updateModel( tool, id ) {
+    return ( dispatch, getState ) => {
+        const name = getName( getState().T03.model.general );
+        const description = getDescription( getState().T03.model.general );
+        const geometry = getArea( getState().T03.model.general );
+        const timeUnit = getTimeUnit( getState().T03.model.general );
+        const lengthUnit = getLengthUnit( getState().T03.model.general );
+        const boundingBox = {};
+        const gridSize = {};
+
+        dispatch( setName( tool, name ) );
+        dispatch( setDescription( tool, description ) );
+        dispatch( setArea( tool, geometry ) );
+        dispatch( setTimeUnit( tool, timeUnit ) );
+        dispatch( setLengthUnit( tool, lengthUnit ) );
+        dispatch( sendCommandUpdateModflowModel( id, name, description, geometry, boundingBox, gridSize, timeUnit, lengthUnit ));
     };
 }
 
