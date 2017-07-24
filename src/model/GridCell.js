@@ -1,4 +1,4 @@
-export default class Grid {
+export default class GridCell {
     _x;
     _y;
 

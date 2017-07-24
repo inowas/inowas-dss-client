@@ -48,7 +48,7 @@ class T03 extends Component {
 const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T03.ui ),
-        area: getArea( state.T03.model.general ),
+        area: getArea( state.T03.model ),
         mapPosition: getMapPosition( state.T03.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
         draggedAreaControlPoint: getDraggedAreaControlPoint( state.T03.ui ),

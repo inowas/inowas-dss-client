@@ -20,6 +20,7 @@ import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import Boundary from '../../model/Boundary';
 import BoundaryType from '../../model/BoundaryType';
+import {calcBoundsOfPolygon} from "../../calculations/geoTools";
 
 const RadiumMap = ConfiguredRadium( Map );
 
@@ -109,6 +110,7 @@ export default class ModelEditor extends Component {
         setAreaLongitude: PropTypes.func,
         activeAreaControlPoint: PropTypes.number,
         setActiveAreaControlPoint: PropTypes.func,
+        updateBoundingBox: PropTypes.func,
         boundaries: PropTypes.array,
         initial: PropTypes.bool,
         activeBoundary: PropTypes.string,
@@ -184,46 +186,10 @@ export default class ModelEditor extends Component {
         this.props.setEditorState( null );
     }
 
-    // TODO move to separate file
-    getBoundsOfPolygone( polygone ) {
-        let minLat = Infinity;
-        let maxLat = -Infinity;
-        let minLng = Infinity;
-        let maxLng = -Infinity;
-
-        polygone.forEach(c => {
-            if ( c.lat < minLat ) {
-                minLat = c.lat;
-            }
-
-            if ( c.lat > maxLat ) {
-                maxLat = c.lat;
-            }
-
-            if ( c.lng < minLng ) {
-                minLng = c.lng;
-            }
-
-            if ( c.lng > maxLng ) {
-                maxLng = c.lng;
-            }
-        });
-
-        return [
-            {
-                lat: minLat,
-                lng: minLng
-            }, {
-                lat: maxLat,
-                lng: maxLng
-            }
-        ];
-    }
-
     centerMapPositionToArea = ( ) => {
         const { area } = this.props;
         if ( area.length > 0 ) {
-            this.props.setMapPosition({bounds: this.getBoundsOfPolygone( area )});
+            this.props.setMapPosition({bounds: calcBoundsOfPolygon( area )});
         }
     }
 
@@ -358,6 +324,8 @@ export default class ModelEditor extends Component {
                 zoom: 2
             };
 
+        console.log(area);
+
         return (
             <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
@@ -441,10 +409,14 @@ export default class ModelEditor extends Component {
     }
 
     setEditorState = slug => {
-        const { setEditorState } = this.props;
+        const { setEditorState, updateBoundingBox } = this.props;
 
         return ( ) => {
             setEditorState( slug );
+
+            if (updateBoundingBox) {
+                updateBoundingBox();
+            }
         };
     }
 
