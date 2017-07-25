@@ -1,4 +1,7 @@
-import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../reducers/ModelEditor/general';
+import {
+    getArea, getBoundingBox, getDescription, getLengthUnit, getName,
+    getTimeUnit
+} from '../reducers/ModelEditor/general';
 
 import ConfiguredAxios from 'ConfiguredAxios';
 import LengthUnit from '../model/LengthUnit';
@@ -11,7 +14,6 @@ import Boundary from '../model/Boundary';
 import BoundaryType from '../model/BoundaryType';
 import BoundaryMetadata from '../model/BoundaryMetadata';
 import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel} from "./messageBox";
-import uuid from "uuid";
 
 /**
  * UI
@@ -98,6 +100,7 @@ export function setActiveBoundaryControlPoint( tool, index ) {
  */
 
 export const ActionTypeModel = {
+    CREATE_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_CREATE',
     SET_NAME: 'MODEL_EDITOR_MODEL_SET_NAME',
     SET_DESCRIPTION: 'MODEL_EDITOR_MODEL_SET_DESCRIPTION',
     SET_TIME_UNIT: 'MODEL_EDITOR_MODEL_SET_TIME_UNIT',
@@ -110,6 +113,15 @@ export const ActionTypeModel = {
     UPDATE_AREA_CONTROL_POINT: 'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL_POINT',
     UPDATE_BOUNDING_BOX: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDING_BOX',
 };
+
+export function createModflowModel( tool, id, payload ) {
+    return {
+        type: ActionTypeModel.CREATE_MODFLOW_MODEL,
+        tool,
+        id,
+        payload
+    };
+}
 
 export function setName( tool, name ) {
     return {
@@ -239,29 +251,6 @@ export function loadModel( tool, id ) {
             // eslint-disable-next-line no-console
             console.error( error );
         } );
-    };
-}
-
-export function createModel( tool ) {
-    return ( dispatch, getState ) => {
-        const id = uuid.v4();
-        const name = getName( getState().T03.model.general );
-        const description = getDescription( getState().T03.model.general );
-        const geometry = getArea( getState().T03.model.general );
-        const timeUnit = getTimeUnit( getState().T03.model.general );
-        const lengthUnit = getLengthUnit( getState().T03.model.general );
-
-        // TODO validate and fullfill data
-        const boundingBox = {};
-        const gridSize = {};
-
-        dispatch( push( '/tools/' + tool + '/' + id ) );
-        dispatch( setName( tool, name ) );
-        dispatch( setDescription( tool, description ) );
-        dispatch( setArea( tool, geometry ) );
-        dispatch( setTimeUnit( tool, timeUnit ) );
-        dispatch( setLengthUnit( tool, lengthUnit ) );
-        dispatch( sendCommandCreateModflowModel( id, name, description, geometry, boundingBox, gridSize, timeUnit, lengthUnit ));
     };
 }
 

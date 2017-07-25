@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    createModel,
+    createModflowModel,
     updateModel,
-    setEditorState,
+    setEditorState, ActionTypeModel,
 } from '../../actions/modelEditor';
 import {
     getModflowModel
@@ -10,13 +10,15 @@ import {
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import {getRequestStatus, isLoading} from "../../reducers/webData";
 import { Map, TileLayer, Polygon } from 'react-leaflet';
-import {convertPolygonToPoints, getBoundsOfPolygon, latLngToXY} from "../../calculations/geoTools";
+import {convertPolygonToPoints, getBoundsOfPolygon} from "../../calculations/geoTools";
 import {getInitialState} from "../../reducers/ModelEditor/model";
-
+import uuid from "uuid";
+import {stateToCreatePayload} from "../../actions/messageBox";
 
 const styles = {
     container: {
@@ -121,6 +123,18 @@ class ModelEditorGeneral extends Component {
         });
     }
 
+    handleInputChangeModflowBoundingBox(event, index, key) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState(function(prevState, props){
+            let modflowModel = prevState.modflowModel;
+            modflowModel['bounding_box'][index][key] = value;
+            return {modflowModel};
+        });
+    }
+
     getState(name) {
         return this.state[name];
     }
@@ -130,7 +144,19 @@ class ModelEditorGeneral extends Component {
     }
 
     editAreaOnMap = ( ) => {
-        this.props.setEditorState( 'area' );
+        this.props.setEditorState( this.props.tool, 'area' );
+    }
+
+    save(id) {
+        if (id) {
+            return;
+        }
+
+        this.props.createModflowModel(
+            this.props.tool,
+            uuid.v4(),
+            stateToCreatePayload(this.state['modflowModel'])
+        );
     }
 
     // eslint-disable-next-line no-shadow
@@ -229,28 +255,28 @@ class ModelEditorGeneral extends Component {
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="x_min" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[0].lat}
-                                               onChange={( e ) => this.handleInputChangeModflow( e, "bounding_box" )}
+                                               value={this.getModflowModelState( "bounding_box" )[0][0]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 0 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="x_max" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[0].lng}
-                                               onChange={( e ) => this.handleInputChangeModflow( e, "bounding_box" )}
+                                               value={this.getModflowModelState( "bounding_box" )[1][0]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 0 )}
                                                placeholder="x_max="/>
                                     </section>
                                 </div>
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="y_min" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[1].lat}
-                                               onChange={( e ) => this.handleInputChangeModflow( e, "bounding_box" )}
+                                               value={this.getModflowModelState( "bounding_box" )[0][1]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 1 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="y_max" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[1].lng}
-                                               onChange={( e ) => this.handleInputChangeModflow( e, "bounding_box" )}
+                                               value={this.getModflowModelState( "bounding_box" )[1][1]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 1 )}
                                                placeholder="y_max="/>
                                     </section>
                                 </div>
@@ -264,9 +290,9 @@ class ModelEditorGeneral extends Component {
                         <div>
                             {(( ) => {
                                 if ( id === undefined || id === null ) {
-                                    return <button disabled={disabled} onClick={createModel} className={btnClass}>Create Model</button>;
+                                    return <button disabled={disabled} onClick={() => {this.save();}} className={btnClass}>Create Model</button>;
                                 }
-                                return <button disabled={disabled} onClick={() => updateModel(id)} className={btnClass}>Save (yet to be implemented)</button>;
+                                return <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save (yet to be implemented)</button>;
                             })( )}
                         </div>
                     </section>
@@ -277,6 +303,7 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
+    console.log({modflowModel: getModflowModel(state[tool].model)});
     return {
         modflowModel: getModflowModel(state[tool].model),
         id: params.id,
@@ -284,26 +311,27 @@ const mapStateToProps = (state, { tool, params }) => {
     };
 };
 
-const actions = {
-    setEditorState,
-    createModel,
-    updateModel
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        createModflowModel: createModflowModel,
+        setEditorState: setEditorState
+    }, dispatch);
 };
 
-const mapDispatchToProps = (dispatch, { tool }) => {
-    const wrappedActions = {};
-    for ( const key in actions ) {
-        if (actions.hasOwnProperty( key )) {
-            // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function( ) {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch(actions[key]( tool, ...args ));
-            };
-        }
-    }
-
-    return wrappedActions;
-};
+// const mapDispatchToProps = (dispatch, { tool }) => {
+//     const wrappedActions = {};
+//     for ( const key in actions ) {
+//         if (actions.hasOwnProperty( key )) {
+//             // eslint-disable-next-line no-loop-func
+//             wrappedActions[key] = function( ) {
+//                 const args = Array.prototype.slice.call( arguments );
+//                 dispatch(actions[key]( tool, ...args ));
+//             };
+//         }
+//     }
+//
+//     return wrappedActions;
+// };
 
 // eslint-disable-next-line no-class-assign
 ModelEditorGeneral = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorGeneral ));

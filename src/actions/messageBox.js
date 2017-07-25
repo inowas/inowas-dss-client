@@ -4,33 +4,16 @@ import config from '../config';
 export const COMMAND_CREATE_MODFLOW_MODEL = "createModflowModel";
 export const COMMAND_UPDATE_MODFLOW_MODEL = "updateModflowModel";
 
-export function sendCommandCreateModflowModel ( id, name, description, geometry, boundingBox, gridSize, timeUnit, lengthUnit ) {
-    const payload = {
-        uuid: id,
-        name,
-        description,
-        geometry,
-        bounding_box: boundingBox,
-        grid_size: gridSize,
-        time_unit: timeUnit,
-        length_unit: lengthUnit
-    };
-
-    return sendMessageBox( COMMAND_CREATE_MODFLOW_MODEL, payload );
-}
-
-export function sendCommandUpdateModflowModel ( id, name, description, geometry, boundingBox, gridSize, timeUnit, lengthUnit ) {
-    const payload = {
-        uuid: id,
-        name,
-        description,
-        geometry,
-        bounding_box: boundingBox,
-        grid_size: gridSize,
-        time_unit: timeUnit,
-        length_unit: lengthUnit
-    };
-    return sendMessageBox( COMMAND_UPDATE_MODFLOW_MODEL, payload );
+export function stateToCreatePayload(state) {
+    return {
+        name: state.name,
+        description: state.description,
+        geometry: state.geometry,
+        bounding_box: state.bounding_box,
+        grid_size: state.grid_size,
+        time_unit: state.time_unit,
+        length_unit: state.length_unit
+    }
 }
 
 export function sendMessageBox ( responseAction, body ) {

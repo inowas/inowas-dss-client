@@ -39,6 +39,10 @@ const createModelReducer = tool => {
             case ActionTypeModel.SET_NAME:
                 return { ...state, name: action.payload };
 
+            case ActionTypeModel.CREATE_MODFLOW_MODEL:
+                console.log('create reducer', action);
+                return {...state, modflowModel: action.payload};
+
             case ActionTypeModel.SET_DESCRIPTION:
                 return { ...state, description: action.payload };
 
@@ -52,13 +56,13 @@ const createModelReducer = tool => {
                 return { ...state, geometry: { coordinates: action.payload, type: "Polygon" } };
 
             case ActionTypeModel.ADD_AREA_CONTROL_POINT:
-                return handleAreaAddControlPoint( state, action );
+                return { ...state, geometry: handleAreaAddControlPoint( state.geometry, action )};
 
             case ActionTypeModel.UPDATE_AREA_CONTROL_POINT:
-                return handleAreaUpdateControlPoint( state, action );
+                return { ...state, geometry: handleAreaUpdateControlPoint( state.geometry, action )};
 
             case ActionTypeModel.DELETE_AREA_CONTROL_POINT:
-                return handleAreaDeleteControlPoint( state, action );
+                return { ...state, geometry: handleAreaDeleteControlPoint( state.geometry, action )};
 
             case ActionTypeBoundaries.SET_BOUNDARIES:
                 return { ...state, boundaries: action.payload.map( b => b.toObject ) };
