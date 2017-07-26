@@ -967,7 +967,7 @@ babel-register@^6.24.0, babel-register@^6.9.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.18.0, babel-runtime@^6.2.0, babel-runtime@^6.22.0, babel-runtime@^6.9.1, babel-runtime@^6.9.2:
+babel-runtime@^6.18.0, babel-runtime@^6.2.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.9.1, babel-runtime@^6.9.2:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
@@ -4151,9 +4151,9 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-leaflet@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.0.3.tgz#1f401b98b45c8192134c6c8d69686253805007c8"
+leaflet@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.1.0.tgz#63246715cfc783dca6798b843a250e8e6fd84918"
 
 less-loader@^4.0.3:
   version "4.0.3"
@@ -5731,10 +5731,11 @@ react-input-autosize@^1.1.3:
     create-react-class "^15.5.2"
     prop-types "^15.5.8"
 
-react-leaflet@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.1.4.tgz#a447c74302d2c4192b1e26795b3c7dd92aa93244"
+react-leaflet@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.4.1.tgz#5cc502a34c1e710809fe33fc520483a03d5e3482"
   dependencies:
+    babel-runtime "^6.23.0"
     lodash "^4.0.0"
     warning "^3.0.0"
 
@@ -7046,11 +7047,7 @@ uuid@^2.0.1, uuid@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
-
-uuid@^3.1.0:
+uuid@^3.0.0, uuid@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
