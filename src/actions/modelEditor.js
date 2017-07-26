@@ -101,6 +101,7 @@ export function setActiveBoundaryControlPoint( tool, index ) {
 
 export const ActionTypeModel = {
     CREATE_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_CREATE',
+    SET_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_SET',
     SET_NAME: 'MODEL_EDITOR_MODEL_SET_NAME',
     SET_DESCRIPTION: 'MODEL_EDITOR_MODEL_SET_DESCRIPTION',
     SET_TIME_UNIT: 'MODEL_EDITOR_MODEL_SET_TIME_UNIT',
@@ -119,6 +120,14 @@ export function createModflowModel( tool, id, payload ) {
         type: ActionTypeModel.CREATE_MODFLOW_MODEL,
         tool,
         id,
+        payload
+    };
+}
+
+export function setModflowModel( tool, payload ) {
+    return {
+        type: ActionTypeModel.SET_MODFLOW_MODEL,
+        tool,
         payload
     };
 }

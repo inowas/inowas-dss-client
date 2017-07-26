@@ -36,12 +36,21 @@ const createModelReducer = tool => {
         }
 
         switch ( action.type ) {
+            case ActionTypeModel.CREATE_MODFLOW_MODEL:
+            case ActionTypeModel.SET_MODFLOW_MODEL:
+                console.log('create/set reducer', action);
+                return {
+                    ...state,
+                    name: action.payload.name,
+                    description: action.payload.description,
+                    time_unit: action.payload.time_unit,
+                    length_unit: action.payload.length_unit,
+                    geometry: action.payload.geometry,
+                    bounding_box: action.payload.bounding_box,
+            };
+
             case ActionTypeModel.SET_NAME:
                 return { ...state, name: action.payload };
-
-            case ActionTypeModel.CREATE_MODFLOW_MODEL:
-                console.log('create reducer', action);
-                return {...state, modflowModel: action.payload};
 
             case ActionTypeModel.SET_DESCRIPTION:
                 return { ...state, description: action.payload };

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
     createModflowModel,
+    setModflowModel,
     updateModel,
     setEditorState, ActionTypeModel,
 } from '../../actions/modelEditor';
@@ -56,55 +57,30 @@ const initialState = {
 @ConfiguredRadium
 class ModelEditorGeneral extends Component {
 
-    // static propTypes = {
-    //     style: PropTypes.object,
-    //     name: PropTypes.string,
-    //     description: PropTypes.string,
-    //     timeUnit: PropTypes.instanceOf( TimeUnit ),
-    //     lengthUnit: PropTypes.instanceOf( LengthUnit ),
-    //     gridX: PropTypes.number,
-    //     gridY: PropTypes.number,
-    //     area: PropTypes.array,
-    //     setName: PropTypes.func,
-    //     setDescription: PropTypes.func,
-    //     setTimeUnit: PropTypes.func,
-    //     setLengthUnit: PropTypes.func,
-    //     addAreaCoordinate: PropTypes.func,
-    //     setAreaLatitude: PropTypes.func,
-    //     setAreaLongitude: PropTypes.func,
-    //     setEditorState: PropTypes.func,
-    //     createModel: PropTypes.func,
-    //     updateModel: PropTypes.func,
-    //     webData: PropTypes.array,
-    //     id: PropTypes.string
-    // };
+    static propTypes = {
+        style: PropTypes.object,
+        setEditorState: PropTypes.func,
+        createModel: PropTypes.func,
+        setModflowModel: PropTypes.func,
+        updateModel: PropTypes.func,
+        webData: PropTypes.array,
+        id: PropTypes.string
+    };
 
     constructor(props) {
         super(props);
         this.state = initialState;
 
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleInputChangeModflow = this.handleInputChangeModflow.bind(this);
     }
 
-    componentWillReceiveProps(props){
-        console.log('componentWillReceiveProps', props);
-        // this.setState(function(prevState, newState){
-        //     console.log({props, prevState, newState});
-        // })
-    }
-
-    handleInputChange(event, key) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
+    componentWillMount(){
         this.setState(function(prevState, props){
-            if (key) {
-                return {[key]: {name: value}}
-            }
-            return {[name]: value}
-        });
+            return { ...prevState, modflowModel: this.props.modflowModel };
+        } );
+    }
+    componentWillUnmount(){
+        this.props.setModflowModel(this.state.modflowModel);
     }
 
     handleInputChangeModflow(event, key) {
@@ -113,13 +89,26 @@ class ModelEditorGeneral extends Component {
         const name = target.name;
 
         this.setState(function(prevState, props){
-            let modflowModel = prevState.modflowModel;
             if (key) {
-                modflowModel[key][name] = value;
-            } else {
-                modflowModel[name] = value;
+                return {
+                    ...prevState,
+                    modflowModel: {
+                        ...prevState.modflowModel,
+                        [key]: {
+                            ...prevState.modflowModel[key],
+                            [name]: value
+                        }
+                    }
+                };
             }
-            return {modflowModel};
+
+            return {
+                ...prevState,
+                modflowModel: {
+                    ...prevState.modflowModel,
+                    [name]: value
+                }
+            };
         });
     }
 
@@ -135,17 +124,13 @@ class ModelEditorGeneral extends Component {
         });
     }
 
-    getState(name) {
-        return this.state[name];
-    }
-
     getModflowModelState(name) {
         return this.state['modflowModel'][name];
     }
 
     editAreaOnMap = ( ) => {
-        this.props.setEditorState( this.props.tool, 'area' );
-    }
+        this.props.setEditorState( 'area' );
+    };
 
     save(id) {
         if (id) {
@@ -153,7 +138,6 @@ class ModelEditorGeneral extends Component {
         }
 
         this.props.createModflowModel(
-            this.props.tool,
             uuid.v4(),
             stateToCreatePayload(this.state['modflowModel'])
         );
@@ -182,9 +166,6 @@ class ModelEditorGeneral extends Component {
         const {
             style,
             id,
-            createModel,
-            updateModel,
-            modflowModel,
             // eslint-disable-next-line no-shadow
             webData
         } = this.props;
@@ -255,13 +236,13 @@ class ModelEditorGeneral extends Component {
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="x_min" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[0][0]}
+                                               value={this.getModflowModelState( "bounding_box")[0][0]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 0 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="x_max" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[1][0]}
+                                               value={this.getModflowModelState( "bounding_box")[1][0]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 0 )}
                                                placeholder="x_max="/>
                                     </section>
@@ -269,13 +250,13 @@ class ModelEditorGeneral extends Component {
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="y_min" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[0][1]}
+                                               value={this.getModflowModelState( "bounding_box")[0][1]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 1 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="y_max" className="input"
-                                               value={this.getModflowModelState( "bounding_box" )[1][1]}
+                                               value={this.getModflowModelState( "bounding_box")[1][1]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 1 )}
                                                placeholder="y_max="/>
                                     </section>
@@ -285,8 +266,7 @@ class ModelEditorGeneral extends Component {
                     </section>
 
                     <section className="col col-rel-3 stretch">
-                        {/*{this.renderArea( this.getModflowModelState('geometry').coordinates, this.editAreaOnMap )}*/}
-                        {this.renderArea( modflowModel.geometry.coordinates, modflowModel.bounding_box, this.editAreaOnMap )}
+                        {this.renderArea( this.getModflowModelState( "geometry")["coordinates"], this.getModflowModelState( "bounding_box"), this.editAreaOnMap )}
                         <div>
                             {(( ) => {
                                 if ( id === undefined || id === null ) {
@@ -303,7 +283,6 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
-    console.log({modflowModel: getModflowModel(state[tool].model)});
     return {
         modflowModel: getModflowModel(state[tool].model),
         id: params.id,
@@ -311,27 +290,27 @@ const mapStateToProps = (state, { tool, params }) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        createModflowModel: createModflowModel,
-        setEditorState: setEditorState
-    }, dispatch);
+const actions = {
+    setModflowModel,
+    createModflowModel,
+    setEditorState
 };
 
-// const mapDispatchToProps = (dispatch, { tool }) => {
-//     const wrappedActions = {};
-//     for ( const key in actions ) {
-//         if (actions.hasOwnProperty( key )) {
-//             // eslint-disable-next-line no-loop-func
-//             wrappedActions[key] = function( ) {
-//                 const args = Array.prototype.slice.call( arguments );
-//                 dispatch(actions[key]( tool, ...args ));
-//             };
-//         }
-//     }
-//
-//     return wrappedActions;
-// };
+const mapDispatchToProps = (dispatch, { tool }) => {
+    const wrappedActions = {};
+    for ( const key in actions ) {
+        if (actions.hasOwnProperty( key )) {
+            // eslint-disable-next-line no-loop-func
+            wrappedActions[key] = function( ) {
+                const args = Array.prototype.slice.call( arguments );
+                dispatch(actions[key]( tool, ...args ));
+            };
+        }
+    }
+
+    return wrappedActions;
+};
+
 
 // eslint-disable-next-line no-class-assign
 ModelEditorGeneral = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorGeneral ));
