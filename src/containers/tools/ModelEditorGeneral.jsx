@@ -104,6 +104,13 @@ class ModelEditorGeneral extends Component {
 
     componentWillUpdate() {
         console.log('componentWillUpdate');
+
+        console.log(this.refs.map);
+        if ( this.refs.map ) {
+            console.log(this.refs.map.leafletElement, this.getModflowModelState('bounding_box'));
+            this.refs.map.leafletElement.fitBounds(this.getModflowModelState('bounding_box'));
+        }
+
     }
 
     handleInputChangeModflow(event, key) {
@@ -149,7 +156,6 @@ class ModelEditorGeneral extends Component {
         if (filter) {
             value = filters[filter](value);
         }
-
         this.setState(function(prevState, props){
             return {
                 ...prevState,
@@ -197,7 +203,7 @@ class ModelEditorGeneral extends Component {
             <div>
                 <h3>Area</h3>
                 <button onClick={editAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
-                <Map className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
+                <Map  ref="map" className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                     {(( ) => {
                         if ( area ) {
