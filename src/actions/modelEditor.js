@@ -4,16 +4,14 @@ import {
 } from '../reducers/ModelEditor/general';
 
 import ConfiguredAxios from 'ConfiguredAxios';
-import LengthUnit from '../model/LengthUnit';
-import TimeUnit from '../model/TimeUnit';
 import { getActiveBoundary } from '../reducers/ModelEditor/ui';
 import { getApiKey } from '../reducers/user';
 import { getBoundary } from '../reducers/ModelEditor/boundaries';
-import { push } from 'react-router-redux';
 import Boundary from '../model/Boundary';
 import BoundaryType from '../model/BoundaryType';
 import BoundaryMetadata from '../model/BoundaryMetadata';
-import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel} from "./messageBox";
+import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel, sendQuery} from "./messageBox";
+
 
 /**
  * UI
@@ -100,6 +98,7 @@ export function setActiveBoundaryControlPoint( tool, index ) {
  */
 
 export const ActionTypeModel = {
+    LOAD_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_LOAD',
     CREATE_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_CREATE',
     SET_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_SET',
     SET_NAME: 'MODEL_EDITOR_MODEL_SET_NAME',
@@ -121,6 +120,14 @@ export function createModflowModel( tool, id, payload ) {
         tool,
         id,
         payload
+    };
+}
+
+export function loadModflowModel( tool, id ) {
+    return {
+        type: ActionTypeModel.LOAD_MODFLOW_MODEL,
+        tool,
+        id
     };
 }
 
@@ -229,37 +236,6 @@ export function deleteAreaControlPoint( tool, index ) {
         type: ActionTypeModel.DELETE_AREA_CONTROL_POINT,
         tool,
         payload: index
-    };
-}
-
-export function loadModel( tool, id ) {
-    return ( dispatch, getState ) => {
-        return dispatch( {
-            type: 'FETCH_DATA',
-            payload: {
-                promise: ConfiguredAxios.get( '/modflowmodels/' + id, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
-            }
-        } ).then( ( { action } ) => {
-            const data = action.payload.data;
-            dispatch( setName( tool, data.name ) );
-            dispatch( setDescription( tool, data.description ) );
-            dispatch( setTimeUnit( tool, TimeUnit.fromNumber( data.time_unit ) ) );
-            dispatch( setLengthUnit( tool, LengthUnit.fromNumber( data.length_unit ) ) );
-            dispatch( setArea( tool, data.geometry.coordinates[ 0 ].map( c => ( { lat: c[ 1 ], lng: c[ 0 ] } ) ) ) );
-            dispatch( setMapPosition( tool, {
-                bounds: [ {
-                    lat: data.bounding_box.y_min,
-                    lng: data.bounding_box.x_min,
-                }, {
-                    lat: data.bounding_box.y_max,
-                    lng: data.bounding_box.x_max,
-                } ]
-            } ) );
-            // TODO
-        } ).catch( ( error ) => {
-            // eslint-disable-next-line no-console
-            console.error( error );
-        } );
     };
 }
 

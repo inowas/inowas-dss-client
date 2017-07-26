@@ -94,7 +94,6 @@ export default class ModelEditor extends Component {
         id: PropTypes.string,
         state: PropTypes.string, // TODO better use oneOf
         setEditorState: PropTypes.func,
-        loadModel: PropTypes.func.isRequired,
         fetchBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
@@ -124,7 +123,8 @@ export default class ModelEditor extends Component {
         updateBoundaryControlPoint: PropTypes.func,
         activeBoundaryControlPoint: PropTypes.number,
         setActiveBoundaryControlPoint: PropTypes.func,
-        deleteAreaControlPoint: PropTypes.func
+        deleteAreaControlPoint: PropTypes.func,
+        loadModflowModel: PropTypes.func,
     };
 
     componentDidMount( ) {
@@ -132,7 +132,7 @@ export default class ModelEditor extends Component {
 
         // load Model
         if (!initial) {
-            this.loadModel();
+            this.props.loadModflowModel(this.props.id);
         }
 
         // center mapPosition to area if no mapPosition is specified
@@ -158,12 +158,6 @@ export default class ModelEditor extends Component {
                 this.enableMap( );
             }
         }
-    }
-
-    loadModel() {
-        const { id, loadModel, fetchBoundaries } = this.props;
-        loadModel( id );
-        fetchBoundaries( id );
     }
 
     enableMap = ( ) => {

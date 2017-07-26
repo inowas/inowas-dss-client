@@ -24,7 +24,7 @@ export function getInitialState () {
             [ 0, 0 ],
             [ 10, 10 ]
         ],
-        geometry: { coordinates: [] },
+        geometry: { coordinates: [], type: "Polygon" },
         boundaries: [],
     };
 }
@@ -41,6 +41,7 @@ const createModelReducer = tool => {
                 console.log('create/set reducer', action);
                 return {
                     ...state,
+                    id: action.payload.id,
                     name: action.payload.name,
                     description: action.payload.description,
                     time_unit: action.payload.time_unit,

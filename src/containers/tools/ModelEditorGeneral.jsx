@@ -20,6 +20,8 @@ import {convertPolygonToPoints, getBoundsOfPolygon} from "../../calculations/geo
 import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
 import {stateToCreatePayload} from "../../actions/messageBox";
+import * as filters from "../../calculations/filter";
+import {sendQuery} from "../../actions/messageBox"
 
 const styles = {
     container: {
@@ -63,7 +65,7 @@ class ModelEditorGeneral extends Component {
         createModel: PropTypes.func,
         setModflowModel: PropTypes.func,
         updateModel: PropTypes.func,
-        webData: PropTypes.array,
+        webData: PropTypes.object,
         id: PropTypes.string
     };
 
@@ -74,19 +76,45 @@ class ModelEditorGeneral extends Component {
         this.handleInputChangeModflow = this.handleInputChangeModflow.bind(this);
     }
 
-    componentWillMount(){
+    componentWillReceiveProps(newProps){
+        console.log('componentWillReceiveProps', newProps);
         this.setState(function(prevState, props){
-            return { ...prevState, modflowModel: this.props.modflowModel };
+            return { ...prevState, modflowModel: newProps.modflowModel };
+        } );
+    }
+
+    componentWillMount(){
+        if (this.props.id !== this.props.modflowModel.id) {
+            console.log('reset modflow model');
+            this.setState(function(prevState, props){
+                return { ...prevState, modflowModel: getInitialState() };
+            } );
+            return;
+        }
+
+        const modflowModel = this.props.modflowModel ? this.props.modflowModel : getInitialState();
+
+        this.setState(function(prevState, props){
+            return { ...prevState, modflowModel };
         } );
     }
     componentWillUnmount(){
         this.props.setModflowModel(this.state.modflowModel);
     }
 
+    componentWillUpdate() {
+        console.log('componentWillUpdate');
+    }
+
     handleInputChangeModflow(event, key) {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
+        const filter = target.dataset.filter;
+
+        if (filter) {
+            value = filters[filter](value);
+        }
 
         this.setState(function(prevState, props){
             if (key) {
@@ -114,13 +142,28 @@ class ModelEditorGeneral extends Component {
 
     handleInputChangeModflowBoundingBox(event, index, key) {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
+
+        const filter = target.dataset.filter;
+
+        if (filter) {
+            value = filters[filter](value);
+        }
 
         this.setState(function(prevState, props){
-            let modflowModel = prevState.modflowModel;
-            modflowModel['bounding_box'][index][key] = value;
-            return {modflowModel};
+            return {
+                ...prevState,
+                modflowModel: {
+                    ...prevState.modflowModel,
+                    bounding_box: prevState.modflowModel.bounding_box.map((item, i) => {
+                        if(i !== index) {
+                            return item;
+                        }
+                        item[key] = value;
+                        return item;
+                    })
+                }
+            };
         });
     }
 
@@ -139,17 +182,22 @@ class ModelEditorGeneral extends Component {
 
         this.props.createModflowModel(
             uuid.v4(),
-            stateToCreatePayload(this.state['modflowModel'])
+            this.state['modflowModel']
         );
+    }
+
+    getBounds() {
+        return this.getModflowModelState('bounding_box');
     }
 
     // eslint-disable-next-line no-shadow
     renderArea( area, bounds, editAreaOnMap ) {
+        console.log('renderArea', area, this.getBounds());
         return (
             <div>
                 <h3>Area</h3>
                 <button onClick={editAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
-                <Map className="crossSectionMap" zoomControl={false} bounds={bounds} >
+                <Map className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                     {(( ) => {
                         if ( area ) {
@@ -196,7 +244,8 @@ class ModelEditorGeneral extends Component {
                                 <label>Time Unit</label>
                                 <select className="select" name="time_unit"
                                         value={this.getModflowModelState( "time_unit" )}
-                                        onChange={this.handleInputChangeModflow}>
+                                        onChange={this.handleInputChangeModflow}
+                                        data-filter="filterInt">
                                     <option value="1">Second</option>
                                     <option value="2">Minute</option>
                                     <option value="3">Hour</option>
@@ -207,6 +256,7 @@ class ModelEditorGeneral extends Component {
                             <div className="form-group">
                                 <label>Length Unit</label>
                                 <select className="select" name="length_unit"
+                                        data-filter="filterInt"
                                         value={this.getModflowModelState( "length_unit" )}
                                         onChange={this.handleInputChangeModflow}>
                                     <option value="1">Centimeter</option>
@@ -220,12 +270,14 @@ class ModelEditorGeneral extends Component {
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="n_x" min="1" step="1" className="input"
                                                value={this.getModflowModelState( "grid_size" ).n_x}
+                                               data-filter="filterInt"
                                                onChange={( e ) => this.handleInputChangeModflow( e, "grid_size" )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="n_y" min="1" step="1" className="input"
                                                value={this.getModflowModelState( "grid_size" ).n_y}
+                                               data-filter="filterInt"
                                                onChange={( e ) => this.handleInputChangeModflow( e, "grid_size" )}
                                                placeholder="Y="/>
                                     </section>
@@ -236,12 +288,14 @@ class ModelEditorGeneral extends Component {
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="x_min" className="input"
+                                               data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[0][0]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 0 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="x_max" className="input"
+                                               data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[1][0]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 0 )}
                                                placeholder="x_max="/>
@@ -250,12 +304,14 @@ class ModelEditorGeneral extends Component {
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="y_min" className="input"
+                                               data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[0][1]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 1 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
                                         <input type="number" name="y_max" className="input"
+                                               data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[1][1]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 1 )}
                                                placeholder="y_max="/>
@@ -283,6 +339,7 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
+    console.log('mapStateToProps', state);
     return {
         modflowModel: getModflowModel(state[tool].model),
         id: params.id,
@@ -293,7 +350,8 @@ const mapStateToProps = (state, { tool, params }) => {
 const actions = {
     setModflowModel,
     createModflowModel,
-    setEditorState
+    setEditorState,
+    sendQuery
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

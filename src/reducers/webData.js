@@ -1,5 +1,5 @@
 function initialState() {
-    return [];
+    return {};
 }
 
 const webData = ( state = initialState(), action ) => {
