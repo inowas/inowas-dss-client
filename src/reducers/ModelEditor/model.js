@@ -40,14 +40,7 @@ const createModelReducer = tool => {
             case ActionTypeModel.SET_MODFLOW_MODEL:
                 return {
                     ...state,
-                    id: action.payload.id,
-                    name: action.payload.name,
-                    description: action.payload.description,
-                    time_unit: action.payload.time_unit,
-                    length_unit: action.payload.length_unit,
-                    geometry: action.payload.geometry,
-                    bounding_box: action.payload.bounding_box,
-                    grid_size: action.payload.grid_size,
+                    ...action.payload
                 };
 
             case ActionTypeModel.DESTROY_MODFLOW_MODEL:
