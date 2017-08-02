@@ -182,9 +182,10 @@ export function fetchDetails( id, onSuccess ) {
                 promise: ConfiguredAxios.get( '/scenarioanalyses/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
+
             const area = action.payload.data.geometry;
             const boundingBoxPlain = action.payload.data.bounding_box;
-            const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain.y_min, boundingBoxPlain.x_min ), new Coordinate( boundingBoxPlain.y_max, boundingBoxPlain.x_max ) );
+            const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain[0][1], boundingBoxPlain[0][0] ), new Coordinate( boundingBoxPlain[1][1], boundingBoxPlain[1][0] ) );
             const gridSize = action.payload.data.grid_size;
 
             const baseModel = ModflowModel.fromProps(
@@ -354,7 +355,7 @@ export function fetchTimeSeries( coordinate, calculationId, resultType, layerNum
         return dispatch( {
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
+                promise: ConfiguredAxios.get( '/calculations/' + calculationId + '/results/timeseries/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/x/' + x + '/y/' + y + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
             const data = [];
