@@ -1,5 +1,5 @@
 import {
-    getArea, getBoundingBox, getDescription, getLengthUnit, getName,
+    getGeometry, getBoundingBox, getDescription, getLengthUnit, getName,
     getTimeUnit
 } from '../reducers/ModelEditor/general';
 

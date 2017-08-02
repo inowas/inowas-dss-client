@@ -2,7 +2,9 @@ import '../../less/leaflet.less';
 
 // TODO break into smaller parts
 
-import { Map, TileLayer } from 'react-leaflet';
+import { Circle, GeoJSON, Map, TileLayer, FeatureGroup } from 'react-leaflet';
+import { EditControl } from "react-leaflet-draw"
+
 import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -98,7 +100,7 @@ export default class ModelEditor extends Component {
         fetchBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
-        area: PropTypes.array,
+        geometry: PropTypes.object,
         mapPosition: PropTypes.object,
         setMousePositionOnMap: PropTypes.func,
         firstAreaControlPoint: PropTypes.object,
@@ -128,6 +130,7 @@ export default class ModelEditor extends Component {
     };
 
     componentDidMount( ) {
+
         const { mapPosition, area, state } = this.props;
 
         // center mapPosition to area if no mapPosition is specified
@@ -165,25 +168,25 @@ export default class ModelEditor extends Component {
 
     unsetActiveTool = ( ) => {
         this.props.setEditorState( null );
-    }
+    };
 
     centerMapPositionToArea = ( ) => {
-        const { area } = this.props;
+        const { geometry } = this.props;
         if ( area.length > 0 ) {
             this.props.setMapPosition({bounds: calcBoundsOfPolygon( area )});
         }
-    }
+    };
 
     setMapPosition = e => {
         const zoom = e.target.getZoom( );
         const center = e.target.getCenter( );
 
         this.props.setMapPosition({ center, zoom });
-    }
+    };
 
     setMousePosition = e => {
         this.props.setMousePositionOnMap( e.latlng );
-    }
+    };
 
     addAreaControlPoint = e => {
         const lat = e.latlng.lat;
@@ -196,7 +199,7 @@ export default class ModelEditor extends Component {
         const latlng = e.latlng;
 
         this.props.addBoundaryControlPoint( latlng );
-    }
+    };
 
     addWell = e => {
         const { addBoundary, boundaries } = this.props;
@@ -209,34 +212,13 @@ export default class ModelEditor extends Component {
                 coordinates: [e.latlng.lng, e.latlng.lat]
             }
         ));
-    }
+    };
 
     renderMap( ) {
         const {
             state,
-            area,
-            mapPosition,
-            setEditorState,
-            mousePositionOnMap,
-            activeAreaControlPoint,
-            addAreaControlPoint,
-            setActiveAreaControlPoint,
-            draggedAreaControlPoint,
-            setDraggedAreaControlPoint,
-            setAreaLatitude,
-            setAreaLongitude,
-            boundaries,
-            activeBoundary,
-            setActiveBoundary,
-            deleteBoundary,
-            draggedBoundary,
-            setDraggedBoundary,
-            updateBoundary,
-            addBoundaryControlPoint,
-            updateBoundaryControlPoint,
-            activeBoundaryControlPoint,
-            setActiveBoundaryControlPoint,
-            deleteAreaControlPoint
+            geometry,
+            mapPosition
         } = this.props;
 
         const handler = {
@@ -244,6 +226,7 @@ export default class ModelEditor extends Component {
             onClick: ( ) => {},
             onMouseMove: ( ) => {}
         };
+
         switch ( state ) {
             case 'area-draw':
                 handler.onClick = this.addAreaControlPoint;
@@ -297,8 +280,7 @@ export default class ModelEditor extends Component {
         })( );
 
         const mergedWithDefaultsMapPosition = mapPosition
-            ? mapPosition
-            : {
+            ? mapPosition : {
                 center: [
                     0, 0
                 ],
@@ -308,35 +290,57 @@ export default class ModelEditor extends Component {
         return (
             <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
-                <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} deleteControlPoint={deleteAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                    ? this.refs.map.leafletElement
-                    : null}/>
-                {boundaries.filter( b => b.type.slug === 'riv' ).map(( r, index ) => {
-                    const riverState = (( ) => {
-                        if ( r.id === activeBoundary ) {
-                            switch ( state ) {
-                                case 'river':
-                                    return 'default';
-                                case 'river-draw':
-                                    return 'draw';
-                                case 'river-edit':
-                                    return 'edit';
-                                default:
-                                    return 'minimal';
-                            }
-                        }
-                        return 'minimal';
-                    })( );
+                {this.renderModelGeometry()}
+                {this.renderEditControl()}
 
-                    return ( <EditableLine key={index} state={riverState} line={r.geometry.coordinates} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                    ? this.refs.map.leafletElement
-                    : null}/> );
-                })}
-                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setEditorState={setEditorState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type.slug === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                    ? this.refs.map.leafletElement
-                    : null}/>
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
             </RadiumMap>
+        );
+    }
+
+    renderModelGeometry( ) {
+        const geom = {
+                        "type": "LineString",
+                        "coordinates": [
+                            [
+                                -122.47979164123535,
+                                37.830124319877235
+                            ],
+                            [
+                                -122.47721672058105,
+                                37.809377088502615
+                            ]
+                        ]
+                    };
+
+        const geometry = this.props.geometry;
+
+        if ( geom) {
+            console.log('GEOMETRY', geom);
+            console.log('GEOMETRY', geometry);
+            return (
+                <FeatureGroup>
+                    <GeoJSON data={geom} />
+                    <GeoJSON data={geometry} />
+                    <Circle center={[51.51, -0.06]} radius={200} />
+                </FeatureGroup>
+            )
+        }
+    }
+
+    renderEditControl() {
+        return (
+            <FeatureGroup>
+                <EditControl
+                    position='bottomright'
+                    onEdited={this._onEditPath}
+                    onCreated={this._onCreate}
+                    onDeleted={this._onDeleted}
+                    draw={{
+                        rectangle: false
+                    }}
+                />
+            </FeatureGroup>
         );
     }
 
@@ -397,7 +401,7 @@ export default class ModelEditor extends Component {
                 updateBoundingBox();
             }
         };
-    }
+    };
 
     render( ) {
         const { state, initial, setEditorState, setActiveBoundaryType } = this.props;

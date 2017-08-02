@@ -20,7 +20,7 @@ import FilterableList from '../../components/primitive/FilterableList';
 import RiverProperties from '../../components/modflow/RiverProperties';
 import WellProperties from '../../components/modflow/WellProperties';
 import { connect } from 'react-redux';
-import { getArea } from '../../reducers/ModelEditor/general';
+import { getGeometry } from '../../reducers/ModelEditor/general';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import { withRouter } from 'react-router';
@@ -160,7 +160,7 @@ const mapStateToProps = (state, { tool, params }) => {
         boundary: getBoundary(state[tool].model.boundaries, getActiveBoundary( state[tool].ui )),
         boundaryType: getActiveBoundaryType( state[tool].ui ),
         boundaries: getBoundaries( state[tool].model.boundaries ),
-        area: getArea( state[tool].model.general ),
+        area: getGeometry( state[tool].model.general ),
         id: params.id
     };
 };
