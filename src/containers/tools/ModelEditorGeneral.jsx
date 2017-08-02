@@ -11,7 +11,6 @@ import {
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
-import {bindActionCreators} from 'redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import {getRequestStatus, isLoading} from "../../reducers/webData";
@@ -19,8 +18,8 @@ import { Map, TileLayer, Polygon } from 'react-leaflet';
 import {convertPolygonToPoints, getBoundsOfPolygon} from "../../calculations/geoTools";
 import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
-import {stateToCreatePayload} from "../../actions/messageBox";
 import * as filters from "../../calculations/filter";
+import * as mapHelpers from "../../calculations/map";
 import {sendQuery} from "../../actions/messageBox"
 
 const styles = {
@@ -98,6 +97,11 @@ class ModelEditorGeneral extends Component {
             return { ...prevState, modflowModel };
         } );
     }
+
+    componentDidMount( ) {
+        mapHelpers.disableMap( this.refs.map );
+    }
+
     componentWillUnmount(){
         this.props.setModflowModel(this.state.modflowModel);
     }

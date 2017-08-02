@@ -21,6 +21,7 @@ import uuid from 'uuid';
 import Boundary from '../../model/Boundary';
 import BoundaryType from '../../model/BoundaryType';
 import {calcBoundsOfPolygon} from "../../calculations/geoTools";
+import * as mapHelpers from "../../calculations/map";
 
 const RadiumMap = ConfiguredRadium( Map );
 
@@ -161,20 +162,12 @@ export default class ModelEditor extends Component {
     }
 
     enableMap = ( ) => {
-        if ( this.refs.map ) {
-            this.refs.map.leafletElement._handlers.forEach( function( handler ) {
-                handler.enable( );
-            });
-        }
-    }
+        mapHelpers.enableMap(this.refs.map);
+    };
 
     disableMap = ( ) => {
-        if ( this.refs.map ) {
-            this.refs.map.leafletElement._handlers.forEach( function( handler ) {
-                handler.disable( );
-            });
-        }
-    }
+        mapHelpers.disableMap(this.refs.map);
+    };
 
     unsetActiveTool = ( ) => {
         this.props.setEditorState( null );
