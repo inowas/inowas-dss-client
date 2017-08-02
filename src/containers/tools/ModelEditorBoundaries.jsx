@@ -160,7 +160,7 @@ const mapStateToProps = (state, { tool, params }) => {
         boundary: getBoundary(state[tool].model.boundaries, getActiveBoundary( state[tool].ui )),
         boundaryType: getActiveBoundaryType( state[tool].ui ),
         boundaries: getBoundaries( state[tool].model.boundaries ),
-        area: getArea( state[tool].model.general ),
+        area: getArea( state[tool].model ),
         id: params.id
     };
 };

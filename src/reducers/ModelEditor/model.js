@@ -71,10 +71,10 @@ const createModelReducer = tool => {
                 return { ...state, geometry: handleAreaDeleteControlPoint( state.geometry, action )};
 
             case ActionTypeBoundaries.SET_BOUNDARIES:
-                return { ...state, boundaries: action.payload.map( b => b.toObject ) };
+                return { ...state, boundaries: action.payload };
 
             case ActionTypeBoundaries.ADD_BOUNDARY:
-                return { ...state, boundaries: [ ...state.boundaries, action.payload.toObject ] };
+                return { ...state, boundaries: [ ...state.boundaries, action.payload ] };
 
             case ActionTypeBoundaries.UPDATE_BOUNDARY:
                 return { ...state, boundaries: handleUpdateBoundary(state.boundaries, action) };

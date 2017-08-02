@@ -86,10 +86,10 @@ export default class BoundariesOverview extends Component {
                                 <Tr key={index}>
                                     <Td>{b.name}</Td>
                                     {!type && <Td>{b.type.fullName}</Td>}
-                                    {type === 'wel' && <Td>{b.metadata.toObject.wellType}</Td>}
+                                    {type === 'wel' && <Td>{b.metadata.well_type}</Td>}
                                     {type === 'wel' && <Td>{b.geometry.coordinates[1]}</Td>}
                                     {type === 'wel' && <Td>{b.geometry.coordinates[0]}</Td>}
-                                    {type === 'wel' && <Td>{b.affectedLayers}</Td>}
+                                    {type === 'wel' && <Td>{b.affected_layers}</Td>}
                                 </Tr>
                             ))}
                         </tbody>
