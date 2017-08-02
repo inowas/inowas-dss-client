@@ -6,15 +6,26 @@ import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
+import {destroyModflowModel, loadModflowModel} from "./actions/modelEditor";
+import {reset} from "./api/webData";
 
-const routes = (
+const routes = (store) => (
     <Route path="/">
         <IndexRoute component={LandingPage}/>
         <Route path="impressum" component={Impressum}/>
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard}/>
             <Route path="T02(/:id)" component={tools.T02}/>
-            <Route path="T03(/:id)" component={tools.T03}/>
+            <Route path="T03(/:id)" component={tools.T03}
+                   onEnter={ (nextState) => {
+                       if (nextState.params.id) {
+                           store.dispatch(loadModflowModel('T03', nextState.params.id));
+                           return;
+                       }
+                       store.dispatch(reset());
+                       store.dispatch(destroyModflowModel('T03'));
+                   }}
+            />
             <Route path="T06(/:id)" component={tools.T06}/>
             <Route path="T07A/:id" component={tools.T07A}/>
             <Route path="T07B/:id" component={tools.T07B}/>

@@ -98,8 +98,10 @@ export function setActiveBoundaryControlPoint( tool, index ) {
  */
 
 export const ActionTypeModel = {
+    DESTROY_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_DESTROY',
     LOAD_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_LOAD',
     CREATE_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_CREATE',
+    UPDATE_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_UPDATE',
     SET_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_SET',
     SET_NAME: 'MODEL_EDITOR_MODEL_SET_NAME',
     SET_DESCRIPTION: 'MODEL_EDITOR_MODEL_SET_DESCRIPTION',
@@ -117,6 +119,21 @@ export const ActionTypeModel = {
 export function createModflowModel( tool, id, payload ) {
     return {
         type: ActionTypeModel.CREATE_MODFLOW_MODEL,
+        tool,
+        id,
+        payload
+    };
+}
+export function destroyModflowModel( tool ) {
+    return {
+        type: ActionTypeModel.DESTROY_MODFLOW_MODEL,
+        tool
+    };
+}
+
+export function updateModflowModel( tool, id, payload ) {
+    return {
+        type: ActionTypeModel.UPDATE_MODFLOW_MODEL,
         tool,
         id,
         payload
@@ -236,25 +253,6 @@ export function deleteAreaControlPoint( tool, index ) {
         type: ActionTypeModel.DELETE_AREA_CONTROL_POINT,
         tool,
         payload: index
-    };
-}
-
-export function updateModel( tool, id ) {
-    return ( dispatch, getState ) => {
-        const name = getName( getState().T03.model.general );
-        const description = getDescription( getState().T03.model.general );
-        const geometry = getArea( getState().T03.model.general );
-        const timeUnit = getTimeUnit( getState().T03.model.general );
-        const lengthUnit = getLengthUnit( getState().T03.model.general );
-        const boundingBox = {};
-        const gridSize = {};
-
-        dispatch( setName( tool, name ) );
-        dispatch( setDescription( tool, description ) );
-        dispatch( setArea( tool, geometry ) );
-        dispatch( setTimeUnit( tool, timeUnit ) );
-        dispatch( setLengthUnit( tool, lengthUnit ) );
-        dispatch( sendCommandUpdateModflowModel( id, name, description, geometry, boundingBox, gridSize, timeUnit, lengthUnit ));
     };
 }
 

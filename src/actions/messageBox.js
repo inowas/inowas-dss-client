@@ -41,26 +41,25 @@ export function sendCommand ( messageName, payload, metadata = [] ) {
 }
 
 export function sendMessageBox ( responseAction, body ) {
-    const options = {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify( body )
-    };
-
-    return sendHttpRequest( { url: config.baseURL + '/v2/messagebox', options }, responseAction );
+    return sendHttpRequest( buildRequest('messagebox', 'POST', JSON.stringify( body )), responseAction );
 }
 
 export function sendQuery ( url, responseAction ) {
-    const options = {
+    return sendHttpRequest( buildRequest(url, 'GET'), responseAction );
+}
+
+export function buildRequest(url, method, body) {
+    let options = {
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Access-Control-Request-Method': method
         },
-        method: "GET"
+        method
     };
+    if (body) {
+        options['body'] = body;
+        options['headers']['Content-Type'] = 'application/json';
+    }
 
-    return sendHttpRequest( { url: config.baseURL + '/v2/' + url, options }, responseAction );
+    return { url: config.baseURL + '/v2/' + url, options }
 }

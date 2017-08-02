@@ -2,11 +2,19 @@ import {call, put, select} from "redux-saga/effects";
 import {getApiKey} from "../reducers/user";
 
 export const AT_SEND_HTTP_REQUEST = 'AT_SEND_HTTP_REQUEST';
+export const AT_RESET_WEB_DATA = 'AT_RESET_WEB_DATA';
 
 export function sendHttpRequest ( request, responseAction ) {
     return {
         type: AT_SEND_HTTP_REQUEST,
         request,
+        responseAction
+    }
+}
+
+export function reset ( responseAction ) {
+    return {
+        type: AT_RESET_WEB_DATA,
         responseAction
     }
 }
@@ -42,7 +50,7 @@ export function* sendHttpRequestFlow ( action ) {
     }
 }
 
-function fetchStatusWrapper ( request, apiKey ) {
+export function fetchStatusWrapper ( request, apiKey ) {
     request.options.headers['X-AUTH-TOKEN'] = apiKey;
 
     return fetch( request.url, request.options ).then( response => {

@@ -124,17 +124,11 @@ export default class ModelEditor extends Component {
         updateBoundaryControlPoint: PropTypes.func,
         activeBoundaryControlPoint: PropTypes.number,
         setActiveBoundaryControlPoint: PropTypes.func,
-        deleteAreaControlPoint: PropTypes.func,
-        loadModflowModel: PropTypes.func,
+        deleteAreaControlPoint: PropTypes.func
     };
 
     componentDidMount( ) {
-        const { mapPosition, area, state, initial } = this.props;
-
-        // load Model
-        if (!initial) {
-            this.props.loadModflowModel(this.props.id);
-        }
+        const { mapPosition, area, state } = this.props;
 
         // center mapPosition to area if no mapPosition is specified
         if ( mapPosition === null && area.length > 0 ) {

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
     createModflowModel,
     setModflowModel,
-    updateModel,
+    updateModflowModel,
     setEditorState, ActionTypeModel,
 } from '../../actions/modelEditor';
 import {
@@ -13,9 +13,8 @@ import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
-import {getRequestStatus, isLoading} from "../../reducers/webData";
+import {getErrorMessage, getRequestStatus, hasError, isLoading} from "../../reducers/webData";
 import { Map, TileLayer, Polygon } from 'react-leaflet';
-import {convertPolygonToPoints, getBoundsOfPolygon} from "../../calculations/geoTools";
 import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
@@ -63,7 +62,6 @@ class ModelEditorGeneral extends Component {
         setEditorState: PropTypes.func,
         createModel: PropTypes.func,
         setModflowModel: PropTypes.func,
-        updateModel: PropTypes.func,
         webData: PropTypes.object,
         id: PropTypes.string
     };
@@ -83,14 +81,6 @@ class ModelEditorGeneral extends Component {
     }
 
     componentWillMount(){
-        if (this.props.id !== this.props.modflowModel.id) {
-            console.log('reset modflow model');
-            this.setState(function(prevState, props){
-                return { ...prevState, modflowModel: getInitialState() };
-            } );
-            return;
-        }
-
         const modflowModel = this.props.modflowModel ? this.props.modflowModel : getInitialState();
 
         this.setState(function(prevState, props){
@@ -109,12 +99,9 @@ class ModelEditorGeneral extends Component {
     componentWillUpdate() {
         console.log('componentWillUpdate');
 
-        console.log(this.refs.map);
         if ( this.refs.map ) {
-            console.log(this.refs.map.leafletElement, this.getModflowModelState('bounding_box'));
             this.refs.map.leafletElement.fitBounds(this.getModflowModelState('bounding_box'));
         }
-
     }
 
     handleInputChangeModflow(event, key) {
@@ -187,12 +174,16 @@ class ModelEditorGeneral extends Component {
 
     save(id) {
         if (id) {
+            this.props.updateModflowModel(
+                id,
+                this.state.modflowModel
+            );
             return;
         }
 
         this.props.createModflowModel(
             uuid.v4(),
-            this.state['modflowModel']
+            this.state.modflowModel
         );
     }
 
@@ -202,7 +193,6 @@ class ModelEditorGeneral extends Component {
 
     // eslint-disable-next-line no-shadow
     renderArea( area, bounds, editAreaOnMap ) {
-        console.log('renderArea', area, this.getBounds());
         return (
             <div>
                 <h3>Area</h3>
@@ -231,6 +221,19 @@ class ModelEditorGeneral extends Component {
         // TODO prevent onClick triggers if disabled and make that css works
         const disabled = isLoading(webData.UpdateModel) ? 'disabled' : '';
         const btnClass = isLoading(webData.UpdateModel) ? 'button button-accent is-disabled' : 'button button-accent';
+
+        if (id && isLoading(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])) {
+            // TODO move to dump component
+            return (
+                <p>Loading ...</p>
+            );
+        }
+        if (id && hasError(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])) {
+            // TODO move to dump component
+            return (
+                <p>Error while loading ... ({getErrorMessage(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])})</p>
+            );
+        }
 
         return (
             <div>
@@ -338,7 +341,7 @@ class ModelEditorGeneral extends Component {
                                 if ( id === undefined || id === null ) {
                                     return <button disabled={disabled} onClick={() => {this.save();}} className={btnClass}>Create Model</button>;
                                 }
-                                return <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save (yet to be implemented)</button>;
+                                return <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save</button>;
                             })( )}
                         </div>
                     </section>
@@ -360,6 +363,7 @@ const mapStateToProps = (state, { tool, params }) => {
 const actions = {
     setModflowModel,
     createModflowModel,
+    updateModflowModel,
     setEditorState,
     sendQuery
 };
