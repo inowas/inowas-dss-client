@@ -2,7 +2,7 @@
 import md5 from 'js-md5'
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FeatureGroup,GeoJSON, LayersControl, Map, CircleMarker, TileLayer } from 'react-leaflet';
+import { FeatureGroup, GeoJSON, LayersControl, Map, Polyline, Polygon,  CircleMarker, Circle, TileLayer } from 'react-leaflet';
 import { EditControl } from "react-leaflet-draw"
 
 class BackgroundMap extends Component {
@@ -120,6 +120,26 @@ class BackgroundMap extends Component {
         )
     }
 
+    renderRiversForEdit( boundaries ) {
+
+        const rivers =  boundaries.map( b => {
+            const coordinates = b.geometry.coordinates.map( c => ([c[1], c[0]]) );
+            return <Polyline key={this.generateKeyFunction( b.geometry )} positions={coordinates} style={this.getStyle(b.type)} />
+        });
+
+        if (rivers.length===0) {
+
+            return null;
+        }
+        const river = rivers[0];
+
+        console.log('RIVER', river);
+
+        return (
+            {river}
+        )
+    }
+
     renderWells( boundaries ) {
         const wells =  boundaries.map( w => (
             <CircleMarker key={w.id} center={[w.geometry.coordinates[1], w.geometry.coordinates[0]]} {...this.getStyle(w.type, 'puw')} />
@@ -138,7 +158,43 @@ class BackgroundMap extends Component {
         )
     }
 
+    getLatLngFromXY(coordinates) {
+        return coordinates.map( c => ([c[1], c[0]]));
+    }
+
     renderEditControl() {
+
+        // Get all editable elements
+
+        let editables = [];
+        if (this.props.model.edit === true) {
+            editables.push({id: 'area', geometry: this.props.model.geometry})
+        }
+
+        this.props.boundaries.map( b => {
+            if (b.edit === true) {
+                editables.push({id: b.id, geometry: b.geometry})
+            }
+        });
+
+        editables = editables.map( e => {
+            if (e.geometry.type === 'Polygon') {
+                return <Polygon key={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates)}/>
+            }
+
+            if (e.geometry.type === 'Linestring') {
+                return <Polyline key={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates)}/>
+            }
+
+            if (e.geometry.type === 'Point') {
+                return <Circle key={e.id} center={this.getLatLngFromXY(e.geometry.coordinates)}/>
+            }
+        });
+
+        if (editables.length === 0) {
+            return null;
+        }
+
         return (
             <FeatureGroup>
                 <EditControl
@@ -150,6 +206,9 @@ class BackgroundMap extends Component {
                         rectangle: false
                     }}
                 />
+
+                {editables}
+
             </FeatureGroup>
         );
     }
@@ -159,11 +218,11 @@ class BackgroundMap extends Component {
         const boundingBox = this.props.model.boundingBox;
         const boundaries = this.props.model.boundaries;
 
-        const constantHeads = boundaries.filter( b => { if (b.type === 'chd') return b });
-        const generalHeads = boundaries.filter( b => { if (b.type === 'ghb') return b });
-        const recharges = boundaries.filter( b => { if (b.type === 'rch') return b });
-        const rivers = boundaries.filter( b => { if (b.type === 'riv') return b });
-        const wells = boundaries.filter( b => { if (b.type === 'wel') return b });
+        const constantHeads = boundaries.filter( b => { if (b.type === 'chd' && b.edit !== true) return b });
+        const generalHeads = boundaries.filter( b => { if (b.type === 'ghb' && b.edit !== true) return b });
+        const recharges = boundaries.filter( b => { if (b.type === 'rch' && b.edit !== true) return b });
+        const rivers = boundaries.filter( b => { if (b.type === 'riv' && b.edit !== true) return b });
+        const wells = boundaries.filter( b => { if (b.type === 'wel' && b.edit !== true) return b });
 
         return (
             <div className="map-wrapper">
@@ -197,8 +256,6 @@ class BackgroundMap extends Component {
                         {this.renderRecharges( recharges )}
                         {this.renderRivers( rivers )}
                         {this.renderWells( wells )}
-
-
                     </LayersControl>
 
                     {this.renderEditControl()}
