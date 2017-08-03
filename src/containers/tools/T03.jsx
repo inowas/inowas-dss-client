@@ -17,6 +17,7 @@ import ModelEditor from '../../components/modflow/ModelEditor';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import BackgroundMap from "./BackgroundMap";
 
 class T03 extends Component {
 
@@ -34,6 +35,12 @@ class T03 extends Component {
         const { navigation } = this.state;
         const { id } = this.props;
         const initial = ( id === undefined || id === null );
+
+        return (
+            <div className="toolT03">
+                <BackgroundMap tool={'T03'} />
+            </div>
+        );
 
         return (
             <div className="toolT03">

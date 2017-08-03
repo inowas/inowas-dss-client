@@ -288,9 +288,9 @@ export default class ModelEditor extends Component {
             };
 
         return (
-            <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
+            <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler} bounds={this.getBounds(geometry)}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
-                {this.renderModelGeometry()}
+                {this.renderModelGeometry( geometry )}
                 {this.renderEditControl()}
 
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
@@ -298,31 +298,19 @@ export default class ModelEditor extends Component {
         );
     }
 
-    renderModelGeometry( ) {
-        const geom = {
-                        "type": "LineString",
-                        "coordinates": [
-                            [
-                                -122.47979164123535,
-                                37.830124319877235
-                            ],
-                            [
-                                -122.47721672058105,
-                                37.809377088502615
-                            ]
-                        ]
-                    };
+    getBounds( geometry ) {
+        if ( geometry.coordinates.length > 0) {
+            const bounds = L.geoJSON(geometry).getBounds();
+            console.log('BOUNDS', bounds);
+            return bounds;
+        }
+    }
 
-        const geometry = this.props.geometry;
-
-        if ( geom) {
-            console.log('GEOMETRY', geom);
-            console.log('GEOMETRY', geometry);
+    renderModelGeometry( geometry ) {
+        if ( geometry.coordinates.length > 0) {
             return (
                 <FeatureGroup>
-                    <GeoJSON data={geom} />
                     <GeoJSON data={geometry} />
-                    <Circle center={[51.51, -0.06]} radius={200} />
                 </FeatureGroup>
             )
         }

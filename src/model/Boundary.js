@@ -37,9 +37,9 @@ export default class Boundary {
         this._affectedLayers = affectedLayers;
 
         // optional
-        if ( !( metadata instanceof BoundaryMetadata ) && metadata !== null ) {
-            throw new Error( 'Expected sixth parameter to be a BoundaryMetadata, but got ' + ( typeof metadata ) );
-        }
+        // if ( !( metadata instanceof BoundaryMetadata ) && metadata !== null ) {
+        //     throw new Error( 'Expected sixth parameter to be a BoundaryMetadata, but got ' + ( typeof metadata ) );
+        // }
         this._metadata = metadata;
 
         // optional
