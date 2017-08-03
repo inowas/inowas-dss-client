@@ -5859,6 +5859,10 @@ react-dom@^15.4.2:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-edit@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/react-edit/-/react-edit-6.3.0.tgz#5657a520a940c7c2b1209ec20aa7ff43859061f4"
+
 react-hot-loader@next:
   version "3.0.0-beta.7"
   resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-3.0.0-beta.7.tgz#d5847b8165d731c4d5b30d86d5d4716227a0fa83"
@@ -5982,6 +5986,10 @@ react@^15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
+
+reactabular@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/reactabular/-/reactabular-8.3.0.tgz#4622473f0725a356ca93769e6828381aa9d068a0"
 
 read-all-stream@^3.0.0:
   version "3.1.0"
@@ -6434,6 +6442,10 @@ schema-utils@^0.3.0:
   dependencies:
     ajv "^5.0.0"
 
+searchtabular@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/searchtabular/-/searchtabular-1.5.1.tgz#857cf52a5b043539cb130529b5354ac3d0755e80"
+
 seek-bzip@^1.0.3:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/seek-bzip/-/seek-bzip-1.0.5.tgz#cfe917cb3d274bcffac792758af53173eb1fabdc"
@@ -6443,6 +6455,10 @@ seek-bzip@^1.0.3:
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
+
+selectabular@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/selectabular/-/selectabular-2.0.1.tgz#80064d24b0c633b55f6c8cb90b1b659407b5e731"
 
 selfsigned@^1.9.1:
   version "1.9.1"
@@ -6598,6 +6614,10 @@ sort-keys@^1.0.0:
   resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-1.1.2.tgz#441b6d4d346798f1b4e49e8920adfba0e543f9ad"
   dependencies:
     is-plain-obj "^1.0.0"
+
+sortabular@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/sortabular/-/sortabular-1.4.1.tgz#2e657a62b363a9c75421d39952356199fa3e064f"
 
 source-list-map@^0.1.7, source-list-map@~0.1.7:
   version "0.1.8"
