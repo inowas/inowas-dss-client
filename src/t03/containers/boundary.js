@@ -5,8 +5,7 @@ import {pure} from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-
-import {BoundaryList} from '../../t03/components/index';
+import {DataTable} from "../../core/dataTable";
 
 const styles = {
     wrapper: {
@@ -77,7 +76,7 @@ class BoundariesOverview extends React.PureComponent {
                     }
                 </div>
                 <div style={[ styles.body ]}>
-                    <BoundaryList type={type} boundaries={boundaries}/>
+                    <DataTable tool={'T03'} />
                 </div>
             </div>
         );
