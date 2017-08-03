@@ -1,24 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    addAreaCoordinate,
-    createModel,
-    setAreaLatitude,
-    setAreaLongitude,
-    setDescription,
-    setLengthUnit,
-    setName,
-    setEditorState,
-    setTimeUnit
+    createModflowModel,
+    setModflowModel,
+    updateModflowModel,
+    setEditorState, ActionTypeModel,
 } from '../../actions/modelEditor';
-import { getArea, getDescription, getLengthUnit, getName, getTimeUnit } from '../../reducers/ModelEditor/general';
-
+import {
+    getModflowModel
+} from '../../reducers/ModelEditor/general';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
-import LengthUnit from '../../model/LengthUnit';
-import TimeUnit from '../../model/TimeUnit';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
+import {getErrorMessage, getRequestStatus, hasError, isLoading} from "../../reducers/webData";
+import { Map, TileLayer, Polygon } from 'react-leaflet';
+import {getInitialState} from "../../reducers/ModelEditor/model";
+import uuid from "uuid";
+import * as filters from "../../calculations/filter";
+import * as mapHelpers from "../../calculations/map";
+import {sendQuery} from "../../actions/messageBox"
 
 const styles = {
     container: {
@@ -48,86 +49,163 @@ const styles = {
     }
 };
 
+
+const initialState = {
+    modflowModel: getInitialState()
+};
+
 @ConfiguredRadium
 class ModelEditorGeneral extends Component {
 
     static propTypes = {
         style: PropTypes.object,
-        name: PropTypes.string,
-        description: PropTypes.string,
-        timeUnit: PropTypes.instanceOf( TimeUnit ),
-        lengthUnit: PropTypes.instanceOf( LengthUnit ),
-        area: PropTypes.array,
-        setName: PropTypes.func,
-        setDescription: PropTypes.func,
-        setTimeUnit: PropTypes.func,
-        setLengthUnit: PropTypes.func,
-        addAreaCoordinate: PropTypes.func,
-        setAreaLatitude: PropTypes.func,
-        setAreaLongitude: PropTypes.func,
         setEditorState: PropTypes.func,
         createModel: PropTypes.func,
+        setModflowModel: PropTypes.func,
+        webData: PropTypes.object,
         id: PropTypes.string
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = initialState;
+
+        this.handleInputChangeModflow = this.handleInputChangeModflow.bind(this);
     }
 
-    nameChangeAction = ( e ) => {
-        this.props.setName( e.target.value );
+    componentWillReceiveProps(newProps){
+        console.log('componentWillReceiveProps', newProps);
+        this.setState(function(prevState, props){
+            return { ...prevState, modflowModel: newProps.modflowModel };
+        } );
     }
 
-    descriptionChangeAction = ( e ) => {
-        this.props.setDescription( e.target.value );
+    componentWillMount(){
+        const modflowModel = this.props.modflowModel ? this.props.modflowModel : getInitialState();
+
+        this.setState(function(prevState, props){
+            return { ...prevState, modflowModel };
+        } );
     }
 
-    timeUnitChangeAction = ( e ) => {
-        // this.props.setTimeUnit( e.target.value );
+    componentDidMount( ) {
+        mapHelpers.disableMap( this.refs.map );
     }
 
-    lengthUnitChangeAction = ( e ) => {
-        // this.props.setLengthUnit( e.target.value );
+    componentWillUnmount(){
+        this.props.setModflowModel(this.state.modflowModel);
     }
 
-    addCoordinateClickAction = ( ) => {
-        this.props.addAreaCoordinate( 0, 0 );
+    componentWillUpdate() {
+        console.log('componentWillUpdate');
+
+        if ( this.refs.map ) {
+            this.refs.map.leafletElement.fitBounds(this.getModflowModelState('bounding_box'));
+        }
     }
 
-    coordinateChangeLatitudeAction = ( index ) => {
-        return ( e ) => {
-            this.props.setAreaLatitude( index, e.target.value );
-        };
+    handleInputChangeModflow(event, key) {
+        const target = event.target;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        const filter = target.dataset.filter;
+
+        if (filter) {
+            value = filters[filter](value);
+        }
+
+        this.setState(function(prevState, props){
+            if (key) {
+                return {
+                    ...prevState,
+                    modflowModel: {
+                        ...prevState.modflowModel,
+                        [key]: {
+                            ...prevState.modflowModel[key],
+                            [name]: value
+                        }
+                    }
+                };
+            }
+
+            return {
+                ...prevState,
+                modflowModel: {
+                    ...prevState.modflowModel,
+                    [name]: value
+                }
+            };
+        });
     }
 
-    coordinateChangeLongitudeAction = ( index ) => {
-        return ( e ) => {
-            this.props.setAreaLongitude( index, e.target.value );
-        };
+    handleInputChangeModflowBoundingBox(event, index, key) {
+        const target = event.target;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
+
+        const filter = target.dataset.filter;
+
+        if (filter) {
+            value = filters[filter](value);
+        }
+        this.setState(function(prevState, props){
+            return {
+                ...prevState,
+                modflowModel: {
+                    ...prevState.modflowModel,
+                    bounding_box: prevState.modflowModel.bounding_box.map((item, i) => {
+                        if(i !== index) {
+                            return item;
+                        }
+                        item[key] = value;
+                        return item;
+                    })
+                }
+            };
+        });
+    }
+
+    getModflowModelState(name) {
+        return this.state['modflowModel'][name];
     }
 
     editAreaOnMap = ( ) => {
         this.props.setEditorState( 'area' );
+    };
+
+    save(id) {
+        if (id) {
+            this.props.updateModflowModel(
+                id,
+                this.state.modflowModel
+            );
+            return;
+        }
+
+        this.props.createModflowModel(
+            uuid.v4(),
+            this.state.modflowModel
+        );
+    }
+
+    getBounds() {
+        return this.getModflowModelState('bounding_box');
     }
 
     // eslint-disable-next-line no-shadow
-    renderArea( area, editAreaOnMap ) {
+    renderArea( area, bounds, editAreaOnMap ) {
         return (
             <div>
                 <h3>Area</h3>
-                <button onClick={editAreaOnMap} className="link">Edit on Map
-                    <Icon name="arrow_right"/></button>
-                <table className="table">
-                    <tbody>
-                        <tr>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                        </tr>
-                        {area.map(( c, index ) => <tr key={index}>
-                            <td><input className="input-on-focus" value={c.lat} onChange={this.coordinateChangeLatitudeAction( index )}/></td>
-                            <td><input className="input-on-focus" value={c.lng} onChange={this.coordinateChangeLongitudeAction( index )}/></td>
-                        </tr>)}
-                    </tbody>
-                </table>
-                <div style={styles.addCoordinateWrapper}>
-                    <button className="button" onClick={this.addCoordinateClickAction}><Icon name="add"/>Add coordinate!</button>
-                </div>
+                <button onClick={editAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
+                <Map  ref="map" className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
+                    <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+                    {(( ) => {
+                        if ( area ) {
+                            return <Polygon positions={area} />;
+                        }
+                        return "";
+                    })( )}
+                </Map>
             </div>
         );
     }
@@ -135,62 +213,138 @@ class ModelEditorGeneral extends Component {
     render( ) {
         const {
             style,
-            name,
-            description,
-            timeUnit,
-            lengthUnit,
-            area,
             id,
             // eslint-disable-next-line no-shadow
-            createModel
+            webData
         } = this.props;
 
+        // TODO prevent onClick triggers if disabled and make that css works
+        const disabled = isLoading(webData.UpdateModel) ? 'disabled' : '';
+        const btnClass = isLoading(webData.UpdateModel) ? 'button button-accent is-disabled' : 'button button-accent';
+
+        if (id && isLoading(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])) {
+            // TODO move to dump component
+            return (
+                <p>Loading ...</p>
+            );
+        }
+        if (id && hasError(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])) {
+            // TODO move to dump component
+            return (
+                <p>Error while loading ... ({getErrorMessage(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])})</p>
+            );
+        }
+
         return (
-            <div style={[ style, styles.container ]}>
-                <div style={styles.content}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td style={[ styles.generalTr, styles.labelTr ]}>Name</td>
-                                <td style={styles.generalTr}><input className="input" value={name} onChange={this.nameChangeAction} placeholder="Name"/></td>
-                            </tr>
-                            <tr>
-                                <td style={[ styles.generalTr, styles.labelTr ]}>Description</td>
-                                <td style={styles.generalTr}><textarea className="input" value={description} onChange={this.descriptionChangeAction} placeholder="Description"/></td>
-                            </tr>
-                            <tr>
-                                <td style={[ styles.generalTr, styles.labelTr ]}>Time Unit</td>
-                                <td style={styles.generalTr}>
-                                    <select className="select" value={timeUnit} onChange={this.timeUnitChangeAction}>
-                                        <option value="s">Second</option>
-                                        <option value="min">Minute</option>
-                                        <option value="h">Hour</option>
-                                        <option value="d">Day</option>
-                                        <option value="yrs">Year</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style={[ styles.generalTr, styles.labelTr ]}>Length Unit</td>
-                                <td style={styles.generalTr}>
-                                    <select className="select" value={lengthUnit} onChange={this.lengthUnitChangeAction}>
-                                        <option value="cm">Centimeter</option>
-                                        <option value="m">Meter</option>
-                                        <option value="ft">Feet</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {this.renderArea( area, this.editAreaOnMap )}
-                </div>
-                <div>
-                    {(( ) => {
-                        if ( id === undefined || id === null ) {
-                            return <button onClick={createModel} className="button button-accent">Create Model</button>;
-                        }
-                        return <button className="button button-accent">Save (yet to be implemented)</button>;
-                    })( )}
+            <div>
+                <div className="grid-container">
+                    <section className="col col-rel-2 stacked">
+                        <form>
+                            <div className="form-group">
+                                <label>Name</label>
+                                <input className="input" name="name" value={this.getModflowModelState( "name" )}
+                                       onChange={this.handleInputChangeModflow}
+                                       placeholder="Name"/>
+                            </div>
+                            <div className="form-group">
+                                <label>Description</label>
+                                <textarea className="input" name="description"
+                                          value={this.getModflowModelState( "description" )}
+                                          onChange={this.handleInputChangeModflow}
+                                          placeholder="Description"/>
+                            </div>
+                            <div className="form-group">
+                                <label>Time Unit</label>
+                                <select className="select" name="time_unit"
+                                        value={this.getModflowModelState( "time_unit" )}
+                                        onChange={this.handleInputChangeModflow}
+                                        data-filter="filterInt">
+                                    <option value="1">Second</option>
+                                    <option value="2">Minute</option>
+                                    <option value="3">Hour</option>
+                                    <option value="4">Day</option>
+                                    <option value="5">Year</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label>Length Unit</label>
+                                <select className="select" name="length_unit"
+                                        data-filter="filterInt"
+                                        value={this.getModflowModelState( "length_unit" )}
+                                        onChange={this.handleInputChangeModflow}>
+                                    <option value="1">Centimeter</option>
+                                    <option value="2">Meter</option>
+                                    <option value="3">Feet</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label>Grid Resolution</label>
+                                <div className="grid-container">
+                                    <section className="col col-rel-2 stacked">
+                                        <input type="number" name="n_x" min="1" step="1" className="input"
+                                               value={this.getModflowModelState( "grid_size" ).n_x}
+                                               data-filter="filterInt"
+                                               onChange={( e ) => this.handleInputChangeModflow( e, "grid_size" )}
+                                               placeholder="X="/>
+                                    </section>
+                                    <section className="col col-rel-2 stacked">
+                                        <input type="number" name="n_y" min="1" step="1" className="input"
+                                               value={this.getModflowModelState( "grid_size" ).n_y}
+                                               data-filter="filterInt"
+                                               onChange={( e ) => this.handleInputChangeModflow( e, "grid_size" )}
+                                               placeholder="Y="/>
+                                    </section>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>Bounding Box</label>
+                                <div className="grid-container">
+                                    <section className="col col-rel-2 stacked">
+                                        <input type="number" name="x_min" className="input"
+                                               data-filter="filterFloat"
+                                               value={this.getModflowModelState( "bounding_box")[0][0]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 0 )}
+                                               placeholder="X="/>
+                                    </section>
+                                    <section className="col col-rel-2 stacked">
+                                        <input type="number" name="x_max" className="input"
+                                               data-filter="filterFloat"
+                                               value={this.getModflowModelState( "bounding_box")[1][0]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 0 )}
+                                               placeholder="x_max="/>
+                                    </section>
+                                </div>
+                                <div className="grid-container">
+                                    <section className="col col-rel-2 stacked">
+                                        <input type="number" name="y_min" className="input"
+                                               data-filter="filterFloat"
+                                               value={this.getModflowModelState( "bounding_box")[0][1]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 1 )}
+                                               placeholder="X="/>
+                                    </section>
+                                    <section className="col col-rel-2 stacked">
+                                        <input type="number" name="y_max" className="input"
+                                               data-filter="filterFloat"
+                                               value={this.getModflowModelState( "bounding_box")[1][1]}
+                                               onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 1 )}
+                                               placeholder="y_max="/>
+                                    </section>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section className="col col-rel-3 stretch">
+                        {this.renderArea( this.getModflowModelState( "geometry")["coordinates"], this.getModflowModelState( "bounding_box"), this.editAreaOnMap )}
+                        <div>
+                            {(( ) => {
+                                if ( id === undefined || id === null ) {
+                                    return <button disabled={disabled} onClick={() => {this.save();}} className={btnClass}>Create Model</button>;
+                                }
+                                return <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save</button>;
+                            })( )}
+                        </div>
+                    </section>
                 </div>
             </div>
         );
@@ -198,26 +352,20 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
+    console.log('mapStateToProps', state);
     return {
-        name: getName( state[tool].model.general ),
-        description: getDescription( state[tool].model.general ),
-        timeUnit: getTimeUnit( state[tool].model.general ),
-        lengthUnit: getLengthUnit( state[tool].model.general ),
-        area: getArea( state[tool].model.general ),
-        id: params.id
+        modflowModel: getModflowModel(state[tool].model),
+        id: params.id,
+        webData: getRequestStatus(state)
     };
 };
 
 const actions = {
-    setName,
-    setDescription,
-    setTimeUnit,
-    setLengthUnit,
-    addAreaCoordinate,
-    setAreaLatitude,
-    setAreaLongitude,
+    setModflowModel,
+    createModflowModel,
+    updateModflowModel,
     setEditorState,
-    createModel
+    sendQuery
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
@@ -234,6 +382,7 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 
     return wrappedActions;
 };
+
 
 // eslint-disable-next-line no-class-assign
 ModelEditorGeneral = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorGeneral ));

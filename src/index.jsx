@@ -18,7 +18,7 @@ const history = syncHistoryWithStore( browserHistory, store );
 const root = document.getElementById( 'root' );
 
 const renderApp = ( ) => {
-    const routes = require( './routes' ).default;
+    const routes = require( './routes' ).default(store);
     render( (
         <AppContainer>
             <Provider store={store}>

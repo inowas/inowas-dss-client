@@ -40,3 +40,5 @@ ngrok
 
 # build output
 dist
+
+src/config.js

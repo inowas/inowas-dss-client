@@ -148,8 +148,8 @@ export default class EditableArea extends Component {
                 const nextC = area[nextIndex];
 
                 const position = {
-                    lat: ( c.lat + nextC.lat ) / 2,
-                    lng: ( c.lng + nextC.lng ) / 2
+                    lat: ( c[1] + nextC[1] ) / 2,
+                    lng: ( c[0] + nextC[0] ) / 2
                 };
 
                 return ( <CircleMarker onClick={this.insertControlPoint( position.lat, position.lng, nextIndex )} key={index} center={position} {...styles.addControlPoint}/> );
