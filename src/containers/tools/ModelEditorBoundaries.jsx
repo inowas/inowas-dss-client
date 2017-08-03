@@ -14,7 +14,6 @@ import { getActiveBoundary, getActiveBoundaryType } from '../../reducers/ModelEd
 import { getBoundaries, getBoundary } from '../../reducers/ModelEditor/boundaries';
 import { maxBy, minBy } from 'lodash';
 
-import BoundariesOverview from '../../components/modflow/BoundariesOverview';
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
 import RiverProperties from '../../components/modflow/RiverProperties';
@@ -24,6 +23,7 @@ import { getGeometry } from '../../reducers/ModelEditor/general';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import { withRouter } from 'react-router';
+import {BoundaryOverview} from "../../t03/containers/index";
 
 const styles = {
     container: {
@@ -125,10 +125,10 @@ class ModelEditorBoundaries extends Component {
         }
 
         if ( boundaryType ) {
-            return ( <BoundariesOverview boundaries={boundaries.filter(b => ( b.type.slug === boundaryType ))} type={boundaryType} setEditorState={setEditorState}/> );
+            return ( <BoundaryOverview boundaries={boundaries.filter(b => ( b.type.slug === boundaryType ))} type={boundaryType} setEditorState={setEditorState}/> );
         }
 
-        return ( <BoundariesOverview boundaries={boundaries}/> );
+        return ( <BoundaryOverview boundaries={boundaries}/> );
     }
 
     setActiveBoundaryType = type => {
