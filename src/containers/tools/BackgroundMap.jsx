@@ -2,8 +2,12 @@
 import md5 from 'js-md5'
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FeatureGroup, GeoJSON, LayersControl, Map, Polyline, Polygon,  CircleMarker, Circle, TileLayer } from 'react-leaflet';
+import { FeatureGroup, GeoJSON, LayersControl, Map, Polyline, Polygon,  CircleMarker, Circle, Rectangle, TileLayer } from 'react-leaflet';
 import { EditControl } from "react-leaflet-draw"
+
+import {
+    updateGeometry
+} from '../../actions/modelEditor';
 
 class BackgroundMap extends Component {
     generateKeyFunction( geometry ) {
@@ -42,6 +46,24 @@ class BackgroundMap extends Component {
                 </LayersControl.Overlay>
             )
         }
+    }
+
+    renderBoundingBox( bb ) {
+
+        if (! Array.isArray(bb)) {
+            return;
+        }
+
+        const bounds = [
+            [bb[0][1], bb[0][0]],
+            [bb[1][1], bb[1][0]],
+        ];
+
+        return (
+            <LayersControl.Overlay name='Bounding Box' checked={false}>
+                <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
+            </LayersControl.Overlay>
+        )
     }
 
     renderConstantHeads( boundaries ) {
@@ -120,26 +142,6 @@ class BackgroundMap extends Component {
         )
     }
 
-    renderRiversForEdit( boundaries ) {
-
-        const rivers =  boundaries.map( b => {
-            const coordinates = b.geometry.coordinates.map( c => ([c[1], c[0]]) );
-            return <Polyline key={this.generateKeyFunction( b.geometry )} positions={coordinates} style={this.getStyle(b.type)} />
-        });
-
-        if (rivers.length===0) {
-
-            return null;
-        }
-        const river = rivers[0];
-
-        console.log('RIVER', river);
-
-        return (
-            {river}
-        )
-    }
-
     renderWells( boundaries ) {
         const wells =  boundaries.map( w => (
             <CircleMarker key={w.id} center={[w.geometry.coordinates[1], w.geometry.coordinates[0]]} {...this.getStyle(w.type, 'puw')} />
@@ -162,24 +164,40 @@ class BackgroundMap extends Component {
         return coordinates.map( c => ([c[1], c[0]]));
     }
 
+    onEdited = ( e ) => {
+        const layers = e.layers._layers;
+        Object.keys(layers).map( key => {
+            const layer = layers[key];
+            const geometry = layer.toGeoJSON().geometry;
+            console.log('GEOMETRY 1', geometry);
+            this.props.updateGeometry( layer.options.id, geometry );
+        })
+    };
+
     renderEditControl() {
 
-        // Get all editable elements
+        const area = this.props.model.geometry;
+        const boundaries = this.props.model.boundaries;
 
+
+        // Get all editable elements
         let editables = [];
-        if (this.props.model.edit === true) {
-            editables.push({id: 'area', geometry: this.props.model.geometry})
+
+        if (area && area.geometry && area.geometry.edit === true) {
+            editables.push({id: 'area', geometry: area.geometry})
         }
 
-        this.props.boundaries.map( b => {
-            if (b.edit === true) {
-                editables.push({id: b.id, geometry: b.geometry})
-            }
-        });
+        if (boundaries && boundaries.length>0) {
+            boundaries.map( b => {
+                if (b.geometry.edit === true) {
+                    editables.push({id: b.id, geometry: b.geometry})
+                }
+            });
+        }
 
         editables = editables.map( e => {
             if (e.geometry.type === 'Polygon') {
-                return <Polygon key={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates)}/>
+                return <Polygon key={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])}/>
             }
 
             if (e.geometry.type === 'Linestring') {
@@ -187,7 +205,7 @@ class BackgroundMap extends Component {
             }
 
             if (e.geometry.type === 'Point') {
-                return <Circle key={e.id} center={this.getLatLngFromXY(e.geometry.coordinates)}/>
+                return <Circle key={e.id} id={e.id} center={[e.geometry.coordinates[1], e.geometry.coordinates[0]]} radius={50} />
             }
         });
 
@@ -195,16 +213,21 @@ class BackgroundMap extends Component {
             return null;
         }
 
+        const drawOptions = {
+            polyline: false,
+            polygon: false,
+            rectangle: false,
+            circle: false,
+            marker: false
+        };
+
         return (
             <FeatureGroup>
                 <EditControl
                     position='bottomright'
-                    onEdited={this._onEditPath}
-                    onCreated={this._onCreate}
-                    onDeleted={this._onDeleted}
-                    draw={{
-                        rectangle: false
-                    }}
+                    onEdited={this.onEdited}
+                    onDeleted={this.onDeleted}
+                    draw={drawOptions}
                 />
 
                 {editables}
@@ -215,14 +238,13 @@ class BackgroundMap extends Component {
 
     render( ) {
         const area = this.props.model.geometry;
-        const boundingBox = this.props.model.boundingBox;
+        const boundingBox = this.props.model.bounding_box;
         const boundaries = this.props.model.boundaries;
-
-        const constantHeads = boundaries.filter( b => { if (b.type === 'chd' && b.edit !== true) return b });
-        const generalHeads = boundaries.filter( b => { if (b.type === 'ghb' && b.edit !== true) return b });
-        const recharges = boundaries.filter( b => { if (b.type === 'rch' && b.edit !== true) return b });
-        const rivers = boundaries.filter( b => { if (b.type === 'riv' && b.edit !== true) return b });
-        const wells = boundaries.filter( b => { if (b.type === 'wel' && b.edit !== true) return b });
+        const constantHeads = boundaries.filter( b => { if (b.type === 'chd' && b.geometry.edit !== true) return b });
+        const generalHeads = boundaries.filter( b => { if (b.type === 'ghb' && b.geometry.edit !== true) return b });
+        const recharges = boundaries.filter( b => { if (b.type === 'rch' && b.geometry.edit !== true) return b });
+        const rivers = boundaries.filter( b => { if (b.type === 'riv' && b.geometry.edit !== true) return b });
+        const wells = boundaries.filter( b => { if (b.type === 'wel' && b.geometry.edit !== true) return b });
 
         return (
             <div className="map-wrapper">
@@ -251,6 +273,7 @@ class BackgroundMap extends Component {
                         </LayersControl.BaseLayer>
 
                         {this.renderArea( area )}
+                        {this.renderBoundingBox( boundingBox )}
                         {this.renderConstantHeads( constantHeads )}
                         {this.renderGeneralHeads( generalHeads )}
                         {this.renderRecharges( recharges )}
@@ -266,13 +289,13 @@ class BackgroundMap extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
-    console.log('mapStateToProps', state);
     return {
         model: state[tool].model
     };
 };
 
 const actions = {
+    updateGeometry
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

@@ -98,6 +98,7 @@ export function setActiveBoundaryControlPoint( tool, index ) {
  */
 
 export const ActionTypeModel = {
+    UPDATE_GEOMETRY: 'MODEL_EDITOR_UPDATE_GEOMETRY',
     DESTROY_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_DESTROY',
     LOAD_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_LOAD',
     CREATE_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_CREATE',
@@ -137,6 +138,17 @@ export function updateModflowModel( tool, id, payload ) {
         tool,
         id,
         payload
+    };
+}
+
+export function updateGeometry( tool, id, geometry ) {
+    return {
+        type: ActionTypeModel.UPDATE_GEOMETRY,
+        tool,
+        payload: {
+            id: id,
+            geometry: geometry
+        }
     };
 }
 
