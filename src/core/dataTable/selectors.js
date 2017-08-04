@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect'
+
 export const calcPage = ( selectedPage, perPage, length ) => {
     return Math.min( Math.max( selectedPage, 1 ), calcPages( perPage, length ) );
 };
@@ -22,4 +24,25 @@ export const mapBoundaries = ( boundaries ) => {
             layers: b.affected_layers,
         }
     } )
+};
+
+const getBoundaries = (state, props) => state[props.tool].model.boundaries;
+
+export const makeGetBoundaries = () => {
+    return createSelector(
+        [getBoundaries],
+        (boundaries) => {
+            return mapBoundaries(boundaries);
+        }
+    );
+};
+
+export const makeMapStateToPropsBoundaries = () => {
+
+    const boundaries = makeGetBoundaries();
+    return (state, props) => {
+        return {
+            rows: boundaries(state, props)
+        }
+    };
 };

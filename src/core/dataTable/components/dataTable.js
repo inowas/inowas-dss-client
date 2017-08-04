@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as Table from 'reactabular-table';
-import {getRows, mapBoundaries} from "../selectors";
+import {getRows, makeMapStateToPropsBoundaries} from "../selectors";
 import {applyNewPage} from "./paginator";
 import Paginator from "./paginator";
 
@@ -124,7 +124,6 @@ class DataTable extends React.Component {
     }
 
     componentWillReceiveProps(newProps){
-        console.log('componentWillReceiveProps', newProps);
         this.setState(function(prevState, props){
             return { ...prevState, rows: newProps.rows };
         } );
@@ -146,8 +145,6 @@ class DataTable extends React.Component {
                 method: resolve.nested
             })
         )(rows);
-
-            console.log(rows);
 
         return (
             <div>
@@ -177,13 +174,7 @@ DataTable.propTypes = {
     perPage: PropTypes.number,
 };
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        rows: mapBoundaries(state[ownProps.tool].model.boundaries),
-    };
-};
-
 // eslint-disable-next-line no-class-assign
-const DataTableContainer = connect( mapStateToProps )( DataTable );
+const DataTableContainer = connect( makeMapStateToPropsBoundaries )( DataTable );
 
 export default DataTableContainer;
