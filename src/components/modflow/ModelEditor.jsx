@@ -2,9 +2,7 @@ import '../../less/leaflet.less';
 
 // TODO break into smaller parts
 
-import { Circle, GeoJSON, Map, TileLayer, FeatureGroup } from 'react-leaflet';
-import { EditControl } from "react-leaflet-draw"
-
+import { Map, TileLayer } from 'react-leaflet';
 import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -22,8 +20,6 @@ import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import Boundary from '../../model/Boundary';
 import BoundaryType from '../../model/BoundaryType';
-import {calcBoundsOfPolygon} from "../../calculations/geoTools";
-import * as mapHelpers from "../../calculations/map";
 
 const RadiumMap = ConfiguredRadium( Map );
 
@@ -97,10 +93,11 @@ export default class ModelEditor extends Component {
         id: PropTypes.string,
         state: PropTypes.string, // TODO better use oneOf
         setEditorState: PropTypes.func,
+        loadModel: PropTypes.func.isRequired,
         fetchBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
-        geometry: PropTypes.object,
+        area: PropTypes.array,
         mapPosition: PropTypes.object,
         setMousePositionOnMap: PropTypes.func,
         firstAreaControlPoint: PropTypes.object,
@@ -112,7 +109,6 @@ export default class ModelEditor extends Component {
         setAreaLongitude: PropTypes.func,
         activeAreaControlPoint: PropTypes.number,
         setActiveAreaControlPoint: PropTypes.func,
-        updateBoundingBox: PropTypes.func,
         boundaries: PropTypes.array,
         initial: PropTypes.bool,
         activeBoundary: PropTypes.string,
@@ -130,8 +126,12 @@ export default class ModelEditor extends Component {
     };
 
     componentDidMount( ) {
+        const { mapPosition, area, state, initial } = this.props;
 
-        const { mapPosition, area, state } = this.props;
+        // load Model
+        if (!initial) {
+            this.loadModel();
+        }
 
         // center mapPosition to area if no mapPosition is specified
         if ( mapPosition === null && area.length > 0 ) {
@@ -158,35 +158,85 @@ export default class ModelEditor extends Component {
         }
     }
 
+    loadModel() {
+        const { id, loadModel, fetchBoundaries } = this.props;
+        loadModel( id );
+        fetchBoundaries( id );
+    }
+
     enableMap = ( ) => {
-        mapHelpers.enableMap(this.refs.map);
-    };
+        if ( this.refs.map ) {
+            this.refs.map.leafletElement._handlers.forEach( function( handler ) {
+                handler.enable( );
+            });
+        }
+    }
 
     disableMap = ( ) => {
-        mapHelpers.disableMap(this.refs.map);
-    };
+        if ( this.refs.map ) {
+            this.refs.map.leafletElement._handlers.forEach( function( handler ) {
+                handler.disable( );
+            });
+        }
+    }
 
     unsetActiveTool = ( ) => {
         this.props.setEditorState( null );
-    };
+    }
+
+    // TODO move to separate file
+    getBoundsOfPolygone( polygone ) {
+        let minLat = Infinity;
+        let maxLat = -Infinity;
+        let minLng = Infinity;
+        let maxLng = -Infinity;
+
+        polygone.forEach(c => {
+            if ( c.lat < minLat ) {
+                minLat = c.lat;
+            }
+
+            if ( c.lat > maxLat ) {
+                maxLat = c.lat;
+            }
+
+            if ( c.lng < minLng ) {
+                minLng = c.lng;
+            }
+
+            if ( c.lng > maxLng ) {
+                maxLng = c.lng;
+            }
+        });
+
+        return [
+            {
+                lat: minLat,
+                lng: minLng
+            }, {
+                lat: maxLat,
+                lng: maxLng
+            }
+        ];
+    }
 
     centerMapPositionToArea = ( ) => {
-        const { geometry } = this.props;
+        const { area } = this.props;
         if ( area.length > 0 ) {
-            this.props.setMapPosition({bounds: calcBoundsOfPolygon( area )});
+            this.props.setMapPosition({bounds: this.getBoundsOfPolygone( area )});
         }
-    };
+    }
 
     setMapPosition = e => {
         const zoom = e.target.getZoom( );
         const center = e.target.getCenter( );
 
         this.props.setMapPosition({ center, zoom });
-    };
+    }
 
     setMousePosition = e => {
         this.props.setMousePositionOnMap( e.latlng );
-    };
+    }
 
     addAreaControlPoint = e => {
         const lat = e.latlng.lat;
@@ -199,7 +249,7 @@ export default class ModelEditor extends Component {
         const latlng = e.latlng;
 
         this.props.addBoundaryControlPoint( latlng );
-    };
+    }
 
     addWell = e => {
         const { addBoundary, boundaries } = this.props;
@@ -212,13 +262,34 @@ export default class ModelEditor extends Component {
                 coordinates: [e.latlng.lng, e.latlng.lat]
             }
         ));
-    };
+    }
 
     renderMap( ) {
         const {
             state,
-            geometry,
-            mapPosition
+            area,
+            mapPosition,
+            setEditorState,
+            mousePositionOnMap,
+            activeAreaControlPoint,
+            addAreaControlPoint,
+            setActiveAreaControlPoint,
+            draggedAreaControlPoint,
+            setDraggedAreaControlPoint,
+            setAreaLatitude,
+            setAreaLongitude,
+            boundaries,
+            activeBoundary,
+            setActiveBoundary,
+            deleteBoundary,
+            draggedBoundary,
+            setDraggedBoundary,
+            updateBoundary,
+            addBoundaryControlPoint,
+            updateBoundaryControlPoint,
+            activeBoundaryControlPoint,
+            setActiveBoundaryControlPoint,
+            deleteAreaControlPoint
         } = this.props;
 
         const handler = {
@@ -226,7 +297,6 @@ export default class ModelEditor extends Component {
             onClick: ( ) => {},
             onMouseMove: ( ) => {}
         };
-
         switch ( state ) {
             case 'area-draw':
                 handler.onClick = this.addAreaControlPoint;
@@ -280,7 +350,8 @@ export default class ModelEditor extends Component {
         })( );
 
         const mergedWithDefaultsMapPosition = mapPosition
-            ? mapPosition : {
+            ? mapPosition
+            : {
                 center: [
                     0, 0
                 ],
@@ -288,47 +359,37 @@ export default class ModelEditor extends Component {
             };
 
         return (
-            <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler} bounds={this.getBounds(geometry)}>
+            <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
-                {this.renderModelGeometry( geometry )}
-                {this.renderEditControl()}
+                <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} deleteControlPoint={deleteAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    ? this.refs.map.leafletElement
+                    : null}/>
+                {boundaries.filter( b => b.type.slug === 'riv' ).map(( r, index ) => {
+                    const riverState = (( ) => {
+                        if ( r.id === activeBoundary ) {
+                            switch ( state ) {
+                                case 'river':
+                                    return 'default';
+                                case 'river-draw':
+                                    return 'draw';
+                                case 'river-edit':
+                                    return 'edit';
+                                default:
+                                    return 'minimal';
+                            }
+                        }
+                        return 'minimal';
+                    })( );
 
+                    return ( <EditableLine key={index} state={riverState} line={r.geometry.coordinates} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    ? this.refs.map.leafletElement
+                    : null}/> );
+                })}
+                <EditableWells setActiveBoundary={setActiveBoundary} deleteBoundary={deleteBoundary} state={wellsState} draggedBoundary={draggedBoundary} setEditorState={setEditorState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type.slug === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
+                    ? this.refs.map.leafletElement
+                    : null}/>
                 <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
             </RadiumMap>
-        );
-    }
-
-    getBounds( geometry ) {
-        if ( geometry.coordinates.length > 0) {
-            const bounds = L.geoJSON(geometry).getBounds();
-            console.log('BOUNDS', bounds);
-            return bounds;
-        }
-    }
-
-    renderModelGeometry( geometry ) {
-        if ( geometry.coordinates.length > 0) {
-            return (
-                <FeatureGroup>
-                    <GeoJSON data={geometry} />
-                </FeatureGroup>
-            )
-        }
-    }
-
-    renderEditControl() {
-        return (
-            <FeatureGroup>
-                <EditControl
-                    position='bottomright'
-                    onEdited={this._onEditPath}
-                    onCreated={this._onCreate}
-                    onDeleted={this._onDeleted}
-                    draw={{
-                        rectangle: false
-                    }}
-                />
-            </FeatureGroup>
         );
     }
 
@@ -380,16 +441,12 @@ export default class ModelEditor extends Component {
     }
 
     setEditorState = slug => {
-        const { setEditorState, updateBoundingBox } = this.props;
+        const { setEditorState } = this.props;
 
         return ( ) => {
             setEditorState( slug );
-
-            if (updateBoundingBox) {
-                updateBoundingBox();
-            }
         };
-    };
+    }
 
     render( ) {
         const { state, initial, setEditorState, setActiveBoundaryType } = this.props;
