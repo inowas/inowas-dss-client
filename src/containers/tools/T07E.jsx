@@ -1,7 +1,7 @@
 import * as actions from '../../actions/modelEditor';
 
 import React, { Component, PropTypes } from 'react';
-import { getArea } from '../../reducers/ModelEditor/general';
+import { getGeometry } from '../../reducers/ModelEditor/general';
 import {
     getState,
     getMapPosition,
@@ -48,7 +48,7 @@ class T07E extends Component {
 const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T07E.ui ),
-        area: getArea( state.T07E.model.general ),
+        area: getGeometry( state.T07E.model.general ),
         mapPosition: getMapPosition( state.T07E.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T07E.ui ),
         draggedAreaControlPoint: getDraggedAreaControlPoint( state.T07E.ui ),

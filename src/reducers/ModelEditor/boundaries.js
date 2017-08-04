@@ -1,6 +1,5 @@
 import Boundary from '../../model/Boundary';
 import BoundaryType from '../../model/BoundaryType';
-import BoundaryMetadata from '../../model/BoundaryMetadata';
 
 export function handleUpdateBoundary ( state, action ) {
     return state.map( b => {
@@ -10,6 +9,25 @@ export function handleUpdateBoundary ( state, action ) {
 
         return b;
     } );
+}
+
+export function handleUpdateBoundaryGeometry ( boundaries, action ) {
+
+    return boundaries.map( b => {
+        if ( b.id === action.payload.id ) {
+            return { ...b, geometry: action.payload.geometry };
+        }
+
+        return b;
+    } );
+}
+
+export function handleUpdateAreaGeometry ( state, action ) {
+    if (state.id === action.payload.id) {
+        return action.payload.geometry;
+    }
+
+    return state.geometry;
 }
 
 export function handleUpdateBoundaryControlPoint ( state, action ) {

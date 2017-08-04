@@ -24,10 +24,6 @@ export function stateToCreatePayload ( state ) {
 }
 
 export function payloadToSetModel ( payload ) {
-
-    payload.geometry.coordinates = payload.geometry.coordinates[0];
-    payload.geometry.coordinates.pop();
-
     return payload;
 }
 
