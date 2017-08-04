@@ -6,7 +6,7 @@ export const BOUNDARY_REMOVED = 'boundaryRemoved';
 
 export function modflowModelCreated ( tool, id, payload ) {
     return {
-        type: Events.MODFLOW_MODEL_CREATED,
+        type: MODFLOW_MODEL_CREATED,
         tool,
         id,
         payload
@@ -15,7 +15,7 @@ export function modflowModelCreated ( tool, id, payload ) {
 
 export function modflowModelUpdated ( tool, id, payload ) {
     return {
-        type: Events.MODFLOW_MODEL_UPDATED,
+        type: MODFLOW_MODEL_UPDATED,
         tool,
         id,
         payload

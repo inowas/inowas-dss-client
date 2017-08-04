@@ -268,9 +268,6 @@ class BackgroundMap extends Component {
                                 url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                             />
                         </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name='Empty'>
-                            <TileLayer/>
-                        </LayersControl.BaseLayer>
 
                         {this.renderArea( area )}
                         {this.renderBoundingBox( boundingBox )}

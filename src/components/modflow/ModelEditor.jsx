@@ -96,7 +96,6 @@ export default class ModelEditor extends Component {
         id: PropTypes.string,
         state: PropTypes.string, // TODO better use oneOf
         setEditorState: PropTypes.func,
-        fetchBoundaries: PropTypes.func.isRequired,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
         area: PropTypes.array,
@@ -129,19 +128,19 @@ export default class ModelEditor extends Component {
     };
 
     componentDidMount( ) {
-        const { mapPosition, area, state } = this.props;
-
-        // center mapPosition to area if no mapPosition is specified
-        if ( mapPosition === null && area.length > 0 ) {
-            this.centerMapPositionToArea( );
-        }
-
-        // enable or disable Map depending on state
-        if ( [ 'general', 'boundariesOverlay' ].indexOf( state ) !== -1 ) {
-            this.disableMap( );
-        } else {
-            this.enableMap( );
-        }
+        // const { mapPosition, area, state } = this.props;
+        //
+        // // center mapPosition to area if no mapPosition is specified
+        // if ( mapPosition === null && area.length > 0 ) {
+        //     this.centerMapPositionToArea( );
+        // }
+        //
+        // // enable or disable Map depending on state
+        // if ( [ 'general', 'boundariesOverlay' ].indexOf( state ) !== -1 ) {
+        //     this.disableMap( );
+        // } else {
+        //     this.enableMap( );
+        // }
     }
 
     componentDidUpdate( prevProps ) {
@@ -210,135 +209,6 @@ export default class ModelEditor extends Component {
                 coordinates: [e.latlng.lng, e.latlng.lat]
             }
         ));
-    }
-
-    renderMap( ) {
-        const {
-            state,
-            area,
-            mapPosition,
-            setEditorState,
-            mousePositionOnMap,
-            activeAreaControlPoint,
-            addAreaControlPoint,
-            setActiveAreaControlPoint,
-            draggedAreaControlPoint,
-            setDraggedAreaControlPoint,
-            setAreaLatitude,
-            setAreaLongitude,
-            boundaries,
-            activeBoundary,
-            setActiveBoundary,
-            deleteBoundary,
-            draggedBoundary,
-            setDraggedBoundary,
-            updateBoundary,
-            addBoundaryControlPoint,
-            updateBoundaryControlPoint,
-            activeBoundaryControlPoint,
-            setActiveBoundaryControlPoint,
-            deleteAreaControlPoint
-        } = this.props;
-
-        const handler = {
-            onMoveEnd: this.setMapPosition,
-            onClick: ( ) => {},
-            onMouseMove: ( ) => {}
-        };
-        switch ( state ) {
-            case 'area-draw':
-                handler.onClick = this.addAreaControlPoint;
-                handler.onMouseMove = this.setMousePosition;
-                break;
-            case 'wells-add':
-                handler.onClick = this.addWell;
-                handler.onMouseMove = this.setMousePosition;
-                break;
-            case 'river-draw':
-                handler.onMouseMove = this.setMousePosition;
-                handler.onClick = this.addBoundaryControlPoint;
-                break;
-            case 'area-edit':
-            case 'wells-move':
-            case 'river-edit':
-                handler.onMouseMove = this.setMousePosition;
-                break;
-        }
-
-        const areaState = (( ) => {
-            switch ( state ) {
-                case 'area':
-                    return 'default';
-                case 'area-draw':
-                    return 'draw';
-                case 'area-edit':
-                    return 'edit';
-                case 'area-delete':
-                    return 'delete';
-                default:
-                    return 'minimal';
-            }
-        })( );
-
-        const wellsState = (( ) => {
-            switch ( state ) {
-                case 'wells':
-                    return 'default';
-                case 'wells-add':
-                    return 'add';
-                case 'wells-move':
-                    return 'move';
-                case 'wells-edit':
-                    return 'edit';
-                case 'wells-delete':
-                    return 'delete';
-                default:
-                    return 'minimal';
-            }
-        })( );
-
-        const mergedWithDefaultsMapPosition = mapPosition
-            ? mapPosition
-            : {
-                center: [
-                    0, 0
-                ],
-                zoom: 2
-            };
-
-        return (
-            <RadiumMap style={styles.map} ref="map" {...mergedWithDefaultsMapPosition} zoomControl={false} {...handler}>
-                <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/> {/** <LayersControl position="topleft" /> **/}
-                <EditableArea state={areaState} area={area} activeControlPoint={activeAreaControlPoint} setActiveControlPoint={setActiveAreaControlPoint} addControlPoint={addAreaControlPoint} deleteControlPoint={deleteAreaControlPoint} draggedControlPoint={draggedAreaControlPoint} setDraggedControlPoint={setDraggedAreaControlPoint} setControlPointLatitude={setAreaLatitude} setControlPointLongitude={setAreaLongitude} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                    ? this.refs.map.leafletElement
-                    : null}/>
-                {boundaries.filter( b => b.type.slug === 'riv' ).map(( r, index ) => {
-                    const riverState = (( ) => {
-                        if ( r.id === activeBoundary ) {
-                            switch ( state ) {
-                                case 'river':
-                                    return 'default';
-                                case 'river-draw':
-                                    return 'draw';
-                                case 'river-edit':
-                                    return 'edit';
-                                default:
-                                    return 'minimal';
-                            }
-                        }
-                        return 'minimal';
-                    })( );
-
-                    return ( <EditableLine key={index} state={riverState} line={r.geometry.coordinates} activeControlPoint={activeBoundaryControlPoint} setActiveControlPoint={setActiveBoundaryControlPoint} addControlPoint={addBoundaryControlPoint} draggedControlPoint={draggedBoundary} setDraggedControlPoint={setDraggedBoundary} updateControlPoint={updateBoundaryControlPoint} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                    ? this.refs.map.leafletElement
-                    : null}/> );
-                })}
-                <EditableWells setActiveBoundary={setActiveBoundary} removeBoundary={removeBoundary} state={wellsState} draggedBoundary={draggedBoundary} setEditorState={setEditorState} setDraggedBoundary={setDraggedBoundary} activeBoundary={activeBoundary} wells={boundaries.filter( b => b.type.slug === 'wel' )} updateBoundary={updateBoundary} mousePosition={mousePositionOnMap} leafletElement={this.refs.map
-                    ? this.refs.map.leafletElement
-                    : null}/>
-                <button style={styles.resetViewButton} title="reset view" className="button icon-inside" onClick={this.centerMapPositionToArea}><Icon name="marker"/></button>
-            </RadiumMap>
-        );
     }
 
     renderTool( ) {
@@ -605,7 +475,6 @@ export default class ModelEditor extends Component {
 
         return (
             <div style={styles.wrapper}>
-                {this.renderMap( )}
                 {(( ) => {
                     if ( state === null || [ 'general', 'boundariesOverlay' ].indexOf( state ) !== -1 ) {
                         return (
@@ -615,12 +484,6 @@ export default class ModelEditor extends Component {
                                 </div>
                             </div>
                         );
-                    } else if ( [ 'area', 'area-draw', 'area-edit', 'area-delete' ].indexOf( state ) !== -1 ) {
-                        return ( <FloatingMapToolBox actions={areaActions} save={this.setEditorState( 'general' )}/> );
-                    } else if ( [ 'wells', 'wells-add', 'wells-move', 'wells-edit', 'wells-delete' ].indexOf( state ) !== -1 ) {
-                        return ( <FloatingMapToolBox actions={wellActions} save={this.setEditorState( 'boundariesOverlay' )}/> );
-                    } else if ( [ 'river', 'river-add' ].indexOf( state ) !== -1 ) {
-                        return ( <FloatingMapToolBox actions={riverActions} save={this.setEditorState( 'boundariesOverlay' )}/> );
                     }
                     return null;
                 })( )}

@@ -1,7 +1,7 @@
 import * as actions from '../../actions/modelEditor';
 
 import React, { Component, PropTypes } from 'react';
-import { getArea } from '../../reducers/ModelEditor/general';
+import { getGeometry } from '../../reducers/ModelEditor/general';
 import {
     getState,
     getMapPosition,
@@ -17,6 +17,7 @@ import ModelEditor from '../../components/modflow/ModelEditor';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import BackgroundMap from "./BackgroundMap";
 
 class T03 extends Component {
 
@@ -38,6 +39,7 @@ class T03 extends Component {
         return (
             <div className="toolT03">
                 <Navbar links={navigation} />
+                <BackgroundMap tool={'T03'} />
                 <ModelEditor {...this.props} initial={initial} tool={'T03'} />
             </div>
         );
@@ -48,7 +50,7 @@ class T03 extends Component {
 const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T03.ui ),
-        area: getArea( state.T03.model.general ),
+        geometry: getGeometry( state.T03.model ),
         mapPosition: getMapPosition( state.T03.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
         draggedAreaControlPoint: getDraggedAreaControlPoint( state.T03.ui ),
