@@ -1,17 +1,17 @@
 import {put, take} from 'redux-saga/effects';
 import {sendCommand} from "../../actions/messageBox";
-import {BoundaryCommands, boundaryRemoved} from "../../actions/modelEditor";
+import {Command, Event} from "../../t03/actions/index";
 import {waitForResponse} from "../../api/webData";
 
 export default function* removeBoundaryFlow () {
 
     while ( true ) {
-        let action = yield take( action => action.type === BoundaryCommands.REMOVE_BOUNDARY );
+        let action = yield take( action => action.type === Command.REMOVE_BOUNDARY );
 
         yield put( sendCommand( action.type, action.payload ) );
 
         while ( true ) {
-            const response = yield take( action => waitForResponse(action, BoundaryCommands.REMOVE_BOUNDARY ) );
+            const response = yield take( action => waitForResponse(action, Command.REMOVE_BOUNDARY ) );
 
             if ( response.webData.type === "error" ) {
                 break;
@@ -19,7 +19,7 @@ export default function* removeBoundaryFlow () {
 
             if ( response.webData.type === "success" ) {
                 // TODO remove before send request to server and restore on server error for faster response in frontend
-                yield put( boundaryRemoved( action.tool, action.payload.boundary_id ) );
+                yield put( Event.boundaryRemoved( action.tool, action.payload.boundary_id ) );
                 break;
             }
         }
