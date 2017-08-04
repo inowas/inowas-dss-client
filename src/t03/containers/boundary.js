@@ -53,6 +53,7 @@ const styles = {
 class BoundariesOverview extends React.PureComponent {
 
     static propTypes = {
+        id: PropTypes.string,
         type: PropTypes.string,
         boundaries: PropTypes.array,
         setEditorState: PropTypes.func
@@ -76,7 +77,8 @@ class BoundariesOverview extends React.PureComponent {
                     }
                 </div>
                 <div style={[ styles.body ]}>
-                    <DataTable tool={'T03'} />
+
+                    <DataTable id={this.props.id} tool={'T03'} />
                 </div>
             </div>
         );

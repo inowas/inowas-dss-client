@@ -86,7 +86,7 @@ export default class EditableWells extends Component {
         wells: PropTypes.array,
         setActiveBoundary: PropTypes.func.isRequired,
         activeBoundary: PropTypes.string,
-        deleteBoundary: PropTypes.func.isRequired,
+        removeBoundary: PropTypes.func.isRequired,
         draggedBoundary: PropTypes.string,
         setDraggedBoundary: PropTypes.func,
         leafletElement: PropTypes.object,
@@ -142,7 +142,7 @@ export default class EditableWells extends Component {
 
     deleteWell = id => {
         return ( ) => {
-            this.props.deleteBoundary( id );
+            this.props.removeBoundary( id );
         };
     }
 

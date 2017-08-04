@@ -97,6 +97,22 @@ export function setActiveBoundaryControlPoint( tool, index ) {
  * GENERAL
  */
 
+export const ModflowModelCommands = {
+    CREATE_MODFLOW_MODEL: 'createModflowModel',
+    DELETE_MODFLOW_MODEL: 'deleteModflowModel',
+    UPDATE_MODFLOW_MODEL: 'updateModflowModel',
+};
+
+export const ModflowModelEvents = {
+    MODFLOW_MODEL_CREATED: 'modflowModelCreated',
+    MODFLOW_MODEL_UPDATED: 'modflowModelUpdated',
+    MODFLOW_MODEL_DELETED: 'modflowModelDeleted',
+};
+
+export const ModflowModelQueries = {
+    GET_MODFLOW_MODEL: 'GET_MODFLOW_MODEL',
+};
+
 export const ActionTypeModel = {
     UPDATE_GEOMETRY: 'MODEL_EDITOR_UPDATE_GEOMETRY',
     DESTROY_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_DESTROY',
@@ -119,12 +135,21 @@ export const ActionTypeModel = {
 
 export function createModflowModel( tool, id, payload ) {
     return {
-        type: ActionTypeModel.CREATE_MODFLOW_MODEL,
+        type: ModflowModelCommands.CREATE_MODFLOW_MODEL,
         tool,
         id,
         payload
     };
 }
+export function modflowModelCreated( tool, id, payload ) {
+    return {
+        type: ModflowModelEvents.MODFLOW_MODEL_CREATED,
+        tool,
+        id,
+        payload
+    };
+}
+
 export function destroyModflowModel( tool ) {
     return {
         type: ActionTypeModel.DESTROY_MODFLOW_MODEL,
@@ -134,7 +159,15 @@ export function destroyModflowModel( tool ) {
 
 export function updateModflowModel( tool, id, payload ) {
     return {
-        type: ActionTypeModel.UPDATE_MODFLOW_MODEL,
+        type: ModflowModelCommands.UPDATE_MODFLOW_MODEL,
+        tool,
+        id,
+        payload
+    };
+}
+export function modflowModelUpdated( tool, id, payload ) {
+    return {
+        type: ModflowModelEvents.MODFLOW_MODEL_UPDATED,
         tool,
         id,
         payload
@@ -154,7 +187,7 @@ export function updateGeometry( tool, id, geometry ) {
 
 export function loadModflowModel( tool, id ) {
     return {
-        type: ActionTypeModel.LOAD_MODFLOW_MODEL,
+        type: ModflowModelQueries.GET_MODFLOW_MODEL,
         tool,
         id
     };
@@ -165,38 +198,6 @@ export function setModflowModel( tool, payload ) {
         type: ActionTypeModel.SET_MODFLOW_MODEL,
         tool,
         payload
-    };
-}
-
-export function setName( tool, name ) {
-    return {
-        type: ActionTypeModel.SET_NAME,
-        tool,
-        payload: name
-    };
-}
-
-export function setDescription( tool, description ) {
-    return {
-        type: ActionTypeModel.SET_DESCRIPTION,
-        tool,
-        payload: description
-    };
-}
-
-export function setTimeUnit( tool, timeUnit ) {
-    return {
-        type: ActionTypeModel.SET_TIME_UNIT,
-        tool,
-        payload: timeUnit
-    };
-}
-
-export function setLengthUnit( tool, lengthUnit ) {
-    return {
-        type: ActionTypeModel.SET_LENGTH_UNIT,
-        tool,
-        payload: lengthUnit
     };
 }
 
@@ -272,25 +273,24 @@ export function deleteAreaControlPoint( tool, index ) {
  * BOUNDARIES
  */
 
+export const BoundaryCommands = {
+    REMOVE_BOUNDARY: 'removeBoundary',
+};
+
+export const BoundaryEvents = {
+    BOUNDARY_REMOVED: 'boundaryRemoved',
+};
+
 export const ActionTypeBoundaries = {
     SET_BOUNDARIES: 'MODEL_EDITOR_MODEL_SET_BOUNDARIES',
     ADD_BOUNDARY: 'MODEL_EDITOR_MODEL_ADD_BOUNDARY',
     UPDATE_BOUNDARY: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY',
-    DELETE_BOUNDARY: 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY',
     ADD_BOUNDARY_CONTROL_POINT: 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT',
     UPDATE_BOUNDARY_CONTROL_POINT: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT',
     DELETE_BOUNDARY_CONTROL_POINT: 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY_CONTROL_POINT',
     UPDATE_BOUNDARY_PUMPING_RATE: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_PUMPING_RATE',
     ADD_BOUNDARY_PUMPING_RATE: 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE',
 };
-
-export function setBoundaries( tool, boundaries ) {
-    return {
-        type: ActionTypeBoundaries.SET_BOUNDARIES,
-        tool,
-        payload: boundaries
-    };
-}
 
 export function addBoundary( tool, boundary ) {
     return {
@@ -308,9 +308,19 @@ export function updateBoundary( tool, boundary ) {
     };
 }
 
-export function deleteBoundary( tool, id ) {
+export function removeBoundary( tool, boundaryId,  modelId) {
     return {
-        type: ActionTypeBoundaries.DELETE_BOUNDARY,
+        type: BoundaryCommands.REMOVE_BOUNDARY,
+        tool,
+        payload: {
+            boundary_id: boundaryId,
+            id: modelId,
+        }
+    };
+}
+export function boundaryRemoved( tool, id ) {
+    return {
+        type: BoundaryEvents.BOUNDARY_REMOVED,
         tool,
         payload: id
     };
@@ -385,33 +395,6 @@ export function addPumpingRate( tool, boundaryId, observationPointId, index, dat
             datetime,
             pumpingRate
         }
-    };
-}
-
-export function fetchBoundaries( tool, id ) {
-    return ( dispatch, getState ) => {
-        return dispatch( {
-            type: 'FETCH_DATA',
-            payload: {
-                promise: ConfiguredAxios.get( '/modflowmodels/' + id + '/boundaries', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
-            }
-        } ).then( ( { action } ) => {
-            const data = action.payload.data;
-            dispatch( setBoundaries( tool, data.map( b => {
-                const type = new BoundaryType( b.type === 'well' ? 'wel' : b.type ); // TODO remove when api updated
-                return new Boundary(
-                    b.id,
-                    b.name,
-                    type,
-                    b.geometry,
-                    b.metadata.layer /* TODO */,
-                    type.slug === 'wel' ? new BoundaryMetadata( { wellType: b.metadata.well_type } ) : null
-                );
-            } ) ) );
-        } ).catch( ( error ) => {
-            // eslint-disable-next-line no-console
-            console.error( error );
-        } );
     };
 }
 

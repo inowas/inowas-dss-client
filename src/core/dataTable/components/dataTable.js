@@ -11,6 +11,10 @@ import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
 
+import {
+    Command,
+} from '../../../t03/actions/index';
+
 class DataTable extends React.Component {
     constructor ( props ) {
         super( props );
@@ -46,7 +50,7 @@ class DataTable extends React.Component {
             searchColumn: 'all',
             query: {}, // Search query
             page: 1,
-            perPage: this.props.perPage || 10,
+            perPage: this.props.perPage || 20,
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
@@ -54,7 +58,7 @@ class DataTable extends React.Component {
                     direction: 'asc',
                     position: 0
                 },
-                'well_ype': {
+                'type': {
                     direction: 'asc',
                     position: 0
                 },
@@ -67,7 +71,7 @@ class DataTable extends React.Component {
                 {
                     property: 'name',
                     header: {
-                        label: 'Type',
+                        label: 'Name',
                         transforms: [ resetable ],
                         formatters: [
                             sort.header( {
@@ -79,9 +83,9 @@ class DataTable extends React.Component {
                     }
                 },
                 {
-                    property: 'well_ype',
+                    property: 'type',
                     header: {
-                        label: 'Well Type',
+                        label: 'Type',
                         transforms: [ resetable ],
                         formatters: [
                             sort.header( {
@@ -118,6 +122,23 @@ class DataTable extends React.Component {
                         ]
                     }
                 },
+                {
+                    props: {
+                        style: {
+                            width: 50
+                        }
+                    },
+                    cell: {
+                        formatters: [
+                            (value, { rowData }) => (
+                                <span
+                                    className="remove"
+                                    onClick={() => this.props.removeBoundary(rowData.id, this.props.id)} style={{ cursor: 'pointer' }}
+                                >&#10007;</span>
+                            )
+                        ]
+                    }
+                }
             ],
             rows: this.props.rows || []
         }
@@ -170,11 +191,32 @@ class DataTable extends React.Component {
 }
 
 DataTable.propTypes = {
+    id: PropTypes.string.isRequired,
     tool: PropTypes.string.isRequired,
     perPage: PropTypes.number,
+    removeBoundary: PropTypes.func.isRequired,
+};
+
+const actions = {
+    removeBoundary: Command.removeBoundary,
+};
+
+const mapDispatchToProps = (dispatch, { tool }) => {
+    const wrappedActions = {};
+    for ( const key in actions ) {
+        if (actions.hasOwnProperty( key )) {
+            // eslint-disable-next-line no-loop-func
+            wrappedActions[key] = function( ) {
+                const args = Array.prototype.slice.call( arguments );
+                dispatch(actions[key]( tool, ...args ));
+            };
+        }
+    }
+
+    return wrappedActions;
 };
 
 // eslint-disable-next-line no-class-assign
-const DataTableContainer = connect( makeMapStateToPropsBoundaries )( DataTable );
+const DataTableContainer = connect( makeMapStateToPropsBoundaries, mapDispatchToProps )( DataTable );
 
 export default DataTableContainer;

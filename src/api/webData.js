@@ -26,6 +26,8 @@ export function responseAction ( type, webData ) {
     }
 }
 
+export const waitForResponse = ( action, responseAction ) => action.type === responseAction && action.webData.type;
+
 export function* sendHttpRequestFlow ( action ) {
 
     yield put( responseAction( action.responseAction, { type: "loading" } ) );

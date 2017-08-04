@@ -1,30 +1,31 @@
 import {put, take} from 'redux-saga/effects';
 import {
-    COMMAND_UPDATE_MODFLOW_MODEL, sendCommand,
+    sendCommand,
     stateToCreatePayload
-} from "../../actions/messageBox";
-import {ActionTypeModel, setModflowModel} from "../../actions/modelEditor";
+} from '../../actions/messageBox';
+
+import {Command, Action, Event} from '../../t03/actions/index';
+import {waitForResponse} from '../../api/webData';
 
 export function* updateModelFlow () {
-    console.log('updateModelFlow started');
-
     while ( true ) {
-        let action = yield take( action => action.type === ActionTypeModel.UPDATE_MODFLOW_MODEL );
+        let action = yield take( action => action.type === Command.UPDATE_MODFLOW_MODEL );
 
-        let payload = stateToCreatePayload(action.payload);
+        let payload = stateToCreatePayload( action.payload );
         payload[ 'id' ] = action.id;
 
-        yield put( setModflowModel("T03", action.payload ) );
-        yield put( sendCommand( COMMAND_UPDATE_MODFLOW_MODEL, payload ) );
+        yield put( sendCommand( action.type, payload ) );
 
         while ( true ) {
-            let response = yield take( action => action.type === COMMAND_UPDATE_MODFLOW_MODEL );
+            const response = yield take( action => waitForResponse( action, Command.UPDATE_MODFLOW_MODEL ) );
 
             if ( response.webData.type === "error" ) {
+                yield put( Action.setModflowModel( action.tool, action.payload ) );
                 break;
             }
 
             if ( response.webData.type === "success" ) {
+                yield put( Event.modflowModelUpdated( action.tool, action.id, action.payload ) );
                 break;
             }
         }

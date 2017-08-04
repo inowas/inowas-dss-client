@@ -1,9 +1,6 @@
 import {sendHttpRequest} from "../api/webData";
 import config from '../config';
 
-export const COMMAND_CREATE_MODFLOW_MODEL = "createModflowModel";
-export const COMMAND_UPDATE_MODFLOW_MODEL = "updateModflowModel";
-
 export function stateToCreatePayload ( state ) {
     let geometry = state.geometry;
 

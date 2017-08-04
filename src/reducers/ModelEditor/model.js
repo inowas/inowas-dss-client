@@ -8,6 +8,7 @@ import {
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry
 } from './boundaries';
 import {ActionTypeBoundaries, ActionTypeModel} from "../../actions/modelEditor";
+import {Action, Event} from "../../t03/actions/index";
 import {calcBoundsOfPolygon} from "../../calculations/geoTools";
 
 function getInitialStyles() {
@@ -165,8 +166,9 @@ const createModelReducer = tool => {
         }
 
         switch ( action.type ) {
-            case ActionTypeModel.CREATE_MODFLOW_MODEL:
-            case ActionTypeModel.SET_MODFLOW_MODEL:
+            case Event.MODFLOW_MODEL_CREATED:
+            case Event.MODFLOW_MODEL_UPDATED:
+            case Action.SET_MODFLOW_MODEL:
                 return {
                     ...state,
                     ...action.payload
@@ -203,7 +205,7 @@ const createModelReducer = tool => {
             case ActionTypeModel.DELETE_AREA_CONTROL_POINT:
                 return { ...state, geometry: handleAreaDeleteControlPoint( state.geometry, action )};
 
-            case ActionTypeBoundaries.SET_BOUNDARIES:
+            case Action.SET_BOUNDARIES:
                 return { ...state, boundaries: action.payload };
 
             case ActionTypeBoundaries.ADD_BOUNDARY:
@@ -215,7 +217,7 @@ const createModelReducer = tool => {
             case ActionTypeModel.UPDATE_BOUNDING_BOX:
                 return { ...state, bounding_box: calcBoundsOfPolygon(state.geometry.coordinates) };
 
-            case ActionTypeBoundaries.DELETE_BOUNDARY:
+            case Event.BOUNDARY_REMOVED:
                 return { ...state, boundaries: handleDeleteBoundary(state.boundaries, action) };
 
             case ActionTypeBoundaries.ADD_BOUNDARY_CONTROL_POINT:

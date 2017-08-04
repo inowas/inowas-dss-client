@@ -125,10 +125,10 @@ class ModelEditorBoundaries extends Component {
         }
 
         if ( boundaryType ) {
-            return ( <BoundaryOverview boundaries={boundaries.filter(b => ( b.type.slug === boundaryType ))} type={boundaryType} setEditorState={setEditorState}/> );
+            return ( <BoundaryOverview id={this.props.id} boundaries={boundaries.filter(b => ( b.type.slug === boundaryType ))} type={boundaryType} setEditorState={setEditorState}/> );
         }
 
-        return ( <BoundaryOverview boundaries={boundaries}/> );
+        return ( <BoundaryOverview id={this.props.id} boundaries={boundaries}/> );
     }
 
     setActiveBoundaryType = type => {

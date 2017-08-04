@@ -18,7 +18,7 @@ export const mapBoundaries = ( boundaries ) => {
         return {
             id: b.id,
             name: b.name,
-            well_ype: b.type,
+            type: b.type,
             lat: b.geometry.coordinates[ 1 ],
             lng: b.geometry.coordinates[ 0 ],
             layers: b.affected_layers,

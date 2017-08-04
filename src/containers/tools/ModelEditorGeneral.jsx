@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    createModflowModel,
-    setModflowModel,
-    updateModflowModel,
-    setEditorState, ActionTypeModel,
+    setEditorState
 } from '../../actions/modelEditor';
+import {
+    Query, Command,Action
+} from '../../t03/actions/index';
 import {
     getModflowModel
 } from '../../reducers/ModelEditor/general';
@@ -19,7 +19,6 @@ import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
 import * as mapHelpers from "../../calculations/map";
-import {sendQuery} from "../../actions/messageBox"
 
 const styles = {
     container: {
@@ -219,19 +218,19 @@ class ModelEditorGeneral extends Component {
         } = this.props;
 
         // TODO prevent onClick triggers if disabled and make that css works
-        const disabled = isLoading(webData.UpdateModel) ? 'disabled' : '';
-        const btnClass = isLoading(webData.UpdateModel) ? 'button button-accent is-disabled' : 'button button-accent';
+        const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
+        const btnClass = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'button button-accent is-disabled' : 'button button-accent';
 
-        if (id && isLoading(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])) {
+        if (id && isLoading(webData[Query.GET_MODFLOW_MODEL])) {
             // TODO move to dump component
             return (
                 <p>Loading ...</p>
             );
         }
-        if (id && hasError(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])) {
+        if (id && hasError(webData[Query.GET_MODFLOW_MODEL])) {
             // TODO move to dump component
             return (
-                <p>Error while loading ... ({getErrorMessage(webData[ActionTypeModel.LOAD_MODFLOW_MODEL])})</p>
+                <p>Error while loading ... ({getErrorMessage(webData[Query.GET_MODFLOW_MODEL])})</p>
             );
         }
 
@@ -352,7 +351,6 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
-    console.log('mapStateToProps', state);
     return {
         modflowModel: getModflowModel(state[tool].model),
         id: params.id,
@@ -361,11 +359,10 @@ const mapStateToProps = (state, { tool, params }) => {
 };
 
 const actions = {
-    setModflowModel,
-    createModflowModel,
-    updateModflowModel,
-    setEditorState,
-    sendQuery
+    setModflowModel: Action.setModflowModel,
+    createModflowModel: Command.createModflowModel,
+    updateModflowModel: Command.updateModflowModel,
+    setEditorState
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
