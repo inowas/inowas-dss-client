@@ -6,10 +6,6 @@ import PropertyWrapper from './Tool';
 import ModelEditorBoundaries from '../../containers/tools/ModelEditorBoundaries';
 import ModelEditorGeneral from '../../containers/tools/ModelEditorGeneral';
 import styleGlobals from 'styleGlobals';
-import uuid from 'uuid';
-import Boundary from '../../model/Boundary';
-import BoundaryType from '../../model/BoundaryType';
-import {calcBoundsOfPolygon} from "../../calculations/geoTools";
 
 const styles = {
     wrapper: {
@@ -118,7 +114,7 @@ export default class ModelEditor extends Component {
     };
 
     render( ) {
-        const { tool, state, initial } = this.props;
+        const { tool, state, initial, isVisible } = this.props;
         const closeable = !initial;
 
         switch ( state ) {
@@ -147,5 +143,6 @@ export default class ModelEditor extends Component {
             default:
                 return null;
         }
+
     }
 }

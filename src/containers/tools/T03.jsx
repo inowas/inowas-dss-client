@@ -78,6 +78,8 @@ class T03 extends Component {
             return null;
         }
 
+        const propertiesVisible = this.props.location.hash !== "#edit";
+
         const menuItems = [
             {
                 name: 'General',
@@ -205,16 +207,20 @@ class T03 extends Component {
             }
         ];
 
-        return (
-            <div style={styles.wrapper}>
-                <div style={styles.overlayWrapper}>
-                    <div style={styles.overlay}>
-                        <Sidebar title="Menu" items={menuItems}/>
-                        <Properties {...this.props} initial={initial} tool={'T03'} />
+        if (propertiesVisible ) {
+            return (
+                <div style={styles.wrapper}>
+                    <div style={styles.overlayWrapper}>
+                        <div style={styles.overlay}>
+                            <Sidebar title="Menu" items={menuItems} />
+                            <Properties {...this.props} initial={initial} tool={'T03'} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
+
+        return null;
     }
 
     render( ) {

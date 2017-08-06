@@ -72,25 +72,28 @@ export default class Sidebar extends Component {
         const { title, items, firstActive } = this.props;
 
         return (
-            <nav style={[ styles.wrapper, styles.menu ]}>
+            <nav style={[styles.wrapper, styles.menu]}>
                 <Accordion>
                     <AccordionItem style={styles.title} heading={title}>
                         <Accordion firstActive={firstActive}>
-                            {items.map(( i, index ) => (
-                                <AccordionItem style={[i.disabled && styles.disabled]} icon={i.icon} heading={i.name} onClick={i.onClick} key={index}>
+                            {items.map((i, index) => (
+                                <AccordionItem style={[i.disabled && styles.disabled]} icon={i.icon}
+                                               heading={i.name} onClick={i.onClick} key={index}>
                                     <ul style={styles.list}>
-                                        {i.items && i.items.map(( i2, index2 ) => (
-                                            <li style={[styles.listItem, (i.disabled || i2.disabled) && styles.disabled]} key={index2}>
-                                                {(( ) => {
-                                                    if ( i2.onClick ) {
+                                        {i.items && i.items.map((i2, index2) => (
+                                            <li style={[styles.listItem, (i.disabled || i2.disabled) && styles.disabled]}
+                                                key={index2}>
+                                                {(() => {
+                                                    if (i2.onClick) {
                                                         return (
-                                                            <button onClick={i2.onClick} className="link" disabled={i.disabled || i2.disabled}>
+                                                            <button onClick={i2.onClick} className="link"
+                                                                    disabled={i.disabled || i2.disabled}>
                                                                 {i2.name}
                                                             </button>
                                                         );
                                                     }
                                                     return i2.name;
-                                                })( )}
+                                                })()}
                                             </li>
                                         ))}
                                     </ul>
@@ -101,5 +104,6 @@ export default class Sidebar extends Component {
                 </Accordion>
             </nav>
         );
+
     }
 }

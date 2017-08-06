@@ -16,25 +16,15 @@ const routes = (store) => (
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard}/>
             <Route path="T02(/:id)" component={tools.T02}/>
-            <Route path="T03(/:id)" component={tools.T03}
-                   onEnter={ (nextState) => {
-                       if (nextState.params.id) {
-                           store.dispatch(loadModflowModel('T03', nextState.params.id));
-                           return;
-                       }
-                       store.dispatch(reset());
-                       store.dispatch(destroyModflowModel('T03'));
-                   }}
-            />
-            <Route path="T03(/:id/:property)" component={tools.T03}
-                   onEnter={ (nextState) => {
-                       if (nextState.params.id) {
-                           store.dispatch(loadModflowModel('T03', nextState.params.id));
-                           return;
-                       }
-                       store.dispatch(reset());
-                       store.dispatch(destroyModflowModel('T03'));
-                   }}
+            <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={tools.T03}
+                onEnter={ (nextState) => {
+                   if (nextState.params.id) {
+                       store.dispatch(loadModflowModel('T03', nextState.params.id));
+                       return;
+                   }
+                   store.dispatch(reset());
+                   store.dispatch(destroyModflowModel('T03'));
+                }}
             />
             <Route path="T06(/:id)" component={tools.T06}/>
             <Route path="T07A/:id" component={tools.T07A}/>
