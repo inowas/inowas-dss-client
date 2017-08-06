@@ -1,8 +1,3 @@
-import {
-    getGeometry, getBoundingBox, getDescription, getLengthUnit, getName,
-    getTimeUnit
-} from '../reducers/ModelEditor/general';
-
 import ConfiguredAxios from 'ConfiguredAxios';
 import { getActiveBoundary } from '../reducers/ModelEditor/ui';
 import { getApiKey } from '../reducers/user';
@@ -16,6 +11,14 @@ import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel, sendQuery}
 /**
  * UI
  */
+
+export function setView(tool, view ) {
+    return {
+        type: 'MODEL_EDITOR_UI_SET_VIEW',
+        tool,
+        payload: view
+    };
+}
 
 export function setEditorState( tool, mode ) {
     return {

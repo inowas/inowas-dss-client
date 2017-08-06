@@ -11,6 +11,7 @@ const styles = {
     bottom: styleGlobals.dimensions.spacing.large,
     left: styleGlobals.dimensions.spacing.large,
     boxShadow: styleGlobals.boxShadow,
+    cursor: 'pointer',
     zIndex: 1100
 };
 
@@ -19,14 +20,16 @@ export default class FloatingToast extends Component {
 
     static propTypes = {
         children: PropTypes.node
-    }
+    };
 
     render( ) {
         const { children } = this.props;
 
         if ( children ) {
             return (
-                <p style={[ styles ]}>{children}</p>
+                <div onClick={this.props.onClick}>
+                    <p style={[ styles ]}>{children}</p>
+                </div>
             );
         }
 

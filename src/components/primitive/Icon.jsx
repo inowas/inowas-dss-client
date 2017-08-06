@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 
-// import Add from '../../../icons/add.svg';
-
 import '../../less/icon.less';
 import icons from '../../icons';
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -13,7 +11,7 @@ export default class Icon extends Component {
         style: PropTypes.object,
         name: PropTypes.string.isRequired,
         className: PropTypes.string
-    }
+    };
 
     render() {
         const { name, style, className, ...rest } = this.props;

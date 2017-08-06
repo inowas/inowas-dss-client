@@ -26,6 +26,16 @@ const routes = (store) => (
                        store.dispatch(destroyModflowModel('T03'));
                    }}
             />
+            <Route path="T03(/:id/:property)" component={tools.T03}
+                   onEnter={ (nextState) => {
+                       if (nextState.params.id) {
+                           store.dispatch(loadModflowModel('T03', nextState.params.id));
+                           return;
+                       }
+                       store.dispatch(reset());
+                       store.dispatch(destroyModflowModel('T03'));
+                   }}
+            />
             <Route path="T06(/:id)" component={tools.T06}/>
             <Route path="T07A/:id" component={tools.T07A}/>
             <Route path="T07B/:id" component={tools.T07B}/>

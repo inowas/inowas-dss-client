@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    setEditorState
+    setEditorState,
+    setView
 } from '../../actions/modelEditor';
 import {
-    Query, Command,Action
+    Query, Command, Action
 } from '../../t03/actions/index';
 import {
     getModflowModel
@@ -14,11 +15,11 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import {getErrorMessage, getRequestStatus, hasError, isLoading} from "../../reducers/webData";
-import { Map, TileLayer, Polygon } from 'react-leaflet';
 import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
 import * as mapHelpers from "../../calculations/map";
+import { Map, Polygon, TileLayer } from 'react-leaflet';
 
 const styles = {
     container: {
@@ -73,7 +74,6 @@ class ModelEditorGeneral extends Component {
     }
 
     componentWillReceiveProps(newProps){
-        console.log('componentWillReceiveProps', newProps);
         this.setState(function(prevState, props){
             return { ...prevState, modflowModel: newProps.modflowModel };
         } );
@@ -192,11 +192,12 @@ class ModelEditorGeneral extends Component {
 
     // eslint-disable-next-line no-shadow
     renderArea( area, bounds, editAreaOnMap ) {
+
         return (
             <div>
                 <h3>Area</h3>
                 <button onClick={editAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
-                <Map  ref="map" className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
+                <Map ref="map" className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                     {(( ) => {
                         if ( area ) {
@@ -210,6 +211,8 @@ class ModelEditorGeneral extends Component {
     }
 
     render( ) {
+
+        console.log('PROPS', this.props);
         const {
             style,
             id,
@@ -362,7 +365,8 @@ const actions = {
     setModflowModel: Action.setModflowModel,
     createModflowModel: Command.createModflowModel,
     updateModflowModel: Command.updateModflowModel,
-    setEditorState
+    setEditorState,
+    setView
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

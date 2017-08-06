@@ -9,11 +9,11 @@ export default class Accordion extends Component {
         style: PropTypes.object,
         children: PropTypes.node.isRequired,
         firstActive: PropTypes.number
-    }
+    };
 
     static defaultProps = {
         firstActive: 0
-    }
+    };
 
     constructor( props ) {
         super( props );
@@ -40,7 +40,7 @@ export default class Accordion extends Component {
             }
             this.setState({ activeIndex: newIndex });
         };
-    }
+    };
 
     render( ) {
         const { style } = this.props;
@@ -63,5 +63,4 @@ export default class Accordion extends Component {
             </div>
         );
     }
-
 }

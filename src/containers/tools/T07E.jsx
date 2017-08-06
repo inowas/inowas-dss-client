@@ -13,7 +13,7 @@ import {
     getActiveBoundaryControlPoint
 } from '../../reducers/ModelEditor/ui';
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
-import ModelEditor from '../../components/modflow/ModelEditor';
+import ModelEditor from '../../components/modflow/Properties';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';

@@ -1,3 +1,4 @@
+
 /*
 
 items = [{
@@ -19,6 +20,15 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
+
+    menu: {
+        width: styleGlobals.dimensions.gridColumn,
+        marginLeft: styleGlobals.dimensions.gridGutter,
+        marginRight: styleGlobals.dimensions.gridGutter,
+        marginBottom: 'auto', // pin element to top
+        position: 'relative',
+        zIndex: 1100
+    },
 
     wrapper: {
         backgroundColor: styleGlobals.colors.background,
@@ -50,25 +60,24 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class Menu extends Component {
+export default class Sidebar extends Component {
 
     static propTypes = {
-        style: PropTypes.object,
         title: PropTypes.string,
         items: PropTypes.array,
         firstActive: PropTypes.number
     };
 
     render( ) {
-        const { title, items, style, firstActive } = this.props;
+        const { title, items, firstActive } = this.props;
 
         return (
-            <nav style={[ styles.wrapper, style ]}>
+            <nav style={[ styles.wrapper, styles.menu ]}>
                 <Accordion>
                     <AccordionItem style={styles.title} heading={title}>
                         <Accordion firstActive={firstActive}>
                             {items.map(( i, index ) => (
-                                <AccordionItem style={[i.disabled && styles.disabled]} icon={i.icon} heading={i.name} key={index}>
+                                <AccordionItem style={[i.disabled && styles.disabled]} icon={i.icon} heading={i.name} onClick={i.onClick} key={index}>
                                     <ul style={styles.list}>
                                         {i.items && i.items.map(( i2, index2 ) => (
                                             <li style={[styles.listItem, (i.disabled || i2.disabled) && styles.disabled]} key={index2}>

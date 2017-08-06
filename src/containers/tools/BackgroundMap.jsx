@@ -4,12 +4,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FeatureGroup, GeoJSON, LayersControl, Map, Polyline, Polygon,  CircleMarker, Circle, Rectangle, TileLayer } from 'react-leaflet';
 import { EditControl } from "react-leaflet-draw"
+import FloatingToast from "../../components/modflow/FloatingToast";
+
 
 import {
+    setView,
     updateGeometry
 } from '../../actions/modelEditor';
 
+
+
 class BackgroundMap extends Component {
+
     generateKeyFunction( geometry ) {
         return md5(JSON.stringify(geometry))
     }
@@ -169,7 +175,6 @@ class BackgroundMap extends Component {
         Object.keys(layers).map( key => {
             const layer = layers[key];
             const geometry = layer.toGeoJSON().geometry;
-            console.log('GEOMETRY 1', geometry);
             this.props.updateGeometry( layer.options.id, geometry );
         })
     };
@@ -236,6 +241,16 @@ class BackgroundMap extends Component {
         );
     }
 
+    closeMap = () => {
+        this.props.setView( 'properties' );
+    };
+
+    renderToast() {
+        if (this.props.ui.view === 'map') {
+            return (<FloatingToast style={{position: 'absolute', bottom: 50, left: 50, zIndex: 100000}} onClick={this.closeMap}>{'Return to Editor'}</FloatingToast>);
+        }
+    }
+
     render( ) {
         const area = this.props.model.geometry;
         const boundingBox = this.props.model.bounding_box;
@@ -280,6 +295,9 @@ class BackgroundMap extends Component {
 
                     {this.renderEditControl()}
                 </Map>
+
+                {this.renderToast()}
+
             </div>
         );
     }
@@ -287,12 +305,14 @@ class BackgroundMap extends Component {
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
-        model: state[tool].model
+        model: state[tool].model,
+        ui: state[tool].ui,
     };
 };
 
 const actions = {
-    updateGeometry
+    updateGeometry,
+    setView
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

@@ -58,7 +58,7 @@ export default class AccordionItem extends Component {
         toggleActive: PropTypes.func,
         last: PropTypes.bool,
         onClick: PropTypes.func,
-    }
+    };
 
     handleClick = () => {
         const { toggleActive, onClick } = this.props;

@@ -1,5 +1,6 @@
 function getInitialState() {
     return {
+        view: 'properties',
         state: 'general',
         activeBoundaryType: null,
         activeBoundary: null,
@@ -21,6 +22,9 @@ const createUiReducer = tool => {
             return state;
         }
         switch ( action.type ) {
+            case 'MODEL_EDITOR_UI_SET_VIEW':
+                return { ...state, view: action.payload };
+
             case 'MODEL_EDITOR_UI_SET_STATE':
                 return { ...state, state: action.payload };
 
@@ -58,6 +62,7 @@ const createUiReducer = tool => {
 
 export default createUiReducer;
 
+export const getView = state => state.view;
 export const getState = state => state.state;
 export const getActiveBoundary = state => state.activeBoundary;
 export const getActiveBoundaryType = state => state.activeBoundaryType;
