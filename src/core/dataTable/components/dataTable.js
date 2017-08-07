@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as Table from 'reactabular-table';
+import * as Sticky from 'reactabular-sticky';
+import * as Virtualized from 'reactabular-virtualized';
 import {getRows, makeMapStateToPropsBoundaries} from "../selectors";
 import {applyNewPage} from "./paginator";
 import Paginator from "./paginator";
@@ -144,6 +146,11 @@ class DataTable extends React.Component {
         }
     }
 
+    componentDidMount() {
+        // We have refs now. Force update to get those to Header/Body.
+        this.forceUpdate();
+    }
+
     componentWillReceiveProps(newProps){
         this.setState(function(prevState, props){
             return { ...prevState, rows: newProps.rows };
@@ -173,12 +180,33 @@ class DataTable extends React.Component {
                     <span>Search</span>
                 </div>
 
-                <Table.Provider className="table" columns={resolvedColumns}>
-                    <Table.Header
-                        headerRows={resolve.headerRows({ columns })}
+                <Table.Provider
+                    className="table"
+                    columns={resolvedColumns}
+                    components={{
+                        body: {
+                            wrapper: Virtualized.BodyWrapper,
+                            row: Virtualized.BodyRow
+                        }
+                    }}
+                >
+                    <Sticky.Header
+                        ref={tableHeader => {
+                            this.tableHeader = tableHeader && tableHeader.getRef();
+                        }}
+                        tableBody={this.tableBody}
                     />
-
-                    <Table.Body rows={sortedRows} rowKey="id" />
+                    <Virtualized.Body
+                        rows={sortedRows}
+                        rowKey="id"
+                        style={{
+                            maxHeight: 800
+                        }}
+                        ref={tableBody => {
+                            this.tableBody = tableBody && tableBody.getRef();
+                        }}
+                        tableHeader={this.tableHeader}
+                    />
                 </Table.Provider>
 
                 <div className="controls">

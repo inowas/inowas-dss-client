@@ -6009,11 +6009,19 @@ react@^15.0.0, react@^15.4.2:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+reactabular-sticky@^8.9.0:
+  version "8.9.0"
+  resolved "https://registry.yarnpkg.com/reactabular-sticky/-/reactabular-sticky-8.9.0.tgz#72f796924c50bc73c5016beef2a894f8e81e6b63"
+
 reactabular-table@^8.9.0:
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/reactabular-table/-/reactabular-table-8.9.0.tgz#46f6cef639cd9bd4b2baf1f14e2686fb2b35e284"
   dependencies:
     classnames "^2.2.5"
+
+reactabular-virtualized@^8.10.1:
+  version "8.10.1"
+  resolved "https://registry.yarnpkg.com/reactabular-virtualized/-/reactabular-virtualized-8.10.1.tgz#949dc2360796f273c09f2224d2aef771ab0b8585"
 
 read-all-stream@^3.0.0:
   version "3.1.0"
