@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { getGeometry } from '../../reducers/ModelEditor/general';
-import {setActiveBoundaryType, setEditorState, setView} from "../../actions/modelEditor"
+import {setActiveBoundaryType, setView} from "../../actions/modelEditor"
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
 import Properties from '../../components/modflow/Properties';
 import Navbar from '../Navbar';
@@ -78,14 +77,6 @@ class T03 extends Component {
                 onClick: () => {
                     this.pushPropertyToBrowserHistory('general');
                 },
-                items: [
-                    {
-                        name: 'Model Properties',
-                        onClick: () => {
-                            this.setEditorState( 'general' )
-                        }
-                    }
-                ]
             }, {
                 name: 'Soilmodel',
                 icon: <Icon name="layer_horizontal_hatched"/>,
@@ -230,7 +221,6 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
     setActiveBoundaryType,
-    setEditorState,
     setView
 };
 
