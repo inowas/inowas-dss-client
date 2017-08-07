@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, IndexRoute, browserHistory } from 'react-router';
 import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
 import Dashboard from './containers/Dashboard';
@@ -8,6 +8,12 @@ import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {destroyModflowModel, loadModflowModel} from "./actions/modelEditor";
 import {reset} from "./api/webData";
+
+export const editBoundary = (tool, id, property, type, boundaryId) => {
+    const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type + '/' + boundaryId;
+
+    browserHistory.push(url);
+};
 
 const routes = (store) => (
     <Route path="/">

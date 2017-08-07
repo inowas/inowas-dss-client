@@ -7,15 +7,11 @@ import {getRows, makeMapStateToPropsBoundaries} from "../selectors";
 import {applyNewPage} from "./paginator";
 import Paginator from "./paginator";
 
-import { connect } from 'react-redux';
 import orderBy from 'lodash/orderBy';
 import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
-
-import {
-    Command,
-} from '../../../t03/actions/index';
+import {pure} from 'recompose';
 
 class DataTable extends React.Component {
     constructor ( props ) {
@@ -99,19 +95,19 @@ class DataTable extends React.Component {
                     }
                 },
                 {
-                    property: 'lat',
+                    property: 'geometry.coordinates.0',
                     header: {
                         label: 'Latitude (X)',
                     }
                 },
                 {
-                    property: 'lng',
+                    property: 'geometry.coordinates.1',
                     header: {
                         label: 'Longitude (Y)',
                     }
                 },
                 {
-                    property: 'layers',
+                    property: 'affected_layers',
                     header: {
                         label: 'Layers',
                         transforms: [ resetable ],
@@ -159,6 +155,7 @@ class DataTable extends React.Component {
 
     render () {
         const { rows, sortingColumns, columns, perPage, page } = this.state;
+
         const resolvedColumns = resolve.columnChildren({ columns });
         const sortedRows = compose(
             getRows(page, perPage),
@@ -200,7 +197,7 @@ class DataTable extends React.Component {
                         rows={sortedRows}
                         rowKey="id"
                         style={{
-                            maxHeight: 800
+                            maxHeight: 1000
                         }}
                         ref={tableBody => {
                             this.tableBody = tableBody && tableBody.getRef();
@@ -225,26 +222,4 @@ DataTable.propTypes = {
     removeBoundary: PropTypes.func.isRequired,
 };
 
-const actions = {
-    removeBoundary: Command.removeBoundary,
-};
-
-const mapDispatchToProps = (dispatch, { tool }) => {
-    const wrappedActions = {};
-    for ( const key in actions ) {
-        if (actions.hasOwnProperty( key )) {
-            // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function( ) {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch(actions[key]( tool, ...args ));
-            };
-        }
-    }
-
-    return wrappedActions;
-};
-
-// eslint-disable-next-line no-class-assign
-const DataTableContainer = connect( makeMapStateToPropsBoundaries, mapDispatchToProps )( DataTable );
-
-export default DataTableContainer;
+export default DataTable;

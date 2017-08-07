@@ -207,7 +207,7 @@ export default class WellProperties extends Component {
                         </div>
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
-                            <Select style={[ styles.input ]} id={typeInputId} value={well.metadata ? well.metadata.toObject.wellType : ''} onChange={this.updateWellType} options={[
+                            <Select style={[ styles.input ]} id={typeInputId} value={well.metadata ? well.metadata.well_type : ''} onChange={this.updateWellType} options={[
                                 {
                                     label: 'Public Well',
                                     value: 'puw'

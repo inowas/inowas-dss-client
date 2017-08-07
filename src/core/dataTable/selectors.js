@@ -13,27 +13,14 @@ export const getRows = ( page, perPage = {} ) => ( data ) => {
     return data.slice( offset, page * perPage );
 };
 
-export const mapBoundaries = ( boundaries ) => {
-    return boundaries.map( ( b, index ) => {
-        return {
-            id: b.id,
-            name: b.name,
-            type: b.type,
-            lat: b.geometry.coordinates[ 1 ],
-            lng: b.geometry.coordinates[ 0 ],
-            layers: b.affected_layers,
-        }
-    } )
-};
-
-const getBoundaries = (state, props) => state[props.tool].model.boundaries;
+const getBoundaries = (state, props) => props.params.type
+    ? state[props.tool].model.boundaries.filter(b => ( b.type === props.params.type ))
+    : state[props.tool].model.boundaries;
 
 export const makeGetBoundaries = () => {
     return createSelector(
         [getBoundaries],
-        (boundaries) => {
-            return mapBoundaries(boundaries);
-        }
+        (boundaries) => boundaries
     );
 };
 
@@ -42,7 +29,7 @@ export const makeMapStateToPropsBoundaries = () => {
     const boundaries = makeGetBoundaries();
     return (state, props) => {
         return {
-            rows: boundaries(state, props)
+            boundaries: boundaries(state, props)
         }
     };
 };

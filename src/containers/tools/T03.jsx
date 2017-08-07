@@ -195,7 +195,7 @@ class T03 extends Component {
                     <div style={styles.overlayWrapper}>
                         <div style={styles.overlay}>
                             <Sidebar title="Menu" items={menuItems} />
-                            <Properties selectedProperty={this.props.params.property} close={this.close} tool={this.getToolName()} />
+                            <Properties selectedProperty={this.props.params.property || 'general'} close={this.close} tool={this.getToolName()} />
                         </div>
                     </div>
                 </div>

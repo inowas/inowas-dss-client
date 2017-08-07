@@ -5687,7 +5687,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8:
+prop-types@15, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -5909,6 +5909,12 @@ react-leaflet@1.1.6:
     lodash "^4.0.0"
     prop-types "^15.5.0"
     warning "^3.0.0"
+
+react-list@^0.8.6:
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/react-list/-/react-list-0.8.6.tgz#21c88eb332829a0b448c2502eb43064f11af38fe"
+  dependencies:
+    prop-types "15"
 
 react-paginate@^4.4.3:
   version "4.4.3"

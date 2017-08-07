@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-
+import ReactList from 'react-list';
 import ConfiguredRadium from 'ConfiguredRadium';
+import ListItem from './ListItem';
 
 const styles = {
     list: {
@@ -14,17 +15,39 @@ const styles = {
 export default class List extends Component {
 
     static propTypes = {
-        children: PropTypes.node,
-        style: PropTypes.object
-    }
+        style: PropTypes.object,
+        data: PropTypes.array,
+        itemClickAction: PropTypes.func.isRequired,
+    };
 
-    render( ) {
-        const {style, ...rest} = this.props;
+    renderItems = (children, ref) => {
+
+        const style = {
+            ...this.props.style,
+            ...styles.list
+        };
 
         return (
-            <ul {...rest} style={[style, styles.list]}>
-                {this.props.children}
-            </ul>
+            <ul ref={ref} style={style}>{children}</ul>
+        );
+    };
+
+    renderItem = (index, key) => {
+        const b = this.props.data[index];
+
+        return (
+            <ListItem clickAction={() => this.props.itemClickAction( b.id, b.type )} key={b.id}>{b.name}</ListItem>
+        );
+    };
+
+    render( ) {
+        return (
+                <ReactList
+                    itemRenderer={this.renderItem}
+                    itemsRenderer={this.renderItems}
+                    length={this.props.data.length}
+                    type='uniform'
+                />
         );
     }
 

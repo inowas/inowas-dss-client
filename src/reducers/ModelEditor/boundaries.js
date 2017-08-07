@@ -150,6 +150,7 @@ export function handleAddBoundaryPumpingRate ( state, action ) {
     } );
 }
 
+export const getBoundaryObjects = state => state.map( b => new Boundary( b.id, b.name, new BoundaryType( b.type ), b.geometry, b.affected_layers, b.metadata, b.observationPoints ) );
 export const getBoundaries = state => state.map( b => new Boundary( b.id, b.name, new BoundaryType( b.type ), b.geometry, b.affected_layers, b.metadata, b.observationPoints ) );
 export const getBoundary = ( state, id ) => {
     const boundary = state.find( b => b.id === id );

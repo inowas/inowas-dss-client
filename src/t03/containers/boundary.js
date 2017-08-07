@@ -56,7 +56,8 @@ class BoundariesOverview extends React.PureComponent {
         id: PropTypes.string,
         type: PropTypes.string,
         boundaries: PropTypes.array,
-        setEditorState: PropTypes.func
+        setEditorState: PropTypes.func,
+        removeBoundary: PropTypes.func.isRequired
     };
 
     render () {
@@ -66,7 +67,7 @@ class BoundariesOverview extends React.PureComponent {
             <div style={[ styles.wrapper ]}>
                 <div style={[ styles.header ]}>
                     <span style={[ styles.type ]}>{type}
-                        ({boundaries.length})</span>
+                        ()</span>
                     <button style={styles.headerButton.button} className="link">
                         <Icon style={styles.headerButton.icon} name="add"/>Add new
                     </button>
@@ -77,8 +78,7 @@ class BoundariesOverview extends React.PureComponent {
                     }
                 </div>
                 <div style={[ styles.body ]}>
-
-                    <DataTable id={this.props.id} tool={'T03'} />
+                    <DataTable rows={boundaries} id={this.props.id} removeBoundary={this.props.removeBoundary} tool={'T03'} />
                 </div>
             </div>
         );
