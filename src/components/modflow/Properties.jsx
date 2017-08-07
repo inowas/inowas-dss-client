@@ -72,16 +72,17 @@ const styles = {
 export default class ModelEditor extends Component {
 
     static propTypes = {
+        selectedProperty: PropTypes.string.isRequired,
+        close: PropTypes.func.isRequired,
+
         tool: PropTypes.string.isRequired,
         id: PropTypes.string,
         view: PropTypes.string,
-        state: PropTypes.string, // TODO better use oneOf
         setEditorState: PropTypes.func,
         setView: PropTypes.func,
         addAreaControlPoint: PropTypes.func,
         setMapPosition: PropTypes.func,
         area: PropTypes.array,
-        mapPosition: PropTypes.object,
         setMousePositionOnMap: PropTypes.func,
         firstAreaControlPoint: PropTypes.object,
         lastAreaControlPoint: PropTypes.object,
@@ -109,33 +110,28 @@ export default class ModelEditor extends Component {
         deleteAreaControlPoint: PropTypes.func
     };
 
-    close = ( ) => {
-        this.props.setView( 'map' );
-    };
-
     render( ) {
-        const { tool, state, initial, isVisible } = this.props;
-        const closeable = !initial;
+        const { tool, close, selectedProperty } = this.props;
 
-        switch ( state ) {
+        switch ( selectedProperty ) {
 
-            case 'create-model':
+            case 'create':
                 return (
-                    <PropertyWrapper heading="Create Model" style={styles.tool} close={this.close} closeable={closeable}>
+                    <PropertyWrapper heading="Create Model" style={styles.tool} close={close} closeable={false}>
                         <ModelEditorGeneral tool={tool}/>
                     </PropertyWrapper>
                 );
 
             case 'general':
                 return (
-                    <PropertyWrapper heading="General Model Properties" style={styles.tool} close={this.close} closeable={closeable}>
+                    <PropertyWrapper heading="General Model Properties" style={styles.tool} close={close} closeable={true}>
                         <ModelEditorGeneral tool={tool}/>
                     </PropertyWrapper>
                 );
 
             case 'boundaries':
                 return (
-                    <PropertyWrapper heading="Boundary Conditions" style={styles.tool} close={this.close} closeable={closeable}>
+                    <PropertyWrapper heading="Boundary Conditions" style={styles.tool} close={close} closeable={true}>
                         <ModelEditorBoundaries tool={tool}/>
                     </PropertyWrapper>
                 );

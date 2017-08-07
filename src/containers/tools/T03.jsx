@@ -1,22 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { getGeometry } from '../../reducers/ModelEditor/general';
-import {
-    getState,
-    getMapPosition,
-    getMousePositionOnMap,
-    getDraggedAreaControlPoint,
-    getActiveAreaControlPoint,
-    getActiveBoundary,
-    getDraggedBoundary,
-    getActiveBoundaryControlPoint, getMapState, getView
-} from '../../reducers/ModelEditor/ui';
-
 import {setActiveBoundaryType, setEditorState, setView} from "../../actions/modelEditor"
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
 import Properties from '../../components/modflow/Properties';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
 import BackgroundMap from "./BackgroundMap";
 import Sidebar from "../../components/primitive/Sidebar"
 import Icon from "../../components/primitive/Icon";
@@ -55,37 +44,39 @@ class T03 extends Component {
         id: PropTypes.string,
         push: PropTypes.func,
         setActiveBoundaryType: PropTypes.func,
-        setEditorState: PropTypes.func,
     };
 
     state = {
         navigation: [ ]
     };
 
-    setEditorState = ( argument ) => {
-        return this.props.setEditorState( argument );
-    };
+    getToolName = () => ( this.constructor.name );
 
-    setActiveBoundaryType = ( argument ) => {
-        return this.props.setActiveBoundaryType( argument );
+    pushPropertyToBrowserHistory( property, propertyType) {
+
+        let url = '/tools/' + this.getToolName() + '/' + this.props.params.id + '/' + property;
+
+        if (propertyType) {
+            url += '/' + propertyType;
+        }
+
+        browserHistory.push(url)
+    }
+
+    close = () => {
+        browserHistory.push(this.props.location.pathname + '#edit');
     };
 
     renderProperties() {
-        const { id, view } = this.props;
+        const { id } = this.props;
         const initial = ( id === undefined || id === null );
-
-        if (view === 'map') {
-            return null;
-        }
-
         const propertiesVisible = this.props.location.hash !== "#edit";
-
         const menuItems = [
             {
                 name: 'General',
                 icon: <Icon name="settings"/>,
                 onClick: () => {
-                    this.setEditorState( 'general' )
+                    this.pushPropertyToBrowserHistory('general');
                 },
                 items: [
                     {
@@ -99,70 +90,61 @@ class T03 extends Component {
                 name: 'Soilmodel',
                 icon: <Icon name="layer_horizontal_hatched"/>,
                 onClick: () => {
-                    this.setEditorState( 'soilmodel' )
+                    this.pushPropertyToBrowserHistory('soilmodel');
                 },
                 disabled: initial
             }, {
                 name: 'Boundaries',
                 icon: <Icon name="marker"/>,
                 onClick: () => {
-                    this.setEditorState( 'boundaries' )
+                    this.pushPropertyToBrowserHistory('boundaries');
                 },
                 disabled: initial,
                 items: [
                     {
                         name: 'Time Variant Specified Head (CHD)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'chd' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'chd');
                         }
                     }, {
                         name: 'Wells (WEL)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'wel' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'wel');
                         }
                     }, {
                         name: 'Recharge (RCH)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'rch' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'rch');
                         }
                     }, {
                         name: 'River (RIV)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'riv' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'riv');
                         }
                     }, {
                         name: 'General Head Coundary (GHB)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'ghb' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'ghb');
                         }
                     }, {
                         name: 'Evapotranspiration (EVT)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'evt' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'evt');
                         }
                     }, {
                         name: 'Drain (DRN)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'drn' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'drn');
                         }
                     }, {
                         name: 'Lake (Lak)',
                         onClick: () => {
-                            this.setEditorState( 'boundariesOverlay' );
-                            this.setActiveBoundaryType( 'lak' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'lak');
                         }
                     }, {
                         name: 'Streamflow Routing (SFR2)',
                         onClick: () => {
-                            this.setEditorState( 'boundaries' );
-                            this.setActiveBoundaryType( 'sfr2' );
+                            this.pushPropertyToBrowserHistory('boundaries', 'sfr2');
                         }
                     }
                 ]
@@ -173,16 +155,16 @@ class T03 extends Component {
                 items: [
                     {
                         name: 'Time Discretization',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'times');}
                     }, {
                         name: 'PCG Solver Parameters',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'solver-params');}
                     }, {
                         name: 'Rewetting Parameters',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'rewetting');}
                     }, {
                         name: 'RUN MODEL',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'calculation');}
                     }
                 ]
             }, {
@@ -192,28 +174,28 @@ class T03 extends Component {
                 items: [
                     {
                         name: 'View Model Results',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'heads');}
                     }, {
                         name: 'Volumetric Budget',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'budget');}
                     }, {
                         name: 'Model Calibration',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'calibration');}
                     }, {
                         name: 'Export Results',
-                        onClick: () => {this.setEditorState( null )}
+                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'export');}
                     }
                 ]
             }
         ];
 
-        if (propertiesVisible ) {
+        if ( propertiesVisible ) {
             return (
                 <div style={styles.wrapper}>
                     <div style={styles.overlayWrapper}>
                         <div style={styles.overlay}>
                             <Sidebar title="Menu" items={menuItems} />
-                            <Properties {...this.props} initial={initial} tool={'T03'} />
+                            <Properties selectedProperty={this.props.params.property} close={this.close} tool={this.getToolName()} />
                         </div>
                     </div>
                 </div>
@@ -229,7 +211,7 @@ class T03 extends Component {
         return (
             <div className="toolT03">
                 <Navbar links={navigation} />
-                <BackgroundMap tool={'T03'} />
+                <BackgroundMap tool={this.getToolName()} />
                 {this.renderProperties()}
             </div>
         );
@@ -240,18 +222,8 @@ class T03 extends Component {
 const mapStateToProps = (state, { params }) => {
 
     return {
-        view: getView( state.T03.ui ),
-        state: getState( state.T03.ui ),
-        geometry: getGeometry( state.T03.model ),
-        mapPosition: getMapPosition( state.T03.ui ),
-        mousePositionOnMap: getMousePositionOnMap( state.T03.ui ),
-        draggedAreaControlPoint: getDraggedAreaControlPoint( state.T03.ui ),
-        activeAreaControlPoint: getActiveAreaControlPoint( state.T03.ui ),
-        boundaries: getBoundaries( state.T03.model.boundaries ),
         id: params.id,
-        activeBoundary: getActiveBoundary( state.T03.ui ),
-        draggedBoundary: getDraggedBoundary( state.T03.ui ),
-        activeBoundaryControlPoint: getActiveBoundaryControlPoint( state.T03.ui )
+        boundaries: getBoundaries( state.T03.model.boundaries ),
     };
 };
 
@@ -270,7 +242,7 @@ const mapDispatchToProps = dispatch => {
             // eslint-disable-next-line no-loop-func
             wrappedActions[key] = function() {
                 const args = Array.prototype.slice.call(arguments);
-                dispatch(actions[key]('T03', ...args));
+                dispatch(actions[key](this, ...args));
             };
         }
     }
@@ -278,7 +250,6 @@ const mapDispatchToProps = dispatch => {
     return wrappedActions;
 };
 
-// eslint-disable-next-line no-class-assign
 T03 = withRouter( connect( mapStateToProps, mapDispatchToProps )( T03 ));
 
 export default T03;

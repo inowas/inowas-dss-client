@@ -26,3 +26,12 @@ export function setBoundaries ( tool, boundaries ) {
         payload: boundaries
     };
 }
+
+export const EDIT_MODEL_AREA = 'MODEL_EDITOR_MODEL_EDIT_AREA';
+
+export function editModelArea ( tool ) {
+    return {
+        type: EDIT_MODEL_AREA,
+        tool
+    };
+}

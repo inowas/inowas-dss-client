@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FeatureGroup, GeoJSON, LayersControl, Map, Polyline, Polygon,  CircleMarker, Circle, Rectangle, TileLayer } from 'react-leaflet';
 import { EditControl } from "react-leaflet-draw"
 import FloatingToast from "../../components/modflow/FloatingToast";
-
+import { withRouter, browserHistory } from 'react-router';
 
 import {
     setView,
@@ -241,13 +241,14 @@ class BackgroundMap extends Component {
         );
     }
 
-    closeMap = () => {
-        this.props.setView( 'properties' );
+    showProperties = () => {
+        browserHistory.push(this.props.location.pathname);
     };
 
     renderToast() {
-        if (this.props.ui.view === 'map') {
-            return (<FloatingToast style={{position: 'absolute', bottom: 50, left: 50, zIndex: 100000}} onClick={this.closeMap}>{'Return to Editor'}</FloatingToast>);
+        const propertiesVisible = this.props.location.hash !== "#edit";
+        if (! propertiesVisible) {
+            return (<FloatingToast style={{position: 'absolute', bottom: 50, left: 50, zIndex: 100000}} onClick={this.showProperties}>{'Return to Editor'}</FloatingToast>);
         }
     }
 
@@ -330,7 +331,7 @@ const mapDispatchToProps = (dispatch, { tool }) => {
     return wrappedActions;
 };
 
-BackgroundMap = connect( mapStateToProps, mapDispatchToProps )( BackgroundMap );
+BackgroundMap = withRouter(connect( mapStateToProps, mapDispatchToProps )( BackgroundMap ));
 
 export default BackgroundMap;
 

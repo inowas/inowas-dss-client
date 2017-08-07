@@ -13,13 +13,12 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { withRouter } from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
 import {getErrorMessage, getRequestStatus, hasError, isLoading} from "../../reducers/webData";
 import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
-import * as mapHelpers from "../../calculations/map";
-import { Map, Polygon, TileLayer } from 'react-leaflet';
+import ModelEditorGeneralMap from "../../components/modflow/ModelEditorGeneralMap";
 
 const styles = {
     container: {
@@ -59,6 +58,7 @@ class ModelEditorGeneral extends Component {
 
     static propTypes = {
         style: PropTypes.object,
+        editModelArea: PropTypes.func,
         setEditorState: PropTypes.func,
         createModel: PropTypes.func,
         setModflowModel: PropTypes.func,
@@ -87,17 +87,11 @@ class ModelEditorGeneral extends Component {
         } );
     }
 
-    componentDidMount( ) {
-        mapHelpers.disableMap( this.refs.map );
-    }
-
     componentWillUnmount(){
         this.props.setModflowModel(this.state.modflowModel);
     }
 
     componentWillUpdate() {
-        console.log('componentWillUpdate');
-
         if ( this.refs.map ) {
             this.refs.map.leafletElement.fitBounds(this.getModflowModelState('bounding_box'));
         }
@@ -168,7 +162,8 @@ class ModelEditorGeneral extends Component {
     }
 
     editAreaOnMap = ( ) => {
-        this.props.setEditorState( 'area' );
+        this.props.editModelArea();
+        browserHistory.push(this.props.location.pathname + '#edit');
     };
 
     save(id) {
@@ -186,39 +181,8 @@ class ModelEditorGeneral extends Component {
         );
     }
 
-    getBounds() {
-        return this.getModflowModelState('bounding_box');
-    }
-
-    // eslint-disable-next-line no-shadow
-    renderArea( area, bounds, editAreaOnMap ) {
-
-        return (
-            <div>
-                <h3>Area</h3>
-                <button onClick={editAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
-                <Map ref="map" className="crossSectionMap" zoomControl={false} bounds={this.getBounds()} >
-                    <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                    {(( ) => {
-                        if ( area ) {
-                            return <Polygon positions={area} />;
-                        }
-                        return "";
-                    })( )}
-                </Map>
-            </div>
-        );
-    }
-
     render( ) {
-
-        console.log('PROPS', this.props);
-        const {
-            style,
-            id,
-            // eslint-disable-next-line no-shadow
-            webData
-        } = this.props;
+        const { style, id, webData } = this.props;
 
         // TODO prevent onClick triggers if disabled and make that css works
         const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
@@ -337,7 +301,8 @@ class ModelEditorGeneral extends Component {
                     </section>
 
                     <section className="col col-rel-3 stretch">
-                        {this.renderArea( this.getModflowModelState( "geometry")["coordinates"], this.getModflowModelState( "bounding_box"), this.editAreaOnMap )}
+                        <button onClick={this.editAreaOnMap} className="link"><Icon name="marker"/>Edit on Map</button>
+                        <ModelEditorGeneralMap model={this.props.modflowModel} />
                         <div>
                             {(( ) => {
                                 if ( id === undefined || id === null ) {
@@ -362,6 +327,7 @@ const mapStateToProps = (state, { tool, params }) => {
 };
 
 const actions = {
+    editModelArea: Action.editModelArea,
     setModflowModel: Action.setModflowModel,
     createModflowModel: Command.createModflowModel,
     updateModflowModel: Command.updateModflowModel,
@@ -383,7 +349,6 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 
     return wrappedActions;
 };
-
 
 // eslint-disable-next-line no-class-assign
 ModelEditorGeneral = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorGeneral ));
