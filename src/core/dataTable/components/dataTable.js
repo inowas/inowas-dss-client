@@ -4,8 +4,9 @@ import * as Table from 'reactabular-table';
 import * as Sticky from 'reactabular-sticky';
 import * as Virtualized from 'reactabular-virtualized';
 import {getRows} from "../selectors";
-import {applyNewPage} from "./paginator";
-import Paginator from "./paginator";
+import {Callback} from "../actions";
+import {Paginator, Action} from "../../paginator";
+import Icon from "../../../components/primitive/Icon";
 
 import orderBy from 'lodash/orderBy';
 import * as resolve from 'table-resolver';
@@ -52,6 +53,7 @@ class DataTable extends React.Component {
             query: {}, // Search query
             page: 1,
             perPage: this.props.perPage || 20,
+            selectedRows: [],
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
@@ -69,6 +71,28 @@ class DataTable extends React.Component {
                 },
             },
             columns: [
+                {
+                    props: {
+                        style: {
+                            width: 30
+                        }
+                    },
+                    header: {
+                        label: '',
+                        formatters: [
+                            (value, { rowData }) => (
+                                <Icon name={'unchecked'} onClick={Callback.onSelectAll(this)}/>
+                            )
+                        ],
+                    },
+                    cell: {
+                        formatters: [
+                            (value, { rowData }) => (
+                                <Icon name={rowData.selected ? 'checked' : 'unchecked'}/>
+                            )
+                        ]
+                    }
+                },
                 {
                     property: 'name',
                     header: {
@@ -142,7 +166,7 @@ class DataTable extends React.Component {
                 }
             ],
             rows: this.props.rows || []
-        }
+        };
     }
 
     componentDidMount() {
@@ -195,6 +219,7 @@ class DataTable extends React.Component {
                     <Virtualized.Body
                         rows={sortedRows}
                         rowKey="id"
+                        onRow={Callback.onRow(this)}
                         style={{
                             maxHeight: 1000
                         }}
@@ -207,7 +232,7 @@ class DataTable extends React.Component {
 
                 <div className="controls">
                     <Paginator perPage={perPage} length={rows.length}
-                               onSelect={( page ) => this.setState( applyNewPage( page.selected + 1, perPage, rows.length ) )}/>
+                               onSelect={( page ) => Action.Callback.onSelectPage(this)( page.selected + 1, perPage, rows.length )}/>
                 </div>
             </div>
         );
