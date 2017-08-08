@@ -150,7 +150,7 @@ class BackgroundMap extends Component {
 
     renderWells( boundaries ) {
         const wells =  boundaries.map( w => (
-            <CircleMarker key={w.id} center={[w.geometry.coordinates[1], w.geometry.coordinates[0]]} {...this.getStyle(w.type, 'puw')} />
+            <CircleMarker key={w.id} center={[w.geometry.coordinates[1], w.geometry.coordinates[0]]} {...this.getStyle(w.type, w.metadata['well_type'])} />
         ));
 
         if (wells.length===0) {
