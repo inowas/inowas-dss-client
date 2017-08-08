@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 
-import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from './Icon';
 import styleGlobals from 'styleGlobals';
 
@@ -45,55 +44,39 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
-export default class AccordionItem extends Component {
+export default class MenuItem extends Component {
 
     static propTypes = {
         icon: PropTypes.element,
         style: PropTypes.object,
         heading: PropTypes.string.isRequired,
+        onClick: PropTypes.func.isRequired,
         children: PropTypes.node,
         index: PropTypes.number,
         active: PropTypes.bool,
         toggleActive: PropTypes.func,
         last: PropTypes.bool,
-        onClick: PropTypes.func,
     };
 
     handleClick = () => {
-        const { toggleActive, onClick } = this.props;
-        if (toggleActive) {
-            toggleActive();
-        }
-
-        if (onClick) {
-            onClick();
-        }
+        this.props.onClick();
     };
 
     render( ) {
-        const { active, style, children, icon, last } = this.props;
+        const { style, icon } = this.props;
 
         return (
             <div>
-                <div style={[styles.header, style]} onClick={this.handleClick}>
+                <div style={{...styles.header, ...style}} onClick={this.handleClick}>
                     {icon && React.cloneElement(icon, {
-                        style: [icon.props.style, styles.icon]
+                        style: {...icon.props.style, ...styles.icon}
                     })}
+
                     <span style={styles.heading}>
                         {this.props.heading}
                     </span>
-                    <Icon style={styles.arrow} name={active
-                        ? 'arrow_down'
-                        : 'arrow_right'}/>
+
                 </div>
-
-                {active &&
-                    <div style={[last || styles.contentNotLast]}>
-                        {children || ( <div style={styles.contentEmpty} /> )}
-                    </div>
-                }
-
             </div>
         );
     }

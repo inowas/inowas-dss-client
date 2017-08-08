@@ -1,27 +1,17 @@
 
-/*
-
-items = [{
-    name,
-    icon,
-    items: [{
-        name,
-        onClick
-    }]
-}]
-
-*/
-
 import React, { Component, PropTypes } from 'react';
 
 import Accordion from './Accordion';
 import AccordionItem from './AccordionItem';
-import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
+import MenuItem from "./MenuItem";
 
 const styles = {
 
     menu: {
+        backgroundColor: styleGlobals.colors.background,
+        padding: 16,
+        boxShadow: styleGlobals.boxShadow,
         width: styleGlobals.dimensions.gridColumn,
         marginLeft: styleGlobals.dimensions.gridGutter,
         marginRight: styleGlobals.dimensions.gridGutter,
@@ -30,14 +20,9 @@ const styles = {
         zIndex: 1100
     },
 
-    wrapper: {
-        backgroundColor: styleGlobals.colors.background,
-        padding: 16,
-        boxShadow: styleGlobals.boxShadow
-    },
-
     title: {
         textAlign: 'center',
+        fontWeight: 'bold',
         fontSize: 16,
         borderBottom: 0
     },
@@ -59,49 +44,58 @@ const styles = {
 
 };
 
-@ConfiguredRadium
 export default class Sidebar extends Component {
 
     static propTypes = {
         title: PropTypes.string,
         items: PropTypes.array,
-        firstActive: PropTypes.number
+        onClick: PropTypes.func,
+        selectedProperty: PropTypes.string,
+        selectedType: PropTypes.string
+    };
+
+    handleClick = (property, type) => {
+        this.props.onClick(property, type);
+    };
+
+    renderItems = items => {
+        return (items.map((i, index) => {
+            if (i.items && i.items.length > 0) {
+
+                const active = i.name === this.props.selectedProperty;
+
+                return (
+                    <AccordionItem key={index} style={[i.disabled && styles.disabled]} icon={i.icon} heading={i.title} active={active} onClick={() => this.handleClick(i.name)}>
+                        {this.renderSubItems(i.name, i.items)}
+                    </AccordionItem>
+                )
+            }
+
+            return <MenuItem key={index} icon={i.icon} heading={i.title} onClick={() => this.handleClick(i.name)}/>
+        }))
+    };
+
+    renderSubItems = (property, items) => {
+        return (
+            <ul style={styles.list}>
+                {items && items.map((i, index) => (
+                    <li key={index} style={styles.listItem} >
+                        <button onClick={() => this.handleClick(property, i.name)} className="link" disabled={false}>{i.title}</button>
+                    </li>
+                ))}
+            </ul>
+        )
     };
 
     render( ) {
-        const { title, items, firstActive } = this.props;
+        const { title, items } = this.props;
 
         return (
-            <nav style={[styles.wrapper, styles.menu]}>
-                <Accordion>
-                    <AccordionItem style={styles.title} heading={title}>
-                        <Accordion firstActive={firstActive}>
-                            {items.map((i, index) => (
-                                <AccordionItem style={[i.disabled && styles.disabled]} icon={i.icon}
-                                               heading={i.name} onClick={i.onClick} key={index}>
-                                    <ul style={styles.list}>
-                                        {i.items && i.items.map((i2, index2) => (
-                                            <li style={[styles.listItem, (i.disabled || i2.disabled) && styles.disabled]}
-                                                key={index2}>
-                                                {(() => {
-                                                    if (i2.onClick) {
-                                                        return (
-                                                            <button onClick={i2.onClick} className="link"
-                                                                    disabled={i.disabled || i2.disabled}>
-                                                                {i2.name}
-                                                            </button>
-                                                        );
-                                                    }
-                                                    return i2.name;
-                                                })()}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </AccordionItem>
-                            ))}
-                        </Accordion>
-                    </AccordionItem>
-                </Accordion>
+            <nav style={styles.menu}>
+                <h1 style={styles.title}>{title}</h1>
+                    <Accordion active={true}>
+                        {this.renderItems(items)}
+                    </Accordion>
             </nav>
         );
 

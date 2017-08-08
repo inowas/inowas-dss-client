@@ -51,7 +51,7 @@ class T03 extends Component {
 
     getToolName = () => ( this.constructor.name );
 
-    pushPropertyToBrowserHistory( property, propertyType) {
+    pushPropertyToBrowserHistory = ( property, propertyType) => {
 
         let url = '/tools/' + this.getToolName() + '/' + this.props.params.id + '/' + property;
 
@@ -60,7 +60,7 @@ class T03 extends Component {
         }
 
         browserHistory.push(url)
-    }
+    };
 
     close = () => {
         browserHistory.push(this.props.location.pathname + '#edit');
@@ -72,109 +72,87 @@ class T03 extends Component {
         const propertiesVisible = this.props.location.hash !== "#edit";
         const menuItems = [
             {
-                name: 'General',
-                icon: <Icon name="settings"/>,
-                onClick: () => {
-                    this.pushPropertyToBrowserHistory('general');
-                },
+                title: 'General',
+                name: 'general',
+                icon: <Icon name="settings"/>
             }, {
-                name: 'Soilmodel',
+                title: 'Soilmodel',
+                name: 'soilmodel',
                 icon: <Icon name="layer_horizontal_hatched"/>,
-                onClick: () => {
-                    this.pushPropertyToBrowserHistory('soilmodel');
-                },
                 disabled: initial
             }, {
-                name: 'Boundaries',
+                title: 'Boundaries',
+                name: 'boundaries',
                 icon: <Icon name="marker"/>,
-                onClick: () => {
-                    this.pushPropertyToBrowserHistory('boundaries');
-                },
                 disabled: initial,
                 items: [
                     {
-                        name: 'Time Variant Specified Head (CHD)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'chd');
-                        }
+                        title: 'Time Variant Specified Head (CHD)',
+                        name: 'chd',
                     }, {
-                        name: 'Wells (WEL)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'wel');
-                        }
+                        title: 'Wells (WEL)',
+                        name: 'wel',
                     }, {
-                        name: 'Recharge (RCH)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'rch');
-                        }
+                        title: 'Recharge (RCH)',
+                        name: 'rch',
                     }, {
-                        name: 'River (RIV)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'riv');
-                        }
+                        title: 'River (RIV)',
+                        name: 'riv',
                     }, {
-                        name: 'General Head Coundary (GHB)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'ghb');
-                        }
+                        title: 'General Head Coundary (GHB)',
+                        name: 'ghb',
                     }, {
-                        name: 'Evapotranspiration (EVT)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'evt');
-                        }
+                        title: 'Evapotranspiration (EVT)',
+                        name: 'evt',
                     }, {
-                        name: 'Drain (DRN)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'drn');
-                        }
+                        title: 'Drain (DRN)',
+                        name: 'drn',
                     }, {
-                        name: 'Lake (Lak)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'lak');
-                        }
+                        title: 'Lake (Lak)',
+                        name: 'lak',
                     }, {
-                        name: 'Streamflow Routing (SFR2)',
-                        onClick: () => {
-                            this.pushPropertyToBrowserHistory('boundaries', 'sfr2');
-                        }
+                        title: 'Streamflow Routing (SFR2)',
+                        name: 'sfr2',
                     }
                 ]
             }, {
-                name: 'Model Run',
+                title: 'Model Run',
+                name: 'model-run',
                 icon: <Icon name="calculator"/>,
                 disabled: initial,
                 items: [
                     {
-                        name: 'Time Discretization',
-                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'times');}
+                        title: 'Time Discretization',
+                        name: 'times',
                     }, {
-                        name: 'PCG Solver Parameters',
-                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'solver-params');}
+                        title: 'PCG Solver Parameters',
+                        name: 'solver-params',
                     }, {
-                        name: 'Rewetting Parameters',
-                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'rewetting');}
+                        title: 'Rewetting Parameters',
+                        name: 'rewetting',
                     }, {
-                        name: 'RUN MODEL',
-                        onClick: () => {this.pushPropertyToBrowserHistory('model-run', 'calculation');}
+                        title: 'RUN MODEL',
+                        name: 'calculation',
                     }
                 ]
             }, {
-                name: 'Result Analysis',
+                title: 'Result Analysis',
+                name: 'results',
                 icon: <Icon name="dataset"/>,
                 disabled: initial,
                 items: [
                     {
-                        name: 'View Model Results',
-                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'heads');}
+                        title: 'View Model Results',
+                        name: 'heads',
                     }, {
-                        name: 'Volumetric Budget',
-                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'budget');}
+                        title: 'Volumetric Budget',
+                        name: 'budget',
                     }, {
-                        name: 'Model Calibration',
-                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'calibration');}
+                        title: 'Model Calibration',
+                        name: 'calibration',
                     }, {
-                        name: 'Export Results',
-                        onClick: () => {this.pushPropertyToBrowserHistory('results', 'export');}
+                        title: 'Export Results',
+                        name: 'export',
                     }
                 ]
             }
@@ -185,7 +163,13 @@ class T03 extends Component {
                 <div style={styles.wrapper}>
                     <div style={styles.overlayWrapper}>
                         <div style={styles.overlay}>
-                            <Sidebar title="Menu" items={menuItems} />
+                            <Sidebar
+                                title="Menu"
+                                items={menuItems}
+                                selectedProperty={this.props.params.property || 'general'}
+                                selectedType={this.props.params.type}
+                                onClick={this.pushPropertyToBrowserHistory}
+                            />
                             <Properties selectedProperty={this.props.params.property || 'general'} close={this.close} tool={this.getToolName()} />
                         </div>
                     </div>
