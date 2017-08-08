@@ -109,6 +109,7 @@ export function deleteAreaControlPoint ( tool, index ) {
 
 
 export const SET_BOUNDARIES = 'MODEL_EDITOR_MODEL_SET_BOUNDARIES';
+export const SET_BOUNDARY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY';
 export const ADD_BOUNDARY = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY';
 export const UPDATE_BOUNDARY = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY';
 export const ADD_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT';
@@ -136,6 +137,14 @@ export function addBoundary( tool, boundary ) {
 export function updateBoundary( tool, boundary ) {
     return {
         type: UPDATE_BOUNDARY,
+        tool,
+        payload: boundary
+    };
+}
+
+export function setBoundary( tool, boundary ) {
+    return {
+        type: SET_BOUNDARY,
         tool,
         payload: boundary
     };

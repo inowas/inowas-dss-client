@@ -12,3 +12,14 @@ export function getModflowModel ( tool, id ) {
         id
     };
 }
+
+export const GET_BOUNDARY = 'GET_BOUNDARY';
+
+export function getBoundary ( tool, id, bid ) {
+    return {
+        type: GET_BOUNDARY,
+        tool,
+        id,
+        bid
+    };
+}

@@ -33,8 +33,12 @@ const routes = (store) => (
                 onEnter={ (nextState) => {
                    if (nextState.params.id) {
                        store.dispatch(Modifier.Query.getModflowModel('T03', nextState.params.id));
+                       if (nextState.params.pid) {
+                           store.dispatch(Modifier.Query.getBoundary('T03', nextState.params.id, nextState.params.pid));
+                       }
                        return;
                    }
+
                    store.dispatch(reset());
                    store.dispatch(Modifier.Action.destroyModflowModel('T03'));
                 }}

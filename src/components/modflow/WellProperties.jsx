@@ -224,7 +224,7 @@ export default class WellProperties extends Component {
                         </div>
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]}>Coordinates
-                                <button disabled className="link"><Icon name="marker"/>Get from Map</button>
+                                <button disabled className="link"><Icon name="marker"/>Edit on Map</button>
                             </label>
                             <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
                             <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>

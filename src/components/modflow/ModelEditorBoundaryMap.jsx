@@ -44,11 +44,15 @@ export default class ModelEditorBoundaryMap extends Component {
 
 
     renderBoundary( b ) {
+        if (b.type === 'riv') {
+            return (
+                <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle(b.type)} />
+            );
+        }
 
         if (b.type === 'wel') {
-            const wellType = b.metadata['well_type'];
             return (
-                <CircleMarker key={b.id} center={[b.geometry.coordinates[1], b.geometry.coordinates[0]]} {...this.getStyle(b.type, wellType)} />
+                <CircleMarker key={b.id} center={[b.geometry.coordinates[1], b.geometry.coordinates[0]]} {...this.getStyle(b.type, b.metadata['well_type'])} />
             );
         }
     }

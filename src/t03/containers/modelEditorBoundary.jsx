@@ -144,8 +144,14 @@ class ModelEditorBoundary extends Component {
                                             area={area} mapStyles={styles}
                                             saveWell={this.saveBoundary}/> );
                     case 'riv':
-                        return (<RiverProperties setEditorState={setEditorState} river={boundary}
-                                                 updateRiver={updateBoundary}/> );
+                        return (
+                            <RiverProperties setEditorState={setEditorState}
+                                             river={boundary}
+                                             area={area}
+                                             mapStyles={styles}
+                                             updateRiver={updateBoundary}
+                            />
+                        );
                 }
             }
         }
@@ -164,8 +170,6 @@ class ModelEditorBoundary extends Component {
     };
 
     render( ) {
-
-        console.log('AREA', this.props.area);
 
         // eslint-disable-next-line no-shadow
         const { style, boundaries, boundaryType } = this.props;

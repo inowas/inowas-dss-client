@@ -50,8 +50,12 @@ const createModelReducer = tool => {
             case Action.ADD_BOUNDARY:
                 return { ...state, boundaries: [ ...state.boundaries, action.payload ] };
 
+            case Action.SET_BOUNDARY:
             case Action.UPDATE_BOUNDARY:
-                return { ...state, boundaries: handleUpdateBoundary(state.boundaries, action) };
+                return {
+                    ...state,
+                    boundaries: handleUpdateBoundary(state.boundaries, action)
+                };
 
             case Action.UPDATE_BOUNDING_BOX:
                 return { ...state, bounding_box: calcBoundsOfPolygon(state.geometry.coordinates) };

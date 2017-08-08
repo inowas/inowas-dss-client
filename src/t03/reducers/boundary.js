@@ -2,7 +2,7 @@
 export function handleUpdateBoundary ( state, action ) {
     return state.map( b => {
         if ( b.id === action.payload.id ) {
-            return { ...b, ...action.payload.toObject };
+            return { ...b, ...action.payload };
         }
 
         return b;
