@@ -51,9 +51,10 @@ export default class Accordion extends Component {
         let index = 0;
         const children = React.Children.map(this.props.children, ( child ) => {
             const currentIndex = index++;
-            //const active = ( currentIndex === this.state.activeIndex );
+            const active = ( currentIndex === this.state.activeIndex );
             return React.cloneElement(child, {
                 index: currentIndex,
+                active: active,
                 last: (currentIndex + 1 === this.props.children.length || !( this.props.children instanceof Array )),
                 toggleActive: this.toggleActiveItem( currentIndex )
             });
