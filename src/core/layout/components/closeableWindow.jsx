@@ -39,7 +39,7 @@ const styles = {
 const closeableWindow = ( { children, close, closeable, style, heading } ) => {
     return (
         <div style={{ ...styles.wrapper, ...style }}>
-            <h3 style={[ styles.heading ]}>{heading}</h3>
+            <h3 style={styles.heading}>{heading}</h3>
 
             {closeable &&
                 <div style={styles.close}>
@@ -47,11 +47,11 @@ const closeableWindow = ( { children, close, closeable, style, heading } ) => {
                 </div>
             }
 
-            <div style={[ styles.content ]}>
+            <div style={styles.content}>
                 {children}
             </div>
         </div>
     );
-}
+};
 
 export default pure( closeableWindow );
