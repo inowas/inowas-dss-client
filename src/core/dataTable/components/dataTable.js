@@ -173,10 +173,6 @@ class DataTable extends React.Component {
 
         return (
             <div>
-                <div className="search-container">
-                    <span>Search</span>
-                </div>
-
                 <Table.Provider
                     className="table"
                     columns={resolvedColumns}

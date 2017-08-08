@@ -135,7 +135,7 @@ class ModelEditorBoundaries extends Component {
             addPumpingRate // eslint-disable-line no-shadow
         } = this.props;
 
-        const {type, id, pid} = this.props.params;
+        const {type, id, pid, property} = this.props.params;
 
         if ( pid ) {
             const boundary = boundaries.filter(b => ( b.type === type && b.id === pid ))[0];
@@ -155,7 +155,9 @@ class ModelEditorBoundaries extends Component {
             }
         }
 
-        return ( <BoundaryOverview  id={id} type={type} removeBoundary={removeBoundary} boundaries={boundaries}/> );
+        return (<BoundaryOverview tool={'T03'} property={property}
+                                  id={id} type={type} removeBoundary={removeBoundary}
+                                  boundaries={boundaries}/> );
     }
 
 

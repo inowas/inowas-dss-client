@@ -6,6 +6,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
 import {DataTable} from "../../core/dataTable";
+import {newBoundary} from "../../routes";
 
 const styles = {
     wrapper: {
@@ -53,32 +54,32 @@ const styles = {
 class BoundariesOverview extends React.PureComponent {
 
     static propTypes = {
-        id: PropTypes.string,
+        tool: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        property: PropTypes.string.isRequired,
         type: PropTypes.string,
-        boundaries: PropTypes.array,
-        setEditorState: PropTypes.func,
+        boundaries: PropTypes.array.isRequired,
         removeBoundary: PropTypes.func.isRequired
     };
 
     render () {
-        const { boundaries, type, setEditorState } = this.props;
+        const { tool, boundaries, property, type, id, removeBoundary } = this.props;
+
+        let addNew = '';
+
+        if (type) {
+            addNew = <button style={styles.headerButton.button} className="link" onClick={() => newBoundary(tool, id, property, type)}>
+                <Icon style={styles.headerButton.icon} name="add"/>Add new
+            </button>;
+        }
 
         return (
             <div style={[ styles.wrapper ]}>
                 <div style={[ styles.header ]}>
-                    <span style={[ styles.type ]}>{type}
-                        ()</span>
-                    <button style={styles.headerButton.button} className="link">
-                        <Icon style={styles.headerButton.icon} name="add"/>Add new
-                    </button>
-                    {type === 'wel' &&
-                    <button onClick={() => setEditorState( 'wells' )} style={styles.headerButton.button} className="link">
-                        <Icon style={styles.headerButton.icon} name="marker"/>View on Map
-                    </button>
-                    }
+                    {addNew}
                 </div>
                 <div style={[ styles.body ]}>
-                    <DataTable rows={boundaries} id={this.props.id} removeBoundary={this.props.removeBoundary} tool={'T03'} />
+                    <DataTable rows={boundaries} id={id} removeBoundary={removeBoundary} tool={'T03'} />
                 </div>
             </div>
         );

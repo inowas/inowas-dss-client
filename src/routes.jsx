@@ -15,6 +15,12 @@ export const editBoundary = (tool, id, property, type, boundaryId) => {
     browserHistory.push(url);
 };
 
+export const newBoundary = (tool, id, property, type) => {
+    const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type;
+
+    browserHistory.push(url);
+};
+
 const routes = (store) => (
     <Route path="/">
         <IndexRoute component={LandingPage}/>
