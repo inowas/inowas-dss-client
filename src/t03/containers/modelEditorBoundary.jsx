@@ -124,7 +124,9 @@ class ModelEditorBoundary extends Component {
             removeBoundary, // eslint-disable-line no-shadow
             setEditorState, // eslint-disable-line no-shadow
             updatePumpingRate, // eslint-disable-line no-shadow
-            addPumpingRate // eslint-disable-line no-shadow
+            addPumpingRate, // eslint-disable-line no-shadow
+            area,
+            styles
         } = this.props;
 
         const {type, id, pid, property} = this.props.params;
@@ -139,6 +141,7 @@ class ModelEditorBoundary extends Component {
                         return (
                             <WellProperties setEditorState={setEditorState} well={boundary} updateWell={updateBoundary}
                                             updatePumpingRate={updatePumpingRate} addPumpingRate={addPumpingRate}
+                                            area={area} mapStyles={styles}
                                             saveWell={this.saveBoundary}/> );
                     case 'riv':
                         return (<RiverProperties setEditorState={setEditorState} river={boundary}
@@ -161,6 +164,9 @@ class ModelEditorBoundary extends Component {
     };
 
     render( ) {
+
+        console.log('AREA', this.props.area);
+
         // eslint-disable-next-line no-shadow
         const { style, boundaries, boundaryType } = this.props;
 

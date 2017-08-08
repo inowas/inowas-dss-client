@@ -12,6 +12,7 @@ import Td from '../primitive/table/Td';
 import Tr from '../primitive/table/Tr';
 import styleGlobals from 'styleGlobals';
 import { uniqueId } from 'lodash';
+import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
 
 const styles = {
     wrapper: {
@@ -91,6 +92,8 @@ const styles = {
 export default class WellProperties extends Component {
 
     static propTypes = {
+        area: PropTypes.object.isRequired,
+        mapStyles: PropTypes.object.isRequired,
         well: PropTypes.object.isRequired,
         updateWell: PropTypes.func.isRequired,
         updatePumpingRate: PropTypes.func.isRequired,
@@ -193,7 +196,7 @@ export default class WellProperties extends Component {
     };
 
     render( ) {
-        const { well } = this.props;
+        const { well, mapStyles, area } = this.props;
         const { nameInputId, typeInputId, layerInputId } = this.state;
         return (
             <div style={[ styles.wrapper ]}>
@@ -225,6 +228,7 @@ export default class WellProperties extends Component {
                             </label>
                             <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
                             <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>
+                            <ModelEditorBoundaryMap styles={mapStyles} area={area} boundary={well} />
                         </div>
                     </div>
                     <div style={[ styles.column, styles.columnNotLast ]}>

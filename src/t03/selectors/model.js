@@ -146,3 +146,5 @@ export const getInitialState = () => {
         boundaries: [],
     };
 };
+
+export const getModflowModel = state => state.model;
