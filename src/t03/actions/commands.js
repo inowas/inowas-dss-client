@@ -1,3 +1,7 @@
+/**
+ * Commands sends a request to server and triggers an event.
+ */
+
 export const CREATE_MODFLOW_MODEL = 'createModflowModel';
 export const DELETE_MODFLOW_MODEL = 'deleteModflowModel';
 export const UPDATE_MODFLOW_MODEL = 'updateModflowModel';

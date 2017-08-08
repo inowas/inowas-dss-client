@@ -1,3 +1,7 @@
+/**
+ * Actions triggers only a store change.
+ */
+
 export const SET_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_SET';
 export const DESTROY_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_DESTROY';
 

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {setActiveBoundaryType, setView} from "../../actions/modelEditor"
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
-import Properties from '../../components/modflow/Properties';
+import {Properties} from '../../t03/components/index';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';

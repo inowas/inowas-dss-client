@@ -13,7 +13,7 @@ import {
     getActiveBoundaryControlPoint
 } from '../../reducers/ModelEditor/ui';
 import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
-import ModelEditor from '../../components/modflow/Properties';
+import {Properties} from '../../t03/components/index';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -38,7 +38,7 @@ class T07E extends Component {
         return (
             <div className="toolT07E">
                 <Navbar links={navigation} />
-                <ModelEditor {...this.props} initial={initial} tool={'T07E'} />
+                <Properties {...this.props} initial={initial} tool={'T07E'} />
             </div>
         );
     }

@@ -1,3 +1,7 @@
+/**
+ * Events triggers only a store change from a successful command.
+ */
+
 export const MODFLOW_MODEL_CREATED = 'modflowModelCreated';
 export const MODFLOW_MODEL_UPDATED = 'modflowModelUpdated';
 export const MODFLOW_MODEL_DELETED = 'modflowModelDeleted';
