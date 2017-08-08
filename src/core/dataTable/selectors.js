@@ -1,14 +1,6 @@
 import { createSelector } from 'reselect'
 import {getGeometry} from "../../t03/selectors/general";
 
-export const calcPage = ( selectedPage, perPage, length ) => {
-    return Math.min( Math.max( selectedPage, 1 ), calcPages( perPage, length ) );
-};
-
-export const calcPages = ( perPage, length ) => {
-    return Math.ceil( length / perPage );
-};
-
 export const getRows = ( page, perPage = {} ) => ( data ) => {
     const offset = (page - 1) * perPage;
     return data.slice( offset, page * perPage );

@@ -1,13 +1,7 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
-import {calcPage, calcPages} from "../selectors";
+import {calcPages} from "../helpers";
 import {pure} from 'recompose';
-
-export const applyNewPage = (page, perPage, length) => {
-    return function( prevState ) {
-        return { ...prevState, page: calcPage(page, perPage, length) };
-    }
-};
 
 const Paginator = ( { perPage, length, onSelect } ) => {
     return (
