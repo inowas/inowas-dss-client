@@ -1,11 +1,11 @@
 import ConfiguredAxios from 'ConfiguredAxios';
 import { getActiveBoundary } from '../reducers/ModelEditor/ui';
 import { getApiKey } from '../reducers/user';
-import { getBoundary } from '../reducers/ModelEditor/boundaries';
+// import { getBoundary } from '../reducers/ModelEditor/boundaries';
 import Boundary from '../model/Boundary';
 import BoundaryType from '../model/BoundaryType';
 import BoundaryMetadata from '../model/BoundaryMetadata';
-import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel, sendQuery} from "./messageBox";
+// import {sendCommandCreateModflowModel, sendCommandUpdateModflowModel, sendQuery} from "./messageBox";
 
 
 /**

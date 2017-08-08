@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as Table from 'reactabular-table';
 import * as Sticky from 'reactabular-sticky';
 import * as Virtualized from 'reactabular-virtualized';
-import {getRows, makeMapStateToPropsBoundaries} from "../selectors";
+import {getRows} from "../selectors";
 import {applyNewPage} from "./paginator";
 import Paginator from "./paginator";
 
@@ -11,7 +11,6 @@ import orderBy from 'lodash/orderBy';
 import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
-import {pure} from 'recompose';
 
 class DataTable extends React.Component {
     constructor ( props ) {
@@ -26,11 +25,13 @@ class DataTable extends React.Component {
             // The user requested sorting, adjust the sorting state accordingly.
             // This is a good chance to pass the request through a sorter.
             onSort: selectedColumn => {
-                this.setState( {
-                    sortingColumns: sort.byColumn( { // sort.byColumn would work too
-                        sortingColumns: this.state.sortingColumns,
-                        selectedColumn
-                    } )
+                this.setState( function( prevState, props ) {
+                    return {
+                        sortingColumns: sort.byColumn( { // sort.byColumn would work too
+                            sortingColumns: this.state.sortingColumns,
+                            selectedColumn
+                        } )
+                    }
                 } );
             },
 
@@ -40,7 +41,9 @@ class DataTable extends React.Component {
         const resetable = sort.reset( {
             event: 'onDoubleClick',
             getSortingColumns,
-            onReset: ( { sortingColumns } ) => this.setState( { sortingColumns } ),
+            onReset: ( { sortingColumns } ) => this.setState( function( prevState, props ) {
+                return { sortingColumns }
+            } ),
             strategy: sort.strategies.byProperty
         } );
 

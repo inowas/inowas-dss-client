@@ -1,21 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    setEditorState,
-    setView
-} from '../../actions/modelEditor';
-import {
     Query, Command, Action
-} from '../../t03/actions/index';
+} from '../actions/index';
 import {
-    getModflowModel
-} from '../../reducers/ModelEditor/general';
+    model, general
+} from '../selectors/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { browserHistory, withRouter } from 'react-router';
 import {getErrorMessage, getRequestStatus, hasError, isLoading} from "../../reducers/webData";
-import {getInitialState} from "../../reducers/ModelEditor/model";
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
 import ModelEditorGeneralMap from "../../components/modflow/ModelEditorGeneralMap";
@@ -50,7 +45,7 @@ const styles = {
 
 
 const initialState = {
-    modflowModel: getInitialState()
+    modflowModel: model.getInitialState()
 };
 
 @ConfiguredRadium
@@ -319,8 +314,9 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
+    console.log(tool, state[tool].model);
     return {
-        modflowModel: getModflowModel(state[tool].model),
+        modflowModel: general.getModflowModel(state[tool].model),
         id: params.id,
         webData: getRequestStatus(state)
     };
@@ -331,8 +327,6 @@ const actions = {
     setModflowModel: Action.setModflowModel,
     createModflowModel: Command.createModflowModel,
     updateModflowModel: Command.updateModflowModel,
-    setEditorState,
-    setView
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

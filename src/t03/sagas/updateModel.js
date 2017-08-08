@@ -7,7 +7,7 @@ import {
 import {Command, Action, Event} from '../../t03/actions/index';
 import {waitForResponse} from '../../api/webData';
 
-export function* updateModelFlow () {
+export default function* updateModelFlow () {
     while ( true ) {
         let action = yield take( action => action.type === Command.UPDATE_MODFLOW_MODEL );
 

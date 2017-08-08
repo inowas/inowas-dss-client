@@ -1,7 +1,7 @@
 import * as actions from '../../actions/modelEditor';
 
 import React, { Component, PropTypes } from 'react';
-import { getGeometry } from '../../reducers/ModelEditor/general';
+// import { getGeometry } from '../../reducers/ModelEditor/general';
 import {
     getState,
     getMapPosition,
@@ -12,8 +12,8 @@ import {
     getDraggedBoundary,
     getActiveBoundaryControlPoint
 } from '../../reducers/ModelEditor/ui';
-import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
-import {Properties} from '../../t03/components/index';
+// import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
+// import {Properties} from '../../t03/components/index';
 import Navbar from '../Navbar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -38,7 +38,7 @@ class T07E extends Component {
         return (
             <div className="toolT07E">
                 <Navbar links={navigation} />
-                <Properties {...this.props} initial={initial} tool={'T07E'} />
+                {/*<Properties {...this.props} initial={initial} tool={'T07E'} />*/}
             </div>
         );
     }
@@ -48,12 +48,12 @@ class T07E extends Component {
 const mapStateToProps = (state, { params }) => {
     return {
         state: getState( state.T07E.ui ),
-        area: getGeometry( state.T07E.model.general ),
+        // area: getGeometry( state.T07E.model.general ),
         mapPosition: getMapPosition( state.T07E.ui ),
         mousePositionOnMap: getMousePositionOnMap( state.T07E.ui ),
         draggedAreaControlPoint: getDraggedAreaControlPoint( state.T07E.ui ),
         activeAreaControlPoint: getActiveAreaControlPoint( state.T07E.ui ),
-        boundaries: getBoundaries( state.T07E.model.boundaries ),
+        // boundaries: getBoundaries( state.T07E.model.boundaries ),
         id: params.id,
         activeBoundary: getActiveBoundary( state.T07E.ui ),
         draggedBoundary: getDraggedBoundary( state.T07E.ui ),

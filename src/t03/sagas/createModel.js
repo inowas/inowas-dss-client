@@ -4,7 +4,7 @@ import {sendCommand, stateToCreatePayload} from "../../actions/messageBox";
 import {Command, Event} from "../../t03/actions/index";
 import {waitForResponse} from "../../api/webData";
 
-export function* createModelFlow () {
+export default function* createModelFlow () {
     while ( true ) {
         let action = yield take( action => action.type === Command.CREATE_MODFLOW_MODEL );
 

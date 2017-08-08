@@ -4,7 +4,7 @@ import {Query, Action} from "../../t03/actions/index";
 import {responseAction, fetchStatusWrapper, reset} from "../../api/webData";
 import {getApiKey} from "../../reducers/user";
 
-export function* loadModelFlow () {
+export default function* loadModelFlow () {
     while ( true ) {
         let action = yield take( action => action.type === Query.GET_MODFLOW_MODEL );
 

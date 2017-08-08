@@ -1,3 +1,11 @@
-import BoundaryOverview from "./boundary";
+import BoundaryOverview from './boundary';
+import ModelEditorGeneral from './modelEditorGeneral';
+import ModelEditorBoundary from './modelEditorBoundary';
+import Main from './main';
 
-export {BoundaryOverview};
+export {
+    Main,
+    BoundaryOverview,
+    ModelEditorGeneral,
+    ModelEditorBoundary,
+};

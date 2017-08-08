@@ -1,15 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    addBoundary,
-    fetchBoundary,
-    setEditorState,
-    updateBoundary,
-    updatePumpingRate,
-    addPumpingRate,
-    saveBoundary
-} from '../../actions/modelEditor';
-import { getActiveBoundary, getActiveBoundaryType } from '../../reducers/ModelEditor/ui';
-import {getBoundary, getBoundaryObjects} from '../../reducers/ModelEditor/boundaries';
+    Action
+} from '../actions/index';
+import {boundary} from '../selectors/index';
 import { maxBy, minBy } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -26,7 +19,6 @@ import Input from '../../components/primitive/Input';
 import {
     Command,
 } from '../../t03/actions/index';
-import {getBoundaries} from "../../reducers/ModelEditor/general";
 import {makeMapStateToPropsBoundaries} from "../../core/dataTable/selectors";
 import {editBoundary} from "../../routes";
 
@@ -54,7 +46,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class ModelEditorBoundaries extends Component {
+class ModelEditorBoundary extends Component {
 
     static propTypes = {
         style: PropTypes.object,
@@ -64,11 +56,9 @@ class ModelEditorBoundaries extends Component {
         updateBoundary: PropTypes.func.isRequired,
         addBoundary: PropTypes.func.isRequired,
         boundaries: PropTypes.array,
-        setEditorState: PropTypes.func.isRequired,
-        fetchBoundary: PropTypes.func.isRequired,
         updatePumpingRate: PropTypes.func.isRequired,
         addPumpingRate: PropTypes.func.isRequired,
-        saveBoundary: PropTypes.func.isRequired
+        // saveBoundary: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -122,13 +112,15 @@ class ModelEditorBoundaries extends Component {
     }
 
     saveBoundary = bid => {
-        // eslint-disable-next-line no-shadow
-        const { saveBoundary, id } = this.props;
-        saveBoundary( id, bid );
+        // // eslint-disable-next-line no-shadow
+        // const { saveBoundary, id } = this.props;
+        // saveBoundary( id, bid );
+        // TODO
     }
 
     renderProperties( boundaries ) {
         const {
+            updateBoundary,
             removeBoundary, // eslint-disable-line no-shadow
             setEditorState, // eslint-disable-line no-shadow
             updatePumpingRate, // eslint-disable-line no-shadow
@@ -192,7 +184,7 @@ class ModelEditorBoundaries extends Component {
                                onChange={this.handleSearchTerm}/>
                     </div>
                     <FilterableList itemClickAction={this.onBoundaryClick}
-                                    list={getBoundaryObjects( list ).map( b => b.toObject )}
+                                    list={boundary.getBoundaryObjects( list ).map( b => b.toObject )}
                                     activeType={boundaryType}/>
                 </div>
                 <div style={styles.properties}>
@@ -204,13 +196,10 @@ class ModelEditorBoundaries extends Component {
 }
 
 const actions = {
-    updateBoundary,
-    setEditorState,
-    addBoundary,
-    fetchBoundary,
-    updatePumpingRate,
-    addPumpingRate,
-    saveBoundary,
+    updateBoundary: Action.updateBoundary,
+    addBoundary: Action.addBoundary,
+    updatePumpingRate: Action.updatePumpingRate,
+    addPumpingRate: Action.addPumpingRate,
     removeBoundary: Command.removeBoundary,
 };
 
@@ -230,6 +219,6 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 // eslint-disable-next-line no-class-assign
-ModelEditorBoundaries = withRouter( connect( makeMapStateToPropsBoundaries, mapDispatchToProps )( ModelEditorBoundaries ));
+ModelEditorBoundary = withRouter( connect( makeMapStateToPropsBoundaries, mapDispatchToProps )( ModelEditorBoundary ));
 
-export default ModelEditorBoundaries;
+export default ModelEditorBoundary;

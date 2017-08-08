@@ -2,8 +2,7 @@ import '../../less/leaflet.less';
 
 import React from 'react';
 import {LayoutComponents} from '../../core/index';
-import ModelEditorBoundaries from '../../containers/tools/ModelEditorBoundaries';
-import ModelEditorGeneral from '../../containers/tools/ModelEditorGeneral';
+import {ModelEditorGeneral, ModelEditorBoundary} from '../containers/index';
 import styleGlobals from 'styleGlobals';
 import {pure} from 'recompose';
 
@@ -71,7 +70,6 @@ const styles = {
 
 const properties = ( { tool, close, selectedProperty } ) => {
     switch ( selectedProperty ) {
-
         case 'create':
             return (
                 <LayoutComponents.CloseableWindow heading="Create Model" style={styles.tool} close={close}
@@ -92,12 +90,12 @@ const properties = ( { tool, close, selectedProperty } ) => {
             return (
                 <LayoutComponents.CloseableWindow heading="Boundary Conditions" style={styles.tool} close={close}
                                                   closeable={true}>
-                    <ModelEditorBoundaries tool={tool}/>
+                    <ModelEditorBoundary tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 
         default:
-            return '';
+            return (<span></span>);
     }
 };
 

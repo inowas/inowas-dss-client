@@ -93,11 +93,10 @@ export default class WellProperties extends Component {
     static propTypes = {
         well: PropTypes.object.isRequired,
         updateWell: PropTypes.func.isRequired,
-        setEditorState: PropTypes.func.isRequired,
         updatePumpingRate: PropTypes.func.isRequired,
         addPumpingRate: PropTypes.func.isRequired,
         saveWell: PropTypes.func.isRequired
-    }
+    };
 
     constructor( props ) {
         super( props );
@@ -124,19 +123,19 @@ export default class WellProperties extends Component {
 
             this.props.updateWell( updatedWell );
         };
-    }
+    };
 
     updateWellName = value => {
         const { well, updateWell } = this.props;
 
         return updateWell(new Boundary( well.id, value, well.type, well.geometry, well.affectedLayers, well.metadata, well.observationPoints ));
-    }
+    };
 
     updateWellType = value => {
         const { well, updateWell } = this.props;
 
         return updateWell(new Boundary( well.id, well.name, well.type, well.geometry, well.affectedLayers, new BoundaryMetadata({ wellType: value }), well.observationPoints ));
-    }
+    };
 
     updateLatitude = value => {
         const { well, updateWell } = this.props;
@@ -145,7 +144,7 @@ export default class WellProperties extends Component {
             ...well.geometry,
             coordinates: [ well.geometry.coordinates[0], value ]
         }, well.affectedLayers, well.metadata, well.observationPoints ));
-    }
+    };
 
     updateLongitude = value => {
         const { well, updateWell } = this.props;
@@ -154,13 +153,13 @@ export default class WellProperties extends Component {
             ...well.geometry,
             coordinates: [value, well.geometry.coordinates[1]]
         }, well.affectedLayers, well.metadata, well.observationPoints ));
-    }
+    };
 
     updateAffectedLayers = value => {
         const { well, updateWell } = this.props;
 
         return updateWell(new Boundary( well.id, well.name, well.type, well.geometry, [value.value], well.metadata, well.observationPoints ));
-    }
+    };
 
     updatePumpingRateTime = index => {
         return datetime => {
@@ -170,7 +169,7 @@ export default class WellProperties extends Component {
 
             updatePumpingRate( well.id, well.observationPoints[0].id, index, datetime.toISOString( ), pumpingRate );
         };
-    }
+    };
 
     updatePumpingRatePumpingRate = index => {
         return pumpingRate => {
@@ -180,21 +179,21 @@ export default class WellProperties extends Component {
 
             updatePumpingRate( well.id, well.observationPoints[0].id, index, datetime, pumpingRate );
         };
-    }
+    };
 
     addPumpingRate = ( ) => {
         const { updatePumpingRate, well } = this.props;
 
         updatePumpingRate( well.id, well.observationPoints[0].id, well.observationPoints[0].values.length, new Date( ).toISOString( ), 0 );
-    }
+    };
 
     saveWell = ( ) => {
         const { saveWell, well } = this.props;
         saveWell( well.id );
-    }
+    };
 
     render( ) {
-        const { well, setEditorState } = this.props;
+        const { well } = this.props;
         const { nameInputId, typeInputId, layerInputId } = this.state;
         return (
             <div style={[ styles.wrapper ]}>
@@ -222,7 +221,7 @@ export default class WellProperties extends Component {
                         </div>
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]}>Coordinates
-                                <button disabled onClick={( ) => setEditorState( 'wells-move' )} className="link"><Icon name="marker"/>Get from Map</button>
+                                <button disabled className="link"><Icon name="marker"/>Get from Map</button>
                             </label>
                             <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
                             <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>

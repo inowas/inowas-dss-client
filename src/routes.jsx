@@ -2,11 +2,12 @@ import React from 'react';
 import { Route, IndexRoute, browserHistory } from 'react-router';
 import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
+import {Container as T03} from './t03/index';
 import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
-import {destroyModflowModel, loadModflowModel} from "./actions/modelEditor";
+import {Modifier} from "./t03/index";
 import {reset} from "./api/webData";
 
 export const editBoundary = (tool, id, property, type, boundaryId) => {
@@ -28,14 +29,14 @@ const routes = (store) => (
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard}/>
             <Route path="T02(/:id)" component={tools.T02}/>
-            <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={tools.T03}
+            <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={T03.Main}
                 onEnter={ (nextState) => {
                    if (nextState.params.id) {
-                       store.dispatch(loadModflowModel('T03', nextState.params.id));
+                       store.dispatch(Modifier.Query.getModflowModel('T03', nextState.params.id));
                        return;
                    }
                    store.dispatch(reset());
-                   store.dispatch(destroyModflowModel('T03'));
+                   store.dispatch(Modifier.Action.destroyModflowModel('T03'));
                 }}
             />
             <Route path="T06(/:id)" component={tools.T06}/>

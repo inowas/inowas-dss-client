@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import {setActiveBoundaryType, setView} from "../../actions/modelEditor"
-import { getBoundaries } from '../../reducers/ModelEditor/boundaries';
+import { boundary } from '../selectors/index';
 import {Properties} from '../../t03/components/index';
-import Navbar from '../Navbar';
+import Navbar from '../../containers/Navbar';
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
-import BackgroundMap from "./BackgroundMap";
+import BackgroundMap from "../../containers/tools/BackgroundMap";
 import Sidebar from "../../components/primitive/Sidebar"
 import Icon from "../../components/primitive/Icon";
 import styleGlobals from 'styleGlobals';
@@ -42,7 +41,6 @@ class T03 extends Component {
     static propTypes = {
         id: PropTypes.string,
         push: PropTypes.func,
-        setActiveBoundaryType: PropTypes.func,
     };
 
     state = {
@@ -198,14 +196,11 @@ const mapStateToProps = (state, { params }) => {
 
     return {
         id: params.id,
-        boundaries: getBoundaries( state.T03.model.boundaries ),
+        boundaries: boundary.getBoundaries( state.T03.model.boundaries ),
     };
 };
 
-
 const actions = {
-    setActiveBoundaryType,
-    setView
 };
 
 const mapDispatchToProps = dispatch => {
