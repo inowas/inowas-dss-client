@@ -139,7 +139,6 @@ class ModelEditorBoundary extends Component {
         if ( pid ) {
             const boundary = boundaries.filter(b => ( b.type === type && b.id === pid ))[0];
 
-            // TODO message if boundary is not available
             if (boundary) {
                 switch ( type ) {
                     case 'wel':
@@ -161,8 +160,8 @@ class ModelEditorBoundary extends Component {
                         );
                 }
             }
+            return <p>Loading ...</p>;
         }
-
         return (<BoundaryOverview tool={'T03'} property={property}
                                   id={id} type={type} removeBoundary={removeBoundary}
                                   boundaries={boundaries}/> );
