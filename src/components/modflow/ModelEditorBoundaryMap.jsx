@@ -42,6 +42,16 @@ export default class ModelEditorBoundaryMap extends Component {
         return styles[type][subtype];
     };
 
+    renderObservationPoints( b ) {
+        if (b.observation_points) {
+            return b.observation_points.map( op => {
+                return <CircleMarker key={op.id} center={[op.geometry.coordinates[1], op.geometry.coordinates[0]]} {...this.getStyle(b.type + '_op')} />
+            });
+        }
+
+        return null;
+    }
+
 
     renderBoundary( b ) {
         if (b.type === 'riv') {
@@ -66,6 +76,7 @@ export default class ModelEditorBoundaryMap extends Component {
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
                 <GeoJSON key={this.generateKeyFunction( areaGeometry )} data={ areaGeometry } style={this.getStyle('area')} />
                 {this.renderBoundary(boundary)}
+                {this.renderObservationPoints(boundary)}
             </Map>
         );
     }

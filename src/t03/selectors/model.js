@@ -51,6 +51,13 @@ const getInitialStyles = () => {
             dashArray: '3',
             fillOpacity: 0
         },
+        riv_op:  {
+            radius: 5,
+            color: 'blue',
+            weight: 2,
+            fillColor: 'darkblue',
+            fillOpacity: 0.7
+        },
         wel: {
             cw: {
                 radius: 3,
