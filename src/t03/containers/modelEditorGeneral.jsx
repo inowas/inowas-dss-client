@@ -314,10 +314,9 @@ class ModelEditorGeneral extends Component {
 }
 
 const mapStateToProps = (state, { tool, params }) => {
-    console.log(tool, state[tool].model);
     return {
-        modflowModel: general.getModflowModel(state[tool].model),
         id: params.id,
+        modflowModel: general.getModflowModel(state[tool].model),
         webData: getRequestStatus(state)
     };
 };

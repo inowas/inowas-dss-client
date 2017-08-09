@@ -9,6 +9,19 @@ export function handleUpdateBoundary ( state, action ) {
     } );
 }
 
+export function handleBoundaryGeometrySetEditTrue ( boundaries, action ) {
+    return boundaries.map( b => {
+        if ( b.id === action.payload ) {
+            let geometry = b.geometry;
+            geometry.edit = true;
+            b.geometry = geometry;
+            return { ...b };
+        }
+
+        return b;
+    } );
+}
+
 export function handleUpdateBoundaryGeometry ( boundaries, action ) {
 
     return boundaries.map( b => {

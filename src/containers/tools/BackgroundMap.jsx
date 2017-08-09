@@ -7,12 +7,19 @@ import { EditControl } from "react-leaflet-draw"
 import FloatingToast from "../../components/modflow/FloatingToast";
 import { withRouter, browserHistory } from 'react-router';
 
+
 import {
-    setView,
-    updateGeometry
-} from '../../actions/modelEditor';
+    Query, Command, Action
+} from '../../t03/actions/index';
 
 
+export const onEdited = ( component = {} ) => () => {
+    component.setState( function( prevState, props ) {
+        return {
+            rows: select.toggle( row => true )( prevState.rows )
+        }
+    } );
+};
 
 class BackgroundMap extends Component {
 
@@ -45,7 +52,7 @@ class BackgroundMap extends Component {
     }
 
     renderArea( geometry ) {
-        if (geometry) {
+        if (geometry && geometry.edit !== true) {
             return (
                 <LayersControl.Overlay name='Area Geometry' checked={true}>
                     <GeoJSON key={this.generateKeyFunction( geometry )} data={geometry} style={this.getStyle('area')} />
@@ -171,12 +178,18 @@ class BackgroundMap extends Component {
     }
 
     onEdited = ( e ) => {
-        const layers = e.layers._layers;
-        Object.keys(layers).map( key => {
-            const layer = layers[key];
+
+        const layers = e.layers;
+        layers.eachLayer(function (layer) {
+            const id = layer.options.id;
             const geometry = layer.toGeoJSON().geometry;
-            this.props.updateGeometry( layer.options.id, geometry );
-        })
+
+            if (id === 'area') {
+                this.props.setModelArea( geometry );
+            } else {
+                this.props.setBoundaryGeometry( id, geometry );
+            }
+        }, this);
     };
 
     renderEditControl() {
@@ -184,13 +197,13 @@ class BackgroundMap extends Component {
         const area = this.props.model.geometry;
         const boundaries = this.props.model.boundaries;
 
-
         // Get all editable elements
         let editables = [];
 
-        if (area && area.geometry && area.geometry.edit === true) {
-            editables.push({id: 'area', geometry: area.geometry})
+        if (area && area.edit === true) {
+            editables.push({id: 'area', geometry: area})
         }
+
 
         if (boundaries && boundaries.length>0) {
             boundaries.map( b => {
@@ -202,11 +215,11 @@ class BackgroundMap extends Component {
 
         editables = editables.map( e => {
             if (e.geometry.type === 'Polygon') {
-                return <Polygon key={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])}/>
+                return <Polygon key={e.id} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])}/>
             }
 
             if (e.geometry.type === 'Linestring') {
-                return <Polyline key={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates)}/>
+                return <Polyline key={e.id} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates)}/>
             }
 
             if (e.geometry.type === 'Point') {
@@ -253,6 +266,7 @@ class BackgroundMap extends Component {
     }
 
     render( ) {
+
         const area = this.props.model.geometry;
         const boundingBox = this.props.model.bounding_box;
         const boundaries = this.props.model.boundaries;
@@ -312,8 +326,8 @@ const mapStateToProps = (state, { tool, params }) => {
 };
 
 const actions = {
-    updateGeometry,
-    setView
+    setModelArea: Action.setModelArea,
+    setBoundaryGeometry: Action.setBoundaryGeometry
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

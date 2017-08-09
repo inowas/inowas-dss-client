@@ -5,7 +5,8 @@ import {
 import {
     handleDeleteBoundary, handleAddBoundaryControlPoint,
     handleUpdateBoundaryControlPoint, handleDeleteBoundaryControlPoint, handleUpdateBoundaryPumpingRate,
-    handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry
+    handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
+    handleBoundaryGeometrySetEditTrue
 } from './boundary';
 import {Action, Event} from "../actions/index";
 import {calcBoundsOfPolygon} from "../../calculations/geoTools";
@@ -32,8 +33,17 @@ const createModelReducer = tool => {
             case Action.DESTROY_MODFLOW_MODEL:
                 return model.getInitialState();
 
-            case Action.SET_AREA:
-                return { ...state, geometry: { coordinates: action.payload, type: "Polygon" } };
+            case Action.SET_MODEL_AREA:
+                return { ...state, geometry: action.payload };
+
+            case Action.EDIT_MODEL_AREA:
+                let geometry = state.geometry;
+                geometry.edit = true;
+
+                return {
+                    ...state,
+                    geometry:  geometry
+                };
 
             case Action.ADD_AREA_CONTROL_POINT:
                 return { ...state, geometry: handleAreaAddControlPoint( state.geometry, action )};
@@ -49,6 +59,16 @@ const createModelReducer = tool => {
 
             case Action.ADD_BOUNDARY:
                 return { ...state, boundaries: [ ...state.boundaries, action.payload ] };
+
+            case Action.EDIT_BOUNDARY_GEOMETRY:
+                return {
+                    ...state,
+                    boundaries: handleBoundaryGeometrySetEditTrue(state.boundaries, action) };
+
+            case Action.SET_BOUNDARY_GEOMETRY:
+                return {
+                    ...state,
+                    boundaries: handleUpdateBoundaryGeometry(state.boundaries, action) };
 
             case Action.SET_BOUNDARY:
             case Action.UPDATE_BOUNDARY:

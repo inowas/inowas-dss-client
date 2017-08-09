@@ -12,7 +12,7 @@ import WellProperties from '../../components/modflow/WellProperties';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
-import { withRouter } from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
 import {BoundaryOverview} from "../../t03/containers/index";
 import Input from '../../components/primitive/Input';
 
@@ -95,6 +95,11 @@ class ModelEditorBoundary extends Component {
         }
     }
 
+    handleEditBoundaryOnMap = ( id ) => {
+        this.props.editBoundaryGeometry( id );
+        browserHistory.push(this.props.location.pathname + '#edit');
+    };
+
     addBoundary = type => {
         return ( ) => {
             // eslint-disable-next-line no-shadow
@@ -141,11 +146,13 @@ class ModelEditorBoundary extends Component {
                         return (
                             <WellProperties setEditorState={setEditorState} well={boundary} updateWell={updateBoundary}
                                             updatePumpingRate={updatePumpingRate} addPumpingRate={addPumpingRate}
+                                            editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             area={area} mapStyles={styles}
                                             saveWell={this.saveBoundary}/> );
                     case 'riv':
                         return (
                             <RiverProperties setEditorState={setEditorState}
+                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                              river={boundary}
                                              area={area}
                                              mapStyles={styles}
@@ -160,7 +167,6 @@ class ModelEditorBoundary extends Component {
                                   id={id} type={type} removeBoundary={removeBoundary}
                                   boundaries={boundaries}/> );
     }
-
 
     onBoundaryClick = (boundaryId, type) => {
         const {tool} = this.props;
@@ -206,6 +212,7 @@ class ModelEditorBoundary extends Component {
 }
 
 const actions = {
+    editBoundaryGeometry: Action.editBoundaryGeometry,
     updateBoundary: Action.updateBoundary,
     addBoundary: Action.addBoundary,
     updatePumpingRate: Action.updatePumpingRate,

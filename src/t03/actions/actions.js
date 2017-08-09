@@ -5,13 +5,31 @@
 export const ADD_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_AREA_ADD_CONTROL_POINT';
 export const DELETE_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_DELETE_AREA_CONTROL_POINT';
 export const DESTROY_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_DESTROY';
-export const SET_AREA = 'MODEL_EDITOR_MODEL_SET_AREA';
+
 export const SET_AREA_LATITUDE = 'MODEL_EDITOR_MODEL_SET_AREA_LATITUDE';
 export const SET_AREA_LONGITUDE = 'MODEL_EDITOR_MODEL_SET_AREA_LONGITUDE';
 export const SET_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_SET';
 export const UPDATE_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL_POINT';
 export const UPDATE_BOUNDING_BOX = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDING_BOX';
 export const UPDATE_GEOMETRY = 'MODEL_EDITOR_UPDATE_GEOMETRY';
+
+export const EDIT_MODEL_AREA = 'MODEL_EDITOR_MODEL_EDIT_AREA';
+export const SET_MODEL_AREA = 'MODEL_EDITOR_MODEL_SET_AREA';
+
+export function editModelArea ( tool ) {
+    return {
+        type: EDIT_MODEL_AREA,
+        tool
+    };
+}
+
+export function setModelArea ( tool, payload ) {
+    return {
+        type: SET_MODEL_AREA,
+        tool,
+        payload
+    };
+}
 
 export function setModflowModel ( tool, payload ) {
     return {
@@ -36,14 +54,6 @@ export function updateGeometry ( tool, id, geometry ) {
             id: id,
             geometry: geometry
         }
-    };
-}
-
-export function setArea ( tool, area ) {
-    return {
-        type: SET_AREA,
-        tool,
-        payload: area
     };
 }
 
@@ -117,6 +127,27 @@ export const UPDATE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY
 export const DELETE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY_CONTROL_POINT';
 export const UPDATE_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_PUMPING_RATE';
 export const ADD_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE';
+export const EDIT_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_EDIT_BOUNDARY_GEOMETRY';
+export const SET_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY_GEOMETRY';
+
+export function editBoundaryGeometry ( tool, boundaryId ) {
+    return {
+        type: EDIT_BOUNDARY_GEOMETRY,
+        tool,
+        payload: boundaryId
+    };
+}
+
+export function setBoundaryGeometry ( tool, boundaryId, geometry ) {
+    return {
+        type: SET_BOUNDARY_GEOMETRY,
+        tool,
+        payload: {
+            id: boundaryId,
+            geometry: geometry
+        }
+    };
+}
 
 export function setBoundaries ( tool, boundaries ) {
     return {
@@ -187,14 +218,5 @@ export function addPumpingRate( tool, boundaryId, observationPointId, index, dat
             datetime,
             pumpingRate
         }
-    };
-}
-
-export const EDIT_MODEL_AREA = 'MODEL_EDITOR_MODEL_EDIT_AREA';
-
-export function editModelArea ( tool ) {
-    return {
-        type: EDIT_MODEL_AREA,
-        tool
     };
 }

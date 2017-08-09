@@ -98,7 +98,8 @@ export default class WellProperties extends Component {
         updateWell: PropTypes.func.isRequired,
         updatePumpingRate: PropTypes.func.isRequired,
         addPumpingRate: PropTypes.func.isRequired,
-        saveWell: PropTypes.func.isRequired
+        saveWell: PropTypes.func.isRequired,
+        editBoundaryOnMap: PropTypes.func.isRequired
     };
 
     constructor( props ) {
@@ -196,7 +197,7 @@ export default class WellProperties extends Component {
     };
 
     render( ) {
-        const { well, mapStyles, area } = this.props;
+        const { well, mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, typeInputId, layerInputId } = this.state;
         return (
             <div style={[ styles.wrapper ]}>
@@ -224,7 +225,7 @@ export default class WellProperties extends Component {
                         </div>
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]}>Coordinates
-                                <button disabled className="link"><Icon name="marker"/>Edit on Map</button>
+                                <button className="link" onClick={editBoundaryOnMap}><Icon name="marker"/>Edit on Map</button>
                             </label>
                             <Input style={[ styles.input ]} onChange={this.updateLatitude} value={well.geometry.coordinates[1]} type="number" placeholder="Latitude"/>
                             <Input style={[ styles.input ]} onChange={this.updateLongitude} value={well.geometry.coordinates[0]} type="number" placeholder="Longitude"/>
