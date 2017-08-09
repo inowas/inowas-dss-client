@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import * as Table from 'reactabular-table';
 import * as Sticky from 'reactabular-sticky';
 import * as Virtualized from 'reactabular-virtualized';
-import {getRows} from "../selectors";
-import {Callback} from "../actions";
-import {Paginator, Action} from "../../paginator";
-import Icon from "../../../components/primitive/Icon";
+import {getRows} from '../selectors';
+import {Callback} from '../actions';
+import {Paginator} from '../../../core';
+import Icon from '../../../components/primitive/Icon';
 
 import orderBy from 'lodash/orderBy';
 import * as resolve from 'table-resolver';
@@ -231,8 +231,8 @@ class DataTable extends React.Component {
                 </Table.Provider>
 
                 <div className="controls">
-                    <Paginator perPage={perPage} length={rows.length}
-                               onSelect={( page ) => Action.Callback.onSelectPage(this)( page.selected + 1, perPage, rows.length )}/>
+                    <Paginator.Paginator perPage={perPage} length={rows.length}
+                               onSelect={( page ) => Paginator.Action.Callback.onSelectPage(this)( page.selected + 1, perPage, rows.length )}/>
                 </div>
             </div>
         );
