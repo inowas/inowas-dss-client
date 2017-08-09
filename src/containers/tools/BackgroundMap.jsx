@@ -214,15 +214,15 @@ class BackgroundMap extends Component {
         }
 
         editables = editables.map( e => {
-            if (e.geometry.type === 'Polygon') {
+            if (e.geometry.type.toLowerCase() === 'polygon') {
                 return <Polygon key={e.id} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])}/>
             }
 
-            if (e.geometry.type === 'Linestring') {
+            if (e.geometry.type.toLowerCase() === 'linestring') {
                 return <Polyline key={e.id} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates)}/>
             }
 
-            if (e.geometry.type === 'Point') {
+            if (e.geometry.type.toLowerCase() === 'point') {
                 return <Circle key={e.id} id={e.id} center={[e.geometry.coordinates[1], e.geometry.coordinates[0]]} radius={50} />
             }
         });

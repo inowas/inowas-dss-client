@@ -117,7 +117,8 @@ export default class RiverProperties extends Component {
     static propTypes = {
         area: PropTypes.object.isRequired,
         mapStyles: PropTypes.object.isRequired,
-        river: PropTypes.object.isRequired
+        river: PropTypes.object.isRequired,
+        editBoundaryOnMap: PropTypes.func.isRequired
     };
 
     constructor( props ) {
@@ -149,7 +150,7 @@ export default class RiverProperties extends Component {
     };
 
     render( ) {
-        const { river, mapStyles, area } = this.props;
+        const { river, mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, typeInputId, layerInputId } = this.state;
 
         return (
@@ -194,8 +195,8 @@ export default class RiverProperties extends Component {
                     <div style={{ ...styles.columnFlex2 }}>
                         <h3 style={ styles.heading }>River Course</h3>
                         <div style={ styles.rightAlign }>
-                            <button style={styles.buttonMarginRight} disabled className="link">
-                                <Icon name="marker"/>Draw on Map
+                            <button style={styles.buttonMarginRight} onClick={editBoundaryOnMap} className="link">
+                                <Icon name="marker"/>Edit on Map
                             </button>
                             <button style={styles.buttonMarginRight} disabled className="link">
                                 <Icon name="trash"/>Delete
