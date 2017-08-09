@@ -177,7 +177,23 @@ class BackgroundMap extends Component {
         return coordinates.map( c => ([c[1], c[0]]));
     }
 
-    onEdited = ( e ) => {
+    onCreated = e => {
+        console.log('Created !');
+    };
+
+    onDeleted = e => {
+        console.log('Deleted !');
+    };
+
+    onEditStop = e => {
+        console.log('Edit is stopped !');
+    };
+
+    onEditStart = e => {
+        console.log('Edit is started !');
+    };
+
+    onEditPath = e => {
 
         const layers = e.layers;
         layers.eachLayer(function (layer) {
@@ -215,7 +231,7 @@ class BackgroundMap extends Component {
 
         editables = editables.map( e => {
             if (e.geometry.type.toLowerCase() === 'polygon') {
-                return <Polygon key={e.id} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])}/>
+                return <Polygon key={e.id} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])} />
             }
 
             if (e.geometry.type.toLowerCase() === 'linestring') {
@@ -243,8 +259,11 @@ class BackgroundMap extends Component {
             <FeatureGroup>
                 <EditControl
                     position='bottomright'
-                    onEdited={this.onEdited}
+                    onCreated={this.onCreated}
                     onDeleted={this.onDeleted}
+                    onEditStart={this.onEditStart}
+                    onEditStop={this.onEditStop}
+                    onEdited={this.onEditPath}
                     draw={drawOptions}
                 />
 
