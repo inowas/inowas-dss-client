@@ -4,9 +4,6 @@
 
 export const MODFLOW_MODEL_CREATED = 'modflowModelCreated';
 export const MODFLOW_MODEL_UPDATED = 'modflowModelUpdated';
-export const MODFLOW_MODEL_DELETED = 'modflowModelDeleted';
-
-export const BOUNDARY_REMOVED = 'boundaryRemoved';
 
 export function modflowModelCreated ( tool, id, payload ) {
     return {
@@ -23,6 +20,22 @@ export function modflowModelUpdated ( tool, id, payload ) {
         tool,
         id,
         payload
+    };
+}
+
+
+export const BOUNDARY_REMOVED = 'boundaryRemoved';
+export const BOUNDARY_UPDATED = 'boundaryUpdateed';
+
+
+export function boundaryUpdated( tool, modelId, data) {
+    return {
+        type: BOUNDARY_UPDATED,
+        tool,
+        payload: {
+            boundary: data,
+            id: modelId,
+        }
     };
 }
 

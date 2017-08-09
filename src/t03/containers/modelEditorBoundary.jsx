@@ -19,8 +19,9 @@ import Input from '../../components/primitive/Input';
 import {
     Command,
 } from '../../t03/actions/index';
-import {makeMapStateToPropsBoundaries} from "../../core/dataTable/selectors";
+import {Helper} from "../../core";
 import {editBoundary} from "../../routes";
+import {makeMapStateToPropsBoundaries} from "../selectors/mapState";
 
 const styles = {
     container: {
@@ -58,7 +59,6 @@ class ModelEditorBoundary extends Component {
         boundaries: PropTypes.array,
         updatePumpingRate: PropTypes.func.isRequired,
         addPumpingRate: PropTypes.func.isRequired,
-        // saveBoundary: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -114,22 +114,19 @@ class ModelEditorBoundary extends Component {
                 lat: ( minBy( area, 'lat' ).lat + maxBy( area, 'lat' ).lat ) / 2
             });
         };
-    }
+    };
 
-    saveBoundary = bid => {
-        // // eslint-disable-next-line no-shadow
-        // const { saveBoundary, id } = this.props;
-        // saveBoundary( id, bid );
-        // TODO
-    }
+    updateBoundary = (data) => {
+        const {id} = this.props.params;
+        console.log('send command', id, data);
+        this.props.updateBoundary(id, data);
+    };
 
     renderProperties( boundaries ) {
         const {
             updateBoundary,
             removeBoundary, // eslint-disable-line no-shadow
             setEditorState, // eslint-disable-line no-shadow
-            updatePumpingRate, // eslint-disable-line no-shadow
-            addPumpingRate, // eslint-disable-line no-shadow
             area,
             styles
         } = this.props;
@@ -143,11 +140,11 @@ class ModelEditorBoundary extends Component {
                 switch ( type ) {
                     case 'wel':
                         return (
-                            <WellProperties setEditorState={setEditorState} well={boundary} updateWell={updateBoundary}
-                                            updatePumpingRate={updatePumpingRate} addPumpingRate={addPumpingRate}
+                            <WellProperties pumpingRates={Helper.addIdFromIndex(boundary.date_time_values || [])}
+                                            well={boundary}
                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             area={area} mapStyles={styles}
-                                            saveWell={this.saveBoundary}/> );
+                                            onSaveWell={this.updateBoundary}/> );
                     case 'riv':
                         return (
                             <RiverProperties setEditorState={setEditorState}
@@ -212,7 +209,7 @@ class ModelEditorBoundary extends Component {
 
 const actions = {
     editBoundaryGeometry: Action.editBoundaryGeometry,
-    updateBoundary: Action.updateBoundary,
+    updateBoundary: Command.updateBoundary,
     addBoundary: Action.addBoundary,
     updatePumpingRate: Action.updatePumpingRate,
     addPumpingRate: Action.addPumpingRate,

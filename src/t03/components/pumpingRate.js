@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import * as Table from 'reactabular-table';
 import * as Sticky from 'reactabular-sticky';
 import * as Virtualized from 'reactabular-virtualized';
-import {getRows} from '../selectors';
-import {Callback} from '../actions';
-import {Paginator} from '../../../core';
-import Icon from '../../../components/primitive/Icon';
+import * as edit from 'react-edit';
+import {DataTable, Paginator, Formatter} from '../../core';
+import Icon from '../../components/primitive/Icon';
 
 import orderBy from 'lodash/orderBy';
+import { cloneDeep, findIndex } from 'lodash';
 import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
 
-class DataTable extends React.Component {
+
+class PumpingRate extends React.Component {
     constructor ( props ) {
         super( props );
 
@@ -48,6 +49,27 @@ class DataTable extends React.Component {
             strategy: sort.strategies.byProperty
         } );
 
+        const editable = edit.edit({
+            isEditing: ({ columnIndex, rowData }) => columnIndex === rowData.editing,
+            onActivate: ({ columnIndex, rowData }) => {
+                const index = findIndex(this.state.rows, { id: rowData.id });
+                const rows = cloneDeep(this.state.rows);
+
+                rows[index].editing = columnIndex;
+
+                this.setState({ rows });
+            },
+            onValue: ({ value, rowData, property }) => {
+                const index = findIndex(this.state.rows, { id: rowData.id });
+                const rows = cloneDeep(this.state.rows);
+
+                rows[index][property] = value;
+                rows[index].editing = false;
+
+                this.setState({ rows });
+            }
+        });
+
         this.state = {
             searchColumn: 'all',
             query: {}, // Search query
@@ -57,15 +79,7 @@ class DataTable extends React.Component {
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
-                'name': {
-                    direction: 'asc',
-                    position: 0
-                },
-                'type': {
-                    direction: 'asc',
-                    position: 0
-                },
-                'layers': {
+                'date_time': {
                     direction: 'asc',
                     position: 0
                 },
@@ -80,23 +94,23 @@ class DataTable extends React.Component {
                     header: {
                         label: '',
                         formatters: [
-                            (value, { rowData }) => (
-                                <Icon name={'unchecked'} onClick={Callback.onSelectAll(this)}/>
+                            ( value, { rowData } ) => (
+                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
                             )
                         ],
                     },
                     cell: {
                         formatters: [
-                            (value, { rowData }) => (
+                            ( value, { rowData } ) => (
                                 <Icon name={rowData.selected ? 'checked' : 'unchecked'}/>
                             )
                         ]
                     }
                 },
                 {
-                    property: 'name',
+                    property: 'date_time',
                     header: {
-                        label: 'Name',
+                        label: 'Start Time',
                         transforms: [ resetable ],
                         formatters: [
                             sort.header( {
@@ -105,95 +119,67 @@ class DataTable extends React.Component {
                                 strategy: sort.strategies.byProperty
                             } )
                         ],
-                    }
-                },
-                {
-                    property: 'type',
-                    header: {
-                        label: 'Type',
-                        transforms: [ resetable ],
-                        formatters: [
-                            sort.header( {
-                                sortable,
-                                getSortingColumns,
-                                strategy: sort.strategies.byProperty
-                            } )
-                        ]
-                    }
-                },
-                {
-                    property: 'geometry.coordinates.0',
-                    header: {
-                        label: 'Latitude (X)',
-                    }
-                },
-                {
-                    property: 'geometry.coordinates.1',
-                    header: {
-                        label: 'Longitude (Y)',
-                    }
-                },
-                {
-                    property: 'affected_layers',
-                    header: {
-                        label: 'Layers',
-                        transforms: [ resetable ],
-                        formatters: [
-                            sort.header( {
-                                sortable,
-                                getSortingColumns,
-                                strategy: sort.strategies.byProperty
-                            } )
-                        ]
-                    }
-                },
-                {
-                    props: {
-                        style: {
-                            width: 50
-                        }
                     },
                     cell: {
+                        transforms: [editable(edit.input())],
                         formatters: [
-                            (value, { rowData }) => (
-                                <Icon name={'trash'} onClick={() => this.props.removeBoundary(rowData.id, this.props.id)}/>
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toDate(value)}</span>
                             )
                         ]
                     }
-                }
+                },
+                {
+                    property: 'values',
+                    header: {
+                        label: 'Rate',
+                    },
+                    cell: {
+                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toNumber(value)}</span>
+                            )
+                        ]
+                    },
+                },
             ],
             rows: this.props.rows || []
         };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         // We have refs now. Force update to get those to Header/Body.
         this.forceUpdate();
     }
 
-    componentWillReceiveProps(newProps){
-        this.setState(function(prevState, props){
+    componentWillReceiveProps ( newProps ) {
+        this.setState( function( prevState, props ) {
             return { ...prevState, rows: newProps.rows };
         } );
     }
 
+    getRows = () => {
+        return this.state.rows.map((data) => {return {date_time: data.date_time, values: data.values}});
+    };
+
     render () {
         const { rows, sortingColumns, columns, perPage, page } = this.state;
 
-        const resolvedColumns = resolve.columnChildren({ columns });
+        const resolvedColumns = resolve.columnChildren( { columns } );
         const sortedRows = compose(
-            getRows(page, perPage),
-            sort.sorter({
+            DataTable.Selector.getRows( page, perPage ),
+            sort.sorter( {
                 columns: resolvedColumns,
                 sortingColumns,
                 sort: orderBy,
                 strategy: sort.strategies.byProperty
-            }),
-            resolve.resolve({
+            } ),
+            resolve.resolve( {
                 columns: resolvedColumns,
                 method: resolve.nested
-            })
-        )(rows);
+            } )
+        )( rows );
 
         return (
             <div>
@@ -216,7 +202,7 @@ class DataTable extends React.Component {
                     <Virtualized.Body
                         rows={sortedRows}
                         rowKey="id"
-                        onRow={Callback.onRow(this)}
+                        onRow={DataTable.Action.Callback.onRow( this )}
                         style={{
                             maxHeight: 1000
                         }}
@@ -229,18 +215,15 @@ class DataTable extends React.Component {
 
                 <div className="controls">
                     <Paginator.Paginator perPage={perPage} length={rows.length}
-                               onSelect={( page ) => Paginator.Action.Callback.onSelectPage(this)( page.selected + 1, perPage, rows.length )}/>
+                               onSelect={( page ) => Paginator.Action.Callback.onSelectPage( this )( page.selected + 1, perPage, rows.length )}/>
                 </div>
             </div>
         );
     }
 }
 
-DataTable.propTypes = {
-    id: PropTypes.string.isRequired,
-    tool: PropTypes.string.isRequired,
+PumpingRate.propTypes = {
     perPage: PropTypes.number,
-    removeBoundary: PropTypes.func.isRequired,
 };
 
-export default DataTable;
+export default PumpingRate;

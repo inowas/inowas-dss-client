@@ -94,7 +94,7 @@ export default class Input extends Component {
     };
 
     defaultHandleChange = e => {
-        this.props.onChange( e.target.value );
+        this.props.onChange( e.target.value, e.target.name, e );
     }
 
     datetimeHandleDateChange = e => {
