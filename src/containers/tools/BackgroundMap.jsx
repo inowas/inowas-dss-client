@@ -23,6 +23,13 @@ export const onEdited = ( component = {} ) => () => {
 
 class BackgroundMap extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            create: ''
+        };
+    }
+
     generateKeyFunction( geometry ) {
         return md5(JSON.stringify(geometry))
     }
@@ -178,7 +185,11 @@ class BackgroundMap extends Component {
     }
 
     onCreated = e => {
-        console.log('Created !');
+        if (this.getCreatable() === 'area') {
+            const polygon =  e.layer;
+            const geometry = polygon.toGeoJSON().geometry;
+            this.props.setModelArea( geometry, geometry.getBounds() );
+        }
     };
 
     onDeleted = e => {
@@ -207,6 +218,43 @@ class BackgroundMap extends Component {
             }
         }, this);
     };
+
+    getCreatable = () => {
+        const area = this.props.model.geometry;
+
+        if (area && area.create === true) {
+            return 'area'
+        }
+
+        return null;
+    };
+
+    renderCreateControl() {
+
+        if (this.getCreatable() === 'area') {
+            const drawOptions = {
+                polyline: false,
+                polygon: true,
+                rectangle: false,
+                circle: false,
+                marker: false
+            };
+
+            return (
+                <FeatureGroup>
+                    <EditControl
+                        position='bottomright'
+                        onCreated={this.onCreated}
+                        onDeleted={this.onDeleted}
+                        onEditStart={this.onEditStart}
+                        onEditStop={this.onEditStop}
+                        onEdited={this.onEditPath}
+                        draw={drawOptions}
+                    />
+                </FeatureGroup>
+            );
+        }
+    }
 
     renderEditControl() {
 
@@ -294,6 +342,19 @@ class BackgroundMap extends Component {
         const recharges = boundaries.filter( b => { if (b.type === 'rch' && b.geometry.edit !== true) return b });
         const rivers = boundaries.filter( b => { if (b.type === 'riv' && b.geometry.edit !== true) return b });
         const wells = boundaries.filter( b => { if (b.type === 'wel' && b.geometry.edit !== true) return b });
+
+        if (!area || area.create === true){
+            let bounds = boundingBox || [[51, -10], [50, 0]];
+            return (
+                <div className="map-wrapper">
+                    <Map className="background-map" ref="map" zoomControl={false} bounds={bounds} >
+                        <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+                        {this.renderCreateControl()}
+                    </Map>
+                    {this.renderToast()}
+                </div>
+            );
+        }
 
         return (
             <div className="map-wrapper">

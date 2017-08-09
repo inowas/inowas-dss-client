@@ -56,6 +56,7 @@ class ModelEditorGeneral extends Component {
         editModelArea: PropTypes.func,
         setEditorState: PropTypes.func,
         createModel: PropTypes.func,
+        createModelArea: PropTypes.func,
         setModflowModel: PropTypes.func,
         webData: PropTypes.object,
     };
@@ -160,6 +161,19 @@ class ModelEditorGeneral extends Component {
         browserHistory.push(this.props.location.pathname + '#edit');
     };
 
+    createAreaOnMap = ( ) => {
+        this.setState(function(prevState, props){
+            browserHistory.push(this.props.location.pathname + '#edit');
+            return {
+                ...prevState,
+                modflowModel: {
+                    ...prevState.modflowModel,
+                    geometry: { create: true }
+                }
+            };
+        });
+    };
+
     save(id) {
         if (id) {
             this.props.updateModflowModel(
@@ -175,13 +189,36 @@ class ModelEditorGeneral extends Component {
         );
     }
 
-    render( ) {
-        const { style, webData } = this.props;
+    renderMapAndSaveButton = () => {
+        const { webData } = this.props;
         const { id } = this.props.params;
 
         // TODO prevent onClick triggers if disabled and make that css works
         const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
         const btnClass = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'button button-accent is-disabled' : 'button button-accent';
+
+        if (id) {
+            return (
+                <section className="col col-rel-3 stretch">
+                    <button onClick={this.editAreaOnMap} className="link"><Icon name="marker"/>Edit on Map</button>
+                    <ModelEditorGeneralMap model={this.props.modflowModel} />
+                    <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save</button>
+                </section>
+            )
+        }
+
+        return (
+            <section className="col col-rel-3 stretch">
+                <button onClick={this.createAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
+                <ModelEditorGeneralMap model={this.props.modflowModel} />
+                <button disabled={disabled} onClick={() => {this.save()}} className={btnClass}>Create Model</button>
+            </section>
+        )
+    };
+
+    render( ) {
+        const { webData } = this.props;
+        const { id } = this.props.params;
 
         if (id && isLoading(webData[Query.GET_MODFLOW_MODEL])) {
             // TODO move to dump component
@@ -295,18 +332,7 @@ class ModelEditorGeneral extends Component {
                         </form>
                     </section>
 
-                    <section className="col col-rel-3 stretch">
-                        <button onClick={this.editAreaOnMap} className="link"><Icon name="marker"/>Edit on Map</button>
-                        <ModelEditorGeneralMap model={this.props.modflowModel} />
-                        <div>
-                            {(( ) => {
-                                if ( id === undefined || id === null ) {
-                                    return <button disabled={disabled} onClick={() => {this.save();}} className={btnClass}>Create Model</button>;
-                                }
-                                return <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save</button>;
-                            })( )}
-                        </div>
-                    </section>
+                    {this.renderMapAndSaveButton()}
                 </div>
             </div>
         );
@@ -321,6 +347,7 @@ const mapStateToProps = (state, { tool, params }) => {
 };
 
 const actions = {
+    createModelArea: Action.createModelArea,
     editModelArea: Action.editModelArea,
     setModflowModel: Action.setModflowModel,
     createModflowModel: Command.createModflowModel,

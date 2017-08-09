@@ -2,17 +2,11 @@ import {WebData} from "../core";
 import config from '../config';
 
 export function stateToCreatePayload ( state ) {
-    let geometry = state.geometry;
-
-    geometry.coordinates = [
-        geometry.coordinates,
-    ];
-    geometry.coordinates[0].push(geometry.coordinates[0][0]);
 
     return {
         name: state.name,
         description: state.description,
-        geometry,
+        geometry: state.geometry,
         bounding_box: state.bounding_box,
         grid_size: state.grid_size,
         time_unit: state.time_unit,

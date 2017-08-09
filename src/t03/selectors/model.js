@@ -148,7 +148,7 @@ export const getInitialState = () => {
         styles: getInitialStyles(),
         time_unit: 2,
         length_unit: 2,
-        bounding_box: [[0,0], [10,10]],
+        bounding_box: [[-10, 51], [0, 50]],
         geometry: null,
         boundaries: [],
     };

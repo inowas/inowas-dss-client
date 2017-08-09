@@ -36,6 +36,12 @@ const createModelReducer = tool => {
             case Action.SET_MODEL_AREA:
                 return { ...state, geometry: action.payload };
 
+            case Action.CREATE_MODEL_AREA:
+                return {
+                    ...state,
+                    geometry: {create: true}
+                };
+
             case Action.EDIT_MODEL_AREA:
                 let geometry = state.geometry;
                 geometry.edit = true;
