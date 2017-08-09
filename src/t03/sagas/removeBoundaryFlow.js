@@ -1,7 +1,7 @@
 import {put, take} from 'redux-saga/effects';
 import {sendCommand} from "../../actions/messageBox";
 import {Command, Event} from "../../t03/actions/index";
-import {waitForResponse} from "../../api/webData";
+import {WebData} from "../../core";
 
 export default function* removeBoundaryFlow () {
 
@@ -11,7 +11,7 @@ export default function* removeBoundaryFlow () {
         yield put( sendCommand( action.type, action.payload ) );
 
         while ( true ) {
-            const response = yield take( action => waitForResponse(action, Command.REMOVE_BOUNDARY ) );
+            const response = yield take( action => WebData.Helpers.waitForResponse(action, Command.REMOVE_BOUNDARY ) );
 
             if ( response.webData.type === "error" ) {
                 break;

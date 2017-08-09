@@ -100,22 +100,6 @@ export function setActiveBoundaryControlPoint( tool, index ) {
  * GENERAL
  */
 
-export const ModflowModelCommands = {
-    CREATE_MODFLOW_MODEL: 'createModflowModel',
-    DELETE_MODFLOW_MODEL: 'deleteModflowModel',
-    UPDATE_MODFLOW_MODEL: 'updateModflowModel',
-};
-
-export const ModflowModelEvents = {
-    MODFLOW_MODEL_CREATED: 'modflowModelCreated',
-    MODFLOW_MODEL_UPDATED: 'modflowModelUpdated',
-    MODFLOW_MODEL_DELETED: 'modflowModelDeleted',
-};
-
-export const ModflowModelQueries = {
-    GET_MODFLOW_MODEL: 'GET_MODFLOW_MODEL',
-};
-
 export const ActionTypeModel = {
     UPDATE_GEOMETRY: 'MODEL_EDITOR_UPDATE_GEOMETRY',
     DESTROY_MODFLOW_MODEL: 'MODEL_EDITOR_MODEL_DESTROY',
@@ -136,46 +120,6 @@ export const ActionTypeModel = {
     UPDATE_BOUNDING_BOX: 'MODEL_EDITOR_MODEL_UPDATE_BOUNDING_BOX',
 };
 
-export function createModflowModel( tool, id, payload ) {
-    return {
-        type: ModflowModelCommands.CREATE_MODFLOW_MODEL,
-        tool,
-        id,
-        payload
-    };
-}
-export function modflowModelCreated( tool, id, payload ) {
-    return {
-        type: ModflowModelEvents.MODFLOW_MODEL_CREATED,
-        tool,
-        id,
-        payload
-    };
-}
-
-export function destroyModflowModel( tool ) {
-    return {
-        type: ActionTypeModel.DESTROY_MODFLOW_MODEL,
-        tool
-    };
-}
-
-export function updateModflowModel( tool, id, payload ) {
-    return {
-        type: ModflowModelCommands.UPDATE_MODFLOW_MODEL,
-        tool,
-        id,
-        payload
-    };
-}
-export function modflowModelUpdated( tool, id, payload ) {
-    return {
-        type: ModflowModelEvents.MODFLOW_MODEL_UPDATED,
-        tool,
-        id,
-        payload
-    };
-}
 
 export function updateGeometry( tool, id, geometry ) {
     return {
@@ -185,14 +129,6 @@ export function updateGeometry( tool, id, geometry ) {
             id: id,
             geometry: geometry
         }
-    };
-}
-
-export function loadModflowModel( tool, id ) {
-    return {
-        type: ModflowModelQueries.GET_MODFLOW_MODEL,
-        tool,
-        id
     };
 }
 
@@ -276,14 +212,6 @@ export function deleteAreaControlPoint( tool, index ) {
  * BOUNDARIES
  */
 
-export const BoundaryCommands = {
-    REMOVE_BOUNDARY: 'removeBoundary',
-};
-
-export const BoundaryEvents = {
-    BOUNDARY_REMOVED: 'boundaryRemoved',
-};
-
 export const ActionTypeBoundaries = {
     SET_BOUNDARIES: 'MODEL_EDITOR_MODEL_SET_BOUNDARIES',
     ADD_BOUNDARY: 'MODEL_EDITOR_MODEL_ADD_BOUNDARY',
@@ -308,24 +236,6 @@ export function updateBoundary( tool, boundary ) {
         type: ActionTypeBoundaries.UPDATE_BOUNDARY,
         tool,
         payload: boundary
-    };
-}
-
-export function removeBoundary( tool, boundaryId,  modelId) {
-    return {
-        type: BoundaryCommands.REMOVE_BOUNDARY,
-        tool,
-        payload: {
-            boundary_id: boundaryId,
-            id: modelId,
-        }
-    };
-}
-export function boundaryRemoved( tool, id ) {
-    return {
-        type: BoundaryEvents.BOUNDARY_REMOVED,
-        tool,
-        payload: id
     };
 }
 

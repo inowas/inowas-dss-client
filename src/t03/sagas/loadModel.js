@@ -1,16 +1,16 @@
 import {put, all, call, take, select} from 'redux-saga/effects';
 import {buildRequest, payloadToSetModel} from "../../actions/messageBox";
 import {Query, Action} from "../../t03/actions/index";
-import {responseAction, fetchStatusWrapper, reset} from "../../api/webData";
 import {getApiKey} from "../../reducers/user";
+import {WebData} from "../../core";
 
 export default function* loadModelFlow () {
     while ( true ) {
         let action = yield take( action => action.type === Query.GET_MODFLOW_MODEL );
 
-        yield put( responseAction( action.type, { type: "loading" } ) );
+        yield put( WebData.Modifier.Action.responseAction( action.type, { type: "loading" } ) );
 
-        yield reset( action.type );
+        yield WebData.Modifier.Action.reset( action.type );
         yield Action.destroyModflowModel();
 
         const state = yield select();
@@ -18,13 +18,13 @@ export default function* loadModelFlow () {
 
         try {
             const [ model, boundaries ] = yield all( [
-                call( fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id, 'GET' ), apiKey ),
-                call( fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/boundaries', 'GET' ), apiKey )
+                call( WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id, 'GET' ), apiKey ),
+                call( WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/boundaries', 'GET' ), apiKey )
             ] );
 
             yield put( Action.setModflowModel( action.tool, payloadToSetModel( model ) ) );
             yield put( Action.setBoundaries( action.tool, boundaries ) );
-            yield put( responseAction( action.type, { type: "success", data: null } ) );
+            yield put( WebData.Modifier.Action.responseAction( action.type, { type: "success", data: null } ) );
 
         } catch ( err ) {
             let msg = "Unknown Error";
@@ -36,7 +36,7 @@ export default function* loadModelFlow () {
                 msg = error.message || msg;
             }
 
-            yield put( responseAction( action.type, { type: "error", msg: msg } ) );
+            yield put( WebData.Modifier.Action.responseAction( action.type, { type: "error", msg: msg } ) );
         }
     }
 }

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { boundary } from '../selectors/index';
 import {Properties} from '../../t03/components/index';
 import Navbar from '../../containers/Navbar';
 import { connect } from 'react-redux';
@@ -8,6 +7,7 @@ import BackgroundMap from "../../containers/tools/BackgroundMap";
 import Sidebar from "../../components/primitive/Sidebar"
 import Icon from "../../components/primitive/Icon";
 import styleGlobals from 'styleGlobals';
+import {makeMapStateToProps} from "../selectors/mapState";
 
 const styles = {
     wrapper: {
@@ -38,11 +38,6 @@ const styles = {
 
 class T03 extends Component {
 
-    static propTypes = {
-        id: PropTypes.string,
-        push: PropTypes.func,
-    };
-
     state = {
         navigation: [ ]
     };
@@ -65,8 +60,7 @@ class T03 extends Component {
     };
 
     renderProperties() {
-        const { id } = this.props;
-        const initial = ( id === undefined || id === null );
+        const initial = ( this.props.params.id === undefined || this.props.params.id === null );
         const propertiesVisible = this.props.location.hash !== "#edit";
         const menuItems = [
             {
@@ -168,7 +162,8 @@ class T03 extends Component {
                                 selectedType={this.props.params.type}
                                 onClick={this.pushPropertyToBrowserHistory}
                             />
-                            <Properties selectedProperty={this.props.params.property || 'general'} close={this.close} tool={this.getToolName()} />
+                            <Properties selectedProperty={this.props.params.property || 'general'} close={this.close}
+                                        tool={this.getToolName()}/>
                         </div>
                     </div>
                 </div>
@@ -192,14 +187,6 @@ class T03 extends Component {
 
 }
 
-const mapStateToProps = (state, { params }) => {
-
-    return {
-        id: params.id,
-        boundaries: boundary.getBoundaries( state.T03.model.boundaries ),
-    };
-};
-
 const actions = {
 };
 
@@ -219,6 +206,6 @@ const mapDispatchToProps = dispatch => {
     return wrappedActions;
 };
 
-T03 = withRouter( connect( mapStateToProps, mapDispatchToProps )( T03 ));
+T03 = withRouter( connect( makeMapStateToProps, mapDispatchToProps )( T03 ));
 
 export default T03;
