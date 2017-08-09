@@ -8,7 +8,7 @@ import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {Modifier} from "./t03/index";
-import {reset} from "./api/webData";
+import {WebData} from "./core";
 
 export const editBoundary = (tool, id, property, type, boundaryId) => {
     const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type + '/' + boundaryId;
@@ -29,7 +29,7 @@ const routes = (store) => (
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard}/>
             <Route path="T02(/:id)" component={tools.T02}/>
-            <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={T03.Main}
+            <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={T03.Main} tool={'T03'}
                 onEnter={ (nextState) => {
                    if (nextState.params.id) {
                        store.dispatch(Modifier.Query.getModflowModel('T03', nextState.params.id));
@@ -39,7 +39,7 @@ const routes = (store) => (
                        return;
                    }
 
-                   store.dispatch(reset());
+                   store.dispatch(WebData.Modifier.Action.reset());
                    store.dispatch(Modifier.Action.destroyModflowModel('T03'));
                 }}
             />

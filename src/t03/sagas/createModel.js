@@ -2,7 +2,7 @@ import {put, call, take} from 'redux-saga/effects';
 import {browserHistory} from 'react-router';
 import {sendCommand, stateToCreatePayload} from "../../actions/messageBox";
 import {Command, Event} from "../../t03/actions/index";
-import {waitForResponse} from "../../api/webData";
+import {WebData} from "../../core";
 
 export default function* createModelFlow () {
     while ( true ) {
@@ -14,7 +14,7 @@ export default function* createModelFlow () {
         yield put( sendCommand( action.type, payload ) );
 
         while ( true ) {
-            const response = yield take( action => waitForResponse(action, Command.CREATE_MODFLOW_MODEL ) );
+            const response = yield take( action => WebData.Helpers.waitForResponse(action, Command.CREATE_MODFLOW_MODEL ) );
 
             if ( response.webData.type === "error" ) {
                 break;

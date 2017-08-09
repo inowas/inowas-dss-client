@@ -1,4 +1,4 @@
-import {sendHttpRequest} from "../api/webData";
+import {WebData} from "../core";
 import config from '../config';
 
 export function stateToCreatePayload ( state ) {
@@ -34,11 +34,11 @@ export function sendCommand ( messageName, payload, metadata = [] ) {
 }
 
 export function sendMessageBox ( responseAction, body ) {
-    return sendHttpRequest( buildRequest('messagebox', 'POST', JSON.stringify( body )), responseAction );
+    return WebData.Modifier.Query.sendHttpRequest( buildRequest('messagebox', 'POST', JSON.stringify( body )), responseAction );
 }
 
 export function sendQuery ( url, responseAction ) {
-    return sendHttpRequest( buildRequest(url, 'GET'), responseAction );
+    return WebData.Modifier.Query.sendHttpRequest( buildRequest(url, 'GET'), responseAction );
 }
 
 export function buildRequest(url, method, body) {

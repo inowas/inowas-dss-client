@@ -24,12 +24,12 @@ import { combineReducers } from 'redux';
 import dashboard from './dashboard';
 import { routerReducer as routing } from 'react-router-redux';
 import user from './user';
-import webData from './webData';
+import {WebData} from '../core';
 
 const rootReducer = combineReducers( {
     routing,
     user,
-    webData,
+    webData: WebData.Reducer.webData,
     dashboard,
     T02,
     T03,

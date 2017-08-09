@@ -5,7 +5,7 @@ import {
 } from '../../actions/messageBox';
 
 import {Command, Action, Event} from '../../t03/actions/index';
-import {waitForResponse} from '../../api/webData';
+import {WebData} from "../../core";
 
 export default function* updateModelFlow () {
     while ( true ) {
@@ -17,7 +17,7 @@ export default function* updateModelFlow () {
         yield put( sendCommand( action.type, payload ) );
 
         while ( true ) {
-            const response = yield take( action => waitForResponse( action, Command.UPDATE_MODFLOW_MODEL ) );
+            const response = yield take( action => WebData.Helpers.waitForResponse( action, Command.UPDATE_MODFLOW_MODEL ) );
 
             if ( response.webData.type === "error" ) {
                 yield put( Action.setModflowModel( action.tool, action.payload ) );

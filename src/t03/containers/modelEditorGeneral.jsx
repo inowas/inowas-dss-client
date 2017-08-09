@@ -10,7 +10,7 @@ import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { browserHistory, withRouter } from 'react-router';
-import {getErrorMessage, getRequestStatus, hasError, isLoading} from "../../reducers/webData";
+import {getErrorMessage, getRequestStatus, hasError, isLoading} from '../../core/webData/selectors/webData';
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
 import ModelEditorGeneralMap from "../../components/modflow/ModelEditorGeneralMap";
@@ -58,7 +58,6 @@ class ModelEditorGeneral extends Component {
         createModel: PropTypes.func,
         setModflowModel: PropTypes.func,
         webData: PropTypes.object,
-        id: PropTypes.string
     };
 
     constructor(props) {
@@ -75,7 +74,7 @@ class ModelEditorGeneral extends Component {
     }
 
     componentWillMount(){
-        const modflowModel = this.props.modflowModel ? this.props.modflowModel : getInitialState();
+        const modflowModel = this.props.modflowModel ? this.props.modflowModel : model.getInitialState();
 
         this.setState(function(prevState, props){
             return { ...prevState, modflowModel };
@@ -177,7 +176,8 @@ class ModelEditorGeneral extends Component {
     }
 
     render( ) {
-        const { style, id, webData } = this.props;
+        const { style, webData } = this.props;
+        const { id } = this.props.params;
 
         // TODO prevent onClick triggers if disabled and make that css works
         const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
@@ -315,7 +315,6 @@ class ModelEditorGeneral extends Component {
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
-        id: params.id,
         modflowModel: general.getModflowModel(state[tool].model),
         webData: getRequestStatus(state)
     };

@@ -45,9 +45,9 @@ export default class ModelEditorGeneralMap extends Component {
         const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
 
         return (
-            <Map className="crossSectionMap" ref="map" zoomControl={false} bounds={this.getBounds(area)} >
+            <Map className="crossSectionMap" ref="map" zoomControl={false} bounds={this.getBounds(area) || bounds} >
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />
+                {area && <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />}
                 <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
             </Map>
         );
