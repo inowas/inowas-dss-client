@@ -90,10 +90,13 @@ export default class Sidebar extends Component {
     render( ) {
         const { title, items } = this.props;
 
+        let activeItem = 0;
+        items.forEach( (i, index) => { if (i.name === this.props.selectedProperty) {activeItem = index} } );
+
         return (
             <nav style={styles.menu}>
                 <h1 style={styles.title}>{title}</h1>
-                    <Accordion active={true}>
+                    <Accordion firstActive={activeItem}>
                         {this.renderItems(items)}
                     </Accordion>
             </nav>
