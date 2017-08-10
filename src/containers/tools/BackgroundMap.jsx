@@ -12,23 +12,7 @@ import {
     Query, Command, Action
 } from '../../t03/actions/index';
 
-
-export const onEdited = ( component = {} ) => () => {
-    component.setState( function( prevState, props ) {
-        return {
-            rows: select.toggle( row => true )( prevState.rows )
-        }
-    } );
-};
-
 class BackgroundMap extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            create: ''
-        };
-    }
 
     generateKeyFunction( geometry ) {
         return md5(JSON.stringify(geometry))
@@ -332,7 +316,7 @@ class BackgroundMap extends Component {
         }
     }
 
-    render( ) {
+    render() {
 
         const area = this.props.model.geometry;
         const boundingBox = this.props.model.bounding_box;
@@ -344,10 +328,10 @@ class BackgroundMap extends Component {
         const wells = boundaries.filter( b => { if (b.type === 'wel' && b.geometry.edit !== true) return b });
 
         if (!area || area.create === true){
-            let bounds = boundingBox || [[51, -10], [50, 0]];
+            const center = [51.047438, 13.741150];
             return (
                 <div className="map-wrapper">
-                    <Map className="background-map" ref="map" zoomControl={false} bounds={bounds} >
+                    <Map className="background-map" ref="map" zoomControl={false} center={center} zoom={4} >
                         <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                         {this.renderCreateControl()}
                     </Map>
