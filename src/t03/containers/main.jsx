@@ -60,8 +60,14 @@ class T03 extends Component {
     };
 
     renderProperties() {
+
+        const isVisible = this.props.location.hash !== "#edit";
+
+        if ( ! isVisible ) {
+            return null;
+        }
+
         const initial = ( this.props.params.id === undefined || this.props.params.id === null );
-        const propertiesVisible = this.props.location.hash !== "#edit";
         const menuItems = [
             {
                 title: 'General',
@@ -150,27 +156,23 @@ class T03 extends Component {
             }
         ];
 
-        if ( propertiesVisible ) {
-            return (
-                <div style={styles.wrapper}>
-                    <div style={styles.overlayWrapper}>
-                        <div style={styles.overlay}>
-                            <Sidebar
-                                title="Menu"
-                                items={menuItems}
-                                selectedProperty={this.props.params.property || 'general'}
-                                selectedType={this.props.params.type}
-                                onClick={this.pushPropertyToBrowserHistory}
-                            />
-                            <Properties selectedProperty={this.props.params.property || 'general'} close={this.close}
-                                        tool={this.getToolName()}/>
-                        </div>
+        return (
+            <div style={styles.wrapper}>
+                <div style={styles.overlayWrapper}>
+                    <div style={styles.overlay}>
+                        <Sidebar
+                            title="Menu"
+                            items={menuItems}
+                            selectedProperty={this.props.params.property || 'general'}
+                            selectedType={this.props.params.type}
+                            onClick={this.pushPropertyToBrowserHistory}
+                        />
+                        <Properties selectedProperty={this.props.params.property || 'general'} close={this.close}
+                                    tool={this.getToolName()}/>
                     </div>
                 </div>
-            )
-        }
-
-        return null;
+            </div>
+        );
     }
 
     render( ) {

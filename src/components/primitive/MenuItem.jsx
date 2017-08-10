@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
+import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from './Icon';
 import styleGlobals from 'styleGlobals';
 
@@ -44,6 +45,7 @@ const styles = {
     }
 };
 
+@ConfiguredRadium
 export default class MenuItem extends Component {
 
     static propTypes = {
@@ -67,9 +69,9 @@ export default class MenuItem extends Component {
 
         return (
             <div>
-                <div style={{...styles.header, ...style}} onClick={this.handleClick}>
+                <div style={[styles.header, style]} onClick={this.handleClick}>
                     {icon && React.cloneElement(icon, {
-                        style: {...icon.props.style, ...styles.icon}
+                        style: [icon.props.style, styles.icon]
                     })}
 
                     <span style={styles.heading}>
@@ -80,5 +82,4 @@ export default class MenuItem extends Component {
             </div>
         );
     }
-
 }

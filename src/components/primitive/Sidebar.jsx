@@ -71,7 +71,7 @@ export default class Sidebar extends Component {
                 )
             }
 
-            return <MenuItem key={index} icon={i.icon} heading={i.title} onClick={() => this.handleClick(i.name)}/>
+            return <MenuItem style={[i.disabled && styles.disabled]} key={index} icon={i.icon} heading={i.title} onClick={() => this.handleClick(i.name)}/>
         }))
     };
 
