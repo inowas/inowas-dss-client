@@ -25,7 +25,7 @@ function getInitialState() {
         parameters: [{
                 order: 0,
                 id: 'k',
-                name: 'Hydraulic conductivity, K (m/d)',
+                name: 'Hydraulic conductivity, K [m/d]',
                 min: 1,
                 validMin: function (x) {
                     return x > 0
@@ -38,7 +38,7 @@ function getInitialState() {
             {
                 order: 1,
                 id: 'b',
-                name: 'Aquifer thickness below sea level, b (m)',
+                name: 'Aquifer thickness below sea level, b [m]',
                 min: 10,
                 validMin: function (x) {
                     return x > 0
@@ -51,7 +51,7 @@ function getInitialState() {
             {
                 order: 2,
                 id: 'q',
-                name: 'Offshore discharge rate, q (m³/d)',
+                name: 'Offshore discharge rate, q [m³/d]',
                 min: 0.1,
                 validMin: function (x) {
                     return x > 0
@@ -64,7 +64,7 @@ function getInitialState() {
             {
                 order: 3,
                 id: 'qw',
-                name: 'Well pumping rate, Qw (m³/d)',
+                name: 'Well pumping rate, Qw [m³/d]',
                 min: 1000,
                 validMin: function (x) {
                     return x > 0
@@ -77,7 +77,7 @@ function getInitialState() {
             {
                 order: 4,
                 id: 'xw',
-                name: 'Distance from well to shoreline, xw (m)',
+                name: 'Distance from well to shoreline, xw [m]',
                 min: 1000,
                 validMin: function (x) {
                     return x > 0
@@ -90,7 +90,7 @@ function getInitialState() {
             {
                 order: 5,
                 id: 'rhof',
-                name: 'Density of freshwater [g/cm³]',
+                name: 'Density of freshwater, ρ [g/cm³]',
                 min: 0.9,
                 validMin: function (x) {
                     return x >= 0.9
@@ -106,7 +106,7 @@ function getInitialState() {
             {
                 order: 6,
                 id: 'rhos',
-                name: 'Density of saltwater [g/cm³]',
+                name: 'Density of saltwater, ρₛ [g/cm³]',
                 min: 0.9,
                 validMin: function (x) {
                     return x >= 0.9
@@ -194,7 +194,9 @@ function calculateAndModifyState(state) {
     const rhos = state.parameters.find(p => {
         return p.id == 'rhos'
     }).value;
-    state.chart.data = calc.calculateDiagramData(q, b, k, rhof, rhos, qw, xw, -100, 0, 1);
+    var xs = xw*(1-(qw/(Math.PI*q*xw) ));
+    console.log(xs);
+    state.chart.data = calc.calculateDiagramData(q, b, k, rhof, rhos, qw, xw);
 
     // state.chart.data = calc.calculateDiagramData(q, k, d, df, ds, 0, 100, 10);
     // state.chart.options.yAxis.domain[1] = 2 * calc.calculateZCrit(d);

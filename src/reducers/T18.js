@@ -1,5 +1,6 @@
 import * as calc from '../calculations/T18';
 import applyParameterUpdate from './applyParameterUpdate';
+import image from '../images/tools/T18.jpg';
 import {
     inputType
 } from '../inputType';
@@ -21,6 +22,9 @@ function getInitialState() {
             AN: 0,
             AO: 0
         },
+        background: {
+            'image': image
+        },
         parameters: [{
             order: 0,
             id: 'LLRN',
@@ -40,7 +44,7 @@ function getInitialState() {
             min: 0,
             validMin: function(x) {return x >= 0},
             max: 500,
-            value: 336,
+            value: 667,
             stepSize: 1,
             decimals: 0
         }, {
@@ -89,7 +93,7 @@ function getInitialState() {
             validMin: function(x) {return x >= 0},
             max: 365,
             validMax: function(x) {return x <= 365},
-            value: 180,
+            value: 365,
             stepSize: 1,
             decimals: 0
         }, {
@@ -100,7 +104,7 @@ function getInitialState() {
             min: 0,
             validMin: function(x) {return x >= 0},
             max: 100,
-            value: 35,
+            value: 40,
             stepSize: 1,
             decimals: 0
         }, {

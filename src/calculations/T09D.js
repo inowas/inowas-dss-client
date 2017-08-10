@@ -1,13 +1,15 @@
-export function calculateDiagramData(q, b, k, rho_f, rho_s, q_w, x_w, x_min, x_max, d_x) {
+export function calculateDiagramData(q, b, k, rho_f, rho_s, q_w, x_w) {
     let d_rho = rho_f / (rho_s - rho_f);
-
+console.log(d_rho);
     function calcY(x) {
         let L = Math.pow(Math.E, (4 * Math.PI * k * (0.5 * (1 + d_rho) * Math.pow(b / d_rho, 2) - q * x / k)) / q_w);
+        console.log(L);
         let M = (L * Math.pow(x + x_w, 2) - Math.pow(x - x_w, 2)) / (1 - L);
         return  Math.sqrt(M);
     }
     let data = [];
-    for (let x = x_min; x < x_max; x += d_x) {
+    const x_min = 21;
+    for (let x = x_min; x < 2500; x += 100) {
         data.push({
             x,
             y: calcY(x)

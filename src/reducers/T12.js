@@ -115,7 +115,7 @@ function getInitialState() {
         }, {
             order: 2,
             id: 'K',
-            name: 'Hydraulic conductivity, K [m/d]',
+            name: 'Hydr. conductivity, K [m/d]',
             min: 1,
             validMin: function(x) {return x > 0},
             max: 100,

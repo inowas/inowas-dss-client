@@ -24,15 +24,17 @@ export default class Chart extends React.Component {
                                     top: 20,
                                     right: 80,
                                     left: 10,
-                                    bottom: 40
+                                    bottom: 0
                                 }}>
 
-                                    <XAxis type="number" label="Area (m²)"/>
+                                    {/*<XAxis type="number" label="Area (m²)"/>*/}
+                                    <XAxis type="number"/>
                                     <YAxis type="category" dataKey="name"/>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <Bar isAnimationActive={false} dataKey="value" fill="#ED8D05"/>
                                 </BarChart>
                             </ResponsiveContainer>
+                            <p className="center-vertical center-horizontal">Area m{<sup>2</sup>}</p>
                         </div>
                     </div>
                     <div className="col col-rel-0-5">

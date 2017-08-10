@@ -20,12 +20,12 @@ export default class Info extends React.Component {
                         <div>
                             <input name="settings" id="radio1" type="radio" value="Case1" checked={settings.case === 'Case1'}
                                    style={styleupdate} onChange={this.handleChange}/>
-                            <label htmlFor="radio1">Variable T, Fixed L</label>
+                            <label htmlFor="radio1">Variable time (T), Fixed length (x)</label>
                         </div>
                         <div>
                             <input name="settings" id="radio2" type="radio" value="Case2" checked={settings.case === 'Case2'}
                                    style={styleupdate} onChange={this.handleChange}/>
-                            <label htmlFor="radio2">Fixed T, Variable L</label>
+                            <label htmlFor="radio2">Fixed time (T), Variable length (x)</label>
                         </div>
                     </div>
                 </div>

@@ -61,7 +61,7 @@ export default class Chart extends React.Component {
                                     bottom: 40
                                 }}>
                                     <XAxis label={label} type="number" dataKey={datakey}/>
-                                    <YAxis label="C (mg/L)" type="number" domain={this.props.options.yAxis.domain}/>
+                                    <YAxis label="C/C0 [-]" type="number" domain={this.props.options.yAxis.domain}/>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <Line isAnimationActive={false} type="basis" dataKey={'C'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
                                 </LineChart>
@@ -69,7 +69,7 @@ export default class Chart extends React.Component {
                             <div className="diagram-labels-bottom-right">
                                 <div className="diagram-label">
                                     <p>
-                                        C&nbsp;=&nbsp;<strong>{(info.C*c0).toFixed(3)}</strong>&nbsp;
+                                        C&nbsp;=&nbsp;<strong>{(info.C*c0).toFixed(2)}</strong>&nbsp;
                                         mg/L
                                     </p>
                                     <p>

@@ -52,7 +52,7 @@ function calcHLR(IR, AF) {
 }
 
 function calcLR(HLR, C, OD) {
-    return HLR * C * 365 / OD;
+   return HLR * C * 365 / OD;
 }
 
 function calcA(C, Q, LLR) {
