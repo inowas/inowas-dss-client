@@ -34,7 +34,7 @@ class BackgroundMap extends Component {
         }
 
         return null;
-    }KK
+    }
 
     zoomToBounds = () => {
         if (this.refs.map && this.getBounds()) {
