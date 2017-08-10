@@ -187,8 +187,8 @@ class BackgroundMap extends Component {
     onCreated = e => {
         if (this.getCreatable() === 'area') {
             const polygon =  e.layer;
-            const geometry = polygon.toGeoJSON().geometry;
-            this.props.setModelArea( geometry, geometry.getBounds() );
+            const geoJSON = polygon.toGeoJSON();
+            this.props.setModelArea( geoJSON.geometry, polygon.getBounds() );
         }
     };
 

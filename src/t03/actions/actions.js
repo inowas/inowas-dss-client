@@ -23,11 +23,14 @@ export function editModelArea ( tool ) {
     };
 }
 
-export function setModelArea ( tool, payload ) {
+export function setModelArea ( tool, geometry, latLngBounds ) {
     return {
         type: SET_MODEL_AREA,
         tool,
-        payload
+        payload: {
+            geometry: geometry,
+            latLngBounds: latLngBounds
+        }
     };
 }
 

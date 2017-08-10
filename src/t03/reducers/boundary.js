@@ -1,4 +1,16 @@
 
+export function handleUpdateAreaGeometry ( state, action ) {
+    if (state.id === action.payload.id) {
+        return action.payload.geometry;
+    }
+
+    return state.geometry;
+}
+
+export function handleUpdateBoundingBox ( state, bounds ) {
+    return [[bounds.getWest(), bounds.getSouth()], [bounds.getEast(), bounds.getNorth()]];
+}
+
 export function handleUpdateBoundary ( state, action ) {
     return state.map( b => {
         if ( b.id === action.payload.id ) {
@@ -23,7 +35,6 @@ export function handleBoundaryGeometrySetEditTrue ( boundaries, action ) {
 }
 
 export function handleUpdateBoundaryGeometry ( boundaries, action ) {
-
     return boundaries.map( b => {
         if ( b.id === action.payload.id ) {
             return { ...b, geometry: action.payload.geometry };
@@ -31,14 +42,6 @@ export function handleUpdateBoundaryGeometry ( boundaries, action ) {
 
         return b;
     } );
-}
-
-export function handleUpdateAreaGeometry ( state, action ) {
-    if (state.id === action.payload.id) {
-        return action.payload.geometry;
-    }
-
-    return state.geometry;
 }
 
 export function handleUpdateBoundaryControlPoint ( state, action ) {

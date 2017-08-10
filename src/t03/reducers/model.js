@@ -6,7 +6,7 @@ import {
     handleDeleteBoundary, handleAddBoundaryControlPoint,
     handleUpdateBoundaryControlPoint, handleDeleteBoundaryControlPoint, handleUpdateBoundaryPumpingRate,
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
-    handleBoundaryGeometrySetEditTrue
+    handleBoundaryGeometrySetEditTrue, handleUpdateBoundingBox
 } from './boundary';
 import {Action, Event} from "../actions/index";
 import {calcBoundsOfPolygon} from "../../calculations/geoTools";
@@ -34,7 +34,7 @@ const createModelReducer = tool => {
                 return model.getInitialState();
 
             case Action.SET_MODEL_AREA:
-                return { ...state, geometry: action.payload };
+                return { ...state, geometry: action.payload.geometry, bounding_box: handleUpdateBoundingBox(state.bounding_box, action.payload.latLngBounds )};
 
             case Action.CREATE_MODEL_AREA:
                 return {
