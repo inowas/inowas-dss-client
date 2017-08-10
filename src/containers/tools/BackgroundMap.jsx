@@ -7,21 +7,80 @@ import { EditControl } from "react-leaflet-draw"
 import FloatingToast from "../../components/modflow/FloatingToast";
 import { withRouter, browserHistory } from 'react-router';
 
-
 import {
     Query, Command, Action
 } from '../../t03/actions/index';
 
+import {geoJSON} from "leaflet/src/layer/GeoJSON";
+
+
 class BackgroundMap extends Component {
+
+    componentDidMount( ) {
+        this.invalidateMap();
+    }
+
+    componentWillUnmount( ) {
+        this.invalidateMap();
+    }
 
     generateKeyFunction( geometry ) {
         return md5(JSON.stringify(geometry))
     }
 
-    getBounds( geometry ) {
-        if ( geometry ) {
-            return L.geoJSON(geometry).getBounds();
+    getBounds() {
+        if ( this.props.model.geometry && !this.props.model.geometry.create) {
+            return geoJSON(this.props.model.geometry).getBounds();
         }
+
+        return null;
+    }
+
+    zoomToBounds = () => {
+        if (this.refs.map && this.getBounds()) {
+            const bounds = this.getBounds();
+            console.log('ZOOMTOBOUNDS', this.refs.map, bounds, bounds.isValid());
+            //this.refs.map.leafletElement.fitBounds(this.getBounds());
+        }
+    };
+
+    invalidateMap = () => {
+        if (this.refs.map) {
+            console.log('INVALIDATEMAP', this.refs.map);
+            this.refs.map.leafletElement.invalidateSize();
+        }
+    };
+
+    getCenter() {
+        if ( this.props.model && this.props.model.geometry && this.props.model.geometry.coordinates ) {
+            const coordinates = this.props.model.geometry.coordinates[0];
+            let xmin = coordinates[0][0];
+            let xmax = coordinates[0][0];
+            let ymin = coordinates[0][1];
+            let ymax = coordinates[0][1];
+
+            coordinates.forEach( c => {
+                if (c[0] < xmin) {
+                    xmin = parseFloat(c[0]);
+                }
+
+                if (c[0] > xmax) {
+                    xmax = parseFloat(c[0]);
+                }
+
+                if (c[1] < ymin) {
+                    ymin = parseFloat(c[1]);
+                }
+
+                if (c[1] > ymax) {
+                    ymax = parseFloat(c[1]);
+                }
+            });
+
+            return [(ymin + ymax)/2, (xmax + xmin)/2];
+        }
+
+        return [51.047438, 13.741150];
     }
 
     getStyle( type, subtype ) {
@@ -42,11 +101,11 @@ class BackgroundMap extends Component {
         return styles[type][subtype];
     }
 
-    renderArea( geometry ) {
-        if (geometry && geometry.edit !== true) {
+    renderArea( area ) {
+        if (area && !area.edit && !area.create) {
             return (
                 <LayersControl.Overlay name='Area Geometry' checked={true}>
-                    <GeoJSON key={this.generateKeyFunction( geometry )} data={geometry} style={this.getStyle('area')} />
+                    <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />
                 </LayersControl.Overlay>
             )
         }
@@ -306,6 +365,8 @@ class BackgroundMap extends Component {
     }
 
     showProperties = () => {
+        this.invalidateMap();
+        this.zoomToBounds();
         browserHistory.push(this.props.location.pathname);
     };
 
@@ -317,7 +378,6 @@ class BackgroundMap extends Component {
     }
 
     render() {
-
         const area = this.props.model.geometry;
         const boundingBox = this.props.model.bounding_box;
         const boundaries = this.props.model.boundaries;
@@ -327,22 +387,9 @@ class BackgroundMap extends Component {
         const rivers = boundaries.filter( b => { if (b.type === 'riv' && b.geometry.edit !== true) return b });
         const wells = boundaries.filter( b => { if (b.type === 'wel' && b.geometry.edit !== true) return b });
 
-        if (!area || area.create === true){
-            const center = [51.047438, 13.741150];
-            return (
-                <div className="map-wrapper">
-                    <Map className="background-map" ref="map" zoomControl={false} center={center} zoom={4} >
-                        <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                        {this.renderCreateControl()}
-                    </Map>
-                    {this.renderToast()}
-                </div>
-            );
-        }
-
         return (
             <div className="map-wrapper">
-                <Map id="background-map" ref="map" bounds={this.getBounds(area)} zoomControl={false} boundsOptions={{padding: [50, 50]}} >
+                <Map id="background-map" ref="map" center={this.getCenter()} zoom={8} zoomControl={false} boundsOptions={{padding: [50, 50]}} >
                     <LayersControl position='topright'>
                         <LayersControl.BaseLayer name='OSM' checked={true}>
                             <TileLayer
@@ -384,8 +431,7 @@ class BackgroundMap extends Component {
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
-        model: state[tool].model,
-        ui: state[tool].ui,
+        model: state[tool].model
     };
 };
 
@@ -412,4 +458,3 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 BackgroundMap = withRouter(connect( mapStateToProps, mapDispatchToProps )( BackgroundMap ));
 
 export default BackgroundMap;
-
