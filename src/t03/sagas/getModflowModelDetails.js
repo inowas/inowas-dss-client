@@ -24,7 +24,7 @@ export default function* getModflowDetailsFlow () {
                 yield put( WebData.Modifier.Action.responseAction( action.type, { type: "success", data: null } ) );
             }
 
-            if (action.property === 'boundaries' && storedModel.boundaries.length === 0) {
+            if (action.property === 'boundaries' && !storedModel.boundaries) {
                 const boundaries = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/boundaries', 'GET'), apiKey);
                 yield put(Action.setBoundaries(action.tool, boundaries));
                 yield put(WebData.Modifier.Action.responseAction(action.type, {type: "success", data: null}));

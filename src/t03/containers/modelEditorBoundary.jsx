@@ -177,7 +177,7 @@ class ModelEditorBoundary extends Component {
 
         const {searchTerm} = this.state;
 
-        let list = boundaries;
+        let list = boundaries || [];
 
         if (searchTerm) {
             const regex = new RegExp(searchTerm, 'i');

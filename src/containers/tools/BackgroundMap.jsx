@@ -396,7 +396,7 @@ class BackgroundMap extends Component {
     render() {
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
-        const boundaries = this.state.model.boundaries;
+        const boundaries = this.state.model.boundaries || [];
         const constantHeads = boundaries.filter( b => { if (b.type === 'chd' && b.geometry.edit !== true) return b });
         const generalHeads = boundaries.filter( b => { if (b.type === 'ghb' && b.geometry.edit !== true) return b });
         const recharges = boundaries.filter( b => { if (b.type === 'rch' && b.geometry.edit !== true) return b });

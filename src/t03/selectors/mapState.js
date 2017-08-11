@@ -2,9 +2,14 @@ import { createSelector } from 'reselect'
 import { webData } from '../../core/webData/selectors'
 import { boundary } from '../selectors';
 
-const getBoundaries = (state, props) => props.params.type
-    ? state[props.tool ? props.tool : props.route.tool].model.boundaries.filter(b => ( b.type === props.params.type ))
-    : state[props.tool ? props.tool : props.route.tool].model.boundaries;
+const getBoundaries = (state, props) => {
+    const boundaries = state[props.tool ? props.tool : props.route.tool].model.boundaries || [];
+    if (props.params.type) {
+        return boundaries.filter(b => ( b.type === props.params.type ));
+    }
+
+    return boundaries;
+};
 
 const getArea = (state, props) => state[props.tool].model.geometry;
 const getStyles = (state, props) => state[props.tool].model.styles;
