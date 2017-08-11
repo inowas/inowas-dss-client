@@ -13,3 +13,9 @@ export const enableMap = ( map ) => {
         } );
     }
 };
+
+export const invalidateSize = ( map ) => {
+    if ( map ) {
+        map.leafletElement.invalidateSize();
+    }
+};

@@ -44,14 +44,11 @@ class BackgroundMap extends Component {
         return md5(JSON.stringify(geometry))
     }
 
-    getBounds() {
-
-        if ( this.state.model.geometry && !this.state.model.geometry.create) {
-            return geoJSON(this.state.model.geometry).getBounds();
+    getBounds = ( geometry ) => {
+        if ( geometry ) {
+            return L.geoJSON(geometry).getBounds();
         }
-
-        return null;
-    }
+    };
 
     zoomToBounds = () => {
         if (this.refs.map && this.getBounds()) {
@@ -403,9 +400,13 @@ class BackgroundMap extends Component {
         const rivers = boundaries.filter( b => { if (b.type === 'riv' && b.geometry.edit !== true) return b });
         const wells = boundaries.filter( b => { if (b.type === 'wel' && b.geometry.edit !== true) return b });
 
+        if (!area || !area.coordinates) {
+            return null;
+        }
+
         return (
             <div className="map-wrapper">
-                <Map id="background-map" ref="map" center={this.getCenter()} zoom={8} zoomControl={false} boundsOptions={{padding: [50, 50]}} >
+                <Map id="background-map" ref="map" bounds={this.getBounds(area)} zoom={8} zoomControl={false} boundsOptions={{padding: [60, 60]}} >
                     <LayersControl position='topright'>
                         <LayersControl.BaseLayer name='OSM' checked={true}>
                             <TileLayer

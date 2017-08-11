@@ -6,8 +6,22 @@ import * as mapHelpers from "../../calculations/map";
 
 export default class ModelEditorGeneralMap extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            model: props.model
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            model: nextProps.model
+        });
+    }
+
     componentDidMount( ) {
-        mapHelpers.disableMap( this.refs.map );
+        mapHelpers.invalidateSize( this.refs.map )
     }
 
     generateKeyFunction = ( geometry ) => {
@@ -21,7 +35,7 @@ export default class ModelEditorGeneralMap extends Component {
     };
 
     getStyle = ( type, subtype ) => {
-        const styles = this.props.model.styles;
+        const styles = this.state.model.styles;
 
         if (!(type in styles)) {
             return styles['default'];
@@ -40,8 +54,8 @@ export default class ModelEditorGeneralMap extends Component {
 
 
     render( ) {
-        const area = this.props.model.geometry;
-        const boundingBox = this.props.model.bounding_box;
+        const area = this.state.model.geometry;
+        const boundingBox = this.state.model.bounding_box;
         const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
 
         if (area) {
@@ -55,10 +69,6 @@ export default class ModelEditorGeneralMap extends Component {
             );
         }
 
-        return (
-            <Map className="crossSectionMap" ref="map" zoomControl={false} bounds={bounds} >
-                <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-            </Map>
-        );
+        return null;
     }
 }
