@@ -118,7 +118,6 @@ class ModelEditorBoundary extends Component {
 
     updateBoundary = (data) => {
         const {id} = this.props.params;
-        console.log('send command', id, data);
         this.props.updateBoundary(id, data);
     };
 

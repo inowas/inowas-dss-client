@@ -9,6 +9,7 @@ import styleGlobals from 'styleGlobals';
 import {uniqueId} from 'lodash';
 import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
 import PumpingRate from "../../t03/components/pumpingRate";
+import {addIdFromIndex, addItem} from "../../core/helpers";
 
 const styles = {
     wrapper: {
@@ -20,6 +21,20 @@ const styles = {
     columns: {
         display: 'flex',
         flex: 1
+    },
+
+    columnFlex1: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: '100%'
+    },
+
+    columnFlex2: {
+        flex: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: '100%'
     },
 
     column: {
@@ -88,7 +103,6 @@ const styles = {
 export default class WellProperties extends Component {
 
     static propTypes = {
-        pumpingRates: PropTypes.array.isRequired,
         area: PropTypes.object.isRequired,
         mapStyles: PropTypes.object.isRequired,
         well: PropTypes.object.isRequired,
@@ -107,10 +121,13 @@ export default class WellProperties extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            well: nextProps.well,
+        });
+    }
+
     handleInputChange = ( value, name, key ) => {
-
-        console.log(value, name);
-
 
         this.setState( function( prevState, props ) {
             if (key) {
@@ -136,6 +153,10 @@ export default class WellProperties extends Component {
         } );
     };
 
+    addPumpingRate = () => {
+        // Todo: To be implemented
+    };
+
     saveWell = () => {
         this.props.onSaveWell(
             {
@@ -146,19 +167,22 @@ export default class WellProperties extends Component {
     };
 
     render () {
-        const { mapStyles, area, editBoundaryOnMap, pumpingRates } = this.props;
+        const { mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, typeInputId, layerInputId, well } = this.state;
+        const pumpingRates = addIdFromIndex(well.date_time_values || []);
 
         return (
             <div style={[ styles.wrapper ]}>
                 <div style={[ styles.columns ]}>
-                    <div style={[ styles.column, styles.columnNotLast ]}>
+                    <div style={[ styles.columnFlex1, styles.columnNotLast ]}>
                         <h3 style={[ styles.heading ]}>Properties</h3>
+
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={nameInputId}>Well Name</label>
                             <Input style={[ styles.input ]} name="name" id={nameInputId} onChange={(value, name) => this.handleInputChange(value, name)}
                                    value={well.name} type="text" placeholder="name"/>
                         </div>
+
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
                             <Select style={[ styles.input ]} name="type" id={typeInputId}
@@ -176,20 +200,7 @@ export default class WellProperties extends Component {
                                         }
                                     ]}/>
                         </div>
-                        <div style={[ styles.inputBlock ]}>
-                            <label style={[ styles.label ]}>Coordinates
-                                <button className="link" onClick={editBoundaryOnMap}><Icon name="marker"/>Edit on Map
-                                </button>
-                            </label>
-                            <Input style={[ styles.input ]} onChange={this.handleInputChange}
-                                   value={well.geometry.coordinates[ 1 ]} type="number" placeholder="Latitude"/>
-                            <Input style={[ styles.input ]} onChange={this.handleInputChange}
-                                   value={well.geometry.coordinates[ 0 ]} type="number" placeholder="Longitude"/>
-                            <ModelEditorBoundaryMap styles={mapStyles} area={area} boundary={well}/>
-                        </div>
-                    </div>
-                    <div style={[ styles.column, styles.columnNotLast ]}>
-                        <h3 style={[ styles.heading ]}>Active Layer</h3>
+
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={layerInputId}>Select Layer</label>
                             <Select style={[ styles.input ]} name="affected_layers" id={layerInputId} value={well.affected_layers
@@ -207,8 +218,21 @@ export default class WellProperties extends Component {
                                 }
                             ]}/>
                         </div>
+
+                        <div style={[ styles.inputBlock ]}>
+                            <label style={[ styles.label ]}>Coordinates
+                                <button className="link" onClick={editBoundaryOnMap}><Icon name="marker"/>Edit on Map
+                                </button>
+                            </label>
+                            <Input style={[ styles.input ]} onChange={this.handleInputChange}
+                                   value={well.geometry.coordinates[ 1 ]} type="number" placeholder="Latitude"/>
+                            <Input style={[ styles.input ]} onChange={this.handleInputChange}
+                                   value={well.geometry.coordinates[ 0 ]} type="number" placeholder="Longitude"/>
+                            <ModelEditorBoundaryMap styles={mapStyles} area={area} boundary={well}/>
+                        </div>
                     </div>
-                    <div style={[ styles.column ]}>
+
+                    <div style={[ styles.columnFlex2 ]}>
                         <h3 style={[ styles.heading ]}>Pumping Rates</h3>
                         <div style={styles.pumpingRatesActions}>
                             <Button onClick={this.addPumpingRate} type="link">
@@ -225,5 +249,4 @@ export default class WellProperties extends Component {
 
         );
     }
-
 }

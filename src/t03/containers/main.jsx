@@ -177,8 +177,6 @@ class T03 extends Component {
 
     render( ) {
 
-        console.log('PROPS', this.props);
-
         const { navigation } = this.state;
 
         return (
