@@ -16,6 +16,22 @@ import {geoJSON} from "leaflet/src/layer/GeoJSON";
 
 class BackgroundMap extends Component {
 
+    constructor(props) {
+
+        console.log('Constructor', props);
+        super(props);
+
+        this.state = {
+            model: props.model
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            model: nextProps.model
+        })
+    }
+
     componentDidMount( ) {
         this.invalidateMap();
     }
@@ -29,8 +45,9 @@ class BackgroundMap extends Component {
     }
 
     getBounds() {
-        if ( this.props.model.geometry && !this.props.model.geometry.create) {
-            return geoJSON(this.props.model.geometry).getBounds();
+
+        if ( this.state.model.geometry && !this.state.model.geometry.create) {
+            return geoJSON(this.state.model.geometry).getBounds();
         }
 
         return null;
@@ -52,8 +69,8 @@ class BackgroundMap extends Component {
     };
 
     getCenter() {
-        if ( this.props.model && this.props.model.geometry && this.props.model.geometry.coordinates ) {
-            const coordinates = this.props.model.geometry.coordinates[0];
+        if ( this.state.model && this.state.model.geometry && this.state.model.geometry.coordinates ) {
+            const coordinates = this.state.model.geometry.coordinates[0];
             let xmin = coordinates[0][0];
             let xmax = coordinates[0][0];
             let ymin = coordinates[0][1];
@@ -84,7 +101,7 @@ class BackgroundMap extends Component {
     }
 
     getStyle( type, subtype ) {
-        const styles = this.props.model.styles;
+        const styles = this.state.model.styles;
 
         if (!(type in styles)) {
             return styles['default'];
@@ -300,9 +317,8 @@ class BackgroundMap extends Component {
     }
 
     renderEditControl() {
-
-        const area = this.props.model.geometry;
-        const boundaries = this.props.model.boundaries;
+        const area = this.state.model.geometry;
+        const boundaries = this.state.model.boundaries;
 
         // Get all editable elements
         let editables = [];
@@ -378,9 +394,9 @@ class BackgroundMap extends Component {
     }
 
     render() {
-        const area = this.props.model.geometry;
-        const boundingBox = this.props.model.bounding_box;
-        const boundaries = this.props.model.boundaries;
+        const area = this.state.model.geometry;
+        const boundingBox = this.state.model.bounding_box;
+        const boundaries = this.state.model.boundaries;
         const constantHeads = boundaries.filter( b => { if (b.type === 'chd' && b.geometry.edit !== true) return b });
         const generalHeads = boundaries.filter( b => { if (b.type === 'ghb' && b.geometry.edit !== true) return b });
         const recharges = boundaries.filter( b => { if (b.type === 'rch' && b.geometry.edit !== true) return b });
