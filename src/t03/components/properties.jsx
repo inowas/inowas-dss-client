@@ -78,14 +78,6 @@ const properties = ( { tool, close, selectedProperty } ) => {
                 </LayoutComponents.CloseableWindow>
             );
 
-        case 'general':
-            return (
-                <LayoutComponents.CloseableWindow heading="General Model Properties" style={styles.tool} close={close}
-                                                  closeable={true}>
-                    <ModelEditorGeneral tool={tool}/>
-                </LayoutComponents.CloseableWindow>
-            );
-
         case 'boundaries':
             return (
                 <LayoutComponents.CloseableWindow heading="Boundary Conditions" style={styles.tool} close={close}
@@ -95,7 +87,12 @@ const properties = ( { tool, close, selectedProperty } ) => {
             );
 
         default:
-            return (<span></span>);
+            return (
+                <LayoutComponents.CloseableWindow heading="General Model Properties" style={styles.tool} close={close}
+                                                  closeable={true}>
+                    <ModelEditorGeneral tool={tool}/>
+                </LayoutComponents.CloseableWindow>
+            );
     }
 };
 

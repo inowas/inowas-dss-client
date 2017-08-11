@@ -44,7 +44,7 @@ export const makeMapStateToProps = () => {
 
     return (state, props) => {
         return {
-            boundaries: boundary.getBoundaries( boundaries(state, props) ),
+            boundaries: boundaries(state, props),
             webData: webData(state, props),
         }
     };
@@ -56,7 +56,9 @@ export const makeMapStateToPropsBoundaries = () => {
     const boundaries = makeGetBoundaries();
     const area = makeGetArea();
     const styles = makeGetStyles();
+
     return (state, props) => {
+        console.log('STATE/PROPS', state, props);
         return {
             styles: styles(state, props),
             area: area(state, props),

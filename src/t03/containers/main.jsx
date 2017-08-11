@@ -46,7 +46,11 @@ class T03 extends Component {
 
     pushPropertyToBrowserHistory = ( property, propertyType) => {
 
-        let url = '/tools/' + this.getToolName() + '/' + this.props.params.id + '/' + property;
+        let url = '/tools/' + this.getToolName() + '/' + this.props.params.id;
+
+        if (property) {
+            url += '/' + property;
+        }
 
         if (propertyType) {
             url += '/' + propertyType;
@@ -71,7 +75,7 @@ class T03 extends Component {
         const menuItems = [
             {
                 title: 'General',
-                name: 'general',
+                name: null,
                 icon: <Icon name="settings"/>
             }, {
                 title: 'Soilmodel',
@@ -163,11 +167,11 @@ class T03 extends Component {
                         <Sidebar
                             title="Menu"
                             items={menuItems}
-                            selectedProperty={this.props.params.property || 'general'}
+                            selectedProperty={this.props.params.property}
                             selectedType={this.props.params.type}
                             onClick={this.pushPropertyToBrowserHistory}
                         />
-                        <Properties selectedProperty={this.props.params.property || 'general'} close={this.close}
+                        <Properties selectedProperty={this.props.params.property} close={this.close}
                                     tool={this.getToolName()}/>
                     </div>
                 </div>
@@ -190,25 +194,6 @@ class T03 extends Component {
 
 }
 
-const actions = {
-};
-
-const mapDispatchToProps = dispatch => {
-    // wrap actions in dispatch and apply T03 as first argument
-    const wrappedActions = {};
-    for (const key in actions) {
-        if(actions.hasOwnProperty(key)) {
-            // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
-                const args = Array.prototype.slice.call(arguments);
-                dispatch(actions[key](this, ...args));
-            };
-        }
-    }
-
-    return wrappedActions;
-};
-
-T03 = withRouter( connect( makeMapStateToProps, mapDispatchToProps )( T03 ));
+T03 = withRouter(( T03 ));
 
 export default T03;
