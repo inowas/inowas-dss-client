@@ -54,7 +54,7 @@ export default class ModelEditorBoundaryMap extends Component {
 
 
     renderBoundary( b ) {
-        if (b.type === 'riv') {
+        if (b.type === 'riv' || b.type === 'rch') {
             return (
                 <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle(b.type)} />
             );

@@ -22,6 +22,7 @@ import {
 import {Helper} from "../../core";
 import {editBoundary} from "../../routes";
 import {makeMapStateToPropsBoundaries} from "../selectors/mapState";
+import RechargeProperties from "../../components/modflow/RechargeProperties";
 
 const styles = {
     container: {
@@ -144,6 +145,16 @@ class ModelEditorBoundary extends Component {
                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             area={area} mapStyles={styles}
                                             onSaveWell={this.updateBoundary}/> );
+                    case 'rch':
+                        return (
+                            <RechargeProperties setEditorState={setEditorState}
+                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                                             recharge={boundary}
+                                             area={area}
+                                             mapStyles={styles}
+                                             updateRiver={updateBoundary}
+                            />
+                        );
                     case 'riv':
                         return (
                             <RiverProperties setEditorState={setEditorState}
