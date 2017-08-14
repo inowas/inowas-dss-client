@@ -2,27 +2,27 @@ import React from 'react';
 import { Route, IndexRoute, browserHistory } from 'react-router';
 import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
-import {Container as T03} from './t03/index';
+import { Container as T03 } from './t03/index';
 import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
-import {Modifier} from "./t03/index";
-import {WebData} from "./core";
+import { Modifier } from './t03/index';
+import { WebData } from './core';
 
-export const editBoundary = (tool, id, property, type, boundaryId) => {
+export const editBoundary = ( tool, id, property, type, boundaryId ) => {
     const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type + '/' + boundaryId;
 
-    browserHistory.push(url);
+    browserHistory.push( url );
 };
 
-export const newBoundary = (tool, id, property, type) => {
+export const newBoundary = ( tool, id, property, type ) => {
     const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type;
 
-    browserHistory.push(url);
+    browserHistory.push( url );
 };
 
-const routes = (store) => (
+const routes = ( store ) => (
     <Route path="/">
         <IndexRoute component={LandingPage}/>
         <Route path="impressum" component={Impressum}/>
@@ -30,20 +30,13 @@ const routes = (store) => (
             <IndexRoute component={Dashboard}/>
             <Route path="T02(/:id)" component={tools.T02}/>
             <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={T03.Main} tool={'T03'}
-                onEnter={ (nextState) => {
-                    if (nextState.params.id) {
-                        store.dispatch(Modifier.Query.getModflowModelDetails(
-                            'T03',
-                            nextState.params.id,
-                            nextState.params.property,
-                            nextState.params.type,
-                            nextState.params.pid,
-                        ));
+                onEnter={( nextState ) => {
+                    if ( nextState.params.id ) {
+                        store.dispatch(Modifier.Query.getModflowModelDetails( 'T03', nextState.params.id, nextState.params.property, nextState.params.type, nextState.params.pid, ));
                         return;
-                   }
-
-                   store.dispatch(WebData.Modifier.Action.reset());
-                   store.dispatch(Modifier.Action.destroyModflowModel('T03'));
+                    }
+                    store.dispatch(WebData.Modifier.Action.reset( ));
+                    store.dispatch(Modifier.Action.destroyModflowModel( 'T03' ));
                 }}
             />
 

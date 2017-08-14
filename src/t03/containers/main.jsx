@@ -3,11 +3,11 @@ import {Properties} from '../../t03/components/index';
 import Navbar from '../../containers/Navbar';
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
-import BackgroundMap from "../../containers/tools/BackgroundMap";
-import Sidebar from "../../components/primitive/Sidebar"
-import Icon from "../../components/primitive/Icon";
+import BackgroundMap from '../../containers/tools/BackgroundMap';
+import Sidebar from '../../components/primitive/Sidebar';
+import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import {makeMapStateToProps} from "../selectors/mapState";
+import {makeMapStateToProps} from '../selectors/mapState';
 
 const styles = {
     wrapper: {
@@ -45,7 +45,6 @@ class T03 extends Component {
     getToolName = () => ( this.constructor.name );
 
     pushPropertyToBrowserHistory = ( property, propertyType) => {
-
         let url = '/tools/' + this.getToolName() + '/' + this.props.params.id;
 
         if (property) {
@@ -56,7 +55,7 @@ class T03 extends Component {
             url += '/' + propertyType;
         }
 
-        browserHistory.push(url)
+        browserHistory.push(url);
     };
 
     close = () => {
@@ -64,8 +63,7 @@ class T03 extends Component {
     };
 
     renderProperties() {
-
-        const isVisible = this.props.location.hash !== "#edit";
+        const isVisible = this.props.location.hash !== '#edit';
 
         if ( ! isVisible ) {
             return null;
@@ -180,7 +178,6 @@ class T03 extends Component {
     }
 
     render( ) {
-
         const { navigation } = this.state;
 
         return (

@@ -5,8 +5,8 @@ import {pure} from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import {DataTable} from "../../core/dataTable";
-import {newBoundary} from "../../routes";
+import {DataTable} from '../../core/dataTable';
+import {newBoundary} from '../../routes';
 
 const styles = {
     wrapper: {
@@ -62,15 +62,15 @@ class BoundariesOverview extends React.PureComponent {
         removeBoundary: PropTypes.func.isRequired
     };
 
-    render () {
+    render() {
         const { tool, boundaries, property, type, id, removeBoundary } = this.props;
 
         let addNew = '';
 
         if (type) {
-            addNew = <button style={styles.headerButton.button} className="link" onClick={() => newBoundary(tool, id, property, type)}>
+            addNew = (<button style={styles.headerButton.button} className="link" onClick={() => newBoundary(tool, id, property, type)}>
                 <Icon style={styles.headerButton.icon} name="add"/>Add new
-            </button>;
+            </button>);
         }
 
         return (
