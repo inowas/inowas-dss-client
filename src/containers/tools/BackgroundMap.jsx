@@ -29,7 +29,7 @@ const styles = {
         left: styleGlobals.dimensions.spacing.large,
         top: styleGlobals.dimensions.navBarHeight + styleGlobals.dimensions.spacing.large,
         position: 'fixed',
-        zIndex: 100000
+        zIndex: 100001
     }
 };
 
