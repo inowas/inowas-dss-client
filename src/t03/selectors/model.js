@@ -1,7 +1,6 @@
-
 const getInitialStyles = () => {
     return {
-        area : {
+        area: {
             weight: 2,
             opacity: 1,
             color: 'grey',
@@ -9,49 +8,49 @@ const getInitialStyles = () => {
             fillColor: 'blue',
             fillOpacity: 0.05
         },
-        bounding_box : {
+        bounding_box: {
             weight: 2,
             color: 'green',
             opacity: 1,
             dashArray: '3',
             fillOpacity: 0
         },
-        grid : {
+        grid: {
             weight: 1,
             opacity: 1,
             color: 'blue',
             dashArray: '3',
             fillOpacity: 0
         },
-        chd : {
+        chd: {
             weight: 2,
             color: 'green',
             opacity: 1,
             dashArray: '3',
             fillOpacity: 0
         },
-        ghb : {
+        ghb: {
             weight: 2,
             color: 'green',
             opacity: 1,
             dashArray: '3',
             fillOpacity: 0
         },
-        rch : {
+        rch: {
             weight: 2,
             color: 'green',
             opacity: 1,
             dashArray: '3',
             fillOpacity: 0
         },
-        riv : {
+        riv: {
             weight: 2,
             color: 'green',
             opacity: 1,
             dashArray: '3',
             fillOpacity: 0
         },
-        riv_op:  {
+        riv_op: {
             radius: 5,
             color: 'blue',
             weight: 2,
@@ -134,13 +133,13 @@ const getInitialStyles = () => {
             fillColor: 'blue',
             fillOpacity: 0.7
         }
-    }
+    };
 };
 
 export const getInitialState = () => {
     return {
-        name: "NewModflowModel",
-        description: "NewModflowModelDescription",
+        name: 'NewModflowModel',
+        description: 'NewModflowModelDescription',
         grid_size: {
             n_x: 50,
             n_y: 60

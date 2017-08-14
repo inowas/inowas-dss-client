@@ -1,5 +1,7 @@
-import Properties from "./properties";
+import Properties from './properties';
+import PumpingRate from './pumpingRate';
 
 export {
-    Properties
+    Properties,
+    PumpingRate
 };

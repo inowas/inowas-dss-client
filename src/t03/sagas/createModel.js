@@ -5,7 +5,9 @@ import {Command, Event} from '../../t03/actions/index';
 import {WebData} from '../../core';
 
 export default function* createModelFlow() {
+    // eslint-disable-next-line no-constant-condition
     while ( true ) {
+        // eslint-disable-next-line no-shadow
         const action = yield take( action => action.type === Command.CREATE_MODFLOW_MODEL );
 
         const payload = stateToCreatePayload(action.payload);
@@ -13,7 +15,9 @@ export default function* createModelFlow() {
 
         yield put( sendCommand( action.type, payload ) );
 
+        // eslint-disable-next-line no-constant-condition
         while ( true ) {
+            // eslint-disable-next-line no-shadow
             const response = yield take( action => WebData.Helpers.waitForResponse(action, Command.CREATE_MODFLOW_MODEL ) );
 
             if ( response.webData.type === 'error' ) {

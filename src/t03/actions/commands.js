@@ -6,7 +6,7 @@ export const CREATE_MODFLOW_MODEL = 'createModflowModel';
 export const DELETE_MODFLOW_MODEL = 'deleteModflowModel';
 export const UPDATE_MODFLOW_MODEL = 'updateModflowModel';
 
-export function createModflowModel ( tool, id, payload ) {
+export function createModflowModel(tool, id, payload) {
     return {
         type: CREATE_MODFLOW_MODEL,
         tool,
@@ -15,7 +15,7 @@ export function createModflowModel ( tool, id, payload ) {
     };
 }
 
-export function updateModflowModel ( tool, id, payload ) {
+export function updateModflowModel(tool, id, payload) {
     return {
         type: UPDATE_MODFLOW_MODEL,
         tool,
@@ -24,12 +24,10 @@ export function updateModflowModel ( tool, id, payload ) {
     };
 }
 
-
 export const UPDATE_BOUNDARY = 'updateBoundary';
 export const REMOVE_BOUNDARY = 'removeBoundary';
 
-
-export function updateBoundary ( tool, modelId, data) {
+export function updateBoundary(tool, modelId, data) {
     return {
         type: UPDATE_BOUNDARY,
         tool,
@@ -40,8 +38,7 @@ export function updateBoundary ( tool, modelId, data) {
     };
 }
 
-
-export function removeBoundary ( tool, boundaryId, modelId ) {
+export function removeBoundary(tool, boundaryId, modelId) {
     return {
         type: REMOVE_BOUNDARY,
         tool,

@@ -8,7 +8,7 @@ import Select from '../primitive/Select';
 import styleGlobals from 'styleGlobals';
 import {uniqueId} from 'lodash';
 import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
-import PumpingRate from "../../t03/components/pumpingRate";
+import {PumpingRate} from "../../t03/components";
 import {addIdFromIndex, addItem} from "../../core/helpers";
 
 const styles = {

@@ -1,14 +1,16 @@
-import {put, all, call, take, select} from 'redux-saga/effects';
-import {buildRequest} from "../../actions/messageBox";
-import {Query, Action} from "../../t03/actions/index";
-import {getApiKey} from "../../reducers/user";
-import {WebData} from "../../core";
+import {put, call, take, select} from 'redux-saga/effects';
+import {buildRequest} from '../../actions/messageBox';
+import {Query, Action} from '../../t03/actions/index';
+import {getApiKey} from '../../reducers/user';
+import {WebData} from '../../core';
 
-export default function* loadBoundaryFlow () {
+export default function* loadBoundaryFlow() {
+    // eslint-disable-next-line no-constant-condition
     while ( true ) {
-        let action = yield take( action => action.type === Query.GET_BOUNDARY );
+        // eslint-disable-next-line no-shadow
+        const action = yield take( action => action.type === Query.GET_BOUNDARY );
 
-        yield put( WebData.Modifier.Action.responseAction( action.type, { type: "loading" } ) );
+        yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
 
         yield WebData.Modifier.Action.reset( action.type );
         yield Action.destroyModflowModel();
@@ -24,18 +26,17 @@ export default function* loadBoundaryFlow () {
             );
 
             yield put( Action.setBoundary( action.tool, action.bid, boundary ) );
-
         } catch ( err ) {
-            let msg = "Unknown Error";
+            let msg = 'Unknown Error';
 
-            if ( typeof err === "string" ) {
+            if ( typeof err === 'string' ) {
                 msg = err;
             } else {
-                let error = err.error || { message: undefined };
+                const error = err.error || { message: undefined };
                 msg = error.message || msg;
             }
 
-            yield put( WebData.Modifier.Action.responseAction( action.type, { type: "error", msg: msg } ) );
+            yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'error', msg: msg } ) );
         }
     }
 }

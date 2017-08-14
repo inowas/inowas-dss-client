@@ -5,7 +5,7 @@
 
 export const GET_MODFLOW_MODEL = 'GET_MODFLOW_MODEL';
 
-export function getModflowModel ( tool, id ) {
+export function getModflowModel(tool, id) {
     return {
         type: GET_MODFLOW_MODEL,
         tool,
@@ -15,7 +15,7 @@ export function getModflowModel ( tool, id ) {
 
 export const GET_MODFLOW_MODEL_DETAILS = 'GET_MODFLOW_MODEL_DETAILS';
 
-export function getModflowModelDetails ( tool, id, property, pType, pId ) {
+export function getModflowModelDetails(tool, id, property, pType, pId) {
     return {
         type: GET_MODFLOW_MODEL_DETAILS,
         tool,
@@ -26,10 +26,9 @@ export function getModflowModelDetails ( tool, id, property, pType, pId ) {
     };
 }
 
-
 export const GET_BOUNDARY = 'GET_BOUNDARY';
 
-export function getBoundary ( tool, id, bid ) {
+export function getBoundary(tool, id, bid) {
     return {
         type: GET_BOUNDARY,
         tool,
