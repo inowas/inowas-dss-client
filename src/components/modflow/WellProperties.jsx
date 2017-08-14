@@ -153,10 +153,6 @@ export default class WellProperties extends Component {
         } );
     };
 
-    addPumpingRate = () => {
-        // Todo: To be implemented
-    };
-
     saveWell = () => {
         this.props.onSaveWell(
             {
@@ -235,8 +231,11 @@ export default class WellProperties extends Component {
                     <div style={[ styles.columnFlex2 ]}>
                         <h3 style={[ styles.heading ]}>Pumping Rates</h3>
                         <div style={styles.pumpingRatesActions}>
-                            <Button onClick={this.addPumpingRate} type="link">
+                            <Button onClick={(e) => this.refs.pumpingRate.onAdd(e)} type="link">
                                 <Icon name="add" style={[ styles.iconInButton ]}/>Add
+                            </Button>
+                            <Button onClick={(e) => this.refs.pumpingRate.onDelete(e)} type="link">
+                                <Icon name="trash" style={[ styles.iconInButton ]}/>Delete
                             </Button>
                         </div>
                         <PumpingRate ref="pumpingRate" rows={pumpingRates}/>

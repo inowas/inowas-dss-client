@@ -1,6 +1,5 @@
-import { createSelector } from 'reselect'
-import { webData } from '../../core/webData/selectors'
-import { boundary } from '../selectors';
+import { createSelector } from 'reselect';
+import { Selector } from '../../core/webData';
 
 const getBoundaries = (state, props) => {
     const boundaries = state[props.tool ? props.tool : props.route.tool].model.boundaries || [];
@@ -37,13 +36,12 @@ export const makeGetStyles = () => {
 
 export const makeGetWebData = () => {
     return createSelector(
-        [webData.getRequestStatus],
+        [Selector.getRequestStatus],
         (status) => status
     );
 };
 
 export const makeMapStateToProps = () => {
-
     const boundaries = makeGetBoundaries();
     const webData = makeGetWebData();
 
@@ -51,23 +49,20 @@ export const makeMapStateToProps = () => {
         return {
             boundaries: boundaries(state, props),
             webData: webData(state, props),
-        }
+        };
     };
 };
 
-
 export const makeMapStateToPropsBoundaries = () => {
-
     const boundaries = makeGetBoundaries();
     const area = makeGetArea();
     const styles = makeGetStyles();
 
     return (state, props) => {
-        console.log('STATE/PROPS', state, props);
         return {
             styles: styles(state, props),
             area: area(state, props),
             boundaries: boundaries(state, props)
-        }
+        };
     };
 };

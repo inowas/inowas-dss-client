@@ -4,14 +4,16 @@ import * as Table from 'reactabular-table';
 import * as Sticky from 'reactabular-sticky';
 import * as Virtualized from 'reactabular-virtualized';
 import * as edit from 'react-edit';
-import {DataTable, Paginator, Formatter} from '../../core';
+import {DataTable, Paginator, Formatter, Helper} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
 import orderBy from 'lodash/orderBy';
-import { cloneDeep, findIndex } from 'lodash';
+import { cloneDeep, findIndex, includes } from 'lodash';
 import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
+import uuid from 'uuid';
+import dateFormat from 'dateformat';
 
 
 class PumpingRate extends React.Component {
@@ -121,7 +123,7 @@ class PumpingRate extends React.Component {
                         ],
                     },
                     cell: {
-                        transforms: [editable(edit.input())],
+                        transforms: [editable(edit.input({ props: { type: 'date' } }))],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toDate(value)}</span>
@@ -160,7 +162,32 @@ class PumpingRate extends React.Component {
     }
 
     getRows = () => {
-        return this.state.rows.map((data) => {return {date_time: data.date_time, values: data.values}});
+        return this.state.rows.map((data) => {
+            return {date_time: Helper.dateToAtomFormat(data.date_time), values: [parseFloat(data.values)]}
+        });
+    };
+
+    onAdd = (e) => {
+        e.preventDefault();
+
+        const rows = cloneDeep(this.state.rows);
+
+        rows.push({
+            id: uuid.v4(),
+            date_time: dateFormat(new Date(), 'isoUtcDateTime'),
+            values: [0]
+        });
+
+        this.setState((prevState, props) => {return { ...prevState, rows };});
+    };
+
+    onDelete = (e) => {
+        e.preventDefault();
+
+        const {selectedRows} = this.state;
+        const rows = cloneDeep(this.state.rows).filter(data => !includes(selectedRows, data.id));
+
+        this.setState((prevState, props) => {return { ...prevState, rows, selectedRows: [] };});
     };
 
     render () {

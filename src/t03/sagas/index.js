@@ -2,7 +2,8 @@ import createModelFlow from './createModel';
 import getModflowModelDetailsFlow from './getModflowModelDetails';
 import loadModelFlow from './loadModel';
 import loadBoundaryFlow from './loadBoundary';
-import removeBoundaryFlow from './removeBoundaryFlow';
+import removeBoundaryFlow from './removeBoundary';
+import updateBoundaryFlow from './updateBoundary';
 import updateModelFlow from './updateModel';
 
 export {
@@ -11,5 +12,6 @@ export {
     loadModelFlow,
     loadBoundaryFlow,
     removeBoundaryFlow,
+    updateBoundaryFlow,
     updateModelFlow,
 };

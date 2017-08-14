@@ -22,7 +22,8 @@ export default function* loadBoundaryFlow () {
                 buildRequest( 'modflowmodels/' + action.id + '/boundaries/' + action.bid, 'GET' ),
                 apiKey
             );
-            yield put( Action.setBoundary( action.tool, boundary ) );
+
+            yield put( Action.setBoundary( action.tool, action.bid, boundary ) );
 
         } catch ( err ) {
             let msg = "Unknown Error";

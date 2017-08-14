@@ -28,14 +28,11 @@ export const BOUNDARY_REMOVED = 'boundaryRemoved';
 export const BOUNDARY_UPDATED = 'boundaryUpdateed';
 
 
-export function boundaryUpdated( tool, modelId, data) {
+export function boundaryUpdated( tool, data) {
     return {
         type: BOUNDARY_UPDATED,
         tool,
-        payload: {
-            boundary: data,
-            id: modelId,
-        }
+        payload:  data
     };
 }
 

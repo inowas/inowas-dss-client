@@ -79,6 +79,7 @@ const createModelReducer = tool => {
 
             case Action.SET_BOUNDARY:
             case Action.UPDATE_BOUNDARY:
+            case Event.BOUNDARY_UPDATED:
                 return {
                     ...state,
                     boundaries: handleUpdateBoundary(state.boundaries, action)
