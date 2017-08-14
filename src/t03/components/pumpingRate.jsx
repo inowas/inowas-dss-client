@@ -8,7 +8,7 @@ import {DataTable, Paginator, Formatter, Helper} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
 import orderBy from 'lodash/orderBy';
-import { cloneDeep, findIndex, includes } from 'lodash';
+import { cloneDeep, findIndex, includes, sortBy, last } from 'lodash';
 import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
@@ -163,19 +163,20 @@ class PumpingRate extends React.Component {
 
     getRows = () => {
         return this.state.rows.map((data) => {
-            return {date_time: Helper.dateToAtomFormat(data.date_time), values: [parseFloat(data.values)]}
+            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: [parseFloat(data.values)]}
         });
     };
 
     onAdd = (e) => {
         e.preventDefault();
 
-        const rows = cloneDeep(this.state.rows);
+        const rows = sortBy(cloneDeep(this.state.rows), 'date_time');
+        const lastRow = last(rows);
 
         rows.push({
             id: uuid.v4(),
-            date_time: dateFormat(new Date(), 'isoUtcDateTime'),
-            values: [0]
+            date_time: dateFormat(new Date(lastRow.date_time).addDays(1), 'isoUtcDateTime'),
+            values: [lastRow.values]
         });
 
         this.setState((prevState, props) => {return { ...prevState, rows };});
