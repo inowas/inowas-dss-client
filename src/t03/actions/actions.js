@@ -132,12 +132,20 @@ export const UPDATE_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_
 export const ADD_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE';
 export const EDIT_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_EDIT_BOUNDARY_GEOMETRY';
 export const SET_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY_GEOMETRY';
+export const REMOVE_GEOMETRY_FLAGS = 'MODEL_EDITOR_MODEL_REMOVE_GEOMETRY_FLAGS';
 
 export function editBoundaryGeometry ( tool, boundaryId ) {
     return {
         type: EDIT_BOUNDARY_GEOMETRY,
         tool,
         payload: boundaryId
+    };
+}
+
+export function removeGeometryFlags ( tool ) {
+    return {
+        type: REMOVE_GEOMETRY_FLAGS,
+        tool
     };
 }
 

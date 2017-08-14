@@ -7,6 +7,12 @@ export function handleUpdateAreaGeometry ( state, action ) {
     return state.geometry;
 }
 
+export function handleAreaGeometrySetEditTrue ( geom ) {
+    let geometry = geom;
+    geometry.edit = true;
+    return geometry;
+}
+
 export function handleUpdateBoundingBox ( state, bounds ) {
     return [[bounds.getWest(), bounds.getSouth()], [bounds.getEast(), bounds.getNorth()]];
 }
@@ -42,6 +48,29 @@ export function handleUpdateBoundaryGeometry ( boundaries, action ) {
 
         return b;
     } );
+}
+
+export function handleRemoveAreaGeometryFlags ( state ) {
+
+    console.log('STATE', state);
+
+    let areaGeometry = state.geometry;
+    delete (areaGeometry['edit']);
+    delete (areaGeometry['create']);
+
+    return areaGeometry;
+}
+export function handleRemoveBoundaryGeometryFlags ( state ) {
+
+    let boundaries = state.boundaries;
+    boundaries = boundaries.map( b => {
+        let geometry = b.geometry;
+        delete geometry['edit'];
+        delete geometry['create'];
+        return { ...b, geometry: geometry };
+    } );
+
+    return boundaries;
 }
 
 export function handleUpdateBoundaryControlPoint ( state, action ) {

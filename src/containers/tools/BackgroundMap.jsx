@@ -11,14 +11,9 @@ import {
     Query, Command, Action
 } from '../../t03/actions/index';
 
-import {geoJSON} from "leaflet/src/layer/GeoJSON";
-
-
 class BackgroundMap extends Component {
 
     constructor(props) {
-
-        console.log('Constructor', props);
         super(props);
 
         this.state = {
@@ -377,16 +372,17 @@ class BackgroundMap extends Component {
         );
     }
 
-    showProperties = () => {
+    returnToProperties = () => {
         this.invalidateMap();
         this.zoomToBounds();
+        this.props.removeGeometryFlags();
         browserHistory.push(this.props.location.pathname);
     };
 
     renderToast() {
         const propertiesVisible = this.props.location.hash !== "#edit";
         if (! propertiesVisible) {
-            return (<FloatingToast style={{position: 'absolute', bottom: 50, left: 50, zIndex: 100000}} onClick={this.showProperties}>{'Return to Editor'}</FloatingToast>);
+            return (<FloatingToast style={{position: 'absolute', bottom: 50, left: 50, zIndex: 100000}} onClick={this.returnToProperties}>{'Return to Editor'}</FloatingToast>);
         }
     }
 
@@ -454,7 +450,8 @@ const mapStateToProps = (state, { tool, params }) => {
 
 const actions = {
     setModelArea: Action.setModelArea,
-    setBoundaryGeometry: Action.setBoundaryGeometry
+    setBoundaryGeometry: Action.setBoundaryGeometry,
+    removeGeometryFlags: Action.removeGeometryFlags
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
