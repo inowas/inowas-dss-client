@@ -52,7 +52,7 @@ export default class T08 extends React.Component {
         return (
             <div className="app-width">
                 <Navbar links={navigation} />
-                <Header title={'T08-1D transport model (Ogata-Banks)'}/>
+                <Header title={'T08. 1D transport model (Ogata-Banks)'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
                         <Background image={this.props.tool.background.image}/>

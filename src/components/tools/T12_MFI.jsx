@@ -80,8 +80,8 @@ export default class Sieves extends React.Component {
                         <tbody>
                         <tr>
                             <th  className="th"><strong></strong></th>
-                            <th  className="th"><strong>Time</strong></th>
-                            <th  className="th"><strong>Volume</strong></th>
+                            <th  className="th"><strong>Time [s]</strong></th>
+                            <th  className="th"><strong>Volume [l]</strong></th>
                         </tr>
                         {params}
                         </tbody>

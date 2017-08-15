@@ -23,7 +23,7 @@ export default class T09D extends React.Component {
             path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
             icon: <Icon name="file"/>
         }]
-    }
+    };
 
     handleChange = (e) => {
         if (e.target.name === 'settings') {
