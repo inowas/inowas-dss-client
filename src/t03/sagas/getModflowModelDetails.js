@@ -14,24 +14,35 @@ export default function* getModflowDetailsFlow() {
 
         const state = yield select();
         const apiKey = getApiKey( state.user );
+        const storedModel = (state[action.tool].model);
 
         try {
             yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
 
-            const [ model, boundaries, results ] = yield all( [
-                call( WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id, 'GET' ), apiKey ),
-                call( WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/boundaries', 'GET' ), apiKey ),
-                call( WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/results', 'GET' ), apiKey )
-            ] );
+            if (storedModel.id !== action.id) {
+                const [model, boundaries, results, soilmodel] = yield all([
+                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id, 'GET'), apiKey),
+                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/boundaries', 'GET'), apiKey),
+                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/results', 'GET'), apiKey),
+                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/soilmodel', 'GET'), apiKey)
+                ]);
 
-            yield put( Action.setModflowModel( action.tool, payloadToSetModel( model ) ) );
-            yield put( Action.setBoundaries( action.tool, boundaries ) );
-            yield put( Action.setResults( action.tool, results ) );
+                yield put( Action.setModflowModel( action.tool, payloadToSetModel( model ) ) );
+                yield put( Action.setBoundaries( action.tool, boundaries ) );
+                yield put( Action.setResults( action.tool, results ) );
+                yield put( Action.setSoilmodel( action.tool, soilmodel ) );
+            }
 
             if (action.property === 'boundaries' && action.pId) {
                 const boundary = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/boundaries/' + action.pId, 'GET' ), apiKey);
                 yield put( Action.setBoundary( action.tool, boundary ) );
             }
+
+            if (action.property === 'soilmodel' && action.pId) {
+                const layer = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/soilmodel/' + action.pId, 'GET' ), apiKey);
+                yield put( Action.setLayer( action.tool, layer ) );
+            }
+
             yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'success', data: null } ) );
         } catch ( err ) {
             let msg = 'Unknown Error';

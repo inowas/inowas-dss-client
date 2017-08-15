@@ -9,8 +9,9 @@ export default function* rootSaga() {
         call(T03.getModflowModelDetailsFlow),
         call(T03.loadBoundaryFlow),
         call(T03.loadModelFlow),
-        call(T03.updateModelFlow),
+        call(T03.loadSoilmodelLayerFlow),
         call(T03.removeBoundaryFlow),
+        call(T03.updateModelFlow),
         call(T03.updateBoundaryFlow),
     ];
 }
