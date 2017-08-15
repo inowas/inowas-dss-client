@@ -13,8 +13,6 @@ import * as resolve from 'table-resolver';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
 import uuid from 'uuid';
-import dateFormat from 'dateformat';
-
 
 class PumpingRate extends React.Component {
     constructor ( props ) {
@@ -29,7 +27,7 @@ class PumpingRate extends React.Component {
             // The user requested sorting, adjust the sorting state accordingly.
             // This is a good chance to pass the request through a sorter.
             onSort: selectedColumn => {
-                this.setState( function( prevState, props ) {
+                this.setState( ( prevState, props ) => {
                     return {
                         sortingColumns: sort.byColumn( { // sort.byColumn would work too
                             sortingColumns: this.state.sortingColumns,
@@ -59,7 +57,7 @@ class PumpingRate extends React.Component {
 
                 rows[index].editing = columnIndex;
 
-                this.setState({ rows });
+                this.setState( ( prevState, props ) => { return {rows: rows}} );
             },
             onValue: ({ value, rowData, property }) => {
                 const index = findIndex(this.state.rows, { id: rowData.id });
@@ -68,9 +66,11 @@ class PumpingRate extends React.Component {
                 rows[index][property] = value;
                 rows[index].editing = false;
 
-                this.setState({ rows });
+                this.setState( ( prevState, props ) => { return {rows: rows}} );
             }
         });
+
+        const transformWrapper = (v => v);
 
         this.state = {
             searchColumn: 'all',
@@ -123,7 +123,9 @@ class PumpingRate extends React.Component {
                         ],
                     },
                     cell: {
-                        transforms: [editable(edit.input({ props: { type: 'date' } }))],
+                        transforms: [
+                            editable(edit.input({ props: { type: 'date', defaultValue: Formatter.dateToYmd(Date.now()) }}))
+                        ],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toDate(value)}</span>
@@ -167,16 +169,19 @@ class PumpingRate extends React.Component {
         });
     };
 
-    onAdd = (e) => {
+    onAdd = (e, increment) => {
         e.preventDefault();
 
         const rows = sortBy(cloneDeep(this.state.rows), 'date_time');
+
         const lastRow = last(rows);
+        let date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
+        const value = lastRow && lastRow.values ? lastRow.values : 0;
 
         rows.push({
             id: uuid.v4(),
-            date_time: dateFormat(new Date(lastRow.date_time).addDays(1), 'isoUtcDateTime'),
-            values: [lastRow.values]
+            date_time: Formatter.dateToAtomFormat(increment(date)),
+            values: [value]
         });
 
         this.setState((prevState, props) => {return { ...prevState, rows };});

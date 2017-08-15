@@ -9,7 +9,7 @@ import styleGlobals from 'styleGlobals';
 import {uniqueId} from 'lodash';
 import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
 import {PumpingRate} from "../../t03/components";
-import {addIdFromIndex, addItem} from "../../core/helpers";
+import {Helper} from "../../core";
 
 const styles = {
     wrapper: {
@@ -165,7 +165,7 @@ export default class WellProperties extends Component {
     render () {
         const { mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, typeInputId, layerInputId, well } = this.state;
-        const pumpingRates = addIdFromIndex(well.date_time_values || []);
+        const pumpingRates = Helper.addIdFromIndex(well.date_time_values || []);
 
         return (
             <div style={[ styles.wrapper ]}>
@@ -231,8 +231,14 @@ export default class WellProperties extends Component {
                     <div style={[ styles.columnFlex2 ]}>
                         <h3 style={[ styles.heading ]}>Pumping Rates</h3>
                         <div style={styles.pumpingRatesActions}>
-                            <Button onClick={(e) => this.refs.pumpingRate.onAdd(e)} type="link">
-                                <Icon name="add" style={[ styles.iconInButton ]}/>Add
+                            <Button onClick={(e) => this.refs.pumpingRate.onAdd(e, Helper.addDays(1))} type="link">
+                                <Icon name="add" style={[ styles.iconInButton ]}/>Add D
+                            </Button>
+                            <Button onClick={(e) => this.refs.pumpingRate.onAdd(e, Helper.addMonths(1))} type="link">
+                                <Icon name="add" style={[ styles.iconInButton ]}/>Add M
+                            </Button>
+                            <Button onClick={(e) => this.refs.pumpingRate.onAdd(e, Helper.addYears(1))} type="link">
+                                <Icon name="add" style={[ styles.iconInButton ]}/>Add Y
                             </Button>
                             <Button onClick={(e) => this.refs.pumpingRate.onDelete(e)} type="link">
                                 <Icon name="trash" style={[ styles.iconInButton ]}/>Delete

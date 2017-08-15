@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
-import dateFormat from 'dateformat';
+import {Formatter} from '../../core';
 
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Accordion from '../../components/primitive/Accordion';
@@ -353,7 +353,7 @@ export default class T07A extends Component {
             sliderValue = totalTimes.length - 1;
         }
 
-        return ( <ArraySlider data={totalTimes} value={sliderValue} onChange={this.changeTotalTimeIndex} formatter={function(value) {return dateFormat(value, 'mm/dd/yyyy');}}/> );
+        return ( <ArraySlider data={totalTimes} value={sliderValue} onChange={this.changeTotalTimeIndex} formatter={function(value) {return Formatter.dateToDate(value);}}/> );
     }
 
     render( ) {

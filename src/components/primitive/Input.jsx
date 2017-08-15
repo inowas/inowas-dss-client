@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 import Icon from './Icon';
-import dateFormat from 'dateformat';
+import {Formatter} from '../../core';
 
 const styles = {
     wrapper: {
@@ -128,8 +128,8 @@ export default class Input extends Component {
                     if ( type === 'datetime' ) {
                         return (
                             <div style={[styles.datetimeWrapper]}>
-                                <input style={[ styles.input ]} onChange={this.datetimeHandleDateChange} type="date" value={dateFormat( value, 'yyyy-mm-dd', true )} {...rest}/>
-                                <input style={[ styles.input ]} onChange={this.datetimeHandleTimeChange} type="time" value={dateFormat( value, 'HH:MM', true )} {...rest}/>
+                                <input style={[ styles.input ]} onChange={this.datetimeHandleDateChange} type="date" value={Formatter.dateToYmd( value )} {...rest}/>
+                                <input style={[ styles.input ]} onChange={this.datetimeHandleTimeChange} type="time" value={Formatter.dateToTime( value )} {...rest}/>
                             </div>
                         );
                     }

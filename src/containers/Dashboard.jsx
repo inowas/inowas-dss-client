@@ -15,7 +15,7 @@ import Table from '../components/primitive/table/Table';
 import Td from '../components/primitive/table/Td';
 import Tr from '../components/primitive/table/Tr';
 import { connect } from 'react-redux';
-import dateFormat from 'dateformat';
+import {Formatter} from '../core';
 import styleGlobals from 'styleGlobals';
 import Button from '../components/primitive/Button';
 
@@ -126,7 +126,7 @@ class Dashboard extends React.Component {
                     <Td>{i.name}</Td>
                     <Td>{i.project}</Td>
                     <Td>{i.application}</Td>
-                    <Td>{dateFormat( new Date( i.created_at ), 'mm/dd/yyyy HH:MM' )}</Td>
+                    <Td>{Formatter.dateToDatetime( new Date( i.created_at ))}</Td>
                     <Td>{i.user_name}</Td>
                     <Td style={[ styles.lastTd ]}>
                         {(( ) => {

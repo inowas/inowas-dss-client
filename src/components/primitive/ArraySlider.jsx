@@ -32,4 +32,3 @@ export default class ArraySlider extends Component {
     }
 
 }
-// dateFormat(startDate.addDays(data[min]), 'mm/dd/yyyy')

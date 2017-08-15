@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
-import dateFormat from 'dateformat';
+import {Formatter} from '../../core';
 
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Accordion from '../../components/primitive/Accordion';
@@ -299,7 +299,7 @@ export default class T07C extends Component {
                 type: 'timeseries',
                 tick: {
                     format: function( x ) {
-                        return dateFormat(x, 'mm/dd/yyyy' );
+                        return Formatter.dateToDate(x);
                     }},
                 label: 'Date'
             },
