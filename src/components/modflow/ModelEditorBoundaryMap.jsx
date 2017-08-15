@@ -13,7 +13,7 @@ export default class ModelEditorBoundaryMap extends Component {
     };
 
     componentDidMount( ) {
-        mapHelpers.disableMap( this.refs.map );
+        mapHelpers.disableMap( this.map );
     }
 
     generateKeyFunction = ( geometry ) => {
@@ -72,7 +72,7 @@ export default class ModelEditorBoundaryMap extends Component {
         const boundary = this.props.boundary;
 
         return (
-            <Map className="boundaryMap" ref="map" zoomControl={false} bounds={ this.getBounds(areaGeometry) } >
+            <Map className="boundaryMap" ref={map => {this.map = map;}} zoomControl={false} bounds={ this.getBounds(areaGeometry) } >
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
                 <GeoJSON key={this.generateKeyFunction( areaGeometry )} data={ areaGeometry } style={this.getStyle('area')} />
                 {this.renderBoundary(boundary)}
