@@ -1,7 +1,6 @@
 import md5 from 'js-md5';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as L from 'leaflet';
 import {
     FeatureGroup,
     GeoJSON,

@@ -5,6 +5,7 @@ import Icon from '../primitive/Icon';
 import { uniqueId } from 'lodash';
 import Select from "../primitive/Select";
 import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
+import Button from "../primitive/Button";
 
 const styles = {
     wrapper: {
@@ -116,16 +117,19 @@ export default class RiverProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,
+        editBoundaryOnMap: PropTypes.func.isRequired,
+        boundary: PropTypes.object.isRequired,
         mapStyles: PropTypes.object.isRequired,
-        river: PropTypes.object.isRequired,
-        editBoundaryOnMap: PropTypes.func.isRequired
+        onSave: PropTypes.func.isRequired
     };
 
     constructor( props ) {
         super( props );
 
         this.state = {
-            selectedObservationPoint: 0
+            nameInputId: uniqueId( 'nameInput-' ),
+            selectedObservationPoint: 0,
+            boundary: {}
         };
     }
 
@@ -152,8 +156,8 @@ export default class RiverProperties extends Component {
     };
 
     render( ) {
-        const { river, mapStyles, area, editBoundaryOnMap } = this.props;
-        const { nameInputId, typeInputId, layerInputId } = this.state;
+        const { boundary, mapStyles, area, editBoundaryOnMap } = this.props;
+        const { nameInputId } = this.state;
 
         return (
             <div style={ styles.wrapper }>
@@ -164,7 +168,7 @@ export default class RiverProperties extends Component {
 
                         <div style={ styles.inputBlock }>
                             <label style={ styles.label } htmlFor={ nameInputId }>River Name</label>
-                            <Input style={ styles.input } id={ nameInputId } value={ river.name } type="text" placeholder="name"/>
+                            <Input style={ styles.input } id={ nameInputId } value={ boundary.name } type="text" placeholder="name"/>
                         </div>
 
                         <div style={ styles.rightAlign }>
@@ -175,7 +179,7 @@ export default class RiverProperties extends Component {
                                 <Icon name="trash"/>Delete
                             </button>
                         </div>
-                        <ModelEditorBoundaryMap area={area} boundary={river} styles={mapStyles}/>
+                        <ModelEditorBoundaryMap area={area} boundary={boundary} styles={mapStyles}/>
 
                         <div style={ styles.inputBlock }>
                             <p style={{ ...styles.label, ...styles.rightAlign }} >Observation Stations
@@ -183,13 +187,16 @@ export default class RiverProperties extends Component {
                                     <Icon name="add"/>
                                 </button>
                             </p>
-                            {this.renderObservationPoints(river)}
+                            {this.renderObservationPoints(boundary)}
                         </div>
 
                     </div>
 
                     <div style={{ ...styles.columnFlex2 }}>
                         <h3 style={ styles.heading }>Data</h3>
+                    </div>
+                    <div style={[ styles.saveButtonWrapper ]}>
+                        <Button onClick={this.saveBoundary}>Save</Button>
                     </div>
                 </div>
             </div>

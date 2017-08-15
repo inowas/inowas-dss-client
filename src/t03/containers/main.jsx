@@ -3,7 +3,7 @@ import {Properties} from '../../t03/components/index';
 import Navbar from '../../containers/Navbar';
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
-import BackgroundMap from '../../containers/tools/BackgroundMap';
+import BackgroundMap from './BackgroundMap';
 import Sidebar from '../../components/primitive/Sidebar';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
