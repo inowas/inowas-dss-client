@@ -1,8 +1,8 @@
 import {takeEvery, call} from 'redux-saga/effects';
 import {WebData} from './core';
-import {Saga as T03} from "./t03/index";
+import {Saga as T03} from './t03/index';
 
-export default function* rootSaga () {
+export default function* rootSaga() {
     yield [
         takeEvery( WebData.Modifier.Query.AT_SEND_HTTP_REQUEST, WebData.Saga.sendHttpRequestFlow ),
         call(T03.createModelFlow),

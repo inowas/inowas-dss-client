@@ -218,3 +218,13 @@ export function addPumpingRate(tool, boundaryId, observationPointId, index, date
         }
     };
 }
+
+export const SET_RESULTS = 'MODEL_EDITOR_MODEL_SET_RESULTS';
+
+export function setResults(tool, results) {
+    return {
+        type: SET_RESULTS,
+        tool,
+        payload: results
+    };
+}

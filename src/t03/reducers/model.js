@@ -107,6 +107,9 @@ const createModelReducer = tool => {
             case Action.ADD_BOUNDARY_PUMPING_RATE:
                 return {...state, boundaries: handleAddBoundaryPumpingRate(state.boundaries, action)};
 
+            case Action.SET_RESULTS:
+                return {...state, results: action.payload};
+
             default:
                 return state;
         }

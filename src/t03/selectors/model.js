@@ -150,6 +150,7 @@ export const getInitialState = () => {
         bounding_box: [[-10, 51], [0, 50]],
         geometry: null,
         boundaries: null,
+        results: null
     };
 };
 
