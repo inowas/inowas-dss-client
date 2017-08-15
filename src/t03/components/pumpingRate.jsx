@@ -49,28 +49,36 @@ class PumpingRate extends React.Component {
             strategy: sort.strategies.byProperty
         } );
 
+        const isEditing = ({columnIndex, rowData}) => columnIndex === rowData.editing;
+        const onActivate = ({columnIndex, rowData}) => {
+            const index = findIndex(this.state.rows, {id: rowData.id});
+            const rows = cloneDeep(this.state.rows);
+
+            rows[index].editing = columnIndex;
+
+            this.setState((prevState, props) => { return {rows: rows};});
+        };
+        const onValue = ({value, rowData, property}) => {
+            const index = findIndex(this.state.rows, {id: rowData.id});
+            const rows = cloneDeep(this.state.rows);
+
+            rows[index][property] = value;
+            rows[index].editing = false;
+
+            this.setState((prevState, props) => { return {rows: rows};});
+        };
+
         const editable = edit.edit({
-            isEditing: ({ columnIndex, rowData }) => columnIndex === rowData.editing,
-            onActivate: ({ columnIndex, rowData }) => {
-                const index = findIndex(this.state.rows, { id: rowData.id });
-                const rows = cloneDeep(this.state.rows);
-
-                rows[index].editing = columnIndex;
-
-                this.setState( ( prevState, props ) => { return {rows: rows}} );
-            },
-            onValue: ({ value, rowData, property }) => {
-                const index = findIndex(this.state.rows, { id: rowData.id });
-                const rows = cloneDeep(this.state.rows);
-
-                rows[index][property] = value;
-                rows[index].editing = false;
-
-                this.setState( ( prevState, props ) => { return {rows: rows}} );
-            }
+            isEditing,
+            onActivate,
+            onValue,
         });
-
-        const transformWrapper = (v => v);
+        const editableDate = edit.edit({
+            isEditing,
+            onActivate,
+            onValue,
+            getEditedValue: v => Formatter.dateToYmd(v)
+        });
 
         this.state = {
             searchColumn: 'all',
@@ -124,7 +132,7 @@ class PumpingRate extends React.Component {
                     },
                     cell: {
                         transforms: [
-                            editable(edit.input({ props: { type: 'date', defaultValue: Formatter.dateToYmd(Date.now()) }}))
+                            editableDate(edit.input({ props: { type: 'date' }}))
                         ],
                         formatters: [
                             ( value, { rowData } ) => (
