@@ -1,6 +1,7 @@
 import BoundaryOverview from './boundary';
 import ModelEditorGeneral from './modelEditorGeneral';
 import ModelEditorBoundary from './modelEditorBoundary';
+import ModelEditorResultsHead from './modelEditorResultsHead';
 import Main from './main';
 
 export {
@@ -8,4 +9,5 @@ export {
     BoundaryOverview,
     ModelEditorGeneral,
     ModelEditorBoundary,
+    ModelEditorResultsHead
 };

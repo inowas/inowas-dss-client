@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {Properties} from '../../t03/components/index';
+import { Properties } from '../../t03/components/index';
 import Navbar from '../../containers/Navbar';
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
@@ -7,7 +7,8 @@ import BackgroundMap from './BackgroundMap';
 import Sidebar from '../../components/primitive/Sidebar';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import {makeMapStateToProps} from '../selectors/mapState';
+import { makeMapStateToProps } from '../selectors/mapState';
+import { push } from 'react-router-redux';
 
 const styles = {
     wrapper: {
@@ -38,34 +39,44 @@ const styles = {
 
 class T03 extends Component {
 
+    static propTypes = {
+        push: PropTypes.func.isRequired,
+        params: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired
+    }
+
     state = {
         navigation: [ ]
     };
 
-    getToolName = () => ( this.constructor.name );
+    getToolName = ( ) => ( this.constructor.name );
 
-    pushPropertyToBrowserHistory = ( property, propertyType) => {
-        let url = '/tools/' + this.getToolName() + '/' + this.props.params.id;
+    pushPropertyToBrowserHistory = ( property, propertyType ) => {
+        // eslint-disable-next-line no-shadow
+        const { params, push } = this.props;
+        let url = '/tools/' + this.getToolName( ) + '/' + params.id;
 
-        if (property) {
+        if ( property ) {
             url += '/' + property;
         }
 
-        if (propertyType) {
+        if ( propertyType ) {
             url += '/' + propertyType;
         }
 
-        browserHistory.push(url);
+        push( url );
     };
 
-    close = () => {
-        browserHistory.push(this.props.location.pathname + '#edit');
+    close = ( ) => {
+        // eslint-disable-next-line no-shadow
+        const { push, location } = this.props;
+        push( location.pathname + '#edit' );
     };
 
-    renderProperties() {
+    renderProperties( ) {
         const isVisible = this.props.location.hash !== '#edit';
 
-        if ( ! isVisible ) {
+        if ( !isVisible ) {
             return null;
         }
 
@@ -88,19 +99,19 @@ class T03 extends Component {
                 items: [
                     {
                         title: 'Time Variant Specified Head (CHD)',
-                        name: 'chd',
+                        name: 'chd'
                     }, {
                         title: 'General Head Boundary (GHB)',
-                        name: 'ghb',
+                        name: 'ghb'
                     }, {
                         title: 'Recharge (RCH)',
-                        name: 'rch',
+                        name: 'rch'
                     }, {
                         title: 'River (RIV)',
-                        name: 'riv',
+                        name: 'riv'
                     }, {
                         title: 'Wells (WEL)',
-                        name: 'wel',
+                        name: 'wel'
                     }
                 ]
             }, {
@@ -111,16 +122,16 @@ class T03 extends Component {
                 items: [
                     {
                         title: 'Time Discretization',
-                        name: 'times',
+                        name: 'times'
                     }, {
                         title: 'RUN MODEL',
-                        name: 'calculation',
+                        name: 'calculation'
                     }, {
                         title: 'Show logs',
-                        name: 'logs',
+                        name: 'logs'
                     }, {
                         title: 'Show Namfile',
-                        name: 'nam',
+                        name: 'nam'
                     }
 
                 ]
@@ -131,17 +142,17 @@ class T03 extends Component {
                 disabled: initial,
                 items: [
                     {
-                        title: 'View Model Results',
-                        name: 'heads',
+                        title: 'Heads',
+                        name: 'heads'
                     }, {
-                        title: 'Volumetric Budget',
-                        name: 'budget',
+                        title: 'Drawdown',
+                        name: 'drawdown'
                     }, {
-                        title: 'Model Calibration',
-                        name: 'calibration',
+                        title: 'Budget',
+                        name: 'budget'
                     }, {
-                        title: 'Export Results',
-                        name: 'export',
+                        title: 'Calibration',
+                        name: 'calibration'
                     }
                 ]
             }
@@ -151,15 +162,8 @@ class T03 extends Component {
             <div style={styles.wrapper}>
                 <div style={styles.overlayWrapper}>
                     <div style={styles.overlay}>
-                        <Sidebar
-                            title="Menu"
-                            items={menuItems}
-                            selectedProperty={this.props.params.property}
-                            selectedType={this.props.params.type}
-                            onClick={this.pushPropertyToBrowserHistory}
-                        />
-                        <Properties selectedProperty={this.props.params.property} close={this.close}
-                                    tool={this.getToolName()}/>
+                        <Sidebar title="Menu" items={menuItems} selectedProperty={this.props.params.property} selectedType={this.props.params.type} onClick={this.pushPropertyToBrowserHistory}/>
+                        <Properties selectedProperty={this.props.params.property} close={this.close} tool={this.getToolName( )} type={this.props.params.type}/>
                     </div>
                 </div>
             </div>
@@ -171,15 +175,20 @@ class T03 extends Component {
 
         return (
             <div className="toolT03">
-                <Navbar links={navigation} />
-                <BackgroundMap tool={this.getToolName()} />
-                {this.renderProperties()}
+                <Navbar links={navigation}/>
+                <BackgroundMap tool={this.getToolName( )}/>
+                {this.renderProperties( )}
             </div>
         );
     }
 
 }
 
-T03 = withRouter(( T03 ));
+const mapStateToProps = (state, { params, location }) => {
+    return { params, location };
+};
+
+// eslint-disable-next-line no-class-assign
+T03 = withRouter( connect(mapStateToProps, { push })( T03 ));
 
 export default T03;
