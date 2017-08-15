@@ -160,31 +160,10 @@ export default class RechargeProperties extends Component {
 
                         <h3 style={ styles.heading }>Properties</h3>
                         <div style={ styles.inputBlock }>
-                            <label style={ styles.label } htmlFor={ nameInputId }>Name</label>
+                            <label style={ styles.label } htmlFor={ nameInputId }>Recharge Name</label>
                             <Input style={ styles.input } id={ nameInputId } value={ recharge.name } type="text" placeholder="name"/>
                         </div>
 
-                        <div style={ styles.inputBlock }>
-                            <label style={ styles.label } htmlFor={ layerInputId } >Select Layer</label>
-                            <Select style={ styles.input } id={ layerInputId } value={recharge.affectedLayers
-                                ? recharge.affectedLayers[0]
-                                : undefined} options={[
-                                {
-                                    value: 0,
-                                    label: 'Layer 1'
-                                }, {
-                                    value: 1,
-                                    label: 'Layer 2'
-                                }, {
-                                    value: 2,
-                                    label: 'Layer 3'
-                                }
-                            ]}/>
-                        </div>
-                    </div>
-
-                    <div style={{ ...styles.columnFlex2 }}>
-                        <h3 style={ styles.heading }>Recharge Map</h3>
                         <div style={ styles.rightAlign }>
                             <button style={styles.buttonMarginRight} onClick={editBoundaryOnMap} className="link">
                                 <Icon name="marker"/>Edit on Map
@@ -194,6 +173,10 @@ export default class RechargeProperties extends Component {
                             </button>
                         </div>
                         <ModelEditorBoundaryMap area={area} boundary={recharge} styles={mapStyles}/>
+                    </div>
+
+                    <div style={{ ...styles.columnFlex2 }}>
+                        <h3 style={ styles.heading }>Data</h3>
                     </div>
                 </div>
             </div>
