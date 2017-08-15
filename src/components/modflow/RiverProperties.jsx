@@ -125,11 +125,13 @@ export default class RiverProperties extends Component {
         super( props );
 
         this.state = {
-            nameInputId: uniqueId( 'nameInput-' ),
-            typeInputId: uniqueId( 'typeInput-' ),
-            layerInputId: uniqueId( 'layerInput-' )
+            selectedObservationPoint: 0
         };
     }
+
+    selectObservationPoint = ( key ) => {
+        this.setState({ selectedObservationPoint: key });
+    };
 
     renderObservationPoints = boundary => {
 
@@ -137,11 +139,11 @@ export default class RiverProperties extends Component {
             return null;
         }
 
-        return boundary.observation_points.map( op => {
+        return boundary.observation_points.map( (op, key) => {
         return (
-            <p key={op.id} style={ styles.rightAlign }>
+            <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(key)}>
                 {op.name}
-                <button style={{...styles.buttonMarginLeft}} disabled className="link">
+                <button style={{...styles.buttonMarginLeft}} disabled className="link" >
                     <Icon name="trash"/>
                 </button>
             </p>
@@ -159,41 +161,12 @@ export default class RiverProperties extends Component {
                     <div style={{ ...styles.columnFlex1, ...styles.columnNotLast }}>
 
                         <h3 style={ styles.heading }>Properties</h3>
+
                         <div style={ styles.inputBlock }>
                             <label style={ styles.label } htmlFor={ nameInputId }>River Name</label>
                             <Input style={ styles.input } id={ nameInputId } value={ river.name } type="text" placeholder="name"/>
                         </div>
 
-                        <div style={ styles.inputBlock }>
-                            <label style={ styles.label } htmlFor={ layerInputId } >Select Layer</label>
-                            <Select style={ styles.input } id={ layerInputId } value={river.affectedLayers
-                                ? river.affectedLayers[0]
-                                : undefined} options={[
-                                {
-                                    value: 0,
-                                    label: 'Layer 1'
-                                }, {
-                                    value: 1,
-                                    label: 'Layer 2'
-                                }, {
-                                    value: 2,
-                                    label: 'Layer 3'
-                                }
-                            ]}/>
-                        </div>
-
-                        <div style={ styles.inputBlock }>
-                            <p style={{ ...styles.label, ...styles.rightAlign }} >Observation Stations
-                                <button style={{ ...styles.buttonMarginLeft}} disabled className="link">
-                                    <Icon name="add"/>
-                                </button>
-                            </p>
-                            {this.renderObservationPoints(river)}
-                        </div>
-                    </div>
-
-                    <div style={{ ...styles.columnFlex2 }}>
-                        <h3 style={ styles.heading }>River Course</h3>
                         <div style={ styles.rightAlign }>
                             <button style={styles.buttonMarginRight} onClick={editBoundaryOnMap} className="link">
                                 <Icon name="marker"/>Edit on Map
@@ -203,6 +176,20 @@ export default class RiverProperties extends Component {
                             </button>
                         </div>
                         <ModelEditorBoundaryMap area={area} boundary={river} styles={mapStyles}/>
+
+                        <div style={ styles.inputBlock }>
+                            <p style={{ ...styles.label, ...styles.rightAlign }} >Observation Stations
+                                <button style={{ ...styles.buttonMarginLeft}} disabled className="link">
+                                    <Icon name="add"/>
+                                </button>
+                            </p>
+                            {this.renderObservationPoints(river)}
+                        </div>
+
+                    </div>
+
+                    <div style={{ ...styles.columnFlex2 }}>
+                        <h3 style={ styles.heading }>Data</h3>
                     </div>
                 </div>
             </div>
