@@ -3,7 +3,7 @@ import {
     Action
 } from '../actions/index';
 import {boundary} from '../selectors/index';
-import { maxBy, minBy } from 'lodash';
+import { maxBy, minBy, first } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
@@ -164,10 +164,13 @@ class ModelEditorBoundary extends Component {
                             />
                         );
                     case 'riv':
+                        const selected = first(boundary.observation_points) || [];
+                        console.log(boundary, selected);
                         return (
                             <RiverProperties setEditorState={setEditorState}
                                              editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                              boundary={boundary}
+                                             selectedObservationPoint={selected['id'] || null}
                                              area={area}
                                              mapStyles={styles}
                                              onSave={this.updateBoundary}

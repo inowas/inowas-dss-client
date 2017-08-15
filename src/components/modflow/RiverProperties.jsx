@@ -1,11 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
 import Input from "../primitive/Input";
 import Icon from '../primitive/Icon';
-import { uniqueId } from 'lodash';
-import Select from "../primitive/Select";
+import { uniqueId, find } from 'lodash';
 import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
 import Button from "../primitive/Button";
+import {ObservationPoint} from "../../t03/components";
+import {Helper} from "../../core";
 
 const styles = {
     wrapper: {
@@ -113,29 +115,74 @@ const styles = {
     }
 };
 
-export default class RiverProperties extends Component {
-
-    static propTypes = {
-        area: PropTypes.object.isRequired,
-        boundary: PropTypes.object.isRequired,
-        editBoundaryOnMap: PropTypes.func.isRequired,
-        mapStyles: PropTypes.object.isRequired,
-        onSave: PropTypes.func.isRequired,
-        readOnly: PropTypes.bool
+const mergeData = (state, id, dateTimeValues) => {
+    return {
+        ...state.boundary,
+        observation_points: state.boundary.observation_points.map(b => {
+            if (b.id === id) {
+                return {...b, date_time_values: dateTimeValues};
+            }
+            return b;
+        }),
     };
+};
+
+class RiverProperties extends Component {
 
     constructor( props ) {
         super( props );
 
         this.state = {
             nameInputId: uniqueId( 'nameInput-' ),
-            selectedObservationPoint: 0,
-            boundary: {}
+            selectedObservationPoint: this.props.selectedObservationPoint || null,
+            boundary: this.props.boundary || {}
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState((prevState) => {
+            return {
+                boundary: nextProps.boundary ? nextProps.boundary : prevState.boundary,
+                selectedObservationPoint: prevState.selectedObservationPoint || nextProps.selectedObservationPoint
+            }
+        });
+    }
+
+    getDateTimeValue = () => {
+        const key = this.state.selectedObservationPoint;
+        const observationPoints = this.state.boundary && this.state.boundary.observation_points
+            ? this.state.boundary.observation_points
+            : [];
+
+        const observationPoint = find(observationPoints, {id: key});
+
+        if (!observationPoint) {
+            return [];
+        }
+
+        return Helper.addIdFromIndex(observationPoint['date_time_values']);
+    };
+
     selectObservationPoint = ( key ) => {
-        this.setState({ selectedObservationPoint: key });
+        this.setState((prevState) => {
+            return {
+                selectedObservationPoint: key,
+                boundary: mergeData(this.state, prevState.selectedObservationPoint, this.observationPoint.getRows())
+            };
+        });
+    };
+
+    save = () => {
+        console.log({
+            ...this.state.boundary,
+            ...mergeData(this.state, this.state.selectedObservationPoint, this.observationPoint.getRows())
+        });
+        this.props.onSave(
+            {
+                ...this.state.boundary,
+                ...mergeData(this.state, this.state.selectedObservationPoint, this.observationPoint.getRows())
+            }
+        );
     };
 
     renderObservationPoints = boundary => {
@@ -146,7 +193,7 @@ export default class RiverProperties extends Component {
 
         return boundary.observation_points.map( (op, key) => {
         return (
-            <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(key)}>
+            <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(op.id)}>
                 {op.name}
                 <button style={{...styles.buttonMarginLeft}} disabled className="link" >
                     <Icon name="trash"/>
@@ -157,8 +204,9 @@ export default class RiverProperties extends Component {
     };
 
     render( ) {
-        const { boundary, mapStyles, area, editBoundaryOnMap } = this.props;
-        const { nameInputId } = this.state;
+        const { mapStyles, area, editBoundaryOnMap } = this.props;
+        const { nameInputId, boundary } = this.state;
+        const observationPoints = Helper.addIdFromIndex(this.getDateTimeValue());
 
         return (
             <div style={ styles.wrapper }>
@@ -194,13 +242,43 @@ export default class RiverProperties extends Component {
                     </div>
 
                     <div style={{ ...styles.columnFlex2 }}>
-                        <h3 style={ styles.heading }>Data</h3>
+                        <h3 style={styles.heading}>Data</h3>
+                        <div style={styles.pumpingRatesActions}>
+                            <Button onClick={(e) => this.observationPoint.onAdd(e, Helper.addDays(1))} type="link">
+                                <Icon name="add" style={[ styles.iconInButton ]}/>Add D
+                            </Button>
+                            <Button onClick={(e) => this.observationPoint.onAdd(e, Helper.addMonths(1))} type="link">
+                                <Icon name="add" style={[ styles.iconInButton ]}/>Add M
+                            </Button>
+                            <Button onClick={(e) => this.observationPoint.onAdd(e, Helper.addYears(1))} type="link">
+                                <Icon name="add" style={[ styles.iconInButton ]}/>Add Y
+                            </Button>
+                            <Button onClick={(e) => this.observationPoint.onDelete(e)} type="link">
+                                <Icon name="trash" style={[ styles.iconInButton ]}/>Delete
+                            </Button>
+                        </div>
+                        <ObservationPoint ref={observationPoint => this.observationPoint = observationPoint }
+                                          rows={observationPoints}/>
                     </div>
                     <div style={[ styles.saveButtonWrapper ]}>
-                        <Button onClick={this.saveBoundary}>Save</Button>
+                        <Button onClick={this.save}>Save</Button>
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+
+RiverProperties.propTypes = {
+    perPage: PropTypes.number,
+    area: PropTypes.object.isRequired,
+    boundary: PropTypes.object.isRequired,
+    editBoundaryOnMap: PropTypes.func.isRequired,
+    mapStyles: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool,
+    selectedObservationPoint: PropTypes.string,
+};
+
+export default RiverProperties;

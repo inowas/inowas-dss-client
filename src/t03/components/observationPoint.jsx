@@ -1,0 +1,299 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import * as Table from 'reactabular-table';
+import * as Sticky from 'reactabular-sticky';
+import * as Virtualized from 'reactabular-virtualized';
+import * as edit from 'react-edit';
+import {DataTable, Paginator, Formatter, Helper} from '../../core';
+import Icon from '../../components/primitive/Icon';
+
+import orderBy from 'lodash/orderBy';
+import { cloneDeep, findIndex, includes, sortBy, last, find } from 'lodash';
+import * as resolve from 'table-resolver';
+import * as sort from 'sortabular';
+import {compose} from 'redux';
+import uuid from 'uuid';
+
+class ObservationPoint extends React.Component {
+    constructor ( props ) {
+        super( props );
+
+        const getSortingColumns = () => this.state.sortingColumns || {};
+        const sortable = sort.sort( {
+            // Point the transform to your rows. React state can work for this purpose
+            // but you can use a state manager as well.
+            getSortingColumns,
+
+            // The user requested sorting, adjust the sorting state accordingly.
+            // This is a good chance to pass the request through a sorter.
+            onSort: selectedColumn => {
+                this.setState( ( prevState, props ) => {
+                    return {
+                        sortingColumns: sort.byColumn( { // sort.byColumn would work too
+                            sortingColumns: this.state.sortingColumns,
+                            selectedColumn
+                        } )
+                    }
+                } );
+            },
+
+            // Use property strategy over index one given we have nested data
+            strategy: sort.strategies.byProperty
+        } );
+        const resetable = sort.reset( {
+            event: 'onDoubleClick',
+            getSortingColumns,
+            onReset: ( { sortingColumns } ) => this.setState( function( prevState, props ) {
+                return { sortingColumns }
+            } ),
+            strategy: sort.strategies.byProperty
+        } );
+
+        const isEditing = ({columnIndex, rowData}) => columnIndex === rowData.editing;
+        const onActivate = ({columnIndex, rowData}) => {
+            const index = findIndex(this.state.rows, {id: rowData.id});
+            const rows = cloneDeep(this.state.rows);
+
+            rows[index].editing = columnIndex;
+
+            this.setState((prevState, props) => { return {rows: rows};});
+        };
+        const onValue = ({value, rowData, property}) => {
+            const index = findIndex(this.state.rows, {id: rowData.id});
+            const rows = cloneDeep(this.state.rows);
+
+            rows[index][property] = value;
+            rows[index].editing = false;
+
+            this.setState((prevState, props) => { return {rows: rows};});
+        };
+
+        const editable = edit.edit({
+            isEditing,
+            onActivate,
+            onValue,
+        });
+        const editableDate = edit.edit({
+            isEditing,
+            onActivate,
+            onValue,
+            getEditedValue: v => Formatter.dateToYmd(v)
+        });
+
+        this.state = {
+            searchColumn: 'all',
+            query: {}, // Search query
+            page: 1,
+            perPage: this.props.perPage || 20,
+            selectedRows: [],
+            // Sort the first column in a descending way by default.
+            // "asc" would work too and you can set multiple if you want.
+            sortingColumns: {
+                'date_time': {
+                    direction: 'asc',
+                    position: 0
+                },
+            },
+            columns: [
+                {
+                    props: {
+                        style: {
+                            width: 30
+                        }
+                    },
+                    header: {
+                        label: '',
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
+                            )
+                        ],
+                    },
+                    cell: {
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <Icon name={rowData.selected ? 'checked' : 'unchecked'}/>
+                            )
+                        ]
+                    }
+                },
+                {
+                    property: 'date_time',
+                    header: {
+                        label: 'Start Time',
+                        transforms: [ resetable ],
+                        formatters: [
+                            sort.header( {
+                                sortable,
+                                getSortingColumns,
+                                strategy: sort.strategies.byProperty
+                            } )
+                        ],
+                    },
+                    cell: {
+                        transforms: [
+                            editableDate(edit.input({ props: { type: 'date' }}))
+                        ],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toDate(value)}</span>
+                            )
+                        ]
+                    }
+                },
+                {
+                    property: 'values.0',
+                    header: {
+                        label: 'River Stage (m)',
+                    },
+                    cell: {
+                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toNumber(value)}</span>
+                            )
+                        ]
+                    },
+                },
+                {
+                    property: 'values.1',
+                    header: {
+                        label: 'River Bottom (m)',
+                    },
+                    cell: {
+                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toNumber(value)}</span>
+                            )
+                        ]
+                    },
+                },
+                {
+                    property: 'values.2',
+                    header: {
+                        label: 'Hydraulic Conductance (m2/d)',
+                    },
+                    cell: {
+                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toNumber(value)}</span>
+                            )
+                        ]
+                    },
+                },
+            ],
+            rows: this.props.rows || []
+        };
+    }
+
+    componentDidMount () {
+        // We have refs now. Force update to get those to Header/Body.
+        this.forceUpdate();
+    }
+
+    componentWillReceiveProps ( newProps ) {
+        this.setState( function( prevState, props ) {
+            return { ...prevState, rows: newProps.rows };
+        } );
+    }
+
+    getRows = () => {
+        return this.state.rows.map((data) => {
+            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: data.values.map(v => parseFloat(v))}
+        });
+    };
+
+    onAdd = (e, increment) => {
+        e.preventDefault();
+
+        const rows = sortBy(cloneDeep(this.state.rows), 'date_time');
+
+        const lastRow = last(rows);
+
+        let date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
+        const values = lastRow && lastRow.values ? lastRow.values : [0, 0, 0];
+
+        rows.push({
+            id: uuid.v4(),
+            date_time: Formatter.dateToAtomFormat(increment(date)),
+            values
+        });
+
+        this.setState((prevState, props) => {return { ...prevState, rows };});
+    };
+
+    onDelete = (e) => {
+        e.preventDefault();
+
+        const {selectedRows} = this.state;
+        const rows = cloneDeep(this.state.rows).filter(data => !includes(selectedRows, data.id));
+
+        this.setState((prevState, props) => {return { ...prevState, rows, selectedRows: [] };});
+    };
+
+    render () {
+        const { rows, sortingColumns, columns, perPage, page } = this.state;
+
+        const resolvedColumns = resolve.columnChildren( { columns } );
+        const sortedRows = compose(
+            DataTable.Selector.getRows( page, perPage ),
+            sort.sorter( {
+                columns: resolvedColumns,
+                sortingColumns,
+                sort: orderBy,
+                strategy: sort.strategies.byProperty
+            } ),
+            resolve.resolve( {
+                columns: resolvedColumns,
+                method: resolve.nested
+            } )
+        )( rows );
+
+        return (
+            <div>
+                <Table.Provider
+                    className="table"
+                    columns={resolvedColumns}
+                    components={{
+                        body: {
+                            wrapper: Virtualized.BodyWrapper,
+                            row: Virtualized.BodyRow
+                        }
+                    }}
+                >
+                    <Sticky.Header
+                        ref={tableHeader => {
+                            this.tableHeader = tableHeader && tableHeader.getRef();
+                        }}
+                        tableBody={this.tableBody}
+                    />
+                    <Virtualized.Body
+                        rows={sortedRows}
+                        rowKey="id"
+                        onRow={DataTable.Action.Callback.onRow( this )}
+                        style={{
+                            maxHeight: 1000
+                        }}
+                        ref={tableBody => {
+                            this.tableBody = tableBody && tableBody.getRef();
+                        }}
+                        tableHeader={this.tableHeader}
+                    />
+                </Table.Provider>
+
+                <div className="controls">
+                    <Paginator.Paginator perPage={perPage} length={rows.length}
+                               onSelect={( page ) => Paginator.Action.Callback.onSelectPage( this )( page.selected + 1, perPage, rows.length )}/>
+                </div>
+            </div>
+        );
+    }
+}
+
+ObservationPoint.propTypes = {
+    perPage: PropTypes.number,
+};
+
+export default ObservationPoint;
