@@ -1,9 +1,23 @@
+import BoundaryMap from './boundaryMap';
+import ConstantHeadProperties from './constantHeadProperties';
+import GeneralHeadProperties from './generalHeadProperties';
+import GeneralMap from './generalMap';
+import ObservationPoint from './observationPoint';
 import Properties from './properties';
 import PumpingRate from './pumpingRate';
-import ObservationPoint from './observationPoint';
+import RechargeProperties from './rechargeProperties';
+import RiverProperties from './riverProperties';
+import WellProperties from './wellProperties';
 
 export {
+    BoundaryMap,
+    ConstantHeadProperties,
+    GeneralHeadProperties,
+    GeneralMap,
     ObservationPoint,
     Properties,
-    PumpingRate
+    PumpingRate,
+    RechargeProperties,
+    RiverProperties,
+    WellProperties,
 };

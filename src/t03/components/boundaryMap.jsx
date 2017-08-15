@@ -4,7 +4,7 @@ import { GeoJSON, Map, CircleMarker, TileLayer} from 'react-leaflet';
 import * as mapHelpers from "../../calculations/map";
 
 
-export default class ModelEditorBoundaryMap extends Component {
+export default class BoundaryMap extends Component {
 
     static propTypes = {
         area: PropTypes.object,

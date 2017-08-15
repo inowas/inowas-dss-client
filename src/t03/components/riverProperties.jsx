@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
-import Input from "../primitive/Input";
-import Icon from '../primitive/Icon';
+import Input from "../../components/primitive/Input";
+import Icon from '../../components/primitive/Icon';
 import { uniqueId, find } from 'lodash';
-import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
-import Button from "../primitive/Button";
+import BoundaryMap from "./boundaryMap";
+import Button from "../../components/primitive/Button";
 import {ObservationPoint} from "../../t03/components";
 import {Helper} from "../../core";
 
@@ -228,7 +228,7 @@ class RiverProperties extends Component {
                                 <Icon name="trash"/>Delete
                             </button>
                         </div>
-                        <ModelEditorBoundaryMap area={area} boundary={boundary} styles={mapStyles}/>
+                        <BoundaryMap area={area} boundary={boundary} styles={mapStyles}/>
 
                         <div style={ styles.inputBlock }>
                             <p style={{ ...styles.label, ...styles.rightAlign }} >Observation Stations
