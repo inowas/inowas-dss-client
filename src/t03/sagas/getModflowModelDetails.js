@@ -10,32 +10,31 @@ export default function* getModflowDetailsFlow() {
         // eslint-disable-next-line no-shadow
         const action = yield take( action => action.type === Query.GET_MODFLOW_MODEL_DETAILS );
 
-        yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
-        yield WebData.Modifier.Action.reset( action.type );
+        yield put(WebData.Modifier.Action.reset( action.type ));
 
         const state = yield select();
         const apiKey = getApiKey( state.user );
         const storedModel = (state[action.tool].model);
 
         try {
+            yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
+
             if (storedModel.id !== action.id) {
-                yield Action.destroyModflowModel();
+                yield put(Action.destroyModflowModel(action.tool));
                 const model = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id, 'GET' ), apiKey);
                 yield put( Action.setModflowModel( action.tool, payloadToSetModel( model ) ) );
-                yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'success', data: null } ) );
             }
 
             if (!storedModel.boundaries) {
                 const boundaries = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/boundaries', 'GET'), apiKey);
                 yield put(Action.setBoundaries(action.tool, boundaries));
-                yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
             }
 
             if (action.property === 'boundaries' && action.pId) {
                 const boundary = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/boundaries/' + action.pId, 'GET' ), apiKey);
                 yield put( Action.setBoundary( action.tool, boundary ) );
-                yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
             }
+            yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'success', data: null } ) );
         } catch ( err ) {
             let msg = 'Unknown Error';
 

@@ -12,8 +12,8 @@ export default function* loadBoundaryFlow() {
 
         yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
 
-        yield WebData.Modifier.Action.reset( action.type );
-        yield Action.destroyModflowModel();
+        yield put(WebData.Modifier.Action.reset( action.type ));
+        yield put(Action.destroyModflowModel(action.tool));
 
         const state = yield select();
         const apiKey = getApiKey( state.user );

@@ -11,7 +11,7 @@ export default function* loadModelFlow() {
         const action = yield take( action => action.type === Query.GET_MODFLOW_MODEL );
 
         yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
-        yield WebData.Modifier.Action.reset( action.type );
+        yield put(WebData.Modifier.Action.reset( action.type ));
 
         const state = yield select();
         const apiKey = getApiKey( state.user );
@@ -19,7 +19,7 @@ export default function* loadModelFlow() {
 
         try {
             if (storedModel.id !== action.id) {
-                yield Action.destroyModflowModel();
+                yield put(Action.destroyModflowModel());
                 const model = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id, 'GET' ), apiKey);
                 yield put( Action.setModflowModel( action.tool, payloadToSetModel( model ) ) );
                 yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'success', data: null } ) );
