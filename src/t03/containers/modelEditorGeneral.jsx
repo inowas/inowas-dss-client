@@ -220,16 +220,16 @@ class ModelEditorGeneral extends Component {
         const { webData } = this.props;
         const { id } = this.props.params;
 
-        if (id && isLoading(webData[Query.GET_MODFLOW_MODEL])) {
+        if (id && isLoading(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
             // TODO move to dump component
             return (
                 <p>Loading ...</p>
             );
         }
-        if (id && hasError(webData[Query.GET_MODFLOW_MODEL])) {
+        if (id && hasError(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
             // TODO move to dump component
             return (
-                <p>Error while loading ... ({getErrorMessage(webData[Query.GET_MODFLOW_MODEL])})</p>
+                <p>Error while loading ... ({getErrorMessage(webData[Query.GET_MODFLOW_MODEL_DETAILS])})</p>
             );
         }
 
