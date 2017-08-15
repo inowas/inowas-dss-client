@@ -116,9 +116,10 @@ export default class RechargeProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,
-        mapStyles: PropTypes.object.isRequired,
         boundary: PropTypes.object.isRequired,
-        editBoundaryOnMap: PropTypes.func.isRequired
+        editBoundaryOnMap: PropTypes.func.isRequired,
+        mapStyles: PropTypes.object.isRequired,
+        readOnly: PropTypes.bool
     };
 
     constructor( props ) {

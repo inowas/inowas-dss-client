@@ -14,6 +14,8 @@ import {getErrorMessage, getRequestStatus, hasError, isLoading} from '../../core
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
 import ModelEditorGeneralMap from "../../components/modflow/ModelEditorGeneralMap";
+import * as lodash from "lodash";
+import Input from "../../components/primitive/Input";
 
 const styles = {
     container: {
@@ -189,13 +191,22 @@ class ModelEditorGeneral extends Component {
         );
     }
 
-    renderMapAndSaveButton = () => {
+    renderMapAndSaveButton = (readOnly) => {
         const { webData } = this.props;
         const { id } = this.props.params;
 
         // TODO prevent onClick triggers if disabled and make that css works
         const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
         const btnClass = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'button button-accent is-disabled' : 'button button-accent';
+
+        if (readOnly)
+        {
+            return (
+                <section className="col col-rel-3 stretch">
+                    <ModelEditorGeneralMap model={this.props.modflowModel} />
+                </section>
+            )
+        }
 
         if (id) {
             return (
@@ -219,6 +230,9 @@ class ModelEditorGeneral extends Component {
     render( ) {
         const { webData } = this.props;
         const { id } = this.props.params;
+        const { permissions } = this.props.modflowModel;
+
+        const readOnly = !lodash.includes(permissions, 'w');
 
         if (id && isLoading(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
             // TODO move to dump component
@@ -234,26 +248,34 @@ class ModelEditorGeneral extends Component {
         }
 
         return (
+
             <div>
                 <div className="grid-container">
                     <section className="col col-rel-2 stacked">
                         <form>
                             <div className="form-group">
                                 <label>Name</label>
-                                <input className="input" name="name" value={this.getModflowModelState( "name" )}
+                                <input disabled={readOnly}
+                                       className="input"
+                                       name="name"
+                                       value={this.getModflowModelState( "name" )}
                                        onChange={this.handleInputChangeModflow}
                                        placeholder="Name"/>
                             </div>
                             <div className="form-group">
                                 <label>Description</label>
-                                <textarea className="input" name="description"
+                                <textarea disabled={readOnly}
+                                          className="input"
+                                          name="description"
                                           value={this.getModflowModelState( "description" )}
                                           onChange={this.handleInputChangeModflow}
                                           placeholder="Description"/>
                             </div>
                             <div className="form-group">
                                 <label>Time Unit</label>
-                                <select className="select" name="time_unit"
+                                <select disabled={readOnly}
+                                        className="select"
+                                        name="time_unit"
                                         value={this.getModflowModelState( "time_unit" )}
                                         onChange={this.handleInputChangeModflow}
                                         data-filter="filterInt">
@@ -266,7 +288,8 @@ class ModelEditorGeneral extends Component {
                             </div>
                             <div className="form-group">
                                 <label>Length Unit</label>
-                                <select className="select" name="length_unit"
+                                <select disabled={readOnly}
+                                        className="select" name="length_unit"
                                         data-filter="filterInt"
                                         value={this.getModflowModelState( "length_unit" )}
                                         onChange={this.handleInputChangeModflow}>
@@ -279,14 +302,16 @@ class ModelEditorGeneral extends Component {
                                 <label>Grid Resolution</label>
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
-                                        <input type="number" name="n_x" min="1" step="1" className="input"
+                                        <input disabled={readOnly}
+                                               type="number" name="n_x" min="1" step="1" className="input"
                                                value={this.getModflowModelState( "grid_size" ).n_x}
                                                data-filter="filterInt"
                                                onChange={( e ) => this.handleInputChangeModflow( e, "grid_size" )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
-                                        <input type="number" name="n_y" min="1" step="1" className="input"
+                                        <input disabled={readOnly}
+                                               type="number" name="n_y" min="1" step="1" className="input"
                                                value={this.getModflowModelState( "grid_size" ).n_y}
                                                data-filter="filterInt"
                                                onChange={( e ) => this.handleInputChangeModflow( e, "grid_size" )}
@@ -298,14 +323,16 @@ class ModelEditorGeneral extends Component {
                                 <label>Bounding Box</label>
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
-                                        <input type="number" name="x_min" className="input"
+                                        <input disabled={true}
+                                               type="number" name="x_min" className="input"
                                                data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[0][0]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 0 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
-                                        <input type="number" name="x_max" className="input"
+                                        <input disabled={true}
+                                               type="number" name="x_max" className="input"
                                                data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[1][0]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 0 )}
@@ -314,14 +341,16 @@ class ModelEditorGeneral extends Component {
                                 </div>
                                 <div className="grid-container">
                                     <section className="col col-rel-2 stacked">
-                                        <input type="number" name="y_min" className="input"
+                                        <input disabled={true}
+                                               type="number" name="y_min" className="input"
                                                data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[0][1]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 0, 1 )}
                                                placeholder="X="/>
                                     </section>
                                     <section className="col col-rel-2 stacked">
-                                        <input type="number" name="y_max" className="input"
+                                        <input disabled={true}
+                                               type="number" name="y_max" className="input"
                                                data-filter="filterFloat"
                                                value={this.getModflowModelState( "bounding_box")[1][1]}
                                                onChange={( e ) => this.handleInputChangeModflowBoundingBox( e, 1, 1 )}
@@ -332,7 +361,7 @@ class ModelEditorGeneral extends Component {
                         </form>
                     </section>
 
-                    {this.renderMapAndSaveButton()}
+                    {this.renderMapAndSaveButton(readOnly)}
                 </div>
             </div>
         );

@@ -104,10 +104,11 @@ export default class WellProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,
+        editBoundaryOnMap: PropTypes.func.isRequired,
         mapStyles: PropTypes.object.isRequired,
-        well: PropTypes.object.isRequired,
         onSaveWell: PropTypes.func.isRequired,
-        editBoundaryOnMap: PropTypes.func.isRequired
+        readOnly: PropTypes.bool,
+        well: PropTypes.object.isRequired
     };
 
     constructor ( props ) {

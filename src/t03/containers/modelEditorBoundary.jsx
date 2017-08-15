@@ -25,6 +25,7 @@ import {makeMapStateToPropsBoundaries} from "../selectors/mapState";
 import RechargeProperties from "../../components/modflow/RechargeProperties";
 import ConstantHeadProperties from "../../components/modflow/ConstantHeadProperties";
 import GeneralHeadProperties from "../../components/modflow/GeneralHeadProperties";
+import * as lodash from "lodash";
 
 const styles = {
     container: {
@@ -126,15 +127,17 @@ class ModelEditorBoundary extends Component {
 
     renderProperties( boundaries ) {
         const {
-            updateBoundary,
+            area,
+            permissions,
             removeBoundary, // eslint-disable-line no-shadow
             setEditorState, // eslint-disable-line no-shadow
-            area,
-            styles
+            styles,
+            updateBoundary
         } = this.props;
 
-        const {type, id, pid, property} = this.props.params;
+        const readOnly = !lodash.includes(permissions, 'w');
 
+        const {type, id, pid, property} = this.props.params;
         if ( pid ) {
             const boundary = boundaries.filter(b => ( b.type === type && b.id === pid ))[0];
 
@@ -146,7 +149,9 @@ class ModelEditorBoundary extends Component {
                                             well={boundary}
                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             area={area} mapStyles={styles}
-                                            onSaveWell={this.updateBoundary}/> );
+                                            onSaveWell={this.updateBoundary}
+                                            readOnly={readOnly}
+                            /> );
                     case 'rch':
                         return (
                             <RechargeProperties setEditorState={setEditorState}
@@ -155,6 +160,7 @@ class ModelEditorBoundary extends Component {
                                             area={area}
                                             mapStyles={styles}
                                             onSave={this.updateBoundary}
+                                            readOnly={readOnly}
                             />
                         );
                     case 'riv':
@@ -165,27 +171,30 @@ class ModelEditorBoundary extends Component {
                                              area={area}
                                              mapStyles={styles}
                                              onSave={this.updateBoundary}
+                                             readOnly={readOnly}
                             />
                         );
                     case 'chd':
                         return (
                             <ConstantHeadProperties setEditorState={setEditorState}
-                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
-                                             boundary={boundary}
-                                             area={area}
-                                             mapStyles={styles}
-                                             onSave={this.updateBoundary}
+                                                    editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                                                    boundary={boundary}
+                                                    area={area}
+                                                    mapStyles={styles}
+                                                    onSave={this.updateBoundary}
+                                                    readOnly={readOnly}
                             />
                         );
 
                     case 'ghb':
                         return (
                             <GeneralHeadProperties setEditorState={setEditorState}
-                                                    editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
-                                                    boundary={boundary}
-                                                    area={area}
-                                                    mapStyles={styles}
-                                                    onSave={this.updateBoundary}
+                                                   editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                                                   boundary={boundary}
+                                                   area={area}
+                                                   mapStyles={styles}
+                                                   onSave={this.updateBoundary}
+                                                   readOnly={readOnly}
                             />
                         );
                 }

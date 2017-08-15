@@ -117,10 +117,11 @@ export default class RiverProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,
-        editBoundaryOnMap: PropTypes.func.isRequired,
         boundary: PropTypes.object.isRequired,
+        editBoundaryOnMap: PropTypes.func.isRequired,
         mapStyles: PropTypes.object.isRequired,
-        onSave: PropTypes.func.isRequired
+        onSave: PropTypes.func.isRequired,
+        readOnly: PropTypes.bool
     };
 
     constructor( props ) {

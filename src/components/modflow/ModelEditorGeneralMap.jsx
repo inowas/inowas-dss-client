@@ -21,7 +21,8 @@ export default class ModelEditorGeneralMap extends Component {
     }
 
     componentDidMount( ) {
-        mapHelpers.invalidateSize( this.refs.map )
+        mapHelpers.invalidateSize( this.map );
+        mapHelpers.disableMap( this.map );
     }
 
     generateKeyFunction = ( geometry ) => {
@@ -61,7 +62,7 @@ export default class ModelEditorGeneralMap extends Component {
         if (area) {
 
             return (
-                <Map className="crossSectionMap" ref="map" zoomControl={false} bounds={this.getBounds(area)} >
+                <Map className="crossSectionMap" ref={map => {this.map = map;}} zoomControl={false} bounds={this.getBounds(area)} >
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                     <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />
                     <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
