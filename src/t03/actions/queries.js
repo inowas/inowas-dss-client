@@ -36,3 +36,14 @@ export function getBoundary(tool, id, bid) {
         bid
     };
 }
+
+export const GET_SOILMODEL_LAYER = 'GET_SOILMODEL_LAYER';
+
+export function getLayer(tool, id, lid) {
+    return {
+        type: GET_SOILMODEL_LAYER,
+        tool,
+        id,
+        lid
+    };
+}

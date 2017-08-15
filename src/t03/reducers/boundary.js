@@ -26,6 +26,19 @@ export function handleUpdateBoundary(state, action) {
     });
 }
 
+export function handleUpdateLayer(state, action) {
+
+    state.layers = state.layers.map(l => {
+        if (l.id === action.payload.id) {
+            return {...l, ...action.payload};
+        }
+
+        return l;
+    });
+
+    return state;
+}
+
 export function handleBoundaryGeometrySetEditTrue(boundaries, action) {
     return boundaries.map(b => {
         if (b.id === action.payload) {

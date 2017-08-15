@@ -7,6 +7,7 @@ import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
 import { pure } from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
+import ModelEditorSoilmodel from "../containers/modelEditorSoilmodel";
 
 const styles = {
     window: {
@@ -29,6 +30,13 @@ const properties = ({ tool, close, selectedProperty, type }) => {
             return (
                 <LayoutComponents.CloseableWindow heading="Boundary Conditions" style={styles.window} close={close} closeable>
                     <ModelEditorBoundary tool={tool}/>
+                </LayoutComponents.CloseableWindow>
+            );
+
+        case 'soilmodel':
+            return (
+                <LayoutComponents.CloseableWindow heading="Soilmodel" style={styles.window} close={close} closeable>
+                    <ModelEditorSoilmodel tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 

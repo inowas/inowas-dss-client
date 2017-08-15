@@ -120,9 +120,10 @@ export function deleteAreaControlPoint(tool, index) {
     };
 }
 
+export const ADD_BOUNDARY = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY';
 export const SET_BOUNDARIES = 'MODEL_EDITOR_MODEL_SET_BOUNDARIES';
 export const SET_BOUNDARY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY';
-export const ADD_BOUNDARY = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY';
+export const SET_LAYER = 'MODEL_EDITOR_MODEL_SET_LAYER';
 export const UPDATE_BOUNDARY = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY';
 export const ADD_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT';
 export const UPDATE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT';
@@ -191,6 +192,14 @@ export function setBoundary(tool, boundary) {
     };
 }
 
+export function setLayer(tool, layer) {
+    return {
+        type: SET_LAYER,
+        tool,
+        payload: layer
+    };
+}
+
 export function updatePumpingRate(tool, boundaryId, observationPointId, index, datetime, pumpingRate) {
     return {
         type: UPDATE_BOUNDARY_PUMPING_RATE,
@@ -226,5 +235,15 @@ export function setResults(tool, results) {
         type: SET_RESULTS,
         tool,
         payload: results
+    };
+}
+
+export const SET_SOILMODEL = 'MODEL_EDITOR_MODEL_SET_SOILMODEL';
+
+export function setSoilmodel(tool, soilmodel) {
+    return {
+        type: SET_SOILMODEL,
+        tool,
+        payload: soilmodel
     };
 }
