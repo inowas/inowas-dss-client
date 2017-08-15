@@ -23,6 +23,8 @@ import {Helper} from "../../core";
 import {editBoundary} from "../../routes";
 import {makeMapStateToPropsBoundaries} from "../selectors/mapState";
 import RechargeProperties from "../../components/modflow/RechargeProperties";
+import ConstantHeadProperties from "../../components/modflow/ConstantHeadProperties";
+import GeneralHeadProperties from "../../components/modflow/GeneralHeadProperties";
 
 const styles = {
     container: {
@@ -148,21 +150,42 @@ class ModelEditorBoundary extends Component {
                     case 'rch':
                         return (
                             <RechargeProperties setEditorState={setEditorState}
-                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
-                                             recharge={boundary}
-                                             area={area}
-                                             mapStyles={styles}
-                                             updateRiver={updateBoundary}
+                                            editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                                            boundary={boundary}
+                                            area={area}
+                                            mapStyles={styles}
+                                            onSave={this.updateBoundary}
                             />
                         );
                     case 'riv':
                         return (
                             <RiverProperties setEditorState={setEditorState}
                                              editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
-                                             river={boundary}
+                                             boundary={boundary}
                                              area={area}
                                              mapStyles={styles}
-                                             updateRiver={updateBoundary}
+                                             onSave={this.updateBoundary}
+                            />
+                        );
+                    case 'chd':
+                        return (
+                            <ConstantHeadProperties setEditorState={setEditorState}
+                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                                             boundary={boundary}
+                                             area={area}
+                                             mapStyles={styles}
+                                             onSave={this.updateBoundary}
+                            />
+                        );
+
+                    case 'ghb':
+                        return (
+                            <GeneralHeadProperties setEditorState={setEditorState}
+                                                    editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                                                    boundary={boundary}
+                                                    area={area}
+                                                    mapStyles={styles}
+                                                    onSave={this.updateBoundary}
                             />
                         );
                 }

@@ -43,7 +43,7 @@ export default class ModelEditorBoundaryMap extends Component {
     };
 
     renderObservationPoints( b ) {
-        if (b.observation_points) {
+        if (b.observation_points && b.observation_points.length > 1) {
             return b.observation_points.map( op => {
                 return <CircleMarker key={op.id} center={[op.geometry.coordinates[1], op.geometry.coordinates[0]]} {...this.getStyle(b.type + '_op')} />
             });
@@ -52,19 +52,16 @@ export default class ModelEditorBoundaryMap extends Component {
         return null;
     }
 
-
     renderBoundary( b ) {
-        if (b.type === 'riv' || b.type === 'rch') {
-            return (
-                <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle(b.type)} />
-            );
-        }
-
         if (b.type === 'wel') {
             return (
                 <CircleMarker key={b.id} center={[b.geometry.coordinates[1], b.geometry.coordinates[0]]} {...this.getStyle(b.type, b.metadata['well_type'])} />
             );
         }
+
+        return (
+            <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle(b.type)} />
+        );
     }
 
     render( ) {
