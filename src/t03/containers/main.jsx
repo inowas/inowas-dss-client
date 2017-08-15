@@ -90,8 +90,8 @@ class T03 extends Component {
                         title: 'Time Variant Specified Head (CHD)',
                         name: 'chd',
                     }, {
-                        title: 'Wells (WEL)',
-                        name: 'wel',
+                        title: 'General Head Boundary (GHB)',
+                        name: 'ghb',
                     }, {
                         title: 'Recharge (RCH)',
                         name: 'rch',
@@ -99,20 +99,8 @@ class T03 extends Component {
                         title: 'River (RIV)',
                         name: 'riv',
                     }, {
-                        title: 'General Head Coundary (GHB)',
-                        name: 'ghb',
-                    }, {
-                        title: 'Evapotranspiration (EVT)',
-                        name: 'evt',
-                    }, {
-                        title: 'Drain (DRN)',
-                        name: 'drn',
-                    }, {
-                        title: 'Lake (Lak)',
-                        name: 'lak',
-                    }, {
-                        title: 'Streamflow Routing (SFR2)',
-                        name: 'sfr2',
+                        title: 'Wells (WEL)',
+                        name: 'wel',
                     }
                 ]
             }, {
@@ -125,15 +113,16 @@ class T03 extends Component {
                         title: 'Time Discretization',
                         name: 'times',
                     }, {
-                        title: 'PCG Solver Parameters',
-                        name: 'solver-params',
-                    }, {
-                        title: 'Rewetting Parameters',
-                        name: 'rewetting',
-                    }, {
                         title: 'RUN MODEL',
                         name: 'calculation',
+                    }, {
+                        title: 'Show logs',
+                        name: 'logs',
+                    }, {
+                        title: 'Show Namfile',
+                        name: 'nam',
                     }
+
                 ]
             }, {
                 title: 'Result Analysis',
