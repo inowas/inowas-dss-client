@@ -8,6 +8,7 @@ import BoundaryMap from "./boundaryMap";
 import Button from "../../components/primitive/Button";
 import {ObservationPoint} from "../../t03/components";
 import {Helper} from "../../core";
+import ConfiguredRadium from 'ConfiguredRadium';
 
 const styles = {
     wrapper: {
@@ -127,6 +128,7 @@ const mergeData = (state, id, dateTimeValues) => {
     };
 };
 
+@ConfiguredRadium
 class RiverProperties extends Component {
 
     constructor( props ) {
@@ -191,9 +193,6 @@ class RiverProperties extends Component {
         return (
             <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(op.id)}>
                 {op.name}
-                <button style={{...styles.buttonMarginLeft}} disabled className="link" >
-                    <Icon name="trash"/>
-                </button>
             </p>
         )
         });
@@ -228,9 +227,6 @@ class RiverProperties extends Component {
 
                         <div style={ styles.inputBlock }>
                             <p style={{ ...styles.label, ...styles.rightAlign }} >Observation Stations
-                                <button style={{ ...styles.buttonMarginLeft}} disabled className="link">
-                                    <Icon name="add"/>
-                                </button>
                             </p>
                             {this.renderObservationPoints(boundary)}
                         </div>
@@ -256,9 +252,9 @@ class RiverProperties extends Component {
                         <ObservationPoint ref={observationPoint => this.observationPoint = observationPoint }
                                           rows={observationPoints}/>
                     </div>
-                    <div style={[ styles.saveButtonWrapper ]}>
-                        <Button onClick={this.save}>Save</Button>
-                    </div>
+                </div>
+                <div style={styles.saveButtonWrapper}>
+                    <Button onClick={this.save}>Save</Button>
                 </div>
             </div>
         );
