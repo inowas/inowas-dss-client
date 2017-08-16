@@ -11,6 +11,7 @@ import WellProperties from './wellProperties';
 import ModelEditorResults from './ModelEditorResults';
 import BoundaryOverview from './boundaryOverview';
 import RechargeRate from './rechargeRate';
+import DataTableAction from './dataTableAction';
 
 export {
     BoundaryMap,
@@ -26,4 +27,5 @@ export {
     ModelEditorResults,
     BoundaryOverview,
     RechargeRate,
+    DataTableAction,
 };

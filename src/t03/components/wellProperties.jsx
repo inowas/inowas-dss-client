@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -6,10 +6,10 @@ import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
-import {uniqueId} from 'lodash';
-import BoundaryMap from "./boundaryMap";
-import {PumpingRate} from "../../t03/components";
-import {Helper} from "../../core";
+import { uniqueId } from 'lodash';
+import BoundaryMap from './boundaryMap';
+import { PumpingRate, DataTableAction } from '../../t03/components';
+import { Helper } from '../../core';
 
 const styles = {
     wrapper: {
@@ -66,11 +66,6 @@ const styles = {
         marginTop: 20
     },
 
-    iconInButton: {
-        marginRight: styleGlobals.dimensions.spacing.small,
-        color: styleGlobals.colors.font
-    },
-
     label: {
         fontWeight: 600,
         paddingLeft: 8,
@@ -79,10 +74,6 @@ const styles = {
 
     input: {
         marginTop: 5
-    },
-
-    pumpingRatesActions: {
-        textAlign: 'right'
     },
 
     dateInput: {
@@ -111,13 +102,13 @@ export default class WellProperties extends Component {
         boundary: PropTypes.object.isRequired
     };
 
-    constructor ( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
 
         this.state = {
-            nameInputId: uniqueId( 'nameInput-' ),
-            typeInputId: uniqueId( 'typeInput-' ),
-            layerInputId: uniqueId( 'layerInput-' ),
+            nameInputId: uniqueId('nameInput-'),
+            typeInputId: uniqueId('typeInput-'),
+            layerInputId: uniqueId('layerInput-'),
             boundary: this.props.boundary || {},
         };
     }
@@ -128,18 +119,19 @@ export default class WellProperties extends Component {
         });
     }
 
-    handleInputChange = ( value, name, key ) => {
+    handleInputChange = (value, name, key) => {
 
-        this.setState( function( prevState, props ) {
+        this.setState(function (prevState, props) {
             if (key) {
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
                         [key]: {
-                            ...prevState.boundary[key],
+                            ...prevState.boundary[ key ],
                             [name]: value
-                        }
+                        },
+                        date_time_values: this.pumpingRate.getRows()
                     }
                 };
             }
@@ -148,10 +140,11 @@ export default class WellProperties extends Component {
                 ...prevState,
                 boundary: {
                     ...prevState.boundary,
-                    [name]: value
+                    [name]: value,
+                    date_time_values: this.pumpingRate.getRows()
                 }
             };
-        } );
+        });
     };
 
     save = () => {
@@ -163,7 +156,7 @@ export default class WellProperties extends Component {
         );
     };
 
-    render () {
+    render() {
         const { mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, typeInputId, layerInputId, boundary } = this.state;
         const pumpingRates = Helper.addIdFromIndex(boundary.date_time_values || []);
@@ -176,14 +169,16 @@ export default class WellProperties extends Component {
 
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={nameInputId}>Well Name</label>
-                            <Input style={[ styles.input ]} name="name" id={nameInputId} onChange={(value, name) => this.handleInputChange(value, name)}
+                            <Input style={[ styles.input ]} name="name" id={nameInputId}
+                                   onChange={(value, name) => this.handleInputChange(value, name)}
                                    value={boundary.name} type="text" placeholder="name"/>
                         </div>
 
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
                             <Select style={[ styles.input ]} name="type" id={typeInputId}
-                                    value={boundary.metadata ? boundary.metadata.boundary_type : ''} onChange={(data) => this.handleInputChange(data.value, 'boundary_type', 'metadata')}
+                                    value={boundary.metadata ? boundary.metadata.boundary_type : ''}
+                                    onChange={(data) => this.handleInputChange(data.value, 'boundary_type', 'metadata')}
                                     options={[
                                         {
                                             label: 'Public Well',
@@ -200,20 +195,23 @@ export default class WellProperties extends Component {
 
                         <div style={[ styles.inputBlock ]}>
                             <label style={[ styles.label ]} htmlFor={layerInputId}>Select Layer</label>
-                            <Select style={[ styles.input ]} name="affected_layers" id={layerInputId} value={boundary.affected_layers
-                                ? boundary.affected_layers[ 0 ]
-                                : undefined} onChange={(data) => this.handleInputChange([data.value], 'affected_layers')} options={[
-                                {
-                                    value: 0,
-                                    label: 'Layer 1'
-                                }, {
-                                    value: 1,
-                                    label: 'Layer 2'
-                                }, {
-                                    value: 2,
-                                    label: 'Layer 3'
-                                }
-                            ]}/>
+                            <Select style={[ styles.input ]} name="affected_layers" id={layerInputId}
+                                    value={boundary.affected_layers
+                                        ? boundary.affected_layers[ 0 ]
+                                        : undefined}
+                                    onChange={(data) => this.handleInputChange([ data.value ], 'affected_layers')}
+                                    options={[
+                                        {
+                                            value: 0,
+                                            label: 'Layer 1'
+                                        }, {
+                                            value: 1,
+                                            label: 'Layer 2'
+                                        }, {
+                                            value: 2,
+                                            label: 'Layer 3'
+                                        }
+                                    ]}/>
                         </div>
 
                         <div style={[ styles.inputBlock ]}>
@@ -231,21 +229,8 @@ export default class WellProperties extends Component {
 
                     <div style={[ styles.columnFlex2 ]}>
                         <h3 style={[ styles.heading ]}>Pumping Rates</h3>
-                        <div style={styles.pumpingRatesActions}>
-                            <Button onClick={(e) => this.pumpingRate.onAdd(e, Helper.addDays(1))} type="link">
-                                <Icon name="add" style={[ styles.iconInButton ]}/>Add D
-                            </Button>
-                            <Button onClick={(e) => this.pumpingRate.onAdd(e, Helper.addMonths(1))} type="link">
-                                <Icon name="add" style={[ styles.iconInButton ]}/>Add M
-                            </Button>
-                            <Button onClick={(e) => this.pumpingRate.onAdd(e, Helper.addYears(1))} type="link">
-                                <Icon name="add" style={[ styles.iconInButton ]}/>Add Y
-                            </Button>
-                            <Button onClick={(e) => this.pumpingRate.onDelete(e)} type="link">
-                                <Icon name="trash" style={[ styles.iconInButton ]}/>Delete
-                            </Button>
-                        </div>
-                        <PumpingRate ref={pumpingRate => this.pumpingRate = pumpingRate } rows={pumpingRates}/>
+                        <DataTableAction component={this.pumpingRate}/>
+                        <PumpingRate ref={pumpingRate => this.pumpingRate = pumpingRate} rows={pumpingRates}/>
                     </div>
                 </div>
                 <div style={[ styles.saveButtonWrapper ]}>
