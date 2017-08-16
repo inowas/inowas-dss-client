@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Icon from '../../../components/primitive/Icon';
+import Button from '../../../components/primitive/Button';
 import styleGlobals from 'styleGlobals';
-import {pure} from 'recompose';
+import { pure } from 'recompose';
+import ConfiguredRadium from 'ConfiguredRadium';
 
 const styles = {
     wrapper: {
@@ -36,16 +38,15 @@ const styles = {
     }
 };
 
-const closeableWindow = ( { children, close, closeable, style, heading } ) => {
+const closeableWindow = ({ children, close, closeable, style, heading }) => {
     return (
-        <div style={{ ...styles.wrapper, ...style }}>
+        <div style={[ styles.wrapper, style ]}>
             <h3 style={styles.heading}>{heading}</h3>
 
-            {closeable &&
-                <div style={styles.close}>
-                    <button className="link" onClick={close}><Icon name="close"/></button>
-                </div>
-            }
+            {closeable && <div style={[ styles.close ]}>
+                <Button type="link" iconInside onClick={close}><Icon name="close"/></Button>
+            </div>
+}
 
             <div style={styles.content}>
                 {children}
@@ -54,4 +55,12 @@ const closeableWindow = ( { children, close, closeable, style, heading } ) => {
     );
 };
 
-export default pure( closeableWindow );
+closeableWindow.propTypes = {
+    children: PropTypes.node,
+    close: PropTypes.func,
+    closeable: PropTypes.bool,
+    style: PropTypes.object,
+    heading: PropTypes.string
+};
+
+export default pure(ConfiguredRadium( closeableWindow ));

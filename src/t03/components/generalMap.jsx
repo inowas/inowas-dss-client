@@ -1,9 +1,18 @@
-import md5 from 'js-md5'
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import md5 from 'js-md5';
 import { GeoJSON, Map, Rectangle, TileLayer} from 'react-leaflet';
-import * as mapHelpers from "../../calculations/map";
+import * as mapHelpers from '../../calculations/map';
+import ConfiguredRadium from 'ConfiguredRadium';
 
-export default class ModelEditorGeneralMap extends Component {
+const styles = {
+    map: {
+        minHeight: 300
+    }
+};
+
+@ConfiguredRadium
+class ModelEditorGeneralMap extends Component {
 
     constructor(props) {
         super(props);
@@ -13,32 +22,34 @@ export default class ModelEditorGeneralMap extends Component {
         };
     }
 
+    componentDidMount( ) {
+        mapHelpers.disableMap( this.map );
+        mapHelpers.invalidateSize( this.map );
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({
             model: nextProps.model
         });
     }
 
-    componentDidMount( ) {
-        mapHelpers.invalidateSize( this.map );
-        mapHelpers.disableMap( this.map );
-    }
-
     generateKeyFunction = ( geometry ) => {
-        return md5(JSON.stringify(geometry))
+        return md5(JSON.stringify(geometry));
     };
 
     getBounds = ( geometry ) => {
         if ( geometry ) {
             return L.geoJSON(geometry).getBounds();
         }
+
+        return null;
     };
 
     getStyle = ( type, subtype ) => {
         const styles = this.state.model.styles;
 
         if (!(type in styles)) {
-            return styles['default'];
+            return styles.default;
         }
 
         if (subtype === undefined) {
@@ -46,7 +57,7 @@ export default class ModelEditorGeneralMap extends Component {
         }
 
         if (!(subtype in styles[type])) {
-            return styles['default'];
+            return styles.default;
         }
 
         return styles[type][subtype];
@@ -59,9 +70,8 @@ export default class ModelEditorGeneralMap extends Component {
         const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
 
         if (area) {
-
             return (
-                <Map className="crossSectionMap" ref={map => {this.map = map;}} zoomControl={false} bounds={this.getBounds(area)} >
+                <Map className="crossSectionMap" style={styles.map} ref={map => {this.map = map;}} zoomControl={false} bounds={this.getBounds(area)} >
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                     <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />
                     <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
@@ -69,6 +79,16 @@ export default class ModelEditorGeneralMap extends Component {
             );
         }
 
-        return null;
+        return (
+            <Map className="crossSectionMap" style={styles.map} ref={map => {this.map = map;}} zoomControl={false} center={[20, 140]} zoom={1} >
+                <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+            </Map>
+        );
     }
 }
+
+ModelEditorGeneralMap.propTypes = {
+    model: PropTypes.object
+};
+
+export default ModelEditorGeneralMap;

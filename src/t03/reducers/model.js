@@ -2,8 +2,8 @@ import {
     handleDeleteBoundary, handleAddBoundaryControlPoint,
     handleUpdateBoundaryControlPoint, handleDeleteBoundaryControlPoint, handleUpdateBoundaryPumpingRate,
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
-    handleBoundaryGeometrySetEditTrue, handleUpdateBoundingBox, handleAreaGeometrySetEditTrue,
-    handleRemoveAreaGeometryFlags, handleRemoveBoundaryGeometryFlags
+    handleBoundaryGeometrySetEditTrue, handleUpdateBoundingBox,
+    handleRemoveAreaGeometryFlags, handleRemoveBoundaryGeometryFlags, handleUpdateLayer
 } from './boundary';
 import { Action, Event } from '../actions/index';
 import { calcBoundsOfPolygon } from '../../calculations/geoTools';
@@ -48,18 +48,6 @@ const createModelReducer = tool => {
                     bounding_box: handleUpdateBoundingBox(state.bounding_box, action.payload.latLngBounds)
                 };
 
-            case Action.CREATE_MODEL_AREA:
-                return {
-                    ...state,
-                    geometry: {create: true}
-                };
-
-            case Action.EDIT_MODEL_AREA:
-                return {
-                    ...state,
-                    geometry: handleAreaGeometrySetEditTrue(state.geometry)
-                };
-
             case Action.SET_BOUNDARIES:
                 return {...state, boundaries: action.payload};
 
@@ -86,6 +74,12 @@ const createModelReducer = tool => {
                     boundaries: handleUpdateBoundary(state.boundaries, action)
                 };
 
+            case Action.SET_LAYER:
+                return {
+                    ...state,
+                    soilmodel: handleUpdateLayer(state.soilmodel, action)
+                };
+
             case Action.UPDATE_BOUNDING_BOX:
                 return {...state, bounding_box: calcBoundsOfPolygon(state.geometry.coordinates)};
 
@@ -106,6 +100,12 @@ const createModelReducer = tool => {
 
             case Action.ADD_BOUNDARY_PUMPING_RATE:
                 return {...state, boundaries: handleAddBoundaryPumpingRate(state.boundaries, action)};
+
+            case Action.SET_RESULTS:
+                return {...state, results: action.payload};
+
+            case Action.SET_SOILMODEL:
+                return {...state, soilmodel: action.payload};
 
             default:
                 return state;

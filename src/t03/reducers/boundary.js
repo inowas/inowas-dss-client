@@ -6,12 +6,6 @@ export function handleUpdateAreaGeometry(state, action) {
     return state.geometry;
 }
 
-export function handleAreaGeometrySetEditTrue(geom) {
-    const geometry = geom;
-    geometry.edit = true;
-    return geometry;
-}
-
 export function handleUpdateBoundingBox(state, bounds) {
     return [[bounds.getWest(), bounds.getSouth()], [bounds.getEast(), bounds.getNorth()]];
 }
@@ -24,6 +18,17 @@ export function handleUpdateBoundary(state, action) {
 
         return b;
     });
+}
+
+export function handleUpdateLayer(soilmodel, action) {
+
+    return {...soilmodel, layers: soilmodel.layers.map(l => {
+        if (l.id === action.payload.id) {
+            return {...l, ...action.payload};
+        }
+
+        return l;
+    })};
 }
 
 export function handleBoundaryGeometrySetEditTrue(boundaries, action) {
@@ -50,14 +55,19 @@ export function handleUpdateBoundaryGeometry(boundaries, action) {
 }
 
 export function handleRemoveAreaGeometryFlags(state) {
+    if (! state.geometry) {
+        return null;
+    }
     const areaGeometry = state.geometry;
     delete (areaGeometry.edit);
     delete (areaGeometry.create);
-
     return areaGeometry;
 }
 
 export function handleRemoveBoundaryGeometryFlags(state) {
+    if (! state.boundaries) {
+        return null;
+    }
     let boundaries = state.boundaries;
     boundaries = boundaries.map(b => {
         const geometry = b.geometry;
