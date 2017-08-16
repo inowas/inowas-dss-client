@@ -10,6 +10,7 @@ import RiverProperties from './riverProperties';
 import WellProperties from './wellProperties';
 import ModelEditorResults from './ModelEditorResults';
 import BoundaryOverview from './boundaryOverview';
+import RechargeRate from './rechargeRate';
 
 export {
     BoundaryMap,
@@ -23,5 +24,6 @@ export {
     RiverProperties,
     WellProperties,
     ModelEditorResults,
-    BoundaryOverview
+    BoundaryOverview,
+    RechargeRate,
 };
