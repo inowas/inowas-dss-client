@@ -276,7 +276,21 @@ class BackgroundMap extends Component {
     }
 
     renderCreateControl( ) {
+        if ( this.getCreatable( ) === 'area' ) {
+            const drawOptions = {
+                polyline: false,
+                polygon: true,
+                rectangle: false,
+                circle: false,
+                marker: false
+            };
 
+            return (
+                <FeatureGroup>
+                    <EditControl position="bottomright" onCreated={this.onCreated} onDeleted={this.onDeleted} onEditStart={this.onEditStart} onEditStop={this.onEditStop} onEdited={this.onEditPath} draw={drawOptions}/>
+                </FeatureGroup>
+            );
+        }
 
         return null;
     }
@@ -338,7 +352,7 @@ class BackgroundMap extends Component {
         this.zoomToBounds( );
         this.props.removeGeometryFlags( );
         browserHistory.push( this.props.location.pathname );
-    }
+    };
 
     centerToBounds = ( ) => {
         if ( this.map ) {
@@ -385,8 +399,8 @@ class BackgroundMap extends Component {
                 <div className="map-wrapper">
                     <Map id="background-map" style={styles.map} center={[30, 0]} zoom={3} zoomControl={false} >
                         <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+                        {this.renderCreateControl( )}
                     </Map>
-                    {this.renderCreateControl( )}
                     {this.renderToast( )}
                 </div>
             );

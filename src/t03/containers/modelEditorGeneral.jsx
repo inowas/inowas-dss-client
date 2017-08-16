@@ -62,7 +62,7 @@ class ModelEditorGeneral extends Component {
     componentWillMount() {
         const modflowModel = this.props.modflowModel ? this.props.modflowModel : model.getInitialState();
 
-        this.setState(function(prevState, props) {
+        this.setState(function(prevState) {
             return { ...prevState, modflowModel };
         } );
     }
@@ -93,7 +93,7 @@ class ModelEditorGeneral extends Component {
             value = filters[filter](value);
         }
 
-        this.setState(function(prevState, props) {
+        this.setState(function(prevState) {
             if (key) {
                 return {
                     ...prevState,
@@ -126,7 +126,7 @@ class ModelEditorGeneral extends Component {
         if (filter) {
             value = filters[filter](value);
         }
-        this.setState(function(prevState, props) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 modflowModel: {
@@ -161,7 +161,7 @@ class ModelEditorGeneral extends Component {
     };
 
     createAreaOnMap = ( ) => {
-        this.setState(function(prevState, props) {
+        this.setState(function(prevState) {
             browserHistory.push(this.props.location.pathname + '#edit');
             return {
                 ...prevState,

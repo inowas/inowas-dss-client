@@ -21,7 +21,6 @@ export function handleUpdateBoundary(state, action) {
 }
 
 export function handleUpdateLayer(soilmodel, action) {
-
     return {...soilmodel, layers: soilmodel.layers.map(l => {
         if (l.id === action.payload.id) {
             return {...l, ...action.payload};
@@ -55,7 +54,7 @@ export function handleUpdateBoundaryGeometry(boundaries, action) {
 }
 
 export function handleRemoveAreaGeometryFlags(state) {
-    if (! state.geometry) {
+    if (!state.geometry || !state.geometry.coordinates) {
         return null;
     }
     const areaGeometry = state.geometry;

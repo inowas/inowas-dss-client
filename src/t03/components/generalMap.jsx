@@ -46,21 +46,21 @@ class ModelEditorGeneralMap extends Component {
     };
 
     getStyle = ( type, subtype ) => {
-        const styles = this.state.model.styles;
+        const modelStyles = this.state.model.styles;
 
-        if (!(type in styles)) {
-            return styles.default;
+        if (!(type in modelStyles)) {
+            return modelStyles.default;
         }
 
         if (subtype === undefined) {
-            return styles[type];
+            return modelStyles[type];
         }
 
-        if (!(subtype in styles[type])) {
-            return styles.default;
+        if (!(subtype in modelStyles[type])) {
+            return modelStyles.default;
         }
 
-        return styles[type][subtype];
+        return modelStyles[type][subtype];
     };
 
 
@@ -68,6 +68,8 @@ class ModelEditorGeneralMap extends Component {
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
         const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
+
+        console.log(area);
 
         if (area) {
             return (
