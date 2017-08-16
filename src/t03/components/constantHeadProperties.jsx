@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import styleGlobals from 'styleGlobals';
-import Input from "../primitive/Input";
-import Icon from '../primitive/Icon';
+import Input from "../../components/primitive/Input";
+import Icon from '../../components/primitive/Icon';
 import { uniqueId } from 'lodash';
-import Select from "../primitive/Select";
-import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
-import Button from "../primitive/Button";
+import ModelEditorBoundaryMap from "../../t03/components/boundaryMap";
+import Button from "../../components/primitive/Button";
 
 const styles = {
     wrapper: {
@@ -113,7 +112,7 @@ const styles = {
     }
 };
 
-export default class RiverProperties extends Component {
+export default class ConstantHeadProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,
@@ -138,6 +137,12 @@ export default class RiverProperties extends Component {
         this.setState({ selectedObservationPoint: key });
     };
 
+    saveBoundary = () => {
+        this.props.onSave(
+
+        );
+    };
+
     renderObservationPoints = boundary => {
 
         if (! boundary.observation_points) {
@@ -145,14 +150,14 @@ export default class RiverProperties extends Component {
         }
 
         return boundary.observation_points.map( (op, key) => {
-        return (
-            <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(key)}>
-                {op.name}
-                <button style={{...styles.buttonMarginLeft}} disabled className="link" >
-                    <Icon name="trash"/>
-                </button>
-            </p>
-        )
+            return (
+                <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(key)}>
+                    {op.name}
+                    <button style={{...styles.buttonMarginLeft}} disabled className="link" >
+                        <Icon name="trash"/>
+                    </button>
+                </p>
+            )
         });
     };
 
@@ -168,7 +173,7 @@ export default class RiverProperties extends Component {
                         <h3 style={ styles.heading }>Properties</h3>
 
                         <div style={ styles.inputBlock }>
-                            <label style={ styles.label } htmlFor={ nameInputId }>River Name</label>
+                            <label style={ styles.label } htmlFor={ nameInputId }>Name</label>
                             <Input style={ styles.input } id={ nameInputId } value={ boundary.name } type="text" placeholder="name"/>
                         </div>
 
@@ -196,9 +201,9 @@ export default class RiverProperties extends Component {
                     <div style={{ ...styles.columnFlex2 }}>
                         <h3 style={ styles.heading }>Data</h3>
                     </div>
-                    <div style={[ styles.saveButtonWrapper ]}>
-                        <Button onClick={this.saveBoundary}>Save</Button>
-                    </div>
+                </div>
+                <div style={[ styles.saveButtonWrapper ]}>
+                    <Button onClick={this.saveBoundary}>Save</Button>
                 </div>
             </div>
         );

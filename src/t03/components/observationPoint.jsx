@@ -5,9 +5,10 @@ import {DataTable, Formatter} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
 import { cloneDeep, sortBy, last } from 'lodash';
+import * as sort from 'sortabular';
 import uuid from 'uuid';
 
-class PumpingRate extends DataTable.Component.DataTable {
+class ObservationPoint extends DataTable.Component.DataTable {
     constructor ( props ) {
         super( props );
 
@@ -69,9 +70,37 @@ class PumpingRate extends DataTable.Component.DataTable {
                     }
                 },
                 {
-                    property: 'values',
+                    property: 'values.0',
                     header: {
-                        label: 'Rate',
+                        label: 'River Stage (m)',
+                    },
+                    cell: {
+                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toNumber(value)}</span>
+                            )
+                        ]
+                    },
+                },
+                {
+                    property: 'values.1',
+                    header: {
+                        label: 'River Bottom (m)',
+                    },
+                    cell: {
+                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <span>{Formatter.toNumber(value)}</span>
+                            )
+                        ]
+                    },
+                },
+                {
+                    property: 'values.2',
+                    header: {
+                        label: 'Hydraulic Conductance (m2/d)',
                     },
                     cell: {
                         transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
@@ -89,7 +118,7 @@ class PumpingRate extends DataTable.Component.DataTable {
 
     getRows = () => {
         return this.state.rows.map((data) => {
-            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: [parseFloat(data.values)]}
+            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: data.values.map(v => parseFloat(v))}
         });
     };
 
@@ -99,21 +128,22 @@ class PumpingRate extends DataTable.Component.DataTable {
         const rows = sortBy(cloneDeep(this.state.rows), 'date_time');
 
         const lastRow = last(rows);
+
         let date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
-        const value = lastRow && lastRow.values ? lastRow.values : 0;
+        const values = lastRow && lastRow.values ? lastRow.values : [0, 0, 0];
 
         rows.push({
             id: uuid.v4(),
             date_time: Formatter.dateToAtomFormat(increment(date)),
-            values: [value]
+            values
         });
 
         this.setState((prevState, props) => {return { ...prevState, rows };});
     };
 }
 
-PumpingRate.propTypes = {
+ObservationPoint.propTypes = {
     perPage: PropTypes.number,
 };
 
-export default PumpingRate;
+export default ObservationPoint;

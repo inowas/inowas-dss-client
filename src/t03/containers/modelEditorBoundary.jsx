@@ -3,12 +3,17 @@ import {
     Action
 } from '../actions/index';
 import {boundary} from '../selectors/index';
-import { maxBy, minBy } from 'lodash';
+import { maxBy, minBy, first } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
-import RiverProperties from '../../components/modflow/RiverProperties';
-import WellProperties from '../../components/modflow/WellProperties';
+import {
+    RiverProperties,
+    WellProperties,
+    RechargeProperties,
+    ConstantHeadProperties,
+    GeneralHeadProperties
+} from '../components';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
@@ -22,9 +27,6 @@ import {
 import {Helper} from "../../core";
 import {editBoundary} from "../../routes";
 import {makeMapStateToPropsBoundaries} from "../selectors/mapState";
-import RechargeProperties from "../../components/modflow/RechargeProperties";
-import ConstantHeadProperties from "../../components/modflow/ConstantHeadProperties";
-import GeneralHeadProperties from "../../components/modflow/GeneralHeadProperties";
 import * as lodash from "lodash";
 
 const styles = {
@@ -164,10 +166,12 @@ class ModelEditorBoundary extends Component {
                             />
                         );
                     case 'riv':
+                        const selected = first(boundary.observation_points) || [];
                         return (
                             <RiverProperties setEditorState={setEditorState}
                                              editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                              boundary={boundary}
+                                             selectedObservationPoint={selected['id'] || null}
                                              area={area}
                                              mapStyles={styles}
                                              onSave={this.updateBoundary}

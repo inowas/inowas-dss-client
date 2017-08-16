@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { GeoJSON, Map, Rectangle, TileLayer} from 'react-leaflet';
 import * as mapHelpers from "../../calculations/map";
 
-
 export default class ModelEditorGeneralMap extends Component {
 
     constructor(props) {

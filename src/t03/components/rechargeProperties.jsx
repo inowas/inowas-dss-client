@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import styleGlobals from 'styleGlobals';
-import Input from "../primitive/Input";
-import Icon from '../primitive/Icon';
+import Input from "../../components/primitive/Input";
+import Icon from '../../components/primitive/Icon';
 import { uniqueId } from 'lodash';
-import Select from "../primitive/Select";
-import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
-import Button from "../primitive/Button";
+import BoundaryMap from "./boundaryMap";
+import Button from "../../components/primitive/Button";
 
 const styles = {
     wrapper: {
@@ -113,14 +112,13 @@ const styles = {
     }
 };
 
-export default class GeneralHeadProperties extends Component {
+export default class RechargeProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,
         boundary: PropTypes.object.isRequired,
         editBoundaryOnMap: PropTypes.func.isRequired,
         mapStyles: PropTypes.object.isRequired,
-        onSave: PropTypes.func.isRequired,
         readOnly: PropTypes.bool
     };
 
@@ -129,38 +127,9 @@ export default class GeneralHeadProperties extends Component {
 
         this.state = {
             nameInputId: uniqueId( 'nameInput-' ),
-            selectedObservationPoint: 0,
             boundary: {}
         };
     }
-
-    selectObservationPoint = ( key ) => {
-        this.setState({ selectedObservationPoint: key });
-    };
-
-    saveBoundary = () => {
-        this.props.onSave(
-
-        );
-    };
-
-    renderObservationPoints = boundary => {
-
-        if (! boundary.observation_points) {
-            return null;
-        }
-
-        return boundary.observation_points.map( (op, key) => {
-            return (
-                <p key={op.id} style={ styles.rightAlign } onClick={() => this.selectObservationPoint(key)}>
-                    {op.name}
-                    <button style={{...styles.buttonMarginLeft}} disabled className="link" >
-                        <Icon name="trash"/>
-                    </button>
-                </p>
-            )
-        });
-    };
 
     render( ) {
         const { boundary, mapStyles, area, editBoundaryOnMap } = this.props;
@@ -172,9 +141,8 @@ export default class GeneralHeadProperties extends Component {
                     <div style={{ ...styles.columnFlex1, ...styles.columnNotLast }}>
 
                         <h3 style={ styles.heading }>Properties</h3>
-
                         <div style={ styles.inputBlock }>
-                            <label style={ styles.label } htmlFor={ nameInputId }>Name</label>
+                            <label style={ styles.label } htmlFor={ nameInputId }>Recharge Name</label>
                             <Input style={ styles.input } id={ nameInputId } value={ boundary.name } type="text" placeholder="name"/>
                         </div>
 
@@ -186,17 +154,7 @@ export default class GeneralHeadProperties extends Component {
                                 <Icon name="trash"/>Delete
                             </button>
                         </div>
-                        <ModelEditorBoundaryMap area={area} boundary={boundary} styles={mapStyles}/>
-
-                        <div style={ styles.inputBlock }>
-                            <p style={{ ...styles.label, ...styles.rightAlign }} >Observation Stations
-                                <button style={{ ...styles.buttonMarginLeft}} disabled className="link">
-                                    <Icon name="add"/>
-                                </button>
-                            </p>
-                            {this.renderObservationPoints(boundary)}
-                        </div>
-
+                        <BoundaryMap area={area} boundary={boundary} styles={mapStyles}/>
                     </div>
 
                     <div style={{ ...styles.columnFlex2 }}>

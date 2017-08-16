@@ -1,6 +1,8 @@
 import * as select from 'selectabular';
 import classnames from 'classnames';
-import { includes, cloneDeep, remove } from 'lodash';
+import { includes, cloneDeep, remove, findIndex } from 'lodash';
+import * as sort from 'sortabular';
+import { getSortingColumns } from '../selectors';
 
 export const onSelectAll = (component = {}) => () => {
     component.setState(function (prevState, props) {
@@ -39,4 +41,34 @@ export const onSelectRow = (component = {}) => (selectedRowIndex) => {
             selectedRows
         };
     });
+};
+
+export const resetable = (component = {}) => () => sort.reset({
+    event: 'onDoubleClick',
+    getSortingColumns: getSortingColumns(component),
+    onReset: ({sortingColumns}) => component.setState(function (prevState, props) {
+        return {sortingColumns};
+    }),
+    strategy: sort.strategies.byProperty
+});
+
+export const isEditing = ({columnIndex, rowData}) => columnIndex === rowData.editing;
+
+export const onActivate = (component = {}) => ({columnIndex, rowData}) => {
+    const index = findIndex(component.state.rows, {id: rowData.id});
+    const rows = cloneDeep(component.state.rows);
+
+    rows[index].editing = columnIndex;
+
+    component.setState((prevState, props) => { return {rows: rows};});
+};
+
+export const onValue = (component = {}) => ({value, rowData, property}) => {
+    const index = findIndex(component.state.rows, {id: rowData.id});
+    const rows = cloneDeep(component.state.rows);
+
+    rows[index][property] = value;
+    rows[index].editing = false;
+
+    component.setState((prevState, props) => { return {rows: rows};});
 };

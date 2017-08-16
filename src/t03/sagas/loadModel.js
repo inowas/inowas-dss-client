@@ -11,7 +11,6 @@ export default function* loadModelFlow() {
         const action = yield take( action => action.type === Query.GET_MODFLOW_MODEL );
 
         yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
-        yield put(WebData.Modifier.Action.reset( action.type ));
 
         const state = yield select();
         const apiKey = getApiKey( state.user );

@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import styleGlobals from 'styleGlobals';
-import Input from "../primitive/Input";
-import Icon from '../primitive/Icon';
+import Input from "../../components/primitive/Input";
+import Icon from '../../components/primitive/Icon';
 import { uniqueId } from 'lodash';
-import Select from "../primitive/Select";
-import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
-import Button from "../primitive/Button";
+import ModelEditorBoundaryMap from "../../t03/components/boundaryMap";
+import Button from "../../components/primitive/Button";
 
 const styles = {
     wrapper: {
@@ -113,7 +112,7 @@ const styles = {
     }
 };
 
-export default class ConstantHeadProperties extends Component {
+export default class GeneralHeadProperties extends Component {
 
     static propTypes = {
         area: PropTypes.object.isRequired,

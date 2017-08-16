@@ -1,13 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 
-import Button from '../primitive/Button';
+import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
-import Icon from '../primitive/Icon';
-import Input from '../primitive/Input';
-import Select from '../primitive/Select';
+import Icon from '../../components/primitive/Icon';
+import Input from '../../components/primitive/Input';
+import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
 import {uniqueId} from 'lodash';
-import ModelEditorBoundaryMap from "./ModelEditorBoundaryMap";
+import BoundaryMap from "./boundaryMap";
 import {PumpingRate} from "../../t03/components";
 import {Helper} from "../../core";
 
@@ -225,7 +225,7 @@ export default class WellProperties extends Component {
                                    value={well.geometry.coordinates[ 1 ]} type="number" placeholder="Latitude"/>
                             <Input style={[ styles.input ]} onChange={this.handleInputChange}
                                    value={well.geometry.coordinates[ 0 ]} type="number" placeholder="Longitude"/>
-                            <ModelEditorBoundaryMap styles={mapStyles} area={area} boundary={well}/>
+                            <BoundaryMap styles={mapStyles} area={area} boundary={well}/>
                         </div>
                     </div>
 

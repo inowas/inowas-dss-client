@@ -13,9 +13,8 @@ import { browserHistory, withRouter } from 'react-router';
 import {getErrorMessage, getRequestStatus, hasError, isLoading} from '../../core/webData/selectors/webData';
 import uuid from "uuid";
 import * as filters from "../../calculations/filter";
-import ModelEditorGeneralMap from "../../components/modflow/ModelEditorGeneralMap";
+import {GeneralMap} from "../components";
 import * as lodash from "lodash";
-import Input from "../../components/primitive/Input";
 
 const styles = {
     container: {
@@ -203,7 +202,7 @@ class ModelEditorGeneral extends Component {
         {
             return (
                 <section className="col col-rel-3 stretch">
-                    <ModelEditorGeneralMap model={this.props.modflowModel} />
+                    <GeneralMap model={this.props.modflowModel} />
                 </section>
             )
         }
@@ -212,7 +211,7 @@ class ModelEditorGeneral extends Component {
             return (
                 <section className="col col-rel-3 stretch">
                     <button onClick={this.editAreaOnMap} className="link"><Icon name="marker"/>Edit on Map</button>
-                    <ModelEditorGeneralMap model={this.props.modflowModel} />
+                    <GeneralMap model={this.props.modflowModel} />
                     <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save</button>
                 </section>
             )
@@ -221,7 +220,7 @@ class ModelEditorGeneral extends Component {
         return (
             <section className="col col-rel-3 stretch">
                 <button onClick={this.createAreaOnMap} className="link"><Icon name="marker"/>Draw on Map</button>
-                <ModelEditorGeneralMap model={this.props.modflowModel} />
+                <GeneralMap model={this.props.modflowModel} />
                 <button disabled={disabled} onClick={() => {this.save()}} className={btnClass}>Create Model</button>
             </section>
         )
