@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DataTable, Formatter} from '../../core';
+import {DataTable} from '../../core';
 import Icon from '../../components/primitive/Icon';
+import {editBoundary} from "../../routes";
 
 class BoundaryOverview extends DataTable.Component.DataTable {
     constructor ( props ) {
@@ -60,6 +61,13 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                         formatters: [
                             DataTable.Helper.header(this)
                         ],
+                    },
+                    cell: {
+                        formatters: [
+                            ( value, { rowData } ) => (
+                                <a href="#" title="edit" onClick={() => this.onBoundaryClick(rowData.id, rowData.type)}>{value}</a>
+                            )
+                        ]
                     }
                 },
                 {
@@ -112,6 +120,11 @@ class BoundaryOverview extends DataTable.Component.DataTable {
             rows: this.props.rows || []
         };
     }
+
+    onBoundaryClick = (boundaryId, type) => {
+        const {tool,id, property } = this.props;
+        editBoundary(tool, id, property, type, boundaryId);
+    };
 }
 
 BoundaryOverview.propTypes = {

@@ -79,7 +79,7 @@ class BoundariesOverview extends React.PureComponent {
                     {addNew}
                 </div>
                 <div style={[ styles.body ]}>
-                    <BoundaryOverview rows={boundaries} id={id} removeBoundary={removeBoundary} tool={'T03'} />
+                    <BoundaryOverview rows={boundaries} id={id} removeBoundary={removeBoundary} tool={tool} property={property} />
                 </div>
             </div>
         );
