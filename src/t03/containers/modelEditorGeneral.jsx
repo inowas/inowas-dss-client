@@ -14,7 +14,7 @@ import { browserHistory, withRouter } from 'react-router';
 import {getErrorMessage, getRequestStatus, hasError, isLoading} from '../../core/webData/selectors/webData';
 import uuid from 'uuid';
 import * as filters from '../../calculations/filter';
-import ModelEditorGeneralMap from '../../components/modflow/ModelEditorGeneralMap';
+import {GeneralMap} from '../components';
 import * as lodash from 'lodash';
 
 const styles = {
@@ -205,8 +205,6 @@ class ModelEditorGeneral extends Component {
     };
 
     renderSaveButton = ( id, readOnly, webData ) => {
-
-
         // TODO prevent onClick triggers if disabled and make that css works
         const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
         const btnClass = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'button button-accent is-disabled' : 'button button-accent';
@@ -361,7 +359,7 @@ class ModelEditorGeneral extends Component {
                     </section>
                     <section className="col col-rel-3 stretch">
                         {this.renderEditOnMapIcon(id, readOnly)}
-                        <ModelEditorGeneralMap model={modflowModel} />
+                        <GeneralMap model={modflowModel} />
                         {this.renderSaveButton(id, readOnly, webData)}
                     </section>
                 </div>
