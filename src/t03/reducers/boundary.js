@@ -21,7 +21,6 @@ export function handleUpdateBoundary(state, action) {
 }
 
 export function handleUpdateLayer(soilmodel, action) {
-
     return {...soilmodel, layers: soilmodel.layers.map(l => {
         if (l.id === action.payload.id) {
             return {...l, ...action.payload};
