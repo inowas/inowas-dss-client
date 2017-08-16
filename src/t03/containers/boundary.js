@@ -5,7 +5,7 @@ import {pure} from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import {DataTable} from '../../core/dataTable';
+import {DataTable} from '../../core';
 import {newBoundary} from '../../routes';
 
 const styles = {
@@ -79,7 +79,7 @@ class BoundariesOverview extends React.PureComponent {
                     {addNew}
                 </div>
                 <div style={[ styles.body ]}>
-                    <DataTable rows={boundaries} id={id} removeBoundary={removeBoundary} tool={'T03'} />
+                    <DataTable.Component.DataTable rows={boundaries} id={id} removeBoundary={removeBoundary} tool={'T03'} />
                 </div>
             </div>
         );

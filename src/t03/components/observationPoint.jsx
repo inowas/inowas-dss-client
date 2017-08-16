@@ -1,84 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as Table from 'reactabular-table';
-import * as Sticky from 'reactabular-sticky';
-import * as Virtualized from 'reactabular-virtualized';
 import * as edit from 'react-edit';
-import {DataTable, Paginator, Formatter, Helper} from '../../core';
+import {DataTable, Formatter} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
-import orderBy from 'lodash/orderBy';
-import { cloneDeep, findIndex, includes, sortBy, last, find } from 'lodash';
-import * as resolve from 'table-resolver';
+import { cloneDeep, sortBy, last } from 'lodash';
 import * as sort from 'sortabular';
-import {compose} from 'redux';
 import uuid from 'uuid';
 
-class ObservationPoint extends React.Component {
+class ObservationPoint extends DataTable.Component.DataTable {
     constructor ( props ) {
         super( props );
-
-        const getSortingColumns = () => this.state.sortingColumns || {};
-        const sortable = sort.sort( {
-            // Point the transform to your rows. React state can work for this purpose
-            // but you can use a state manager as well.
-            getSortingColumns,
-
-            // The user requested sorting, adjust the sorting state accordingly.
-            // This is a good chance to pass the request through a sorter.
-            onSort: selectedColumn => {
-                this.setState( ( prevState, props ) => {
-                    return {
-                        sortingColumns: sort.byColumn( { // sort.byColumn would work too
-                            sortingColumns: this.state.sortingColumns,
-                            selectedColumn
-                        } )
-                    }
-                } );
-            },
-
-            // Use property strategy over index one given we have nested data
-            strategy: sort.strategies.byProperty
-        } );
-        const resetable = sort.reset( {
-            event: 'onDoubleClick',
-            getSortingColumns,
-            onReset: ( { sortingColumns } ) => this.setState( function( prevState, props ) {
-                return { sortingColumns }
-            } ),
-            strategy: sort.strategies.byProperty
-        } );
-
-        const isEditing = ({columnIndex, rowData}) => columnIndex === rowData.editing;
-        const onActivate = ({columnIndex, rowData}) => {
-            const index = findIndex(this.state.rows, {id: rowData.id});
-            const rows = cloneDeep(this.state.rows);
-
-            rows[index].editing = columnIndex;
-
-            this.setState((prevState, props) => { return {rows: rows};});
-        };
-        const onValue = ({value, rowData, property}) => {
-            const index = findIndex(this.state.rows, {id: rowData.id});
-            const rows = cloneDeep(this.state.rows);
-
-            rows[index][property] = value;
-            rows[index].editing = false;
-
-            this.setState((prevState, props) => { return {rows: rows};});
-        };
-
-        const editable = edit.edit({
-            isEditing,
-            onActivate,
-            onValue,
-        });
-        const editableDate = edit.edit({
-            isEditing,
-            onActivate,
-            onValue,
-            getEditedValue: v => Formatter.dateToYmd(v)
-        });
 
         this.state = {
             searchColumn: 'all',
@@ -121,18 +53,14 @@ class ObservationPoint extends React.Component {
                     property: 'date_time',
                     header: {
                         label: 'Start Time',
-                        transforms: [ resetable ],
+                        transforms: [ DataTable.Helper.resetable(this) ],
                         formatters: [
-                            sort.header( {
-                                sortable,
-                                getSortingColumns,
-                                strategy: sort.strategies.byProperty
-                            } )
+                            DataTable.Helper.header(this)
                         ],
                     },
                     cell: {
                         transforms: [
-                            editableDate(edit.input({ props: { type: 'date' }}))
+                            DataTable.Helper.editableDate(this)(edit.input({ props: { type: 'date' }}))
                         ],
                         formatters: [
                             ( value, { rowData } ) => (
@@ -147,7 +75,7 @@ class ObservationPoint extends React.Component {
                         label: 'River Stage (m)',
                     },
                     cell: {
-                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toNumber(value)}</span>
@@ -161,7 +89,7 @@ class ObservationPoint extends React.Component {
                         label: 'River Bottom (m)',
                     },
                     cell: {
-                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toNumber(value)}</span>
@@ -175,7 +103,7 @@ class ObservationPoint extends React.Component {
                         label: 'Hydraulic Conductance (m2/d)',
                     },
                     cell: {
-                        transforms: [editable(edit.input({ props: { type: 'number' } }))],
+                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toNumber(value)}</span>
@@ -186,17 +114,6 @@ class ObservationPoint extends React.Component {
             ],
             rows: this.props.rows || []
         };
-    }
-
-    componentDidMount () {
-        // We have refs now. Force update to get those to Header/Body.
-        this.forceUpdate();
-    }
-
-    componentWillReceiveProps ( newProps ) {
-        this.setState( function( prevState, props ) {
-            return { ...prevState, rows: newProps.rows };
-        } );
     }
 
     getRows = () => {
@@ -223,73 +140,6 @@ class ObservationPoint extends React.Component {
 
         this.setState((prevState, props) => {return { ...prevState, rows };});
     };
-
-    onDelete = (e) => {
-        e.preventDefault();
-
-        const {selectedRows} = this.state;
-        const rows = cloneDeep(this.state.rows).filter(data => !includes(selectedRows, data.id));
-
-        this.setState((prevState, props) => {return { ...prevState, rows, selectedRows: [] };});
-    };
-
-    render () {
-        const { rows, sortingColumns, columns, perPage, page } = this.state;
-
-        const resolvedColumns = resolve.columnChildren( { columns } );
-        const sortedRows = compose(
-            DataTable.Selector.getRows( page, perPage ),
-            sort.sorter( {
-                columns: resolvedColumns,
-                sortingColumns,
-                sort: orderBy,
-                strategy: sort.strategies.byProperty
-            } ),
-            resolve.resolve( {
-                columns: resolvedColumns,
-                method: resolve.nested
-            } )
-        )( rows );
-
-        return (
-            <div>
-                <Table.Provider
-                    className="table"
-                    columns={resolvedColumns}
-                    components={{
-                        body: {
-                            wrapper: Virtualized.BodyWrapper,
-                            row: Virtualized.BodyRow
-                        }
-                    }}
-                >
-                    <Sticky.Header
-                        ref={tableHeader => {
-                            this.tableHeader = tableHeader && tableHeader.getRef();
-                        }}
-                        tableBody={this.tableBody}
-                    />
-                    <Virtualized.Body
-                        rows={sortedRows}
-                        rowKey="id"
-                        onRow={DataTable.Action.Callback.onRow( this )}
-                        style={{
-                            maxHeight: 1000
-                        }}
-                        ref={tableBody => {
-                            this.tableBody = tableBody && tableBody.getRef();
-                        }}
-                        tableHeader={this.tableHeader}
-                    />
-                </Table.Provider>
-
-                <div className="controls">
-                    <Paginator.Paginator perPage={perPage} length={rows.length}
-                               onSelect={( page ) => Paginator.Action.Callback.onSelectPage( this )( page.selected + 1, perPage, rows.length )}/>
-                </div>
-            </div>
-        );
-    }
 }
 
 ObservationPoint.propTypes = {

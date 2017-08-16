@@ -167,7 +167,6 @@ class ModelEditorBoundary extends Component {
                         );
                     case 'riv':
                         const selected = first(boundary.observation_points) || [];
-                        console.log(boundary, selected);
                         return (
                             <RiverProperties setEditorState={setEditorState}
                                              editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}

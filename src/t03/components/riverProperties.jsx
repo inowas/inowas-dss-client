@@ -173,10 +173,6 @@ class RiverProperties extends Component {
     };
 
     save = () => {
-        console.log({
-            ...this.state.boundary,
-            ...mergeData(this.state, this.state.selectedObservationPoint, this.observationPoint.getRows())
-        });
         this.props.onSave(
             {
                 ...this.state.boundary,
