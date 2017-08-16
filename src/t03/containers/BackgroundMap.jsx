@@ -24,6 +24,14 @@ import styleGlobals from 'styleGlobals';
 import { Action } from '../../t03/actions/index';
 
 const styles = {
+    map: {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: styleGlobals.dimensions.navBarHeight,
+        bottom: 0,
+        overflow: 'hidden'
+    },
     centerToBoundsButton: {
         left: styleGlobals.dimensions.spacing.large,
         top: styleGlobals.dimensions.navBarHeight + styleGlobals.dimensions.spacing.large,
@@ -41,7 +49,7 @@ class BackgroundMap extends Component {
         setBoundaryGeometry: PropTypes.func,
         removeGeometryFlags: PropTypes.func,
         location: PropTypes.object
-    }
+    };
 
     constructor( props ) {
         super( props );
@@ -73,7 +81,7 @@ class BackgroundMap extends Component {
         }
 
         return null;
-    }
+    };
 
     zoomToBounds = ( ) => {
         if (this.map && this.getBounds( )) {
@@ -81,7 +89,7 @@ class BackgroundMap extends Component {
             console.log('ZOOMTOBOUNDS', this.map, bounds, bounds.isValid( ));
             // this.map.leafletElement.fitBounds(this.getBounds());
         }
-    }
+    };
 
     invalidateMap = ( ) => {
         if ( this.map ) {
@@ -90,57 +98,22 @@ class BackgroundMap extends Component {
         }
     }
 
-    getCenter( ) {
-        if ( this.state.model && this.state.model.geometry && this.state.model.geometry.coordinates ) {
-            const coordinates = this.state.model.geometry.coordinates[0];
-            let xmin = coordinates[0][0 ];
-            let xmax = coordinates[0][0 ];
-            let ymin = coordinates[0][1 ];
-            let ymax = coordinates[0][1 ];
-
-            coordinates.forEach(c => {
-                if ( c[0] < xmin ) {
-                    xmin = parseFloat(c[0]);
-                }
-
-                if ( c[0] > xmax ) {
-                    xmax = parseFloat(c[0]);
-                }
-
-                if ( c[1] < ymin ) {
-                    ymin = parseFloat(c[1]);
-                }
-
-                if ( c[1] > ymax ) {
-                    ymax = parseFloat(c[1]);
-                }
-            });
-
-            return [
-                ( ymin + ymax ) / 2,
-                ( xmax + xmin ) / 2
-            ];
-        }
-
-        return [ 51.047438, 13.741150 ];
-    }
-
     getStyle( type, subtype ) {
-        const styles = this.state.model.styles;
+        const modelStyles = this.state.model.styles;
 
-        if (!( type in styles )) {
-            return styles.default;
+        if (!( type in modelStyles )) {
+            return modelStyles.default;
         }
 
         if ( subtype === undefined ) {
-            return styles[type];
+            return modelStyles[type];
         }
 
-        if (!(subtype in styles[type])) {
-            return styles.default;
+        if (!(subtype in modelStyles[type])) {
+            return modelStyles.default;
         }
 
-        return styles[type][subtype ];
+        return modelStyles[type][subtype ];
     }
 
     renderArea( area ) {
@@ -161,10 +134,8 @@ class BackgroundMap extends Component {
         }
 
         const bounds = [
-            [bb[0][1], bb[0][0 ]
-            ],
-            [bb[1][1], bb[1][0 ]
-            ]
+            [bb[0][1], bb[0][0]],
+            [bb[1][1], bb[1][0]]
         ];
 
         return (
@@ -264,7 +235,7 @@ class BackgroundMap extends Component {
             const geoJSON = polygon.toGeoJSON( );
             this.props.setModelArea(geoJSON.geometry, polygon.getBounds( ));
         }
-    }
+    };
 
     onDeleted = e => {
         console.log( 'Deleted !' );
@@ -285,12 +256,14 @@ class BackgroundMap extends Component {
             const geometry = layer.toGeoJSON( ).geometry;
 
             if ( id === 'area' ) {
-                this.props.setModelArea( geometry );
+                const polygon = layer;
+                const geoJSON = polygon.toGeoJSON( );
+                this.props.setModelArea(geoJSON.geometry, polygon.getBounds( ));
             } else {
                 this.props.setBoundaryGeometry( id, geometry );
             }
         }, this);
-    }
+    };
 
     getCreatable = ( ) => {
         const area = this.props.model.geometry;
@@ -303,21 +276,7 @@ class BackgroundMap extends Component {
     }
 
     renderCreateControl( ) {
-        if ( this.getCreatable( ) === 'area' ) {
-            const drawOptions = {
-                polyline: false,
-                polygon: true,
-                rectangle: false,
-                circle: false,
-                marker: false
-            };
 
-            return (
-                <FeatureGroup>
-                    <EditControl position="bottomright" onCreated={this.onCreated} onDeleted={this.onDeleted} onEditStart={this.onEditStart} onEditStop={this.onEditStop} onEdited={this.onEditPath} draw={drawOptions}/>
-                </FeatureGroup>
-            );
-        }
 
         return null;
     }
@@ -422,7 +381,15 @@ class BackgroundMap extends Component {
         const wells = boundaries.filter(b => ( b.type === 'wel' && b.geometry.edit !== true ));
 
         if ( !area || !area.coordinates ) {
-            return null;
+            return (
+                <div className="map-wrapper">
+                    <Map id="background-map" style={styles.map} center={[30, 0]} zoom={3} zoomControl={false} >
+                        <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+                    </Map>
+                    {this.renderCreateControl( )}
+                    {this.renderToast( )}
+                </div>
+            );
         }
 
         return (

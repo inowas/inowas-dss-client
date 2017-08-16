@@ -13,15 +13,7 @@ export const UPDATE_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL
 export const UPDATE_BOUNDING_BOX = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDING_BOX';
 export const UPDATE_GEOMETRY = 'MODEL_EDITOR_UPDATE_GEOMETRY';
 
-export const EDIT_MODEL_AREA = 'MODEL_EDITOR_MODEL_EDIT_AREA';
 export const SET_MODEL_AREA = 'MODEL_EDITOR_MODEL_SET_AREA';
-
-export function editModelArea(tool) {
-    return {
-        type: EDIT_MODEL_AREA,
-        tool
-    };
-}
 
 export function setModelArea(tool, geometry, latLngBounds) {
     return {

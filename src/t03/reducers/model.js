@@ -2,7 +2,7 @@ import {
     handleDeleteBoundary, handleAddBoundaryControlPoint,
     handleUpdateBoundaryControlPoint, handleDeleteBoundaryControlPoint, handleUpdateBoundaryPumpingRate,
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
-    handleBoundaryGeometrySetEditTrue, handleUpdateBoundingBox, handleAreaGeometrySetEditTrue,
+    handleBoundaryGeometrySetEditTrue, handleUpdateBoundingBox,
     handleRemoveAreaGeometryFlags, handleRemoveBoundaryGeometryFlags, handleUpdateLayer
 } from './boundary';
 import { Action, Event } from '../actions/index';
@@ -46,18 +46,6 @@ const createModelReducer = tool => {
                     ...state,
                     geometry: action.payload.geometry,
                     bounding_box: handleUpdateBoundingBox(state.bounding_box, action.payload.latLngBounds)
-                };
-
-            case Action.CREATE_MODEL_AREA:
-                return {
-                    ...state,
-                    geometry: {create: true}
-                };
-
-            case Action.EDIT_MODEL_AREA:
-                return {
-                    ...state,
-                    geometry: handleAreaGeometrySetEditTrue(state.geometry)
                 };
 
             case Action.SET_BOUNDARIES:
