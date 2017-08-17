@@ -54,7 +54,7 @@ export function handleUpdateBoundaryGeometry(boundaries, action) {
 }
 
 export function handleRemoveAreaGeometryFlags(state) {
-    if (! state.geometry) {
+    if (!state.geometry || !state.geometry.coordinates) {
         return null;
     }
     const areaGeometry = state.geometry;

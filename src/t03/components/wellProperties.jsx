@@ -105,6 +105,7 @@ export default class WellProperties extends Component {
     constructor(props) {
         super(props);
 
+
         this.state = {
             nameInputId: uniqueId('nameInput-'),
             typeInputId: uniqueId('typeInput-'),
