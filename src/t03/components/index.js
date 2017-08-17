@@ -9,6 +9,9 @@ import RechargeProperties from './rechargeProperties';
 import RiverProperties from './riverProperties';
 import WellProperties from './wellProperties';
 import ModelEditorResults from './ModelEditorResults';
+import BoundaryOverview from './boundaryOverview';
+import RechargeRate from './rechargeRate';
+import DataTableAction from './dataTableAction';
 
 export {
     BoundaryMap,
@@ -21,5 +24,8 @@ export {
     RechargeProperties,
     RiverProperties,
     WellProperties,
-    ModelEditorResults
+    ModelEditorResults,
+    BoundaryOverview,
+    RechargeRate,
+    DataTableAction,
 };

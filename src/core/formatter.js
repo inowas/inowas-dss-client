@@ -13,8 +13,8 @@ export function toNumber(number) {
     return intlNumberFormatter.format(number);
 }
 
-export const dateToAtomFormat = (date) => moment(date).format("YYYY-MM-DD[T]HH:MM:ss+00:00");
+export const dateToAtomFormat = (date) => moment(date).format('YYYY-MM-DD[T]HH:MM:ss+00:00');
 export const dateToYmd = (date) => moment(date).format('YYYY-MM-DD');
 export const dateToTime = (date) => moment(date).format('HH:MM');
-export const dateToDate = (date) => moment(date).format('mm/dd/yyyy');
+export const dateToDate = (date) => moment(date).format('MM/DD/YYYY');
 export const dateToDatetime = (date) => moment(date).format('MM/DD/YYYY HH:MM');

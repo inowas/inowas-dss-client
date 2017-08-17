@@ -131,10 +131,8 @@ class ModelEditorBoundary extends Component {
         const {
             area,
             permissions,
-            removeBoundary, // eslint-disable-line no-shadow
-            setEditorState, // eslint-disable-line no-shadow
+            removeBoundary,
             styles,
-            updateBoundary
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
@@ -147,17 +145,15 @@ class ModelEditorBoundary extends Component {
                 switch ( type ) {
                     case 'wel':
                         return (
-                            <WellProperties pumpingRates={Helper.addIdFromIndex(boundary.date_time_values || [])}
-                                            well={boundary}
+                            <WellProperties boundary={boundary}
                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             area={area} mapStyles={styles}
-                                            onSaveWell={this.updateBoundary}
+                                            onSave={this.updateBoundary}
                                             readOnly={readOnly}
                             /> );
                     case 'rch':
                         return (
-                            <RechargeProperties setEditorState={setEditorState}
-                                            editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                            <RechargeProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             boundary={boundary}
                                             area={area}
                                             mapStyles={styles}
@@ -168,8 +164,7 @@ class ModelEditorBoundary extends Component {
                     case 'riv':
                         const selected = first(boundary.observation_points) || [];
                         return (
-                            <RiverProperties setEditorState={setEditorState}
-                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                            <RiverProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                              boundary={boundary}
                                              selectedObservationPoint={selected['id'] || null}
                                              area={area}
@@ -180,8 +175,7 @@ class ModelEditorBoundary extends Component {
                         );
                     case 'chd':
                         return (
-                            <ConstantHeadProperties setEditorState={setEditorState}
-                                                    editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                            <ConstantHeadProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                                     boundary={boundary}
                                                     area={area}
                                                     mapStyles={styles}
@@ -192,8 +186,7 @@ class ModelEditorBoundary extends Component {
 
                     case 'ghb':
                         return (
-                            <GeneralHeadProperties setEditorState={setEditorState}
-                                                   editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
+                            <GeneralHeadProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                                    boundary={boundary}
                                                    area={area}
                                                    mapStyles={styles}
