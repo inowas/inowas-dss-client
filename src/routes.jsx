@@ -17,7 +17,7 @@ export const editBoundary = ( tool, id, property, type, boundaryId ) => {
 };
 
 export const newBoundary = ( tool, id, property, type ) => {
-    const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type;
+    const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type + '#create';
 
     browserHistory.push( url );
 };

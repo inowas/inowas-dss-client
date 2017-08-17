@@ -111,7 +111,7 @@ export default class WellProperties extends Component {
         well: PropTypes.object.isRequired
     };
 
-    constructor ( props ) {
+    constructor( props ) {
         super( props );
 
         this.state = {
@@ -130,7 +130,7 @@ export default class WellProperties extends Component {
 
     handleInputChange = ( value, name, key ) => {
 
-        this.setState( function( prevState, props ) {
+        this.setState( function( prevState ) {
             if (key) {
                 return {
                     ...prevState,
@@ -163,7 +163,7 @@ export default class WellProperties extends Component {
         );
     };
 
-    render () {
+    render( ) {
         const { mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, typeInputId, layerInputId, well } = this.state;
         const pumpingRates = Helper.addIdFromIndex(well.date_time_values || []);

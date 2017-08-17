@@ -148,29 +148,11 @@ class ModelEditorGeneral extends Component {
     }
 
     editAreaOnMap = ( ) => {
-        this.setState(function(prevState) {
-            browserHistory.push(this.props.location.pathname + '#edit');
-            return {
-                ...prevState,
-                modflowModel: {
-                    ...prevState.modflowModel,
-                    geometry: {...prevState.modflowModel.geometry, edit: true}
-                }
-            };
-        });
+        browserHistory.push(this.props.location.pathname + '#edit');
     };
 
     createAreaOnMap = ( ) => {
-        this.setState(function(prevState) {
-            browserHistory.push(this.props.location.pathname + '#edit');
-            return {
-                ...prevState,
-                modflowModel: {
-                    ...prevState.modflowModel,
-                    geometry: { create: true }
-                }
-            };
-        });
+        browserHistory.push(this.props.location.pathname + '#create');
     };
 
     save(id) {

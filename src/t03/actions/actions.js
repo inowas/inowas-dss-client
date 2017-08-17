@@ -126,6 +126,7 @@ export const EDIT_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_EDIT_BOUNDARY_GEOMETRY
 export const SET_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY_GEOMETRY';
 export const REMOVE_GEOMETRY_FLAGS = 'MODEL_EDITOR_MODEL_REMOVE_GEOMETRY_FLAGS';
 
+
 export function editBoundaryGeometry(tool, boundaryId) {
     return {
         type: EDIT_BOUNDARY_GEOMETRY,
@@ -160,11 +161,14 @@ export function setBoundaries(tool, boundaries) {
     };
 }
 
-export function addBoundary(tool, boundary) {
+export function addBoundary(tool, type, geometry) {
     return {
         type: ADD_BOUNDARY,
         tool,
-        payload: boundary
+        payload: {
+            type: type,
+            geometry: geometry
+        }
     };
 }
 

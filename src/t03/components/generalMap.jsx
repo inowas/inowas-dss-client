@@ -4,6 +4,7 @@ import md5 from 'js-md5';
 import { GeoJSON, Map, Rectangle, TileLayer} from 'react-leaflet';
 import * as mapHelpers from '../../calculations/map';
 import ConfiguredRadium from 'ConfiguredRadium';
+import { geoJSON } from 'leaflet';
 
 const styles = {
     map: {
@@ -39,7 +40,7 @@ class ModelEditorGeneralMap extends Component {
 
     getBounds = ( geometry ) => {
         if ( geometry ) {
-            return L.geoJSON(geometry).getBounds();
+            return geoJSON(geometry).getBounds();
         }
 
         return null;
@@ -68,8 +69,6 @@ class ModelEditorGeneralMap extends Component {
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
         const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
-
-        console.log(area);
 
         if (area) {
             return (

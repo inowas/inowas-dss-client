@@ -43,7 +43,7 @@ class T03 extends Component {
         push: PropTypes.func.isRequired,
         params: PropTypes.object.isRequired,
         location: PropTypes.object.isRequired
-    }
+    };
 
     state = {
         navigation: [ ]
@@ -70,12 +70,12 @@ class T03 extends Component {
     close = ( ) => {
         // eslint-disable-next-line no-shadow
         const { push, location } = this.props;
-        push( location.pathname + '#edit' );
+        push( location.pathname + '#view' );
     };
 
     renderProperties( ) {
-        const isVisible = this.props.location.hash !== '#edit';
 
+        const isVisible = this.props.location.hash !== '#edit' && this.props.location.hash !== '#create' && this.props.location.hash !== '#view';
         if ( !isVisible ) {
             return null;
         }
