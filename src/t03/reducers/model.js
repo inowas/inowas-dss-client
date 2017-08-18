@@ -2,8 +2,7 @@ import {
     handleDeleteBoundary, handleAddBoundaryControlPoint,
     handleUpdateBoundaryControlPoint, handleDeleteBoundaryControlPoint, handleUpdateBoundaryPumpingRate,
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
-    handleBoundaryGeometrySetEditTrue, handleUpdateBoundingBox,
-    handleRemoveAreaGeometryFlags, handleRemoveBoundaryGeometryFlags, handleUpdateLayer
+    handleUpdateBoundingBox, handleUpdateLayer
 } from './boundary';
 import { Action, Event } from '../actions/index';
 import { calcBoundsOfPolygon } from '../../calculations/geoTools';
@@ -31,13 +30,6 @@ const createModelReducer = tool => {
                     geometry: handleUpdateAreaGeometry(state)
                 };
 
-            case Action.REMOVE_GEOMETRY_FLAGS:
-                return {
-                    ...state,
-                    geometry: handleRemoveAreaGeometryFlags(state),
-                    boundaries: handleRemoveBoundaryGeometryFlags(state)
-                };
-
             case Action.DESTROY_MODFLOW_MODEL:
                 return model.getInitialState();
 
@@ -53,12 +45,6 @@ const createModelReducer = tool => {
 
             case Action.ADD_BOUNDARY:
                 return {...state, boundaries: [...state.boundaries, action.payload]};
-
-            case Action.EDIT_BOUNDARY_GEOMETRY:
-                return {
-                    ...state,
-                    boundaries: handleBoundaryGeometrySetEditTrue(state.boundaries, action)
-                };
 
             case Action.SET_BOUNDARY_GEOMETRY:
                 return {

@@ -100,7 +100,7 @@ class ObservationPoint extends DataTable.Component.DataTable {
                 {
                     property: 'values.2',
                     header: {
-                        label: 'Hydraulic Conductance (m2/d)',
+                        label: 'Hydraulic Conductance (m/d)',
                     },
                     cell: {
                         transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],

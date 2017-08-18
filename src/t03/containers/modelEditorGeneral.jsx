@@ -4,7 +4,7 @@ import {
     Query, Command, Action
 } from '../actions/index';
 import {
-    model, general
+    model as modelSelector, general
 } from '../selectors/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
@@ -16,6 +16,7 @@ import uuid from 'uuid';
 import * as filters from '../../calculations/filter';
 import {GeneralMap} from '../components';
 import * as lodash from 'lodash';
+
 
 const styles = {
     container: {
@@ -46,7 +47,7 @@ const styles = {
 };
 
 const initialState = {
-    modflowModel: model.getInitialState()
+    model: modelSelector.getInitialState()
 };
 
 @ConfiguredRadium
@@ -60,16 +61,16 @@ class ModelEditorGeneral extends Component {
     }
 
     componentWillMount() {
-        const modflowModel = this.props.modflowModel ? this.props.modflowModel : model.getInitialState();
+        const model = this.props.model ? this.props.model : modelSelector.getInitialState();
 
         this.setState(function(prevState) {
-            return { ...prevState, modflowModel };
+            return { ...prevState, model: model };
         } );
     }
 
     componentWillReceiveProps(newProps) {
         this.setState(function(prevState) {
-            return { ...prevState, modflowModel: newProps.modflowModel };
+            return { ...prevState, model: newProps.model };
         } );
     }
 
@@ -80,7 +81,7 @@ class ModelEditorGeneral extends Component {
     }
 
     componentWillUnmount() {
-        this.props.setModflowModel(this.state.modflowModel);
+        this.props.setModflowModel(this.state.model);
     }
 
     handleInputChangeModflow(event, key) {
@@ -97,10 +98,10 @@ class ModelEditorGeneral extends Component {
             if (key) {
                 return {
                     ...prevState,
-                    modflowModel: {
-                        ...prevState.modflowModel,
+                    model: {
+                        ...prevState.model,
                         [key]: {
-                            ...prevState.modflowModel[key],
+                            ...prevState.model[key],
                             [name]: value
                         }
                     }
@@ -109,8 +110,8 @@ class ModelEditorGeneral extends Component {
 
             return {
                 ...prevState,
-                modflowModel: {
-                    ...prevState.modflowModel,
+                model: {
+                    ...prevState.model,
                     [name]: value
                 }
             };
@@ -129,9 +130,9 @@ class ModelEditorGeneral extends Component {
         this.setState(function(prevState) {
             return {
                 ...prevState,
-                modflowModel: {
-                    ...prevState.modflowModel,
-                    bounding_box: prevState.modflowModel.bounding_box.map((item, i) => {
+                model: {
+                    ...prevState.model,
+                    bounding_box: prevState.model.bounding_box.map((item, i) => {
                         if(i !== index) {
                             return item;
                         }
@@ -144,7 +145,7 @@ class ModelEditorGeneral extends Component {
     }
 
     getModflowModelState(name) {
-        return this.state.modflowModel[name];
+        return this.state.model[name];
     }
 
     editAreaOnMap = ( ) => {
@@ -159,14 +160,14 @@ class ModelEditorGeneral extends Component {
         if (id) {
             this.props.updateModflowModel(
                 id,
-                this.state.modflowModel
+                this.state.model
             );
             return;
         }
 
         this.props.createModflowModel(
             uuid.v4(),
-            this.state.modflowModel
+            this.state.model
         );
     }
 
@@ -207,11 +208,11 @@ class ModelEditorGeneral extends Component {
     };
 
     render( ) {
-        const { webData, modflowModel } = this.props;
+        const { webData, model } = this.props;
         const { id } = this.props.params;
-        const { permissions } = modflowModel;
 
-        const readOnly = !lodash.includes(permissions, 'w');
+        const readOnly = !lodash.includes(model.permissions, 'w');
+
 
         if (id && isLoading(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
             // TODO move to dump component
@@ -341,7 +342,7 @@ class ModelEditorGeneral extends Component {
                     </section>
                     <section className="col col-rel-3 stretch">
                         {this.renderEditOnMapIcon(id, readOnly)}
-                        <GeneralMap model={modflowModel} />
+                        <GeneralMap model={model} />
                         {this.renderSaveButton(id, readOnly, webData)}
                     </section>
                 </div>
@@ -352,7 +353,7 @@ class ModelEditorGeneral extends Component {
 
 const mapStateToProps = (state, { tool }) => {
     return {
-        modflowModel: general.getModflowModel(state[tool].model),
+        model: general.getModflowModel(state[tool].model),
         webData: getRequestStatus(state)
     };
 };
@@ -392,7 +393,7 @@ ModelEditorGeneral.propTypes = {
     updateModflowModel: PropTypes.func,
     setModflowModel: PropTypes.func,
     webData: PropTypes.object,
-    modflowModel: PropTypes.object,
+    model: PropTypes.object,
     location: PropTypes.object,
     params: PropTypes.object
 };

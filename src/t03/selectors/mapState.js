@@ -72,7 +72,7 @@ export const makeMapStateToPropsBoundaries = () => {
             area: area(state, props),
             boundaries: boundaries(state, props),
             permissions: permissions(state, props),
-            styles: styles(state, props)
+            mapStyles: styles(state, props)
         };
     };
 };
