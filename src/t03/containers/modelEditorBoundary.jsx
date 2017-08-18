@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import {
-    Action
-} from '../actions/index';
-import {boundary} from '../selectors/index';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Action } from '../actions/index';
+import { boundary as BoundarySelector} from '../selectors/index';
 import { maxBy, minBy, first } from 'lodash';
 
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -18,16 +17,12 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import { browserHistory, withRouter } from 'react-router';
-import {BoundaryOverview} from "../../t03/containers/index";
+import {BoundaryOverview} from '../../t03/containers/index';
 import Input from '../../components/primitive/Input';
-
-import {
-    Command,
-} from '../../t03/actions/index';
-import {Helper} from "../../core";
-import {editBoundary} from "../../routes";
-import {makeMapStateToPropsBoundaries} from "../selectors/mapState";
-import * as lodash from "lodash";
+import { Command } from '../../t03/actions/index';
+import {editBoundary} from '../../routes';
+import {makeMapStateToPropsBoundaries} from '../selectors/mapState';
+import * as lodash from 'lodash';
 
 const styles = {
     container: {
@@ -55,33 +50,12 @@ const styles = {
 @ConfiguredRadium
 class ModelEditorBoundary extends Component {
 
-    static propTypes = {
-        style: PropTypes.object,
-        id: PropTypes.string,
-        boundary: PropTypes.object,
-        boundaryType: PropTypes.string,
-        updateBoundary: PropTypes.func.isRequired,
-        addBoundary: PropTypes.func.isRequired,
-        boundaries: PropTypes.array,
-        updatePumpingRate: PropTypes.func.isRequired,
-        addPumpingRate: PropTypes.func.isRequired,
-    };
-
     constructor(props) {
         super(props);
         this.state = {
             searchTerm: ''
         };
     }
-
-    handleSearchTerm = value => {
-        this.setState(function(prevState, props){
-            return {
-                ...prevState,
-                    searchTerm: value
-            };
-        });
-    };
 
     componentDidMount( ) {
         // eslint-disable-next-line no-shadow
@@ -101,8 +75,16 @@ class ModelEditorBoundary extends Component {
         }
     }
 
-    handleEditBoundaryOnMap = ( id ) => {
-        this.props.editBoundaryGeometry( id );
+    handleSearchTerm = value => {
+        this.setState(function(prevState, props) {
+            return {
+                ...prevState,
+                searchTerm: value
+            };
+        });
+    };
+
+    handleEditBoundaryOnMap = ( ) => {
         browserHistory.push(this.props.location.pathname + '#edit');
     };
 
@@ -132,7 +114,7 @@ class ModelEditorBoundary extends Component {
             area,
             permissions,
             removeBoundary,
-            styles,
+            mapStyles,
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
@@ -147,7 +129,7 @@ class ModelEditorBoundary extends Component {
                         return (
                             <WellProperties boundary={boundary}
                                             editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
-                                            area={area} mapStyles={styles}
+                                            area={area} mapStyles={mapStyles}
                                             onSave={this.updateBoundary}
                                             readOnly={readOnly}
                             /> );
@@ -156,7 +138,7 @@ class ModelEditorBoundary extends Component {
                             <RechargeProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                             boundary={boundary}
                                             area={area}
-                                            mapStyles={styles}
+                                            mapStyles={mapStyles}
                                             onSave={this.updateBoundary}
                                             readOnly={readOnly}
                             />
@@ -166,9 +148,9 @@ class ModelEditorBoundary extends Component {
                         return (
                             <RiverProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                              boundary={boundary}
-                                             selectedObservationPoint={selected['id'] || null}
+                                             selectedObservationPoint={selected.id || null}
                                              area={area}
-                                             mapStyles={styles}
+                                             mapStyles={mapStyles}
                                              onSave={this.updateBoundary}
                                              readOnly={readOnly}
                             />
@@ -178,7 +160,7 @@ class ModelEditorBoundary extends Component {
                             <ConstantHeadProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                                     boundary={boundary}
                                                     area={area}
-                                                    mapStyles={styles}
+                                                    mapStyles={mapStyles}
                                                     onSave={this.updateBoundary}
                                                     readOnly={readOnly}
                             />
@@ -189,7 +171,7 @@ class ModelEditorBoundary extends Component {
                             <GeneralHeadProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                                    boundary={boundary}
                                                    area={area}
-                                                   mapStyles={styles}
+                                                   mapStyles={mapStyles}
                                                    onSave={this.updateBoundary}
                                                    readOnly={readOnly}
                             />
@@ -211,7 +193,6 @@ class ModelEditorBoundary extends Component {
     };
 
     render( ) {
-
         // eslint-disable-next-line no-shadow
         const { style, boundaries, boundaryType } = this.props;
 
@@ -235,7 +216,7 @@ class ModelEditorBoundary extends Component {
                                onChange={this.handleSearchTerm}/>
                     </div>
                     <FilterableList itemClickAction={this.onBoundaryClick}
-                                    list={boundary.getBoundaryObjects( list ).map( b => b.toObject )}
+                                    list={ BoundarySelector.getBoundaryObjects( list ).map( b => b.toObject )}
                                     activeType={boundaryType}/>
                 </div>
                 <div style={styles.properties}>
@@ -247,7 +228,6 @@ class ModelEditorBoundary extends Component {
 }
 
 const actions = {
-    editBoundaryGeometry: Action.editBoundaryGeometry,
     updateBoundary: Command.updateBoundary,
     addBoundary: Action.addBoundary,
     updatePumpingRate: Action.updatePumpingRate,
@@ -272,5 +252,25 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 
 // eslint-disable-next-line no-class-assign
 ModelEditorBoundary = withRouter( connect( makeMapStateToPropsBoundaries, mapDispatchToProps )( ModelEditorBoundary ));
+
+ModelEditorBoundary.propTypes = {
+    addBoundary: PropTypes.func,
+    addPumpingRate: PropTypes.func,
+    area: PropTypes.object,
+    boundary: PropTypes.object,
+    boundaries: PropTypes.array,
+    boundaryType: PropTypes.string,
+    fetchBoundary: PropTypes.func,
+    id: PropTypes.string,
+    location: PropTypes.object,
+    mapStyles: PropTypes.object,
+    permissions: PropTypes.string,
+    params: PropTypes.object,
+    removeBoundary: PropTypes.func,
+    style: PropTypes.object,
+    tool: PropTypes.string,
+    updateBoundary: PropTypes.func,
+    updatePumpingRate: PropTypes.func
+};
 
 export default ModelEditorBoundary;

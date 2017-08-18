@@ -24,7 +24,7 @@ import styleGlobals from 'styleGlobals';
 import { Action } from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
 import { uniqueId }  from 'lodash';
-import {geoJSON} from "leaflet";
+import { geoJSON } from 'leaflet';
 
 const styles = {
     map: {
@@ -50,7 +50,6 @@ class BackgroundMap extends Component {
         model: PropTypes.object,
         setModelArea: PropTypes.func,
         setBoundaryGeometry: PropTypes.func,
-        removeGeometryFlags: PropTypes.func,
         location: PropTypes.object,
         params: PropTypes.object
     };
@@ -409,7 +408,6 @@ class BackgroundMap extends Component {
 
     returnToProperties = ( ) => {
         this.invalidateMap( );
-        this.props.removeGeometryFlags( );
         browserHistory.push( this.props.location.pathname );
     };
 
@@ -505,8 +503,7 @@ const mapStateToProps = (state, { tool }) => {
 
 const actions = {
     setModelArea: Action.setModelArea,
-    setBoundaryGeometry: Action.setBoundaryGeometry,
-    removeGeometryFlags: Action.removeGeometryFlags
+    setBoundaryGeometry: Action.setBoundaryGeometry
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {

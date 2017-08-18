@@ -53,31 +53,6 @@ export function handleUpdateBoundaryGeometry(boundaries, action) {
     });
 }
 
-export function handleRemoveAreaGeometryFlags(state) {
-    if (!state.geometry || !state.geometry.coordinates) {
-        return null;
-    }
-    const areaGeometry = state.geometry;
-    delete (areaGeometry.edit);
-    delete (areaGeometry.create);
-    return areaGeometry;
-}
-
-export function handleRemoveBoundaryGeometryFlags(state) {
-    if (! state.boundaries) {
-        return null;
-    }
-    let boundaries = state.boundaries;
-    boundaries = boundaries.map(b => {
-        const geometry = b.geometry;
-        delete geometry.edit;
-        delete geometry.create;
-        return {...b, geometry: geometry};
-    });
-
-    return boundaries;
-}
-
 export function handleUpdateBoundaryControlPoint(state, action) {
     return state.map(b => {
         if (b.id === action.payload.id) {

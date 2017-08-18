@@ -1,3 +1,5 @@
+import {includes} from 'lodash';
+
 const getInitialStyles = () => {
     return {
         area: {
@@ -152,7 +154,10 @@ export const getInitialState = () => {
         boundaries: null,
         results: null,
         soilmodel: null,
+        permissions: 'r--'
     };
 };
+
+export const getPermissions = state => state.model.permissions;
 
 export const getModflowModel = state => state.model;

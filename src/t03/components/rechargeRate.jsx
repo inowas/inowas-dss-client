@@ -8,7 +8,7 @@ import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
 class RechargeRate extends DataTable.Component.DataTable {
-    constructor ( props ) {
+    constructor( props ) {
         super( props );
 
         this.state = {
