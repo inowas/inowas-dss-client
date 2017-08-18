@@ -115,7 +115,7 @@ class BackgroundMap extends Component {
     }
 
     renderArea( area ) {
-        if ( area && this.getEditable() && this.getEditable().property !== 'area' ) {
+        if ( area && !(this.getEditable() && this.getEditable().property === 'area' )) {
             return (
                 <LayersControl.Overlay name="Area Geometry" checked>
                     <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle( 'area' )}/>
