@@ -30,6 +30,13 @@ export function handleUpdateLayer(soilmodel, action) {
     })};
 }
 
+export function handleRemoveLayer(state, action) {
+    return [
+        ...state.slice(0, state.findIndex(b => ( b.id === action.payload ))),
+        ...state.slice(state.findIndex(b => ( b.id === action.payload )) + 1, state.length)
+    ];
+}
+
 export function handleBoundaryGeometrySetEditTrue(boundaries, action) {
     return boundaries.map(b => {
         if (b.id === action.payload) {

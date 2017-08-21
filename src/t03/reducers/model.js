@@ -2,7 +2,7 @@ import {
     handleDeleteBoundary, handleAddBoundaryControlPoint,
     handleUpdateBoundaryControlPoint, handleDeleteBoundaryControlPoint, handleUpdateBoundaryPumpingRate,
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
-    handleUpdateBoundingBox, handleUpdateLayer
+    handleUpdateBoundingBox, handleUpdateLayer, handleRemoveLayer
 } from './boundary';
 import { Action, Event } from '../actions/index';
 import { calcBoundsOfPolygon } from '../../calculations/geoTools';
@@ -61,9 +61,19 @@ const createModelReducer = tool => {
                 };
 
             case Action.SET_LAYER:
+            case Event.LAYER_UPDATED:
                 return {
                     ...state,
                     soilmodel: handleUpdateLayer(state.soilmodel, action)
+                };
+
+            case Event.LAYER_REMOVED:
+                return {
+                    ...state,
+                    soilmodel: {
+                        ...state.soilmodel,
+                        layers: handleRemoveLayer( state.soilmodel.layers, action )
+                    }
                 };
 
             case Action.UPDATE_BOUNDING_BOX:
