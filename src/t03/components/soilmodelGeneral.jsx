@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Input from '../../components/primitive/Input';
 
-class soilmodelGeneral extends React.Component {
+class SoilmodelGeneral extends React.Component {
 
     render () {
         const { soilmodel, readOnly } = this.props;
@@ -12,8 +13,9 @@ class soilmodelGeneral extends React.Component {
                     <form>
                         <div className="form-group">
                             <label>WetFct</label>
-                            <input disabled={readOnly}
+                            <Input disabled={readOnly}
                                    className="input"
+                                   onChange={() => null}
                                    name="name"
                                    value={soilmodel.general.wetfct}
                                    placeholder="Name"/>
@@ -25,9 +27,9 @@ class soilmodelGeneral extends React.Component {
     }
 }
 
-soilmodelGeneral.propTypes = {
+SoilmodelGeneral.propTypes = {
     soilmodel: PropTypes.object.isRequired,
     readOnly: PropTypes.bool.isRequired
 };
 
-export default soilmodelGeneral;
+export default SoilmodelGeneral;

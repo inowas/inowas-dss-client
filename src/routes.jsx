@@ -28,7 +28,6 @@ export const editlayer = ( tool, id, property, type, layerId ) => {
     browserHistory.push( url );
 };
 
-
 const routes = ( store ) => (
     <Route path="/">
         <IndexRoute component={LandingPage}/>

@@ -1,13 +1,15 @@
 import BoundaryOverview from './boundary';
-import ModelEditorGeneral from './modelEditorGeneral';
-import ModelEditorBoundary from './modelEditorBoundary';
-import ModelEditorResultsHead from './modelEditorResultsHead';
 import Main from './main';
+import ModelEditorBoundary from './modelEditorBoundary';
+import ModelEditorGeneral from './modelEditorGeneral';
+import ModelEditorResultsHead from './modelEditorResultsHead';
+import ModelEditorSoilmodel from './modelEditorSoilmodel';
 
 export {
-    Main,
     BoundaryOverview,
-    ModelEditorGeneral,
+    Main,
     ModelEditorBoundary,
-    ModelEditorResultsHead
+    ModelEditorGeneral,
+    ModelEditorResultsHead,
+    ModelEditorSoilmodel,
 };

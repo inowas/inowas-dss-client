@@ -6,7 +6,7 @@ import * as Virtualized from 'reactabular-virtualized';
 import {Paginator} from '../../../core';
 import {Action, Helper} from '../';
 
-import { cloneDeep, includes, sortBy, last } from 'lodash';
+import { cloneDeep, includes} from 'lodash';
 import * as resolve from 'table-resolver';
 
 // TODO use HOC

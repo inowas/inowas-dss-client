@@ -2,12 +2,11 @@ import '../../less/leaflet.less';
 
 import React from 'react';
 import { LayoutComponents } from '../../core/index';
-import { ModelEditorGeneral, ModelEditorBoundary } from '../containers/index';
+import { ModelEditorGeneral, ModelEditorBoundary, ModelEditorSoilmodel } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
 import { pure } from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
-import ModelEditorSoilmodel from "../containers/modelEditorSoilmodel";
 
 const styles = {
     window: {

@@ -1,35 +1,43 @@
 import BoundaryMap from './boundaryMap';
+import BoundaryOverview from './boundaryOverview';
 import ConstantHeadObservationPoint from './constantHeadObservationPoint';
 import ConstantHeadProperties from './constantHeadProperties';
-import GeneralHeadProperties from './generalHeadProperties';
+import DataTableAction from './dataTableAction';
 import GeneralHeadObservationPoint from './generalHeadObservationPoint';
+import GeneralHeadProperties from './generalHeadProperties';
 import GeneralMap from './generalMap';
-import RiverObservationPoint from './riverObservationPoint';
+import ModelEditorResults from './ModelEditorResults';
 import Properties from './properties';
 import PumpingRate from './pumpingRate';
 import RechargeProperties from './rechargeProperties';
-import RiverProperties from './riverProperties';
-import WellProperties from './wellProperties';
-import ModelEditorResults from './ModelEditorResults';
-import BoundaryOverview from './boundaryOverview';
 import RechargeRate from './rechargeRate';
-import DataTableAction from './dataTableAction';
+import RiverObservationPoint from './riverObservationPoint';
+import RiverProperties from './riverProperties';
+import SoilmodelGeneral from './soilmodelGeneral';
+import SoilmodelLayer from './soilmodelLayer';
+import SoilModelLayerDataTable from './soilModelLayerDataTable';
+import SoilModelLayerOverview from './soilModelLayerOverview';
+import WellProperties from './wellProperties';
 
 export {
     BoundaryMap,
+    BoundaryOverview,
     ConstantHeadObservationPoint,
     ConstantHeadProperties,
+    DataTableAction,
     GeneralHeadObservationPoint,
     GeneralHeadProperties,
     GeneralMap,
-    RiverObservationPoint,
+    ModelEditorResults,
     Properties,
     PumpingRate,
     RechargeProperties,
-    RiverProperties,
-    WellProperties,
-    ModelEditorResults,
-    BoundaryOverview,
     RechargeRate,
-    DataTableAction,
+    RiverObservationPoint,
+    RiverProperties,
+    SoilmodelGeneral,
+    SoilmodelLayer,
+    SoilModelLayerDataTable,
+    SoilModelLayerOverview,
+    WellProperties,
 };

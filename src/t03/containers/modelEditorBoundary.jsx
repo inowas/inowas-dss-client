@@ -57,24 +57,6 @@ class ModelEditorBoundary extends Component {
         };
     }
 
-    componentDidMount( ) {
-        // eslint-disable-next-line no-shadow
-        const { boundary, id, fetchBoundary } = this.props;
-
-        if ( boundary ) {
-            fetchBoundary( id, boundary.id );
-        }
-    }
-
-    componentDidUpdate( prevProps ) {
-        // eslint-disable-next-line no-shadow
-        const { boundary, id, fetchBoundary } = this.props;
-
-        if (boundary && ( !prevProps.boundary || boundary.id !== prevProps.boundary.id )) {
-            fetchBoundary( id, boundary.id );
-        }
-    }
-
     handleSearchTerm = value => {
         this.setState(function(prevState, props) {
             return {
@@ -255,27 +237,12 @@ const mapDispatchToProps = (dispatch, { tool }) => {
     return wrappedActions;
 };
 
+ModelEditorBoundary.propTypes = {
+    tool: PropTypes.string.isRequired,
+};
+
 // eslint-disable-next-line no-class-assign
 ModelEditorBoundary = withRouter( connect( makeMapStateToPropsBoundaries, mapDispatchToProps )( ModelEditorBoundary ));
 
-ModelEditorBoundary.propTypes = {
-    addBoundary: PropTypes.func,
-    addPumpingRate: PropTypes.func,
-    area: PropTypes.object,
-    boundary: PropTypes.object,
-    boundaries: PropTypes.array,
-    boundaryType: PropTypes.string,
-    fetchBoundary: PropTypes.func,
-    id: PropTypes.string,
-    location: PropTypes.object,
-    mapStyles: PropTypes.object,
-    permissions: PropTypes.string,
-    params: PropTypes.object,
-    removeBoundary: PropTypes.func,
-    style: PropTypes.object,
-    tool: PropTypes.string,
-    updateBoundary: PropTypes.func,
-    updatePumpingRate: PropTypes.func
-};
 
 export default ModelEditorBoundary;

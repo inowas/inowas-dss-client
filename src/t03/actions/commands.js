@@ -48,3 +48,28 @@ export function removeBoundary(tool, boundaryId, modelId) {
         }
     };
 }
+
+export const UPDATE_LAYER = 'updateLayer';
+export const REMOVE_LAYER = 'removeLayer';
+
+export function updateLayer(tool, modelId, data) {
+    return {
+        type: UPDATE_LAYER,
+        tool,
+        payload: {
+            layer: data,
+            id: modelId,
+        }
+    };
+}
+
+export function removeLayer(tool, layerId, modelId) {
+    return {
+        type: REMOVE_LAYER,
+        tool,
+        payload: {
+            layer_id: layerId,
+            id: modelId,
+        }
+    };
+}
