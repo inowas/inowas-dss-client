@@ -2,6 +2,7 @@ import BoundaryMap from './boundaryMap';
 import ConstantHeadObservationPoint from './constantHeadObservationPoint';
 import ConstantHeadProperties from './constantHeadProperties';
 import GeneralHeadProperties from './generalHeadProperties';
+import GeneralHeadObservationPoint from './generalHeadObservationPoint';
 import GeneralMap from './generalMap';
 import RiverObservationPoint from './riverObservationPoint';
 import Properties from './properties';
@@ -18,6 +19,7 @@ export {
     BoundaryMap,
     ConstantHeadObservationPoint,
     ConstantHeadProperties,
+    GeneralHeadObservationPoint,
     GeneralHeadProperties,
     GeneralMap,
     RiverObservationPoint,
