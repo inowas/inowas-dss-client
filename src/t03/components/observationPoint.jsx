@@ -5,7 +5,6 @@ import {DataTable, Formatter} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
 import { cloneDeep, sortBy, last } from 'lodash';
-import * as sort from 'sortabular';
 import uuid from 'uuid';
 
 class ObservationPoint extends DataTable.Component.DataTable {
