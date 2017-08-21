@@ -124,6 +124,7 @@ class ModelEditorBoundary extends Component {
             const boundary = boundaries.filter(b => ( b.type === type && b.id === pid ))[0];
 
             if (boundary) {
+                let selected = '';
                 switch ( type ) {
                     case 'wel':
                         return (
@@ -144,7 +145,7 @@ class ModelEditorBoundary extends Component {
                             />
                         );
                     case 'riv':
-                        const selected = first(boundary.observation_points) || [];
+                        selected = first(boundary.observation_points) || [];
                         return (
                             <RiverProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                              boundary={boundary}
@@ -156,9 +157,11 @@ class ModelEditorBoundary extends Component {
                             />
                         );
                     case 'chd':
+                        selected = first(boundary.observation_points) || [];
                         return (
                             <ConstantHeadProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                                     boundary={boundary}
+                                                    selectedObservationPoint={selected.id || null}
                                                     area={area}
                                                     mapStyles={mapStyles}
                                                     onSave={this.updateBoundary}
@@ -167,9 +170,11 @@ class ModelEditorBoundary extends Component {
                         );
 
                     case 'ghb':
+                        selected = first(boundary.observation_points) || [];
                         return (
                             <GeneralHeadProperties editBoundaryOnMap={() => this.handleEditBoundaryOnMap(boundary.id)}
                                                    boundary={boundary}
+                                                   selectedObservationPoint={selected.id || null}
                                                    area={area}
                                                    mapStyles={mapStyles}
                                                    onSave={this.updateBoundary}

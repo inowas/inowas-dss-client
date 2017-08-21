@@ -7,7 +7,7 @@ import Icon from '../../components/primitive/Icon';
 import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
-class ObservationPoint extends DataTable.Component.DataTable {
+class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
     constructor ( props ) {
         super( props );
 
@@ -71,7 +71,7 @@ class ObservationPoint extends DataTable.Component.DataTable {
                 {
                     property: 'values.0',
                     header: {
-                        label: 'River Stage (m)',
+                        label: 'sHead',
                     },
                     cell: {
                         transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
@@ -85,21 +85,7 @@ class ObservationPoint extends DataTable.Component.DataTable {
                 {
                     property: 'values.1',
                     header: {
-                        label: 'River Bottom (m)',
-                    },
-                    cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
-                        formatters: [
-                            ( value, { rowData } ) => (
-                                <span>{Formatter.toNumber(value)}</span>
-                            )
-                        ]
-                    },
-                },
-                {
-                    property: 'values.2',
-                    header: {
-                        label: 'Hydraulic Conductance (m/d)',
+                        label: 'eHead',
                     },
                     cell: {
                         transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
@@ -129,7 +115,7 @@ class ObservationPoint extends DataTable.Component.DataTable {
         const lastRow = last(rows);
 
         let date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
-        const values = lastRow && lastRow.values ? lastRow.values : [0, 0, 0];
+        const values = lastRow && lastRow.values ? lastRow.values : [0, 0];
 
         rows.push({
             id: uuid.v4(),
@@ -141,8 +127,8 @@ class ObservationPoint extends DataTable.Component.DataTable {
     };
 }
 
-ObservationPoint.propTypes = {
+ConstantHeadObservationPoint.propTypes = {
     perPage: PropTypes.number,
 };
 
-export default ObservationPoint;
+export default ConstantHeadObservationPoint;

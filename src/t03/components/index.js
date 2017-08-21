@@ -1,8 +1,9 @@
 import BoundaryMap from './boundaryMap';
+import ConstantHeadObservationPoint from './constantHeadObservationPoint';
 import ConstantHeadProperties from './constantHeadProperties';
 import GeneralHeadProperties from './generalHeadProperties';
 import GeneralMap from './generalMap';
-import ObservationPoint from './observationPoint';
+import RiverObservationPoint from './riverObservationPoint';
 import Properties from './properties';
 import PumpingRate from './pumpingRate';
 import RechargeProperties from './rechargeProperties';
@@ -15,10 +16,11 @@ import DataTableAction from './dataTableAction';
 
 export {
     BoundaryMap,
+    ConstantHeadObservationPoint,
     ConstantHeadProperties,
     GeneralHeadProperties,
     GeneralMap,
-    ObservationPoint,
+    RiverObservationPoint,
     Properties,
     PumpingRate,
     RechargeProperties,

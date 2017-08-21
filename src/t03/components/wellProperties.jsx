@@ -179,7 +179,7 @@ export default class WellProperties extends Component {
                             <label style={[ styles.label ]} htmlFor={typeInputId}>Well Type</label>
                             <Select style={[ styles.input ]} name="type" id={typeInputId}
                                     value={boundary.metadata ? boundary.metadata.boundary_type : ''}
-                                    onChange={(data) => this.handleInputChange(data.value, 'boundary_type', 'metadata')}
+                                    onChange={(data) => this.handleInputChange(data ? data.value : '', 'boundary_type', 'metadata')}
                                     options={[
                                         {
                                             label: 'Public Well',
@@ -200,7 +200,7 @@ export default class WellProperties extends Component {
                                     value={boundary.affected_layers
                                         ? boundary.affected_layers[ 0 ]
                                         : undefined}
-                                    onChange={(data) => this.handleInputChange([ data.value ], 'affected_layers')}
+                                    onChange={(data) => this.handleInputChange(data ? [data.value] : [], 'affected_layers')}
                                     options={[
                                         {
                                             value: 0,

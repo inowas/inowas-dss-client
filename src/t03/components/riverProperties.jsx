@@ -7,7 +7,7 @@ import Icon from '../../components/primitive/Icon';
 import { uniqueId, find } from 'lodash';
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
-import { ObservationPoint, DataTableAction } from '../../t03/components';
+import { RiverObservationPoint, DataTableAction } from '../../t03/components';
 import { Helper } from '../../core';
 import ConfiguredRadium from 'ConfiguredRadium';
 
@@ -250,7 +250,7 @@ class RiverProperties extends Component {
                                     value={boundary.affected_layers
                                         ? boundary.affected_layers[ 0 ]
                                         : undefined}
-                                    onChange={(value, name) => this.handleInputChange([value], 'affected_layers')}
+                                    onChange={(data) => this.handleInputChange(data ? [data.value] : [], 'affected_layers')}
                                     options={[
                                         {
                                             value: 0,
@@ -286,8 +286,8 @@ class RiverProperties extends Component {
                     <div style={{ ...styles.columnFlex2 }}>
                         <h3 style={styles.heading}>Flux Boundaries</h3>
                         <DataTableAction component={this.observationPoint}/>
-                        <ObservationPoint ref={observationPoint => this.observationPoint = observationPoint}
-                                          rows={observationPoints}/>
+                        <RiverObservationPoint ref={observationPoint => this.observationPoint = observationPoint}
+                                               rows={observationPoints}/>
                     </div>
                 </div>
                 <div style={styles.saveButtonWrapper}>
