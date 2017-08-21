@@ -147,7 +147,6 @@ class ConstantHeadProperties extends Component {
     }
 
     handleInputChange = (value, name, key) => {
-        console.log({name, value}, this.observationPoint.getRows());
         this.setState(function (prevState, props) {
             if (key) {
                 return {
