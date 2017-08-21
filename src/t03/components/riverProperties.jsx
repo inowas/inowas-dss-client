@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
 import Input from '../../components/primitive/Input';
+import Select from '../../components/primitive/Select';
 import Icon from '../../components/primitive/Icon';
 import { uniqueId, find } from 'lodash';
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
-import { ObservationPoint, DataTableAction } from '../../t03/components';
+import { RiverObservationPoint, DataTableAction } from '../../t03/components';
 import { Helper } from '../../core';
 import ConfiguredRadium from 'ConfiguredRadium';
 
@@ -130,6 +131,7 @@ class RiverProperties extends Component {
 
         this.state = {
             nameInputId: uniqueId('nameInput-'),
+            layerInputId: uniqueId('layerInput-'),
             selectedObservationPoint: this.props.selectedObservationPoint || null,
             boundary: this.props.boundary || {}
         };
@@ -225,7 +227,7 @@ class RiverProperties extends Component {
 
     render() {
         const { mapStyles, area, editBoundaryOnMap } = this.props;
-        const { nameInputId, boundary } = this.state;
+        const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(this.getDateTimeValue());
 
         return (
@@ -241,6 +243,26 @@ class RiverProperties extends Component {
                                    onChange={(value, name) => this.handleInputChange(value, name)} value={boundary.name}
                                    type="text"
                                    placeholder="name"/>
+                        </div>
+                        <div style={styles.inputBlock}>
+                            <label style={styles.label} htmlFor={nameInputId}>Select Layer</label>
+                            <Select style={[ styles.input ]} name="affected_layers" id={layerInputId}
+                                    value={boundary.affected_layers
+                                        ? boundary.affected_layers[ 0 ]
+                                        : undefined}
+                                    onChange={(data) => this.handleInputChange(data ? [data.value] : [], 'affected_layers')}
+                                    options={[
+                                        {
+                                            value: 0,
+                                            label: 'Layer 1'
+                                        }, {
+                                            value: 1,
+                                            label: 'Layer 2'
+                                        }, {
+                                            value: 2,
+                                            label: 'Layer 3'
+                                        }
+                                    ]}/>
                         </div>
 
                         <div style={styles.rightAlign}>
@@ -264,8 +286,8 @@ class RiverProperties extends Component {
                     <div style={{ ...styles.columnFlex2 }}>
                         <h3 style={styles.heading}>Flux Boundaries</h3>
                         <DataTableAction component={this.observationPoint}/>
-                        <ObservationPoint ref={observationPoint => this.observationPoint = observationPoint}
-                                          rows={observationPoints}/>
+                        <RiverObservationPoint ref={observationPoint => this.observationPoint = observationPoint}
+                                               rows={observationPoints}/>
                     </div>
                 </div>
                 <div style={styles.saveButtonWrapper}>

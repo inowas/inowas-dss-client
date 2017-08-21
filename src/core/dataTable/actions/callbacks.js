@@ -1,6 +1,6 @@
 import * as select from 'selectabular';
 import classnames from 'classnames';
-import { includes, cloneDeep, remove, findIndex } from 'lodash';
+import { cloneDeep, findIndex, set } from 'lodash';
 import * as sort from 'sortabular';
 import { getSortingColumns } from '../selectors';
 
@@ -66,9 +66,12 @@ export const onActivate = (component = {}) => ({columnIndex, rowData}) => {
 export const onValue = (component = {}) => ({value, rowData, property}) => {
     const index = findIndex(component.state.rows, {id: rowData.id});
     const rows = cloneDeep(component.state.rows);
+    const row = cloneDeep(rows[index]);
 
-    rows[index][property] = value;
-    rows[index].editing = false;
+    row.editing = false;
+
+    set(row, property, value);
+    rows[index] = row;
 
     component.setState((prevState, props) => { return {rows: rows};});
 };
