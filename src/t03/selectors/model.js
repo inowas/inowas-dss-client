@@ -1,5 +1,3 @@
-import {includes} from 'lodash';
-
 const getInitialStyles = () => {
     return {
         area: {
