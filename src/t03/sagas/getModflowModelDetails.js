@@ -10,8 +10,6 @@ export default function* getModflowDetailsFlow() {
         // eslint-disable-next-line no-shadow
         const action = yield take( Query.GET_MODFLOW_MODEL_DETAILS );
 
-        yield put(WebData.Modifier.Action.reset( action.type ));
-
         const state = yield select();
         const apiKey = getApiKey( state.user );
         const storedModel = (state[action.tool].model);

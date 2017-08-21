@@ -5,13 +5,14 @@ import FilterableList from '../../components/primitive/FilterableList';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
-import { editlayer } from '../../routes';
-
+import { editLayer } from '../../routes';
 import * as lodash from 'lodash';
-
 import { Command } from '../../t03/actions/index';
 import { SoilmodelGeneral, SoilModelLayerOverview, SoilmodelLayer } from '../components';
 import Input from '../../components/primitive/Input';
+import { getInitialLayerState } from '../selectors/model';
+import uuid from 'uuid';
+import { WebData } from '../../core';
 
 const styles = {
     container: {
@@ -48,10 +49,21 @@ class ModelEditorSoilmodel extends React.Component {
 
     onLayerClick = (layerId) => {
         const { tool } = this.props;
-        const { id, property } = this.props.params;
-        const type = '!';
+        const { id } = this.props.params;
 
-        editlayer(tool, id, property, type, layerId);
+        editLayer(tool, id, layerId);
+    };
+
+    onSave = (data) => {
+        const { id } = this.props.params;
+
+        this.props.updateLayer(id, data);
+    };
+
+    onCreateLayer = () => {
+        const { id } = this.props.params;
+
+        this.props.createLayer(id, {id: uuid.v4(),...getInitialLayerState()});
     };
 
     handleSearchTerm = value => {
@@ -65,15 +77,16 @@ class ModelEditorSoilmodel extends React.Component {
 
     renderProperties(soilmodel) {
 
-        const readOnly = !lodash.includes(this.props.permissions, 'w');
-        const {removeLayer} = this.props;
-        const { pid, property, id, type } = this.props.params;
+        const readOnly = !lodash.includes(this.props.permissions, 'w' );
+        const { removeLayer, addLayerStatus, updateLayerStatus } = this.props;
+        const { pid, property, id } = this.props.params;
 
         if (pid) {
             const layer = soilmodel.layers.filter(b => ( b.id === pid ))[ 0 ];
             if (layer) {
                 return (
-                    <SoilmodelLayer layer={layer} readOnly={readOnly}/>
+                    <SoilmodelLayer onSave={this.onSave} layer={layer} readOnly={readOnly}
+                                    updateLayerStatus={updateLayerStatus}/>
                 );
             }
 
@@ -85,8 +98,11 @@ class ModelEditorSoilmodel extends React.Component {
                 <SoilmodelGeneral soilmodel={soilmodel} readOnly={readOnly}/>
                 <SoilModelLayerOverview tool={'T03'} id={id}
                                         property={property}
-                                        type={type} remove={removeLayer}
-                                        layers={soilmodel.layers}/>
+                                        removeLayer={removeLayer}
+                                        createLayer={this.onCreateLayer}
+                                        layers={soilmodel.layers}
+                                        addLayerStatus={addLayerStatus}
+                />
             </div>
         );
     }
@@ -127,13 +143,17 @@ class ModelEditorSoilmodel extends React.Component {
 }
 
 const actions = {
+    createLayer: Command.addLayer,
     removeLayer: Command.removeLayer,
+    updateLayer: Command.updateLayer,
 };
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
         soilmodel: state[ tool ].model.soilmodel,
-        permissions: state[ tool ].model.permissions
+        permissions: state[ tool ].model.permissions,
+        addLayerStatus: WebData.Selector.getRequestStatusByType(state, Command.ADD_LAYER),
+        updateLayerStatus: WebData.Selector.getRequestStatusByType(state, Command.UPDATE_LAYER),
     };
 };
 

@@ -42,8 +42,17 @@ export function boundaryRemoved(tool, id) {
     };
 }
 
+export const LAYER_ADDED = 'layerAdded';
 export const LAYER_REMOVED = 'layerRemoved';
 export const LAYER_UPDATED = 'layerUpdated';
+
+export function layerAdded(tool, data) {
+    return {
+        type: LAYER_ADDED,
+        tool,
+        payload: data
+    };
+}
 
 export function layerUpdated(tool, data) {
     return {

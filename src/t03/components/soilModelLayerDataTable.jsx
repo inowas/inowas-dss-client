@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {DataTable} from '../../core';
 import Icon from '../../components/primitive/Icon';
-import {editlayer} from "../../routes";
+import {editLayer} from "../../routes";
 
 class SoilModelLayerDataTable extends DataTable.Component.DataTable {
     constructor ( props ) {
@@ -110,10 +110,9 @@ class SoilModelLayerDataTable extends DataTable.Component.DataTable {
     }
 
     onLayerClick = (layerId) => {
-        const {tool,id, property } = this.props;
-        const type = '!';
+        const {tool,id } = this.props;
 
-        editlayer(tool, id, property, type, layerId);
+        editLayer(tool, id, layerId);
     };
 }
 

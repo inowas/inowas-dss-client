@@ -49,8 +49,20 @@ export function removeBoundary(tool, boundaryId, modelId) {
     };
 }
 
+export const ADD_LAYER = 'addLayer';
 export const UPDATE_LAYER = 'updateLayer';
 export const REMOVE_LAYER = 'removeLayer';
+
+export function addLayer(tool, modelId, data) {
+    return {
+        type: ADD_LAYER,
+        tool,
+        payload: {
+            layer: data,
+            id: modelId,
+        }
+    };
+}
 
 export function updateLayer(tool, modelId, data) {
     return {

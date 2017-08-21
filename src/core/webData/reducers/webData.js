@@ -2,9 +2,6 @@ import {Action} from "../actions";
 import {webData as Selector} from "../selectors";
 
 const webData = ( state = Selector.initialState(), action ) => {
-    if ( !action.webData ) {
-        return state;
-    }
 
     // TODO ensure uniqueness
     switch ( action.type ) {
@@ -14,7 +11,14 @@ const webData = ( state = Selector.initialState(), action ) => {
                 [action.type]: {}
             };
 
+        case Action.AT_CLEAR_WEB_DATA:
+            return {};
+
         default:
+            if ( !action.webData ) {
+                return state;
+            }
+
             return {
                 ...state,
                 [action.type]: action.webData

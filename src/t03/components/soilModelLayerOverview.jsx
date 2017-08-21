@@ -5,6 +5,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
 import { SoilModelLayerDataTable } from '../components';
+import { WebData } from '../../core';
 
 const styles = {
     wrapper: {
@@ -47,15 +48,23 @@ const styles = {
         }
     }
 };
-const SoilModelLayerOverview = ({ tool, layers, property, type, id, remove }) => {
+const SoilModelLayerOverview = ({ tool, layers, property, id, createLayer, removeLayer, addLayerStatus }) => {
+
+    const processingData = {status: WebData.Selector.getType(addLayerStatus), errorMessage: WebData.Selector.getErrorMessage(addLayerStatus)};
+    const processing = WebData.Component.Processing(
+        <button style={styles.headerButton.button} className="link" onClick={createLayer}>
+            <Icon style={styles.headerButton.icon} name="add"/>Add new layer
+        </button>
+    );
 
     return (
         <div style={[ styles.wrapper ]}>
             <div style={[ styles.header ]}>
+                {processing(processingData)}
             </div>
             <div style={[ styles.body ]}>
-                <SoilModelLayerDataTable rows={layers} id={id} remove={remove} tool={tool}
-                                  property={property}/>
+                <SoilModelLayerDataTable rows={layers} id={id} remove={removeLayer} tool={tool}
+                                         property={property}/>
             </div>
         </div>
     );
