@@ -24,7 +24,7 @@ export function modflowModelUpdated(tool, id, payload) {
 }
 
 export const BOUNDARY_REMOVED = 'boundaryRemoved';
-export const BOUNDARY_UPDATED = 'boundaryUpdateed';
+export const BOUNDARY_UPDATED = 'boundaryUpdated';
 
 export function boundaryUpdated(tool, data) {
     return {
@@ -37,6 +37,25 @@ export function boundaryUpdated(tool, data) {
 export function boundaryRemoved(tool, id) {
     return {
         type: BOUNDARY_REMOVED,
+        tool,
+        payload: id
+    };
+}
+
+export const LAYER_REMOVED = 'layerRemoved';
+export const LAYER_UPDATED = 'layerUpdated';
+
+export function layerUpdated(tool, data) {
+    return {
+        type: LAYER_UPDATED,
+        tool,
+        payload: data
+    };
+}
+
+export function layerRemoved(tool, id) {
+    return {
+        type: LAYER_REMOVED,
         tool,
         payload: id
     };
