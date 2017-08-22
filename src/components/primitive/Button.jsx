@@ -20,6 +20,11 @@ const styles = {
         paddingRight: styleGlobals.dimensions.spacing.small
     },
 
+    disabled: {
+        opacity: 0.5,
+        cursor: 'not-allowed'
+    },
+
     types: {
         default: {
             background: styleGlobals.colors.grayDark,
@@ -68,14 +73,15 @@ const Button = ConfiguredRadium( function( props ) {
         children,
         type,
         iconInside,
+        disabled,
         style,
         ...rest
     } = props;
     return (
         <button style={[
-            styles.base, iconInside
-                ? styles.iconInside
-                : null,
+            styles.base,
+            ( iconInside && styles.iconInside ),
+            ( disabled && styles.disabled ),
             styles.types[type],
             style
         ]} {...rest}>{children}</button>
@@ -86,12 +92,14 @@ Button.propTypes = {
     children: PropTypes.node,
     type: PropTypes.oneOf([ 'default', 'primary', 'accent', 'link' ]),
     iconInside: PropTypes.bool,
+    disabled: PropTypes.bool,
     style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
 };
 
 Button.defaultProps = {
     type: 'default',
-    iconInside: false
+    iconInside: false,
+    disabled: false
 };
 
 export default Button;

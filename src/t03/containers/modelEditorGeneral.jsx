@@ -16,6 +16,7 @@ import uuid from 'uuid';
 import * as filters from '../../calculations/filter';
 import {GeneralMap} from '../components';
 import * as lodash from 'lodash';
+import Button from '../../components/primitive/Button';
 
 
 const styles = {
@@ -187,20 +188,19 @@ class ModelEditorGeneral extends Component {
         return null;
     };
 
-    renderSaveButton = ( id, readOnly, webData ) => {
+    renderSaveButton = ( id, readOnly, webData, model ) => {
         // TODO prevent onClick triggers if disabled and make that css works
-        const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'disabled' : '';
-        const btnClass = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) ? 'button button-accent is-disabled' : 'button button-accent';
+        const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) || !model.geometry;
 
         if (id && !readOnly) {
             return (
-                <button disabled={disabled} onClick={() => this.save(id)} className={btnClass}>Save</button>
+                <Button disabled={disabled} onClick={() => this.save(id)} type="accent">Save</Button>
             );
         }
 
         if (!id) {
             return (
-                <button disabled={disabled} onClick={() => {this.save();}} className={btnClass}>Create Model</button>
+                <Button disabled={disabled} onClick={() => {this.save();}} type="accent">Create Model</Button>
             );
         }
 
@@ -343,7 +343,7 @@ class ModelEditorGeneral extends Component {
                     <section className="col col-rel-3 stretch">
                         {this.renderEditOnMapIcon(id, readOnly)}
                         <GeneralMap model={model} />
-                        {this.renderSaveButton(id, readOnly, webData)}
+                        {this.renderSaveButton(id, readOnly, webData, model)}
                     </section>
                 </div>
             </div>
