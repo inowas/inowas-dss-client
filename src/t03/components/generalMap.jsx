@@ -12,6 +12,8 @@ const styles = {
     }
 };
 
+const RadiumMap = ConfiguredRadium(Map);
+
 @ConfiguredRadium
 class ModelEditorGeneralMap extends Component {
 
@@ -66,30 +68,32 @@ class ModelEditorGeneralMap extends Component {
 
 
     render( ) {
+        const { style } = this.props;
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
         const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
 
         if (area) {
             return (
-                <Map className="crossSectionMap" style={styles.map} ref={map => {this.map = map;}} zoomControl={false} bounds={this.getBounds(area)} >
+                <RadiumMap className="crossSectionMap" style={[styles.map, style]} ref={map => {this.map = map;}} zoomControl={false} bounds={this.getBounds(area)} >
                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
                     <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />
                     <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
-                </Map>
+                </RadiumMap>
             );
         }
 
         return (
-            <Map className="crossSectionMap" style={styles.map} ref={map => {this.map = map;}} zoomControl={false} center={[20, 140]} zoom={1} >
+            <RadiumMap className="crossSectionMap" style={[styles.map, style]} ref={map => {this.map = map;}} zoomControl={false} center={[20, 140]} zoom={1} >
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-            </Map>
+            </RadiumMap>
         );
     }
 }
 
 ModelEditorGeneralMap.propTypes = {
-    model: PropTypes.object
+    model: PropTypes.object,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 export default ModelEditorGeneralMap;

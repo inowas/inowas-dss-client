@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 import Icon from './Icon';
-import {Formatter} from '../../core';
+import { Formatter } from '../../core';
 
 const styles = {
     wrapper: {
@@ -31,6 +31,11 @@ const styles = {
             ':hover': {
                 border: '1px solid ' + styleGlobals.colors.graySemidark
             }
+        },
+
+        disabled: {
+            opacity: 0.5,
+            cursor: 'not-allowed'
         }
 
     },
@@ -44,7 +49,8 @@ const styles = {
         flex: 1,
         maxWidth: '100%',
         border: 0,
-        background: 'transparent'
+        background: 'transparent',
+        cursor: 'inherit'
     },
 
     icon: {
@@ -80,21 +86,37 @@ export default class Input extends Component {
             'text',
             'time',
             'url',
-            'week'
+            'week',
+            'textarea'
         ]),
         appearance: PropTypes.oneOf([ 'default', 'visibleOnFocus' ]),
         style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
         onChange: PropTypes.func,
-        value: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.object ])
+        value: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.object ]),
+        disabled: PropTypes.bool,
+        cast: PropTypes.func,
+        validator: PropTypes.func
     }
 
     static defaultProps = {
         type: 'text',
-        appearance: 'default'
+        appearance: 'default',
+        disabled: false
     };
 
     defaultHandleChange = e => {
-        this.props.onChange( e.target.value, e.target.name, e );
+        const { cast, validator, onChange } = this.props;
+
+        let value = e.target.value;
+
+        value = cast
+            ? cast( value )
+            : value;
+        value = validator
+            ? validator( value )
+            : value;
+
+        onChange( value, e );
     }
 
     datetimeHandleDateChange = e => {
@@ -115,26 +137,38 @@ export default class Input extends Component {
             style,
             appearance,
             value,
+            disabled,
             onChange, // eslint-disable-line no-unused-vars
+            cast, // eslint-disable-line no-unused-vars
+            validator, // eslint-disable-line no-unused-vars
             ...rest
         } = this.props;
 
         return (
-            <div style={[ styles.wrapper.base, styles.wrapper[appearance], style ]}>
+            <div style={[
+                styles.wrapper.base,
+                styles.wrapper[appearance],
+                ( disabled && styles.wrapper.disabled ),
+                style
+            ]}>
                 {type === 'search'
                     ? <Icon name="search" style={[ styles.icon ]}/>
                     : null}
-                {(( ) => {
-                    if ( type === 'datetime' ) {
-                        return (
-                            <div style={[styles.datetimeWrapper]}>
-                                <input style={[ styles.input ]} onChange={this.datetimeHandleDateChange} type="date" value={Formatter.dateToYmd( value )} {...rest}/>
-                                <input style={[ styles.input ]} onChange={this.datetimeHandleTimeChange} type="time" value={Formatter.dateToTime( value )} {...rest}/>
-                            </div>
-                        );
-                    }
 
-                    return ( <input style={[ styles.input ]} onChange={this.defaultHandleChange} type={type} value={value} {...rest}/> );
+                {(( ) => {
+                    switch ( type ) {
+                        case 'datetime':
+                            return (
+                                <div style={[ styles.datetimeWrapper ]}>
+                                    <input style={[ styles.input ]} onChange={this.datetimeHandleDateChange} type="date" value={Formatter.dateToYmd( value )} disabled={disabled} {...rest}/>
+                                    <input style={[ styles.input ]} onChange={this.datetimeHandleTimeChange} type="time" value={Formatter.dateToTime( value )} disabled={disabled} {...rest}/>
+                                </div>
+                            );
+                        case 'textarea':
+                            return ( <textarea style={[ styles.input ]} onChange={this.defaultHandleChange} type={type} value={value} disabled={disabled} {...rest}/> );
+                        default:
+                            return ( <input style={[ styles.input ]} onChange={this.defaultHandleChange} type={type} value={value} disabled={disabled} {...rest}/> );
+                    }
                 })( )}
             </div>
         );

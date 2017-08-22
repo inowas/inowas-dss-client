@@ -1,5 +1,7 @@
-import CloseableWindow from "./closeableWindow";
+import CloseableWindow from './closeableWindow';
+import Column from './Column';
 
 export {
-    CloseableWindow
+    CloseableWindow,
+    Column
 };

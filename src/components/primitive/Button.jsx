@@ -65,6 +65,11 @@ const styles = {
                 color: Color( styleGlobals.colors.font ).darken( 0.9 ).string( )
             }
         }
+    },
+
+    icon: {
+        marginRight: styleGlobals.dimensions.spacing.medium,
+        color: styleGlobals.colors.font
     }
 };
 
@@ -73,10 +78,12 @@ const Button = ConfiguredRadium( function( props ) {
         children,
         type,
         iconInside,
+        icon,
         disabled,
         style,
         ...rest
     } = props;
+
     return (
         <button style={[
             styles.base,
@@ -84,7 +91,12 @@ const Button = ConfiguredRadium( function( props ) {
             ( disabled && styles.disabled ),
             styles.types[type],
             style
-        ]} {...rest}>{children}</button>
+        ]} disabled={disabled} {...rest}>
+            {icon && React.cloneElement(icon, {
+                style: [ styles.icon ]
+            })}
+            {children}
+        </button>
     );
 });
 
@@ -93,7 +105,8 @@ Button.propTypes = {
     type: PropTypes.oneOf([ 'default', 'primary', 'accent', 'link' ]),
     iconInside: PropTypes.bool,
     disabled: PropTypes.bool,
-    style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
+    style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+    icon: PropTypes.element
 };
 
 Button.defaultProps = {
