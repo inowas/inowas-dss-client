@@ -20,6 +20,16 @@ export function handleUpdateBoundary(state, action) {
     });
 }
 
+export function handleAddLayer(soilmodel, action) {
+    return {
+        ...soilmodel,
+        layers: [
+            ...soilmodel.layers,
+            action.payload
+        ]
+    };
+}
+
 export function handleUpdateLayer(soilmodel, action) {
     return {...soilmodel, layers: soilmodel.layers.map(l => {
         if (l.id === action.payload.id) {

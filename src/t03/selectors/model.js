@@ -156,6 +156,24 @@ export const getInitialState = () => {
     };
 };
 
+export const getInitialLayerState = () => {
+    return {
+        'botm': 0,
+        'description': '',
+        'hani': 0,
+        'hk': 0,
+        'layavg': 0,
+        'laytyp': 0,
+        'laywet': 0,
+        'name': 'new layer',
+        'number': 0,
+        'ss': 0,
+        'sy': 0,
+        'top': 0,
+        'vka': 0,
+    };
+};
+
 export const getPermissions = state => state.model.permissions;
 
 export const getModflowModel = state => state.model;

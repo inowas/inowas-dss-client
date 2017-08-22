@@ -22,10 +22,12 @@ export const newBoundary = ( tool, id, property, type ) => {
     browserHistory.push( url );
 };
 
-export const editlayer = ( tool, id, property, type, layerId ) => {
-    const url = '/tools/' + tool + '/' + id + '/' + property + '/' + type + '/' + layerId;
+export const editLayer = (tool, id, layerId ) => {
+    browserHistory.push( editLayerUrl( tool, id, layerId) );
+};
 
-    browserHistory.push( url );
+export const editLayerUrl = ( tool, id, layerId ) => {
+    return '/tools/' + tool + '/' + id + '/soilmodel/!/' + layerId;
 };
 
 const routes = ( store ) => (
@@ -37,11 +39,12 @@ const routes = ( store ) => (
             <Route path="T02(/:id)" component={tools.T02}/>
             <Route path="T03(/:id)(/:property)(/:type)(/:pid)" component={T03.Main} tool={'T03'}
                 onEnter={( nextState ) => {
+                    store.dispatch(WebData.Modifier.Action.clear());
+
                     if ( nextState.params.id ) {
                         store.dispatch(Modifier.Query.getModflowModelDetails( 'T03', nextState.params.id, nextState.params.property, nextState.params.type, nextState.params.pid, ));
                         return;
                     }
-                    store.dispatch(WebData.Modifier.Action.reset( ));
                     store.dispatch(Modifier.Action.destroyModflowModel( 'T03' ));
                 }}
             />

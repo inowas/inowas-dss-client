@@ -1,3 +1,4 @@
+import addLayerFlow from './addLayer';
 import createModelFlow from './createModel';
 import getModflowModelDetailsFlow from './getModflowModelDetails';
 import loadBoundaryFlow from './loadBoundary';
@@ -6,9 +7,11 @@ import loadSoilmodelLayerFlow from './loadSoilmodelLayer';
 import removeBoundaryFlow from './removeBoundary';
 import removeLayerFlow from './removeLayer';
 import updateBoundaryFlow from './updateBoundary';
+import updateLayerFlow from './updateLayer';
 import updateModelFlow from './updateModel';
 
 export {
+    addLayerFlow,
     createModelFlow,
     getModflowModelDetailsFlow,
     loadBoundaryFlow,
@@ -17,5 +20,6 @@ export {
     removeBoundaryFlow,
     removeLayerFlow,
     updateBoundaryFlow,
+    updateLayerFlow,
     updateModelFlow,
 };
