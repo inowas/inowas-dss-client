@@ -9,6 +9,7 @@ import removeLayerFlow from './removeLayer';
 import updateBoundaryFlow from './updateBoundary';
 import updateLayerFlow from './updateLayer';
 import updateModelFlow from './updateModel';
+import updateStressPeriodsFlow from './updateStressPeriods';
 
 export {
     addLayerFlow,
@@ -22,4 +23,5 @@ export {
     updateBoundaryFlow,
     updateLayerFlow,
     updateModelFlow,
+    updateStressPeriodsFlow,
 };

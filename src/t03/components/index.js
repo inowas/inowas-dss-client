@@ -17,6 +17,8 @@ import SoilmodelGeneral from './soilmodelGeneral';
 import SoilmodelLayer from './soilmodelLayer';
 import SoilModelLayerDataTable from './soilModelLayerDataTable';
 import SoilModelLayerOverview from './soilModelLayerOverview';
+import StressPeriodDataTable from './stressPeriodDataTable';
+import StressPeriodProperties from './stressPeriodProperties';
 import WellProperties from './wellProperties';
 
 export {
@@ -39,5 +41,7 @@ export {
     SoilmodelLayer,
     SoilModelLayerDataTable,
     SoilModelLayerOverview,
+    StressPeriodDataTable,
+    StressPeriodProperties,
     WellProperties,
 };

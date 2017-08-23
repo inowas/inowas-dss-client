@@ -4,6 +4,7 @@ import ModelEditorBoundary from './modelEditorBoundary';
 import ModelEditorGeneral from './modelEditorGeneral';
 import ModelEditorResultsHead from './modelEditorResultsHead';
 import ModelEditorSoilmodel from './modelEditorSoilmodel';
+import ModelEditorModelRun from './modelEditorModelRun';
 
 export {
     BoundaryOverview,
@@ -12,4 +13,5 @@ export {
     ModelEditorGeneral,
     ModelEditorResultsHead,
     ModelEditorSoilmodel,
+    ModelEditorModelRun,
 };

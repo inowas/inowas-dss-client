@@ -69,3 +69,14 @@ export function layerRemoved(tool, id) {
         payload: id
     };
 }
+
+
+export const STRESS_PERIODS_UPDATED = 'stressPeriodsUpdated';
+
+export function stressPeriodsUpdated(tool, data) {
+    return {
+        type: STRESS_PERIODS_UPDATED,
+        tool,
+        payload: data
+    };
+}

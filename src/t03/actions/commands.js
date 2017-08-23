@@ -85,3 +85,18 @@ export function removeLayer(tool, layerId, modelId) {
         }
     };
 }
+
+
+export const UPDATE_STRESS_PERIODS = 'updateStressPeriods';
+
+
+export function updateStressPeriods(tool, modelId, data) {
+    return {
+        type: UPDATE_STRESS_PERIODS,
+        tool,
+        payload: {
+            stress_periods: data,
+            id: modelId,
+        }
+    };
+}

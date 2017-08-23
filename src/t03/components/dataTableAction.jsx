@@ -4,6 +4,7 @@ import Icon from '../../components/primitive/Icon';
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
+import {pure} from 'recompose';
 
 const styles = {
     iconInButton: {
@@ -35,4 +36,4 @@ const dataTableActions = ({ component }) => {
     );
 };
 
-export default ConfiguredRadium(dataTableActions);
+export default pure(ConfiguredRadium(dataTableActions));
