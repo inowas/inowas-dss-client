@@ -82,6 +82,13 @@ const createModelReducer = tool => {
                     }
                 };
 
+            case Action.SET_STRESS_PERIODS:
+            case Event.STRESS_PERIODS_UPDATED:
+                return {
+                    ...state,
+                    stress_periods: action.payload
+                };
+
             case Action.UPDATE_BOUNDING_BOX:
                 return {...state, bounding_box: calcBoundsOfPolygon(state.geometry.coordinates)};
 

@@ -123,6 +123,7 @@ export const DELETE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY
 export const UPDATE_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_PUMPING_RATE';
 export const ADD_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE';
 export const SET_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY_GEOMETRY';
+export const SET_STRESS_PERIODS = 'MODEL_EDITOR_MODEL_SET_STRESS_PERIODS';
 
 export function setBoundaryGeometry(tool, boundaryId, geometry) {
     return {
@@ -175,6 +176,14 @@ export function setLayer(tool, layer) {
         type: SET_LAYER,
         tool,
         payload: layer
+    };
+}
+
+export function setStressPeriods(tool, stressperiod) {
+    return {
+        type: SET_STRESS_PERIODS,
+        tool,
+        payload: stressperiod
     };
 }
 

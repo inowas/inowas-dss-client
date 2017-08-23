@@ -41,6 +41,11 @@ export default function* getModflowDetailsFlow() {
                 yield put( Action.setLayer( action.tool, layer ) );
             }
 
+            if (action.property === 'model-run') {
+                const stressperiods = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/stressperiods', 'GET' ), apiKey);
+                yield put( Action.setStressPeriods( action.tool, stressperiods ) );
+            }
+
             yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'success', data: null } ) );
         } catch ( err ) {
             let msg = 'Unknown Error';

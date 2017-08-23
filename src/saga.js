@@ -16,5 +16,6 @@ export default function* rootSaga() {
         call(T03.updateBoundaryFlow),
         call(T03.updateLayerFlow),
         call(T03.updateModelFlow),
+        call(T03.updateStressPeriodsFlow),
     ];
 }

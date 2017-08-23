@@ -2,7 +2,7 @@ import '../../less/leaflet.less';
 
 import React from 'react';
 import { LayoutComponents } from '../../core/index';
-import { ModelEditorGeneral, ModelEditorBoundary, ModelEditorSoilmodel } from '../containers/index';
+import { ModelEditorGeneral, ModelEditorBoundary, ModelEditorSoilmodel, ModelEditorModelRun } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
 import { pure } from 'recompose';
@@ -43,6 +43,13 @@ const properties = ({ tool, close, selectedProperty, type }) => {
             return (
                 <LayoutComponents.CloseableWindow heading="Results" style={styles.window}>
                     <ModelEditorResults type={type} tool={tool} />
+                </LayoutComponents.CloseableWindow>
+            );
+
+        case 'model-run':
+            return (
+                <LayoutComponents.CloseableWindow heading="Model Run" style={styles.window}>
+                    <ModelEditorModelRun type={type} tool={tool} />
                 </LayoutComponents.CloseableWindow>
             );
 
