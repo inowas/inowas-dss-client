@@ -66,6 +66,7 @@ const styles = {
             display: 'inline-block',
             fontWeight: 300,
             color: styleGlobals.colors.primary,
+            textAlign: 'left',
 
             ':hover': {
                 color: Color(styleGlobals.colors.font).darken(0.9).string()
