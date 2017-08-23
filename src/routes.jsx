@@ -23,6 +23,12 @@ export const editBoundary = (tool, id, property, type, boundaryId) => {
     browserHistory.push(url);
 };
 
+export const editBoundaryOnMap = (tool, id, property, type, boundaryId) => {
+    const url = `/tools/${tool}/${id}/${property}/${type}/${boundaryId}#edit`;
+
+    browserHistory.push(url);
+};
+
 // TODO use modern template strings
 export const newBoundary = (tool, id, property, type) => {
     const url =
