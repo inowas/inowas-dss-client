@@ -6,11 +6,11 @@ import { Formatter } from '../../core';
 
 const styles = {
     wrapper: {
-
         base: {
             display: 'flex',
             alignItems: 'center',
-            borderRadius: styleGlobals.dimensions.borderRadius
+            borderRadius: styleGlobals.dimensions.borderRadius,
+            minWidth: 0
         },
 
         default: {
@@ -37,7 +37,6 @@ const styles = {
             opacity: 0.5,
             cursor: 'not-allowed'
         }
-
     },
 
     datetimeWrapper: {
@@ -50,7 +49,8 @@ const styles = {
         maxWidth: '100%',
         border: 0,
         background: 'transparent',
-        cursor: 'inherit'
+        cursor: 'inherit',
+        minWidth: 0
     },
 
     icon: {
@@ -62,7 +62,6 @@ const styles = {
 
 @ConfiguredRadium
 export default class Input extends Component {
-
     static propTypes = {
         type: PropTypes.oneOf([
             'checkbox',
@@ -89,14 +88,18 @@ export default class Input extends Component {
             'week',
             'textarea'
         ]),
-        appearance: PropTypes.oneOf([ 'default', 'visibleOnFocus' ]),
-        style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+        appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
+        style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
         onChange: PropTypes.func,
-        value: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.object ]),
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+            PropTypes.object
+        ]),
         disabled: PropTypes.bool,
         cast: PropTypes.func,
         validator: PropTypes.func
-    }
+    };
 
     static defaultProps = {
         type: 'text',
@@ -109,29 +112,45 @@ export default class Input extends Component {
 
         let value = e.target.value;
 
-        value = cast
-            ? cast( value )
-            : value;
-        value = validator
-            ? validator( value )
-            : value;
+        value = cast ? cast(value) : value;
+        value = validator ? validator(value) : value;
 
-        onChange( value, e );
-    }
+        onChange(value, e);
+    };
 
     datetimeHandleDateChange = e => {
         const { onChange, value } = this.props;
-        const dateArray = e.target.value.split( '-' );
-        onChange(new Date(Date.UTC(dateArray[0], dateArray[1] - 1, dateArray[2], value.getUTCHours( ), value.getUTCMinutes( ))));
-    }
+        const dateArray = e.target.value.split('-');
+        onChange(
+            new Date(
+                Date.UTC(
+                    dateArray[0],
+                    dateArray[1] - 1,
+                    dateArray[2],
+                    value.getUTCHours(),
+                    value.getUTCMinutes()
+                )
+            )
+        );
+    };
 
     datetimeHandleTimeChange = e => {
         const { onChange, value } = this.props;
-        const timeArray = e.target.value.split( ':' );
-        onChange(new Date(Date.UTC(value.getUTCFullYear( ), value.getUTCMonth( ), value.getUTCDate( ), timeArray[0], timeArray[1])));
-    }
+        const timeArray = e.target.value.split(':');
+        onChange(
+            new Date(
+                Date.UTC(
+                    value.getUTCFullYear(),
+                    value.getUTCMonth(),
+                    value.getUTCDate(),
+                    timeArray[0],
+                    timeArray[1]
+                )
+            )
+        );
+    };
 
-    render( ) {
+    render() {
         const {
             type,
             style,
@@ -145,31 +164,65 @@ export default class Input extends Component {
         } = this.props;
 
         return (
-            <div style={[
-                styles.wrapper.base,
-                styles.wrapper[appearance],
-                ( disabled && styles.wrapper.disabled ),
-                style
-            ]}>
+            <div
+                style={[
+                    styles.wrapper.base,
+                    styles.wrapper[appearance],
+                    disabled && styles.wrapper.disabled,
+                    style
+                ]}
+            >
                 {type === 'search'
-                    ? <Icon name="search" style={[ styles.icon ]}/>
+                    ? <Icon name="search" style={[styles.icon]} />
                     : null}
 
-                {(( ) => {
-                    switch ( type ) {
+                {(() => {
+                    switch (type) {
                         case 'datetime':
                             return (
-                                <div style={[ styles.datetimeWrapper ]}>
-                                    <input style={[ styles.input ]} onChange={this.datetimeHandleDateChange} type="date" value={Formatter.dateToYmd( value )} disabled={disabled} {...rest}/>
-                                    <input style={[ styles.input ]} onChange={this.datetimeHandleTimeChange} type="time" value={Formatter.dateToTime( value )} disabled={disabled} {...rest}/>
+                                <div style={[styles.datetimeWrapper]}>
+                                    <input
+                                        style={[styles.input]}
+                                        onChange={this.datetimeHandleDateChange}
+                                        type="date"
+                                        value={Formatter.dateToYmd(value)}
+                                        disabled={disabled}
+                                        {...rest}
+                                    />
+                                    <input
+                                        style={[styles.input]}
+                                        onChange={this.datetimeHandleTimeChange}
+                                        type="time"
+                                        value={Formatter.dateToTime(value)}
+                                        disabled={disabled}
+                                        {...rest}
+                                    />
                                 </div>
                             );
                         case 'textarea':
-                            return ( <textarea style={[ styles.input ]} onChange={this.defaultHandleChange} type={type} value={value} disabled={disabled} {...rest}/> );
+                            return (
+                                <textarea
+                                    style={[styles.input]}
+                                    onChange={this.defaultHandleChange}
+                                    type={type}
+                                    value={value}
+                                    disabled={disabled}
+                                    {...rest}
+                                />
+                            );
                         default:
-                            return ( <input style={[ styles.input ]} onChange={this.defaultHandleChange} type={type} value={value} disabled={disabled} {...rest}/> );
+                            return (
+                                <input
+                                    style={[styles.input]}
+                                    onChange={this.defaultHandleChange}
+                                    type={type}
+                                    value={value}
+                                    disabled={disabled}
+                                    {...rest}
+                                />
+                            );
                     }
-                })( )}
+                })()}
             </div>
         );
     }

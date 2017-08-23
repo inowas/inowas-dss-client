@@ -17,7 +17,7 @@ const styles = {
     },
 
     header: {
-        marginBottom: 10,
+        marginBottom: styleGlobals.dimensions.spacing.medium,
         minHeight: 15,
         textAlign: 'right'
     },

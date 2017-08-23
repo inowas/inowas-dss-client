@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
+
 import ConfiguredRadium from 'ConfiguredRadium';
+import { pure } from 'recompose';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
     wrapper: {
-        flex: 1
+        flex: 1,
+        minWidth: 0
     },
 
     heading: {
@@ -16,14 +19,13 @@ const styles = {
     }
 };
 
-const Column = ConfiguredRadium(({ heading, children, style }) =>
+const Column = ({ heading, children, style }) =>
     <div style={[styles.wrapper, style]}>
         <h3 style={[styles.heading]}>
             {heading}
         </h3>
         {children}
-    </div>
-);
+    </div>;
 
 Column.propTypes = {
     heading: PropTypes.string,
@@ -31,4 +33,4 @@ Column.propTypes = {
     style: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
-export default Column;
+export default pure(ConfiguredRadium(Column));

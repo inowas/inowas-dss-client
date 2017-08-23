@@ -1,16 +1,16 @@
+import { DataTableAction, PumpingRate } from '../../t03/components';
 import React, { Component, PropTypes } from 'react';
 
+import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
+import { Helper } from '../../core';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
+import { LayoutComponents } from '../../core';
 import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
-import { LayoutComponents } from '../../core';
 import { uniqueId } from 'lodash';
-import BoundaryMap from './boundaryMap';
-import { PumpingRate, DataTableAction } from '../../t03/components';
-import { Helper } from '../../core';
 
 const styles = {
     wrapper: {
@@ -42,20 +42,6 @@ const styles = {
         overflow: 'auto'
     },
 
-    inputBlock: {
-        marginTop: 20
-    },
-
-    label: {
-        fontWeight: 600,
-        paddingLeft: 8,
-        paddingRight: 8
-    },
-
-    input: {
-        marginTop: 5
-    },
-
     dateInput: {
         maxWidth: 125
     },
@@ -67,6 +53,21 @@ const styles = {
     saveButtonWrapper: {
         textAlign: 'right',
         marginTop: styleGlobals.dimensions.spacing.medium
+    },
+
+    coordinatesLabel: {
+        label: {
+            display: 'block'
+        },
+
+        outerSpan: {
+            width: '100%',
+            display: 'flex'
+        },
+
+        innerSpan: {
+            flex: 1
+        }
     }
 };
 
@@ -144,12 +145,8 @@ export default class WellProperties extends Component {
                         heading="Properties"
                         style={[styles.columnLeft]}
                     >
-                        <div style={[styles.inputBlock]}>
-                            <label style={[styles.label]} htmlFor={nameInputId}>
-                                Well Name
-                            </label>
+                        <LayoutComponents.InputGroup label="Well Name">
                             <Input
-                                style={[styles.input]}
                                 name="name"
                                 id={nameInputId}
                                 onChange={(value, name) =>
@@ -158,14 +155,10 @@ export default class WellProperties extends Component {
                                 type="text"
                                 placeholder="name"
                             />
-                        </div>
+                        </LayoutComponents.InputGroup>
 
-                        <div style={[styles.inputBlock]}>
-                            <label style={[styles.label]} htmlFor={typeInputId}>
-                                Well Type
-                            </label>
+                        <LayoutComponents.InputGroup label="Well Type">
                             <Select
-                                style={[styles.input]}
                                 name="type"
                                 id={typeInputId}
                                 value={
@@ -194,17 +187,10 @@ export default class WellProperties extends Component {
                                     }
                                 ]}
                             />
-                        </div>
+                        </LayoutComponents.InputGroup>
 
-                        <div style={[styles.inputBlock]}>
-                            <label
-                                style={[styles.label]}
-                                htmlFor={layerInputId}
-                            >
-                                Select Layer
-                            </label>
+                        <LayoutComponents.InputGroup label="Soil Layer">
                             <Select
-                                style={[styles.input]}
                                 name="affected_layers"
                                 id={layerInputId}
                                 value={
@@ -232,38 +218,51 @@ export default class WellProperties extends Component {
                                     }
                                 ]}
                             />
-                        </div>
+                        </LayoutComponents.InputGroup>
 
-                        <div style={[styles.inputBlock]}>
-                            <label style={[styles.label]}>
-                                Coordinates
-                                <button
-                                    className="link"
-                                    onClick={editBoundaryOnMap}
+                        <LayoutComponents.InputGroup
+                            labelProps={{
+                                style: [styles.coordinatesLabel.label]
+                            }}
+                            label={
+                                <span
+                                    style={[styles.coordinatesLabel.outerSpan]}
                                 >
-                                    <Icon name="marker" />Edit on Map
-                                </button>
-                            </label>
+                                    <span
+                                        style={[
+                                            styles.coordinatesLabel.innerSpan
+                                        ]}
+                                    >
+                                        Coordinates
+                                    </span>
+                                    <Button
+                                        type="link"
+                                        icon={<Icon name="marker" />}
+                                        onClick={editBoundaryOnMap}
+                                    >
+                                        Edit on Map
+                                    </Button>
+                                </span>
+                            }
+                        >
                             <Input
-                                style={[styles.input]}
                                 onChange={this.handleInputChange}
                                 value={boundary.geometry.coordinates[1]}
                                 type="number"
                                 placeholder="Latitude"
                             />
                             <Input
-                                style={[styles.input]}
                                 onChange={this.handleInputChange}
                                 value={boundary.geometry.coordinates[0]}
                                 type="number"
                                 placeholder="Longitude"
                             />
-                            <BoundaryMap
-                                styles={mapStyles}
-                                area={area}
-                                boundary={boundary}
-                            />
-                        </div>
+                        </LayoutComponents.InputGroup>
+                        <BoundaryMap
+                            styles={mapStyles}
+                            area={area}
+                            boundary={boundary}
+                        />
                     </LayoutComponents.Column>
                     <LayoutComponents.Column
                         heading="Pumping Rates"

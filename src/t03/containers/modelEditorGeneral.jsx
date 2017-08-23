@@ -29,26 +29,12 @@ const styles = {
         display: 'flex'
     },
 
-    column: {
-        flex: 1
-    },
-
     columnLeft: {
         marginRight: 0.5 * styleGlobals.dimensions.spacing.large
     },
 
     columnRight: {
         marginLeft: 0.5 * styleGlobals.dimensions.spacing.large
-    },
-
-    formGroup: {
-        marginBottom: styleGlobals.dimensions.spacing.medium
-    },
-
-    label: {
-        fontWeight: 600,
-        marginBottom: styleGlobals.dimensions.spacing.small,
-        marginLeft: styleGlobals.dimensions.spacing.medium
     },
 
     mapActionToolbar: {
@@ -273,17 +259,16 @@ class ModelEditorGeneral extends Component {
                     style={[styles.columnLeft]}
                 >
                     <form>
-                        <div style={[styles.formGroup]}>
-                            <label style={[styles.label]}>Name</label>
+                        <LayoutComponents.InputGroup label="Name">
                             <Input
                                 disabled={readOnly}
                                 value={stateModel.name}
                                 onChange={this.handleInputChangeModflow('name')}
                                 placeholder="Name"
                             />
-                        </div>
-                        <div style={[styles.formGroup]}>
-                            <label style={[styles.label]}>Description</label>
+                        </LayoutComponents.InputGroup>
+
+                        <LayoutComponents.InputGroup label="Description">
                             <Input
                                 type="textarea"
                                 disabled={readOnly}
@@ -294,9 +279,9 @@ class ModelEditorGeneral extends Component {
                                 )}
                                 placeholder="Description"
                             />
-                        </div>
-                        <div style={[styles.formGroup]}>
-                            <label style={[styles.label]}>Time Unit</label>
+                        </LayoutComponents.InputGroup>
+
+                        <LayoutComponents.InputGroup label="Time Unit">
                             <Select
                                 value={stateModel.time_unit}
                                 onChange={this.handleInputChangeModflow(
@@ -310,9 +295,8 @@ class ModelEditorGeneral extends Component {
                                     })
                                 )}
                             />
-                        </div>
-                        <div style={[styles.formGroup]}>
-                            <label style={[styles.label]}>Length Unit</label>
+                        </LayoutComponents.InputGroup>
+                        <LayoutComponents.InputGroup label="Length Unit">
                             <Select
                                 value={stateModel.length_unit}
                                 onChange={this.handleInputChangeModflow(
@@ -326,136 +310,99 @@ class ModelEditorGeneral extends Component {
                                     })
                                 )}
                             />
-                        </div>
-                        <div style={[styles.formGroup]}>
-                            <label style={[styles.label]}>
-                                Grid Resolution
-                            </label>
-                            <div style={[styles.columnContainer]}>
-                                <section
-                                    style={[styles.column, styles.columnLeft]}
-                                >
-                                    <Input
-                                        disabled={readOnly}
-                                        type="number"
-                                        min="1"
-                                        step="1"
-                                        value={stateModel.grid_size.n_x}
-                                        cast={parseInt}
-                                        onChange={this.handleInputChangeModflow(
-                                            'n_x',
-                                            'grid_size'
-                                        )}
-                                        placeholder="X="
-                                    />
-                                </section>
-                                <section
-                                    style={[styles.column, styles.columnRight]}
-                                >
-                                    <Input
-                                        disabled={readOnly}
-                                        type="number"
-                                        min="1"
-                                        step="1"
-                                        value={stateModel.grid_size.n_y}
-                                        cast={parseInt}
-                                        onChange={this.handleInputChangeModflow(
-                                            'n_y',
-                                            'grid_size'
-                                        )}
-                                        placeholder="Y="
-                                    />
-                                </section>
-                            </div>
-                        </div>
-                        <div>
-                            <label style={[styles.label]}>Bounding Box</label>
-                            <div
-                                style={[
-                                    styles.formGroup,
-                                    styles.columnContainer
-                                ]}
-                            >
-                                <section
-                                    style={[styles.column, styles.columnLeft]}
-                                >
-                                    <Input
-                                        disabled
-                                        type="number"
-                                        name="x_min"
-                                        cast={parseFloat}
-                                        value={stateModel.bounding_box[0][0]}
-                                        onChange={(value, event) =>
-                                            this.handleInputChangeModflowBoundingBox(
-                                                value,
-                                                event,
-                                                0,
-                                                0
-                                            )}
-                                        placeholder="X="
-                                    />
-                                </section>
-                                <section
-                                    style={[styles.column, styles.columnRight]}
-                                >
-                                    <Input
-                                        disabled
-                                        type="number"
-                                        name="x_max"
-                                        cast={parseFloat}
-                                        value={stateModel.bounding_box[1][0]}
-                                        onChange={(value, event) =>
-                                            this.handleInputChangeModflowBoundingBox(
-                                                value,
-                                                event,
-                                                1,
-                                                0
-                                            )}
-                                        placeholder="x_max="
-                                    />
-                                </section>
-                            </div>
-                            <div style={[styles.columnContainer]}>
-                                <section
-                                    style={[styles.column, styles.columnLeft]}
-                                >
-                                    <Input
-                                        disabled
-                                        type="number"
-                                        name="y_min"
-                                        cast={parseFloat}
-                                        value={stateModel.bounding_box[0][1]}
-                                        onChange={(value, event) =>
-                                            this.handleInputChangeModflowBoundingBox(
-                                                value,
-                                                event,
-                                                0,
-                                                1
-                                            )}
-                                        placeholder="X="
-                                    />
-                                </section>
-                                <section
-                                    style={[styles.column, styles.columnRight]}
-                                >
-                                    <Input
-                                        disabled
-                                        type="number"
-                                        name="y_max"
-                                        cast={parseFloat}
-                                        value={stateModel.bounding_box[1][1]}
-                                        onChange={(value, event) =>
-                                            this.handleInputChangeModflowBoundingBox(
-                                                value,
-                                                event,
-                                                1,
-                                                1
-                                            )}
-                                        placeholder="y_max="
-                                    />
-                                </section>
-                            </div>
-                        </div>
+                        </LayoutComponents.InputGroup>
+                        <LayoutComponents.InputGroup label="Grid Resolution">
+                            <Input
+                                disabled={readOnly}
+                                type="number"
+                                min="1"
+                                step="1"
+                                value={stateModel.grid_size.n_x}
+                                cast={parseInt}
+                                onChange={this.handleInputChangeModflow(
+                                    'n_x',
+                                    'grid_size'
+                                )}
+                                placeholder="X="
+                            />
+                            <Input
+                                disabled={readOnly}
+                                type="number"
+                                min="1"
+                                step="1"
+                                value={stateModel.grid_size.n_y}
+                                cast={parseInt}
+                                onChange={this.handleInputChangeModflow(
+                                    'n_y',
+                                    'grid_size'
+                                )}
+                                placeholder="Y="
+                            />
+                        </LayoutComponents.InputGroup>
+                        <LayoutComponents.InputGroup label="Bounding Box">
+                            <Input
+                                disabled
+                                type="number"
+                                name="x_min"
+                                cast={parseFloat}
+                                value={stateModel.bounding_box[0][0]}
+                                onChange={(value, event) =>
+                                    this.handleInputChangeModflowBoundingBox(
+                                        value,
+                                        event,
+                                        0,
+                                        0
+                                    )}
+                                placeholder="X="
+                            />
+                            <Input
+                                disabled
+                                type="number"
+                                name="x_max"
+                                cast={parseFloat}
+                                value={stateModel.bounding_box[1][0]}
+                                onChange={(value, event) =>
+                                    this.handleInputChangeModflowBoundingBox(
+                                        value,
+                                        event,
+                                        1,
+                                        0
+                                    )}
+                                placeholder="x_max="
+                            />
+                        </LayoutComponents.InputGroup>
+                        <LayoutComponents.InputGroup>
+                            <Input
+                                disabled
+                                type="number"
+                                name="y_min"
+                                cast={parseFloat}
+                                value={stateModel.bounding_box[0][1]}
+                                onChange={(value, event) =>
+                                    this.handleInputChangeModflowBoundingBox(
+                                        value,
+                                        event,
+                                        0,
+                                        1
+                                    )}
+                                placeholder="X="
+                            />
+                            <Input
+                                disabled
+                                type="number"
+                                name="y_max"
+                                cast={parseFloat}
+                                value={stateModel.bounding_box[1][1]}
+                                onChange={(value, event) =>
+                                    this.handleInputChangeModflowBoundingBox(
+                                        value,
+                                        event,
+                                        1,
+                                        1
+                                    )}
+                                placeholder="y_max="
+                            />
+                        </LayoutComponents.InputGroup>
                     </form>
                 </LayoutComponents.Column>
                 <LayoutComponents.Column
