@@ -18,9 +18,10 @@ const styles = {
 
     heading: {
         fontSize: 16,
-        fontWeight: 600,
-        padding: 0,
-        margin: 0
+        fontWeight: 400,
+        marginTop: 0,
+        marginBottom: styleGlobals.dimensions.spacing.large,
+        padding: 0
     },
 
     close: {
@@ -34,19 +35,24 @@ const styles = {
         flex: 1,
         marginTop: 0,
         marginBottom: 0,
-        minHeight: 0
+        minHeight: 0,
+        overflowY: 'auto'
     }
 };
 
 const closeableWindow = ({ children, close, closeable, style, heading }) => {
     return (
-        <div style={[ styles.wrapper, style ]}>
-            <h3 style={styles.heading}>{heading}</h3>
+        <div style={[styles.wrapper, style]}>
+            <h3 style={styles.heading}>
+                {heading}
+            </h3>
 
-            {closeable && <div style={[ styles.close ]}>
-                <Button type="link" iconInside onClick={close}><Icon name="close"/></Button>
-            </div>
-}
+            {closeable &&
+                <div style={[styles.close]}>
+                    <Button type="link" iconInside onClick={close}>
+                        <Icon name="close" />
+                    </Button>
+                </div>}
 
             <div style={styles.content}>
                 {children}
@@ -63,4 +69,4 @@ closeableWindow.propTypes = {
     heading: PropTypes.string
 };
 
-export default pure(ConfiguredRadium( closeableWindow ));
+export default pure(ConfiguredRadium(closeableWindow));

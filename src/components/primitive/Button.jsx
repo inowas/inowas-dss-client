@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+
+import Color from 'color';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
-import Color from 'color';
 
 const styles = {
     base: {
@@ -9,7 +10,6 @@ const styles = {
         paddingBottom: styleGlobals.dimensions.spacing.small,
         paddingLeft: styleGlobals.dimensions.spacing.medium,
         paddingRight: styleGlobals.dimensions.spacing.medium,
-
         border: 0,
         borderRadius: styleGlobals.dimensions.borderRadius,
         cursor: 'pointer'
@@ -30,7 +30,9 @@ const styles = {
             background: styleGlobals.colors.grayDark,
             color: styleGlobals.colors.grayLight,
             ':hover': {
-                background: Color( styleGlobals.colors.grayDark ).darken( 0.15 ).string( )
+                background: Color(styleGlobals.colors.grayDark)
+                    .darken(0.15)
+                    .string()
             }
         },
 
@@ -38,7 +40,9 @@ const styles = {
             background: styleGlobals.colors.primary,
             color: styleGlobals.colors.grayLight,
             ':hover': {
-                background: Color( styleGlobals.colors.primary ).darken( 0.15 ).string( )
+                background: Color(styleGlobals.colors.primary)
+                    .darken(0.15)
+                    .string()
             }
         },
 
@@ -46,7 +50,9 @@ const styles = {
             background: styleGlobals.colors.accent,
             color: styleGlobals.colors.grayLight,
             ':hover': {
-                background: Color( styleGlobals.colors.accent ).darken( 0.15 ).string( )
+                background: Color(styleGlobals.colors.accent)
+                    .darken(0.15)
+                    .string()
             }
         },
 
@@ -62,18 +68,18 @@ const styles = {
             color: styleGlobals.colors.primary,
 
             ':hover': {
-                color: Color( styleGlobals.colors.font ).darken( 0.9 ).string( )
+                color: Color(styleGlobals.colors.font).darken(0.9).string()
             }
         }
     },
 
     icon: {
-        marginRight: styleGlobals.dimensions.spacing.medium,
+        marginRight: '0.5em',
         color: styleGlobals.colors.font
     }
 };
 
-const Button = ConfiguredRadium( function( props ) {
+const Button = ConfiguredRadium(function(props) {
     const {
         children,
         type,
@@ -85,16 +91,21 @@ const Button = ConfiguredRadium( function( props ) {
     } = props;
 
     return (
-        <button style={[
-            styles.base,
-            ( iconInside && styles.iconInside ),
-            ( disabled && styles.disabled ),
-            styles.types[type],
-            style
-        ]} disabled={disabled} {...rest}>
-            {icon && React.cloneElement(icon, {
-                style: [ styles.icon ]
-            })}
+        <button
+            style={[
+                styles.base,
+                iconInside && styles.iconInside,
+                disabled && styles.disabled,
+                styles.types[type],
+                style
+            ]}
+            disabled={disabled}
+            {...rest}
+        >
+            {icon &&
+                React.cloneElement(icon, {
+                    style: [styles.icon]
+                })}
             {children}
         </button>
     );
@@ -102,10 +113,10 @@ const Button = ConfiguredRadium( function( props ) {
 
 Button.propTypes = {
     children: PropTypes.node,
-    type: PropTypes.oneOf([ 'default', 'primary', 'accent', 'link' ]),
+    type: PropTypes.oneOf(['default', 'primary', 'accent', 'link']),
     iconInside: PropTypes.bool,
     disabled: PropTypes.bool,
-    style: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     icon: PropTypes.element
 };
 

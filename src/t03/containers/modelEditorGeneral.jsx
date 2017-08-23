@@ -7,7 +7,12 @@ import Icon from '../../components/primitive/Icon';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { browserHistory, withRouter } from 'react-router';
-import { getErrorMessage, getRequestStatus, hasError, isLoading } from '../../core/webData/selectors/webData';
+import {
+    getErrorMessage,
+    getRequestStatus,
+    hasError,
+    isLoading
+} from '../../core/webData/selectors/webData';
 import uuid from 'uuid';
 // import * as filters from '../../calculations/filter';
 import { GeneralMap } from '../components';
@@ -17,7 +22,7 @@ import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import TimeUnit from '../../model/TimeUnit';
 import LengthUnit from '../../model/TimeUnit';
-import { Column } from '../../core/layout/components';
+import { LayoutComponents } from '../../core';
 
 const styles = {
     columnContainer: {
@@ -67,25 +72,26 @@ const styles = {
 };
 
 const initialState = {
-    model: modelSelector.getInitialState( )
+    model: modelSelector.getInitialState()
 };
 
 @ConfiguredRadium
 class ModelEditorGeneral extends Component {
-
-    constructor( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
         this.state = initialState;
 
-        this.handleInputChangeModflow = this.handleInputChangeModflow.bind( this );
+        this.handleInputChangeModflow = this.handleInputChangeModflow.bind(
+            this
+        );
     }
 
-    componentWillMount( ) {
+    componentWillMount() {
         const model = this.props.model
             ? this.props.model
-            : modelSelector.getInitialState( );
+            : modelSelector.getInitialState();
 
-        this.setState( function( prevState ) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 model: model
@@ -93,8 +99,8 @@ class ModelEditorGeneral extends Component {
         });
     }
 
-    componentWillReceiveProps( newProps ) {
-        this.setState( function( prevState ) {
+    componentWillReceiveProps(newProps) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 model: newProps.model
@@ -102,26 +108,28 @@ class ModelEditorGeneral extends Component {
         });
     }
 
-    componentWillUpdate( ) {
-        if ( this.refs.map ) {
-            this.refs.map.leafletElement.fitBounds(this.getModflowModelState( 'bounding_box' ));
+    componentWillUpdate() {
+        if (this.refs.map) {
+            this.refs.map.leafletElement.fitBounds(
+                this.getModflowModelState('bounding_box')
+            );
         }
     }
 
-    componentWillUnmount( ) {
-        this.props.setModflowModel( this.state.model );
+    componentWillUnmount() {
+        this.props.setModflowModel(this.state.model);
     }
 
-    handleInputChangeModflow( name, key ) {
+    handleInputChangeModflow(name, key) {
         return value => {
-            this.setState( function( prevState ) {
-                if ( key ) {
+            this.setState(function(prevState) {
+                if (key) {
                     return {
                         model: {
                             ...prevState.model,
-                            [ key ]: {
+                            [key]: {
                                 ...prevState.model[key],
-                                [ name ]: value
+                                [name]: value
                             }
                         }
                     };
@@ -130,7 +138,7 @@ class ModelEditorGeneral extends Component {
                 return {
                     model: {
                         ...prevState.model,
-                        [ name ]: value
+                        [name]: value
                     }
                 };
             });
@@ -138,158 +146,330 @@ class ModelEditorGeneral extends Component {
     }
 
     // TODO refactor to function creator like handleInputChangeModflow
-    handleInputChangeModflowBoundingBox( value, event, index, key ) {
-        this.setState( function( prevState ) {
+    handleInputChangeModflowBoundingBox(value, event, index, key) {
+        this.setState(function(prevState) {
             return {
                 model: {
                     ...prevState.model,
-                    bounding_box: prevState.model.bounding_box.map(( item, i ) => {
-                        if ( i !== index ) {
+                    bounding_box: prevState.model.bounding_box.map(
+                        (item, i) => {
+                            if (i !== index) {
+                                return item;
+                            }
+                            item[key] = value;
                             return item;
                         }
-                        item[key] = value;
-                        return item;
-                    })
+                    )
                 }
             };
         });
     }
 
-    editAreaOnMap = ( ) => {
-        browserHistory.push( this.props.location.pathname + '#edit' );
+    editAreaOnMap = () => {
+        browserHistory.push(this.props.location.pathname + '#edit');
     };
 
-    createAreaOnMap = ( ) => {
-        browserHistory.push( this.props.location.pathname + '#create' );
+    createAreaOnMap = () => {
+        browserHistory.push(this.props.location.pathname + '#create');
     };
 
-    save( id ) {
-        if ( id ) {
-            this.props.updateModflowModel( id, this.state.model );
+    save(id) {
+        if (id) {
+            this.props.updateModflowModel(id, this.state.model);
             return;
         }
 
-        this.props.createModflowModel( uuid.v4( ), this.state.model );
+        this.props.createModflowModel(uuid.v4(), this.state.model);
     }
 
-    renderEditOnMapIcon = ( id, readOnly ) => {
-        if ( id && !readOnly ) {
+    renderEditOnMapIcon = (id, readOnly) => {
+        if (id && !readOnly) {
             return (
-                <Button onClick={this.editAreaOnMap} type="link" icon={< Icon name = "marker" />}>Edit on Map</Button>
+                <Button
+                    onClick={this.editAreaOnMap}
+                    type="link"
+                    icon={<Icon name="marker" />}
+                >
+                    Edit on Map
+                </Button>
             );
         }
 
-        if ( !id ) {
+        if (!id) {
             return (
-                <Button onClick={this.createAreaOnMap} type="link" icon={< Icon name = "marker" />}>Draw on Map</Button>
+                <Button
+                    onClick={this.createAreaOnMap}
+                    type="link"
+                    icon={<Icon name="marker" />}
+                >
+                    Draw on Map
+                </Button>
             );
         }
 
         return null;
     };
 
-    renderSaveButton = ( id, readOnly, webData, model ) => {
+    renderSaveButton = (id, readOnly, webData, model) => {
         // TODO prevent onClick triggers if disabled and make that css works
-        const disabled = isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) || !model.geometry;
+        const disabled =
+            isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) || !model.geometry;
 
-        if ( id && !readOnly ) {
+        if (id && !readOnly) {
             return (
-                <Button disabled={disabled} onClick={( ) => this.save( id )} type="accent">Save</Button>
+                <Button
+                    disabled={disabled}
+                    onClick={() => this.save(id)}
+                    type="accent"
+                >
+                    Save
+                </Button>
             );
         }
 
-        if ( !id ) {
+        if (!id) {
             return (
-                <Button disabled={disabled} onClick={( ) => {
-                    this.save( );
-                }} type="accent">Create Model</Button>
+                <Button
+                    disabled={disabled}
+                    onClick={() => {
+                        this.save();
+                    }}
+                    type="accent"
+                >
+                    Create Model
+                </Button>
             );
         }
 
         return null;
     };
 
-    render( ) {
+    render() {
         const { webData, model } = this.props;
         const { id } = this.props.params;
         const { model: stateModel } = this.state;
 
-        const readOnly = !lodash.includes( model.permissions, 'w' );
+        const readOnly = !lodash.includes(model.permissions, 'w');
 
         if (id && isLoading(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
             // TODO move to dump component
-            return (
-                <p>Loading ...</p>
-            );
+            return <p>Loading ...</p>;
         }
         if (id && hasError(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
             // TODO move to dump component
             return (
-                <p>Error while loading ... ({getErrorMessage(webData[Query.GET_MODFLOW_MODEL_DETAILS])})</p>
+                <p>
+                    Error while loading ... ({getErrorMessage(
+                        webData[Query.GET_MODFLOW_MODEL_DETAILS]
+                    )})
+                </p>
             );
         }
 
         return (
-            <div style={[ styles.columnContainer ]}>
-                <Column heading="General Properties" style={[ styles.columnLeft ]}>
+            <div style={[styles.columnContainer]}>
+                <LayoutComponents.Column
+                    heading="General Properties"
+                    style={[styles.columnLeft]}
+                >
                     <form>
-                        <div style={[ styles.formGroup ]}>
-                            <label style={[ styles.label ]}>Name</label>
-                            <Input disabled={readOnly} value={stateModel.name} onChange={this.handleInputChangeModflow( 'name' )} placeholder="Name"/>
+                        <div style={[styles.formGroup]}>
+                            <label style={[styles.label]}>Name</label>
+                            <Input
+                                disabled={readOnly}
+                                value={stateModel.name}
+                                onChange={this.handleInputChangeModflow('name')}
+                                placeholder="Name"
+                            />
                         </div>
-                        <div style={[ styles.formGroup ]}>
-                            <label style={[ styles.label ]}>Description</label>
-                            <Input type="textarea" disabled={readOnly} name="description" value={stateModel.description} onChange={this.handleInputChangeModflow( 'description' )} placeholder="Description"/>
+                        <div style={[styles.formGroup]}>
+                            <label style={[styles.label]}>Description</label>
+                            <Input
+                                type="textarea"
+                                disabled={readOnly}
+                                name="description"
+                                value={stateModel.description}
+                                onChange={this.handleInputChangeModflow(
+                                    'description'
+                                )}
+                                placeholder="Description"
+                            />
                         </div>
-                        <div style={[ styles.formGroup ]}>
-                            <label style={[ styles.label ]}>Time Unit</label>
-                            <Select value={stateModel.time_unit} onChange={this.handleInputChangeModflow( 'time_unit' )} options={lodash.map(TimeUnit.numberCodes, ( value, key ) => ({ label: value, value: key }))}/>
+                        <div style={[styles.formGroup]}>
+                            <label style={[styles.label]}>Time Unit</label>
+                            <Select
+                                value={stateModel.time_unit}
+                                onChange={this.handleInputChangeModflow(
+                                    'time_unit'
+                                )}
+                                options={lodash.map(
+                                    TimeUnit.numberCodes,
+                                    (value, key) => ({
+                                        label: value,
+                                        value: key
+                                    })
+                                )}
+                            />
                         </div>
-                        <div style={[ styles.formGroup ]}>
-                            <label style={[ styles.label ]}>Length Unit</label>
-                            <Select value={stateModel.length_unit} onChange={this.handleInputChangeModflow( 'length_unit' )} options={lodash.map(LengthUnit.numberCodes, ( value, key ) => ({ label: value, value: key }))}/>
+                        <div style={[styles.formGroup]}>
+                            <label style={[styles.label]}>Length Unit</label>
+                            <Select
+                                value={stateModel.length_unit}
+                                onChange={this.handleInputChangeModflow(
+                                    'length_unit'
+                                )}
+                                options={lodash.map(
+                                    LengthUnit.numberCodes,
+                                    (value, key) => ({
+                                        label: value,
+                                        value: key
+                                    })
+                                )}
+                            />
                         </div>
-                        <div style={[ styles.formGroup ]}>
-                            <label style={[ styles.label ]}>Grid Resolution</label>
-                            <div style={[ styles.columnContainer ]}>
-                                <section style={[ styles.column, styles.columnLeft ]}>
-                                    <Input disabled={readOnly} type="number" min="1" step="1" value={stateModel.grid_size.n_x} cast={parseInt} onChange={this.handleInputChangeModflow( 'n_x', 'grid_size' )} placeholder="X="/>
+                        <div style={[styles.formGroup]}>
+                            <label style={[styles.label]}>
+                                Grid Resolution
+                            </label>
+                            <div style={[styles.columnContainer]}>
+                                <section
+                                    style={[styles.column, styles.columnLeft]}
+                                >
+                                    <Input
+                                        disabled={readOnly}
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        value={stateModel.grid_size.n_x}
+                                        cast={parseInt}
+                                        onChange={this.handleInputChangeModflow(
+                                            'n_x',
+                                            'grid_size'
+                                        )}
+                                        placeholder="X="
+                                    />
                                 </section>
-                                <section style={[ styles.column, styles.columnRight ]}>
-                                    <Input disabled={readOnly} type="number" min="1" step="1" value={stateModel.grid_size.n_y} cast={parseInt} onChange={this.handleInputChangeModflow( 'n_y', 'grid_size' )} placeholder="Y="/>
+                                <section
+                                    style={[styles.column, styles.columnRight]}
+                                >
+                                    <Input
+                                        disabled={readOnly}
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        value={stateModel.grid_size.n_y}
+                                        cast={parseInt}
+                                        onChange={this.handleInputChangeModflow(
+                                            'n_y',
+                                            'grid_size'
+                                        )}
+                                        placeholder="Y="
+                                    />
                                 </section>
                             </div>
                         </div>
                         <div>
-                            <label style={[ styles.label ]}>Bounding Box</label>
-                            <div style={[ styles.formGroup, styles.columnContainer ]}>
-                                <section style={[ styles.column, styles.columnLeft ]}>
-                                    <Input disabled type="number" name="x_min" cast={parseFloat} value={stateModel.bounding_box[0][0 ]} onChange={( value, event ) => this.handleInputChangeModflowBoundingBox( value, event, 0, 0 )} placeholder="X="/>
+                            <label style={[styles.label]}>Bounding Box</label>
+                            <div
+                                style={[
+                                    styles.formGroup,
+                                    styles.columnContainer
+                                ]}
+                            >
+                                <section
+                                    style={[styles.column, styles.columnLeft]}
+                                >
+                                    <Input
+                                        disabled
+                                        type="number"
+                                        name="x_min"
+                                        cast={parseFloat}
+                                        value={stateModel.bounding_box[0][0]}
+                                        onChange={(value, event) =>
+                                            this.handleInputChangeModflowBoundingBox(
+                                                value,
+                                                event,
+                                                0,
+                                                0
+                                            )}
+                                        placeholder="X="
+                                    />
                                 </section>
-                                <section style={[ styles.column, styles.columnRight ]}>
-                                    <Input disabled type="number" name="x_max" cast={parseFloat} value={stateModel.bounding_box[1][0 ]} onChange={( value, event ) => this.handleInputChangeModflowBoundingBox( value, event, 1, 0 )} placeholder="x_max="/>
+                                <section
+                                    style={[styles.column, styles.columnRight]}
+                                >
+                                    <Input
+                                        disabled
+                                        type="number"
+                                        name="x_max"
+                                        cast={parseFloat}
+                                        value={stateModel.bounding_box[1][0]}
+                                        onChange={(value, event) =>
+                                            this.handleInputChangeModflowBoundingBox(
+                                                value,
+                                                event,
+                                                1,
+                                                0
+                                            )}
+                                        placeholder="x_max="
+                                    />
                                 </section>
                             </div>
-                            <div style={[ styles.columnContainer ]}>
-                                <section style={[ styles.column, styles.columnLeft ]}>
-                                    <Input disabled type="number" name="y_min" cast={parseFloat} value={stateModel.bounding_box[0][1 ]} onChange={( value, event ) => this.handleInputChangeModflowBoundingBox( value, event, 0, 1 )} placeholder="X="/>
+                            <div style={[styles.columnContainer]}>
+                                <section
+                                    style={[styles.column, styles.columnLeft]}
+                                >
+                                    <Input
+                                        disabled
+                                        type="number"
+                                        name="y_min"
+                                        cast={parseFloat}
+                                        value={stateModel.bounding_box[0][1]}
+                                        onChange={(value, event) =>
+                                            this.handleInputChangeModflowBoundingBox(
+                                                value,
+                                                event,
+                                                0,
+                                                1
+                                            )}
+                                        placeholder="X="
+                                    />
                                 </section>
-                                <section style={[ styles.column, styles.columnRight ]}>
-                                    <Input disabled type="number" name="y_max" cast={parseFloat} value={stateModel.bounding_box[1][1 ]} onChange={( value, event ) => this.handleInputChangeModflowBoundingBox( value, event, 1, 1 )} placeholder="y_max="/>
+                                <section
+                                    style={[styles.column, styles.columnRight]}
+                                >
+                                    <Input
+                                        disabled
+                                        type="number"
+                                        name="y_max"
+                                        cast={parseFloat}
+                                        value={stateModel.bounding_box[1][1]}
+                                        onChange={(value, event) =>
+                                            this.handleInputChangeModflowBoundingBox(
+                                                value,
+                                                event,
+                                                1,
+                                                1
+                                            )}
+                                        placeholder="y_max="
+                                    />
                                 </section>
                             </div>
                         </div>
                     </form>
-                </Column>
-                <Column heading="Area" style={[ styles.columnRight, styles.expandVerticalContainer ]}>
-                    <div style={[ styles.mapActionToolbar ]}>
-                        {this.renderEditOnMapIcon( id, readOnly )}
+                </LayoutComponents.Column>
+                <LayoutComponents.Column
+                    heading="Area"
+                    style={[styles.columnRight, styles.expandVerticalContainer]}
+                >
+                    <div style={[styles.mapActionToolbar]}>
+                        {this.renderEditOnMapIcon(id, readOnly)}
                     </div>
-                    <GeneralMap style={[ styles.expandVertical ]} model={model}/>
-                    <div style={[ styles.saveButtonWrapper ]}>
-                        {this.renderSaveButton( id, readOnly, webData, model )}
+                    <GeneralMap style={[styles.expandVertical]} model={model} />
+                    <div style={[styles.saveButtonWrapper]}>
+                        {this.renderSaveButton(id, readOnly, webData, model)}
                     </div>
-                </Column>
+                </LayoutComponents.Column>
             </div>
         );
     }
@@ -297,8 +477,8 @@ class ModelEditorGeneral extends Component {
 
 const mapStateToProps = (state, { tool }) => {
     return {
-        model: general.getModflowModel( state[tool].model ),
-        webData: getRequestStatus( state )
+        model: general.getModflowModel(state[tool].model),
+        webData: getRequestStatus(state)
     };
 };
 
@@ -310,12 +490,12 @@ const actions = {
 
 const mapDispatchToProps = (dispatch, { tool }) => {
     const wrappedActions = {};
-    for ( const key in actions ) {
-        if (actions.hasOwnProperty( key )) {
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function( ) {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch(actions[key]( tool, ...args ));
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
             };
         }
     }
@@ -324,7 +504,9 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 // eslint-disable-next-line no-class-assign
-ModelEditorGeneral = withRouter( connect( mapStateToProps, mapDispatchToProps )( ModelEditorGeneral ));
+ModelEditorGeneral = withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(ModelEditorGeneral)
+);
 
 ModelEditorGeneral.propTypes = {
     style: PropTypes.object,

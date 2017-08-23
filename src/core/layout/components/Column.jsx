@@ -16,12 +16,14 @@ const styles = {
     }
 };
 
-const Column = ConfiguredRadium(({heading, children, style}) => (
+const Column = ConfiguredRadium(({ heading, children, style }) =>
     <div style={[styles.wrapper, style]}>
-        <h3 style={[styles.heading]}>{heading}</h3>
+        <h3 style={[styles.heading]}>
+            {heading}
+        </h3>
         {children}
     </div>
-));
+);
 
 Column.propTypes = {
     heading: PropTypes.string,
