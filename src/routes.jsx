@@ -10,7 +10,13 @@ import Impressum from './containers/Impressum';
 import { Modifier } from './t03/index';
 import { WebData } from './core';
 
-export const goToBoundaryOverview = (tool, id, property, type) => {
+export const goToBoundaryOverview = (tool, id, property) => {
+    const url = `/tools/${tool}/${id}/${property}`;
+
+    browserHistory.push(url);
+};
+
+export const goToBoundaryTypeOverview = (tool, id, property, type) => {
     const url = `/tools/${tool}/${id}/${property}/${type}`;
 
     browserHistory.push(url);

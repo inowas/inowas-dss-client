@@ -1,102 +1,34 @@
+import { DataTableAction, RechargeRate } from '../../t03/components';
+import { Helper, LayoutComponents } from '../../core';
 import React, { Component, PropTypes } from 'react';
-import styleGlobals from 'styleGlobals';
-import Input from '../../components/primitive/Input';
-import Icon from '../../components/primitive/Icon';
-import { uniqueId } from 'lodash';
+
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
-import { RechargeRate, DataTableAction } from '../../t03/components';
-import { Helper } from '../../core';
 import ConfiguredRadium from 'ConfiguredRadium';
+import Icon from '../../components/primitive/Icon';
+import Input from '../../components/primitive/Input';
+import styleGlobals from 'styleGlobals';
+import { uniqueId } from 'lodash';
 
 const styles = {
-    wrapper: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-
     columns: {
-        display: 'flex',
-        flex: 1
-    },
-
-    column: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        maxHeight: '100%'
-    },
-
-    columnFlex1: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        maxHeight: '100%'
+        display: 'flex'
     },
 
     columnFlex2: {
-        flex: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        maxHeight: '100%'
+        flex: 2
     },
 
     columnNotLast: {
         marginRight: styleGlobals.dimensions.gridGutter
     },
 
-    columnBody: {
-        flex: 1,
-        minHeight: 0,
-        overflow: 'auto'
-    },
-
-    heading: {
-        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
-        fontWeight: 300,
-        fontSize: 16,
-        textAlign: 'left',
-        paddingBottom: 10
-    },
-
-    inputBlock: {
-        marginTop: 10
-    },
-
     rightAlign: {
         textAlign: 'right'
     },
 
-    absoluteRight: {
-        position: 'absolute',
-        right: 0
-    },
-
     buttonMarginRight: {
         marginRight: 10
-    },
-
-    buttonMarginLeft: {
-        marginLeft: 10
-    },
-
-    label: {
-        fontWeight: 600,
-        paddingLeft: 8,
-        paddingRight: 8
-    },
-
-    input: {
-        marginTop: 5
-    },
-
-    dateInput: {
-        maxWidth: 125
-    },
-
-    rateInput: {
-        maxWidth: 70
     },
 
     saveButtonWrapper: {
@@ -107,7 +39,6 @@ const styles = {
 
 @ConfiguredRadium
 export default class RechargeProperties extends Component {
-
     static propTypes = {
         area: PropTypes.object.isRequired,
         boundary: PropTypes.object.isRequired,
@@ -127,19 +58,19 @@ export default class RechargeProperties extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            boundary: nextProps.boundary,
+            boundary: nextProps.boundary
         });
     }
 
     handleInputChange = (value, name, key) => {
-        this.setState(function (prevState, props) {
+        this.setState(function(prevState, props) {
             if (key) {
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
                         [key]: {
-                            ...prevState.boundary[ key ],
+                            ...prevState.boundary[key],
                             [name]: value
                         },
                         date_time_values: this.rechargeRate.getRows()
@@ -159,50 +90,78 @@ export default class RechargeProperties extends Component {
     };
 
     save = () => {
-        this.props.onSave(
-            {
-                ...this.state.boundary,
-                date_time_values: this.rechargeRate.getRows()
-            }
-        );
+        this.props.onSave({
+            ...this.state.boundary,
+            date_time_values: this.rechargeRate.getRows()
+        });
     };
 
     render() {
         const { mapStyles, area, editBoundaryOnMap } = this.props;
         const { nameInputId, boundary } = this.state;
-        const rechargeRates = Helper.addIdFromIndex(boundary.date_time_values || []);
+        const rechargeRates = Helper.addIdFromIndex(
+            boundary.date_time_values || []
+        );
 
         return (
-            <div style={styles.wrapper}>
+            <div>
                 <div style={styles.columns}>
-                    <div style={{ ...styles.columnFlex1, ...styles.columnNotLast }}>
-
-                        <h3 style={styles.heading}>Properties</h3>
-                        <div style={styles.inputBlock}>
-                            <label style={styles.label} htmlFor={nameInputId}>Recharge Name</label>
-                            <Input style={styles.input} name="name" id={nameInputId} value={boundary.name}
-                                   onChange={(value, name) => this.handleInputChange(value, name)} type="text"
-                                   placeholder="name"/>
-                        </div>
+                    <LayoutComponents.Column
+                        heading="Properties"
+                        style={[styles.columnNotLast]}
+                    >
+                        <LayoutComponents.InputGroup label="Name">
+                            <Input
+                                name="name"
+                                id={nameInputId}
+                                value={boundary.name}
+                                onChange={(value, name) =>
+                                    this.handleInputChange(value, name)}
+                                type="text"
+                                placeholder="name"
+                            />
+                        </LayoutComponents.InputGroup>
 
                         <div style={styles.rightAlign}>
-                            <button style={styles.buttonMarginRight} onClick={editBoundaryOnMap} className="link">
-                                <Icon name="marker"/>Edit on Map
-                            </button>
-                            <button style={styles.buttonMarginRight} disabled className="link">
-                                <Icon name="trash"/>Delete
-                            </button>
+                            <Button
+                                style={styles.buttonMarginRight}
+                                onClick={editBoundaryOnMap}
+                                type="link"
+                                icon={<Icon name="marker" />}
+                            >
+                                Edit on Map
+                            </Button>
+                            <Button
+                                style={styles.buttonMarginRight}
+                                disabled
+                                type="link"
+                                icon={<Icon name="trash" />}
+                            >
+                                Delete
+                            </Button>
                         </div>
-                        <BoundaryMap area={area} boundary={boundary} styles={mapStyles}/>
-                    </div>
 
-                    <div style={[ styles.columnFlex2 ]}>
-                        <h3 style={[ styles.heading ]}>Recharge Rates m/d</h3>
-                        <DataTableAction component={this.rechargeRate}/>
-                        <RechargeRate ref={rechargeRate => this.rechargeRate = rechargeRate} rows={rechargeRates}/>
-                    </div>
+                        <BoundaryMap
+                            area={area}
+                            boundary={boundary}
+                            styles={mapStyles}
+                        />
+                    </LayoutComponents.Column>
+
+                    <LayoutComponents.Column
+                        heading="Recharge Rates m/d"
+                        style={[styles.columnFlex2]}
+                    >
+                        <DataTableAction component={this.rechargeRate} />
+                        <RechargeRate
+                            ref={rechargeRate =>
+                                (this.rechargeRate = rechargeRate)}
+                            rows={rechargeRates}
+                        />
+                    </LayoutComponents.Column>
                 </div>
-                <div style={[ styles.saveButtonWrapper ]}>
+
+                <div style={[styles.saveButtonWrapper]}>
                     <Button onClick={this.save}>Save</Button>
                 </div>
             </div>

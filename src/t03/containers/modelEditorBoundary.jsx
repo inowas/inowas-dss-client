@@ -1,33 +1,41 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Action } from '../actions/index';
-import { boundary as BoundarySelector } from '../selectors/index';
-import { maxBy, minBy, first } from 'lodash';
+import * as lodash from 'lodash';
 
+import {
+    ConstantHeadProperties,
+    GeneralHeadProperties,
+    RechargeProperties,
+    RiverProperties,
+    WellProperties
+} from '../components';
+import React, { Component } from 'react';
+import { browserHistory, withRouter } from 'react-router';
+import {
+    editBoundary,
+    goToBoundaryOverview,
+    goToBoundaryTypeOverview
+} from '../../routes';
+import { first, maxBy, minBy } from 'lodash';
+
+import { Action } from '../actions/index';
+import { BoundaryOverview } from '../../t03/containers/index';
+import { boundary as BoundarySelector } from '../selectors/index';
+import Button from '../../components/primitive/Button';
+import { Command } from '../../t03/actions/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
-import {
-    RiverProperties,
-    WellProperties,
-    RechargeProperties,
-    ConstantHeadProperties,
-    GeneralHeadProperties
-} from '../components';
+import Icon from '../../components/primitive/Icon';
+import Input from '../../components/primitive/Input';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { makeMapStateToPropsBoundaries } from '../selectors/mapState';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
-import { browserHistory, withRouter } from 'react-router';
-import { BoundaryOverview } from '../../t03/containers/index';
-import Input from '../../components/primitive/Input';
-import { Command } from '../../t03/actions/index';
-import { editBoundary, goToBoundaryOverview } from '../../routes';
-import { makeMapStateToPropsBoundaries } from '../selectors/mapState';
-import * as lodash from 'lodash';
 
 const styles = {
     container: {
         display: 'flex',
-        maxHeight: '100%'
+        height: '100%',
+        overflow: 'hidden'
     },
 
     left: {
@@ -39,11 +47,16 @@ const styles = {
     },
 
     properties: {
-        flex: 1
+        flex: 1,
+        overflowY: 'auto'
     },
 
     searchWrapper: {
         marginBottom: 6
+    },
+
+    backButtonWrapper: {
+        padding: styleGlobals.dimensions.spacing.medium
     }
 };
 
@@ -199,13 +212,25 @@ class ModelEditorBoundary extends Component {
             const { tool } = this.props;
             const { id, property } = this.props.params;
 
-            goToBoundaryOverview(tool, id, property, type);
+            goToBoundaryTypeOverview(tool, id, property, type);
         };
+    };
+
+    onBackButtonClick = () => {
+        const { tool, params } = this.props;
+        const { id, property, type, pid } = params;
+
+        if (pid) {
+            goToBoundaryTypeOverview(tool, id, property, type);
+        } else if (type) {
+            goToBoundaryOverview(tool, id, property);
+        }
     };
 
     render() {
         // eslint-disable-next-line no-shadow
-        const { style, boundaries, boundaryType } = this.props;
+        const { style, boundaries, boundaryType, params } = this.props;
+        const { id, property, type, pid } = params;
 
         const { searchTerm } = this.state;
 
@@ -221,6 +246,16 @@ class ModelEditorBoundary extends Component {
         return (
             <div style={[styles.container, style]}>
                 <div style={styles.left}>
+                    {type &&
+                        <div style={styles.backButtonWrapper}>
+                            <Button
+                                type="link"
+                                onClick={this.onBackButtonClick}
+                                icon={<Icon name="arrow_left" />}
+                            >
+                                Back to Overview
+                            </Button>
+                        </div>}
                     <div style={styles.searchWrapper}>
                         <Input
                             type="search"

@@ -1,45 +1,27 @@
 import { DataTableAction, PumpingRate } from '../../t03/components';
+import { Helper, LayoutComponents } from '../../core';
 import React, { Component, PropTypes } from 'react';
 
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
-import { Helper } from '../../core';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
-import { LayoutComponents } from '../../core';
 import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
 import { uniqueId } from 'lodash';
 
 const styles = {
-    wrapper: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-
     columns: {
-        display: 'flex',
-        flex: 1
+        display: 'flex'
     },
 
     columnFlex2: {
         flex: 2
     },
 
-    columnLeft: {
-        marginRight: 0.5 * styleGlobals.dimensions.spacing.large
-    },
-
-    columnRight: {
-        marginLeft: 0.5 * styleGlobals.dimensions.spacing.large
-    },
-
-    columnBody: {
-        flex: 1,
-        minHeight: 0,
-        overflow: 'auto'
+    columnNotLast: {
+        marginRight: styleGlobals.dimensions.gridGutter
     },
 
     dateInput: {
@@ -143,7 +125,7 @@ export default class WellProperties extends Component {
                 <div style={[styles.columns]}>
                     <LayoutComponents.Column
                         heading="Properties"
-                        style={[styles.columnLeft]}
+                        style={[styles.columnNotLast]}
                     >
                         <LayoutComponents.InputGroup label="Well Name">
                             <Input
@@ -189,7 +171,7 @@ export default class WellProperties extends Component {
                             />
                         </LayoutComponents.InputGroup>
 
-                        <LayoutComponents.InputGroup label="Soil Layer">
+                        <LayoutComponents.InputGroup label="Select Layer">
                             <Select
                                 name="affected_layers"
                                 id={layerInputId}
@@ -266,7 +248,7 @@ export default class WellProperties extends Component {
                     </LayoutComponents.Column>
                     <LayoutComponents.Column
                         heading="Pumping Rates"
-                        style={[styles.columnRight, styles.columnFlex2]}
+                        style={[styles.columnFlex2]}
                     >
                         <DataTableAction component={this.pumpingRate} />
                         <PumpingRate

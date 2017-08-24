@@ -29,12 +29,8 @@ const styles = {
         display: 'flex'
     },
 
-    columnLeft: {
-        marginRight: 0.5 * styleGlobals.dimensions.spacing.large
-    },
-
-    columnRight: {
-        marginLeft: 0.5 * styleGlobals.dimensions.spacing.large
+    columnNotLast: {
+        marginRight: styleGlobals.dimensions.gridGutter
     },
 
     mapActionToolbar: {
@@ -256,7 +252,7 @@ class ModelEditorGeneral extends Component {
             <div style={[styles.columnContainer]}>
                 <LayoutComponents.Column
                     heading="General Properties"
-                    style={[styles.columnLeft]}
+                    style={[styles.columnNotLast]}
                 >
                     <form>
                         <LayoutComponents.InputGroup label="Name">
@@ -296,6 +292,7 @@ class ModelEditorGeneral extends Component {
                                 )}
                             />
                         </LayoutComponents.InputGroup>
+
                         <LayoutComponents.InputGroup label="Length Unit">
                             <Select
                                 value={stateModel.length_unit}
@@ -311,6 +308,7 @@ class ModelEditorGeneral extends Component {
                                 )}
                             />
                         </LayoutComponents.InputGroup>
+
                         <LayoutComponents.InputGroup label="Grid Resolution">
                             <Input
                                 disabled={readOnly}
@@ -339,6 +337,7 @@ class ModelEditorGeneral extends Component {
                                 placeholder="Y="
                             />
                         </LayoutComponents.InputGroup>
+
                         <LayoutComponents.InputGroup label="Bounding Box">
                             <Input
                                 disabled
@@ -371,6 +370,7 @@ class ModelEditorGeneral extends Component {
                                 placeholder="x_max="
                             />
                         </LayoutComponents.InputGroup>
+
                         <LayoutComponents.InputGroup>
                             <Input
                                 disabled
@@ -405,9 +405,10 @@ class ModelEditorGeneral extends Component {
                         </LayoutComponents.InputGroup>
                     </form>
                 </LayoutComponents.Column>
+
                 <LayoutComponents.Column
                     heading="Area"
-                    style={[styles.columnRight, styles.expandVerticalContainer]}
+                    style={[styles.expandVerticalContainer]}
                 >
                     <div style={[styles.mapActionToolbar]}>
                         {this.renderEditOnMapIcon(id, readOnly)}
