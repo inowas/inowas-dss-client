@@ -23,7 +23,7 @@ import styleGlobals from 'styleGlobals';
 
 import { Action } from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
-import { uniqueId }  from 'lodash';
+import { uniqueId } from 'lodash';
 import { geoJSON } from 'leaflet';
 
 const styles = {
@@ -37,7 +37,9 @@ const styles = {
     },
     centerToBoundsButton: {
         left: styleGlobals.dimensions.spacing.large,
-        top: styleGlobals.dimensions.navBarHeight + styleGlobals.dimensions.spacing.large,
+        top:
+            styleGlobals.dimensions.navBarHeight +
+            styleGlobals.dimensions.spacing.large,
         position: 'fixed',
         zIndex: 100001
     }
@@ -45,7 +47,6 @@ const styles = {
 
 @ConfiguredRadium
 class BackgroundMap extends Component {
-
     static propTypes = {
         model: PropTypes.object,
         setModelArea: PropTypes.func,
@@ -54,56 +55,60 @@ class BackgroundMap extends Component {
         params: PropTypes.object
     };
 
-    constructor( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
 
         this.state = {
             model: props.model
         };
     }
 
-    componentDidMount( ) {
-        this.invalidateMap( );
+    componentDidMount() {
+        this.invalidateMap();
     }
 
-    componentWillReceiveProps( nextProps ) {
+    componentWillReceiveProps(nextProps) {
         this.setState({ model: nextProps.model });
     }
 
-    componentWillUnmount( ) {
-        this.invalidateMap( );
+    componentWillUnmount() {
+        this.invalidateMap();
     }
 
-    isActive( ) {
-        return this.props.location.hash === '#edit' || this.props.location.hash === '#create' || this.props.location.hash === '#view';
+    isActive() {
+        return (
+            this.props.location.hash === '#edit' ||
+            this.props.location.hash === '#create' ||
+            this.props.location.hash === '#view'
+        );
     }
 
-    generateKeyFunction( geometry ) {
-        return md5(JSON.stringify( geometry ));
+    generateKeyFunction(geometry) {
+        return md5(JSON.stringify(geometry));
     }
 
-    getBounds = ( geometry ) => {
-        if ( geometry ) {
-            return geoJSON( geometry ).getBounds( );
+    getBounds = geometry => {
+        if (geometry) {
+            return geoJSON(geometry).getBounds();
         }
 
         return null;
     };
 
-    invalidateMap = ( ) => {
-        if ( this.map ) {
-            this.map.leafletElement.invalidateSize( );
+    invalidateMap = () => {
+        if (this.map) {
+            this.map.leafletElement.invalidateSize();
         }
     };
 
-    getStyle( type, subtype ) {
+    getStyle(type, subtype) {
         const modelStyles = this.state.model.styles;
 
-        if (!( type in modelStyles )) {
+        if (!(type in modelStyles)) {
             return modelStyles.default;
         }
 
-        if ( subtype === undefined ) {
+        if (subtype === undefined) {
             return modelStyles[type];
         }
 
@@ -111,14 +116,21 @@ class BackgroundMap extends Component {
             return modelStyles.default;
         }
 
-        return modelStyles[type][subtype ];
+        return modelStyles[type][subtype];
     }
 
-    renderArea( area ) {
-        if ( area && !(this.getEditable() && this.getEditable().property === 'area' )) {
+    renderArea(area) {
+        if (
+            area &&
+            !(this.getEditable() && this.getEditable().property === 'area')
+        ) {
             return (
                 <LayersControl.Overlay name="Area Geometry" checked>
-                    <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle( 'area' )}/>
+                    <GeoJSON
+                        key={this.generateKeyFunction(area)}
+                        data={area}
+                        style={this.getStyle('area')}
+                    />
                 </LayersControl.Overlay>
             );
         }
@@ -126,29 +138,38 @@ class BackgroundMap extends Component {
         return null;
     }
 
-    renderBoundingBox( bb ) {
-        if (!Array.isArray( bb )) {
+    renderBoundingBox(bb) {
+        if (!Array.isArray(bb)) {
             return null;
         }
 
-        const bounds = [
-            [bb[0][1], bb[0][0]],
-            [bb[1][1], bb[1][0]]
-        ];
+        const bounds = [[bb[0][1], bb[0][0]], [bb[1][1], bb[1][0]]];
 
         return (
             <LayersControl.Overlay name="Bounding Box" checked={false}>
-                <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
+                <Rectangle bounds={bounds} {...this.getStyle('bounding_box')} />
             </LayersControl.Overlay>
         );
     }
 
-    renderConstantHeads( boundaries ) {
-        const constantHeads = boundaries.filter(b => ( b.type === 'chd')
-        ).filter( b => ( !this.getEditable() || this.getEditable().type !== b.type || this.getEditable().id !== b.id )
-        ).map(b => ( <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle( b.type )}/> ));
+    renderConstantHeads(boundaries) {
+        const constantHeads = boundaries
+            .filter(b => b.type === 'chd')
+            .filter(
+                b =>
+                    !this.getEditable() ||
+                    this.getEditable().type !== b.type ||
+                    this.getEditable().id !== b.id
+            )
+            .map(b =>
+                <GeoJSON
+                    key={this.generateKeyFunction(b.geometry)}
+                    data={b.geometry}
+                    style={this.getStyle(b.type)}
+                />
+            );
 
-        if ( constantHeads.length === 0 ) {
+        if (constantHeads.length === 0) {
             return null;
         }
 
@@ -161,12 +182,24 @@ class BackgroundMap extends Component {
         );
     }
 
-    renderGeneralHeads( boundaries ) {
-        const generalHeads = boundaries.filter(b => ( b.type === 'ghb')
-        ).filter( b => ( !this.getEditable() || this.getEditable().type !== b.type || this.getEditable().id !== b.id )
-        ).map(b => ( <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle( b.type )}/> ));
+    renderGeneralHeads(boundaries) {
+        const generalHeads = boundaries
+            .filter(b => b.type === 'ghb')
+            .filter(
+                b =>
+                    !this.getEditable() ||
+                    this.getEditable().type !== b.type ||
+                    this.getEditable().id !== b.id
+            )
+            .map(b =>
+                <GeoJSON
+                    key={this.generateKeyFunction(b.geometry)}
+                    data={b.geometry}
+                    style={this.getStyle(b.type)}
+                />
+            );
 
-        if ( generalHeads.length === 0 ) {
+        if (generalHeads.length === 0) {
             return null;
         }
 
@@ -179,12 +212,24 @@ class BackgroundMap extends Component {
         );
     }
 
-    renderRecharges( boundaries ) {
-        const recharges = boundaries.filter(b => ( b.type === 'rch')
-        ).filter( b => ( !this.getEditable() || this.getEditable().type !== b.type || this.getEditable().id !== b.id )
-        ).map(b => ( <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle( b.type )}/> ));
+    renderRecharges(boundaries) {
+        const recharges = boundaries
+            .filter(b => b.type === 'rch')
+            .filter(
+                b =>
+                    !this.getEditable() ||
+                    this.getEditable().type !== b.type ||
+                    this.getEditable().id !== b.id
+            )
+            .map(b =>
+                <GeoJSON
+                    key={this.generateKeyFunction(b.geometry)}
+                    data={b.geometry}
+                    style={this.getStyle(b.type)}
+                />
+            );
 
-        if ( recharges.length === 0 ) {
+        if (recharges.length === 0) {
             return null;
         }
 
@@ -197,12 +242,24 @@ class BackgroundMap extends Component {
         );
     }
 
-    renderRivers( boundaries ) {
-        const rivers = boundaries.filter(b => ( b.type === 'riv')
-        ).filter( b => ( !this.getEditable() || this.getEditable().type !== b.type || this.getEditable().id !== b.id )
-        ).map(b => ( <GeoJSON key={this.generateKeyFunction( b.geometry )} data={b.geometry} style={this.getStyle( b.type )}/> ));
+    renderRivers(boundaries) {
+        const rivers = boundaries
+            .filter(b => b.type === 'riv')
+            .filter(
+                b =>
+                    !this.getEditable() ||
+                    this.getEditable().type !== b.type ||
+                    this.getEditable().id !== b.id
+            )
+            .map(b =>
+                <GeoJSON
+                    key={this.generateKeyFunction(b.geometry)}
+                    data={b.geometry}
+                    style={this.getStyle(b.type)}
+                />
+            );
 
-        if ( rivers.length === 0 ) {
+        if (rivers.length === 0) {
             return null;
         }
 
@@ -215,12 +272,27 @@ class BackgroundMap extends Component {
         );
     }
 
-    renderWells( boundaries ) {
-        const wells = boundaries.filter(b => ( b.type === 'wel')
-        ).filter( b => ( !this.getEditable() || this.getEditable().type !== b.type || this.getEditable().id !== b.id )
-        ).map(b => ( <CircleMarker key={b.id} center={[b.geometry.coordinates[1], b.geometry.coordinates[0]]} {...this.getStyle(b.type, b.metadata.well_type)}/> ));
+    renderWells(boundaries) {
+        const wells = boundaries
+            .filter(b => b.type === 'wel')
+            .filter(
+                b =>
+                    !this.getEditable() ||
+                    this.getEditable().type !== b.type ||
+                    this.getEditable().id !== b.id
+            )
+            .map(b =>
+                <CircleMarker
+                    key={b.id}
+                    center={[
+                        b.geometry.coordinates[1],
+                        b.geometry.coordinates[0]
+                    ]}
+                    {...this.getStyle(b.type, b.metadata.well_type)}
+                />
+            );
 
-        if ( wells.length === 0 ) {
+        if (wells.length === 0) {
             return null;
         }
 
@@ -233,40 +305,40 @@ class BackgroundMap extends Component {
         );
     }
 
-    getLatLngFromXY( coordinates ) {
-        return coordinates.map(c => ([c[1], c[0]]));
+    getLatLngFromXY(coordinates) {
+        return coordinates.map(c => [c[1], c[0]]);
     }
 
     onCreated = e => {
-        if ( this.getCreatable( ) === 'area' ) {
+        if (this.getCreatable() === 'area') {
             const polygon = e.layer;
-            const json = polygon.toGeoJSON( );
-            this.props.setModelArea(json.geometry, polygon.getBounds( ));
+            const json = polygon.toGeoJSON();
+            this.props.setModelArea(json.geometry, polygon.getBounds());
         }
 
-        if ( this.getCreatable( ) === 'wel' ) {
+        if (this.getCreatable() === 'wel') {
             const point = e.layer;
-            const json = point.toGeoJSON( );
+            const json = point.toGeoJSON();
         }
     };
 
     onEditPath = e => {
         const layers = e.layers;
-        layers.eachLayer( function( layer ) {
+        layers.eachLayer(function(layer) {
             const id = layer.options.id;
-            const geometry = layer.toGeoJSON( ).geometry;
+            const geometry = layer.toGeoJSON().geometry;
 
-            if ( id === 'area' ) {
+            if (id === 'area') {
                 const polygon = layer;
-                const json = polygon.toGeoJSON( );
-                this.props.setModelArea(json.geometry, polygon.getBounds( ));
+                const json = polygon.toGeoJSON();
+                this.props.setModelArea(json.geometry, polygon.getBounds());
             } else {
-                this.props.setBoundaryGeometry( id, geometry );
+                this.props.setBoundaryGeometry(id, geometry);
             }
         }, this);
     };
 
-    getCreatable = ( ) => {
+    getCreatable = () => {
         const { hash } = this.props.location;
         const { params } = this.props;
 
@@ -278,14 +350,19 @@ class BackgroundMap extends Component {
             return 'area';
         }
 
-        if (params.id && params.property === 'boundaries' && params.type && !params.pid) {
+        if (
+            params.id &&
+            params.property === 'boundaries' &&
+            params.type &&
+            !params.pid
+        ) {
             return params.type;
         }
 
         return null;
     };
 
-    renderCreateControl( ) {
+    renderCreateControl() {
         const options = {
             area: {
                 edit: {
@@ -300,8 +377,6 @@ class BackgroundMap extends Component {
                     marker: false,
                     delete: false
                 }
-
-
             },
             wel: {
                 edit: {
@@ -318,10 +393,14 @@ class BackgroundMap extends Component {
             }
         };
 
-        if ( this.getCreatable( )) {
+        if (this.getCreatable()) {
             return (
                 <FeatureGroup>
-                    <EditControl position="bottomright" onCreated={this.onCreated} {...options[this.getCreatable()]} />
+                    <EditControl
+                        position="bottomright"
+                        onCreated={this.onCreated}
+                        {...options[this.getCreatable()]}
+                    />
                 </FeatureGroup>
             );
         }
@@ -329,7 +408,7 @@ class BackgroundMap extends Component {
         return null;
     }
 
-    getEditable = ( ) => {
+    getEditable = () => {
         const { hash } = this.props.location;
         const { params } = this.props;
 
@@ -338,20 +417,29 @@ class BackgroundMap extends Component {
         }
 
         if (params.id && !params.property && !params.type && !params.pid) {
-            return {property: 'area', type: 'area', id: 'area'};
+            return { property: 'area', type: 'area', id: 'area' };
         }
 
-        if (params.id && params.property === 'boundaries' && params.type && params.pid) {
-            return {property: params.property, type: params.type, id: params.pid};
+        if (
+            params.id &&
+            params.property === 'boundaries' &&
+            params.type &&
+            params.pid
+        ) {
+            return {
+                property: params.property,
+                type: params.type,
+                id: params.pid
+            };
         }
 
         return null;
     };
 
-    renderEditControl( ) {
+    renderEditControl() {
         const editable = this.getEditable();
 
-        let editables = [ ];
+        let editables = [];
 
         if (editable) {
             if (editable.property === 'area' && editable.id === 'area') {
@@ -360,7 +448,7 @@ class BackgroundMap extends Component {
             }
 
             if (editable.property === 'boundaries') {
-                this.state.model.boundaries.forEach( b => {
+                this.state.model.boundaries.forEach(b => {
                     if (b.id === editable.id) {
                         editables.push({ id: b.id, geometry: b.geometry });
                     }
@@ -368,21 +456,46 @@ class BackgroundMap extends Component {
             }
         }
 
-
         editables = editables.map(e => {
-            switch (e.geometry.type.toLowerCase( )) {
+            switch (e.geometry.type.toLowerCase()) {
                 case 'polygon':
-                    return <Polygon key={uniqueId()} id={e.id} positions={this.getLatLngFromXY(e.geometry.coordinates[0])}/>;
+                    return (
+                        <Polygon
+                            key={uniqueId()}
+                            id={e.id}
+                            positions={this.getLatLngFromXY(
+                                e.geometry.coordinates[0]
+                            )}
+                        />
+                    );
                 case 'linestring':
-                    return <Polyline key={uniqueId()} id={e.id} positions={this.getLatLngFromXY( e.geometry.coordinates )}/>;
+                    return (
+                        <Polyline
+                            key={uniqueId()}
+                            id={e.id}
+                            positions={this.getLatLngFromXY(
+                                e.geometry.coordinates
+                            )}
+                        />
+                    );
                 case 'point':
-                    return <Circle key={uniqueId()} id={e.id} center={[e.geometry.coordinates[1], e.geometry.coordinates[0]]} radius={50}/>;
+                    return (
+                        <Circle
+                            key={uniqueId()}
+                            id={e.id}
+                            center={[
+                                e.geometry.coordinates[1],
+                                e.geometry.coordinates[0]
+                            ]}
+                            radius={50}
+                        />
+                    );
                 default:
                     return null;
             }
         });
 
-        if ( editables.length === 0 ) {
+        if (editables.length === 0) {
             return null;
         }
 
@@ -401,97 +514,141 @@ class BackgroundMap extends Component {
 
         return (
             <FeatureGroup>
-                <EditControl position="bottomright" onEdited={this.onEditPath} {...options}/> {editables}
+                <EditControl
+                    position="bottomright"
+                    onEdited={this.onEditPath}
+                    {...options}
+                />{' '}
+                {editables}
             </FeatureGroup>
         );
     }
 
-    returnToProperties = ( ) => {
-        this.invalidateMap( );
-        browserHistory.push( this.props.location.pathname );
+    returnToProperties = () => {
+        this.invalidateMap();
+        browserHistory.push(this.props.location.pathname);
     };
 
-    centerToBounds = ( ) => {
-        if ( this.map ) {
+    centerToBounds = () => {
+        if (this.map) {
             const area = this.state.model.geometry;
-            this.map.leafletElement.fitBounds(this.getBounds( area ));
+            this.map.leafletElement.fitBounds(this.getBounds(area));
         }
-    }
+    };
 
-    renderCenterToBoundsButton = ( ) => {
-        if ( this.props.location.hash === '#edit' || this.props.location.hash === '#create' ) {
-            return <Button onClick={this.centerToBounds} style={[ styles.centerToBoundsButton ]} iconInside><Icon name="marker"/></Button>;
+    renderCenterToBoundsButton = () => {
+        if (
+            this.props.location.hash === '#edit' ||
+            this.props.location.hash === '#create'
+        ) {
+            return (
+                <Button
+                    onClick={this.centerToBounds}
+                    style={[styles.centerToBoundsButton]}
+                    iconInside
+                >
+                    <Icon name="marker" />
+                </Button>
+            );
         }
 
         return null;
     };
 
-    renderToast( ) {
+    renderToast() {
         if (this.isActive()) {
             return (
-                <FloatingToast style={{
-                    position: 'absolute',
-                    bottom: 50,
-                    left: 50,
-                    zIndex: 100000
-                }} onClick={this.returnToProperties}>{'Return to Editor'}</FloatingToast>
+                <FloatingToast
+                    style={{
+                        position: 'absolute',
+                        bottom: 50,
+                        left: 50,
+                        zIndex: 100000
+                    }}
+                    onClick={this.returnToProperties}
+                >
+                    {'Return to Editor'}
+                </FloatingToast>
             );
         }
 
         return null;
     }
 
-    render( ) {
+    render() {
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
-        const boundaries = this.state.model.boundaries || [ ];
+        const boundaries = this.state.model.boundaries || [];
 
-        if ( !area || !area.coordinates ) {
+        if (!area || !area.coordinates) {
             return (
                 <div className="map-wrapper">
-                    <Map id="background-map" style={styles.map} center={[30, 0]} zoom={3} zoomControl={false} >
-                        <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                        {this.renderCreateControl( )}
+                    <Map
+                        id="background-map"
+                        style={styles.map}
+                        center={[30, 0]}
+                        zoom={3}
+                        zoomControl={false}
+                    >
+                        <TileLayer
+                            url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                            attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
+                        />
+                        {this.renderCreateControl()}
                     </Map>
-                    {this.renderToast( )}
+                    {this.renderToast()}
                 </div>
             );
         }
 
         return (
             <div className="map-wrapper">
-                <Map id="background-map" ref={map => {
-                    this.map = map;
-                }} bounds={this.getBounds( area )} zoomControl={false} boundsOptions={{
-                    padding: [ 60, 60 ]
-                }}>
+                <Map
+                    id="background-map"
+                    ref={map => {
+                        this.map = map;
+                    }}
+                    bounds={this.getBounds(area)}
+                    zoomControl={false}
+                    boundsOptions={{
+                        padding: [60, 60]
+                    }}
+                >
                     <LayersControl position="topright">
                         <LayersControl.BaseLayer name="OSM" checked>
-                            <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
+                            <TileLayer
+                                url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                                attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
+                            />
                         </LayersControl.BaseLayer>
                         <LayersControl.BaseLayer name="OSM.BlackAndWhite">
-                            <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' url="http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"/>
+                            <TileLayer
+                                attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                                url="http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                            />
                         </LayersControl.BaseLayer>
                         <LayersControl.BaseLayer name="OSM.Mapnik">
-                            <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"/>
+                            <TileLayer
+                                attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                                url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                            />
                         </LayersControl.BaseLayer>
 
-                        {this.renderArea( area )}
-                        {this.renderBoundingBox( boundingBox )}
-                        {this.renderConstantHeads( boundaries )}
-                        {this.renderGeneralHeads( boundaries )}
-                        {this.renderRecharges( boundaries )}
-                        {this.renderRivers( boundaries )}
-                        {this.renderWells( boundaries )}
+                        {this.renderArea(area)}
+                        {this.renderBoundingBox(boundingBox)}
+                        {this.renderConstantHeads(boundaries)}
+                        {this.renderGeneralHeads(boundaries)}
+                        {this.renderRecharges(boundaries)}
+                        {this.renderRivers(boundaries)}
+                        {this.renderWells(boundaries)}
                     </LayersControl>
 
-                    {this.renderCreateControl( )}
-                    {this.renderEditControl( )}
-                    {this.renderCenterToBoundsButton( )}
+                    {this.renderCreateControl()}
+                    {this.renderEditControl()}
+                    {this.renderCenterToBoundsButton()}
                 </Map>
 
-                {this.renderToast( )}
-
+                {this.renderToast()}
             </div>
         );
     }
@@ -508,12 +665,12 @@ const actions = {
 
 const mapDispatchToProps = (dispatch, { tool }) => {
     const wrappedActions = {};
-    for ( const key in actions ) {
-        if (actions.hasOwnProperty( key )) {
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function( ) {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch(actions[key]( tool, ...args ));
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
             };
         }
     }
@@ -522,6 +679,8 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 // eslint-disable-next-line no-class-assign
-BackgroundMap = withRouter( connect( mapStateToProps, mapDispatchToProps )( BackgroundMap ));
+BackgroundMap = withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(BackgroundMap)
+);
 
 export default BackgroundMap;

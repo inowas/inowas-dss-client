@@ -1,54 +1,46 @@
+import styleGlobals from 'styleGlobals';
+
 const getInitialStyles = () => {
     return {
         area: {
-            weight: 2,
-            opacity: 1,
-            color: 'grey',
-            dashArray: '3',
-            fillColor: 'blue',
-            fillOpacity: 0.05
+            weight: 5,
+            opacity: 0.7,
+            color: styleGlobals.colors.primary,
+            fill: false
         },
         bounding_box: {
-            weight: 2,
-            color: 'green',
-            opacity: 1,
-            dashArray: '3',
-            fillOpacity: 0
+            color: '#000',
+            weight: 0.5,
+            fill: false
         },
         grid: {
             weight: 1,
             opacity: 1,
             color: 'blue',
-            dashArray: '3',
-            fillOpacity: 0
+            fill: false
         },
         chd: {
             weight: 2,
-            color: 'green',
-            opacity: 1,
-            dashArray: '3',
-            fillOpacity: 0
+            color: styleGlobals.colors.accent,
+            opacity: 0.7,
+            fill: false
         },
         ghb: {
             weight: 2,
-            color: 'green',
-            opacity: 1,
-            dashArray: '3',
-            fillOpacity: 0
+            color: styleGlobals.colors.accent,
+            opacity: 0.7,
+            fill: false
         },
         rch: {
             weight: 2,
-            color: 'green',
-            opacity: 1,
-            dashArray: '3',
-            fillOpacity: 0
+            color: styleGlobals.colors.accent,
+            opacity: 0.7,
+            fillOpacity: 0.3
         },
         riv: {
             weight: 2,
-            color: 'green',
-            opacity: 1,
-            dashArray: '3',
-            fillOpacity: 0
+            color: styleGlobals.colors.accent,
+            opacity: 0.7
         },
         riv_op: {
             radius: 5,
@@ -158,19 +150,19 @@ export const getInitialState = () => {
 
 export const getInitialLayerState = () => {
     return {
-        'botm': 0,
-        'description': '',
-        'hani': 0,
-        'hk': 0,
-        'layavg': 0,
-        'laytyp': 0,
-        'laywet': 0,
-        'name': 'new layer',
-        'number': 0,
-        'ss': 0,
-        'sy': 0,
-        'top': 0,
-        'vka': 0,
+        botm: 0,
+        description: '',
+        hani: 0,
+        hk: 0,
+        layavg: 0,
+        laytyp: 0,
+        laywet: 0,
+        name: 'new layer',
+        number: 0,
+        ss: 0,
+        sy: 0,
+        top: 0,
+        vka: 0
     };
 };
 

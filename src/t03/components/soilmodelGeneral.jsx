@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../components/primitive/Input';
+import ConfiguredRadium from 'ConfiguredRadium';
+import { LayoutComponents } from '../../core';
 
+@ConfiguredRadium
 class SoilmodelGeneral extends React.Component {
-
-    render () {
+    render() {
         const { soilmodel, readOnly } = this.props;
 
         return (
-            <div className="grid-container">
-                <section className="col col-rel-2 stacked">
-                    <form>
-                        <div className="form-group">
-                            <label>WetFct</label>
-                            <Input disabled={readOnly}
-                                   className="input"
-                                   onChange={() => null}
-                                   name="name"
-                                   value={soilmodel.general.wetfct}
-                                   placeholder="Name"/>
-                        </div>
-                    </form>
+            <div>
+                <section>
+                    <LayoutComponents.InputGroup label="WetFct">
+                        <Input
+                            disabled={readOnly}
+                            onChange={() => null}
+                            name="name"
+                            value={soilmodel.general.wetfct}
+                            placeholder="Name"
+                        />
+                    </LayoutComponents.InputGroup>
                 </section>
             </div>
         );
