@@ -13,8 +13,7 @@ import { uniqueId } from 'lodash';
 
 const styles = {
     columns: {
-        display: 'flex',
-        backgroundColor: 'red'
+        display: 'flex'
     },
 
     columnFlex2: {
