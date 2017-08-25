@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { DataTable } from '../../core';
 import Icon from '../../components/primitive/Icon';
 import Button from '../../components/primitive/Button';
-import { editBoundary, editBoundaryOnMap } from '../../routes';
+// import { editBoundary, editBoundaryOnMap } from '../../routes';
+import { Routing } from '../actions';
 
 class BoundaryOverview extends DataTable.Component.DataTable {
     constructor(props) {
@@ -150,14 +151,14 @@ class BoundaryOverview extends DataTable.Component.DataTable {
 
     onBoundaryClick = (boundaryId, type) => {
         const { tool, id, property } = this.props;
-        editBoundary(tool, id, property, type, boundaryId);
+        Routing.editBoundary(tool, id, property, type, boundaryId);
     };
 
     onBoundaryMapClick = (type, boundaryId) => {
         return () => {
             const { tool, id, property } = this.props;
             console.warn('kgberrg');
-            editBoundaryOnMap(tool, id, property, type, boundaryId);
+            Routing.editBoundaryOnMap(tool, id, property, type, boundaryId);
         };
     };
 }

@@ -9,11 +9,12 @@ import {
 } from '../components';
 import React, { Component } from 'react';
 import { browserHistory, withRouter } from 'react-router';
-import {
-    editBoundary,
-    goToBoundaryOverview,
-    goToBoundaryTypeOverview
-} from '../../routes';
+// import {
+//     editBoundary,
+//     goToBoundaryOverview,
+//     goToBoundaryTypeOverview
+// } from '../../routes';
+import { Routing } from '../actions';
 import { first, maxBy, minBy } from 'lodash';
 
 import { Action } from '../actions/index';
@@ -204,7 +205,7 @@ class ModelEditorBoundary extends Component {
         const { tool } = this.props;
         const { id, property } = this.props.params;
 
-        editBoundary(tool, id, property, type, boundaryId);
+        Routing.editBoundary(tool, id, property, type, boundaryId);
     };
 
     onBoundaryTypeClick = type => {
@@ -212,7 +213,7 @@ class ModelEditorBoundary extends Component {
             const { tool } = this.props;
             const { id, property } = this.props.params;
 
-            goToBoundaryTypeOverview(tool, id, property, type);
+            Routing.goToBoundaryTypeOverview(tool, id, property, type);
         };
     };
 
@@ -223,7 +224,7 @@ class ModelEditorBoundary extends Component {
         if (pid) {
             goToBoundaryTypeOverview(tool, id, property, type);
         } else if (type) {
-            goToBoundaryOverview(tool, id, property);
+            Routing.goToBoundaryOverview(tool, id, property);
         }
     };
 

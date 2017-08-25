@@ -6,7 +6,8 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Button from '../../components/primitive/Button';
 import styleGlobals from 'styleGlobals';
-import { newBoundary } from '../../routes';
+// import { newBoundary } from '../../routes';
+import { Routing } from '../actions';
 import { BoundaryOverview } from '../components';
 
 const styles = {
@@ -57,7 +58,8 @@ class BoundariesOverview extends React.PureComponent {
                 <Button
                     icon={<Icon name="add" />}
                     type="link"
-                    onClick={() => newBoundary(tool, id, property, type)}
+                    onClick={() =>
+                        Routing.newBoundary(tool, id, property, type)}
                 >
                     Add new
                 </Button>
