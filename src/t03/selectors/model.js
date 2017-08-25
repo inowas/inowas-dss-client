@@ -38,15 +38,15 @@ const getInitialStyles = () => {
             fillOpacity: 0.3
         },
         riv: {
-            weight: 2,
+            weight: 5,
             color: styleGlobals.colors.accent,
-            opacity: 0.7
+            opacity: 1
         },
         riv_op: {
             radius: 5,
-            color: 'blue',
+            color: styleGlobals.colors.grayDark,
             weight: 2,
-            fillColor: 'darkblue',
+            fillColor: styleGlobals.colors.grayDark,
             fillOpacity: 0.7
         },
         wel: {

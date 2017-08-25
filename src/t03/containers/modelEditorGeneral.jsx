@@ -21,7 +21,7 @@ import Button from '../../components/primitive/Button';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import TimeUnit from '../../model/TimeUnit';
-import LengthUnit from '../../model/TimeUnit';
+import LengthUnit from '../../model/LengthUnit';
 import { LayoutComponents } from '../../core';
 
 const styles = {
