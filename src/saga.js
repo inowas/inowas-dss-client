@@ -1,7 +1,6 @@
 import { takeEvery, call } from 'redux-saga/effects';
 import { WebData } from './core';
-// import {Saga as T03} from './t03/index';
-import * as T03 from './t03/sagas';
+import { Saga as T03 } from './t03/index';
 
 export default function* rootSaga() {
     yield [

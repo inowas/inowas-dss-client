@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { createModelReducer } from '../t03/reducers';
+import { Reducer } from '../t03/index';
 
 const createModelEditorReducer = tool => {
     return combineReducers({
-        model: createModelReducer(tool)
+        model: Reducer.createModelReducer(tool)
     });
 };
 
