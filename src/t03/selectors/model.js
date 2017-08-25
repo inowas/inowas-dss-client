@@ -20,15 +20,15 @@ const getInitialStyles = () => {
             fill: false
         },
         chd: {
-            weight: 2,
+            weight: 5,
             color: styleGlobals.colors.accent,
-            opacity: 0.7,
+            opacity: 1,
             fill: false
         },
         ghb: {
-            weight: 2,
+            weight: 5,
             color: styleGlobals.colors.accent,
-            opacity: 0.7,
+            opacity: 1,
             fill: false
         },
         rch: {
