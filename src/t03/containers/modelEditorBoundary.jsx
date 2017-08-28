@@ -222,7 +222,7 @@ class ModelEditorBoundary extends Component {
         const { id, property, type, pid } = params;
 
         if (pid) {
-            goToBoundaryTypeOverview(tool, id, property, type);
+            Routing.goToBoundaryTypeOverview(tool, id, property, type);
         } else if (type) {
             Routing.goToBoundaryOverview(tool, id, property);
         }
