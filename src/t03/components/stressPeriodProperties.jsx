@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { StressPeriods } from '../../t03/selectors';
 import styleGlobals from 'styleGlobals';
-import { uniqueId } from 'lodash';
+import { orderBy } from 'lodash';
 
 const styles = {
     columns: {
@@ -29,6 +29,32 @@ const styles = {
     }
 };
 
+const stressPeriodsToFlowPy = (rows, start, end) => {
+
+    let stressPeriods = orderBy( rows, [ 'totim_start' ], [ 'asc' ] ).map( (data) => {
+        return {
+            totim_start: Helper.diffInDays( start, data.totim_start ),
+            nstp: parseInt( data.nstp ),
+            tsmult: parseFloat( data.tsmult ),
+            steady: data.steady ? true : false
+        };
+    } );
+
+    let perlen = 0;
+
+    stressPeriods = orderBy( stressPeriods, [ 'totim_start' ], [ 'desc' ] ).map( (data) => {
+        const obj = {
+            ...data,
+            perlen: perlen - data.totim_start
+        };
+        perlen = data.totim_start;
+        return obj;
+    } );
+    stressPeriods[ 0 ].perlen = Helper.diffInDays( start, end ) - stressPeriods[ 0 ].totim_start;
+
+    return orderBy( stressPeriods, [ 'totim_start' ], [ 'asc' ] );
+};
+
 @ConfiguredRadium
 class StressPeriodProperties extends React.Component {
     constructor(props) {
@@ -36,17 +62,30 @@ class StressPeriodProperties extends React.Component {
 
         this.state = {
             stressPeriods: StressPeriods.getInitialState(),
+            startDate: null,
+            endDate: null,
             initialized: false
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
+        this.setState( prevState => {
             return {
-                stressPeriods: nextProps.stressPeriods
-                    ? nextProps.stressPeriods
+                stressPeriods: nextProps.stressPeriods ? {
+                        ...nextProps.stressPeriods,
+                        stress_periods: orderBy( nextProps.stressPeriods.stress_periods, [ 'totim_start' ], [ 'asc' ] ).map( (data) => {
+                            return {
+                                ...data,
+                                totim_start: Formatter.dateToYmd(
+                                    Helper.addDays( data.totim_start )( nextProps.stressPeriods.start_date_time )
+                                )
+                            };
+                        } )
+                    }
                     : prevState.stressPeriods,
-                initialized: true
+                initialized: true,
+                startDate: nextProps.stressPeriods && !prevState.startDate ? nextProps.stressPeriods.start_date_time : prevState.stressPeriods.startDate,
+                endDate: nextProps.stressPeriods && !prevState.endDate ? nextProps.stressPeriods.end_date_time : prevState.stressPeriods.endDate,
             };
         });
     }
@@ -60,7 +99,7 @@ class StressPeriodProperties extends React.Component {
                     stressPeriods: {
                         ...prevState.stressPeriods,
                         [name]: Formatter.dateToAtomFormat( value ),
-                        stress_periods: this.dataTable.getRows()
+                        stress_periods: this.dataTable.getRows(),
                     }
                 };
             } );
@@ -70,12 +109,16 @@ class StressPeriodProperties extends React.Component {
     save = () => {
         this.props.onSave({
             ...this.state.stressPeriods,
-            stress_periods: this.dataTable.getRows()
+            stress_periods: stressPeriodsToFlowPy(
+                this.dataTable.getRows(),
+                this.state.stressPeriods.start_date_time,
+                this.state.stressPeriods.end_date_time,
+            )
         });
     };
 
     render() {
-        const { stressPeriods, initialized } = this.state;
+        const { stressPeriods, initialized} = this.state;
         const { updateStressPeriodsStatus } = this.props;
 
         if (!initialized || !stressPeriods) {
@@ -94,14 +137,7 @@ class StressPeriodProperties extends React.Component {
 
         const data = Helper.addIdFromIndex(
             stressPeriods.stress_periods || []
-        ).map(v => {
-            return {
-                ...v,
-                totim_start: Formatter.dateToYmd(
-                    Helper.addDays(v.totim_start)(stressPeriods.start_date_time)
-                )
-            };
-        });
+        );
 
         return (
             <div>
@@ -160,8 +196,6 @@ class StressPeriodProperties extends React.Component {
                         <StressPeriodDataTable
                             ref={dataTable => (this.dataTable = dataTable)}
                             rows={data}
-                            start={stressPeriods.start_date_time}
-                            end={stressPeriods.end_date_time}
                         />
                     </LayoutComponents.Column>
                 </div>

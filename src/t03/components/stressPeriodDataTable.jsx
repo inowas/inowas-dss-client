@@ -4,7 +4,7 @@ import * as edit from 'react-edit';
 import {DataTable, Formatter, Helper} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
-import { cloneDeep, sortBy, last, orderBy } from 'lodash';
+import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
 class StressPeriodDataTable extends DataTable.Component.DataTable {
@@ -110,31 +110,7 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
         };
     }
 
-    getRows = () => {
-        const {start, end} = this.props;
-
-        let stressPeriods = orderBy(this.state.rows, ['totim_start'], ['asc']).map((data) => {
-            return {
-                totim_start: Helper.diffInDays(start, data.totim_start),
-                nstp: parseInt(data.nstp),
-                tsmult: parseFloat(data.tsmult),
-                steady: data.steady ? true : false
-            }
-        });
-        let perlen = 0;
-
-        stressPeriods = orderBy(stressPeriods, [ 'totim_start' ], [ 'desc' ] ).map( (data) => {
-            const obj = {
-                ...data,
-                perlen: perlen - data.totim_start
-            };
-            perlen = data.totim_start;
-            return obj;
-        } );
-        stressPeriods[0].perlen = Helper.diffInDays(start, end) - stressPeriods[0].totim_start;
-
-        return orderBy(stressPeriods, [ 'totim_start' ], [ 'asc' ] );
-    };
+    getRows = () => cloneDeep(this.state.rows);
 
     onAdd = (e, increment) => {
         e.preventDefault();
@@ -146,7 +122,6 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
         const nstp = lastRow && lastRow.nstp ? lastRow.nstp : 1;
         const tsmult = lastRow && lastRow.tsmult ? lastRow.tsmult : 1;
         const steady = lastRow && lastRow.steady ? lastRow.steady : false;
-        const perlen = lastRow && lastRow.perlen ? lastRow.perlen : 0;
 
         rows.push({
             id: uuid.v4(),
@@ -154,7 +129,6 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
             nstp,
             tsmult,
             steady,
-            perlen
         });
 
         this.setState((prevState, props) => {return { ...prevState, rows };});
