@@ -36,6 +36,26 @@ const styles = {
     saveButtonWrapper: {
         textAlign: 'right',
         marginTop: styleGlobals.dimensions.spacing.medium
+    },
+
+    observationPointSelection: {
+        wrapper: {
+            display: 'flex',
+            marginBottom: styleGlobals.dimensions.spacing.medium,
+            alignItems: 'center'
+        },
+
+        input: {
+            flex: 1,
+            marginRight: styleGlobals.dimensions.spacing.medium
+        },
+
+        button: {
+            paddingTop: styleGlobals.dimensions.spacing.medium,
+            paddingBottom: styleGlobals.dimensions.spacing.medium,
+            paddingLeft: styleGlobals.dimensions.spacing.medium,
+            paddingRight: styleGlobals.dimensions.spacing.medium
+        }
     }
 };
 
@@ -121,6 +141,63 @@ class RiverProperties extends Component {
         });
     };
 
+    handleObservationPointNameInputChange = value => {
+        this.setState(prevState => {
+            const indexOfSelectedObservationPoint = prevState.boundary.observation_points.findIndex(
+                op => op.id === prevState.selectedObservationPoint
+            );
+
+            return {
+                ...prevState,
+                boundary: {
+                    ...prevState.boundary,
+                    observation_points: [
+                        ...prevState.boundary.observation_points.slice(
+                            0,
+                            indexOfSelectedObservationPoint
+                        ),
+                        {
+                            ...prevState.boundary.observation_points[
+                                indexOfSelectedObservationPoint
+                            ],
+                            name: value
+                        },
+                        ...prevState.boundary.observation_points.slice(
+                            indexOfSelectedObservationPoint + 1,
+                            prevState.boundary.observation_points.length
+                        )
+                    ]
+                }
+            };
+        });
+    };
+
+    handleObservationPointDelete = () => {
+        this.setState(prevState => {
+            const indexOfSelectedObservationPoint = prevState.boundary.observation_points.findIndex(
+                op => op.id === prevState.selectedObservationPoint
+            );
+
+            return {
+                ...prevState,
+                boundary: {
+                    ...prevState.boundary,
+                    observation_points: [
+                        ...prevState.boundary.observation_points.slice(
+                            0,
+                            indexOfSelectedObservationPoint
+                        ),
+                        ...prevState.boundary.observation_points.slice(
+                            indexOfSelectedObservationPoint + 1,
+                            prevState.boundary.observation_points.length
+                        )
+                    ]
+                },
+                selectedObservationPoint: null
+            };
+        });
+    };
+
     getDateTimeValue = () => {
         const key = this.state.selectedObservationPoint;
         const observationPoints =
@@ -161,21 +238,59 @@ class RiverProperties extends Component {
         });
     };
 
-    renderObservationPoints = boundary => {
+    renderObservationPointsSelection = boundary => {
         if (!boundary.observation_points) {
             return null;
         }
 
-        return boundary.observation_points.map(op => {
-            return (
-                <p
-                    key={op.id}
-                    onClick={() => this.selectObservationPoint(op.id)}
-                >
-                    {op.name}
-                </p>
-            );
-        });
+        const { selectedObservationPoint } = this.state;
+
+        return (
+            <div>
+                <div style={[styles.observationPointSelection.wrapper]}>
+                    <Select
+                        style={[styles.observationPointSelection.input]}
+                        options={boundary.observation_points.map(op => ({
+                            value: op.id,
+                            label: op.name
+                        }))}
+                        value={selectedObservationPoint}
+                        onChange={op => this.selectObservationPoint(op.value)}
+                    />
+                    <Button
+                        style={styles.observationPointSelection.button}
+                        iconInside
+                        disabled
+                        icon={<Icon name="add" />}
+                    />
+                </div>
+                {selectedObservationPoint &&
+                    <div style={[styles.observationPointSelection.wrapper]}>
+                        <LayoutComponents.InputGroup
+                            label="Name"
+                            style={[styles.observationPointSelection.input]}
+                        >
+                            <Input
+                                type="text"
+                                value={
+                                    boundary.observation_points.find(
+                                        op => op.id === selectedObservationPoint
+                                    ).name
+                                }
+                                onChange={
+                                    this.handleObservationPointNameInputChange
+                                }
+                            />
+                        </LayoutComponents.InputGroup>
+                        <Button
+                            style={styles.observationPointSelection.button}
+                            iconInside
+                            onClick={this.handleObservationPointDelete}
+                            icon={<Icon name="trash" />}
+                        />
+                    </div>}
+            </div>
+        );
     };
 
     render() {
@@ -259,24 +374,24 @@ class RiverProperties extends Component {
                             boundary={boundary}
                             styles={mapStyles}
                         />
-
-                        <div>
-                            Observation Stations
-                            {this.renderObservationPoints(boundary)}
-                        </div>
                     </LayoutComponents.Column>
 
                     <LayoutComponents.Column
-                        heading="Flux Boundaries"
+                        heading="Observation Points"
                         style={[styles.columnFlex2]}
                     >
-                        <DataTableAction component={this.observationPoint} />
-                        <RiverObservationPoint
-                            ref={observationPoint => {
-                                this.observationPoint = observationPoint;
-                            }}
-                            rows={observationPoints}
-                        />
+                        {this.renderObservationPointsSelection(boundary)}
+                        <LayoutComponents.Column heading="Flux Boundaries">
+                            <DataTableAction
+                                component={this.observationPoint}
+                            />
+                            <RiverObservationPoint
+                                ref={observationPoint => {
+                                    this.observationPoint = observationPoint;
+                                }}
+                                rows={observationPoints}
+                            />
+                        </LayoutComponents.Column>
                     </LayoutComponents.Column>
                 </div>
                 <div style={styles.saveButtonWrapper}>
