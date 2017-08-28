@@ -24,7 +24,7 @@ import styleGlobals from 'styleGlobals';
 import { Action } from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
 import { uniqueId } from 'lodash';
-import { geoJSON } from 'leaflet';
+import {geoJSON, geoJson} from 'leaflet';
 
 const styles = {
     map: {
@@ -329,9 +329,9 @@ class BackgroundMap extends Component {
             const geometry = layer.toGeoJSON().geometry;
 
             if (id === 'area') {
-                const polygon = layer;
-                const json = polygon.toGeoJSON();
-                this.props.setModelArea(json.geometry, polygon.getBounds());
+                const json = layer.toGeoJSON();
+                const bounds = geoJson(json).getBounds();
+                this.props.setModelArea(json.geometry, bounds);
             } else {
                 this.props.setBoundaryGeometry(id, geometry);
             }
