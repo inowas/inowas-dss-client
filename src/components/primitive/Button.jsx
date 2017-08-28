@@ -75,8 +75,26 @@ const styles = {
     },
 
     icon: {
-        marginRight: '0.5em',
-        color: styleGlobals.colors.font
+        notOnlyIcon: {
+            marginRight: '0.5em'
+        },
+        type: {
+            default: {
+                color: styleGlobals.colors.grayLight
+            },
+
+            primary: {
+                color: styleGlobals.colors.grayLight
+            },
+
+            accent: {
+                color: styleGlobals.colors.grayLight
+            },
+
+            link: {
+                color: styleGlobals.colors.font
+            }
+        }
     }
 };
 
@@ -105,7 +123,11 @@ const Button = ConfiguredRadium(function(props) {
         >
             {icon &&
                 React.cloneElement(icon, {
-                    style: [styles.icon]
+                    style: [
+                        iconInside || styles.icon.notOnlyIcon,
+                        styles.icon.type[type],
+                        icon.props.style
+                    ]
                 })}
             {children}
         </button>
