@@ -106,17 +106,32 @@ class RiverProperties extends Component {
         });
     }
 
-    handleInputChange = (value, name, key) => {
-        this.setState(function(prevState, props) {
-            if (key) {
+    handleInputChange = (name, key) => {
+        return value => {
+            this.setState( function (prevState, props) {
+                if (key) {
+                    return {
+                        ...prevState,
+                        boundary: {
+                            ...prevState.boundary,
+                            [key]: {
+                                ...prevState.boundary[ key ],
+                                [name]: value
+                            },
+                            observation_points: mergeObservationPoints(
+                                prevState.boundary.observation_points,
+                                prevState.selectedObservationPoint,
+                                this.observationPoint.getRows()
+                            )
+                        }
+                    };
+                }
+
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
-                        [key]: {
-                            ...prevState.boundary[key],
-                            [name]: value
-                        },
+                        [name]: value,
                         observation_points: mergeObservationPoints(
                             prevState.boundary.observation_points,
                             prevState.selectedObservationPoint,
@@ -124,21 +139,16 @@ class RiverProperties extends Component {
                         )
                     }
                 };
-            }
+            } );
+        }
+    };
 
-            return {
-                ...prevState,
-                boundary: {
-                    ...prevState.boundary,
-                    [name]: value,
-                    observation_points: mergeObservationPoints(
-                        prevState.boundary.observation_points,
-                        prevState.selectedObservationPoint,
-                        this.observationPoint.getRows()
-                    )
-                }
-            };
-        });
+    handleSelectChange = (name, key, useArray) => {
+        if (useArray) {
+            return data => this.handleInputChange(name, key)(data ? [data.value] : []);
+        }
+
+        return data => this.handleInputChange(name, key)(data ? data.value : undefined);
     };
 
     handleObservationPointNameInputChange = value => {
@@ -311,8 +321,7 @@ class RiverProperties extends Component {
                             <Input
                                 name="name"
                                 id={nameInputId}
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange('name')}
                                 value={boundary.name}
                                 type="text"
                                 placeholder="name"
@@ -328,11 +337,7 @@ class RiverProperties extends Component {
                                         ? boundary.affected_layers[0]
                                         : undefined
                                 }
-                                onChange={data =>
-                                    this.handleInputChange(
-                                        data ? [data.value] : [],
-                                        'affected_layers'
-                                    )}
+                                onChange={this.handleSelectChange('affected_layers', null, true)}
                                 options={[
                                     {
                                         value: 0,

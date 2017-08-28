@@ -4,7 +4,8 @@ import styleGlobals from 'styleGlobals';
 import Input from '../../components/primitive/Input';
 import Select, {
     extractSimpleValues,
-    hydrateSimpleValues
+    hydrateSimpleValues,
+    arrayValuesToInt
 } from '../../components/primitive/Select';
 import Icon from '../../components/primitive/Icon';
 import { uniqueId, find } from 'lodash';
@@ -17,6 +18,7 @@ import {
 } from '../../t03/components';
 import { Helper } from '../../core';
 import ConfiguredRadium from 'ConfiguredRadium';
+import {compose} from 'redux';
 
 const styles = {
     columns: {
@@ -112,17 +114,18 @@ class ConstantHeadProperties extends Component {
         });
     }
 
-    handleInputChange = (value, name, key) => {
-        this.setState(function(prevState, props) {
-            if (key) {
+    handleInputChange = (name, callable) => {
+        return value => {
+
+            if (callable) {
+                value = callable(value);
+            }
+            this.setState( function (prevState, props) {
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
-                        [key]: {
-                            ...prevState.boundary[key],
-                            [name]: value
-                        },
+                        [name]: value,
                         observation_points: mergeObservationPoints(
                             prevState.boundary.observation_points,
                             prevState.selectedObservationPoint,
@@ -130,21 +133,8 @@ class ConstantHeadProperties extends Component {
                         )
                     }
                 };
-            }
-
-            return {
-                ...prevState,
-                boundary: {
-                    ...prevState.boundary,
-                    [name]: value,
-                    observation_points: mergeObservationPoints(
-                        prevState.boundary.observation_points,
-                        prevState.selectedObservationPoint,
-                        this.observationPoint.getRows()
-                    )
-                }
-            };
-        });
+            } );
+        }
     };
 
     handleObservationPointNameInputChange = value => {
@@ -317,8 +307,7 @@ class ConstantHeadProperties extends Component {
                             <Input
                                 name="name"
                                 id={nameInputId}
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange}
                                 value={boundary.name}
                                 type="text"
                                 placeholder="name"
@@ -336,13 +325,12 @@ class ConstantHeadProperties extends Component {
                                           )
                                         : undefined
                                 }
-                                onChange={data =>
-                                    this.handleInputChange(
-                                        extractSimpleValues(data).map(v =>
-                                            parseInt(v)
-                                        ),
-                                        'affected_layers'
-                                    )}
+                                onChange={this.handleInputChange( 'affected_layers',
+                                    compose(
+                                        arrayValuesToInt,
+                                        extractSimpleValues
+                                    )
+                                )}
                                 multi
                                 simpleValue
                                 options={[

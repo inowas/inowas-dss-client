@@ -11,6 +11,7 @@ const RadiumReactSelect = ConfiguredRadium(ReactSelect);
 // REVIEW what are those for?
 export const extractSimpleValues = data => data.split(',');
 export const hydrateSimpleValues = data => data.join(',');
+export const arrayValuesToInt = data => data.map( v => parseInt( v ) );
 
 const Select = ({ style, ...props }) => {
     // the inner components of react-select-plus don't use radium, so we have to make sure to pass an object and no array as wrapperStyle prop

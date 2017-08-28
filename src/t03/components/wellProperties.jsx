@@ -79,31 +79,65 @@ export default class WellProperties extends Component {
         this.setState({ boundary: nextProps.boundary });
     }
 
-    handleInputChange = (value, name, key) => {
-        this.setState(function(prevState, props) {
-            if (key) {
+    handleInputChange = (name, key) => {
+        return value => {
+            this.setState( function (prevState, props) {
+                if (key) {
+                    return {
+                        ...prevState,
+                        boundary: {
+                            ...prevState.boundary,
+                            [key]: {
+                                ...prevState.boundary[ key ],
+                                [name]: value
+                            },
+                            date_time_values: this.pumpingRate.getRows()
+                        }
+                    };
+                }
+
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
-                        [key]: {
-                            ...prevState.boundary[key],
-                            [name]: value
+                        [name]: value,
+                        date_time_values: this.pumpingRate.getRows()
+                    }
+                };
+            } );
+        };
+    };
+
+    handleCoordinatesChange = (name) => {
+        return value => {
+            this.setState( function (prevState, props) {
+                if (name === 'lat') {
+                    value = [prevState.boundary.geometry.coordinates[0], value];
+                } else {
+                    value = [value, prevState.boundary.geometry.coordinates[1]];
+                }
+
+                return {
+                    ...prevState,
+                    boundary: {
+                        ...prevState.boundary,
+                        geometry: {
+                            ...prevState.boundary.geometry,
+                            coordinates: value
                         },
                         date_time_values: this.pumpingRate.getRows()
                     }
                 };
-            }
+            })
+        }
+    };
 
-            return {
-                ...prevState,
-                boundary: {
-                    ...prevState.boundary,
-                    [name]: value,
-                    date_time_values: this.pumpingRate.getRows()
-                }
-            };
-        });
+    handleSelectChange = (name, key, useArray) => {
+        if (useArray) {
+            return data => this.handleInputChange(name, key)(data ? [data.value] : []);
+        }
+
+        return data => this.handleInputChange(name, key)(data ? data.value : undefined);
     };
 
     save = () => {
@@ -131,8 +165,7 @@ export default class WellProperties extends Component {
                             <Input
                                 name="name"
                                 id={nameInputId}
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange('name')}
                                 value={boundary.name}
                                 type="text"
                                 placeholder="name"
@@ -148,12 +181,7 @@ export default class WellProperties extends Component {
                                         ? boundary.metadata.boundary_type
                                         : ''
                                 }
-                                onChange={data =>
-                                    this.handleInputChange(
-                                        data ? data.value : '',
-                                        'boundary_type',
-                                        'metadata'
-                                    )}
+                                onChange={this.handleSelectChange('boundary_type', 'metadata')}
                                 options={[
                                     {
                                         label: 'Public Well',
@@ -180,11 +208,7 @@ export default class WellProperties extends Component {
                                         ? boundary.affected_layers[0]
                                         : undefined
                                 }
-                                onChange={data =>
-                                    this.handleInputChange(
-                                        data ? [data.value] : [],
-                                        'affected_layers'
-                                    )}
+                                onChange={this.handleSelectChange('affected_layers', null, true)}
                                 options={[
                                     {
                                         value: 0,
@@ -228,13 +252,13 @@ export default class WellProperties extends Component {
                             }
                         >
                             <Input
-                                onChange={this.handleInputChange}
+                                onChange={this.handleCoordinatesChange('lat')}
                                 value={boundary.geometry.coordinates[1]}
                                 type="number"
                                 placeholder="Latitude"
                             />
                             <Input
-                                onChange={this.handleInputChange}
+                                onChange={this.handleCoordinatesChange('lng')}
                                 value={boundary.geometry.coordinates[0]}
                                 type="number"
                                 placeholder="Longitude"

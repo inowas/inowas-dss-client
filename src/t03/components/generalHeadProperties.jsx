@@ -6,7 +6,8 @@ import { Helper, LayoutComponents } from '../../core';
 import React, { Component } from 'react';
 import Select, {
     extractSimpleValues,
-    hydrateSimpleValues
+    hydrateSimpleValues,
+    arrayValuesToInt
 } from '../../components/primitive/Select';
 import { find, uniqueId } from 'lodash';
 
@@ -17,6 +18,7 @@ import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
 import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
+import {compose} from 'redux';
 
 const styles = {
     columns: {
@@ -112,17 +114,19 @@ class GeneralHeadProperties extends Component {
         });
     }
 
-    handleInputChange = (value, name, key) => {
-        this.setState(function(prevState, props) {
-            if (key) {
+    handleInputChange = (name, callable) => {
+        return value => {
+
+            if (callable) {
+                value = callable(value);
+            }
+
+            this.setState( function (prevState, props) {
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
-                        [key]: {
-                            ...prevState.boundary[key],
-                            [name]: value
-                        },
+                        [name]: value,
                         observation_points: mergeObservationPoints(
                             prevState.boundary.observation_points,
                             prevState.selectedObservationPoint,
@@ -130,21 +134,8 @@ class GeneralHeadProperties extends Component {
                         )
                     }
                 };
-            }
-
-            return {
-                ...prevState,
-                boundary: {
-                    ...prevState.boundary,
-                    [name]: value,
-                    observation_points: mergeObservationPoints(
-                        prevState.boundary.observation_points,
-                        prevState.selectedObservationPoint,
-                        this.observationPoint.getRows()
-                    )
-                }
-            };
-        });
+            } );
+        }
     };
 
     handleObservationPointNameInputChange = value => {
@@ -318,8 +309,7 @@ class GeneralHeadProperties extends Component {
                                 style={styles.input}
                                 name="name"
                                 id={nameInputId}
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange('name')}
                                 value={boundary.name}
                                 type="text"
                                 placeholder="name"
@@ -338,13 +328,12 @@ class GeneralHeadProperties extends Component {
                                           )
                                         : undefined
                                 }
-                                onChange={data =>
-                                    this.handleInputChange(
-                                        extractSimpleValues(data).map(v =>
-                                            parseInt(v)
-                                        ),
-                                        'affected_layers'
-                                    )}
+                                onChange={this.handleInputChange( 'affected_layers',
+                                    compose(
+                                        arrayValuesToInt,
+                                        extractSimpleValues
+                                    )
+                                )}
                                 multi
                                 simpleValue
                                 options={[

@@ -43,37 +43,22 @@ class SoilmodelLayer extends React.Component {
         });
     }
 
-    handleInputChange = (value, name) => {
-        this.setState((prevState, props) => {
-            return {
-                ...prevState,
-                layer: {
-                    ...prevState.layer,
-                    [name]: value
-                }
-            };
-        });
+    handleInputChange = (name) => {
+        return value => {
+            this.setState( prevState => {
+                return {
+                    ...prevState,
+                    layer: {
+                        ...prevState.layer,
+                        [name]: value
+                    }
+                };
+            } );
+        }
     };
 
-    handleNativeInputChange = event => {
-        const target = event.target;
-        let value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        const filter = target.dataset.filter;
-
-        if (filter) {
-            value = filters[filter](value);
-        }
-
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                layer: {
-                    ...prevState.layer,
-                    [name]: value
-                }
-            };
-        });
+    handleSelectChange = (name) => {
+        return data => this.handleInputChange(name)(data ? data.value : undefined);
     };
 
     save = () => {
@@ -99,8 +84,7 @@ class SoilmodelLayer extends React.Component {
                         <Input
                             disabled={readOnly}
                             name="name"
-                            onChange={(value, name) =>
-                                this.handleInputChange(value, name)}
+                            onChange={this.handleInputChange('name')}
                             value={layer.name}
                             placeholder="Name"
                         />
@@ -111,7 +95,7 @@ class SoilmodelLayer extends React.Component {
                             type="textarea"
                             disabled={readOnly}
                             name="description"
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('description')}
                             value={layer.description}
                             placeholder="Description"
                         />
@@ -125,7 +109,7 @@ class SoilmodelLayer extends React.Component {
                                 name="top"
                                 value={layer.top}
                                 cast={parseFloat}
-                                onChange={this.handleNativeInputChange}
+                                onChange={this.handleInputChange('top')}
                                 placeholder="top"
                             />
                         </LayoutComponents.InputGroup>}
@@ -137,7 +121,7 @@ class SoilmodelLayer extends React.Component {
                             name="botm"
                             value={getValueForInput(layer.botm)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('botm')}
                             placeholder="botm"
                         />
                     </LayoutComponents.InputGroup>
@@ -149,7 +133,7 @@ class SoilmodelLayer extends React.Component {
                             name="hk"
                             value={getValueForInput(layer.hk)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('hk')}
                             placeholder="hk"
                         />
                     </LayoutComponents.InputGroup>
@@ -161,7 +145,7 @@ class SoilmodelLayer extends React.Component {
                             name="hani"
                             value={getValueForInput(layer.hani)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('hani')}
                             placeholder="hani"
                         />
                     </LayoutComponents.InputGroup>
@@ -173,7 +157,7 @@ class SoilmodelLayer extends React.Component {
                             name="vka"
                             value={getValueForInput(layer.vka)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('vka')}
                             placeholder="vka"
                         />
                     </LayoutComponents.InputGroup>
@@ -183,11 +167,7 @@ class SoilmodelLayer extends React.Component {
                             name="layavg"
                             disabled={readOnly}
                             value={layer.layavg}
-                            onChange={data =>
-                                this.handleInputChange(
-                                    data ? data.value : undefined,
-                                    'layavg'
-                                )}
+                            onChange={this.handleSelectChange('layavg')}
                             options={[
                                 {
                                     value: 0,
@@ -212,7 +192,7 @@ class SoilmodelLayer extends React.Component {
                             name="laywet"
                             value={getValueForInput(layer.laywet)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('laywet')}
                             placeholder="laywet"
                         />
                     </LayoutComponents.InputGroup>
@@ -224,7 +204,7 @@ class SoilmodelLayer extends React.Component {
                             name="ss"
                             value={getValueForInput(layer.ss)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('ss')}
                             placeholder="ss"
                         />
                     </LayoutComponents.InputGroup>
@@ -236,7 +216,7 @@ class SoilmodelLayer extends React.Component {
                             name="sy"
                             value={getValueForInput(layer.sy)}
                             cast={parseFloat}
-                            onChange={this.handleNativeInputChange}
+                            onChange={this.handleInputChange('sy')}
                             placeholder="sy"
                         />
                     </LayoutComponents.InputGroup>

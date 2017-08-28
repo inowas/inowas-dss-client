@@ -62,31 +62,19 @@ export default class RechargeProperties extends Component {
         });
     }
 
-    handleInputChange = (value, name, key) => {
-        this.setState(function(prevState, props) {
-            if (key) {
+    handleInputChange = (name) => {
+        return value => {
+            this.setState( function (prevState, props) {
                 return {
                     ...prevState,
                     boundary: {
                         ...prevState.boundary,
-                        [key]: {
-                            ...prevState.boundary[key],
-                            [name]: value
-                        },
+                        [name]: value,
                         date_time_values: this.rechargeRate.getRows()
                     }
                 };
-            }
-
-            return {
-                ...prevState,
-                boundary: {
-                    ...prevState.boundary,
-                    [name]: value,
-                    date_time_values: this.rechargeRate.getRows()
-                }
-            };
-        });
+            } );
+        }
     };
 
     save = () => {
@@ -115,8 +103,7 @@ export default class RechargeProperties extends Component {
                                 name="name"
                                 id={nameInputId}
                                 value={boundary.name}
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange('name')}
                                 type="text"
                                 placeholder="name"
                             />

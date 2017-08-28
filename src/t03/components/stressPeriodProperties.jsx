@@ -51,18 +51,20 @@ class StressPeriodProperties extends React.Component {
         });
     }
 
-    handleInputChange = (value, name) => {
-        // TODO check for date values or use new Input fields with filter
-        this.setState(function(prevState, props) {
-            return {
-                ...prevState,
-                stressPeriods: {
-                    ...prevState.stressPeriods,
-                    [name]: Formatter.dateToAtomFormat(value),
-                    stress_periods: this.dataTable.getRows()
-                }
-            };
-        });
+    handleInputChange = (name) => {
+        return value => {
+            // TODO check for date values or use new Input fields with filter
+            this.setState( function (prevState, props) {
+                return {
+                    ...prevState,
+                    stressPeriods: {
+                        ...prevState.stressPeriods,
+                        [name]: Formatter.dateToAtomFormat( value ),
+                        stress_periods: this.dataTable.getRows()
+                    }
+                };
+            } );
+        };
     };
 
     save = () => {
@@ -128,8 +130,7 @@ class StressPeriodProperties extends React.Component {
                         <LayoutComponents.InputGroup label="Start Date">
                             <Input
                                 name="start_date_time"
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange('start_date_time')}
                                 value={Formatter.dateToYmd(
                                     stressPeriods.start_date_time
                                 )}
@@ -141,8 +142,7 @@ class StressPeriodProperties extends React.Component {
                         <LayoutComponents.InputGroup label="End Date">
                             <Input
                                 name="end_date_time"
-                                onChange={(value, name) =>
-                                    this.handleInputChange(value, name)}
+                                onChange={this.handleInputChange('end_date_time')}
                                 value={Formatter.dateToYmd(
                                     stressPeriods.end_date_time
                                 )}

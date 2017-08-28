@@ -127,25 +127,26 @@ class ModelEditorGeneral extends Component {
         };
     }
 
-    // TODO refactor to function creator like handleInputChangeModflow
-    handleInputChangeModflowBoundingBox(value, event, index, key) {
-        this.setState(function(prevState) {
-            return {
-                model: {
-                    ...prevState.model,
-                    bounding_box: prevState.model.bounding_box.map(
-                        (item, i) => {
-                            if (i !== index) {
+    handleInputChangeModflowBoundingBox(index, key) {
+        return value => {
+            this.setState( function (prevState) {
+                return {
+                    model: {
+                        ...prevState.model,
+                        bounding_box: prevState.model.bounding_box.map(
+                            (item, i) => {
+                                if (i !== index) {
+                                    return item;
+                                }
+                                item[ key ] = value;
                                 return item;
                             }
-                            item[key] = value;
-                            return item;
-                        }
-                    )
-                }
-            };
-        });
-    }
+                        )
+                    }
+                };
+            } );
+        };
+    };
 
     editAreaOnMap = () => {
         browserHistory.push(this.props.location.pathname + '#edit');
@@ -345,13 +346,7 @@ class ModelEditorGeneral extends Component {
                                 name="x_min"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[0][0]}
-                                onChange={(value, event) =>
-                                    this.handleInputChangeModflowBoundingBox(
-                                        value,
-                                        event,
-                                        0,
-                                        0
-                                    )}
+                                onChange={this.handleInputChangeModflowBoundingBox(0,0)}
                                 placeholder="X="
                             />
                             <Input
@@ -360,13 +355,7 @@ class ModelEditorGeneral extends Component {
                                 name="x_max"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[1][0]}
-                                onChange={(value, event) =>
-                                    this.handleInputChangeModflowBoundingBox(
-                                        value,
-                                        event,
-                                        1,
-                                        0
-                                    )}
+                                onChange={this.handleInputChangeModflowBoundingBox(1,0)}
                                 placeholder="x_max="
                             />
                         </LayoutComponents.InputGroup>
@@ -378,13 +367,7 @@ class ModelEditorGeneral extends Component {
                                 name="y_min"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[0][1]}
-                                onChange={(value, event) =>
-                                    this.handleInputChangeModflowBoundingBox(
-                                        value,
-                                        event,
-                                        0,
-                                        1
-                                    )}
+                                onChange={this.handleInputChangeModflowBoundingBox(0,1)}
                                 placeholder="X="
                             />
                             <Input
@@ -393,13 +376,7 @@ class ModelEditorGeneral extends Component {
                                 name="y_max"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[1][1]}
-                                onChange={(value, event) =>
-                                    this.handleInputChangeModflowBoundingBox(
-                                        value,
-                                        event,
-                                        1,
-                                        1
-                                    )}
+                                onChange={this.handleInputChangeModflowBoundingBox(1,1)}
                                 placeholder="y_max="
                             />
                         </LayoutComponents.InputGroup>
