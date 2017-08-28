@@ -111,7 +111,9 @@ class ModelEditorGeneral extends Component {
                             ...prevState.model,
                             [key]: {
                                 ...prevState.model[key],
-                                [name]: value
+                                [name]: value.hasOwnProperty('value')
+                                    ? value.value
+                                    : value // dirty fix for react-select-plus returning an object
                             }
                         }
                     };
@@ -120,7 +122,9 @@ class ModelEditorGeneral extends Component {
                 return {
                     model: {
                         ...prevState.model,
-                        [name]: value
+                        [name]: value.hasOwnProperty('value')
+                            ? value.value
+                            : value // dirty fix for react-select-plus returning an object
                     }
                 };
             });
@@ -129,7 +133,7 @@ class ModelEditorGeneral extends Component {
 
     handleInputChangeModflowBoundingBox(index, key) {
         return value => {
-            this.setState( function (prevState) {
+            this.setState(function(prevState) {
                 return {
                     model: {
                         ...prevState.model,
@@ -138,15 +142,15 @@ class ModelEditorGeneral extends Component {
                                 if (i !== index) {
                                     return item;
                                 }
-                                item[ key ] = value;
+                                item[key] = value;
                                 return item;
                             }
                         )
                     }
                 };
-            } );
+            });
         };
-    };
+    }
 
     editAreaOnMap = () => {
         browserHistory.push(this.props.location.pathname + '#edit');
@@ -280,7 +284,8 @@ class ModelEditorGeneral extends Component {
 
                         <LayoutComponents.InputGroup label="Time Unit">
                             <Select
-                                value={stateModel.time_unit}
+                                disabled
+                                value={String(stateModel.time_unit)}
                                 onChange={this.handleInputChangeModflow(
                                     'time_unit'
                                 )}
@@ -296,7 +301,8 @@ class ModelEditorGeneral extends Component {
 
                         <LayoutComponents.InputGroup label="Length Unit">
                             <Select
-                                value={stateModel.length_unit}
+                                disabled
+                                value={String(stateModel.length_unit)}
                                 onChange={this.handleInputChangeModflow(
                                     'length_unit'
                                 )}
@@ -346,7 +352,10 @@ class ModelEditorGeneral extends Component {
                                 name="x_min"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[0][0]}
-                                onChange={this.handleInputChangeModflowBoundingBox(0,0)}
+                                onChange={this.handleInputChangeModflowBoundingBox(
+                                    0,
+                                    0
+                                )}
                                 placeholder="X="
                             />
                             <Input
@@ -355,7 +364,10 @@ class ModelEditorGeneral extends Component {
                                 name="x_max"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[1][0]}
-                                onChange={this.handleInputChangeModflowBoundingBox(1,0)}
+                                onChange={this.handleInputChangeModflowBoundingBox(
+                                    1,
+                                    0
+                                )}
                                 placeholder="x_max="
                             />
                         </LayoutComponents.InputGroup>
@@ -367,7 +379,10 @@ class ModelEditorGeneral extends Component {
                                 name="y_min"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[0][1]}
-                                onChange={this.handleInputChangeModflowBoundingBox(0,1)}
+                                onChange={this.handleInputChangeModflowBoundingBox(
+                                    0,
+                                    1
+                                )}
                                 placeholder="X="
                             />
                             <Input
@@ -376,7 +391,10 @@ class ModelEditorGeneral extends Component {
                                 name="y_max"
                                 cast={parseFloat}
                                 value={stateModel.bounding_box[1][1]}
-                                onChange={this.handleInputChangeModflowBoundingBox(1,1)}
+                                onChange={this.handleInputChangeModflowBoundingBox(
+                                    1,
+                                    1
+                                )}
                                 placeholder="y_max="
                             />
                         </LayoutComponents.InputGroup>
