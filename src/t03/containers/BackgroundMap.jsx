@@ -1,30 +1,39 @@
-import md5 from 'js-md5';
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import {
+    Circle,
+    CircleMarker,
     FeatureGroup,
     GeoJSON,
     LayersControl,
     Map,
-    Polyline,
     Polygon,
-    CircleMarker,
-    Circle,
+    Polyline,
     Rectangle,
     TileLayer
 } from 'react-leaflet';
-
-import FloatingToast from '../../components/modflow/FloatingToast';
-import { withRouter, browserHistory } from 'react-router';
-import Button from '../../components/primitive/Button';
-import Icon from '../../components/primitive/Icon';
-import ConfiguredRadium from 'ConfiguredRadium';
-import styleGlobals from 'styleGlobals';
+import React, { Component, PropTypes } from 'react';
+import { browserHistory, withRouter } from 'react-router';
+import { geoJSON, geoJson } from 'leaflet';
 
 import { Action } from '../../t03/actions/index';
+import Button from '../../components/primitive/Button';
+import ConfiguredRadium from 'ConfiguredRadium';
 import EditControl from '../../core/map/EditControl';
+import FloatingToast from '../../components/modflow/FloatingToast';
+import Icon from '../../components/primitive/Icon';
+import L from 'leaflet';
+import { connect } from 'react-redux';
+import md5 from 'js-md5';
+import styleGlobals from 'styleGlobals';
 import { uniqueId } from 'lodash';
-import {geoJSON, geoJson} from 'leaflet';
+
+// see https://github.com/PaulLeCam/react-leaflet/issues/255
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+});
 
 const styles = {
     map: {
