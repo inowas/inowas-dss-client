@@ -1,5 +1,5 @@
-import CloseableWindow from "./closeableWindow";
+import CloseableWindow from './closeableWindow';
+import Column from './Column';
+import InputGroup from './InputGroup';
 
-export {
-    CloseableWindow
-};
+export { CloseableWindow, Column, InputGroup };

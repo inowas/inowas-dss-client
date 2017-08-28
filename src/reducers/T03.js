@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import {Reducer} from '../t03/index';
+import { Reducer } from '../t03/index';
 
 const createModelEditorReducer = tool => {
-    return combineReducers( {
-        model: Reducer.createModelReducer( tool ),
-    } );
+    return combineReducers({
+        model: Reducer.createModelReducer(tool)
+    });
 };
 
 export default createModelEditorReducer('T03');

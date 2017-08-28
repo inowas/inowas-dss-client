@@ -37,7 +37,7 @@ const styles = {
     },
 
     contentNotLast: {
-        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
+        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight
     },
 
     contentEmpty: {
@@ -47,55 +47,50 @@ const styles = {
 
 @ConfiguredRadium
 export default class AccordionItem extends Component {
-
     static propTypes = {
         icon: PropTypes.element,
         style: PropTypes.object,
-        heading: PropTypes.string.isRequired,
+        heading: PropTypes.node.isRequired,
         children: PropTypes.node,
         index: PropTypes.number,
         active: PropTypes.bool,
         toggleActive: PropTypes.func,
         last: PropTypes.bool,
-        onClick: PropTypes.func,
+        onClick: PropTypes.func
     };
 
     handleClick = () => {
-        const { toggleActive, onClick } = this.props;
+        const { toggleActive } = this.props;
         if (toggleActive) {
             toggleActive();
         }
-
-        if (onClick) {
-            onClick();
-        }
     };
 
-    render( ) {
-        const { active, style, children, icon, last } = this.props;
+    render() {
+        const { active, style, children, icon, last, onClick } = this.props;
 
         return (
             <div>
-                <div style={[styles.header, style]} onClick={this.handleClick}>
-                    {icon && React.cloneElement(icon, {
-                        style: [icon.props.style, styles.icon]
-                    })}
-                    <span style={styles.heading}>
+                <div style={[styles.header, style]}>
+                    {icon &&
+                        React.cloneElement(icon, {
+                            style: [icon.props.style, styles.icon]
+                        })}
+                    <span style={styles.heading} onClick={onClick}>
                         {this.props.heading}
                     </span>
-                    <Icon style={styles.arrow} name={active
-                        ? 'arrow_down'
-                        : 'arrow_right'}/>
+                    <Icon
+                        style={styles.arrow}
+                        name={active ? 'arrow_down' : 'arrow_right'}
+                        onClick={this.handleClick}
+                    />
                 </div>
 
                 {active &&
                     <div style={[last || styles.contentNotLast]}>
-                        {children || ( <div style={styles.contentEmpty} /> )}
-                    </div>
-                }
-
+                        {children || <div style={styles.contentEmpty} />}
+                    </div>}
             </div>
         );
     }
-
 }

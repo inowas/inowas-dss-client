@@ -1,12 +1,14 @@
 import * as React from 'react';
-import {PropTypes} from 'react';
-import {pure} from 'recompose';
+import { PropTypes } from 'react';
+import { pure } from 'recompose';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
+import Button from '../../components/primitive/Button';
 import styleGlobals from 'styleGlobals';
-import {newBoundary} from '../../routes';
-import {BoundaryOverview} from '../components';
+// import { newBoundary } from '../../routes';
+import { Routing } from '../actions';
+import { BoundaryOverview } from '../components';
 
 const styles = {
     wrapper: {
@@ -16,43 +18,20 @@ const styles = {
     },
 
     header: {
-        display: 'flex',
-        flex: 1,
-        marginBottom: 10,
-        minHeight: 30
+        marginBottom: styleGlobals.dimensions.spacing.medium,
+        minHeight: 15,
+        textAlign: 'right'
     },
 
     body: {
         minHeight: 0,
         flex: 1,
         overflow: 'auto'
-    },
-
-    type: {
-        flex: 1,
-        border: '1px solid ' + styleGlobals.colors.graySemilight,
-        borderRadius: styleGlobals.dimensions.borderRadius,
-        marginRight: 14,
-        paddingTop: 6,
-        paddingBottom: 6,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-
-    headerButton: {
-        button: {
-            marginRight: 14
-        },
-
-        icon: {
-            marginRight: 6
-        }
     }
 };
 
 @ConfiguredRadium
 class BoundariesOverview extends React.PureComponent {
-
     static propTypes = {
         tool: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
@@ -63,28 +42,47 @@ class BoundariesOverview extends React.PureComponent {
     };
 
     render() {
-        const { tool, boundaries, property, type, id, removeBoundary } = this.props;
+        const {
+            tool,
+            boundaries,
+            property,
+            type,
+            id,
+            removeBoundary
+        } = this.props;
 
         let addNew = '';
 
         if (type) {
-            addNew = (<button style={styles.headerButton.button} className="link" onClick={() => newBoundary(tool, id, property, type)}>
-                <Icon style={styles.headerButton.icon} name="add"/>Add new
-            </button>);
+            addNew = (
+                <Button
+                    icon={<Icon name="add" />}
+                    type="link"
+                    onClick={() =>
+                        Routing.newBoundary(tool, id, property, type)}
+                >
+                    Add new
+                </Button>
+            );
         }
 
         return (
-            <div style={[ styles.wrapper ]}>
-                <div style={[ styles.header ]}>
+            <div style={[styles.wrapper]}>
+                <div style={[styles.header]}>
                     {addNew}
                 </div>
-                <div style={[ styles.body ]}>
-                    <BoundaryOverview rows={boundaries} id={id} removeBoundary={removeBoundary} tool={tool} property={property} />
+                <div style={[styles.body]}>
+                    <BoundaryOverview
+                        rows={boundaries}
+                        id={id}
+                        removeBoundary={removeBoundary}
+                        tool={tool}
+                        property={property}
+                    />
                 </div>
             </div>
         );
     }
 }
 
-
-export default pure( BoundariesOverview );
+export default pure(BoundariesOverview);

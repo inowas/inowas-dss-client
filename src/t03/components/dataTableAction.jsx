@@ -7,30 +7,48 @@ import styleGlobals from 'styleGlobals';
 import {pure} from 'recompose';
 
 const styles = {
-    iconInButton: {
-        marginRight: styleGlobals.dimensions.spacing.small,
-        color: styleGlobals.colors.font
-    },
-
-    actions: {
+    wrapper: {
         textAlign: 'right'
     },
+
+    buttonNotLast: {
+        marginRight: styleGlobals.dimensions.spacing.large
+    }
 };
 
 const dataTableActions = ({ component }) => {
     return (
-        <div style={[ styles.actions ]}>
-            <Button onClick={(e) => component.onAdd(e, Helper.addDays(1))} type="link">
-                <Icon name="add" style={[ styles.iconInButton ]}/>Add D
+        <div style={[styles.wrapper]}>
+            <Button
+                onClick={e => component.onAdd(e, Helper.addDays(1))}
+                type="link"
+                icon={<Icon name="add" />}
+                style={[styles.buttonNotLast]}
+            >
+                Add Day
             </Button>
-            <Button onClick={(e) => component.onAdd(e, Helper.addMonths(1))} type="link">
-                <Icon name="add" style={[ styles.iconInButton ]}/>Add M
+            <Button
+                onClick={e => component.onAdd(e, Helper.addMonths(1))}
+                type="link"
+                icon={<Icon name="add" />}
+                style={[styles.buttonNotLast]}
+            >
+                Add Month
             </Button>
-            <Button onClick={(e) => component.onAdd(e, Helper.addYears(1))} type="link">
-                <Icon name="add" style={[ styles.iconInButton ]}/>Add Y
+            <Button
+                onClick={e => component.onAdd(e, Helper.addYears(1))}
+                type="link"
+                icon={<Icon name="add" />}
+                style={[styles.buttonNotLast]}
+            >
+                Add Year
             </Button>
-            <Button onClick={(e) => component.onDelete(e)} type="link">
-                <Icon name="trash" style={[ styles.iconInButton ]}/>Delete
+            <Button
+                onClick={e => component.onDelete(e)}
+                type="link"
+                icon={<Icon name="trash" />}
+            >
+                Delete
             </Button>
         </div>
     );

@@ -1,41 +1,48 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import * as Table from 'reactabular-table';
 import * as Sticky from 'reactabular-sticky';
+import * as Table from 'reactabular-table';
 import * as Virtualized from 'reactabular-virtualized';
-import {Paginator} from '../../../core';
-import {Action, Helper} from '../';
-
-import { cloneDeep, includes} from 'lodash';
 import * as resolve from 'table-resolver';
 
+import { Action, Helper } from '../';
+import React, { Component } from 'react';
+import { cloneDeep, includes } from 'lodash';
+
+import { Paginator } from '../../../core';
+import PropTypes from 'prop-types';
+import ConfiguredRadium from 'ConfiguredRadium';
+
 // TODO use HOC
-class DataTable extends React.Component {
+@ConfiguredRadium
+class DataTable extends Component {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         // We have refs now. Force update to get those to Header/Body.
         this.forceUpdate();
     }
 
-    componentWillReceiveProps ( newProps ) {
-        this.setState( function( prevState, props ) {
+    componentWillReceiveProps(newProps) {
+        this.setState(function(prevState, props) {
             return { ...prevState, rows: newProps.rows };
-        } );
+        });
     }
 
-    onDelete = (e) => {
+    onDelete = e => {
         e.preventDefault();
 
-        const {selectedRows} = this.state;
-        const rows = cloneDeep(this.state.rows).filter(data => !includes(selectedRows, data.id));
+        const { selectedRows } = this.state;
+        const rows = cloneDeep(this.state.rows).filter(
+            data => !includes(selectedRows, data.id)
+        );
 
-        this.setState((prevState, props) => {return { ...prevState, rows, selectedRows: [] };});
+        this.setState((prevState, props) => {
+            return { ...prevState, rows, selectedRows: [] };
+        });
     };
 
-    render () {
+    render() {
         if (!this.state) {
             return null;
         }
@@ -46,7 +53,7 @@ class DataTable extends React.Component {
             return null;
         }
 
-        const resolvedColumns = resolve.columnChildren( { columns } );
+        const resolvedColumns = resolve.columnChildren({ columns });
 
         return (
             <div>
@@ -62,14 +69,21 @@ class DataTable extends React.Component {
                 >
                     <Sticky.Header
                         ref={tableHeader => {
-                            this.tableHeader = tableHeader && tableHeader.getRef();
+                            this.tableHeader =
+                                tableHeader && tableHeader.getRef();
                         }}
                         tableBody={this.tableBody}
                     />
                     <Virtualized.Body
-                        rows={Helper.sortedRows(rows, sortingColumns, resolvedColumns, page, perPage)}
+                        rows={Helper.sortedRows(
+                            rows,
+                            sortingColumns,
+                            resolvedColumns,
+                            page,
+                            perPage
+                        )}
                         rowKey="id"
-                        onRow={Action.Callback.onRow( this )}
+                        onRow={Action.Callback.onRow(this)}
                         style={{
                             maxHeight: 1000
                         }}
@@ -81,8 +95,16 @@ class DataTable extends React.Component {
                 </Table.Provider>
 
                 <div className="controls">
-                    <Paginator.Paginator perPage={perPage} length={rows.length}
-                                         onSelect={( page ) => Paginator.Action.Callback.onSelectPage( this )( page.selected + 1, perPage, rows.length )}/>
+                    <Paginator.Paginator
+                        perPage={perPage}
+                        length={rows.length}
+                        onSelect={page =>
+                            Paginator.Action.Callback.onSelectPage(this)(
+                                page.selected + 1,
+                                perPage,
+                                rows.length
+                            )}
+                    />
                 </div>
             </div>
         );
@@ -90,7 +112,7 @@ class DataTable extends React.Component {
 }
 
 DataTable.propTypes = {
-    perPage: PropTypes.number,
+    perPage: PropTypes.number
 };
 
 export default DataTable;

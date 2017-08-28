@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DataTable} from '../../core';
+import { DataTable } from '../../core';
 import Icon from '../../components/primitive/Icon';
-import {editBoundary} from "../../routes";
+import Button from '../../components/primitive/Button';
+// import { editBoundary, editBoundaryOnMap } from '../../routes';
+import { Routing } from '../actions';
 
 class BoundaryOverview extends DataTable.Component.DataTable {
-    constructor ( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
 
         this.state = {
             searchColumn: 'all',
@@ -17,18 +19,18 @@ class BoundaryOverview extends DataTable.Component.DataTable {
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
-                'name': {
+                name: {
                     direction: 'asc',
                     position: 0
                 },
-                'type': {
+                type: {
                     direction: 'asc',
                     position: 0
                 },
-                'layers': {
+                layers: {
                     direction: 'asc',
                     position: 0
-                },
+                }
             },
             columns: [
                 {
@@ -40,16 +42,25 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     header: {
                         label: '',
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
-                            )
-                        ],
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={'unchecked'}
+                                    onClick={DataTable.Action.Callback.onSelectAll(
+                                        this
+                                    )}
+                                />
+                        ]
                     },
                     cell: {
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'}/>
-                            )
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={
+                                        rowData.selected
+                                            ? 'checked'
+                                            : 'unchecked'
+                                    }
+                                />
                         ]
                     }
                 },
@@ -57,16 +68,22 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     property: 'name',
                     header: {
                         label: 'Name',
-                        transforms: [ DataTable.Helper.resetable(this) ],
-                        formatters: [
-                            DataTable.Helper.header(this)
-                        ],
+                        transforms: [DataTable.Helper.resetable(this)],
+                        formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <a href="#" title="edit" onClick={() => this.onBoundaryClick(rowData.id, rowData.type)}>{value}</a>
-                            )
+                            (value, { rowData }) =>
+                                <Button
+                                    type="link"
+                                    onClick={() =>
+                                        this.onBoundaryClick(
+                                            rowData.id,
+                                            rowData.type
+                                        )}
+                                >
+                                    {value}
+                                </Button>
                         ]
                     }
                 },
@@ -74,32 +91,37 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     property: 'type',
                     header: {
                         label: 'Type',
-                        transforms: [ DataTable.Helper.resetable(this) ],
+                        transforms: [DataTable.Helper.resetable(this)],
+                        formatters: [DataTable.Helper.header(this)]
+                    }
+                },
+                {
+                    header: {
+                        label: 'Map',
+                        transforms: [DataTable.Helper.resetable(this)],
+                        formatters: [DataTable.Helper.header(this)]
+                    },
+                    cell: {
                         formatters: [
-                            DataTable.Helper.header(this)
+                            (value, { rowData }) =>
+                                <Button
+                                    type="link"
+                                    onClick={this.onBoundaryMapClick(
+                                        rowData.type,
+                                        rowData.id
+                                    )}
+                                    iconInside
+                                    icon={<Icon name="marker" />}
+                                />
                         ]
-                    }
-                },
-                {
-                    property: 'geometry.coordinates.0',
-                    header: {
-                        label: 'Latitude (X)',
-                    }
-                },
-                {
-                    property: 'geometry.coordinates.1',
-                    header: {
-                        label: 'Longitude (Y)',
                     }
                 },
                 {
                     property: 'affected_layers',
                     header: {
                         label: 'Layers',
-                        transforms: [ DataTable.Helper.resetable(this) ],
-                        formatters: [
-                            DataTable.Helper.header(this)
-                        ]
+                        transforms: [DataTable.Helper.resetable(this)],
+                        formatters: [DataTable.Helper.header(this)]
                     }
                 },
                 {
@@ -110,9 +132,15 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     },
                     cell: {
                         formatters: [
-                            (value, { rowData }) => (
-                                <Icon name={'trash'} onClick={() => this.props.removeBoundary(rowData.id, this.props.id)}/>
-                            )
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={'trash'}
+                                    onClick={() =>
+                                        this.props.removeBoundary(
+                                            rowData.id,
+                                            this.props.id
+                                        )}
+                                />
                         ]
                     }
                 }
@@ -122,8 +150,16 @@ class BoundaryOverview extends DataTable.Component.DataTable {
     }
 
     onBoundaryClick = (boundaryId, type) => {
-        const {tool,id, property } = this.props;
-        editBoundary(tool, id, property, type, boundaryId);
+        const { tool, id, property } = this.props;
+        Routing.editBoundary(tool, id, property, type, boundaryId);
+    };
+
+    onBoundaryMapClick = (type, boundaryId) => {
+        return () => {
+            const { tool, id, property } = this.props;
+            console.warn('kgberrg');
+            Routing.editBoundaryOnMap(tool, id, property, type, boundaryId);
+        };
     };
 }
 
@@ -131,7 +167,7 @@ BoundaryOverview.propTypes = {
     id: PropTypes.string.isRequired,
     tool: PropTypes.string.isRequired,
     perPage: PropTypes.number,
-    removeBoundary: PropTypes.func.isRequired,
+    removeBoundary: PropTypes.func.isRequired
 };
 
 export default BoundaryOverview;

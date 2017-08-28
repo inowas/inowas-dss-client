@@ -8,33 +8,43 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import React from 'react';
-import {StyleRoot} from 'radium';
+import { StyleRoot } from 'radium';
 import configureStore from './store/configureStore';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-const store = configureStore( );
-const history = syncHistoryWithStore( browserHistory, store );
+const store = configureStore();
+const history = syncHistoryWithStore(browserHistory, store);
 
-const root = document.getElementById( 'root' );
+const root = document.getElementById('root');
 
-const renderApp = ( ) => {
-    const routes = require( './routes' ).default(store);
-    render( (
+const renderApp = () => {
+    const routes = require('./routes').default(store);
+    render(
         <AppContainer>
             <Provider store={store}>
                 <StyleRoot>
-                    <Router history={history} routes={routes}/>
+                    <Router history={history} routes={routes} />
                 </StyleRoot>
             </Provider>
-        </AppContainer>
-    ), root );
+        </AppContainer>,
+        root
+    );
 };
 
-renderApp( );
+const renderError = error => {
+    const RedBox = require('redbox-react');
+    render(<RedBox error={error} />, root);
+};
 
-if ( module.hot ) {
-    module.hot.accept('./routes', ( ) => {
-        unmountComponentAtNode( root );
-        renderApp( );
+renderApp();
+
+if (module.hot) {
+    module.hot.accept('./routes', () => {
+        unmountComponentAtNode(root);
+        try {
+            renderApp();
+        } catch (error) {
+            renderError(error);
+        }
     });
 }

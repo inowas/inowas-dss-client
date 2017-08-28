@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as edit from 'react-edit';
-import {DataTable, Formatter} from '../../core';
+import { DataTable, Formatter } from '../../core';
 import Icon from '../../components/primitive/Icon';
 
 import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
 class PumpingRate extends DataTable.Component.DataTable {
-    constructor ( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
 
         this.state = {
             searchColumn: 'all',
@@ -20,10 +20,10 @@ class PumpingRate extends DataTable.Component.DataTable {
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
-                'date_time': {
+                date_time: {
                     direction: 'asc',
                     position: 0
-                },
+                }
             },
             columns: [
                 {
@@ -35,16 +35,25 @@ class PumpingRate extends DataTable.Component.DataTable {
                     header: {
                         label: '',
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
-                            )
-                        ],
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={'unchecked'}
+                                    onClick={DataTable.Action.Callback.onSelectAll(
+                                        this
+                                    )}
+                                />
+                        ]
                     },
                     cell: {
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'}/>
-                            )
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={
+                                        rowData.selected
+                                            ? 'checked'
+                                            : 'unchecked'
+                                    }
+                                />
                         ]
                     }
                 },
@@ -52,44 +61,53 @@ class PumpingRate extends DataTable.Component.DataTable {
                     property: 'date_time',
                     header: {
                         label: 'Start Time',
-                        transforms: [ DataTable.Helper.resetable(this) ],
-                        formatters: [
-                            DataTable.Helper.header(this)
-                        ],
+                        transforms: [DataTable.Helper.resetable(this)],
+                        formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
                         transforms: [
-                            DataTable.Helper.editableDate(this)(edit.input({ props: { type: 'date' }}))
+                            DataTable.Helper.editableDate(this)(
+                                edit.input({ props: { type: 'date' } })
+                            )
                         ],
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <span>{Formatter.toDate(value)}</span>
-                            )
+                            (value, { rowData }) =>
+                                <span>
+                                    {Formatter.toDate(value)}
+                                </span>
                         ]
                     }
                 },
                 {
                     property: 'values',
                     header: {
-                        label: 'Rate',
+                        label: 'Rate'
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
-                        formatters: [
-                            ( value, { rowData } ) => (
-                                <span>{Formatter.toNumber(value)}</span>
+                        transforms: [
+                            DataTable.Helper.editable(this)(
+                                edit.input({ props: { type: 'number' } })
                             )
+                        ],
+                        formatters: [
+                            (value, { rowData }) =>
+                                <span>
+                                    {Formatter.toNumber(value)}
+                                </span>
                         ]
-                    },
-                },
+                    }
+                }
             ],
             rows: this.props.rows || []
         };
     }
 
     getRows = () => {
-        return this.state.rows.map((data) => {
-            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: [parseFloat(data.values)]}
+        return this.state.rows.map(data => {
+            return {
+                date_time: Formatter.dateToAtomFormat(data.date_time),
+                values: [parseFloat(data.values)]
+            };
         });
     };
 
@@ -99,7 +117,10 @@ class PumpingRate extends DataTable.Component.DataTable {
         const rows = sortBy(cloneDeep(this.state.rows), 'date_time');
 
         const lastRow = last(rows);
-        let date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
+        const date =
+            lastRow && lastRow.date_time
+                ? new Date(lastRow.date_time)
+                : new Date();
         const value = lastRow && lastRow.values ? lastRow.values : 0;
 
         rows.push({
@@ -108,12 +129,14 @@ class PumpingRate extends DataTable.Component.DataTable {
             values: [value]
         });
 
-        this.setState((prevState, props) => {return { ...prevState, rows };});
+        this.setState((prevState, props) => {
+            return { ...prevState, rows };
+        });
     };
 }
 
 PumpingRate.propTypes = {
-    perPage: PropTypes.number,
+    perPage: PropTypes.number
 };
 
 export default PumpingRate;

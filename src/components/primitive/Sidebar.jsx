@@ -1,13 +1,11 @@
-
 import React, { Component, PropTypes } from 'react';
 
 import Accordion from './Accordion';
 import AccordionItem from './AccordionItem';
+import MenuItem from './MenuItem';
 import styleGlobals from 'styleGlobals';
-import MenuItem from "./MenuItem";
 
 const styles = {
-
     menu: {
         backgroundColor: styleGlobals.colors.background,
         padding: 16,
@@ -41,11 +39,9 @@ const styles = {
     disabled: {
         opacity: 0.5
     }
-
 };
 
 export default class Sidebar extends Component {
-
     static propTypes = {
         title: PropTypes.string,
         items: PropTypes.array,
@@ -59,48 +55,75 @@ export default class Sidebar extends Component {
     };
 
     renderItems = items => {
-        return (items.map((i, index) => {
+        return items.map((i, index) => {
             if (i.items && i.items.length > 0) {
-
                 const active = i.name === this.props.selectedProperty;
 
                 return (
-                    <AccordionItem key={index} style={[i.disabled && styles.disabled]} icon={i.icon} heading={i.title} active={active} onClick={() => this.handleClick(i.name)}>
+                    <AccordionItem
+                        key={index}
+                        style={[i.disabled && styles.disabled]}
+                        icon={i.icon}
+                        heading={i.title}
+                        active={active}
+                        onClick={() => this.handleClick(i.name)}
+                    >
                         {this.renderSubItems(i.name, i.items)}
                     </AccordionItem>
-                )
+                );
             }
 
-            return <MenuItem style={[i.disabled && styles.disabled]} key={index} icon={i.icon} heading={i.title} onClick={() => this.handleClick(i.name)}/>
-        }))
+            return (
+                <MenuItem
+                    style={[i.disabled && styles.disabled]}
+                    key={index}
+                    icon={i.icon}
+                    heading={i.title}
+                    onClick={() => this.handleClick(i.name)}
+                />
+            );
+        });
     };
 
     renderSubItems = (property, items) => {
         return (
             <ul style={styles.list}>
-                {items && items.map((i, index) => (
-                    <li key={index} style={styles.listItem} >
-                        <button onClick={() => this.handleClick(property, i.name)} className="link" disabled={false}>{i.title}</button>
-                    </li>
-                ))}
+                {items &&
+                    items.map((i, index) =>
+                        <li key={index} style={styles.listItem}>
+                            <button
+                                onClick={() =>
+                                    this.handleClick(property, i.name)}
+                                className="link"
+                                disabled={false}
+                            >
+                                {i.title}
+                            </button>
+                        </li>
+                    )}
             </ul>
-        )
+        );
     };
 
-    render( ) {
+    render() {
         const { title, items } = this.props;
 
         let activeItem = 0;
-        items.forEach( (i, index) => { if (i.name === this.props.selectedProperty) {activeItem = index} } );
+        items.forEach((i, index) => {
+            if (i.name === this.props.selectedProperty) {
+                activeItem = index;
+            }
+        });
 
         return (
             <nav style={styles.menu}>
-                <h1 style={styles.title}>{title}</h1>
-                    <Accordion firstActive={activeItem}>
-                        {this.renderItems(items)}
-                    </Accordion>
+                <h1 style={styles.title}>
+                    {title}
+                </h1>
+                <Accordion firstActive={activeItem}>
+                    {this.renderItems(items)}
+                </Accordion>
             </nav>
         );
-
     }
 }

@@ -5,16 +5,17 @@ export default class LengthUnit {
 
     static numberCodes = {
         0: 'undefined',
-        1: 'seconds',
-        2: 'minutes',
-        3: 'hours',
-        4: 'days',
-        5: 'years'
-    }
+        1: 'feet',
+        2: 'meters',
+        3: 'centimeters'
+    };
 
-    constructor( unit ) {
-        if ( typeof unit !== 'string' ) {
-            throw new Error( 'Expected first parameter to be a string, but got ' + ( typeof unit ) );
+    constructor(unit) {
+        if (typeof unit !== 'string') {
+            throw new Error(
+                'Expected first parameter to be a string, but got ' +
+                    typeof unit
+            );
         }
 
         this._unit = unit;
@@ -25,14 +26,17 @@ export default class LengthUnit {
     }
 
     get toNumber() {
-        return Number(findKey( LengthUnit.numberCodes, o => o === this._unit ));
+        return Number(findKey(LengthUnit.numberCodes, o => o === this._unit));
     }
 
-    static fromNumber( number ) {
-        if ( typeof number !== 'number' ) {
-            throw new Error( 'Expected first parameter to be a number, but got ' + ( typeof number ) );
+    static fromNumber(number) {
+        if (typeof number !== 'number') {
+            throw new Error(
+                'Expected first parameter to be a number, but got ' +
+                    typeof number
+            );
         }
 
-        return new LengthUnit( LengthUnit.numberCodes[ number ] );
+        return new LengthUnit(LengthUnit.numberCodes[number]);
     }
 }

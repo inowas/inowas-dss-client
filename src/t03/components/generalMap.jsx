@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import md5 from 'js-md5';
-import { GeoJSON, Map, Rectangle, TileLayer} from 'react-leaflet';
 import * as mapHelpers from '../../calculations/map';
+
+import { GeoJSON, Map, Rectangle, TileLayer } from 'react-leaflet';
+import React, { Component } from 'react';
+
 import ConfiguredRadium from 'ConfiguredRadium';
+import PropTypes from 'prop-types';
 import { geoJSON } from 'leaflet';
+import md5 from 'js-md5';
 
 const styles = {
     map: {
@@ -12,9 +14,10 @@ const styles = {
     }
 };
 
+const RadiumMap = ConfiguredRadium(Map);
+
 @ConfiguredRadium
 class ModelEditorGeneralMap extends Component {
-
     constructor(props) {
         super(props);
 
@@ -23,9 +26,9 @@ class ModelEditorGeneralMap extends Component {
         };
     }
 
-    componentDidMount( ) {
-        mapHelpers.disableMap( this.map );
-        mapHelpers.invalidateSize( this.map );
+    componentDidMount() {
+        mapHelpers.disableMap(this.map);
+        mapHelpers.invalidateSize(this.map);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -34,19 +37,19 @@ class ModelEditorGeneralMap extends Component {
         });
     }
 
-    generateKeyFunction = ( geometry ) => {
+    generateKeyFunction = geometry => {
         return md5(JSON.stringify(geometry));
     };
 
-    getBounds = ( geometry ) => {
-        if ( geometry ) {
+    getBounds = geometry => {
+        if (geometry) {
             return geoJSON(geometry).getBounds();
         }
 
         return null;
     };
 
-    getStyle = ( type, subtype ) => {
+    getStyle = (type, subtype) => {
         const modelStyles = this.state.model.styles;
 
         if (!(type in modelStyles)) {
@@ -64,32 +67,66 @@ class ModelEditorGeneralMap extends Component {
         return modelStyles[type][subtype];
     };
 
-
-    render( ) {
+    render() {
+        const { style } = this.props;
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
-        const bounds = [[boundingBox[0][1], boundingBox[0][0]], [boundingBox[1][1], boundingBox[1][0]]];
+        const bounds = [
+            [boundingBox[0][1], boundingBox[0][0]],
+            [boundingBox[1][1], boundingBox[1][0]]
+        ];
 
         if (area) {
             return (
-                <Map className="crossSectionMap" style={styles.map} ref={map => {this.map = map;}} zoomControl={false} bounds={this.getBounds(area)} >
-                    <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-                    <GeoJSON key={this.generateKeyFunction( area )} data={area} style={this.getStyle('area')} />
-                    <Rectangle bounds={bounds} {...this.getStyle('bounding_box')}/>
-                </Map>
+                <RadiumMap
+                    className="crossSectionMap"
+                    style={[styles.map, style]}
+                    ref={map => {
+                        this.map = map;
+                    }}
+                    zoomControl={false}
+                    bounds={this.getBounds(area)}
+                >
+                    <TileLayer
+                        url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                        attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
+                    />
+                    <GeoJSON
+                        key={this.generateKeyFunction(area)}
+                        data={area}
+                        style={this.getStyle('area')}
+                    />
+                    <Rectangle
+                        bounds={bounds}
+                        {...this.getStyle('bounding_box')}
+                    />
+                </RadiumMap>
             );
         }
 
         return (
-            <Map className="crossSectionMap" style={styles.map} ref={map => {this.map = map;}} zoomControl={false} center={[20, 140]} zoom={1} >
-                <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'/>
-            </Map>
+            <RadiumMap
+                className="crossSectionMap"
+                style={[styles.map, style]}
+                ref={map => {
+                    this.map = map;
+                }}
+                zoomControl={false}
+                center={[20, 140]}
+                zoom={1}
+            >
+                <TileLayer
+                    url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                    attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
+                />
+            </RadiumMap>
         );
     }
 }
 
 ModelEditorGeneralMap.propTypes = {
-    model: PropTypes.object
+    model: PropTypes.object,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 export default ModelEditorGeneralMap;
