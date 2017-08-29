@@ -307,7 +307,7 @@ class ConstantHeadProperties extends Component {
                             <Input
                                 name="name"
                                 id={nameInputId}
-                                onChange={this.handleInputChange}
+                                onChange={this.handleInputChange('name')}
                                 value={boundary.name}
                                 type="text"
                                 placeholder="name"
