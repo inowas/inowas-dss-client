@@ -15,6 +15,25 @@ export const onSelectAll = (component = {}) => () => {
     });
 };
 
+export const onSelect = (component = {}) => (rowData) => {
+    component.setState(function (prevState, props) {
+        const index = findIndex(component.state.rows, {id: rowData.id});;
+        const selectedRowId = prevState.rows[index].id;
+        const selectedRows = cloneDeep(prevState.selectedRows);
+
+        if (prevState.rows[index].selected) {
+            selectedRows.splice(selectedRows.indexOf(selectedRowId), 1);
+        } else {
+            selectedRows.push(selectedRowId);
+        }
+
+        return {
+            rows: select.toggle(row => row.id === selectedRowId)(prevState.rows),
+            selectedRows
+        };
+    });
+};
+
 export const onRow = (component = {}) => (row, {rowIndex, rowKey}) => {
     return {
         className: classnames(
