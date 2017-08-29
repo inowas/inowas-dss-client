@@ -28,7 +28,7 @@ import L from 'leaflet';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
 import { uniqueId } from 'lodash';
-import {editBoundary} from "../actions/routing";
+import {editBoundary} from '../actions/routing';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -93,6 +93,7 @@ class BackgroundMap extends Component {
     isActive() {
         return (
             this.props.location.hash === '#edit' ||
+            this.props.location.hash === '#edit-op' ||
             this.props.location.hash === '#create' ||
             this.props.location.hash === '#view'
         );
@@ -451,6 +452,8 @@ class BackgroundMap extends Component {
         const layers = e.layers;
         layers.eachLayer(function(layer) {
             const id = layer.options.id;
+            const oId = layer.options.oId;
+
             const geometry = layer.toGeoJSON().geometry;
 
             if (id === 'area') {
@@ -458,7 +461,7 @@ class BackgroundMap extends Component {
                 const bounds = geoJson(json).getBounds();
                 this.props.setModelArea(json.geometry, bounds);
             } else {
-                this.props.setBoundaryGeometry(id, geometry);
+                this.props.setBoundaryGeometry(id, oId, geometry);
             }
         }, this);
     };
@@ -589,25 +592,39 @@ class BackgroundMap extends Component {
         const { hash } = this.props.location;
         const { params } = this.props;
 
-        if (hash !== '#edit') {
-            return null;
+        if (hash === '#edit') {
+            if (params.id && !params.property && !params.type && !params.pid) {
+                return {property: 'area', type: 'area', id: 'area'};
+            }
+
+            if (
+                params.id &&
+                params.property === 'boundaries' &&
+                params.type &&
+                params.pid
+            ) {
+                return {
+                    property: params.property,
+                    type: params.type,
+                    id: params.pid
+                };
+            }
         }
 
-        if (params.id && !params.property && !params.type && !params.pid) {
-            return { property: 'area', type: 'area', id: 'area' };
-        }
-
-        if (
-            params.id &&
-            params.property === 'boundaries' &&
-            params.type &&
-            params.pid
-        ) {
-            return {
-                property: params.property,
-                type: params.type,
-                id: params.pid
-            };
+        if (hash === '#edit-op') {
+            if (
+                params.id &&
+                params.property === 'boundaries' &&
+                params.type &&
+                params.pid
+            ) {
+                return {
+                    property: params.property,
+                    type: params.type,
+                    id: params.pid,
+                    op: true
+                };
+            }
         }
 
         return null;
@@ -619,17 +636,35 @@ class BackgroundMap extends Component {
         let editables = [];
 
         if (editable) {
-            if (editable.property === 'area' && editable.id === 'area') {
-                const area = this.state.model.geometry;
-                editables.push({ id: 'area', geometry: area });
+            if (!editable.op) {
+                if (editable.property === 'area' && editable.id === 'area') {
+                    const area = this.state.model.geometry;
+                    editables.push({ id: 'area', geometry: area });
+                }
+
+                if (editable.property === 'boundaries') {
+                    this.state.model.boundaries.forEach(b => {
+                        if (b.id === editable.id) {
+                            editables.push({ id: b.id, geometry: b.geometry });
+                        }
+                    });
+                }
             }
 
-            if (editable.property === 'boundaries') {
-                this.state.model.boundaries.forEach(b => {
-                    if (b.id === editable.id) {
-                        editables.push({ id: b.id, geometry: b.geometry });
-                    }
-                });
+            if (editable.op === true) {
+                if (editable.property === 'boundaries') {
+                    this.state.model.boundaries.forEach(b => {
+                        if (b.id === editable.id) {
+                            if (b.observation_points) {
+                                b.observation_points.forEach(
+                                    op => {
+                                        editables.push({ id: b.id, oId: op.id, geometry: op.geometry });
+                                    }
+                                );
+                            }
+                        }
+                    });
+                }
             }
         }
 
@@ -660,6 +695,7 @@ class BackgroundMap extends Component {
                         <Circle
                             key={uniqueId()}
                             id={e.id}
+                            oId={e.oId}
                             center={[
                                 e.geometry.coordinates[1],
                                 e.geometry.coordinates[0]
@@ -719,10 +755,7 @@ class BackgroundMap extends Component {
     };
 
     renderCenterToBoundsButton = () => {
-        if (
-            this.props.location.hash === '#edit' ||
-            this.props.location.hash === '#create'
-        ) {
+        if (this.props.location.hash) {
             return (
                 <Button
                     onClick={this.centerToBounds}

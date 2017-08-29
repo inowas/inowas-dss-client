@@ -133,12 +133,13 @@ export const ADD_BOUNDARY_PUMPING_RATE =
 export const SET_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY_GEOMETRY';
 export const SET_STRESS_PERIODS = 'MODEL_EDITOR_MODEL_SET_STRESS_PERIODS';
 
-export function setBoundaryGeometry(tool, boundaryId, geometry) {
+export function setBoundaryGeometry(tool, boundaryId, observationPointId, geometry) {
     return {
         type: SET_BOUNDARY_GEOMETRY,
         tool,
         payload: {
             id: boundaryId,
+            oId: observationPointId,
             geometry: geometry
         }
     };

@@ -47,23 +47,24 @@ export function handleRemoveLayer(state, action) {
     ];
 }
 
-export function handleBoundaryGeometrySetEditTrue(boundaries, action) {
-    return boundaries.map(b => {
-        if (b.id === action.payload) {
-            const geometry = b.geometry;
-            geometry.edit = true;
-            b.geometry = geometry;
-            return {...b};
-        }
-
-        return b;
-    });
-}
-
 export function handleUpdateBoundaryGeometry(boundaries, action) {
     return boundaries.map(b => {
         if (b.id === action.payload.id) {
-            return {...b, geometry: action.payload.geometry};
+            if (!action.payload.oId) {
+                return {...b, geometry: action.payload.geometry};
+            }
+
+            if (action.payload.oId) {
+                const observationPoints = b.observation_points.map( op => {
+                    if (op.id === action.payload.oId) {
+                        return {...op, geometry: action.payload.geometry};
+                    }
+
+                    return op;
+                });
+
+                return {...b, observation_points: observationPoints};
+            }
         }
 
         return b;

@@ -73,6 +73,7 @@ class T03 extends React.Component {
     renderProperties() {
         const isVisible =
             this.props.location.hash !== '#edit' &&
+            this.props.location.hash !== '#edit-op' &&
             this.props.location.hash !== '#create' &&
             this.props.location.hash !== '#view';
         if (!isVisible) {
