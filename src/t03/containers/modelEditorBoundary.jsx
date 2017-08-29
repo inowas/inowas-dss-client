@@ -151,7 +151,10 @@ class ModelEditorBoundary extends React.Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
 
