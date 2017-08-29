@@ -23,8 +23,7 @@ import '../../less/crossSectionMap.less';
 export default class ScenarioAnalysisMap extends Component {
     static propTypes = {
         mapData: PropTypes.instanceOf(ScenarioAnalysisMapData).isRequired,
-        updateMapView: PropTypes.func.isRequired,
-        updateBounds: PropTypes.func.isRequired,
+        setMapPosition: PropTypes.func,
         mapPosition: PropTypes.object.isRequired,
         clickCoordinate: PropTypes.func.isRequired
     };
@@ -147,12 +146,18 @@ export default class ScenarioAnalysisMap extends Component {
         const zoom = e.target.getZoom();
         const center = e.target.getCenter();
 
-        this.props.updateMapView({ lat: center.lat, lng: center.lng }, zoom);
+        this.props.setMapPosition({
+            center,
+            zoom
+        });
     };
 
     resetView = () => {
         const boundingBox = this.props.mapData.boundingBox;
-        this.props.updateBounds(boundingBox.toArray());
+
+        this.props.setMapPosition({
+            bounds: boundingBox.toArray()
+        });
     };
 
     clickOnMap = e => {
@@ -197,7 +202,7 @@ export default class ScenarioAnalysisMap extends Component {
         }
 
         const wells = boundaries.map((b, index) => {
-            if (b.type === 'well') {
+            if (b.type === 'wel') {
                 const geometry = b.geometry;
                 const metadata = b.metadata;
 

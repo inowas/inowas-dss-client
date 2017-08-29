@@ -87,7 +87,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             }
 
             if ( state.selectedTotalTimeIndex === null ) {
-                state.selectedTotalTimeIndex = state.totalTimes.length-1;
+                state.selectedTotalTimeIndex = state.totalTimes.length - 1;
             }
 
             break;
@@ -128,14 +128,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             } );
             break;
 
-        case 'T07_SET_BOUNDS':
-            state = {
-                ...state,
-                mapPosition: action.payload
-            };
-            break;
-
-        case 'T07_SET_MAP_VIEW':
+        case 'T07_SET_MAP_POSITION':
             state = {
                 ...state,
                 mapPosition: action.payload

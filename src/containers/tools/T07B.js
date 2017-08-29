@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
-import {Formatter} from '../../core';
+import { Formatter } from '../../core';
 
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Header from '../../components/tools/Header';
@@ -19,8 +19,7 @@ import {
     setSelectedModelIdsT07B,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
-    setMapView,
-    setBounds,
+    setMapPosition,
     setActiveCoordinate,
     setupT07b
 } from '../../actions/T07';
@@ -58,7 +57,7 @@ export default class T07B extends Component {
                     name: 'Time series',
                     path: '/tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
-                } /* , {
+                }/* , {
                     name: 'Overall budget',
                     path: '/tools/T07D/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched"/>
@@ -183,13 +182,9 @@ export default class T07B extends Component {
         );
     }
 
-    updateMapView = ( latLng, zoom ) => {
-        this.props.dispatch(setMapView( latLng, zoom ));
-    };
-
-    updateBounds = ( bounds ) => {
-        this.props.dispatch(setBounds( bounds ));
-    };
+    setMapPosition = mapPosition => {
+        this.props.dispatch(setMapPosition( mapPosition ));
+    }
 
     setActiveCoordinate = ( coordinate ) => {
         this.props.dispatch(setActiveCoordinate( coordinate ));
@@ -213,30 +208,32 @@ export default class T07B extends Component {
             area: t07bDifference.area,
             grid: t07bDifference.grid,
             xCrossSection,
-            heatMapUrl: t07bDifference.result ? t07bDifference.result.imgUrl(t07bDifference.result.min(), t07bDifference.result.max()) : null
+            heatMapUrl: t07bDifference.result
+                ? t07bDifference.result.imgUrl(t07bDifference.result.min( ), t07bDifference.result.max( ))
+                : null
         });
 
         return (
             <section className="tile col stretch">
-                <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinate}/>
+                <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} setMapPosition={this.setMapPosition} clickCoordinate={this.setActiveCoordinate}/>
             </section>
         );
     }
 
     labelYAxis = ( resultType ) => {
-        if (resultType.toString() === 'head') {
+        if ( resultType.toString( ) === 'head' ) {
             return 'Groundwater Head [m]';
         }
 
-        if (resultType.toString() === 'drawdown') {
+        if ( resultType.toString( ) === 'drawdown' ) {
             return 'Groundwater DrawDown [m]';
         }
 
         return '';
     };
 
-    labelXAxis = () => {
-        return ('Longitude');
+    labelXAxis = ( ) => {
+        return ( 'Longitude' );
     };
 
     renderChart( ) {
@@ -294,7 +291,7 @@ export default class T07B extends Component {
 
         const axis = {
             x: {
-                label: this.labelXAxis()
+                label: this.labelXAxis( )
             },
             y: {
                 label: this.labelYAxis( selectedResultType )

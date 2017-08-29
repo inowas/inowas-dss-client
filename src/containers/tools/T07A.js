@@ -24,8 +24,7 @@ import {
     setSelectedResultType,
     setSelectedTotalTimeIndex,
     toggleModelSelection,
-    setMapView,
-    setBounds,
+    setMapPosition,
     setActiveCoordinate,
     cloneScenario
 } from '../../actions/T07';
@@ -176,13 +175,9 @@ export default class T07A extends Component {
         );
     }
 
-    updateMapView = ( latLng, zoom ) => {
-        this.props.dispatch(setMapView( latLng, zoom ));
-    };
-
-    updateBounds = ( bounds ) => {
-        this.props.dispatch(setBounds( bounds ));
-    };
+    setMapPosition = mapPosition => {
+        this.props.dispatch(setMapPosition( mapPosition ));
+    }
 
     setActiveCoordinateHandler = ( coordinate ) => {
         this.props.dispatch(setActiveCoordinate( coordinate ));
@@ -219,7 +214,7 @@ export default class T07A extends Component {
             return (
                 <section key={model.modelId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
-                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinateHandler}/>
+                    <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} setMapPosition={this.setMapPosition} clickCoordinate={this.setActiveCoordinateHandler}/>
                 </section>
             );
         });
