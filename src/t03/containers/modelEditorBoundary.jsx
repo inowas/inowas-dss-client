@@ -89,7 +89,7 @@ class ModelEditorBoundary extends Component {
     };
 
     renderProperties(boundaries) {
-        const { area, permissions, removeBoundary, mapStyles } = this.props;
+        const { area, permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
 
@@ -111,7 +111,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
                     case 'rch':
@@ -271,7 +274,8 @@ const actions = {
     updateBoundary: Command.updateBoundary,
     updatePumpingRate: Action.updatePumpingRate,
     addPumpingRate: Action.addPumpingRate,
-    removeBoundary: Command.removeBoundary
+    removeBoundary: Command.removeBoundary,
+    setBoundary: Action.setBoundary,
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
@@ -290,7 +294,8 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 ModelEditorBoundary.propTypes = {
-    tool: PropTypes.string.isRequired
+    tool: PropTypes.string.isRequired,
+    updateBoundaryStatus: PropTypes.object,
 };
 
 // eslint-disable-next-line no-class-assign
