@@ -1,6 +1,7 @@
 import { DataTableAction, RiverObservationPoint } from '../../t03/components';
-import { Helper, LayoutComponents } from '../../core';
-import React, { Component } from 'react';
+import { Helper, LayoutComponents, WebData } from '../../core';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { find, uniqueId } from 'lodash';
 
 import BoundaryMap from './boundaryMap';
@@ -8,7 +9,6 @@ import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
-import PropTypes from 'prop-types';
 import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
 
@@ -80,7 +80,7 @@ const mergeObservationPoints = (state, id, dateTimeValues) => {
 };
 
 @ConfiguredRadium
-class RiverProperties extends Component {
+class RiverProperties extends React.Component {
     constructor(props) {
         super(props);
 
@@ -103,6 +103,17 @@ class RiverProperties extends Component {
                     prevState.selectedObservationPoint ||
                     nextProps.selectedObservationPoint
             };
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.setBoundary({
+            ...this.state.boundary,
+            ...mergeBoundary(
+                this.state,
+                this.state.selectedObservationPoint,
+                this.observationPoint.getRows()
+            )
         });
     }
 
@@ -308,10 +319,14 @@ class RiverProperties extends Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
+        );
+
+        const saveButton = WebData.Component.Processing(
+            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -324,6 +339,7 @@ class RiverProperties extends Component {
                         <LayoutComponents.InputGroup label="Name">
                             <Input
                                 name="name"
+                                disabled={readOnly}
                                 id={nameInputId}
                                 onChange={this.handleInputChange('name')}
                                 value={boundary.name}
@@ -335,6 +351,7 @@ class RiverProperties extends Component {
                         <LayoutComponents.InputGroup label="Select Layer">
                             <Select
                                 name="affected_layers"
+                                disabled={readOnly}
                                 id={layerInputId}
                                 value={
                                     boundary.affected_layers
@@ -361,6 +378,7 @@ class RiverProperties extends Component {
 
                         <div style={styles.rightAlign}>
                             <Button
+                                disabled={readOnly}
                                 style={styles.buttonMarginRight}
                                 onClick={editBoundaryOnMap}
                                 type="link"
@@ -370,7 +388,8 @@ class RiverProperties extends Component {
                             </Button>
                             <Button
                                 style={styles.buttonMarginRight}
-                                disabled
+                                disabled={readOnly}
+                                onClick={onDelete}
                                 type="link"
                                 icon={<Icon name="trash" />}
                             >
@@ -404,7 +423,7 @@ class RiverProperties extends Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={styles.saveButtonWrapper}>
-                    <Button onClick={this.save}>Save</Button>
+                    {saveButton(updateStatus)}
                 </div>
             </div>
         );
