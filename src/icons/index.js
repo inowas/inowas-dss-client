@@ -22,6 +22,7 @@ import LayerHorizontalHatched from './layer-horizontal-hatched.svg';
 import LayerHorizontal from './layer-horizontal.svg';
 import LayerVerticalHatched from './layer-vertical-hatched.svg';
 import LayerVertical from './layer-vertical.svg';
+import Loading from './loading.svg';
 import Map from './map.svg';
 import MarkerMultiple from './marker-multiple.svg';
 import Marker from './marker.svg';
@@ -38,42 +39,43 @@ import Unchecked from './unchecked.svg';
 import World from './world.svg';
 
 const icons = {
-    add_multiple: <AddMultiple/>,
-    add: <Add/>,
-    arrow_down: <ArrowDown/>,
-    arrow_left: <ArrowLeft/>,
-    arrow_right: <ArrowRight/>,
-    arrow_up: <ArrowUp/>,
-    boundaries: <Boundaries/>,
-    calculator: <Calculator/>,
-    checked: <Checked/>,
-    clone: <Clone/>,
-    close: <Close/>,
-    constant_head: <ConstantHead/>,
-    dataset: <Dataset/>,
-    edit: <Edit/>,
-    exclamation_mark: <ExclamationMark/>,
-    file: <File/>,
-    folder: <Folder/>,
-    import: <ImportIcon/>,
-    layer_horizontal_hatched: <LayerHorizontalHatched/>,
-    layer_horizontal: <LayerHorizontal/>,
-    layer_vertical_hatched: <LayerVerticalHatched/>,
-    layer_vertical: <LayerVertical/>,
-    map: <Map/>,
-    marker_multiple: <MarkerMultiple/>,
-    marker: <Marker/>,
-    minus: <Minus/>,
-    person: <Person/>,
-    rivers: <Rivers/>,
-    search: <Search/>,
-    settings: <Settings/>,
-    share: <Share/>,
-    success: <Success/>,
-    tools: <Tools/>,
-    trash: <Trash/>,
-    unchecked: <Unchecked/>,
-    world: <World/>
+    add_multiple: <AddMultiple />,
+    add: <Add />,
+    arrow_down: <ArrowDown />,
+    arrow_left: <ArrowLeft />,
+    arrow_right: <ArrowRight />,
+    arrow_up: <ArrowUp />,
+    boundaries: <Boundaries />,
+    calculator: <Calculator />,
+    checked: <Checked />,
+    clone: <Clone />,
+    close: <Close />,
+    constant_head: <ConstantHead />,
+    dataset: <Dataset />,
+    edit: <Edit />,
+    exclamation_mark: <ExclamationMark />,
+    file: <File />,
+    folder: <Folder />,
+    import: <ImportIcon />,
+    layer_horizontal_hatched: <LayerHorizontalHatched />,
+    layer_horizontal: <LayerHorizontal />,
+    layer_vertical_hatched: <LayerVerticalHatched />,
+    layer_vertical: <LayerVertical />,
+    loading: <Loading />,
+    map: <Map />,
+    marker_multiple: <MarkerMultiple />,
+    marker: <Marker />,
+    minus: <Minus />,
+    person: <Person />,
+    rivers: <Rivers />,
+    search: <Search />,
+    settings: <Settings />,
+    share: <Share />,
+    success: <Success />,
+    tools: <Tools />,
+    trash: <Trash />,
+    unchecked: <Unchecked />,
+    world: <World />
 };
 
 export default icons;

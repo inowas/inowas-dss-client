@@ -1,11 +1,35 @@
-import * as React from 'react';
-import {pure} from 'recompose';
+import React, { PropTypes } from 'react';
 
-// TODO make it beautiful
-const LoadingSpinner = ({ ...props }) => {
+import ConfiguredRadium from 'ConfiguredRadium';
+import Icon from '../../../components/primitive/Icon';
+import color from 'color';
+import { pure } from 'recompose';
+import styleGlobals from 'styleGlobals';
+
+const styles = {
+    wrapper: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: color(styleGlobals.colors.background).fade(0.7),
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+};
+
+const LoadingSpinner = ({ style }) => {
     return (
-        <p {...props}>Loading ...</p>
+        <div style={[styles.wrapper, style]}>
+            <Icon name="loading" />
+        </div>
     );
 };
 
-export default pure(LoadingSpinner);
+LoadingSpinner.propTypes = {
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+};
+
+export default pure(ConfiguredRadium(LoadingSpinner));

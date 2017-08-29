@@ -89,22 +89,29 @@ export function setResultsT07B( modflowCalculationResult ) {
     };
 }
 
-export function setBounds( bounds ) {
-    return {
-        type: 'T07_SET_BOUNDS',
-        payload: {
-            bounds
-        }
-    };
-}
+// export function setBounds( bounds ) {
+//     return {
+//         type: 'T07_SET_BOUNDS',
+//         payload: {
+//             bounds
+//         }
+//     };
+// }
+//
+// export function setMapView( center, zoom ) {
+//     return {
+//         type: 'T07_SET_MAP_VIEW',
+//         payload: {
+//             center,
+//             zoom
+//         }
+//     };
+// }
 
-export function setMapView( center, zoom ) {
+export function setMapPosition( mapPosition ) {
     return {
-        type: 'T07_SET_MAP_VIEW',
-        payload: {
-            center,
-            zoom
-        }
+        type: 'T07_SET_MAP_POSITION',
+        payload: mapPosition
     };
 }
 
@@ -182,10 +189,9 @@ export function fetchDetails( id, onSuccess ) {
                 promise: ConfiguredAxios.get( '/scenarioanalyses/' + id + '.json', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
-
             const area = action.payload.data.geometry;
             const boundingBoxPlain = action.payload.data.bounding_box;
-            const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain[0][1], boundingBoxPlain[0][0] ), new Coordinate( boundingBoxPlain[1][1], boundingBoxPlain[1][0] ) );
+            const boundingBox = new BoundingBox( new Coordinate( boundingBoxPlain[ 0 ][ 1 ], boundingBoxPlain[ 0 ][ 0 ] ), new Coordinate( boundingBoxPlain[ 1 ][ 1 ], boundingBoxPlain[ 1 ][ 0 ] ) );
             const gridSize = action.payload.data.grid_size;
 
             const baseModel = ModflowModel.fromProps(
@@ -202,7 +208,7 @@ export function fetchDetails( id, onSuccess ) {
             );
 
             dispatch( addModel( baseModel ) );
-            dispatch( setBounds( boundingBox.toArray() ) );
+            dispatch( setMapPosition( { bounds: boundingBox.toArray() } ) );
             dispatch( fetchModelBoundaries( baseModel.modelId ) );
             dispatch( fetchLayerValues( baseModel.calculationId ) );
             dispatch( fetchTotalTimes( baseModel.calculationId, new ResultType( 'head' ), new LayerNumber( 0 ) ) );
@@ -374,7 +380,6 @@ export function fetchTimeSeries( coordinate, calculationId, resultType, layerNum
     };
 }
 
-
 export function cloneScenario( id ) {
     return ( dispatch, getState ) => {
         return dispatch( {
@@ -384,7 +389,7 @@ export function cloneScenario( id ) {
                 promise: ConfiguredAxios.post( 'scenarioanalysis...', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
             }
         } ).then( ( { action } ) => {
-            console.warn(action.payload.data);
+            console.warn( action.payload.data );
         } ).catch( ( error ) => {
             // eslint-disable-next-line no-console
             console.error( error );

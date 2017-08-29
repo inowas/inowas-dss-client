@@ -16,15 +16,24 @@ import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 import Icon from '../primitive/Icon';
 import ColorLegend from './ColorLegend';
+import ConfiguredRadium from 'ConfiguredRadium';
 
 import '../../less/leaflet.less';
 import '../../less/crossSectionMap.less';
 
+const RadiumMap = ConfiguredRadium(Map);
+
+const styles = {
+    map: {
+        zIndex: 0
+    }
+};
+
+@ConfiguredRadium
 export default class ScenarioAnalysisMap extends Component {
     static propTypes = {
         mapData: PropTypes.instanceOf(ScenarioAnalysisMapData).isRequired,
-        updateMapView: PropTypes.func.isRequired,
-        updateBounds: PropTypes.func.isRequired,
+        setMapPosition: PropTypes.func,
         mapPosition: PropTypes.object.isRequired,
         clickCoordinate: PropTypes.func.isRequired
     };
@@ -147,12 +156,18 @@ export default class ScenarioAnalysisMap extends Component {
         const zoom = e.target.getZoom();
         const center = e.target.getCenter();
 
-        this.props.updateMapView({ lat: center.lat, lng: center.lng }, zoom);
+        this.props.setMapPosition({
+            center,
+            zoom
+        });
     };
 
     resetView = () => {
         const boundingBox = this.props.mapData.boundingBox;
-        this.props.updateBounds(boundingBox.toArray());
+
+        this.props.setMapPosition({
+            bounds: boundingBox.toArray()
+        });
     };
 
     clickOnMap = e => {
@@ -197,7 +212,7 @@ export default class ScenarioAnalysisMap extends Component {
         }
 
         const wells = boundaries.map((b, index) => {
-            if (b.type === 'well') {
+            if (b.type === 'wel') {
                 const geometry = b.geometry;
                 const metadata = b.metadata;
 
@@ -308,7 +323,8 @@ export default class ScenarioAnalysisMap extends Component {
         const { mapPosition } = this.props;
 
         return (
-            <Map
+            <RadiumMap
+                style={styles.map}
                 className="crossSectionMap"
                 {...mapPosition}
                 onClick={this.clickOnMap}
@@ -336,7 +352,7 @@ export default class ScenarioAnalysisMap extends Component {
                     <Icon name="marker" />
                 </button>
                 {this.renderLegend()}
-            </Map>
+            </RadiumMap>
         );
     }
 }

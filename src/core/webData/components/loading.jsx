@@ -1,18 +1,39 @@
-import * as React from 'react';
+import React, { PropTypes } from 'react';
+
+import ConfiguredRadium from 'ConfiguredRadium';
 import LoadingError from './loadingError';
 import LoadingSpinner from './loadingSpinner';
+import { pure } from 'recompose';
 
-const withLoadingSpinner = ComposedComponent => {
-    return ( { status, errorMessage } ) => {
-        switch (status) {
-            case 'error':
-                return <LoadingError message={ errorMessage }/>;
-            case 'loading':
-                return <LoadingSpinner/>;
-            default:
-                return ComposedComponent;
-        }
-    };
+const styles = {
+    wrapper: {
+        position: 'relative'
+    }
 };
 
-export default withLoadingSpinner;
+const Loading = ({ status, children }) => {
+    return (
+        <div style={styles.wrapper}>
+            {children}
+
+            {(() => {
+                if (status) {
+                    if (status.type === 'error') {
+                        return <LoadingError message={status.errorMessage} />;
+                    } else if (status.type === 'loading') {
+                        return <LoadingSpinner />;
+                    }
+                }
+
+                return null;
+            })()}
+        </div>
+    );
+};
+
+Loading.propTypes = {
+    status: PropTypes.object,
+    children: PropTypes.node
+};
+
+export default pure(ConfiguredRadium(Loading));

@@ -47,3 +47,5 @@ export function getLayer(tool, id, lid) {
         lid
     };
 }
+
+export const GET_CALCULATION = 'GET_CALCULATION';

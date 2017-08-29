@@ -20,8 +20,7 @@ import {
     setSelectedResultType,
     setSelectedTotalTimeIndex,
     toggleModelSelection,
-    setMapView,
-    setBounds,
+    setMapPosition,
     addTimeSeriesPoint,
     setTimeSeriesPointSelection,
     fetchTimeSeries
@@ -144,13 +143,9 @@ export default class T07C extends Component {
         );
     }
 
-    updateMapView = ( latLng, zoom ) => {
-        this.props.dispatch(setMapView( latLng, zoom ));
-    };
-
-    updateBounds = ( bounds ) => {
-        this.props.dispatch(setBounds( bounds ));
-    };
+    setMapPosition = mapPosition => {
+        this.props.dispatch(setMapPosition( mapPosition ));
+    }
 
     addPoint = ( coordinate ) => {
         const { models } = this.props.tool;
@@ -203,7 +198,7 @@ export default class T07C extends Component {
             // boundaries: model.boundaries,
             timeSeriesGridCells
         });
-        return ( <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.addPoint}/> );
+        return ( <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} setMapPosition={this.setMapPosition} clickCoordinate={this.addPoint}/> );
     }
 
     setTimeSeriesPointSelection = index => {

@@ -2,14 +2,17 @@
  * Actions triggers only a store change.
  */
 
-export const ADD_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_AREA_ADD_CONTROL_POINT';
-export const DELETE_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_DELETE_AREA_CONTROL_POINT';
+export const ADD_AREA_CONTROL_POINT =
+    'MODEL_EDITOR_MODEL_AREA_ADD_CONTROL_POINT';
+export const DELETE_AREA_CONTROL_POINT =
+    'MODEL_EDITOR_MODEL_DELETE_AREA_CONTROL_POINT';
 export const DESTROY_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_DESTROY';
 
 export const SET_AREA_LATITUDE = 'MODEL_EDITOR_MODEL_SET_AREA_LATITUDE';
 export const SET_AREA_LONGITUDE = 'MODEL_EDITOR_MODEL_SET_AREA_LONGITUDE';
 export const SET_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_SET';
-export const UPDATE_AREA_CONTROL_POINT = 'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL_POINT';
+export const UPDATE_AREA_CONTROL_POINT =
+    'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL_POINT';
 export const UPDATE_BOUNDING_BOX = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDING_BOX';
 export const UPDATE_GEOMETRY = 'MODEL_EDITOR_UPDATE_GEOMETRY';
 
@@ -78,7 +81,7 @@ export function updateAreaControlPoint(tool, index, controlPoint) {
 export function updateBoundingBox(tool) {
     return {
         type: UPDATE_BOUNDING_BOX,
-        tool,
+        tool
     };
 }
 
@@ -117,11 +120,16 @@ export const SET_BOUNDARIES = 'MODEL_EDITOR_MODEL_SET_BOUNDARIES';
 export const SET_BOUNDARY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY';
 export const SET_LAYER = 'MODEL_EDITOR_MODEL_SET_LAYER';
 export const UPDATE_BOUNDARY = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY';
-export const ADD_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT';
-export const UPDATE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT';
-export const DELETE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_DELETE_BOUNDARY_CONTROL_POINT';
-export const UPDATE_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_PUMPING_RATE';
-export const ADD_BOUNDARY_PUMPING_RATE = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE';
+export const ADD_BOUNDARY_CONTROL_POINT =
+    'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT';
+export const UPDATE_BOUNDARY_CONTROL_POINT =
+    'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT';
+export const DELETE_BOUNDARY_CONTROL_POINT =
+    'MODEL_EDITOR_MODEL_DELETE_BOUNDARY_CONTROL_POINT';
+export const UPDATE_BOUNDARY_PUMPING_RATE =
+    'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_PUMPING_RATE';
+export const ADD_BOUNDARY_PUMPING_RATE =
+    'MODEL_EDITOR_MODEL_ADD_BOUNDARY_PUMPING_RATE';
 export const SET_BOUNDARY_GEOMETRY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY_GEOMETRY';
 export const SET_STRESS_PERIODS = 'MODEL_EDITOR_MODEL_SET_STRESS_PERIODS';
 
@@ -184,7 +192,14 @@ export function setStressPeriods(tool, stressperiod) {
     };
 }
 
-export function updatePumpingRate(tool, boundaryId, observationPointId, index, datetime, pumpingRate) {
+export function updatePumpingRate(
+    tool,
+    boundaryId,
+    observationPointId,
+    index,
+    datetime,
+    pumpingRate
+) {
     return {
         type: UPDATE_BOUNDARY_PUMPING_RATE,
         tool,
@@ -198,7 +213,14 @@ export function updatePumpingRate(tool, boundaryId, observationPointId, index, d
     };
 }
 
-export function addPumpingRate(tool, boundaryId, observationPointId, index, datetime, pumpingRate) {
+export function addPumpingRate(
+    tool,
+    boundaryId,
+    observationPointId,
+    index,
+    datetime,
+    pumpingRate
+) {
     return {
         type: ADD_BOUNDARY_PUMPING_RATE,
         tool,
