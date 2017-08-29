@@ -47,13 +47,7 @@ class PumpingRate extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
-                                    name={
-                                        rowData.selected
-                                            ? 'checked'
-                                            : 'unchecked'
-                                    }
-                                />
+                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
                         ]
                     }
                 },

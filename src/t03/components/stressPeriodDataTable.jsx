@@ -4,7 +4,7 @@ import * as edit from 'react-edit';
 import {DataTable, Formatter, Helper} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
-import { cloneDeep, sortBy, last, orderBy } from 'lodash';
+import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
 class StressPeriodDataTable extends DataTable.Component.DataTable {
@@ -42,9 +42,8 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                     },
                     cell: {
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'}/>
-                            )
+                            ( value, { rowData } ) =>
+                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
                         ]
                     }
                 },
@@ -97,10 +96,10 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         label: 'steady state',
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.boolean())],
+                        transforms: [DataTable.Helper.editableCheckbox(this)(DataTable.Component.Checkbox())],
                         formatters: [
                             ( value, { rowData } ) => (
-                                <span>{Formatter.toNumber(value)}</span>
+                                <Icon name={value ? 'checked' : 'unchecked'}/>
                             )
                         ]
                     },
@@ -110,30 +109,23 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
         };
     }
 
-    getRows = () => {
-        const {start, end} = this.props;
+    getRows = () => cloneDeep(this.state.rows);
 
-        let stressPeriods = orderBy(this.state.rows, ['totim_start'], ['asc']).map((data) => {
-            return {
-                totim_start: Helper.diffInDays(start, data.totim_start),
-                nstp: parseInt(data.nstp),
-                tsmult: parseFloat(data.tsmult),
-                steady: data.steady ? true : false
-            }
+    onRowChange = ( ) => {
+        this.props.onRowChange();
+    };
+
+    checkDateRange = (start, end) => {
+        let success = true;
+
+        this.state.rows.map(data => {
+            data.error = !Helper.isBetweenDate(data.totim_start, start, end);
+            success &= !data.error;
+
+            return data;
         });
-        let perlen = 0;
-
-        stressPeriods = orderBy(stressPeriods, [ 'totim_start' ], [ 'desc' ] ).map( (data) => {
-            const obj = {
-                ...data,
-                perlen: perlen - data.totim_start
-            };
-            perlen = data.totim_start;
-            return obj;
-        } );
-        stressPeriods[0].perlen = Helper.diffInDays(start, end) - stressPeriods[0].totim_start;
-
-        return orderBy(stressPeriods, [ 'totim_start' ], [ 'asc' ] );
+        // ensure boolean
+        return !!success;
     };
 
     onAdd = (e, increment) => {
@@ -142,29 +134,34 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
         const rows = sortBy(cloneDeep(this.state.rows), 'totim_start');
 
         const lastRow = last(rows);
-        const totim_start = lastRow && lastRow.totim_start ? Helper.addDays(lastRow.perlen)(lastRow.totim_start) : new Date();
+        const totim_start = lastRow && lastRow.totim_start
+                ? new Date(lastRow.totim_start)
+                : new Date();
         const nstp = lastRow && lastRow.nstp ? lastRow.nstp : 1;
         const tsmult = lastRow && lastRow.tsmult ? lastRow.tsmult : 1;
         const steady = lastRow && lastRow.steady ? lastRow.steady : false;
-        const perlen = lastRow && lastRow.perlen ? lastRow.perlen : 0;
 
-        rows.push({
+        const row = {
             id: uuid.v4(),
             totim_start: Formatter.dateToYmd(increment(totim_start)),
             nstp,
             tsmult,
             steady,
-            perlen
-        });
+        };
 
-        this.setState((prevState, props) => {return { ...prevState, rows };});
+        rows.push(row);
+
+        this.setState((prevState, props) => {
+            this.props.onRowChange();
+
+            return { ...prevState, rows };
+        });
     };
 }
 
 StressPeriodDataTable.propTypes = {
     perPage: PropTypes.number,
-    start: PropTypes.string,
-    end: PropTypes.string,
+    onRowChange: PropTypes.func.isRequired
 };
 
 export default StressPeriodDataTable;

@@ -13,6 +13,12 @@ export const editable = (component = {}) => edit.edit({
     onValue: Callback.onValue(component),
 });
 
+export const editableCheckbox = (component = {}) => edit.edit({
+    isEditing: Callback.isEditing,
+    onActivate: Callback.onActivateCheckbox(component),
+    onValue: Callback.onValue(component),
+});
+
 export const editableDate = (component = {}) => edit.edit({
     isEditing: Callback.isEditing,
     onActivate: Callback.onActivate(component),

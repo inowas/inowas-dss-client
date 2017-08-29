@@ -38,6 +38,9 @@ class DataTable extends Component {
         );
 
         this.setState((prevState, props) => {
+            if (this.onRowChange) {
+                this.onRowChange();
+            }
             return { ...prevState, rows, selectedRows: [] };
         });
     };
@@ -83,7 +86,6 @@ class DataTable extends Component {
                             perPage
                         )}
                         rowKey="id"
-                        onRow={Action.Callback.onRow(this)}
                         style={{
                             maxHeight: 1000
                         }}
