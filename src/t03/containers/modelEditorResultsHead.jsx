@@ -51,7 +51,6 @@ class ModelEditorResultsHead extends Component {
     }
 
     onTimeSliderChange = nextSelectedTotalTimeIndex => {
-        console.warn(nextSelectedTotalTimeIndex);
         this.setState({
             selectedTotalTimeIndex: nextSelectedTotalTimeIndex
         });
