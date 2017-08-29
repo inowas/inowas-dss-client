@@ -86,6 +86,7 @@ class DataTable extends Component {
                             perPage
                         )}
                         rowKey="id"
+                        onRow={Action.Callback.onRow(this)}
                         style={{
                             maxHeight: 1000
                         }}

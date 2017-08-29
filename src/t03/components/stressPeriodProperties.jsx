@@ -77,7 +77,7 @@ class StressPeriodProperties extends React.Component {
                             return {
                                 ...data,
                                 totim_start: Formatter.dateToYmd(
-                                    Helper.addDays( data.totim_start )( nextProps.stressPeriods.start_date_time )
+                                    Helper.addDays( data.totim_start + 1 )( nextProps.stressPeriods.start_date_time )
                                 )
                             };
                         } )
@@ -180,23 +180,6 @@ class StressPeriodProperties extends React.Component {
                         heading="Properties"
                         style={[styles.columnNotLast]}
                     >
-                        <LayoutComponents.InputGroup label="Time Unit">
-                            {/* REVIEW use Select component and model/TimeUnit */}
-                            <select
-                                disabled
-                                className="select"
-                                name="time_unit"
-                                value={stressPeriods.time_unit}
-                                data-filter="filterInt"
-                            >
-                                <option value="1">Second</option>
-                                <option value="2">Minute</option>
-                                <option value="3">Hour</option>
-                                <option value="4">Day</option>
-                                <option value="5">Year</option>
-                            </select>
-                        </LayoutComponents.InputGroup>
-
                         <LayoutComponents.InputGroup label="Start Date">
                             <Input
                                 name="start_date_time"

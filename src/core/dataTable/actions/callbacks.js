@@ -41,7 +41,6 @@ export const onRow = (component = {}) => (row, {rowIndex, rowKey}) => {
             row.selected && 'selected-row',
             row.error && 'error-row',
         ),
-        onClick: () => onSelectRow(component)(rowIndex)
     };
 };
 
