@@ -7,15 +7,10 @@ import {
     RiverProperties,
     WellProperties
 } from '../components';
-import React, { Component } from 'react';
+import React from 'react';
 import { browserHistory, withRouter } from 'react-router';
-// import {
-//     editBoundary,
-//     goToBoundaryOverview,
-//     goToBoundaryTypeOverview
-// } from '../../routes';
 import { Routing } from '../actions';
-import { first, maxBy, minBy } from 'lodash';
+import { first } from 'lodash';
 
 import { Action } from '../actions/index';
 import { BoundaryOverview } from '../../t03/containers/index';
@@ -30,7 +25,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeMapStateToPropsBoundaries } from '../selectors/mapState';
 import styleGlobals from 'styleGlobals';
-import uuid from 'uuid';
 
 const styles = {
     container: {
@@ -62,7 +56,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class ModelEditorBoundary extends Component {
+class ModelEditorBoundary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -126,7 +120,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
                     case 'riv':
