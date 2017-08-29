@@ -12,7 +12,7 @@ export default function* updateLayerFlow() {
         // eslint-disable-next-line no-shadow
         const action = yield take( action => action.type === Command.UPDATE_LAYER );
 
-        yield put( Action.setBoundary( action.tool, action.payload.layer ) );
+        yield put( Action.setLayer( action.tool, action.payload.layer ) );
         yield put( sendCommand( action.type, {...action.payload, layer_id: action.payload.layer.id} ) );
 
         // eslint-disable-next-line no-constant-condition
