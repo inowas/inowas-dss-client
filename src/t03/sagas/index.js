@@ -1,3 +1,4 @@
+import addBoundaryFlow from './addBoundary';
 import addLayerFlow from './addLayer';
 import createModelFlow from './createModel';
 import getModflowModelDetailsFlow from './getModflowModelDetails';
@@ -12,6 +13,7 @@ import updateModelFlow from './updateModel';
 import updateStressPeriodsFlow from './updateStressPeriods';
 
 export {
+    addBoundaryFlow,
     addLayerFlow,
     createModelFlow,
     getModflowModelDetailsFlow,

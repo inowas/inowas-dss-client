@@ -144,14 +144,11 @@ export function setBoundaries(tool, boundaries) {
     };
 }
 
-export function addBoundary(tool, type, geometry) {
+export function addBoundary(tool, boundary) {
     return {
         type: ADD_BOUNDARY,
         tool,
-        payload: {
-            type: type,
-            geometry: geometry
-        }
+        payload: boundary
     };
 }
 

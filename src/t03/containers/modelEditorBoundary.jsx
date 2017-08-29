@@ -83,22 +83,6 @@ class ModelEditorBoundary extends Component {
         browserHistory.push(this.props.location.pathname + '#edit');
     };
 
-    addBoundary = type => {
-        return () => {
-            // eslint-disable-next-line no-shadow
-            const { addBoundary, area } = this.props;
-
-            addBoundary({
-                name: 'New Boundary',
-                type,
-                optimisic: true,
-                id: uuid(),
-                lng: (minBy(area, 'lng').lng + maxBy(area, 'lng').lng) / 2,
-                lat: (minBy(area, 'lat').lat + maxBy(area, 'lat').lat) / 2
-            });
-        };
-    };
-
     updateBoundary = data => {
         const { id } = this.props.params;
         this.props.updateBoundary(id, data);
@@ -285,7 +269,6 @@ class ModelEditorBoundary extends Component {
 
 const actions = {
     updateBoundary: Command.updateBoundary,
-    addBoundary: Action.addBoundary,
     updatePumpingRate: Action.updatePumpingRate,
     addPumpingRate: Action.addPumpingRate,
     removeBoundary: Command.removeBoundary

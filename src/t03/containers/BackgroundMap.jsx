@@ -14,16 +14,18 @@ import React, { Component, PropTypes } from 'react';
 import { browserHistory, withRouter } from 'react-router';
 import { geoJSON, geoJson } from 'leaflet';
 
-import { Action } from '../../t03/actions/index';
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
+import styleGlobals from 'styleGlobals';
+import { Action, Command } from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
+import {getBoundaryDefaultsByType} from '../selectors/boundary';
+
 import FloatingToast from '../../components/modflow/FloatingToast';
 import Icon from '../../components/primitive/Icon';
 import L from 'leaflet';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
-import styleGlobals from 'styleGlobals';
 import { uniqueId } from 'lodash';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
@@ -57,11 +59,12 @@ const styles = {
 @ConfiguredRadium
 class BackgroundMap extends Component {
     static propTypes = {
-        model: PropTypes.object,
-        setModelArea: PropTypes.func,
-        setBoundaryGeometry: PropTypes.func,
+        addBoundary: PropTypes.func,
         location: PropTypes.object,
-        params: PropTypes.object
+        model: PropTypes.object,
+        params: PropTypes.object,
+        setBoundaryGeometry: PropTypes.func,
+        setModelArea: PropTypes.func
     };
 
     constructor(props) {
@@ -318,16 +321,45 @@ class BackgroundMap extends Component {
         return coordinates.map(c => [c[1], c[0]]);
     }
 
+    getNewBoundaryNumber = type => {
+        let i = 1;
+        while (i < 100000) {
+            // eslint-disable-next-line no-loop-func
+            if (this.props.model.boundaries.filter( b => {
+                return (b.id === (type + '-' + i));
+            } ).length === 0) {
+                return i;
+            }
+            i++;
+        }
+
+        return null;
+    };
+
+    getStartDate = () => '2000-01-01T00:00:00+00:00';
+
     onCreated = e => {
-        if (this.getCreatable() === 'area') {
+        const type = this.getCreatable();
+        if (type === 'area') {
             const polygon = e.layer;
             const json = polygon.toGeoJSON();
             this.props.setModelArea(json.geometry, polygon.getBounds());
+            this.returnToProperties();
         }
 
-        if (this.getCreatable() === 'wel') {
+        if (type === 'wel') {
             const point = e.layer;
-            const json = point.toGeoJSON();
+            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const boundary = getBoundaryDefaultsByType(
+                type,
+                'wel-' + newBoundaryNumber,
+                'Well ' + newBoundaryNumber,
+                point.toGeoJSON().geometry,
+                this.getStartDate()
+            );
+
+            this.props.addBoundary(this.props.model.id, boundary);
         }
     };
 
@@ -669,7 +701,8 @@ const mapStateToProps = (state, { tool }) => {
 
 const actions = {
     setModelArea: Action.setModelArea,
-    setBoundaryGeometry: Action.setBoundaryGeometry
+    setBoundaryGeometry: Action.setBoundaryGeometry,
+    addBoundary: Command.addBoundary
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
