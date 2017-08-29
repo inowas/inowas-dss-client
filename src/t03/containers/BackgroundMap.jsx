@@ -7,6 +7,7 @@ import {
     Map,
     Polygon,
     Polyline,
+    Popup,
     Rectangle,
     TileLayer
 } from 'react-leaflet';
@@ -27,6 +28,7 @@ import L from 'leaflet';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
 import { uniqueId } from 'lodash';
+import {editBoundary} from "../actions/routing";
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -64,7 +66,8 @@ class BackgroundMap extends Component {
         model: PropTypes.object,
         params: PropTypes.object,
         setBoundaryGeometry: PropTypes.func,
-        setModelArea: PropTypes.func
+        setModelArea: PropTypes.func,
+        tool: PropTypes.string
     };
 
     constructor(props) {
@@ -164,6 +167,17 @@ class BackgroundMap extends Component {
         );
     }
 
+    renderBoundaryPopup = b => {
+        return (
+            <Popup>
+                <div>
+                    <div>{b.name}</div>
+                    <a onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type ) }>Edit</a>
+                </div>
+            </Popup>
+        );
+    };
+
     renderConstantHeads(boundaries) {
         const constantHeads = boundaries
             .filter(b => b.type === 'chd')
@@ -178,7 +192,9 @@ class BackgroundMap extends Component {
                     key={this.generateKeyFunction(b.geometry)}
                     data={b.geometry}
                     style={this.getStyle(b.type)}
-                />
+                >
+                    { this.renderBoundaryPopup( b )}
+                </GeoJSON>
             );
 
         if (constantHeads.length === 0) {
@@ -208,7 +224,9 @@ class BackgroundMap extends Component {
                     key={this.generateKeyFunction(b.geometry)}
                     data={b.geometry}
                     style={this.getStyle(b.type)}
-                />
+                >
+                    { this.renderBoundaryPopup( b )}
+                </GeoJSON>
             );
 
         if (generalHeads.length === 0) {
@@ -238,7 +256,9 @@ class BackgroundMap extends Component {
                     key={this.generateKeyFunction(b.geometry)}
                     data={b.geometry}
                     style={this.getStyle(b.type)}
-                />
+                >
+                    { this.renderBoundaryPopup( b )}
+                </GeoJSON>
             );
 
         if (recharges.length === 0) {
@@ -268,7 +288,9 @@ class BackgroundMap extends Component {
                     key={this.generateKeyFunction(b.geometry)}
                     data={b.geometry}
                     style={this.getStyle(b.type)}
-                />
+                >
+                    { this.renderBoundaryPopup( b )}
+                </GeoJSON>
             );
 
         if (rivers.length === 0) {
@@ -301,7 +323,9 @@ class BackgroundMap extends Component {
                         b.geometry.coordinates[0]
                     ]}
                     {...this.getStyle(b.type, b.metadata.well_type)}
-                />
+                >
+                { this.renderBoundaryPopup(b) }
+                </CircleMarker>
             );
 
         if (wells.length === 0) {
@@ -680,6 +704,11 @@ class BackgroundMap extends Component {
     returnToProperties = () => {
         this.invalidateMap();
         browserHistory.push(this.props.location.pathname);
+    };
+
+    returnToBoundariesWithBoundaryId = ( id, type ) => {
+        this.invalidateMap();
+        editBoundary(this.props.tool, this.props.params.id, 'boundaries', type, id);
     };
 
     centerToBounds = () => {
