@@ -144,7 +144,7 @@ export const getInitialState = () => {
         boundaries: null,
         results: null,
         soilmodel: null,
-        permissions: 'r--'
+        permissions: 'rwx'
     };
 };
 

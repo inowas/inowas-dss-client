@@ -79,6 +79,10 @@ export default class WellProperties extends Component {
         this.setState({ boundary: nextProps.boundary });
     }
 
+    componentWillMount() {
+        this.forceUpdate();
+    }
+
     handleInputChange = (name, key) => {
         return value => {
             this.setState( function (prevState, props) {
@@ -274,7 +278,7 @@ export default class WellProperties extends Component {
                         heading="Pumping Rates"
                         style={[styles.columnFlex2]}
                     >
-                        <DataTableAction component={this.pumpingRate} />
+                        {this.pumpingRate && <DataTableAction component={this.pumpingRate} />}
                         <PumpingRate
                             ref={pumpingRate => {
                                 this.pumpingRate = pumpingRate;

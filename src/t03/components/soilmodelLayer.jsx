@@ -69,10 +69,6 @@ class SoilmodelLayer extends React.Component {
         const { readOnly, updateLayerStatus } = this.props;
         const { layer } = this.state;
 
-        const processingData = {
-            status: WebData.Selector.getType(updateLayerStatus),
-            errorMessage: WebData.Selector.getErrorMessage(updateLayerStatus)
-        };
         const processing = WebData.Component.Processing(
             <Button onClick={this.save}>Save</Button>
         );
@@ -223,7 +219,7 @@ class SoilmodelLayer extends React.Component {
                 </section>
 
                 <div style={styles.saveButtonWrapper}>
-                    {processing(processingData)}
+                    {processing(updateLayerStatus)}
                 </div>
             </div>
         );

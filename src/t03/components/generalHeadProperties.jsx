@@ -114,6 +114,10 @@ class GeneralHeadProperties extends Component {
         });
     }
 
+    componentWillMount() {
+        this.forceUpdate();
+    }
+
     handleInputChange = (name, callable) => {
         return value => {
 
