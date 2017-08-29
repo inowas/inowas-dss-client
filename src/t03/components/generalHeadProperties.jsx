@@ -6,9 +6,7 @@ import { Helper, LayoutComponents, WebData } from '../../core';
 import React  from 'react';
 import PropTypes from 'prop-types';
 import Select, {
-    extractSimpleValues,
-    hydrateSimpleValues,
-    arrayValuesToInt
+    mapOptionValues
 } from '../../components/primitive/Select';
 import { find, uniqueId } from 'lodash';
 
@@ -18,7 +16,6 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
 import styleGlobals from 'styleGlobals';
-import {compose} from 'redux';
 
 const styles = {
     columns: {
@@ -131,7 +128,7 @@ class GeneralHeadProperties extends React.Component {
 
     handleInputChange = (name, callable) => {
         return value => {
-
+            console.log({value});
             if (callable) {
                 value = callable(value);
             }
@@ -306,7 +303,7 @@ class GeneralHeadProperties extends React.Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus, layers } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
@@ -345,33 +342,12 @@ class GeneralHeadProperties extends React.Component {
                                 id={layerInputId}
                                 value={
                                     boundary.affected_layers
-                                        ? hydrateSimpleValues(
-                                              boundary.affected_layers
-                                          )
+                                        ? boundary.affected_layers
                                         : undefined
                                 }
-                                onChange={this.handleInputChange( 'affected_layers',
-                                    compose(
-                                        arrayValuesToInt,
-                                        extractSimpleValues
-                                    )
-                                )}
+                                onChange={this.handleInputChange( 'affected_layers', mapOptionValues)}
                                 multi
-                                simpleValue
-                                options={[
-                                    {
-                                        value: '0',
-                                        label: 'Layer 1'
-                                    },
-                                    {
-                                        value: '1',
-                                        label: 'Layer 2'
-                                    },
-                                    {
-                                        value: '2',
-                                        label: 'Layer 3'
-                                    }
-                                ]}
+                                options={layers}
                             />
                         </LayoutComponents.InputGroup>
 
@@ -440,6 +416,7 @@ GeneralHeadProperties.propTypes = {
     readOnly: PropTypes.bool,
     selectedObservationPoint: PropTypes.string,
     updateStatus: PropTypes.object,
+    layers: PropTypes.array,
 };
 
 export default GeneralHeadProperties;

@@ -6,7 +6,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import Input from '../../components/primitive/Input';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { StressPeriods } from '../../t03/selectors';
+import { stressPeriods } from '../../t03/selectors';
 import styleGlobals from 'styleGlobals';
 import { orderBy } from 'lodash';
 
@@ -61,7 +61,7 @@ class StressPeriodProperties extends React.Component {
         super(props);
 
         this.state = {
-            stressPeriods: StressPeriods.getInitialState(),
+            stressPeriods: stressPeriods.getInitialState(),
             saveable: true,
             initialized: false
         };

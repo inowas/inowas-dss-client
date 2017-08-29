@@ -1,14 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { Properties } from '../../t03/components/index';
 import Navbar from '../../containers/Navbar';
-import { connect } from 'react-redux';
-import { browserHistory, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import BackgroundMap from './BackgroundMap';
 import Sidebar from '../../components/primitive/Sidebar';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import { makeMapStateToProps } from '../selectors/mapState';
-import { push } from 'react-router-redux';
 
 const styles = {
     wrapper: {
@@ -37,11 +34,11 @@ const styles = {
     }
 };
 
-class T03 extends Component {
+class T03 extends React.Component {
     static propTypes = {
-        push: PropTypes.func.isRequired,
-        params: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired
+        // push: PropTypes.func.isRequired,
+        // params: PropTypes.object.isRequired,
+        // location: PropTypes.object.isRequired
     };
 
     state = {
@@ -52,7 +49,7 @@ class T03 extends Component {
 
     pushPropertyToBrowserHistory = (property, propertyType) => {
         // eslint-disable-next-line no-shadow
-        const { params, push } = this.props;
+        const { router, params } = this.props;
         let url = '/tools/' + this.getToolName() + '/' + params.id;
 
         if (property) {
@@ -63,13 +60,14 @@ class T03 extends Component {
             url += '/' + propertyType;
         }
 
-        push(url);
+        router.push(url);
     };
 
     close = () => {
         // eslint-disable-next-line no-shadow
-        const { push, location } = this.props;
-        push(location.pathname + '#view');
+        const { router, location } = this.props;
+
+        router.push(location.pathname + '#view');
     };
 
     renderProperties() {
@@ -205,11 +203,7 @@ class T03 extends Component {
     }
 }
 
-const mapStateToProps = (state, { params, location }) => {
-    return { params, location };
-};
-
 // eslint-disable-next-line no-class-assign
-T03 = withRouter(connect(mapStateToProps, { push })(T03));
+T03 = withRouter(T03);
 
 export default T03;

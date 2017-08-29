@@ -83,7 +83,7 @@ class ModelEditorBoundary extends React.Component {
     };
 
     renderProperties(boundaries) {
-        const { area, permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus } = this.props;
+        const { area, permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus, soilmodelLayers } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
 
@@ -109,6 +109,7 @@ class ModelEditorBoundary extends React.Component {
                                 updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
                                 onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
+                                layers={soilmodelLayers}
                             />
                         );
                     case 'rch':
@@ -141,6 +142,7 @@ class ModelEditorBoundary extends React.Component {
                                 updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
                                 onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
+                                layers={soilmodelLayers}
                             />
                         );
                     case 'chd':
@@ -158,6 +160,7 @@ class ModelEditorBoundary extends React.Component {
                                 updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
                                 onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
+                                layers={soilmodelLayers}
                             />
                         );
 
@@ -176,6 +179,7 @@ class ModelEditorBoundary extends React.Component {
                                 updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
                                 onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
+                                layers={soilmodelLayers}
                             />
                         );
                 }

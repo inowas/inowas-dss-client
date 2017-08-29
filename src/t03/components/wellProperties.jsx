@@ -160,7 +160,7 @@ class WellProperties extends React.Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus, layers } = this.props;
         const { nameInputId, typeInputId, layerInputId, boundary } = this.state;
         const pumpingRates = Helper.addIdFromIndex(
             boundary.date_time_values || []
@@ -228,20 +228,7 @@ class WellProperties extends React.Component {
                                         : undefined
                                 }
                                 onChange={this.handleSelectChange('affected_layers', null, true)}
-                                options={[
-                                    {
-                                        value: 0,
-                                        label: 'Layer 1'
-                                    },
-                                    {
-                                        value: 1,
-                                        label: 'Layer 2'
-                                    },
-                                    {
-                                        value: 2,
-                                        label: 'Layer 3'
-                                    }
-                                ]}
+                                options={layers}
                             />
                         </LayoutComponents.InputGroup>
 
@@ -335,5 +322,6 @@ WellProperties.propTypes = {
     boundary: PropTypes.object.isRequired,
     setBoundary: PropTypes.func,
     updateStatus: PropTypes.object,
+    layers: PropTypes.array,
 };
 export default WellProperties;

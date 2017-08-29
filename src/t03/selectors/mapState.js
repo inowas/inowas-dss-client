@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import { Selector } from '../../core/webData';
+import { WebData } from '../../core';
 import { Command } from '../../t03/actions';
+import * as Selector from '../../t03/selectors';
 
 const getBoundaries = (state, props) => {
     const boundaries = state[props.tool ? props.tool : props.route.tool].model.boundaries || [];
@@ -45,28 +46,23 @@ export const makeGetStyles = () => {
 
 export const makeGetWebData = () => {
     return createSelector(
-        [Selector.getRequestStatus],
+        [WebData.Selector.getRequestStatus],
         (status) => status
     );
 };
 
 export const makeGetWebDataStatusObject = (type) => {
     return createSelector(
-        [state => Selector.getStatusObject(state, type)],
+        [state => WebData.Selector.getStatusObject(state, type)],
         (status) => status
     );
 };
 
-export const makeMapStateToProps = () => {
-    const boundaries = makeGetBoundaries();
-    const webData = makeGetWebData();
-
-    return (state, props) => {
-        return {
-            boundaries: boundaries(state, props),
-            webData: webData(state, props),
-        };
-    };
+export const makeGetSoilmodelLayersForInput = () => {
+    return createSelector(
+        [(state, props) => Selector.soilModel.getLayersForInput(state[props.tool].model)],
+        (layers) => layers
+    );
 };
 
 export const makeMapStateToPropsBoundaries = () => {
@@ -75,14 +71,17 @@ export const makeMapStateToPropsBoundaries = () => {
     const permissions = makeGetPermissions();
     const styles = makeGetStyles();
     const updateBoundaryStatus = makeGetWebDataStatusObject(Command.UPDATE_BOUNDARY);
+    const soilmodelLayers = makeGetSoilmodelLayersForInput();
 
     return (state, props) => {
+        console.log(state);
         return {
             area: area(state, props),
             boundaries: boundaries(state, props),
             permissions: permissions(state, props),
             mapStyles: styles(state, props),
-            updateBoundaryStatus: updateBoundaryStatus(state, props)
+            updateBoundaryStatus: updateBoundaryStatus(state, props),
+            soilmodelLayers: soilmodelLayers(state, props)
         };
     };
 };

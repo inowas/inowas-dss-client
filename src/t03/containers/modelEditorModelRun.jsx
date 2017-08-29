@@ -6,7 +6,7 @@ import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
 import { Command } from '../../t03/actions';
-import { StressPeriods } from '../../t03/selectors';
+import { stressPeriods } from '../../t03/selectors';
 import { StressPeriodProperties } from '../components';
 import { WebData } from '../../core';
 
@@ -87,7 +87,7 @@ const actions = {
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
-        stressPeriods: StressPeriods.getState(state[ tool ].model),
+        stressPeriods: stressPeriods.getState(state[ tool ].model),
         permissions: state[ tool ].model.permissions,
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
     };
