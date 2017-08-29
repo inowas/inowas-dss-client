@@ -16,10 +16,20 @@ import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
 import Icon from '../primitive/Icon';
 import ColorLegend from './ColorLegend';
+import ConfiguredRadium from 'ConfiguredRadium';
 
 import '../../less/leaflet.less';
 import '../../less/crossSectionMap.less';
 
+const RadiumMap = ConfiguredRadium(Map);
+
+const styles = {
+    map: {
+        zIndex: 0
+    }
+};
+
+@ConfiguredRadium
 export default class ScenarioAnalysisMap extends Component {
     static propTypes = {
         mapData: PropTypes.instanceOf(ScenarioAnalysisMapData).isRequired,
@@ -313,7 +323,8 @@ export default class ScenarioAnalysisMap extends Component {
         const { mapPosition } = this.props;
 
         return (
-            <Map
+            <RadiumMap
+                style={styles.map}
                 className="crossSectionMap"
                 {...mapPosition}
                 onClick={this.clickOnMap}
@@ -341,7 +352,7 @@ export default class ScenarioAnalysisMap extends Component {
                     <Icon name="marker" />
                 </button>
                 {this.renderLegend()}
-            </Map>
+            </RadiumMap>
         );
     }
 }

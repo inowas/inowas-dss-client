@@ -25,5 +25,5 @@ export {
     updateBoundaryFlow,
     updateLayerFlow,
     updateModelFlow,
-    updateStressPeriodsFlow,
+    updateStressPeriodsFlow
 };

@@ -1,16 +1,20 @@
 import React, { Component, PropTypes } from 'react';
+import { model, results } from '../selectors';
+
 import ArraySlider from '../../components/primitive/ArraySlider';
+import BoundingBox from '../../model/BoundingBox';
+import ConfiguredRadium from 'ConfiguredRadium';
+import Coordinate from '../../model/Coordinate';
+import { Formatter, WebData } from '../../core';
+import Grid from '../../model/Grid';
+import { Query } from '../actions/index';
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
-import Grid from '../../model/Grid';
-import BoundingBox from '../../model/BoundingBox';
-import Coordinate from '../../model/Coordinate';
 import Select from '../../components/primitive/Select';
-import { model, results } from '../selectors';
 import { connect } from 'react-redux';
-import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
-import { Formatter } from '../../core';
+import { sendQuery } from '../../actions/messageBox';
+import { HeadResultsChart } from '../components';
 
 const styles = {
     selectWrapper: {
@@ -27,22 +31,30 @@ const styles = {
             4 * styleGlobals.dimensions.gridColumn +
             3 * styleGlobals.dimensions.gridGutter,
         padding: styleGlobals.dimensions.spacing.medium
+    },
+
+    chartWrapper: {
+        marginTop: styleGlobals.dimensions.spacing.medium
     }
 };
 
 @ConfiguredRadium
 class ModelEditorResultsHead extends Component {
     static propTypes = {
+        tool: PropTypes.string.isRequired,
         model: PropTypes.object,
         times: PropTypes.object,
-        layerValues: PropTypes.array
+        layerValues: PropTypes.array,
+        calculationId: PropTypes.string,
+        sendQuery: PropTypes.func.isRequired,
+        getCalculationStatus: PropTypes.object
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedLayer: props.layerValues
+            selectedLayerAndType: props.layerValues
                 ? `0_${props.layerValues[0][0]}`
                 : null,
             selectedTotalTimeIndex: 0,
@@ -57,12 +69,25 @@ class ModelEditorResultsHead extends Component {
                         lng: props.model.bounding_box[1][0]
                     }
                 ]
-            }
+            },
+            activeCoordinate: null
         };
     }
 
+    componentDidMount() {
+        this.fetchCalculation(this.props);
+    }
+
     componentWillReceiveProps(nextProps) {
+        if (nextProps.layerValues && !this.state.selectedLayerAndType) {
+            this.setState({
+                selectedLayerAndType: `0_${nextProps.layerValues[0][0]}`
+            });
+        }
+
         if (this.props.model !== nextProps.model) {
+            this.fetchCalculation(nextProps);
+
             this.setState({
                 mapPosition: {
                     bounds: [
@@ -80,28 +105,70 @@ class ModelEditorResultsHead extends Component {
         }
     }
 
+    fetchCalculation = props => {
+        // eslint-disable-next-line no-shadow
+        const { sendQuery, calculationId, times } = props;
+        const { selectedLayerAndType, selectedTotalTimeIndex } = this.state;
+
+        if (
+            !calculationId ||
+            !times ||
+            !selectedLayerAndType ||
+            selectedTotalTimeIndex === null
+        ) {
+            return;
+        }
+
+        const splittedSelectedLayerAndType = selectedLayerAndType.split('_');
+        const layer = splittedSelectedLayerAndType[0];
+        const type = splittedSelectedLayerAndType[1];
+
+        const time = times.total_times[selectedTotalTimeIndex];
+
+        sendQuery(
+            `calculations/${calculationId}/results/types/${type}/layers/${layer}/totims/${time}`,
+            Query.GET_CALCULATION
+        );
+    };
+
+    onLayerSelectChange = nextSelectedLayerAndType => {
+        this.setState(
+            {
+                selectedLayerAndType: nextSelectedLayerAndType
+                    ? nextSelectedLayerAndType.value
+                    : null
+            },
+            () => this.fetchCalculation(this.props)
+        );
+    };
+
+    onTimeSliderChange = nextSelectedTotalTimeIndex => {
+        this.setState(
+            { selectedTotalTimeIndex: nextSelectedTotalTimeIndex },
+            () => this.fetchCalculation(this.props)
+        );
+    };
+
     setMapPosition = newMapPosition => {
         this.setState({
             mapPosition: newMapPosition
         });
     };
 
-    onLayerSelectChange = nextSelectedLayer => {
+    setActiveCoordinate = newActiveCoordinate => {
         this.setState({
-            selectedLayer: nextSelectedLayer ? nextSelectedLayer.value : null
+            activeCoordinate: newActiveCoordinate
         });
     };
 
-    onTimeSliderChange = nextSelectedTotalTimeIndex => {
-        this.setState({ selectedTotalTimeIndex: nextSelectedTotalTimeIndex });
-    };
-
     render() {
-        const { model, times, layerValues } = this.props;
+        // eslint-disable-next-line no-shadow
+        const { model, times, layerValues, getCalculationStatus } = this.props;
         const {
-            selectedLayer,
+            selectedLayerAndType,
             selectedTotalTimeIndex,
-            mapPosition
+            mapPosition,
+            activeCoordinate
         } = this.state;
 
         if (!model || !times || !layerValues) {
@@ -118,30 +185,51 @@ class ModelEditorResultsHead extends Component {
                 : []
         }));
 
+        const splittedSelectedLayerAndType = selectedLayerAndType
+            ? selectedLayerAndType.split('_')
+            : null;
+        // const selectedLayer = splittedSelectedLayerAndType
+        //     ? splittedSelectedLayerAndType[0]
+        //     : null;
+        const selectedType = splittedSelectedLayerAndType
+            ? splittedSelectedLayerAndType[1]
+            : null;
+
         const startDate = new Date(times.start_date_time);
         const totalTimes = times.total_times.map(t => {
             return startDate.addDays(t);
         });
 
-        console.warn(model);
+        const grid = new Grid(
+            new BoundingBox(
+                new Coordinate(
+                    model.bounding_box[0][1],
+                    model.bounding_box[0][0]
+                ),
+                new Coordinate(
+                    model.bounding_box[1][1],
+                    model.bounding_box[1][0]
+                )
+            ),
+            model.grid_size.n_x,
+            model.grid_size.n_y
+        );
+
+        let xCrossSection = null;
+        if (activeCoordinate) {
+            const activeGridCell = grid.coordinateToGridCell(activeCoordinate);
+            if (activeGridCell) {
+                xCrossSection = grid.gridCellToXCrossectionBoundingBox(
+                    activeGridCell
+                );
+            }
+        }
 
         const mapData = new ScenarioAnalysisMapData({
             area: model.geometry,
-            grid: new Grid(
-                new BoundingBox(
-                    new Coordinate(
-                        model.bounding_box[0][1],
-                        model.bounding_box[0][0]
-                    ),
-                    new Coordinate(
-                        model.bounding_box[1][1],
-                        model.bounding_box[1][0]
-                    )
-                ),
-                model.grid_size.n_x,
-                model.grid_size.n_y
-            ),
-            boundaries: model.boundaries
+            grid,
+            boundaries: model.boundaries,
+            xCrossSection
         });
 
         return (
@@ -150,7 +238,7 @@ class ModelEditorResultsHead extends Component {
                     <div style={[styles.layerSelectWrapper]}>
                         <Select
                             options={options}
-                            value={selectedLayer}
+                            value={selectedLayerAndType}
                             onChange={this.onLayerSelectChange}
                         />
                     </div>
@@ -168,7 +256,19 @@ class ModelEditorResultsHead extends Component {
                         mapData={mapData}
                         mapPosition={mapPosition}
                         setMapPosition={this.setMapPosition}
-                        clickCoordinate={console.warn}
+                        clickCoordinate={this.setActiveCoordinate}
+                    />
+                </div>
+                <div style={[styles.chartWrapper]}>
+                    <HeadResultsChart
+                        data={
+                            getCalculationStatus
+                                ? getCalculationStatus.data
+                                : null
+                        }
+                        activeCoordinate={activeCoordinate}
+                        grid={grid}
+                        selectedType={selectedType}
                     />
                 </div>
             </div>
@@ -178,11 +278,19 @@ class ModelEditorResultsHead extends Component {
 
 const mapStateToProps = (state, { tool }) => {
     return {
+        tool,
         model: model.getModflowModel(state[tool]),
         calculationId: results.getCalculationID(state[tool].model.results),
         layerValues: results.getLayerValues(state[tool].model.results),
-        times: results.getTimes(state[tool].model.results)
+        times: results.getTimes(state[tool].model.results),
+        getCalculationStatus: WebData.Selector.getRequestStatusByType(
+            state,
+            Query.GET_CALCULATION
+        )
     };
 };
 
-export default connect(mapStateToProps, {})(ModelEditorResultsHead);
+export default connect(mapStateToProps, {
+    getCalculation: Query.getCalculation,
+    sendQuery
+})(ModelEditorResultsHead);
