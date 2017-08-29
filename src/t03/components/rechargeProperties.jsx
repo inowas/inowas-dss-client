@@ -39,7 +39,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class RechargeProperties extends React. Component {
+class RechargeProperties extends React.Component {
     static propTypes = {
         area: PropTypes.object.isRequired,
         boundary: PropTypes.object.isRequired,
@@ -74,9 +74,9 @@ class RechargeProperties extends React. Component {
         this.forceUpdate();
     }
 
-    handleInputChange = (name) => {
+    handleInputChange = name => {
         return value => {
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 return {
                     ...prevState,
                     boundary: {
@@ -85,8 +85,8 @@ class RechargeProperties extends React. Component {
                         date_time_values: this.rechargeRate.getRows()
                     }
                 };
-            } );
-        }
+            });
+        };
     };
 
     save = () => {
@@ -97,14 +97,17 @@ class RechargeProperties extends React. Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
+        const {
+            mapStyles,
+            area,
+            editBoundaryOnMap,
+            onDelete,
+            readOnly,
+            updateStatus
+        } = this.props;
         const { nameInputId, boundary } = this.state;
         const rechargeRates = Helper.addIdFromIndex(
             boundary.date_time_values || []
-        );
-
-        const saveButton = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -168,7 +171,9 @@ class RechargeProperties extends React. Component {
                 </div>
 
                 <div style={[styles.saveButtonWrapper]}>
-                    {saveButton(updateStatus)}
+                    <WebData.Component.Loading status={updateStatus}>
+                        <Button onClick={this.save}>Save</Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );
@@ -184,6 +189,6 @@ RechargeProperties.propTypes = {
     readOnly: PropTypes.bool,
     boundary: PropTypes.object.isRequired,
     setBoundary: PropTypes.func,
-    updateStatus: PropTypes.object,
+    updateStatus: PropTypes.object
 };
 export default RechargeProperties;

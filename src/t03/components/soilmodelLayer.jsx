@@ -43,9 +43,9 @@ class SoilmodelLayer extends React.Component {
         });
     }
 
-    handleInputChange = (name) => {
+    handleInputChange = name => {
         return value => {
-            this.setState( prevState => {
+            this.setState(prevState => {
                 return {
                     ...prevState,
                     layer: {
@@ -53,12 +53,13 @@ class SoilmodelLayer extends React.Component {
                         [name]: value
                     }
                 };
-            } );
-        }
+            });
+        };
     };
 
-    handleSelectChange = (name) => {
-        return data => this.handleInputChange(name)(data ? data.value : undefined);
+    handleSelectChange = name => {
+        return data =>
+            this.handleInputChange(name)(data ? data.value : undefined);
     };
 
     save = () => {
@@ -68,10 +69,6 @@ class SoilmodelLayer extends React.Component {
     render() {
         const { readOnly, updateLayerStatus } = this.props;
         const { layer } = this.state;
-
-        const processing = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
-        );
 
         return (
             <div>
@@ -219,7 +216,9 @@ class SoilmodelLayer extends React.Component {
                 </section>
 
                 <div style={styles.saveButtonWrapper}>
-                    {processing(updateLayerStatus)}
+                    <WebData.Component.Loading status={updateLayerStatus}>
+                        <Button onClick={this.save}>Save</Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );

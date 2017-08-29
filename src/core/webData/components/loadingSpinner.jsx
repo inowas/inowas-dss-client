@@ -13,7 +13,7 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: color(styleGlobals.colors.background).fade(0.7),
+        backgroundColor: color(styleGlobals.colors.background).fade(0.3),
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'

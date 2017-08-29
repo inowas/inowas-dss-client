@@ -123,14 +123,14 @@ class RiverProperties extends React.Component {
 
     handleInputChange = (name, key) => {
         return value => {
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 if (key) {
                     return {
                         ...prevState,
                         boundary: {
                             ...prevState.boundary,
                             [key]: {
-                                ...prevState.boundary[ key ],
+                                ...prevState.boundary[key],
                                 [name]: value
                             },
                             observation_points: mergeObservationPoints(
@@ -154,16 +154,18 @@ class RiverProperties extends React.Component {
                         )
                     }
                 };
-            } );
-        }
+            });
+        };
     };
 
     handleSelectChange = (name, key, useArray) => {
         if (useArray) {
-            return data => this.handleInputChange(name, key)(data ? [data.value] : []);
+            return data =>
+                this.handleInputChange(name, key)(data ? [data.value] : []);
         }
 
-        return data => this.handleInputChange(name, key)(data ? data.value : undefined);
+        return data =>
+            this.handleInputChange(name, key)(data ? data.value : undefined);
     };
 
     handleObservationPointNameInputChange = value => {
@@ -319,14 +321,18 @@ class RiverProperties extends React.Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus, layers } = this.props;
+        const {
+            mapStyles,
+            area,
+            editBoundaryOnMap,
+            onDelete,
+            readOnly,
+            updateStatus,
+            layers
+        } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
-        );
-
-        const saveButton = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -358,7 +364,11 @@ class RiverProperties extends React.Component {
                                         ? boundary.affected_layers[0]
                                         : undefined
                                 }
-                                onChange={this.handleSelectChange('affected_layers', null, true)}
+                                onChange={this.handleSelectChange(
+                                    'affected_layers',
+                                    null,
+                                    true
+                                )}
                                 options={layers}
                             />
                         </LayoutComponents.InputGroup>
@@ -410,7 +420,9 @@ class RiverProperties extends React.Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={styles.saveButtonWrapper}>
-                    {saveButton(updateStatus)}
+                    <WebData.Component.Loading status={updateStatus}>
+                        <Button onClick={this.save}>Save</Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );
@@ -427,7 +439,7 @@ RiverProperties.propTypes = {
     readOnly: PropTypes.bool,
     selectedObservationPoint: PropTypes.string,
     updateStatus: PropTypes.object,
-    layers: PropTypes.array,
+    layers: PropTypes.array
 };
 
 export default RiverProperties;

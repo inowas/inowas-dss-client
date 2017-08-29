@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
 import Input from '../../components/primitive/Input';
-import Select, {
-    mapOptionValues
-} from '../../components/primitive/Select';
+import Select, { mapOptionValues } from '../../components/primitive/Select';
 import Icon from '../../components/primitive/Icon';
 import { uniqueId, find } from 'lodash';
 import BoundaryMap from './boundaryMap';
@@ -122,7 +120,6 @@ class ConstantHeadProperties extends React.Component {
         });
     }
 
-
     componentWillMount() {
         this.forceUpdate();
     }
@@ -132,7 +129,7 @@ class ConstantHeadProperties extends React.Component {
             if (callable) {
                 value = callable(value);
             }
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 return {
                     ...prevState,
                     boundary: {
@@ -145,8 +142,8 @@ class ConstantHeadProperties extends React.Component {
                         )
                     }
                 };
-            } );
-        }
+            });
+        };
     };
 
     handleObservationPointNameInputChange = value => {
@@ -302,14 +299,18 @@ class ConstantHeadProperties extends React.Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, readOnly, onDelete, updateStatus, layers } = this.props;
+        const {
+            mapStyles,
+            area,
+            editBoundaryOnMap,
+            readOnly,
+            onDelete,
+            updateStatus,
+            layers
+        } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
-        );
-
-        const saveButton = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -341,7 +342,10 @@ class ConstantHeadProperties extends React.Component {
                                         ? boundary.affected_layers
                                         : undefined
                                 }
-                                onChange={this.handleInputChange( 'affected_layers', mapOptionValues)}
+                                onChange={this.handleInputChange(
+                                    'affected_layers',
+                                    mapOptionValues
+                                )}
                                 multi
                                 options={layers}
                             />
@@ -392,7 +396,9 @@ class ConstantHeadProperties extends React.Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={styles.saveButtonWrapper}>
-                    {saveButton(updateStatus)}
+                    <WebData.Component.Loading status={updateStatus}>
+                        <Button onClick={this.save}>Save</Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );
@@ -409,7 +415,7 @@ ConstantHeadProperties.propTypes = {
     readOnly: PropTypes.bool,
     selectedObservationPoint: PropTypes.string,
     updateStatus: PropTypes.object,
-    layers: PropTypes.array,
+    layers: PropTypes.array
 };
 
 export default ConstantHeadProperties;

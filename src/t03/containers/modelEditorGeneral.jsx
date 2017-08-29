@@ -12,9 +12,7 @@ import {
     hasError,
     isLoading
 } from '../../core/webData/selectors/webData';
-import {
-    WebData
-} from '../../core';
+import { WebData } from '../../core';
 import uuid from 'uuid';
 // import * as filters from '../../calculations/filter';
 import { GeneralMap } from '../components';
@@ -200,7 +198,12 @@ class ModelEditorGeneral extends Component {
     };
 
     render() {
-        const { getModflowModelDetailsStatus, model, createModflowModelStatus, updateModflowModelStatus } = this.props;
+        const {
+            getModflowModelDetailsStatus,
+            model,
+            createModflowModelStatus,
+            updateModflowModelStatus
+        } = this.props;
         const { id } = this.props.params;
         const { model: stateModel } = this.state;
 
@@ -221,18 +224,6 @@ class ModelEditorGeneral extends Component {
                 </p>
             );
         }
-
-        const saveButton = WebData.Component.Processing(
-            <Button
-                disabled={readOnly}
-                onClick={() => {
-                    this.save(id);
-                }}
-                type="accent"
-            >
-                {id ? 'save' : 'Create Model'}
-            </Button>
-        );
 
         return (
             <div style={[styles.columnContainer]}>
@@ -391,7 +382,23 @@ class ModelEditorGeneral extends Component {
                     </div>
                     <GeneralMap style={[styles.expandVertical]} model={model} />
                     <div style={[styles.saveButtonWrapper]}>
-                        {saveButton(id ? updateModflowModelStatus : createModflowModelStatus)}
+                        <WebData.Component.Loading
+                            status={
+                                id
+                                    ? updateModflowModelStatus
+                                    : createModflowModelStatus
+                            }
+                        >
+                            <Button
+                                disabled={readOnly}
+                                onClick={() => {
+                                    this.save(id);
+                                }}
+                                type="accent"
+                            >
+                                {id ? 'Save' : 'Create Model'}
+                            </Button>
+                        </WebData.Component.Loading>
                     </div>
                 </LayoutComponents.Column>
             </div>
@@ -402,9 +409,18 @@ class ModelEditorGeneral extends Component {
 const mapStateToProps = (state, { tool }) => {
     return {
         model: general.getModflowModel(state[tool].model),
-        getModflowModelDetailsStatus: WebData.Selector.getRequestStatusByType(state, Query.GET_MODFLOW_MODEL_DETAILS),
-        createModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CREATE_MODFLOW_MODEL),
-        updateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_MODFLOW_MODEL),
+        getModflowModelDetailsStatus: WebData.Selector.getRequestStatusByType(
+            state,
+            Query.GET_MODFLOW_MODEL_DETAILS
+        ),
+        createModflowModelStatus: WebData.Selector.getStatusObject(
+            state,
+            Command.CREATE_MODFLOW_MODEL
+        ),
+        updateModflowModelStatus: WebData.Selector.getStatusObject(
+            state,
+            Command.UPDATE_MODFLOW_MODEL
+        )
     };
 };
 
@@ -444,7 +460,7 @@ ModelEditorGeneral.propTypes = {
     params: PropTypes.object,
     getModflowModelDetailsStatus: PropTypes.object,
     createModflowModelStatus: PropTypes.object,
-    updateModflowModelStatus: PropTypes.object,
+    updateModflowModelStatus: PropTypes.object
 };
 
 export default ModelEditorGeneral;

@@ -3,6 +3,7 @@ import { pure } from 'recompose';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
+import Button from '../../components/primitive/Button';
 import styleGlobals from 'styleGlobals';
 import { SoilModelLayerDataTable } from '../components';
 import { WebData } from '../../core';
@@ -36,34 +37,38 @@ const styles = {
         paddingBottom: 6,
         paddingLeft: 10,
         paddingRight: 10
-    },
-
-    headerButton: {
-        button: {
-            marginRight: 14
-        },
-
-        icon: {
-            marginRight: 6
-        }
     }
 };
-const SoilModelLayerOverview = ({ tool, layers, property, id, createLayer, removeLayer, addLayerStatus }) => {
-
-    const processing = WebData.Component.Processing(
-        <button style={styles.headerButton.button} className="link" onClick={createLayer}>
-            <Icon style={styles.headerButton.icon} name="add"/>Add new layer
-        </button>
-    );
-
+const SoilModelLayerOverview = ({
+    tool,
+    layers,
+    property,
+    id,
+    createLayer,
+    removeLayer,
+    addLayerStatus
+}) => {
     return (
-        <div style={[ styles.wrapper ]}>
-            <div style={[ styles.header ]}>
-                {processing(addLayerStatus)}
+        <div style={[styles.wrapper]}>
+            <div style={[styles.header]}>
+                <WebData.Component.Loading status={addLayerStatus}>
+                    <Button
+                        type="link"
+                        onClick={createLayer}
+                        icon={<Icon name="add" />}
+                    >
+                        Add new Layer
+                    </Button>
+                </WebData.Component.Loading>
             </div>
-            <div style={[ styles.body ]}>
-                <SoilModelLayerDataTable rows={layers} id={id} remove={removeLayer} tool={tool}
-                                         property={property}/>
+            <div style={[styles.body]}>
+                <SoilModelLayerDataTable
+                    rows={layers}
+                    id={id}
+                    remove={removeLayer}
+                    tool={tool}
+                    property={property}
+                />
             </div>
         </div>
     );

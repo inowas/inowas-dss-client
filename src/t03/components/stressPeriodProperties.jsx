@@ -30,29 +30,33 @@ const styles = {
 };
 
 const stressPeriodsToFlowPy = (rows, start, end) => {
-
-    let stressPeriods = orderBy( rows, [ 'totim_start' ], [ 'asc' ] ).map( (data) => {
+    let stressPeriods = orderBy(rows, ['totim_start'], ['asc']).map(data => {
         return {
-            totim_start: Helper.diffInDays( start, data.totim_start ),
-            nstp: parseInt( data.nstp ),
-            tsmult: parseFloat( data.tsmult ),
+            totim_start: Helper.diffInDays(start, data.totim_start),
+            nstp: parseInt(data.nstp),
+            tsmult: parseFloat(data.tsmult),
             steady: data.steady ? true : false
         };
-    } );
+    });
 
     let perlen = 0;
 
-    stressPeriods = orderBy( stressPeriods, [ 'totim_start' ], [ 'desc' ] ).map( (data) => {
+    stressPeriods = orderBy(
+        stressPeriods,
+        ['totim_start'],
+        ['desc']
+    ).map(data => {
         const obj = {
             ...data,
             perlen: perlen - data.totim_start
         };
         perlen = data.totim_start;
         return obj;
-    } );
-    stressPeriods[ 0 ].perlen = Helper.diffInDays( start, end ) - stressPeriods[ 0 ].totim_start;
+    });
+    stressPeriods[0].perlen =
+        Helper.diffInDays(start, end) - stressPeriods[0].totim_start;
 
-    return orderBy( stressPeriods, [ 'totim_start' ], [ 'asc' ] );
+    return orderBy(stressPeriods, ['totim_start'], ['asc']);
 };
 
 @ConfiguredRadium
@@ -68,22 +72,30 @@ class StressPeriodProperties extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState( prevState => {
+        this.setState(prevState => {
             return {
                 ...prevState,
-                stressPeriods: nextProps.stressPeriods ? {
+                stressPeriods: nextProps.stressPeriods
+                    ? {
                         ...nextProps.stressPeriods,
-                        stress_periods: orderBy( nextProps.stressPeriods.stress_periods, [ 'totim_start' ], [ 'asc' ] ).map( (data) => {
-                            return {
-                                ...data,
-                                totim_start: Formatter.dateToYmd(
-                                    Helper.addDays( data.totim_start + 1 )( nextProps.stressPeriods.start_date_time )
-                                )
-                            };
-                        } )
+                        stress_periods: orderBy(
+                              nextProps.stressPeriods.stress_periods,
+                              ['totim_start'],
+                              ['asc']
+                          ).map(data => {
+                              return {
+                                  ...data,
+                                  totim_start: Formatter.dateToYmd(
+                                      Helper.addDays(data.totim_start + 1)(
+                                          nextProps.stressPeriods
+                                              .start_date_time
+                                      )
+                                  )
+                              };
+                          })
                     }
                     : prevState.stressPeriods,
-                initialized: true,
+                initialized: true
             };
         });
     }
@@ -92,43 +104,53 @@ class StressPeriodProperties extends React.Component {
         this.forceUpdate();
     }
 
-    handleInputChange = (name) => {
+    handleInputChange = name => {
         return value => {
             // TODO check for date values or use new Input fields with filter
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 return {
                     ...prevState,
                     saveable: this.dataTable.checkDateRange(
-                        name === 'start_date_time' ? value : Formatter.dateToYmd(prevState.stressPeriods.start_date_time),
-                        name === 'end_date_time' ? value : Formatter.dateToYmd(prevState.stressPeriods.end_date_time)
+                        name === 'start_date_time'
+                            ? value
+                            : Formatter.dateToYmd(
+                                  prevState.stressPeriods.start_date_time
+                              ),
+                        name === 'end_date_time'
+                            ? value
+                            : Formatter.dateToYmd(
+                                  prevState.stressPeriods.end_date_time
+                              )
                     ),
                     stressPeriods: {
                         ...prevState.stressPeriods,
-                        [name]: Formatter.dateToAtomFormat( value ),
-                        stress_periods: this.dataTable.getRows(),
+                        [name]: Formatter.dateToAtomFormat(value),
+                        stress_periods: this.dataTable.getRows()
                     }
                 };
-            } );
+            });
         };
     };
 
     save = () => {
-        if (false === this.dataTable.checkDateRange(
+        if (
+            this.dataTable.checkDateRange(
                 Formatter.dateToYmd(this.state.stressPeriods.start_date_time),
                 Formatter.dateToYmd(this.state.stressPeriods.end_date_time)
-            )
+            ) ===
+            false
         ) {
             this.dataTable.forceUpdate();
-            this.setState( prevState => {
+            this.setState(prevState => {
                 return {
                     ...prevState,
                     saveable: false,
                     stressPeriods: {
                         ...prevState.stressPeriods,
-                        stress_periods: this.dataTable.getRows(),
+                        stress_periods: this.dataTable.getRows()
                     }
                 };
-            } );
+            });
             return;
         }
         this.props.onSave({
@@ -136,42 +158,38 @@ class StressPeriodProperties extends React.Component {
             stress_periods: stressPeriodsToFlowPy(
                 this.dataTable.getRows(),
                 this.state.stressPeriods.start_date_time,
-                this.state.stressPeriods.end_date_time,
+                this.state.stressPeriods.end_date_time
             )
         });
     };
 
-    onRowChange = ( ) => {
-        this.setState( prevState => {
+    onRowChange = () => {
+        this.setState(prevState => {
             return {
                 ...prevState,
                 saveable: this.dataTable.checkDateRange(
-                    Formatter.dateToYmd(prevState.stressPeriods.start_date_time),
+                    Formatter.dateToYmd(
+                        prevState.stressPeriods.start_date_time
+                    ),
                     Formatter.dateToYmd(prevState.stressPeriods.end_date_time)
                 ),
                 stressPeriods: {
                     ...prevState.stressPeriods,
-                    stress_periods: this.dataTable.getRows(),
+                    stress_periods: this.dataTable.getRows()
                 }
             };
-        } );
+        });
     };
 
     render() {
-        const { stressPeriods, initialized, saveable} = this.state;
+        const { stressPeriods, initialized, saveable } = this.state;
         const { updateStressPeriodsStatus } = this.props;
 
         if (!initialized || !stressPeriods) {
             return <p>Loading ...</p>;
         }
 
-        const processing = WebData.Component.Processing(
-            saveable ? <Button onClick={this.save}>Save</Button> : <Button disabled>Save</Button>
-        );
-
-        const data = Helper.addIdFromIndex(
-            stressPeriods.stress_periods || []
-        );
+        const data = Helper.addIdFromIndex(stressPeriods.stress_periods || []);
 
         return (
             <div>
@@ -183,7 +201,9 @@ class StressPeriodProperties extends React.Component {
                         <LayoutComponents.InputGroup label="Start Date">
                             <Input
                                 name="start_date_time"
-                                onChange={this.handleInputChange('start_date_time')}
+                                onChange={this.handleInputChange(
+                                    'start_date_time'
+                                )}
                                 value={Formatter.dateToYmd(
                                     stressPeriods.start_date_time
                                 )}
@@ -195,7 +215,9 @@ class StressPeriodProperties extends React.Component {
                         <LayoutComponents.InputGroup label="End Date">
                             <Input
                                 name="end_date_time"
-                                onChange={this.handleInputChange('end_date_time')}
+                                onChange={this.handleInputChange(
+                                    'end_date_time'
+                                )}
                                 value={Formatter.dateToYmd(
                                     stressPeriods.end_date_time
                                 )}
@@ -218,7 +240,13 @@ class StressPeriodProperties extends React.Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={[styles.saveButtonWrapper]}>
-                    {processing(updateStressPeriodsStatus)}
+                    <WebData.Component.Loading
+                        status={updateStressPeriodsStatus}
+                    >
+                        <Button onClick={this.save} disabled={saveable}>
+                            Save
+                        </Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );

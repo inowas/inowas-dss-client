@@ -3,11 +3,9 @@ import {
     GeneralHeadObservationPoint
 } from '../../t03/components';
 import { Helper, LayoutComponents, WebData } from '../../core';
-import React  from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Select, {
-    mapOptionValues
-} from '../../components/primitive/Select';
+import Select, { mapOptionValues } from '../../components/primitive/Select';
 import { find, uniqueId } from 'lodash';
 
 import BoundaryMap from './boundaryMap';
@@ -128,12 +126,11 @@ class GeneralHeadProperties extends React.Component {
 
     handleInputChange = (name, callable) => {
         return value => {
-            console.log({value});
             if (callable) {
                 value = callable(value);
             }
 
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 return {
                     ...prevState,
                     boundary: {
@@ -146,8 +143,8 @@ class GeneralHeadProperties extends React.Component {
                         )
                     }
                 };
-            } );
-        }
+            });
+        };
     };
 
     handleObservationPointNameInputChange = value => {
@@ -303,16 +300,19 @@ class GeneralHeadProperties extends React.Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus, layers } = this.props;
+        const {
+            mapStyles,
+            area,
+            editBoundaryOnMap,
+            onDelete,
+            readOnly,
+            updateStatus,
+            layers
+        } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
         );
-
-        const saveButton = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
-        );
-
 
         return (
             <div>
@@ -345,7 +345,10 @@ class GeneralHeadProperties extends React.Component {
                                         ? boundary.affected_layers
                                         : undefined
                                 }
-                                onChange={this.handleInputChange( 'affected_layers', mapOptionValues)}
+                                onChange={this.handleInputChange(
+                                    'affected_layers',
+                                    mapOptionValues
+                                )}
                                 multi
                                 options={layers}
                             />
@@ -399,7 +402,9 @@ class GeneralHeadProperties extends React.Component {
                 </div>
 
                 <div style={styles.saveButtonWrapper}>
-                    {saveButton(updateStatus)}
+                    <WebData.Component.Loading status={updateStatus}>
+                        <Button onClick={this.save}>Save</Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );
@@ -416,7 +421,7 @@ GeneralHeadProperties.propTypes = {
     readOnly: PropTypes.bool,
     selectedObservationPoint: PropTypes.string,
     updateStatus: PropTypes.object,
-    layers: PropTypes.array,
+    layers: PropTypes.array
 };
 
 export default GeneralHeadProperties;

@@ -64,7 +64,6 @@ const styles = {
 
 @ConfiguredRadium
 class WellProperties extends React.Component {
-
     constructor(props) {
         super(props);
 
@@ -93,14 +92,14 @@ class WellProperties extends React.Component {
 
     handleInputChange = (name, key) => {
         return value => {
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 if (key) {
                     return {
                         ...prevState,
                         boundary: {
                             ...prevState.boundary,
                             [key]: {
-                                ...prevState.boundary[ key ],
+                                ...prevState.boundary[key],
                                 [name]: value
                             },
                             date_time_values: this.pumpingRate.getRows()
@@ -116,13 +115,13 @@ class WellProperties extends React.Component {
                         date_time_values: this.pumpingRate.getRows()
                     }
                 };
-            } );
+            });
         };
     };
 
-    handleCoordinatesChange = (name) => {
+    handleCoordinatesChange = name => {
         return value => {
-            this.setState( function (prevState, props) {
+            this.setState(function(prevState, props) {
                 if (name === 'lat') {
                     value = [prevState.boundary.geometry.coordinates[0], value];
                 } else {
@@ -140,16 +139,18 @@ class WellProperties extends React.Component {
                         date_time_values: this.pumpingRate.getRows()
                     }
                 };
-            })
-        }
+            });
+        };
     };
 
     handleSelectChange = (name, key, useArray) => {
         if (useArray) {
-            return data => this.handleInputChange(name, key)(data ? [data.value] : []);
+            return data =>
+                this.handleInputChange(name, key)(data ? [data.value] : []);
         }
 
-        return data => this.handleInputChange(name, key)(data ? data.value : undefined);
+        return data =>
+            this.handleInputChange(name, key)(data ? data.value : undefined);
     };
 
     save = () => {
@@ -160,14 +161,18 @@ class WellProperties extends React.Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus, layers } = this.props;
+        const {
+            mapStyles,
+            area,
+            editBoundaryOnMap,
+            onDelete,
+            readOnly,
+            updateStatus,
+            layers
+        } = this.props;
         const { nameInputId, typeInputId, layerInputId, boundary } = this.state;
         const pumpingRates = Helper.addIdFromIndex(
             boundary.date_time_values || []
-        );
-
-        const saveButton = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -199,7 +204,10 @@ class WellProperties extends React.Component {
                                         ? boundary.metadata.boundary_type
                                         : ''
                                 }
-                                onChange={this.handleSelectChange('boundary_type', 'metadata')}
+                                onChange={this.handleSelectChange(
+                                    'boundary_type',
+                                    'metadata'
+                                )}
                                 options={[
                                     {
                                         label: 'Public Well',
@@ -227,7 +235,11 @@ class WellProperties extends React.Component {
                                         ? boundary.affected_layers[0]
                                         : undefined
                                 }
-                                onChange={this.handleSelectChange('affected_layers', null, true)}
+                                onChange={this.handleSelectChange(
+                                    'affected_layers',
+                                    null,
+                                    true
+                                )}
                                 options={layers}
                             />
                         </LayoutComponents.InputGroup>
@@ -251,14 +263,14 @@ class WellProperties extends React.Component {
                             }
                         >
                             <Input
-                                disabled={true}
+                                disabled
                                 onChange={this.handleCoordinatesChange('lat')}
                                 value={boundary.geometry.coordinates[1]}
                                 type="number"
                                 placeholder="Latitude"
                             />
                             <Input
-                                disabled={true}
+                                disabled
                                 onChange={this.handleCoordinatesChange('lng')}
                                 value={boundary.geometry.coordinates[0]}
                                 type="number"
@@ -295,7 +307,8 @@ class WellProperties extends React.Component {
                         heading="Pumping Rates"
                         style={[styles.columnFlex2]}
                     >
-                        {this.pumpingRate && <DataTableAction component={this.pumpingRate} />}
+                        {this.pumpingRate &&
+                            <DataTableAction component={this.pumpingRate} />}
                         <PumpingRate
                             ref={pumpingRate => {
                                 this.pumpingRate = pumpingRate;
@@ -305,7 +318,9 @@ class WellProperties extends React.Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={[styles.saveButtonWrapper]}>
-                    {saveButton(updateStatus)}
+                    <WebData.Component.Loading status={updateStatus}>
+                        <Button onClick={this.save}>Save</Button>
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );
@@ -322,6 +337,6 @@ WellProperties.propTypes = {
     boundary: PropTypes.object.isRequired,
     setBoundary: PropTypes.func,
     updateStatus: PropTypes.object,
-    layers: PropTypes.array,
+    layers: PropTypes.array
 };
 export default WellProperties;

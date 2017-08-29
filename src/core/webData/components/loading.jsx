@@ -7,29 +7,30 @@ import { pure } from 'recompose';
 
 const styles = {
     wrapper: {
-        position: 'relative'
+        position: 'relative',
+        display: 'inline-block'
     }
 };
 
-const Loading = ({ status, children }) => {
-    return (
-        <div style={styles.wrapper}>
-            {children}
+const Loading = ({ status, children }) =>
+    <div style={styles.wrapper}>
+        {children}
 
-            {(() => {
-                if (status) {
-                    if (status.type === 'error') {
-                        return <LoadingError message={status.errorMessage} />;
-                    } else if (status.type === 'loading') {
-                        return <LoadingSpinner />;
-                    }
+        {(() => {
+            if (status) {
+                if (status.type === 'error') {
+                    return <LoadingError message={status.errorMessage} />;
+                } else if (
+                    status.type === 'loading' ||
+                    status.status === 'loading'
+                ) {
+                    return <LoadingSpinner />;
                 }
+            }
 
-                return null;
-            })()}
-        </div>
-    );
-};
+            return null;
+        })()}
+    </div>;
 
 Loading.propTypes = {
     status: PropTypes.object,
