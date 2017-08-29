@@ -96,10 +96,10 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         label: 'steady state',
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.boolean())],
+                        transforms: [DataTable.Helper.editableCheckbox(this)(DataTable.Component.Checkbox())],
                         formatters: [
                             ( value, { rowData } ) => (
-                                <span>{Formatter.toNumber(value)}</span>
+                                <Icon name={value ? 'checked' : 'unchecked'}/>
                             )
                         ]
                     },

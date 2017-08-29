@@ -83,6 +83,17 @@ export const onActivate = (component = {}) => ({columnIndex, rowData}) => {
     component.setState((prevState, props) => { return {rows: rows};});
 };
 
+export const onActivateCheckbox = (component = {}) => ({columnIndex, rowData, property}) => {
+    const index = findIndex(component.state.rows, {id: rowData.id});
+    const rows = cloneDeep(component.state.rows);
+
+    rows[index].editing = columnIndex;
+    // toggle checkbox state to avoid double click
+    rows[index][property] = !rows[index][property];
+
+    component.setState((prevState, props) => { return {rows: rows};});
+};
+
 export const onValue = (component = {}) => ({value, rowData, property}) => {
     const index = findIndex(component.state.rows, {id: rowData.id});
     const rows = cloneDeep(component.state.rows);
