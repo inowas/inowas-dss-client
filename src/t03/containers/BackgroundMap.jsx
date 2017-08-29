@@ -347,13 +347,73 @@ class BackgroundMap extends Component {
             this.returnToProperties();
         }
 
-        if (type === 'wel') {
-            const point = e.layer;
+        if (type === 'chd') {
+            const linestring = e.layer.bindPopup('my popup text').openPopup();
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
 
             const boundary = getBoundaryDefaultsByType(
                 type,
-                'wel-' + newBoundaryNumber,
+                type + '-' + newBoundaryNumber,
+                'Constant Head ' + newBoundaryNumber,
+                linestring.toGeoJSON().geometry,
+                this.getStartDate()
+            );
+
+            this.props.addBoundary(this.props.model.id, boundary);
+        }
+
+        if (type === 'ghb') {
+            const linestring = e.layer.bindPopup('my popup text').openPopup();
+            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const boundary = getBoundaryDefaultsByType(
+                type,
+                type + '-' + newBoundaryNumber,
+                'General Head ' + newBoundaryNumber,
+                linestring.toGeoJSON().geometry,
+                this.getStartDate()
+            );
+
+            this.props.addBoundary(this.props.model.id, boundary);
+        }
+
+        if (type === 'rch') {
+            const polygon = e.layer.bindPopup('my popup text').openPopup();
+            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const boundary = getBoundaryDefaultsByType(
+                type,
+                type + '-' + newBoundaryNumber,
+                'Recharge ' + newBoundaryNumber,
+                polygon.toGeoJSON().geometry,
+                this.getStartDate()
+            );
+
+            this.props.addBoundary(this.props.model.id, boundary);
+        }
+
+        if (type === 'riv') {
+            const linestring = e.layer.bindPopup('my popup text').openPopup();
+            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const boundary = getBoundaryDefaultsByType(
+                type,
+                type + '-' + newBoundaryNumber,
+                'River ' + newBoundaryNumber,
+                linestring.toGeoJSON().geometry,
+                this.getStartDate()
+            );
+
+            this.props.addBoundary(this.props.model.id, boundary);
+        }
+
+        if (type === 'wel') {
+            const point = e.layer.bindPopup('my popup text').openPopup();
+            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const boundary = getBoundaryDefaultsByType(
+                type,
+                type + '-' + newBoundaryNumber,
                 'Well ' + newBoundaryNumber,
                 point.toGeoJSON().geometry,
                 this.getStartDate()
@@ -419,6 +479,58 @@ class BackgroundMap extends Component {
                     delete: false
                 }
             },
+            chd: {
+                edit: {
+                    edit: true,
+                    remove: false
+                },
+                draw: {
+                    polyline: true,
+                    polygon: false,
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                }
+            },
+            ghb: {
+                edit: {
+                    edit: true,
+                    remove: false
+                },
+                draw: {
+                    polyline: true,
+                    polygon: false,
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                }
+            },
+            rch: {
+                edit: {
+                    edit: true,
+                    remove: false
+                },
+                draw: {
+                    polyline: false,
+                    polygon: true,
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                }
+            },
+            riv: {
+                edit: {
+                    edit: true,
+                    remove: false
+                },
+                draw: {
+                    polyline: true,
+                    polygon: false,
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                }
+            },
             wel: {
                 edit: {
                     edit: true,
@@ -428,7 +540,7 @@ class BackgroundMap extends Component {
                     polyline: false,
                     polygon: false,
                     rectangle: false,
-                    circle: true,
+                    circle: false,
                     marker: true
                 }
             }

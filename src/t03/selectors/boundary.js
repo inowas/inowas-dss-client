@@ -10,6 +10,60 @@ export const getBoundary = ( state, id ) => {
 
 export function getBoundaryDefaultsByType( type, id, name, geometry, startDateTime ) {
     switch (type) {
+        case 'chd':
+        case 'ghb':
+            return {
+                id: id,
+                name: name,
+                geometry: geometry,
+                type: type,
+                affected_layers: [0],
+                metadata: {},
+                observation_points: [
+                    {
+                        id: 'op1',
+                        name: 'OP1',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: geometry.coordinates[0]
+                        },
+                        date_time_values: [
+                            {
+                                date_time: startDateTime,
+                                values: [ 0, 0 ]
+                            }
+                        ]
+                    }
+                ]
+            };
+
+        case 'riv':
+            return {
+                id: id,
+                name: name,
+                geometry: geometry,
+                type: type,
+                affected_layers: [0],
+                metadata: {},
+                observation_points: [
+                    {
+                        id: 'op1',
+                        name: 'OP1',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: geometry.coordinates[0]
+                        },
+                        date_time_values: [
+                            {
+                                date_time: startDateTime,
+                                values: [ 0, 0, 0 ]
+                            }
+                        ]
+                    }
+                ]
+            };
+
+        case 'rch':
         case 'wel':
             return {
                 id: id,
