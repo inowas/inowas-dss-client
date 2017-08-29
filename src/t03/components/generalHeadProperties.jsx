@@ -2,8 +2,9 @@ import {
     DataTableAction,
     GeneralHeadObservationPoint
 } from '../../t03/components';
-import { Helper, LayoutComponents } from '../../core';
-import React, { Component } from 'react';
+import { Helper, LayoutComponents, WebData } from '../../core';
+import React  from 'react';
+import PropTypes from 'prop-types';
 import Select, {
     extractSimpleValues,
     hydrateSimpleValues,
@@ -16,7 +17,6 @@ import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
-import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
 import {compose} from 'redux';
 
@@ -88,7 +88,7 @@ const mergeObservationPoints = (state, id, dateTimeValues) => {
 };
 
 @ConfiguredRadium
-class GeneralHeadProperties extends Component {
+class GeneralHeadProperties extends React.Component {
     constructor(props) {
         super(props);
 
@@ -111,6 +111,17 @@ class GeneralHeadProperties extends Component {
                     prevState.selectedObservationPoint ||
                     nextProps.selectedObservationPoint
             };
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.setBoundary({
+            ...this.state.boundary,
+            ...mergeBoundary(
+                this.state,
+                this.state.selectedObservationPoint,
+                this.observationPoint.getRows()
+            )
         });
     }
 
@@ -295,11 +306,16 @@ class GeneralHeadProperties extends Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
         );
+
+        const saveButton = WebData.Component.Processing(
+            <Button onClick={this.save}>Save</Button>
+        );
+
 
         return (
             <div>
@@ -312,6 +328,7 @@ class GeneralHeadProperties extends Component {
                             <Input
                                 style={styles.input}
                                 name="name"
+                                disabled={readOnly}
                                 id={nameInputId}
                                 onChange={this.handleInputChange('name')}
                                 value={boundary.name}
@@ -323,6 +340,7 @@ class GeneralHeadProperties extends Component {
                         <LayoutComponents.InputGroup label="Select Layer">
                             <Select
                                 style={[styles.input]}
+                                disabled={readOnly}
                                 name="affected_layers"
                                 id={layerInputId}
                                 value={
@@ -360,6 +378,7 @@ class GeneralHeadProperties extends Component {
                         <div style={styles.rightAlign}>
                             <Button
                                 style={styles.buttonMarginRight}
+                                disabled={readOnly}
                                 onClick={editBoundaryOnMap}
                                 type="link"
                                 icon={<Icon name="marker" />}
@@ -368,7 +387,8 @@ class GeneralHeadProperties extends Component {
                             </Button>
                             <Button
                                 style={styles.buttonMarginRight}
-                                disabled
+                                disabled={readOnly}
+                                onClick={onDelete}
                                 type="link"
                                 icon={<Icon name="trash" />}
                             >
@@ -403,7 +423,7 @@ class GeneralHeadProperties extends Component {
                 </div>
 
                 <div style={styles.saveButtonWrapper}>
-                    <Button onClick={this.save}>Save</Button>
+                    {saveButton(updateStatus)}
                 </div>
             </div>
         );
@@ -418,7 +438,8 @@ GeneralHeadProperties.propTypes = {
     mapStyles: PropTypes.object.isRequired,
     onSave: PropTypes.func.isRequired,
     readOnly: PropTypes.bool,
-    selectedObservationPoint: PropTypes.string
+    selectedObservationPoint: PropTypes.string,
+    updateStatus: PropTypes.object,
 };
 
 export default GeneralHeadProperties;

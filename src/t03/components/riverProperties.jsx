@@ -438,7 +438,8 @@ RiverProperties.propTypes = {
     mapStyles: PropTypes.object.isRequired,
     onSave: PropTypes.func.isRequired,
     readOnly: PropTypes.bool,
-    selectedObservationPoint: PropTypes.string
+    selectedObservationPoint: PropTypes.string,
+    updateStatus: PropTypes.object,
 };
 
 export default RiverProperties;
