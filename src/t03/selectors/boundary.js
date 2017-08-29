@@ -7,3 +7,25 @@ export const getBoundary = ( state, id ) => {
     const boundary = state.find( b => b.id === id );
     return boundary ? new Boundary( boundary.id, boundary.name, new BoundaryType( boundary.type ), boundary.geometry, boundary.affected_layers, boundary.metadata ? boundary.metadata : null, boundary.observationPoints ) : null;
 };
+
+export function getBoundaryDefaultsByType( type, id, name, geometry, startDateTime ) {
+    switch (type) {
+        case 'wel':
+            return {
+                id: id,
+                name: name,
+                geometry: geometry,
+                type: type,
+                affected_layers: [0],
+                metadata: {
+                    well_type: 'puw'
+                },
+                date_time_values: [{
+                    date_time: startDateTime,
+                    values: [0]
+                }]
+            };
+    }
+
+    return null;
+}

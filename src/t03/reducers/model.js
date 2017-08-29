@@ -44,6 +44,7 @@ const createModelReducer = tool => {
                 return {...state, boundaries: action.payload};
 
             case Action.ADD_BOUNDARY:
+            // case Event.BOUNDARY_ADDED:
                 return {...state, boundaries: [...state.boundaries, action.payload]};
 
             case Action.SET_BOUNDARY_GEOMETRY:

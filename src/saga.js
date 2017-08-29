@@ -8,6 +8,7 @@ export default function* rootSaga() {
             WebData.Modifier.Query.AT_SEND_HTTP_REQUEST,
             WebData.Saga.sendHttpRequestFlow
         ),
+        call(T03.addBoundaryFlow),
         call(T03.addLayerFlow),
         call(T03.createModelFlow),
         call(T03.getModflowModelDetailsFlow),

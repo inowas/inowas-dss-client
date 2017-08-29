@@ -24,15 +24,16 @@ export function updateModflowModel(tool, id, payload) {
     };
 }
 
-export const UPDATE_BOUNDARY = 'updateBoundary';
+export const ADD_BOUNDARY = 'addBoundary';
 export const REMOVE_BOUNDARY = 'removeBoundary';
+export const UPDATE_BOUNDARY = 'updateBoundary';
 
-export function updateBoundary(tool, modelId, data) {
+export function addBoundary(tool, modelId, boundary) {
     return {
-        type: UPDATE_BOUNDARY,
+        type: ADD_BOUNDARY,
         tool,
         payload: {
-            boundary: data,
+            boundary: boundary,
             id: modelId,
         }
     };
@@ -44,6 +45,17 @@ export function removeBoundary(tool, boundaryId, modelId) {
         tool,
         payload: {
             boundary_id: boundaryId,
+            id: modelId,
+        }
+    };
+}
+
+export function updateBoundary(tool, modelId, data) {
+    return {
+        type: UPDATE_BOUNDARY,
+        tool,
+        payload: {
+            boundary: data,
             id: modelId,
         }
     };
