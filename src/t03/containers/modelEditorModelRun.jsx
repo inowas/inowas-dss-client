@@ -89,7 +89,7 @@ const mapStateToProps = (state, { tool, params }) => {
     return {
         stressPeriods: StressPeriods.getState(state[ tool ].model),
         permissions: state[ tool ].model.permissions,
-        updateStressPeriodsStatus: WebData.Selector.getRequestStatusByType(state, Command.UPDATE_STRESS_PERIODS),
+        updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
     };
 };
 

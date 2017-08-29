@@ -50,7 +50,6 @@ const styles = {
 };
 const SoilModelLayerOverview = ({ tool, layers, property, id, createLayer, removeLayer, addLayerStatus }) => {
 
-    const processingData = {status: WebData.Selector.getType(addLayerStatus), errorMessage: WebData.Selector.getErrorMessage(addLayerStatus)};
     const processing = WebData.Component.Processing(
         <button style={styles.headerButton.button} className="link" onClick={createLayer}>
             <Icon style={styles.headerButton.icon} name="add"/>Add new layer
@@ -60,7 +59,7 @@ const SoilModelLayerOverview = ({ tool, layers, property, id, createLayer, remov
     return (
         <div style={[ styles.wrapper ]}>
             <div style={[ styles.header ]}>
-                {processing(processingData)}
+                {processing(addLayerStatus)}
             </div>
             <div style={[ styles.body ]}>
                 <SoilModelLayerDataTable rows={layers} id={id} remove={removeLayer} tool={tool}

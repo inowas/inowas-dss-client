@@ -170,11 +170,11 @@ const mapStateToProps = (state, { tool, params }) => {
     return {
         soilmodel: state[tool].model.soilmodel,
         permissions: state[tool].model.permissions,
-        addLayerStatus: WebData.Selector.getRequestStatusByType(
+        addLayerStatus: WebData.Selector.getStatusObject(
             state,
             Command.ADD_LAYER
         ),
-        updateLayerStatus: WebData.Selector.getRequestStatusByType(
+        updateLayerStatus: WebData.Selector.getStatusObject(
             state,
             Command.UPDATE_LAYER
         )

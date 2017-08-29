@@ -82,12 +82,6 @@ class StressPeriodProperties extends React.Component {
             return <p>Loading ...</p>;
         }
 
-        const processingData = {
-            status: WebData.Selector.getType(updateStressPeriodsStatus),
-            errorMessage: WebData.Selector.getErrorMessage(
-                updateStressPeriodsStatus
-            )
-        };
         const processing = WebData.Component.Processing(
             <Button onClick={this.save}>Save</Button>
         );
@@ -166,7 +160,7 @@ class StressPeriodProperties extends React.Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={[styles.saveButtonWrapper]}>
-                    {processing(processingData)}
+                    {processing(updateStressPeriodsStatus)}
                 </div>
             </div>
         );

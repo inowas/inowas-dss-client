@@ -9,10 +9,12 @@ import styleGlobals from 'styleGlobals';
 import { browserHistory, withRouter } from 'react-router';
 import {
     getErrorMessage,
-    getRequestStatus,
     hasError,
     isLoading
 } from '../../core/webData/selectors/webData';
+import {
+    WebData
+} from '../../core';
 import uuid from 'uuid';
 // import * as filters from '../../calculations/filter';
 import { GeneralMap } from '../components';
@@ -197,61 +199,40 @@ class ModelEditorGeneral extends Component {
         return null;
     };
 
-    renderSaveButton = (id, readOnly, webData, model) => {
-        // TODO prevent onClick triggers if disabled and make that css works
-        const disabled =
-            isLoading(webData[Command.UPDATE_MODFLOW_MODEL]) || !model.geometry;
-
-        if (id && !readOnly) {
-            return (
-                <Button
-                    disabled={disabled}
-                    onClick={() => this.save(id)}
-                    type="accent"
-                >
-                    Save
-                </Button>
-            );
-        }
-
-        if (!id) {
-            return (
-                <Button
-                    disabled={disabled}
-                    onClick={() => {
-                        this.save();
-                    }}
-                    type="accent"
-                >
-                    Create Model
-                </Button>
-            );
-        }
-
-        return null;
-    };
-
     render() {
-        const { webData, model } = this.props;
+        const { getModflowModelDetailsStatus, model, createModflowModelStatus, updateModflowModelStatus } = this.props;
         const { id } = this.props.params;
         const { model: stateModel } = this.state;
 
-        const readOnly = !lodash.includes(model.permissions, 'w');
+        const readOnly = model && !lodash.includes(model.permissions, 'w');
 
-        if (id && isLoading(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
+        // TODO use WebData loading component if ready
+        if (id && isLoading(getModflowModelDetailsStatus)) {
             // TODO move to dump component
             return <p>Loading ...</p>;
         }
-        if (id && hasError(webData[Query.GET_MODFLOW_MODEL_DETAILS])) {
+        if (id && hasError(getModflowModelDetailsStatus)) {
             // TODO move to dump component
             return (
                 <p>
                     Error while loading ... ({getErrorMessage(
-                        webData[Query.GET_MODFLOW_MODEL_DETAILS]
+                        getModflowModelDetailsStatus
                     )})
                 </p>
             );
         }
+
+        const saveButton = WebData.Component.Processing(
+            <Button
+                disabled={readOnly}
+                onClick={() => {
+                    this.save(id);
+                }}
+                type="accent"
+            >
+                {id ? 'save' : 'Create Model'}
+            </Button>
+        );
 
         return (
             <div style={[styles.columnContainer]}>
@@ -410,7 +391,7 @@ class ModelEditorGeneral extends Component {
                     </div>
                     <GeneralMap style={[styles.expandVertical]} model={model} />
                     <div style={[styles.saveButtonWrapper]}>
-                        {this.renderSaveButton(id, readOnly, webData, model)}
+                        {saveButton(id ? updateModflowModelStatus : createModflowModelStatus)}
                     </div>
                 </LayoutComponents.Column>
             </div>
@@ -421,7 +402,9 @@ class ModelEditorGeneral extends Component {
 const mapStateToProps = (state, { tool }) => {
     return {
         model: general.getModflowModel(state[tool].model),
-        webData: getRequestStatus(state)
+        getModflowModelDetailsStatus: WebData.Selector.getRequestStatusByType(state, Query.GET_MODFLOW_MODEL_DETAILS),
+        createModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CREATE_MODFLOW_MODEL),
+        updateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_MODFLOW_MODEL),
     };
 };
 
@@ -453,17 +436,15 @@ ModelEditorGeneral = withRouter(
 
 ModelEditorGeneral.propTypes = {
     style: PropTypes.object,
-    editModelArea: PropTypes.func,
-    setEditorState: PropTypes.func,
-    createModel: PropTypes.func,
-    createModelArea: PropTypes.func,
     createModflowModel: PropTypes.func,
     updateModflowModel: PropTypes.func,
     setModflowModel: PropTypes.func,
-    webData: PropTypes.object,
     model: PropTypes.object,
     location: PropTypes.object,
-    params: PropTypes.object
+    params: PropTypes.object,
+    getModflowModelDetailsStatus: PropTypes.object,
+    createModflowModelStatus: PropTypes.object,
+    updateModflowModelStatus: PropTypes.object,
 };
 
 export default ModelEditorGeneral;
