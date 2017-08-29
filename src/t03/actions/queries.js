@@ -49,16 +49,3 @@ export function getLayer(tool, id, lid) {
 }
 
 export const GET_CALCULATION = 'GET_CALCULATION';
-
-export function getCalculation(tool, id, type, layer, time) {
-    return {
-        type: GET_CALCULATION,
-        tool,
-        payload: {
-            id,
-            type,
-            layer,
-            time
-        }
-    };
-}

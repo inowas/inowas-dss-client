@@ -253,21 +253,3 @@ export function setSoilmodel(tool, soilmodel) {
         payload: soilmodel
     };
 }
-
-export const SET_CALCULATION = 'MODEL_EDITOR_SET_CALCULATION';
-
-export function setCalculation(tool, calculation) {
-    return {
-        type: SET_CALCULATION,
-        tool,
-        payload: calculation
-    };
-}
-
-export const DELETE_CALCULATION = 'MODEL_EDITOR_DELETE_CALCULATION';
-
-export function deleteCalculation(tool) {
-    return dispatch => {
-        dispatch(setCalculation(tool, null));
-    };
-}

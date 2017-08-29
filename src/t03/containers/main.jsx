@@ -158,10 +158,6 @@ class T03 extends Component {
                         name: 'heads'
                     },
                     {
-                        title: 'Drawdown',
-                        name: 'drawdown'
-                    },
-                    {
                         title: 'Budget',
                         name: 'budget'
                     },

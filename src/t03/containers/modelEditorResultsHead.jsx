@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { sendQuery } from '../../actions/messageBox';
 import { HeadResultsChart } from '../components';
+import config from '../../config';
 
 const styles = {
     selectWrapper: {
@@ -162,8 +163,13 @@ class ModelEditorResultsHead extends Component {
     };
 
     render() {
-        // eslint-disable-next-line no-shadow
-        const { model, times, layerValues, getCalculationStatus } = this.props;
+        const {
+            model, // eslint-disable-line no-shadow
+            times,
+            layerValues,
+            getCalculationStatus,
+            calculationId
+        } = this.props;
         const {
             selectedLayerAndType,
             selectedTotalTimeIndex,
@@ -188,9 +194,9 @@ class ModelEditorResultsHead extends Component {
         const splittedSelectedLayerAndType = selectedLayerAndType
             ? selectedLayerAndType.split('_')
             : null;
-        // const selectedLayer = splittedSelectedLayerAndType
-        //     ? splittedSelectedLayerAndType[0]
-        //     : null;
+        const selectedLayer = splittedSelectedLayerAndType
+            ? splittedSelectedLayerAndType[0]
+            : null;
         const selectedType = splittedSelectedLayerAndType
             ? splittedSelectedLayerAndType[1]
             : null;
@@ -225,11 +231,14 @@ class ModelEditorResultsHead extends Component {
             }
         }
 
+        const time = times.total_times[selectedTotalTimeIndex];
+
         const mapData = new ScenarioAnalysisMapData({
             area: model.geometry,
             grid,
             boundaries: model.boundaries,
-            xCrossSection
+            xCrossSection,
+            heatMapUrl: `${config.baseURL}/image/calculations/${calculationId}/results/types/${selectedType}/layers/${selectedLayer}/totims/${time}`
         });
 
         return (
@@ -260,16 +269,18 @@ class ModelEditorResultsHead extends Component {
                     />
                 </div>
                 <div style={[styles.chartWrapper]}>
-                    <HeadResultsChart
-                        data={
-                            getCalculationStatus
-                                ? getCalculationStatus.data
-                                : null
-                        }
-                        activeCoordinate={activeCoordinate}
-                        grid={grid}
-                        selectedType={selectedType}
-                    />
+                    <WebData.Component.Loading status={getCalculationStatus}>
+                        <HeadResultsChart
+                            data={
+                                getCalculationStatus
+                                    ? getCalculationStatus.data
+                                    : null
+                            }
+                            activeCoordinate={activeCoordinate}
+                            grid={grid}
+                            selectedType={selectedType}
+                        />
+                    </WebData.Component.Loading>
                 </div>
             </div>
         );
