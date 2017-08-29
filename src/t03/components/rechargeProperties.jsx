@@ -62,6 +62,10 @@ export default class RechargeProperties extends Component {
         });
     }
 
+    componentWillMount() {
+        this.forceUpdate();
+    }
+
     handleInputChange = (name) => {
         return value => {
             this.setState( function (prevState, props) {

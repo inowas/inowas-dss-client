@@ -51,6 +51,10 @@ class StressPeriodProperties extends React.Component {
         });
     }
 
+    componentWillMount() {
+        this.forceUpdate();
+    }
+
     handleInputChange = (name) => {
         return value => {
             // TODO check for date values or use new Input fields with filter

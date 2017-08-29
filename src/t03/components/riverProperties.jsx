@@ -106,6 +106,10 @@ class RiverProperties extends Component {
         });
     }
 
+    componentWillMount() {
+        this.forceUpdate();
+    }
+
     handleInputChange = (name, key) => {
         return value => {
             this.setState( function (prevState, props) {
