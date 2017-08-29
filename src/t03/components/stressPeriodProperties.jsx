@@ -62,8 +62,7 @@ class StressPeriodProperties extends React.Component {
 
         this.state = {
             stressPeriods: StressPeriods.getInitialState(),
-            startDate: null,
-            endDate: null,
+            saveable: true,
             initialized: false
         };
     }
@@ -71,6 +70,7 @@ class StressPeriodProperties extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState( prevState => {
             return {
+                ...prevState,
                 stressPeriods: nextProps.stressPeriods ? {
                         ...nextProps.stressPeriods,
                         stress_periods: orderBy( nextProps.stressPeriods.stress_periods, [ 'totim_start' ], [ 'asc' ] ).map( (data) => {
@@ -84,8 +84,6 @@ class StressPeriodProperties extends React.Component {
                     }
                     : prevState.stressPeriods,
                 initialized: true,
-                startDate: nextProps.stressPeriods && !prevState.startDate ? nextProps.stressPeriods.start_date_time : prevState.stressPeriods.startDate,
-                endDate: nextProps.stressPeriods && !prevState.endDate ? nextProps.stressPeriods.end_date_time : prevState.stressPeriods.endDate,
             };
         });
     }
@@ -96,6 +94,10 @@ class StressPeriodProperties extends React.Component {
             this.setState( function (prevState, props) {
                 return {
                     ...prevState,
+                    saveable: this.dataTable.checkDateRange(
+                        name === 'start_date_time' ? value : Formatter.dateToYmd(prevState.stressPeriods.start_date_time),
+                        name === 'end_date_time' ? value : Formatter.dateToYmd(prevState.stressPeriods.end_date_time)
+                    ),
                     stressPeriods: {
                         ...prevState.stressPeriods,
                         [name]: Formatter.dateToAtomFormat( value ),
@@ -107,6 +109,24 @@ class StressPeriodProperties extends React.Component {
     };
 
     save = () => {
+        if (false === this.dataTable.checkDateRange(
+                Formatter.dateToYmd(this.state.stressPeriods.start_date_time),
+                Formatter.dateToYmd(this.state.stressPeriods.end_date_time)
+            )
+        ) {
+            this.dataTable.forceUpdate();
+            this.setState( prevState => {
+                return {
+                    ...prevState,
+                    saveable: false,
+                    stressPeriods: {
+                        ...prevState.stressPeriods,
+                        stress_periods: this.dataTable.getRows(),
+                    }
+                };
+            } );
+            return;
+        }
         this.props.onSave({
             ...this.state.stressPeriods,
             stress_periods: stressPeriodsToFlowPy(
@@ -117,8 +137,24 @@ class StressPeriodProperties extends React.Component {
         });
     };
 
+    onRowChange = ( ) => {
+        this.setState( prevState => {
+            return {
+                ...prevState,
+                saveable: this.dataTable.checkDateRange(
+                    Formatter.dateToYmd(prevState.stressPeriods.start_date_time),
+                    Formatter.dateToYmd(prevState.stressPeriods.end_date_time)
+                ),
+                stressPeriods: {
+                    ...prevState.stressPeriods,
+                    stress_periods: this.dataTable.getRows(),
+                }
+            };
+        } );
+    };
+
     render() {
-        const { stressPeriods, initialized} = this.state;
+        const { stressPeriods, initialized, saveable} = this.state;
         const { updateStressPeriodsStatus } = this.props;
 
         if (!initialized || !stressPeriods) {
@@ -132,7 +168,7 @@ class StressPeriodProperties extends React.Component {
             )
         };
         const processing = WebData.Component.Processing(
-            <Button onClick={this.save}>Save</Button>
+            saveable ? <Button onClick={this.save}>Save</Button> : <Button disabled>Save</Button>
         );
 
         const data = Helper.addIdFromIndex(
@@ -196,6 +232,7 @@ class StressPeriodProperties extends React.Component {
                         <StressPeriodDataTable
                             ref={dataTable => (this.dataTable = dataTable)}
                             rows={data}
+                            onRowChange={this.onRowChange}
                         />
                     </LayoutComponents.Column>
                 </div>

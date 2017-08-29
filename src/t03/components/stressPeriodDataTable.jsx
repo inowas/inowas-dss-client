@@ -112,33 +112,57 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
 
     getRows = () => cloneDeep(this.state.rows);
 
+    onRowChange = ( ) => {
+        this.props.onRowChange();
+    };
+
+    checkDateRange = (start, end) => {
+        let success = true;
+
+        this.state.rows.map(data => {
+            data.error = !Helper.isBetweenDate(data.totim_start, start, end);
+            success &= !data.error;
+
+            return data;
+        });
+        // ensure boolean
+        return !!success;
+    };
+
     onAdd = (e, increment) => {
         e.preventDefault();
 
         const rows = sortBy(cloneDeep(this.state.rows), 'totim_start');
 
         const lastRow = last(rows);
-        const totim_start = lastRow && lastRow.totim_start ? Helper.addDays(lastRow.perlen)(lastRow.totim_start) : new Date();
+        const totim_start = lastRow && lastRow.totim_start
+                ? new Date(lastRow.totim_start)
+                : new Date();
         const nstp = lastRow && lastRow.nstp ? lastRow.nstp : 1;
         const tsmult = lastRow && lastRow.tsmult ? lastRow.tsmult : 1;
         const steady = lastRow && lastRow.steady ? lastRow.steady : false;
 
-        rows.push({
+        const row = {
             id: uuid.v4(),
             totim_start: Formatter.dateToYmd(increment(totim_start)),
             nstp,
             tsmult,
             steady,
-        });
+        };
 
-        this.setState((prevState, props) => {return { ...prevState, rows };});
+        rows.push(row);
+
+        this.setState((prevState, props) => {
+            this.props.onRowChange();
+
+            return { ...prevState, rows };
+        });
     };
 }
 
 StressPeriodDataTable.propTypes = {
     perPage: PropTypes.number,
-    start: PropTypes.string,
-    end: PropTypes.string,
+    onRowChange: PropTypes.func.isRequired
 };
 
 export default StressPeriodDataTable;

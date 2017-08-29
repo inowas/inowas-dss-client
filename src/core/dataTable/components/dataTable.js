@@ -38,6 +38,9 @@ class DataTable extends Component {
         );
 
         this.setState((prevState, props) => {
+            if (this.onRowChange) {
+                this.onRowChange();
+            }
             return { ...prevState, rows, selectedRows: [] };
         });
     };

@@ -19,7 +19,8 @@ export const onRow = (component = {}) => (row, {rowIndex, rowKey}) => {
     return {
         className: classnames(
             rowIndex % 2 ? 'odd-row' : 'even-row',
-            row.selected && 'selected-row'
+            row.selected && 'selected-row',
+            row.error && 'error-row',
         ),
         onClick: () => onSelectRow(component)(rowIndex)
     };
@@ -73,5 +74,11 @@ export const onValue = (component = {}) => ({value, rowData, property}) => {
     set(row, property, value);
     rows[index] = row;
 
-    component.setState((prevState, props) => { return {rows: rows};});
+    component.setState((prevState, props) => {
+        if (component.onRowChange) {
+            component.onRowChange();
+        }
+
+        return {rows: rows};
+    });
 };

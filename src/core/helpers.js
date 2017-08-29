@@ -6,3 +6,4 @@ export const diffInDays = ( start, end ) => moment(end).diff(moment(start), 'day
 export const addDays = ( days = {} ) => ( date ) => moment(date).add(days, 'd').toDate();
 export const addMonths = ( months = {} ) => ( date ) => moment(date).add(months, 'M').toDate();
 export const addYears = ( years = {} ) => ( date ) => moment(date).add(years, 'Y').toDate();
+export const isBetweenDate = ( date, start, end ) => moment(date).isSameOrAfter(moment(start)) && moment(date).isSameOrBefore(moment(end));
