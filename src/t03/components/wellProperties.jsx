@@ -1,6 +1,7 @@
 import { DataTableAction, PumpingRate } from '../../t03/components';
-import { Helper, LayoutComponents } from '../../core';
-import React, { Component, PropTypes } from 'react';
+import { Helper, LayoutComponents, WebData } from '../../core';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
@@ -32,6 +33,14 @@ const styles = {
         maxWidth: 70
     },
 
+    rightAlign: {
+        textAlign: 'right'
+    },
+
+    buttonMarginRight: {
+        marginRight: 10
+    },
+
     saveButtonWrapper: {
         textAlign: 'right',
         marginTop: styleGlobals.dimensions.spacing.medium
@@ -54,15 +63,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class WellProperties extends Component {
-    static propTypes = {
-        area: PropTypes.object.isRequired,
-        editBoundaryOnMap: PropTypes.func.isRequired,
-        mapStyles: PropTypes.object.isRequired,
-        onSave: PropTypes.func.isRequired,
-        readOnly: PropTypes.bool,
-        boundary: PropTypes.object.isRequired
-    };
+class WellProperties extends React.Component {
 
     constructor(props) {
         super(props);
@@ -77,6 +78,13 @@ export default class WellProperties extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({ boundary: nextProps.boundary });
+    }
+
+    componentWillUnmount() {
+        this.props.setBoundary({
+            ...this.state.boundary,
+            date_time_values: this.pumpingRate.getRows()
+        });
     }
 
     componentWillMount() {
@@ -152,10 +160,14 @@ export default class WellProperties extends Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
         const { nameInputId, typeInputId, layerInputId, boundary } = this.state;
         const pumpingRates = Helper.addIdFromIndex(
             boundary.date_time_values || []
+        );
+
+        const saveButton = WebData.Component.Processing(
+            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -168,6 +180,7 @@ export default class WellProperties extends Component {
                         <LayoutComponents.InputGroup label="Well Name">
                             <Input
                                 name="name"
+                                disabled={readOnly}
                                 id={nameInputId}
                                 onChange={this.handleInputChange('name')}
                                 value={boundary.name}
@@ -179,6 +192,7 @@ export default class WellProperties extends Component {
                         <LayoutComponents.InputGroup label="Well Type">
                             <Select
                                 name="type"
+                                disabled={readOnly}
                                 id={typeInputId}
                                 value={
                                     boundary.metadata
@@ -206,6 +220,7 @@ export default class WellProperties extends Component {
                         <LayoutComponents.InputGroup label="Select Layer">
                             <Select
                                 name="affected_layers"
+                                disabled={readOnly}
                                 id={layerInputId}
                                 value={
                                     boundary.affected_layers
@@ -245,29 +260,44 @@ export default class WellProperties extends Component {
                                     >
                                         Coordinates
                                     </span>
-                                    <Button
-                                        type="link"
-                                        icon={<Icon name="marker" />}
-                                        onClick={editBoundaryOnMap}
-                                    >
-                                        Edit on Map
-                                    </Button>
                                 </span>
                             }
                         >
                             <Input
+                                disabled={true}
                                 onChange={this.handleCoordinatesChange('lat')}
                                 value={boundary.geometry.coordinates[1]}
                                 type="number"
                                 placeholder="Latitude"
                             />
                             <Input
+                                disabled={true}
                                 onChange={this.handleCoordinatesChange('lng')}
                                 value={boundary.geometry.coordinates[0]}
                                 type="number"
                                 placeholder="Longitude"
                             />
                         </LayoutComponents.InputGroup>
+                        <div style={styles.rightAlign}>
+                            <Button
+                                disabled={readOnly}
+                                style={styles.buttonMarginRight}
+                                onClick={editBoundaryOnMap}
+                                type="link"
+                                icon={<Icon name="marker" />}
+                            >
+                                Edit on Map
+                            </Button>
+                            <Button
+                                style={styles.buttonMarginRight}
+                                disabled={readOnly}
+                                onClick={onDelete}
+                                type="link"
+                                icon={<Icon name="trash" />}
+                            >
+                                Delete
+                            </Button>
+                        </div>
                         <BoundaryMap
                             styles={mapStyles}
                             area={area}
@@ -288,9 +318,22 @@ export default class WellProperties extends Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={[styles.saveButtonWrapper]}>
-                    <Button onClick={this.save}>Save</Button>
+                    {saveButton(updateStatus)}
                 </div>
             </div>
         );
     }
 }
+
+WellProperties.propTypes = {
+    area: PropTypes.object.isRequired,
+    editBoundaryOnMap: PropTypes.func.isRequired,
+    mapStyles: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool,
+    boundary: PropTypes.object.isRequired,
+    setBoundary: PropTypes.func,
+    updateStatus: PropTypes.object,
+};
+export default WellProperties;

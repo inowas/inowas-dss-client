@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styleGlobals from 'styleGlobals';
 import Input from '../../components/primitive/Input';
@@ -11,7 +11,7 @@ import Icon from '../../components/primitive/Icon';
 import { uniqueId, find } from 'lodash';
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
-import { LayoutComponents } from '../../core';
+import { LayoutComponents, WebData } from '../../core';
 import {
     ConstantHeadObservationPoint,
     DataTableAction
@@ -88,7 +88,7 @@ const mergeObservationPoints = (state, id, dateTimeValues) => {
 };
 
 @ConfiguredRadium
-class ConstantHeadProperties extends Component {
+class ConstantHeadProperties extends React.Component {
     constructor(props) {
         super(props);
 
@@ -113,6 +113,18 @@ class ConstantHeadProperties extends Component {
             };
         });
     }
+
+    componentWillUnmount() {
+        this.props.setBoundary({
+            ...this.state.boundary,
+            ...mergeBoundary(
+                this.state,
+                this.state.selectedObservationPoint,
+                this.observationPoint.getRows()
+            )
+        });
+    }
+
 
     componentWillMount() {
         this.forceUpdate();
@@ -294,10 +306,14 @@ class ConstantHeadProperties extends Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, readOnly, onDelete, updateStatus } = this.props;
         const { nameInputId, layerInputId, boundary } = this.state;
         const observationPoints = Helper.addIdFromIndex(
             this.getDateTimeValue()
+        );
+
+        const saveButton = WebData.Component.Processing(
+            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -310,6 +326,7 @@ class ConstantHeadProperties extends Component {
                         <LayoutComponents.InputGroup label="Name">
                             <Input
                                 name="name"
+                                disabled={readOnly}
                                 id={nameInputId}
                                 onChange={this.handleInputChange('name')}
                                 value={boundary.name}
@@ -321,6 +338,7 @@ class ConstantHeadProperties extends Component {
                         <LayoutComponents.InputGroup label="Select Layer">
                             <Select
                                 name="affected_layers"
+                                disabled={readOnly}
                                 id={layerInputId}
                                 value={
                                     boundary.affected_layers
@@ -357,6 +375,7 @@ class ConstantHeadProperties extends Component {
                         <div style={styles.rightAlign}>
                             <Button
                                 style={styles.buttonMarginRight}
+                                disabled={readOnly}
                                 onClick={editBoundaryOnMap}
                                 type="link"
                                 icon={<Icon name="marker" />}
@@ -365,7 +384,8 @@ class ConstantHeadProperties extends Component {
                             </Button>
                             <Button
                                 style={styles.buttonMarginRight}
-                                disabled
+                                disabled={readOnly}
+                                onClick={onDelete}
                                 type="link"
                                 icon={<Icon name="trash" />}
                             >
@@ -397,7 +417,7 @@ class ConstantHeadProperties extends Component {
                     </LayoutComponents.Column>
                 </div>
                 <div style={styles.saveButtonWrapper}>
-                    <Button onClick={this.save}>Save</Button>
+                    {saveButton(updateStatus)}
                 </div>
             </div>
         );
@@ -412,7 +432,8 @@ ConstantHeadProperties.propTypes = {
     mapStyles: PropTypes.object.isRequired,
     onSave: PropTypes.func.isRequired,
     readOnly: PropTypes.bool,
-    selectedObservationPoint: PropTypes.string
+    selectedObservationPoint: PropTypes.string,
+    updateStatus: PropTypes.object,
 };
 
 export default ConstantHeadProperties;

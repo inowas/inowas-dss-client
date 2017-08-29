@@ -1,6 +1,7 @@
 import { DataTableAction, RechargeRate } from '../../t03/components';
-import { Helper, LayoutComponents } from '../../core';
-import React, { Component, PropTypes } from 'react';
+import { Helper, LayoutComponents, WebData } from '../../core';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import BoundaryMap from './boundaryMap';
 import Button from '../../components/primitive/Button';
@@ -38,7 +39,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class RechargeProperties extends Component {
+class RechargeProperties extends React. Component {
     static propTypes = {
         area: PropTypes.object.isRequired,
         boundary: PropTypes.object.isRequired,
@@ -59,6 +60,13 @@ export default class RechargeProperties extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             boundary: nextProps.boundary
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.setBoundary({
+            ...this.state.boundary,
+            date_time_values: this.rechargeRate.getRows()
         });
     }
 
@@ -89,10 +97,14 @@ export default class RechargeProperties extends Component {
     };
 
     render() {
-        const { mapStyles, area, editBoundaryOnMap } = this.props;
+        const { mapStyles, area, editBoundaryOnMap, onDelete, readOnly, updateStatus } = this.props;
         const { nameInputId, boundary } = this.state;
         const rechargeRates = Helper.addIdFromIndex(
             boundary.date_time_values || []
+        );
+
+        const saveButton = WebData.Component.Processing(
+            <Button onClick={this.save}>Save</Button>
         );
 
         return (
@@ -105,6 +117,7 @@ export default class RechargeProperties extends Component {
                         <LayoutComponents.InputGroup label="Name">
                             <Input
                                 name="name"
+                                disabled={readOnly}
                                 id={nameInputId}
                                 value={boundary.name}
                                 onChange={this.handleInputChange('name')}
@@ -116,6 +129,7 @@ export default class RechargeProperties extends Component {
                         <div style={styles.rightAlign}>
                             <Button
                                 style={styles.buttonMarginRight}
+                                disabled={readOnly}
                                 onClick={editBoundaryOnMap}
                                 type="link"
                                 icon={<Icon name="marker" />}
@@ -124,7 +138,8 @@ export default class RechargeProperties extends Component {
                             </Button>
                             <Button
                                 style={styles.buttonMarginRight}
-                                disabled
+                                disabled={readOnly}
+                                onClick={onDelete}
                                 type="link"
                                 icon={<Icon name="trash" />}
                             >
@@ -153,9 +168,22 @@ export default class RechargeProperties extends Component {
                 </div>
 
                 <div style={[styles.saveButtonWrapper]}>
-                    <Button onClick={this.save}>Save</Button>
+                    {saveButton(updateStatus)}
                 </div>
             </div>
         );
     }
 }
+
+RechargeProperties.propTypes = {
+    area: PropTypes.object.isRequired,
+    editBoundaryOnMap: PropTypes.func.isRequired,
+    mapStyles: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool,
+    boundary: PropTypes.object.isRequired,
+    setBoundary: PropTypes.func,
+    updateStatus: PropTypes.object,
+};
+export default RechargeProperties;

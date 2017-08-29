@@ -7,15 +7,10 @@ import {
     RiverProperties,
     WellProperties
 } from '../components';
-import React, { Component } from 'react';
+import React from 'react';
 import { browserHistory, withRouter } from 'react-router';
-// import {
-//     editBoundary,
-//     goToBoundaryOverview,
-//     goToBoundaryTypeOverview
-// } from '../../routes';
 import { Routing } from '../actions';
-import { first, maxBy, minBy } from 'lodash';
+import { first } from 'lodash';
 
 import { Action } from '../actions/index';
 import { BoundaryOverview } from '../../t03/containers/index';
@@ -30,7 +25,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeMapStateToPropsBoundaries } from '../selectors/mapState';
 import styleGlobals from 'styleGlobals';
-import uuid from 'uuid';
 
 const styles = {
     container: {
@@ -62,7 +56,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class ModelEditorBoundary extends Component {
+class ModelEditorBoundary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -89,7 +83,7 @@ class ModelEditorBoundary extends Component {
     };
 
     renderProperties(boundaries) {
-        const { area, permissions, removeBoundary, mapStyles } = this.props;
+        const { area, permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
 
@@ -111,7 +105,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
                     case 'rch':
@@ -123,7 +120,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
                     case 'riv':
@@ -137,7 +137,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
                     case 'chd':
@@ -151,7 +154,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
 
@@ -166,7 +172,10 @@ class ModelEditorBoundary extends Component {
                                 area={area}
                                 mapStyles={mapStyles}
                                 onSave={this.updateBoundary}
+                                setBoundary={setBoundary}
+                                updateStatus={updateBoundaryStatus}
                                 readOnly={readOnly}
+                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                             />
                         );
                 }
@@ -271,7 +280,8 @@ const actions = {
     updateBoundary: Command.updateBoundary,
     updatePumpingRate: Action.updatePumpingRate,
     addPumpingRate: Action.addPumpingRate,
-    removeBoundary: Command.removeBoundary
+    removeBoundary: Command.removeBoundary,
+    setBoundary: Action.setBoundary,
 };
 
 const mapDispatchToProps = (dispatch, { tool }) => {
@@ -290,7 +300,8 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 };
 
 ModelEditorBoundary.propTypes = {
-    tool: PropTypes.string.isRequired
+    tool: PropTypes.string.isRequired,
+    updateBoundaryStatus: PropTypes.object,
 };
 
 // eslint-disable-next-line no-class-assign
