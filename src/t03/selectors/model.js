@@ -137,7 +137,7 @@ export const getInitialState = () => {
             n_y: 60
         },
         styles: getInitialStyles(),
-        time_unit: 2,
+        time_unit: 4,
         length_unit: 2,
         bounding_box: [[-10, 51], [0, 50]],
         geometry: null,
