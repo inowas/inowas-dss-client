@@ -27,10 +27,6 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     direction: 'asc',
                     position: 0
                 },
-                layers: {
-                    direction: 'asc',
-                    position: 0
-                }
             },
             columns: [
                 {
@@ -92,8 +88,6 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                 {
                     header: {
                         label: 'Map',
-                        transforms: [DataTable.Helper.resetable(this)],
-                        formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
                         formatters: [
@@ -114,8 +108,11 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     property: 'affected_layers',
                     header: {
                         label: 'Layers',
-                        transforms: [DataTable.Helper.resetable(this)],
-                        formatters: [DataTable.Helper.header(this)]
+                    },
+                    cell: {
+                        formatters: [
+                            (value, { rowData }) => value.join(', ')
+                        ]
                     }
                 },
                 {
