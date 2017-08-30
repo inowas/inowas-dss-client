@@ -2,9 +2,21 @@
  * Commands sends a request to server and triggers an event.
  */
 
+export const CALCULATE_MODFLOW_MODEL = 'calculateModflowModel';
 export const CREATE_MODFLOW_MODEL = 'createModflowModel';
 export const DELETE_MODFLOW_MODEL = 'deleteModflowModel';
 export const UPDATE_MODFLOW_MODEL = 'updateModflowModel';
+
+export function calculateModflowModel(tool, id, routes, params) {
+    return {
+        type: CALCULATE_MODFLOW_MODEL,
+        tool,
+        id,
+        routes,
+        params,
+        payload: {id}
+    };
+}
 
 export function createModflowModel(tool, id, payload, routes, params) {
     return {

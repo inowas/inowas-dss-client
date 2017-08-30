@@ -90,6 +90,7 @@ export default class Input extends Component {
         ]),
         appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
         style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+        inputStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
         onChange: PropTypes.func,
         value: PropTypes.oneOfType([
             PropTypes.string,
@@ -155,6 +156,7 @@ export default class Input extends Component {
         const {
             type,
             style,
+            inputStyle,
             appearance,
             value,
             disabled,
@@ -203,7 +205,7 @@ export default class Input extends Component {
                         case 'textarea':
                             return (
                                 <textarea
-                                    style={[styles.input]}
+                                    style={[styles.input, inputStyle]}
                                     onChange={this.defaultHandleChange}
                                     type={type}
                                     value={value}

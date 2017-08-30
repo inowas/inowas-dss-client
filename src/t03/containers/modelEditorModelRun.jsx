@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
-import { Command } from '../../t03/actions';
+import { Command, Query } from '../../t03/actions';
 import { stressPeriods } from '../../t03/selectors';
 import { StressPeriodProperties } from '../components';
 import { WebData } from '../../core';
@@ -46,17 +46,27 @@ class ModelEditorModelRun extends React.Component {
         const {
             stressPeriods,
             updateStressPeriodsStatus,
+            calculateModflowModel,
+            calculateModflowModelStatus,
+            getModflowModelCalculationStatus,
+            getModflowModelCalculation,
             permissions,
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
 
-        const {type} = this.props.params;
+        const {type, id} = this.props.params;
 
         switch ( type ) {
             case 'calculation':
                 return (
-                    <RunModelProperties/>
+                    <RunModelProperties
+                        calculateModflowModel={calculateModflowModel}
+                        calculateModflowModelStatus={calculateModflowModelStatus}
+                        getModflowModelCalculationStatus={getModflowModelCalculationStatus}
+                        getModflowModelCalculation={getModflowModelCalculation}
+                        id={id}
+                    />
                 );
             case 'times':
                 return (
@@ -87,7 +97,9 @@ class ModelEditorModelRun extends React.Component {
 }
 
 const actions = {
-    updateStressPeriods: Command.updateStressPeriods
+    updateStressPeriods: Command.updateStressPeriods,
+    calculateModflowModel: Command.calculateModflowModel,
+    getModflowModelCalculation: Query.getModflowModelCalculation,
 };
 
 const mapStateToProps = (state, { tool, params }) => {
@@ -95,6 +107,8 @@ const mapStateToProps = (state, { tool, params }) => {
         stressPeriods: stressPeriods.getState(state[ tool ].model),
         permissions: state[ tool ].model.permissions,
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
+        calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
+        getModflowModelCalculationStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_CALCULATION),
     };
 };
 

@@ -10,6 +10,7 @@ export default function* rootSaga() {
         ),
         call(T03.addBoundaryFlow),
         call(T03.addLayerFlow),
+        call(T03.calculateModflowModelFlow),
         call(T03.createModelFlow),
         call(T03.getModflowModelDetailsFlow),
         call(T03.loadBoundaryFlow),
@@ -20,6 +21,7 @@ export default function* rootSaga() {
         call(T03.updateBoundaryFlow),
         call(T03.updateLayerFlow),
         call(T03.updateModelFlow),
-        call(T03.updateStressPeriodsFlow)
+        call(T03.updateStressPeriodsFlow),
+        call(T03.pollModflowModelCalculationStatusFlow),
     ];
 }
