@@ -21,3 +21,6 @@ export const fetchStatusWrapper = ( request, apiKey ) => {
 };
 
 export const waitForResponse = ( action, responseAction ) => action.type === responseAction && action.webData.type;
+export const isSuccess = ( action ) => action.webData && action.webData.type === 'success';
+export const isError = ( action ) => action.webData && action.webData.type === 'error';
+export const waitForAction = ( action, responseAction ) => action.type === responseAction && !action.webData;

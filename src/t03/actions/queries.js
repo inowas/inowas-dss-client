@@ -48,4 +48,12 @@ export function getLayer(tool, id, lid) {
     };
 }
 
-export const GET_CALCULATION = 'GET_CALCULATION';
+export const GET_MODFLOW_MODEL_CALCULATION = 'GET_MODFLOW_MODEL_CALCULATION';
+
+export function getModflowModelCalculation(tool, id) {
+    return {
+        type: GET_MODFLOW_MODEL_CALCULATION,
+        tool,
+        id,
+    };
+}
