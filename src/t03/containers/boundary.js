@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import { pure } from 'recompose';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Button from '../../components/primitive/Button';
 import styleGlobals from 'styleGlobals';
-// import { newBoundary } from '../../routes';
-import { Routing } from '../actions';
 import { BoundaryOverview } from '../components';
 
 const styles = {
@@ -32,14 +30,6 @@ const styles = {
 
 @ConfiguredRadium
 class BoundariesOverview extends React.PureComponent {
-    static propTypes = {
-        tool: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-        property: PropTypes.string.isRequired,
-        type: PropTypes.string,
-        boundaries: PropTypes.array.isRequired,
-        removeBoundary: PropTypes.func.isRequired
-    };
 
     render() {
         const {
@@ -48,7 +38,10 @@ class BoundariesOverview extends React.PureComponent {
             property,
             type,
             id,
-            removeBoundary
+            removeBoundary,
+            editBoundary,
+            editBoundaryOnMap,
+            createBoundary,
         } = this.props;
 
         let addNew = '';
@@ -58,9 +51,7 @@ class BoundariesOverview extends React.PureComponent {
                 <Button
                     icon={<Icon name="add" />}
                     type="link"
-                    onClick={() =>
-                        Routing.newBoundary(tool, id, property, type)}
-                >
+                    onClick={() => createBoundary(property, type)}>
                     Add new
                 </Button>
             );
@@ -76,7 +67,8 @@ class BoundariesOverview extends React.PureComponent {
                         rows={boundaries}
                         id={id}
                         removeBoundary={removeBoundary}
-                        tool={tool}
+                        editBoundary={editBoundary}
+                        editBoundaryOnMap={editBoundaryOnMap}
                         property={property}
                     />
                 </div>
@@ -84,5 +76,16 @@ class BoundariesOverview extends React.PureComponent {
         );
     }
 }
+
+BoundariesOverview.propTypes = {
+    id: PropTypes.string.isRequired,
+    property: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    boundaries: PropTypes.array.isRequired,
+    removeBoundary: PropTypes.func.isRequired,
+    editBoundary: PropTypes.func.isRequired,
+    editBoundaryOnMap: PropTypes.func.isRequired,
+    createBoundary: PropTypes.func.isRequired,
+};
 
 export default pure(BoundariesOverview);

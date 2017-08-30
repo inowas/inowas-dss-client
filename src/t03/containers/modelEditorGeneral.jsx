@@ -161,12 +161,14 @@ class ModelEditorGeneral extends Component {
     };
 
     save(id) {
+        const {routes, params} = this.props;
+
         if (id) {
-            this.props.updateModflowModel(id, this.state.model);
+            this.props.updateModflowModel(id, this.state.model, routes, params);
             return;
         }
 
-        this.props.createModflowModel(uuid.v4(), this.state.model);
+        this.props.createModflowModel(uuid.v4(), this.state.model, routes, params);
     }
 
     renderEditOnMapIcon = (id, readOnly) => {

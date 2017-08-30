@@ -9,11 +9,11 @@ import {
 } from '../components';
 import React from 'react';
 import { browserHistory, withRouter } from 'react-router';
-import { Routing } from '../actions';
 import { first } from 'lodash';
 
 import { Action } from '../actions/index';
 import { BoundaryOverview } from '../../t03/containers/index';
+import { Routing } from '../../t03/actions';
 import { boundary as BoundarySelector } from '../selectors/index';
 import Button from '../../components/primitive/Button';
 import { Command } from '../../t03/actions/index';
@@ -88,6 +88,8 @@ class ModelEditorBoundary extends React.Component {
         const readOnly = !lodash.includes(permissions, 'w');
 
         const { type, id, pid, property } = this.props.params;
+        const { params, routes } = this.props;
+
         if (pid) {
             const boundary = boundaries.filter(
                 b => b.type === type && b.id === pid
@@ -188,47 +190,49 @@ class ModelEditorBoundary extends React.Component {
         }
         return (
             <BoundaryOverview
-                tool={'T03'}
                 property={property}
                 id={id}
                 type={type}
                 removeBoundary={removeBoundary}
+                editBoundary={Routing.editBoundary(routes, params)}
+                createBoundary={Routing.createBoundary(routes, params)}
+                editBoundaryOnMap={Routing.editBoundaryOnMap(routes, params)}
                 boundaries={boundaries}
             />
         );
     }
 
     onBoundaryClick = (boundaryId, type) => {
-        const { tool } = this.props;
-        const { id, property } = this.props.params;
+        const { property } = this.props.params;
+        const { routes, params } = this.props;
 
-        Routing.editBoundary(tool, id, property, type, boundaryId);
+        Routing.editBoundary(routes, params)(property, type, boundaryId);
     };
 
     onBoundaryTypeClick = type => {
         return () => {
-            const { tool } = this.props;
-            const { id, property } = this.props.params;
+            const { property } = this.props.params;
+            const { routes, params } = this.props;
 
-            Routing.goToBoundaryTypeOverview(tool, id, property, type);
+            Routing.goToBoundaryTypeOverview(routes, params)(property, type);
         };
     };
 
     onBackButtonClick = () => {
-        const { tool, params } = this.props;
-        const { id, property, type, pid } = params;
+        const { params, routes } = this.props;
+        const { property, type, pid } = params;
 
         if (pid) {
-            Routing.goToBoundaryTypeOverview(tool, id, property, type);
+            Routing.goToBoundaryTypeOverview(routes, params)(property, type);
         } else if (type) {
-            Routing.goToBoundaryOverview(tool, id, property);
+            Routing.goToBoundaryOverview(routes, params)(property);
         }
     };
 
     render() {
         // eslint-disable-next-line no-shadow
         const { style, boundaries, boundaryType, params } = this.props;
-        const { id, property, type, pid } = params;
+        const { type } = params;
 
         const { searchTerm } = this.state;
 

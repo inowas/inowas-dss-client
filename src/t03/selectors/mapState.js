@@ -74,7 +74,6 @@ export const makeMapStateToPropsBoundaries = () => {
     const soilmodelLayers = makeGetSoilmodelLayersForInput();
 
     return (state, props) => {
-        console.log(state);
         return {
             area: area(state, props),
             boundaries: boundaries(state, props),

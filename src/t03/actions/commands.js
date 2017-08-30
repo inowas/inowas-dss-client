@@ -6,11 +6,13 @@ export const CREATE_MODFLOW_MODEL = 'createModflowModel';
 export const DELETE_MODFLOW_MODEL = 'deleteModflowModel';
 export const UPDATE_MODFLOW_MODEL = 'updateModflowModel';
 
-export function createModflowModel(tool, id, payload) {
+export function createModflowModel(tool, id, payload, routes, params) {
     return {
         type: CREATE_MODFLOW_MODEL,
         tool,
         id,
+        routes,
+        params,
         payload
     };
 }
@@ -65,10 +67,12 @@ export const ADD_LAYER = 'addLayer';
 export const UPDATE_LAYER = 'updateLayer';
 export const REMOVE_LAYER = 'removeLayer';
 
-export function addLayer(tool, modelId, data) {
+export function addLayer(tool, modelId, data, routes, params) {
     return {
         type: ADD_LAYER,
         tool,
+        routes,
+        params,
         payload: {
             layer: data,
             id: modelId,

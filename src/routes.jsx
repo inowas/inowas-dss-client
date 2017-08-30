@@ -45,7 +45,33 @@ const routes = store =>
             <Route path="T07B/:id" component={tools.T07B} />
             <Route path="T07C/:id" component={tools.T07C} />
             <Route path="T07D/:id" component={tools.T07D} />
-            <Route path="T07E(/:id)" component={tools.T07E} />
+            <Route
+                path="T07E/:said"
+                tool={'T07E'}
+            >
+                <Route
+                    path=":id(/:property)(/:type)(/:pid)"
+                    component={T03.Main}
+                    tool={'T07E'}
+                    onEnter={nextState => {
+                        // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
+                        store.dispatch(WebData.Modifier.Action.clear());
+                        if (nextState.params.id) {
+                            store.dispatch(
+                                Modifier.Query.getModflowModelDetails(
+                                    'T07E',
+                                    nextState.params.id,
+                                    nextState.params.property,
+                                    nextState.params.type,
+                                    nextState.params.pid
+                                )
+                            );
+                            return;
+                        }
+                        store.dispatch(Modifier.Action.destroyModflowModel('T07E'));
+                    }}
+                />
+            </Route>
             <Route path="T08/:id" component={tools.T08} />
             <Route path="T09(/:id)" component={tools.T09} />
             <Route path="T09A(/:id)" component={tools.T09A} />

@@ -64,7 +64,7 @@ class SoilModelLayerDataTable extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             ( value, { rowData } ) => (
-                                <a href="#" title="edit" onClick={() => this.onLayerClick(rowData.id)}>{value}</a>
+                                <a href="#" title="edit" onClick={() => this.props.edit(rowData.id)}>{value}</a>
                             )
                         ]
                     }
@@ -107,19 +107,13 @@ class SoilModelLayerDataTable extends DataTable.Component.DataTable {
             rows: this.props.rows || []
         };
     }
-
-    onLayerClick = (layerId) => {
-        const {tool,id } = this.props;
-
-        Routing.editLayer(tool, id, layerId);
-    };
 }
 
 SoilModelLayerDataTable.propTypes = {
     id: PropTypes.string.isRequired,
-    tool: PropTypes.string.isRequired,
     perPage: PropTypes.number,
     remove: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
 };
 
 export default SoilModelLayerDataTable;

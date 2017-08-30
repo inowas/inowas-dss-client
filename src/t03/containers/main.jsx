@@ -6,6 +6,7 @@ import BackgroundMap from './BackgroundMap';
 import Sidebar from '../../components/primitive/Sidebar';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
+import { Routing } from '../../t03/actions';
 
 const styles = {
     wrapper: {
@@ -45,24 +46,6 @@ class T03 extends React.Component {
         navigation: []
     };
 
-    getToolName = () => this.constructor.name;
-
-    pushPropertyToBrowserHistory = (property, propertyType) => {
-        // eslint-disable-next-line no-shadow
-        const { router, params } = this.props;
-        let url = '/tools/' + this.getToolName() + '/' + params.id;
-
-        if (property) {
-            url += '/' + property;
-        }
-
-        if (propertyType) {
-            url += '/' + propertyType;
-        }
-
-        router.push(url);
-    };
-
     close = () => {
         // eslint-disable-next-line no-shadow
         const { router, location } = this.props;
@@ -80,8 +63,10 @@ class T03 extends React.Component {
             return null;
         }
 
-        const initial =
-            this.props.params.id === undefined || this.props.params.id === null;
+        const initial = this.props.params.id === undefined || this.props.params.id === null;
+        const {params, routes} = this.props;
+        const {tool} = this.props.route;
+
         const menuItems = [
             {
                 title: 'General',
@@ -177,12 +162,12 @@ class T03 extends React.Component {
                             items={menuItems}
                             selectedProperty={this.props.params.property}
                             selectedType={this.props.params.type}
-                            onClick={this.pushPropertyToBrowserHistory}
+                            onClick={Routing.goToBoundaryTypeOverview(routes, params)}
                         />
                         <Properties
                             selectedProperty={this.props.params.property}
                             close={this.close}
-                            tool={this.getToolName()}
+                            tool={tool}
                             type={this.props.params.type}
                         />
                     </div>
@@ -193,11 +178,12 @@ class T03 extends React.Component {
 
     render() {
         const { navigation } = this.state;
+        const { tool } = this.props.route;
 
         return (
             <div className="toolT03">
                 <Navbar links={navigation} />
-                <BackgroundMap tool={this.getToolName()} />
+                <BackgroundMap tool={tool} />
                 {this.renderProperties()}
             </div>
         );

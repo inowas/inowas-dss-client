@@ -1,8 +1,9 @@
 import {put, call, take} from 'redux-saga/effects';
-import {browserHistory} from 'react-router';
 import {sendCommand, stateToCreatePayload} from '../../actions/messageBox';
 import {Command, Event} from '../../t03/actions/index';
 import {WebData} from '../../core';
+import { Routing } from '../actions';
+import { push } from 'react-router-redux';
 
 export default function* createModelFlow() {
     // eslint-disable-next-line no-constant-condition
@@ -26,7 +27,11 @@ export default function* createModelFlow() {
 
             if ( response.webData.type === 'success' ) {
                 yield put(Event.modflowModelCreated(action.tool, action.id, action.payload));
-                yield call( browserHistory.push, '/tools/' + action.tool + '/' + action.id );
+                yield put(
+                    push(
+                        Routing.editModflowModelUrl( action.routes, action.params )( action.id )
+                    )
+                );
                 break;
             }
         }

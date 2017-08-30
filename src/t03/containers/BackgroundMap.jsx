@@ -744,7 +744,7 @@ class BackgroundMap extends Component {
 
     returnToBoundariesWithBoundaryId = ( id, type ) => {
         this.invalidateMap();
-        editBoundary(this.props.tool, this.props.params.id, 'boundaries', type, id);
+        editBoundary('boundaries', type, id);
     };
 
     centerToBounds = () => {
