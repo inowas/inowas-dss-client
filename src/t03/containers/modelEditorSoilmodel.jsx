@@ -51,11 +51,10 @@ class ModelEditorSoilmodel extends React.Component {
         };
     }
 
-    onLayerClick = layerId => {
-        const { tool } = this.props;
-        const { id } = this.props.params;
+    onLayerClick = pid => {
+        const { routes, params } = this.props;
 
-        Routing.editLayer(tool, id, layerId);
+        Routing.editLayer(routes, params)(pid);
     };
 
     onSave = data => {
@@ -66,11 +65,17 @@ class ModelEditorSoilmodel extends React.Component {
 
     onCreateLayer = () => {
         const { id } = this.props.params;
+        const { routes, params } = this.props;
 
-        this.props.createLayer(id, {
-            id: uuid.v4(),
-            ...getInitialLayerState()
-        });
+        this.props.createLayer(
+            id,
+            {
+                id: uuid.v4(),
+                ...getInitialLayerState()
+            },
+            routes,
+            params
+        );
     };
 
     handleSearchTerm = value => {
@@ -86,6 +91,7 @@ class ModelEditorSoilmodel extends React.Component {
         const readOnly = !lodash.includes(this.props.permissions, 'w');
         const { removeLayer, addLayerStatus, updateLayerStatus } = this.props;
         const { pid, property, id } = this.props.params;
+        const { routes, params } = this.props;
 
         if (pid) {
             const layer = soilmodel.layers.filter(b => b.id === pid)[0];
@@ -107,11 +113,11 @@ class ModelEditorSoilmodel extends React.Component {
             <div>
                 <SoilmodelGeneral soilmodel={soilmodel} readOnly={readOnly} />
                 <SoilModelLayerOverview
-                    tool={'T03'}
                     id={id}
                     property={property}
                     removeLayer={removeLayer}
                     createLayer={this.onCreateLayer}
+                    editLayer={Routing.editLayer(routes, params)}
                     layers={soilmodel.layers}
                     addLayerStatus={addLayerStatus}
                 />

@@ -140,25 +140,25 @@ class BoundaryOverview extends DataTable.Component.DataTable {
         };
     }
 
-    onBoundaryClick = (boundaryId, type) => {
-        const { tool, id, property } = this.props;
-        Routing.editBoundary(tool, id, property, type, boundaryId);
+    onBoundaryClick = (pid, type) => {
+        const { editBoundary, property } = this.props;
+        editBoundary(property, type, pid);
     };
 
-    onBoundaryMapClick = (type, boundaryId) => {
+    onBoundaryMapClick = (type, pid) => {
         return () => {
-            const { tool, id, property } = this.props;
-            console.warn('kgberrg');
-            Routing.editBoundaryOnMap(tool, id, property, type, boundaryId);
+            const { editBoundaryOnMap, property } = this.props;
+            editBoundaryOnMap(property, type, pid);
         };
     };
 }
 
 BoundaryOverview.propTypes = {
     id: PropTypes.string.isRequired,
-    tool: PropTypes.string.isRequired,
     perPage: PropTypes.number,
-    removeBoundary: PropTypes.func.isRequired
+    removeBoundary: PropTypes.func.isRequired,
+    editBoundary: PropTypes.func.isRequired,
+    editBoundaryOnMap: PropTypes.func.isRequired,
 };
 
 export default BoundaryOverview;

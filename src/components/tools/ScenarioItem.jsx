@@ -8,6 +8,7 @@ import Button from '../primitive/Button'
 export default class ScenarioItem extends React.Component {
 
     static propTypes = {
+        said: React.PropTypes.string.isRequired,
         scenario: React.PropTypes.object.isRequired,
         clone: React.PropTypes.func.isRequired,
         toggleSelection: React.PropTypes.func.isRequired
@@ -18,7 +19,7 @@ export default class ScenarioItem extends React.Component {
     }
 
     render( ) {
-        const { scenario, toggleSelection, clone } = this.props;
+        const { scenario, toggleSelection, clone, said } = this.props;
         const { name, description, selected, modelId, isBaseModel } = scenario;
         return (
             <div className="item" data-selected={selected} onClick={toggleSelection}>
@@ -30,7 +31,7 @@ export default class ScenarioItem extends React.Component {
                     <p>{description}</p>
                     <p>
                         {!isBaseModel
-                            ? <Link to={'/tools/T07E/' + modelId}>Edit</Link>
+                            ? <Link to={'/tools/T07E/' + said + '/' + modelId}>Edit</Link>
                             : null}
                         <Button type="link" onClick={() => clone(modelId)}>Clone</Button>
                     </p>

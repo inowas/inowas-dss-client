@@ -11,6 +11,7 @@ import Icon from '../../components/primitive/Icon';
 import ArraySlider from '../../components/primitive/ArraySlider';
 import Navbar from '../Navbar';
 import ScenarioSelect from '../../components/tools/ScenarioSelect';
+import { withRouter } from 'react-router';
 
 import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
@@ -38,7 +39,8 @@ import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 @connect(store => {
     return { tool: store.T07 };
 })
-export default class T07A extends Component {
+
+class T07A extends Component {
     static propTypes = {
         dispatch: PropTypes.func.isRequired,
         params: PropTypes.object,
@@ -449,6 +451,7 @@ export default class T07A extends Component {
 
     render() {
         const { navigation } = this.state;
+        const { id } = this.props.params;
         const models = this.props.tool.models;
 
         return (
@@ -460,6 +463,7 @@ export default class T07A extends Component {
                         <Accordion firstActive={0}>
                             <AccordionItem heading="Scenarios">
                                 <ScenarioSelect
+                                    said={id}
                                     clone={this.cloneScenario()}
                                     scenarios={models}
                                     toggleSelection={this.toggleSelection}
@@ -486,3 +490,5 @@ export default class T07A extends Component {
         );
     }
 }
+
+export default withRouter(T07A);

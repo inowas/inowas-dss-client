@@ -40,12 +40,12 @@ const styles = {
     }
 };
 const SoilModelLayerOverview = ({
-    tool,
     layers,
     property,
     id,
     createLayer,
     removeLayer,
+    editLayer,
     addLayerStatus
 }) => {
     return (
@@ -66,7 +66,7 @@ const SoilModelLayerOverview = ({
                     rows={layers}
                     id={id}
                     remove={removeLayer}
-                    tool={tool}
+                    edit={editLayer}
                     property={property}
                 />
             </div>
