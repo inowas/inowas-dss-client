@@ -292,6 +292,7 @@ class GeneralHeadProperties extends React.Component {
                             style={styles.observationPointSelection.button}
                             iconInside
                             onClick={this.handleObservationPointDelete}
+                            disabled={boundary.observation_points.length <= 1}
                             icon={<Icon name="trash" />}
                         />
                     </div>}
