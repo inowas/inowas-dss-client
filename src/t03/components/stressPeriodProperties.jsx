@@ -243,7 +243,7 @@ class StressPeriodProperties extends React.Component {
                     <WebData.Component.Loading
                         status={updateStressPeriodsStatus}
                     >
-                        <Button onClick={this.save} disabled={saveable}>
+                        <Button onClick={this.save} disabled={!saveable}>
                             Save
                         </Button>
                     </WebData.Component.Loading>
