@@ -9,6 +9,7 @@ import { Command } from '../../t03/actions';
 import { stressPeriods } from '../../t03/selectors';
 import { StressPeriodProperties } from '../components';
 import { WebData } from '../../core';
+import RunModelProperties from "../components/runModelProperties";
 
 const styles = {
     container: {
@@ -53,6 +54,10 @@ class ModelEditorModelRun extends React.Component {
         const {type} = this.props.params;
 
         switch ( type ) {
+            case 'calculation':
+                return (
+                    <RunModelProperties/>
+                );
             case 'times':
                 return (
                     <StressPeriodProperties stressPeriods={stressPeriods}
