@@ -264,10 +264,9 @@ class T07A extends Component {
                     grid: model.grid,
                     boundaries: model.boundaries,
                     xCrossSection,
-                    legend: model.result ? model.result.legend(min, max) : null,
-                    heatMapUrl: model.result
-                        ? model.result.imgUrl(min, max)
-                        : null
+                    heatMapData: model.result ? model.result.data : null,
+                    globalMin: min,
+                    globalMax: max
                 });
                 return (
                     <section

@@ -142,12 +142,20 @@ export default class Grid {
         );
     }
 
-    lngOfCellCenter(y) {
+    lngOfCellCenter(x) {
         const xMin = this.boundingBox.southWest.lng;
         const xMax = this.boundingBox.northEast.lng;
         const dX = (xMax - xMin) / this.nX;
 
-        return Math.round((xMin + (y + 0.5) * dX) * 1000) / 1000;
+        return xMin + (x + 0.5) * dX;
+    }
+
+    latOfCellCenter(y) {
+        const yMin = this.boundingBox.southWest.lat;
+        const yMax = this.boundingBox.northEast.lat;
+        const dY = (yMax - yMin) / this.nY;
+
+        return yMin + (y + 0.5) * dY;
     }
 
     get lngOfCellCenters() {
@@ -157,7 +165,7 @@ export default class Grid {
 
         const column = [];
         for (let i = 0; i < this.nX; i++) {
-            column.push(Math.round((xMin + (i + 0.5) * dX) * 1000) / 1000);
+            column.push(xMin + (i + 0.5) * dX);
         }
 
         return column;

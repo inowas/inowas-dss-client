@@ -5286,6 +5286,10 @@ pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
 
+percentile@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/percentile/-/percentile-1.2.0.tgz#fa3b05c1ffd355b35228529834e5fa37f0bd465d"
+
 performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
@@ -5799,6 +5803,14 @@ raf@^3.2.0:
   dependencies:
     performance-now "^2.1.0"
 
+"rainbowvis.js@https://github.com/inowas/RainbowVis-JS.git":
+  version "1.0.1"
+  resolved "https://github.com/inowas/RainbowVis-JS.git#28d345552a1c117bb65856f1043803d639f1be07"
+
+"rainbowvis.js@https://github.com/inowas/RainbowVis-JS.git#master":
+  version "1.0.1"
+  resolved "https://github.com/inowas/RainbowVis-JS.git#714d8b3554202506e5680f5cff40dc7ef5952b6b"
+
 randomatic@^1.1.3:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-1.1.7.tgz#c7abe9cc8b87c0baa876b19fde83fd464797e38c"
@@ -6206,7 +6218,7 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-devtools-extension@2.15:
+redux-devtools-extension@2.13:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.2.tgz#e0f9a8e8dfca7c17be92c7124958a3b94eb2911d"
 

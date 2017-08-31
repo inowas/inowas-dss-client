@@ -42,7 +42,10 @@ const HeadResultsChart = ({
 
                 chartAxis = {
                     x: {
-                        label: 'Longitude'
+                        label: 'Longitude',
+                        tick: {
+                            format: x => Number(x).toFixed(3)
+                        }
                     },
                     y: {
                         label: labelYAxis(selectedType)
