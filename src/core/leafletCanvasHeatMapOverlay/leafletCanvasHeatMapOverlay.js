@@ -211,10 +211,8 @@ export const CanvasHeatMapOverlay = Layer.extend({
     _runDraw: function() {
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
         this._dataArray.forEach(d => {
-            if (d.value) {
-                this._ctx.fillStyle = '#' + this._rainbow.colourAt(d.value);
-                this._ctx.fillRect(d.y, d.x, 1, 1);
-            }
+            this._ctx.fillStyle = '#' + this._rainbow.colourAt(d.value);
+            this._ctx.fillRect(d.y, d.x, 1, 1);
         });
     },
 

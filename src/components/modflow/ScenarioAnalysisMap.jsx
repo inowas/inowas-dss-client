@@ -248,7 +248,7 @@ export default class ScenarioAnalysisMap extends Component {
         const newHeatMapData = [];
         heatMapData.forEach((x, xIndex) => {
             x.forEach((y, yIndex) => {
-                if (y) {
+                if (y !== null) {
                     newHeatMapData.push({
                         x: xIndex,
                         y: yIndex,
