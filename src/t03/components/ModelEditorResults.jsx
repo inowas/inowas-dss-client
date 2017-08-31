@@ -3,13 +3,12 @@ import { ModelEditorResultsHead } from '../containers/index';
 import { pure } from 'recompose';
 
 const ModelEditorResults = ({ type, tool }) => {
-    switch ( type ) {
-        case 'head':
+    switch (type) {
+        case 'heads':
+            return <ModelEditorResultsHead tool={tool} />;
         default:
-            return (
-                <ModelEditorResultsHead tool={tool} />
-            );
+            return null;
     }
 };
 
-export default pure( ModelEditorResults );
+export default pure(ModelEditorResults);
