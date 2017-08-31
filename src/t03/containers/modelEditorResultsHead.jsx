@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { sendQuery } from '../../actions/messageBox';
 import { HeadResultsChart } from '../components';
-import config from '../../config';
 
 const styles = {
     selectWrapper: {
@@ -128,7 +127,7 @@ class ModelEditorResultsHead extends Component {
 
         sendQuery(
             `calculations/${calculationId}/results/types/${type}/layers/${layer}/totims/${time}`,
-            Query.GET_CALCULATION
+            Query.GET_MODFLOW_MODEL_CALCULATION
         );
     };
 
@@ -231,14 +230,12 @@ class ModelEditorResultsHead extends Component {
             }
         }
 
-        const time = times.total_times[selectedTotalTimeIndex];
-
         const mapData = new ScenarioAnalysisMapData({
             area: model.geometry,
             grid,
             boundaries: model.boundaries,
             xCrossSection,
-            heatMapUrl: `${config.baseURL}/image/calculations/${calculationId}/results/types/${selectedType}/layers/${selectedLayer}/totims/${time}`
+            heatMapData: getCalculationStatus ? getCalculationStatus.data : null
         });
 
         return (
@@ -296,7 +293,7 @@ const mapStateToProps = (state, { tool }) => {
         times: results.getTimes(state[tool].model.results),
         getCalculationStatus: WebData.Selector.getRequestStatusByType(
             state,
-            Query.GET_CALCULATION
+            Query.GET_MODFLOW_MODEL_CALCULATION
         )
     };
 };
