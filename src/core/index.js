@@ -1,9 +1,10 @@
-import * as LayoutComponents from "./layout/components/index";
-import * as Paginator from "./paginator";
-import * as DataTable from "./dataTable";
-import * as WebData from "./webData";
-import * as Formatter from "./formatter";
-import * as Helper from "./helpers";
+import * as LayoutComponents from './layout/components/index';
+import * as Paginator from './paginator';
+import * as DataTable from './dataTable';
+import * as WebData from './webData';
+import * as Formatter from './formatter';
+import * as Helper from './helpers';
+import * as RainbowVis from './rainbowVis';
 
 export {
     DataTable,
@@ -11,5 +12,6 @@ export {
     Paginator,
     WebData,
     Formatter,
-    Helper
+    Helper,
+    RainbowVis
 };

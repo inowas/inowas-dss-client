@@ -20,9 +20,9 @@ import Coordinate from '../../model/Coordinate';
 import Icon from '../primitive/Icon';
 import Rainbow from 'rainbowvis.js';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
-import percentile from 'percentile';
 import { sortBy } from 'lodash';
 import styleGlobals from 'styleGlobals';
+import { RainbowVis } from '../../core';
 
 const RadiumMap = ConfiguredRadium(Map);
 
@@ -194,15 +194,19 @@ export default class ScenarioAnalysisMap extends Component {
                 props.mapData.heatMapData
             );
 
+            const rainbowRange = RainbowVis.Helper.extractRangeFromHeatMapData(
+                newHeatMapData
+            );
+
             this.state = {
                 heatMapData: newHeatMapData,
                 rainbow: rainbowFactory({
                     min: props.mapData.globalMin
                         ? props.mapData.globalMin
-                        : percentile(5, newHeatMapData, o => o.value).value,
+                        : rainbowRange.min,
                     max: props.mapData.globalMax
                         ? props.mapData.globalMax
-                        : percentile(95, newHeatMapData, o => o.value).value
+                        : rainbowRange.max
                 })
             };
         } else {
@@ -226,15 +230,19 @@ export default class ScenarioAnalysisMap extends Component {
                 nextProps.mapData.heatMapData
             );
 
+            const rainbowRange = RainbowVis.Helper.extractRangeFromHeatMapData(
+                newHeatMapData
+            );
+
             this.setState({
                 heatMapData: newHeatMapData,
                 rainbow: rainbowFactory({
                     min: nextProps.mapData.globalMin
                         ? nextProps.mapData.globalMin
-                        : percentile(5, newHeatMapData, o => o.value).value,
+                        : rainbowRange.min,
                     max: nextProps.mapData.globalMax
                         ? nextProps.mapData.globalMax
-                        : percentile(95, newHeatMapData, o => o.value).value
+                        : rainbowRange.max
                 })
             });
         }
