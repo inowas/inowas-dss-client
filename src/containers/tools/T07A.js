@@ -216,7 +216,7 @@ export default class T07A extends Component {
                 heatMapUrl: model.result ? model.result.imgUrl(min, max) : null
             });
             return (
-                <section key={model.modelId} className="tile col col-min-2 stretch">
+                <section key={model.calculationId} className="tile col col-min-2 stretch">
                     <h2>{model.name}</h2>
                     <ScenarioAnalysisMap mapData={mapData} mapPosition={mapPosition} updateMapView={this.updateMapView} updateBounds={this.updateBounds} clickCoordinate={this.setActiveCoordinateHandler}/>
                 </section>

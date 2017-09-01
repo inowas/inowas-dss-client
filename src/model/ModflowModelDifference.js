@@ -174,7 +174,7 @@ export default class ModflowModelDifference {
         return (this._result instanceof MfResult);
     }
 
-    modelIds() {
+    get modelIds() {
         return [this._modelId1, this._modelId2];
     }
 }

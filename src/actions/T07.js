@@ -255,7 +255,7 @@ export function updateResultsT07A( calculationId, resultType, layerNumber, total
 
 export function updateResultsT07B( calculation1, calculation2, resultType, layerNumber, totalTime ) {
     const imageURL = config.baseURL + '/image';
-    const url = '/calculations/' + calculation1 + '/results/difference/' + calculation2 + '/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/totims/' + totalTime.toString();
+    const url = '/calculations/' + calculation1 + '/results/differences/' + calculation2 + '/types/' + resultType.toString() + '/layers/' + layerNumber.toString() + '/totims/' + totalTime.toString();
 
     return ( dispatch, getState ) => {
         return dispatch( {
