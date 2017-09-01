@@ -86,10 +86,9 @@ class StressPeriodProperties extends React.Component {
                               return {
                                   ...data,
                                   totim_start: Formatter.dateToYmd(
-                                      Helper.addDays(data.totim_start + 1)(
-                                          nextProps.stressPeriods
-                                              .start_date_time
-                                      )
+                                      Helper.addDays(
+                                          data.totim_start /* + 1 */
+                                      )(nextProps.stressPeriods.start_date_time)
                                   )
                               };
                           })
@@ -137,8 +136,7 @@ class StressPeriodProperties extends React.Component {
             this.dataTable.checkDateRange(
                 Formatter.dateToYmd(this.state.stressPeriods.start_date_time),
                 Formatter.dateToYmd(this.state.stressPeriods.end_date_time)
-            ) ===
-            false
+            ) === false
         ) {
             this.dataTable.forceUpdate();
             this.setState(prevState => {

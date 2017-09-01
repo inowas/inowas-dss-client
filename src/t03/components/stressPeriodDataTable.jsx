@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as edit from 'react-edit';
-import {DataTable, Formatter, Helper} from '../../core';
+import { DataTable, Formatter, Helper } from '../../core';
 import Icon from '../../components/primitive/Icon';
 
 import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
 class StressPeriodDataTable extends DataTable.Component.DataTable {
-    constructor ( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
 
         this.state = {
             searchColumn: 'all',
@@ -20,10 +20,10 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
-                'totim_start': {
+                totim_start: {
                     direction: 'asc',
                     position: 0
-                },
+                }
             },
             columns: [
                 {
@@ -35,15 +35,29 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                     header: {
                         label: '',
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
-                            )
-                        ],
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={'unchecked'}
+                                    onClick={DataTable.Action.Callback.onSelectAll(
+                                        this
+                                    )}
+                                />
+                        ]
                     },
                     cell: {
                         formatters: [
-                            ( value, { rowData } ) =>
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
+                            (value, { rowData }) =>
+                                <Icon
+                                    name={
+                                        rowData.selected
+                                            ? 'checked'
+                                            : 'unchecked'
+                                    }
+                                    onClick={() =>
+                                        DataTable.Action.Callback.onSelect(
+                                            this
+                                        )(rowData)}
+                                />
                         ]
                     }
                 },
@@ -51,59 +65,74 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                     property: 'totim_start',
                     header: {
                         label: 'Start Time',
-                        transforms: [ DataTable.Helper.resetable(this) ],
-                        formatters: [
-                            DataTable.Helper.header(this)
-                        ],
+                        transforms: [DataTable.Helper.resetable(this)],
+                        formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
                         transforms: [
-                            DataTable.Helper.editableDate(this)(edit.input({ props: { type: 'date' }}))
+                            DataTable.Helper.editableDate(this)(
+                                edit.input({ props: { type: 'date' } })
+                            )
                         ],
                         formatters: [
-                            ( value, { rowData } ) => (
-                                <span>{Formatter.toDate(value)}</span>
-                            )
+                            (value, { rowData }) =>
+                                <span>
+                                    {Formatter.toDate(value)}
+                                </span>
                         ]
                     }
                 },
                 {
                     property: 'nstp',
                     header: {
-                        label: 'number of timesteps',
+                        label: 'number of timesteps'
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number', step: 1 } }))],
-                    },
+                        transforms: [
+                            DataTable.Helper.editable(this)(
+                                edit.input({
+                                    props: { type: 'number', step: 1 }
+                                })
+                            )
+                        ]
+                    }
                 },
                 {
                     property: 'tsmult',
                     header: {
-                        label: 'timestep multiplier',
+                        label: 'timestep multiplier'
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
-                        formatters: [
-                            ( value, { rowData } ) => (
-                                <span>{Formatter.toNumber(value)}</span>
+                        transforms: [
+                            DataTable.Helper.editable(this)(
+                                edit.input({ props: { type: 'number' } })
                             )
+                        ],
+                        formatters: [
+                            (value, { rowData }) =>
+                                <span>
+                                    {Formatter.toNumber(value)}
+                                </span>
                         ]
-                    },
+                    }
                 },
                 {
                     property: 'steady',
                     header: {
-                        label: 'steady state',
+                        label: 'steady state'
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editableCheckbox(this)(DataTable.Component.Checkbox())],
-                        formatters: [
-                            ( value, { rowData } ) => (
-                                <Icon name={value ? 'checked' : 'unchecked'}/>
+                        transforms: [
+                            DataTable.Helper.editableCheckbox(this)(
+                                DataTable.Component.Checkbox()
                             )
+                        ],
+                        formatters: [
+                            (value, { rowData }) =>
+                                <Icon name={value ? 'checked' : 'unchecked'} />
                         ]
-                    },
-                },
+                    }
+                }
             ],
             rows: this.props.rows || []
         };
@@ -111,7 +140,7 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
 
     getRows = () => cloneDeep(this.state.rows);
 
-    onRowChange = ( ) => {
+    onRowChange = () => {
         this.props.onRowChange();
     };
 
@@ -134,7 +163,8 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
         const rows = sortBy(cloneDeep(this.state.rows), 'totim_start');
 
         const lastRow = last(rows);
-        const totim_start = lastRow && lastRow.totim_start
+        const totim_start =
+            lastRow && lastRow.totim_start
                 ? new Date(lastRow.totim_start)
                 : new Date();
         const nstp = lastRow && lastRow.nstp ? lastRow.nstp : 1;
@@ -146,7 +176,7 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
             totim_start: Formatter.dateToYmd(increment(totim_start)),
             nstp,
             tsmult,
-            steady,
+            steady
         };
 
         rows.push(row);
