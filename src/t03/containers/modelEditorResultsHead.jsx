@@ -249,12 +249,13 @@ class ModelEditorResultsHead extends Component {
                         />
                     </div>
                     <div style={[styles.sliderWrapper]}>
-                        <ArraySlider
-                            data={totalTimes}
-                            value={selectedTotalTimeIndex}
-                            onChange={this.onTimeSliderChange}
-                            formatter={Formatter.dateToDate}
-                        />
+                        {totalTimes.length > 1 &&
+                            <ArraySlider
+                                data={totalTimes}
+                                value={selectedTotalTimeIndex}
+                                onChange={this.onTimeSliderChange}
+                                formatter={Formatter.dateToDate}
+                            />}
                     </div>
                 </div>
                 <div>
