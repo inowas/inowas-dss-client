@@ -37,7 +37,8 @@ const styles = {
     },
 
     disabled: {
-        opacity: 0.5
+        opacity: 0.5,
+        cursor: 'not-allowed'
     }
 };
 
@@ -79,6 +80,7 @@ export default class Sidebar extends Component {
                     key={index}
                     icon={i.icon}
                     heading={i.title}
+                    disabled={i.disabled}
                     onClick={() => this.handleClick(i.name)}
                 />
             );

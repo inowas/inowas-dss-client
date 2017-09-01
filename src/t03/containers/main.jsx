@@ -64,9 +64,10 @@ class T03 extends React.Component {
             return null;
         }
 
-        const initial = this.props.params.id === undefined || this.props.params.id === null;
-        const {params, routes} = this.props;
-        const {tool} = this.props.route;
+        const initial =
+            this.props.params.id === undefined || this.props.params.id === null;
+        const { params, routes } = this.props;
+        const { tool } = this.props.route;
 
         const menuItems = [
             {
@@ -133,24 +134,16 @@ class T03 extends React.Component {
                 ]
             },
             {
-                title: 'Result Analysis',
+                title: 'Results',
                 name: 'results',
                 icon: <Icon name="dataset" />,
-                disabled: initial,
-                items: [
-                    {
-                        title: 'Heads',
-                        name: 'heads'
-                    },
-                    {
-                        title: 'Budget',
-                        name: 'budget'
-                    },
-                    {
-                        title: 'Calibration',
-                        name: 'calibration'
-                    }
-                ]
+                disabled: initial
+            },
+            {
+                title: 'Calibration',
+                name: 'calibration',
+                icon: <Icon name="target" />,
+                disabled: true
             }
         ];
 
@@ -163,7 +156,10 @@ class T03 extends React.Component {
                             items={menuItems}
                             selectedProperty={this.props.params.property}
                             selectedType={this.props.params.type}
-                            onClick={Routing.goToBoundaryTypeOverview(routes, params)}
+                            onClick={Routing.goToBoundaryTypeOverview(
+                                routes,
+                                params
+                            )}
                         />
                         <Properties
                             selectedProperty={this.props.params.property}

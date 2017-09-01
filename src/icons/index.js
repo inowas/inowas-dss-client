@@ -33,6 +33,7 @@ import Search from './search.svg';
 import Settings from './settings.svg';
 import Share from './share.svg';
 import Success from './success.svg';
+import Target from './target.svg';
 import Tools from './tools.svg';
 import Trash from './trash.svg';
 import Unchecked from './unchecked.svg';
@@ -72,6 +73,7 @@ const icons = {
     settings: <Settings />,
     share: <Share />,
     success: <Success />,
+    target: <Target />,
     tools: <Tools />,
     trash: <Trash />,
     unchecked: <Unchecked />,
