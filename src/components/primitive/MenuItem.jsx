@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import ConfiguredRadium from 'ConfiguredRadium';
-import Icon from './Icon';
 import styleGlobals from 'styleGlobals';
 
 const styles = {
@@ -37,7 +36,7 @@ const styles = {
     },
 
     contentNotLast: {
-        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
+        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight
     },
 
     contentEmpty: {
@@ -47,7 +46,6 @@ const styles = {
 
 @ConfiguredRadium
 export default class MenuItem extends Component {
-
     static propTypes = {
         icon: PropTypes.element,
         style: PropTypes.object,
@@ -58,26 +56,34 @@ export default class MenuItem extends Component {
         active: PropTypes.bool,
         toggleActive: PropTypes.func,
         last: PropTypes.bool,
+        disabled: PropTypes.bool
+    };
+
+    static defaultProps = {
+        disabled: false
     };
 
     handleClick = () => {
-        this.props.onClick();
+        const { onClick, disabled } = this.props;
+        if (!disabled) {
+            onClick();
+        }
     };
 
-    render( ) {
+    render() {
         const { style, icon } = this.props;
 
         return (
             <div>
                 <div style={[styles.header, style]} onClick={this.handleClick}>
-                    {icon && React.cloneElement(icon, {
-                        style: [icon.props.style, styles.icon]
-                    })}
+                    {icon &&
+                        React.cloneElement(icon, {
+                            style: [icon.props.style, styles.icon]
+                        })}
 
                     <span style={styles.heading}>
                         {this.props.heading}
                     </span>
-
                 </div>
             </div>
         );
