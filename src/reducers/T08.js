@@ -1,6 +1,6 @@
 import * as calc from '../calculations/T08';
 import applyParameterUpdate from './applyParameterUpdate';
-import image from '../images/tools/T08.png';
+import image from '../images/tools/T08.jpg';
 
 function getInitialState() {
     return {
