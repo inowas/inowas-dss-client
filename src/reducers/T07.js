@@ -122,7 +122,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
         case 'T07_TOGGLE_MODEL_SELECTION':
             state = { ...state };
             state.models.map( m => {
-                if ( m.modelId === action.payload ) {
+                if ( m.calculationId === action.payload ) {
                     m.toggleSelection();
                 }
             } );
@@ -162,13 +162,13 @@ const T07Reducer = ( state = getInitialState(), action ) => {
                     const model2 = models.models[1];
 
                     state.t07bDifference = new ModflowModelDifference(
-                        model1.modelId,
-                        model2.modelId,
+                        model1.calculationId,
+                        model2.calculationId,
                         model1.area,
                         model1.grid
                     );
 
-                    state.t07bSelectedModelIds = state.t07bDifference.modelIds();
+                    state.t07bSelectedModelIds = state.t07bDifference.modelIds;
                 }
             }
             break;

@@ -11,7 +11,7 @@ export default class ModflowModel {
     name = null;
     description = null;
     _grid;
-    area = null;
+    _area;
     boundaries = [];
     _calculationId = null;
     selected = null;
@@ -19,8 +19,8 @@ export default class ModflowModel {
     result;
 
     static fromModflowDetails(details) {
-        const model = new ModflowModel(details.modelId, details.isBaseModel);
-        model.area = details.area;
+        const model = new ModflowModel(details.calculationId, details.isBaseModel);
+        model._area = details.area;
         model.name = details.name;
         model.description = details.description;
         model._grid = new Grid(details.boundingBox, details.gridSize.n_x, details.gridSize.n_y);
@@ -30,7 +30,7 @@ export default class ModflowModel {
 
     static fromProps( modelId, isBaseModel, area, name, description, boundingBox, nx, ny, calculationId, selected){
         const model = new ModflowModel(modelId, isBaseModel);
-        model.area = area;
+        model._area = area;
         model.name = name;
         model.description = description;
         model._grid = new Grid(boundingBox, nx, ny);
@@ -41,6 +41,10 @@ export default class ModflowModel {
 
     get calculationId() {
         return this._calculationId;
+    }
+
+    get area() {
+        return this._area;
     }
 
     get grid() {
