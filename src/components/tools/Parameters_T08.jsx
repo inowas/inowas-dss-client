@@ -96,7 +96,7 @@ export default class Parameters extends React.Component {
                             {params_Kd}
                             </tbody>
                         </table>
-                        <button  style={styleupdate} type="Button" onClick={this.closePopup}>Calculate</button>
+                        <button  style={styleupdate} type="Button" onClick={this.closePopup}>Close</button>
                     </div>
                 </Popup>
             </div>

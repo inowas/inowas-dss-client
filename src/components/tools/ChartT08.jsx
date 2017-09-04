@@ -57,15 +57,18 @@ export default class Chart extends React.Component {
                                 <LineChart data={this.props.data} margin={{
                                     top: 20,
                                     right: 40,
-                                    left: 10,
-                                    bottom: 40
+                                    left: 20,
+                                    bottom: 0
                                 }}>
-                                    <XAxis label={label} type="number" dataKey={datakey}/>
-                                    <YAxis label="C/C0 [-]" type="number" domain={this.props.options.yAxis.domain}/>
+                                    <XAxis type="number" dataKey={datakey}/>
+                                    <YAxis type="number" domain={this.props.options.yAxis.domain}/>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <Line isAnimationActive={false} type="basis" dataKey={'C'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
                                 </LineChart>
                             </ResponsiveContainer>
+                            <div className="diagram-ylabels">
+                                <p>C/C<sub>0</sub> [-]</p>
+                            </div>
                             <div className="diagram-labels-bottom-right">
                                 <div className="diagram-label">
                                     <p>
@@ -86,6 +89,7 @@ export default class Chart extends React.Component {
                                     </p>
                                 </div>
                             </div>
+                            <p className="center-vertical center-horizontal">{label}</p>
                         </div>
                     </div>
                     <div className="col col-rel-0-5">

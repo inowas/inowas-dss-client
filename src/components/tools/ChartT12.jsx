@@ -27,16 +27,19 @@ export default class Chart extends React.Component {
                                     top: 20,
                                     right: 40,
                                     left: 10,
-                                    bottom: 40
+                                    bottom: 0
                                 }}>
 
-                                    <XAxis tickCount={6} tickFormatter={this.logtick} label="V" type="number" dataKey="V"/>
-                                    <YAxis label="t/V" type="number" domain={this.props.options.yAxis.domain}/>
+                                    <XAxis tickCount={6} tickFormatter={this.logtick} type="number" dataKey="V"/>
+                                    <YAxis type="number" domain={this.props.options.yAxis.domain}/>
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <Line isAnimationActive={false} type="basis" dataKey={'tV'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
                                     <Line dataKey={'mfi'} strokeDasharray="3 3" stroke="#4C4C4C" strokeWidth="1" dot={false}/>
                                 </LineChart>
                             </ResponsiveContainer>
+                            <div className="diagram-ylabels">
+                                <p>t/V [s/l]</p>
+                            </div>
                             <div className="diagram-labels-bottom-right">
                                 <div className="diagram-label">
                                     <p>
@@ -49,6 +52,7 @@ export default class Chart extends React.Component {
                                     </p>
                                 </div>
                             </div>
+                            <p className="center-vertical center-horizontal">V [l]</p>
                         </div>
                     </div>
                     <div className="col col-rel-0-5">

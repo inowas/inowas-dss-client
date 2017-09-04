@@ -80,7 +80,7 @@ function getInitialState() {
             inputType: inputType.SLIDER,
             min: 0,
             validMin: function(x) {return x >= 0},
-            max: 500,
+            max: 1000,
             value: 438,
             stepSize: 1,
             decimals: 0
