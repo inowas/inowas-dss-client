@@ -39,7 +39,7 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={'unchecked'}
                                     onClick={DataTable.Action.Callback.onSelectAll(
                                         this
@@ -50,7 +50,7 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
+                                !this.props.readOnly && <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
                         ]
                     }
                 },
@@ -124,7 +124,7 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={'trash'}
                                     onClick={() =>
                                         this.props.removeBoundary(
@@ -159,6 +159,7 @@ BoundaryOverview.propTypes = {
     removeBoundary: PropTypes.func.isRequired,
     editBoundary: PropTypes.func.isRequired,
     editBoundaryOnMap: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool,
 };
 
 export default BoundaryOverview;

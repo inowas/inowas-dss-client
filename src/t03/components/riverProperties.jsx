@@ -271,6 +271,7 @@ class RiverProperties extends React.Component {
         }
 
         const { selectedObservationPoint } = this.state;
+        const { readOnly } = this.props;
 
         return (
             <div>
@@ -281,15 +282,16 @@ class RiverProperties extends React.Component {
                             value: op.id,
                             label: op.name
                         }))}
+                        clearable={false}
                         value={selectedObservationPoint}
                         onChange={op => this.selectObservationPoint(op.value)}
                     />
-                    <Button
+                    {!readOnly && <Button
                         style={styles.observationPointSelection.button}
                         iconInside
                         disabled
                         icon={<Icon name="add" />}
-                    />
+                    />}
                 </div>
                 {selectedObservationPoint &&
                     <div style={[styles.observationPointSelection.wrapper]}>
@@ -298,6 +300,7 @@ class RiverProperties extends React.Component {
                             style={[styles.observationPointSelection.input]}
                         >
                             <Input
+                                readOnly={readOnly}
                                 type="text"
                                 value={
                                     boundary.observation_points.find(
@@ -309,13 +312,13 @@ class RiverProperties extends React.Component {
                                 }
                             />
                         </LayoutComponents.InputGroup>
-                        <Button
+                        {!readOnly && <Button
                             style={styles.observationPointSelection.button}
                             iconInside
                             onClick={this.handleObservationPointDelete}
                             disabled={boundary.observation_points.length <= 1}
                             icon={<Icon name="trash" />}
-                        />
+                        />}
                     </div>}
             </div>
         );
@@ -373,7 +376,7 @@ class RiverProperties extends React.Component {
                                 options={layers}
                             />
                         </LayoutComponents.InputGroup>
-
+                        {!readOnly &&
                         <div style={styles.rightAlign}>
                             <Button
                                 disabled={readOnly}
@@ -393,7 +396,7 @@ class RiverProperties extends React.Component {
                             >
                                 Delete
                             </Button>
-                        </div>
+                        </div>}
 
                         <BoundaryMap
                             area={area}
@@ -408,10 +411,11 @@ class RiverProperties extends React.Component {
                     >
                         {this.renderObservationPointsSelection(boundary)}
                         <LayoutComponents.Column heading="Flux Boundaries">
-                            <DataTableAction
+                            {!readOnly && <DataTableAction
                                 component={this.observationPoint}
-                            />
+                            />}
                             <RiverObservationPoint
+                                readOnly={readOnly}
                                 ref={observationPoint => {
                                     this.observationPoint = observationPoint;
                                 }}
@@ -420,11 +424,12 @@ class RiverProperties extends React.Component {
                         </LayoutComponents.Column>
                     </LayoutComponents.Column>
                 </div>
+                {!readOnly &&
                 <div style={styles.saveButtonWrapper}>
                     <WebData.Component.Loading status={updateStatus}>
                         <Button onClick={this.save}>Save</Button>
                     </WebData.Component.Loading>
-                </div>
+                </div>}
             </div>
         );
     }

@@ -41,14 +41,14 @@ class SoilModelLayerDataTable extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             ( value, { rowData } ) => (
-                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
+                                !this.props.readOnly && <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
                             )
                         ],
                     },
                     cell: {
                         formatters: [
                             ( value, { rowData } ) =>
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
+                                !this.props.readOnly && <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
                         ]
                     }
                 },
@@ -98,7 +98,7 @@ class SoilModelLayerDataTable extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) => (
-                                <Icon name={'trash'} onClick={() => this.props.remove(rowData.id, this.props.id)}/>
+                                !this.props.readOnly && <Icon name={'trash'} onClick={() => this.props.remove(rowData.id, this.props.id)}/>
                             )
                         ]
                     }
@@ -114,6 +114,7 @@ SoilModelLayerDataTable.propTypes = {
     perPage: PropTypes.number,
     remove: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool.isRequired,
 };
 
 export default SoilModelLayerDataTable;

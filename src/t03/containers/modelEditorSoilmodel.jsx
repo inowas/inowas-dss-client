@@ -115,6 +115,7 @@ class ModelEditorSoilmodel extends React.Component {
                 <SoilModelLayerOverview
                     id={id}
                     property={property}
+                    readOnly={readOnly}
                     removeLayer={removeLayer}
                     createLayer={this.onCreateLayer}
                     editLayer={Routing.editLayer(routes, params)}

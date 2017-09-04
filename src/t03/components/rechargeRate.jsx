@@ -36,7 +36,7 @@ class RechargeRate extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={'unchecked'}
                                     onClick={DataTable.Action.Callback.onSelectAll(
                                         this
@@ -47,7 +47,7 @@ class RechargeRate extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={
                                         rowData.selected
                                             ? 'checked'
@@ -69,11 +69,11 @@ class RechargeRate extends DataTable.Component.DataTable {
                         formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editableDate(this)(
                                 edit.input({ props: { type: 'date' } })
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -88,11 +88,11 @@ class RechargeRate extends DataTable.Component.DataTable {
                         label: 'Recharge Rate (m/d)'
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editable(this)(
                                 edit.input({ props: { type: 'number' } })
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>

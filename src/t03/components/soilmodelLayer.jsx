@@ -96,10 +96,10 @@ class SoilmodelLayer extends React.Component {
                         <LayoutComponents.InputGroup label="Top elevation">
                             <Input
                                 disabled={readOnly}
-                                type="number"
+                                type={getTypeForInput(layer.botm)}
                                 name="top"
-                                value={layer.top}
-                                cast={parseFloat}
+                                value={getValueForInput(layer.top)}
+                                cast={layer.top instanceof Array ? null : parseFloat}
                                 onChange={this.handleInputChange('top')}
                                 placeholder="top"
                             />
@@ -111,7 +111,7 @@ class SoilmodelLayer extends React.Component {
                             type={getTypeForInput(layer.botm)}
                             name="botm"
                             value={getValueForInput(layer.botm)}
-                            cast={parseFloat}
+                            cast={layer.botm instanceof Array ? null : parseFloat}
                             onChange={this.handleInputChange('botm')}
                             placeholder="botm"
                         />
@@ -246,11 +246,13 @@ class SoilmodelLayer extends React.Component {
                     </LayoutComponents.InputGroup>
                 </section>
 
+                {!readOnly &&
                 <div style={styles.saveButtonWrapper}>
                     <WebData.Component.Loading status={updateLayerStatus}>
                         <Button onClick={this.save}>Save</Button>
                     </WebData.Component.Loading>
                 </div>
+                }
             </div>
         );
     }

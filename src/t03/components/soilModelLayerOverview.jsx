@@ -46,20 +46,23 @@ const SoilModelLayerOverview = ({
     createLayer,
     removeLayer,
     editLayer,
-    addLayerStatus
+    addLayerStatus,
+    readOnly
 }) => {
     return (
         <div style={[styles.wrapper]}>
             <div style={[styles.header]}>
+                {!readOnly &&
                 <WebData.Component.Loading status={addLayerStatus}>
                     <Button
                         type="link"
                         onClick={createLayer}
-                        icon={<Icon name="add" />}
+                        icon={<Icon name="add"/>}
                     >
                         Add new Layer
                     </Button>
                 </WebData.Component.Loading>
+                }
             </div>
             <div style={[styles.body]}>
                 <SoilModelLayerDataTable
@@ -68,6 +71,7 @@ const SoilModelLayerOverview = ({
                     remove={removeLayer}
                     edit={editLayer}
                     property={property}
+                    readOnly={readOnly}
                 />
             </div>
         </div>

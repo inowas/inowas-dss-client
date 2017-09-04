@@ -36,7 +36,7 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={'unchecked'}
                                     onClick={DataTable.Action.Callback.onSelectAll(
                                         this
@@ -47,7 +47,7 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={
                                         rowData.selected
                                             ? 'checked'
@@ -69,11 +69,11 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editableDate(this)(
                                 edit.input({ props: { type: 'date' } })
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -88,13 +88,13 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         label: 'number of timesteps'
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editable(this)(
                                 edit.input({
                                     props: { type: 'number', step: 1 }
                                 })
                             )
-                        ]
+                        ] : []
                     }
                 },
                 {
@@ -103,11 +103,11 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         label: 'timestep multiplier'
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editable(this)(
                                 edit.input({ props: { type: 'number' } })
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -122,11 +122,11 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
                         label: 'steady state'
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editableCheckbox(this)(
                                 DataTable.Component.Checkbox()
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <Icon name={value ? 'checked' : 'unchecked'} />

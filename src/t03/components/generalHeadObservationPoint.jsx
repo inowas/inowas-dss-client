@@ -36,7 +36,7 @@ class GeneralHeadObservationPoint extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={'unchecked'}
                                     onClick={DataTable.Action.Callback.onSelectAll(
                                         this
@@ -47,7 +47,7 @@ class GeneralHeadObservationPoint extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={
                                         rowData.selected
                                             ? 'checked'
@@ -69,11 +69,9 @@ class GeneralHeadObservationPoint extends DataTable.Component.DataTable {
                         formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
-                        transforms: [
-                            DataTable.Helper.editableDate(this)(
-                                edit.input({ props: { type: 'date' } })
-                            )
-                        ],
+                        transforms: !this.props.readOnly ? [
+                            DataTable.Helper.editableDate(this)(edit.input({ props: { type: 'date' }}))
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -88,11 +86,9 @@ class GeneralHeadObservationPoint extends DataTable.Component.DataTable {
                         label: 'Head'
                     },
                     cell: {
-                        transforms: [
-                            DataTable.Helper.editable(this)(
-                                edit.input({ props: { type: 'number' } })
-                            )
-                        ],
+                        transforms: !this.props.readOnly ? [
+                            DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -107,11 +103,9 @@ class GeneralHeadObservationPoint extends DataTable.Component.DataTable {
                         label: 'Conductance'
                     },
                     cell: {
-                        transforms: [
-                            DataTable.Helper.editable(this)(
-                                edit.input({ props: { type: 'number' } })
-                            )
-                        ],
+                        transforms: !this.props.readOnly ? [
+                            DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -160,7 +154,8 @@ class GeneralHeadObservationPoint extends DataTable.Component.DataTable {
 }
 
 GeneralHeadObservationPoint.propTypes = {
-    perPage: PropTypes.number
+    perPage: PropTypes.number,
+    readOnly: PropTypes.bool,
 };
 
 export default GeneralHeadObservationPoint;
