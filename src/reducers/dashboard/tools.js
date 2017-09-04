@@ -1,4 +1,5 @@
-import { Modifier } from '../../t03';
+import { Modifier as T03 } from '../../t03';
+import { Modifier as T07 } from '../../t07';
 
 const initialState = [ {
     slug: 'T02',
@@ -300,7 +301,22 @@ const tools = ( state = initialState, action ) => {
                 return t;
             });
 
-        case Modifier.Event.MODFLOW_MODEL_DELETED:
+        case T03.Event.MODFLOW_MODEL_DELETED:
+            return state.map(t => {
+                if (t.slug === action.tool) {
+                    return {
+                        ...t,
+                        instances: [
+                            ...t.instances.slice(0, t.instances.findIndex(b => ( b.id === action.payload ))),
+                            ...t.instances.slice(t.instances.findIndex(b => ( b.id === action.payload )) + 1, t.instances.length)
+                        ]
+                    };
+                }
+
+                return t;
+            });
+            break;
+        case T07.Event.SCENARIO_ANALYSIS_DELETED:
             return state.map(t => {
                 if (t.slug === action.tool) {
                     return {

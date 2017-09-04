@@ -2,12 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { model, results } from '../selectors';
 
 import ArraySlider from '../../components/primitive/ArraySlider';
+import Button from '../../components/primitive/Button';
 import BoundingBox from '../../model/BoundingBox';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Coordinate from '../../model/Coordinate';
 import { Formatter, WebData } from '../../core';
 import Grid from '../../model/Grid';
 import { Query } from '../actions/index';
+import { Modifier as T07 } from '../../t07';
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import Select from '../../components/primitive/Select';
@@ -15,6 +17,7 @@ import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { sendQuery } from '../../actions/messageBox';
 import { HeadResultsChart } from '../components';
+import uuid from 'uuid';
 
 const styles = {
     selectWrapper: {
@@ -161,14 +164,27 @@ class ModelEditorResultsHead extends Component {
         });
     };
 
+    createScenarioAnalysis = () => {
+        const {model, tool} = this.props;
+
+        this.props.createScenarioAnalysis(
+            tool,
+            uuid.v4(),
+            model.id,
+            'Scenario of ' + model.name
+        );
+    };
+
     render() {
         const {
             model, // eslint-disable-line no-shadow
             times,
             layerValues,
             getCalculationStatus,
-            calculationId
+            calculationId,
+            createScenarioAnalysisStatus
         } = this.props;
+
         const {
             selectedLayerAndType,
             selectedTotalTimeIndex,
@@ -280,6 +296,11 @@ class ModelEditorResultsHead extends Component {
                         />
                     </WebData.Component.Loading>
                 </div>
+                <div style={[styles.saveButtonWrapper]}>
+                    <WebData.Component.Loading status={createScenarioAnalysisStatus}>
+                        <Button onClick={this.createScenarioAnalysis}>Create new Scenario Analysis</Button>
+                    </WebData.Component.Loading>
+                </div>
             </div>
         );
     }
@@ -295,11 +316,18 @@ const mapStateToProps = (state, { tool }) => {
         getCalculationStatus: WebData.Selector.getRequestStatusByType(
             state,
             Query.GET_MODFLOW_MODEL_CALCULATION
+        ),
+        createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(
+            state,
+            T07.Command.CREATE_SCENARIO_ANALYSIS
         )
     };
 };
 
-export default connect(mapStateToProps, {
+const actions = {
     getCalculation: Query.getCalculation,
-    sendQuery
-})(ModelEditorResultsHead);
+    sendQuery,
+    createScenarioAnalysis: T07.Command.createScenarioAnalysis,
+};
+
+export default connect(mapStateToProps, actions)(ModelEditorResultsHead);
