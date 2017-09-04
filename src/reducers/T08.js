@@ -1,6 +1,6 @@
 import * as calc from '../calculations/T08';
 import applyParameterUpdate from './applyParameterUpdate';
-import image from '../images/tools/T13B.png';
+import image from '../images/tools/T08.jpg';
 
 function getInitialState() {
     return {
@@ -29,7 +29,7 @@ function getInitialState() {
         parameters: [{
             order: 0,
             id: 'C0',
-            name: 'Initial concentration of the solute, C0 [mg/l]',
+            name: 'Initial concentration of the solute, C₀ [mg/l]',
             min: 0.0,
             max: 1000.0,
             value: 725,
@@ -92,7 +92,7 @@ function getInitialState() {
         }, {
             order: 7,
             id: 'Kd',
-            name: 'Sorption partition coefficient, Kd []',
+            name: 'Sorption partition coefficient,  Kd [l/g]',
             min: 0.0,
             max: 0.1,
             value: 0.01,
@@ -101,7 +101,7 @@ function getInitialState() {
         }, {
             order: 8,
             id: 'Corg',
-            name: 'Organic carbon content in the soil, Corg []',
+            name: 'Organic carbon content in the soil, Cₒᵣg [-]',
             min: 0,
             max: 0.1,
             value: 0.001,
@@ -110,7 +110,7 @@ function getInitialState() {
         }, {
             order: 9,
             id: 'Kow',
-            name: 'Octanol/water partition coefficient, Kow []',
+            name: 'Logarithmus of octanol/water partition coefficient, log Kₒw [-]',
             min: 0,
             max: 10,
             value: 2.25,

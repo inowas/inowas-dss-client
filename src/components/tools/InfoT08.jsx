@@ -11,7 +11,20 @@ export default class Info extends React.Component {
             marginTop: "10px",
             marginBottom: "10px"
         };
-        const settings = this.props.data;
+        const settings = this.props.settings;
+        const x = this.props.x.value;
+        const t = this.props.t.value;
+        const c0 = this.props.c0.value;
+        const info = this.props.info;
+        const c = (c0*info.C).toFixed(2);
+        if (settings.case === 'Case2') {
+            var text = <p>After fixed <strong>{t} days</strong> since introduction of constant point source the
+                concentration is <strong>{c} mg/l</strong> at a distance of <strong>{x} m</strong> from constant point source.'</p>
+        }
+        if (settings.case === 'Case1') {
+            var text = <p>At a fixed distance of <strong>{x} m</strong> m from constant point source the concentration is
+                <strong>{c} mg/l</strong> after <strong>{t} days</strong> days since introduction of constant point source.</p>
+        }
         return (
             <div className="padding-30">
                 <h2>Settings</h2>
@@ -35,7 +48,7 @@ export default class Info extends React.Component {
                         <div>
                             <input name="settings2" id="radio3" type="radio" checked= {true}
                                    style={styleupdate} />
-                            <label htmlFor="radio3">Continous infiltration</label>
+                            <label htmlFor="radio3">Continuous infiltration</label>
                         </div>
                         <div>
                             <input name="settings2" id="radio4" type="radio" checked= {false}
@@ -44,6 +57,8 @@ export default class Info extends React.Component {
                         </div>
                     </div>
                 </div>
+                <p><br/><br/>
+                    {text}</p>
             </div>
         )
     }

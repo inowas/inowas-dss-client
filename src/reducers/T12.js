@@ -1,6 +1,6 @@
 import * as calc from '../calculations/T12';
 import applyParameterUpdate from './applyParameterUpdate';
-import image from '../images/tools/T16.png';
+import image from '../images/tools/T12.png';
 
 function getInitialState() {
     return {
@@ -95,7 +95,7 @@ function getInitialState() {
         parameters: [{
             order: 0,
             id: 'ueq',
-            name: "Infiltration duration, ueq [h]",
+            name: "Infiltration duration, uₑq [h]",
             min: 1,
             validMin: function(x) {return x > 0},
             max: 10000,

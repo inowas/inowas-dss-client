@@ -67,7 +67,9 @@ export default class T08 extends React.Component {
 
                 <div className="grid-container">
                     <section className="tile col col-abs-2">
-                        <Info data={this.props.tool.settings} handleChange={this.handleChange}/>
+                        <Info settings ={this.props.tool.settings} x = {this.props.tool.parameters[1]}
+                              t = {this.props.tool.parameters[2]} c0 = {this.props.tool.parameters[0]}
+                              info={this.props.tool.info} handleChange={this.handleChange}/>
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
