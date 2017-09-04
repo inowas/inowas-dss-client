@@ -2,6 +2,7 @@ import '../less/dashboard.less';
 
 import React, { PropTypes } from 'react';
 import {
+    deleteToolInstance,
     cloneToolInstance,
     fetchInstances,
     setActiveTool,
@@ -76,6 +77,7 @@ class Dashboard extends React.Component {
         fetchInstances: PropTypes.func.isRequired,
         setPublic: PropTypes.func.isRequired,
         cloneToolInstance: PropTypes.func.isRequired,
+        deleteToolInstance: PropTypes.func.isRequired,
         push: PropTypes.func.isRequired
     };
 
@@ -131,7 +133,7 @@ class Dashboard extends React.Component {
 
     renderTableRows(basePath, instances) {
         // eslint-disable-next-line no-shadow
-        const { publicInstances, cloneToolInstance, push } = this.props;
+        const { publicInstances, cloneToolInstance, deleteToolInstance, push } = this.props;
         return instances.map((i, index) => {
             return (
                 <Tr
@@ -173,8 +175,7 @@ class Dashboard extends React.Component {
                                             {!i.fake &&
                                                 <Button
                                                     style={[styles.action]}
-                                                    onClick={() =>
-                                                        cloneToolInstance(i.id)}
+                                                    onClick={() => cloneToolInstance(i.id)}
                                                     type="link"
                                                     icon={<Icon name="clone" />}
                                                 >
@@ -184,6 +185,7 @@ class Dashboard extends React.Component {
                                                 !publicInstances &&
                                                 <Button
                                                     style={[styles.action]}
+                                                    onClick={() => deleteToolInstance(i.id)}
                                                     type="link"
                                                     icon={<Icon name="trash" />}
                                                 >
@@ -373,6 +375,7 @@ Dashboard = connect(mapStateToProps, {
     fetchInstances,
     setPublic,
     cloneToolInstance,
+    deleteToolInstance,
     push
 })(Dashboard);
 

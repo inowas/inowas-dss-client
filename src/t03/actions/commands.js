@@ -6,6 +6,7 @@ export const CALCULATE_MODFLOW_MODEL = 'calculateModflowModel';
 export const CREATE_MODFLOW_MODEL = 'createModflowModel';
 export const DELETE_MODFLOW_MODEL = 'deleteModflowModel';
 export const UPDATE_MODFLOW_MODEL = 'updateModflowModel';
+export const CLONE_MODFLOW_MODEL = 'cloneModflowModel';
 
 export function calculateModflowModel(tool, id, routes, params) {
     return {
@@ -35,6 +36,29 @@ export function updateModflowModel(tool, id, payload) {
         tool,
         id,
         payload
+    };
+}
+
+export function cloneModflowModel(tool, id, newId) {
+    return {
+        type: CLONE_MODFLOW_MODEL,
+        tool,
+        id,
+        payload: {
+            is_tool: true,
+            id,
+            new_id: newId
+        }
+    };
+}
+
+export function deleteModflowModel(tool, id) {
+    return {
+        type: DELETE_MODFLOW_MODEL,
+        tool,
+        payload: {
+            id
+        }
     };
 }
 

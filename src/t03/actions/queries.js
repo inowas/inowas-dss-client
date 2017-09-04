@@ -57,3 +57,13 @@ export function getModflowModelCalculation(tool, id) {
         id,
     };
 }
+
+export const GET_RESULTS = 'GET_MODFLOW_MODEL_RESULTS';
+
+export function getModflowModelResults(tool, id) {
+    return {
+        type: GET_RESULTS,
+        tool,
+        id,
+    };
+}

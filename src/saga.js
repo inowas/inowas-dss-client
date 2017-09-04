@@ -23,5 +23,8 @@ export default function* rootSaga() {
         call(T03.updateModelFlow),
         call(T03.updateStressPeriodsFlow),
         call(T03.pollModflowModelCalculationStatusFlow),
+        call(T03.loadResultsFlow),
+        call(T03.cloneModflowModelFlow),
+        call(T03.deleteModlfowModelFlow),
     ];
 }

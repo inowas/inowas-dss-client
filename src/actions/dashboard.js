@@ -1,5 +1,7 @@
 import ConfiguredAxios from 'ConfiguredAxios';
 import { getApiKey } from '../reducers/user';
+import { Modifier } from '../t03';
+import uuid from 'uuid';
 
 export function setActiveTool( tool ) {
     return {
@@ -42,18 +44,31 @@ export function fetchInstances( tool, publicInstances = false ) {
 }
 
 export function cloneToolInstance( id ) {
-    return ( dispatch, getState ) => {
-        return dispatch( {
-            type: 'FETCH_DATA',
-            payload: {
-                promise: ConfiguredAxios.post( '/tools/' + id + '/clone', {}, { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user ) } } )
-            }
-        } ).then( ( { action } ) => {
-            console.warn(action.payload.data);
-            // dispatch( setInstances( tool, action.payload.data ) );
-        } ).catch( ( error ) => {
-            // eslint-disable-next-line no-console
-            console.log( error );
-        } );
+    return (dispatch, getState ) => {
+
+        const tool = getState().dashboard.ui.activeToolSlug;
+
+        switch (tool) {
+            case 'T03':
+                return dispatch( Modifier.Command.cloneModflowModel( tool, id, uuid.v4()) );
+                break;
+            default:
+                break;
+        }
+    };
+}
+
+export function deleteToolInstance( id ) {
+    return (dispatch, getState ) => {
+
+        const tool = getState().dashboard.ui.activeToolSlug;
+
+        switch (tool) {
+            case 'T03':
+                return dispatch( Modifier.Command.deleteModflowModel( tool, id ) );
+                break;
+            default:
+                break;
+        }
     };
 }

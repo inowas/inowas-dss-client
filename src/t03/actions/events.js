@@ -4,6 +4,8 @@
 
 export const MODFLOW_MODEL_CREATED = 'modflowModelCreated';
 export const MODFLOW_MODEL_UPDATED = 'modflowModelUpdated';
+export const MODFLOW_MODEL_CLONED = 'modflowModelCloned';
+export const MODFLOW_MODEL_DELETED = 'modflowModelDeleted';
 
 export function modflowModelCreated(tool, id, payload) {
     return {
@@ -20,6 +22,23 @@ export function modflowModelUpdated(tool, id, payload) {
         tool,
         id,
         payload
+    };
+}
+
+export function modflowModelCloned(tool, id, newId) {
+    return {
+        type: MODFLOW_MODEL_CLONED,
+        tool,
+        id,
+        payload: newId
+    };
+}
+
+export function modflowModelDeleted(tool, id) {
+    return {
+        type: MODFLOW_MODEL_DELETED,
+        tool,
+        payload: id
     };
 }
 
