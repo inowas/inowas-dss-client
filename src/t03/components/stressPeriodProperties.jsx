@@ -181,7 +181,7 @@ class StressPeriodProperties extends React.Component {
 
     render() {
         const { stressPeriods, initialized, saveable } = this.state;
-        const { updateStressPeriodsStatus } = this.props;
+        const { updateStressPeriodsStatus, readOnly } = this.props;
 
         if (!initialized || !stressPeriods) {
             return <p>Loading ...</p>;
@@ -198,6 +198,7 @@ class StressPeriodProperties extends React.Component {
                     >
                         <LayoutComponents.InputGroup label="Start Date">
                             <Input
+                                readOnly={readOnly}
                                 name="start_date_time"
                                 onChange={this.handleInputChange(
                                     'start_date_time'
@@ -212,6 +213,7 @@ class StressPeriodProperties extends React.Component {
 
                         <LayoutComponents.InputGroup label="End Date">
                             <Input
+                                readOnly={readOnly}
                                 name="end_date_time"
                                 onChange={this.handleInputChange(
                                     'end_date_time'
@@ -229,14 +231,16 @@ class StressPeriodProperties extends React.Component {
                         heading="Time Discretization"
                         style={[styles.columnFlex2]}
                     >
-                        <DataTableAction component={this.dataTable} />
+                        {!readOnly && <DataTableAction component={this.dataTable} />}
                         <StressPeriodDataTable
+                            readOnly={readOnly}
                             ref={dataTable => (this.dataTable = dataTable)}
                             rows={data}
                             onRowChange={this.onRowChange}
                         />
                     </LayoutComponents.Column>
                 </div>
+                {!readOnly &&
                 <div style={[styles.saveButtonWrapper]}>
                     <WebData.Component.Loading
                         status={updateStressPeriodsStatus}
@@ -245,7 +249,7 @@ class StressPeriodProperties extends React.Component {
                             Save
                         </Button>
                     </WebData.Component.Loading>
-                </div>
+                </div>}
             </div>
         );
     }

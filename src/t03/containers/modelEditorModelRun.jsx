@@ -61,6 +61,7 @@ class ModelEditorModelRun extends React.Component {
             case 'calculation':
                 return (
                     <RunModelProperties
+                        readOnly={readOnly}
                         calculateModflowModel={calculateModflowModel}
                         calculateModflowModelStatus={calculateModflowModelStatus}
                         getModflowModelCalculationStatus={getModflowModelCalculationStatus}

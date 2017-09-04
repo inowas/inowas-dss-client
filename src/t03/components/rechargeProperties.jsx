@@ -128,7 +128,7 @@ class RechargeProperties extends React.Component {
                                 placeholder="name"
                             />
                         </LayoutComponents.InputGroup>
-
+                        {!readOnly &&
                         <div style={styles.rightAlign}>
                             <Button
                                 style={styles.buttonMarginRight}
@@ -148,7 +148,7 @@ class RechargeProperties extends React.Component {
                             >
                                 Delete
                             </Button>
-                        </div>
+                        </div>}
 
                         <BoundaryMap
                             area={area}
@@ -161,20 +161,21 @@ class RechargeProperties extends React.Component {
                         heading="Recharge Rates m/d"
                         style={[styles.columnFlex2]}
                     >
-                        <DataTableAction component={this.rechargeRate} />
+                        {!readOnly && <DataTableAction component={this.rechargeRate} />}
                         <RechargeRate
+                            readOnly={readOnly}
                             ref={rechargeRate =>
                                 (this.rechargeRate = rechargeRate)}
                             rows={rechargeRates}
                         />
                     </LayoutComponents.Column>
                 </div>
-
+                {!readOnly &&
                 <div style={[styles.saveButtonWrapper]}>
                     <WebData.Component.Loading status={updateStatus}>
                         <Button onClick={this.save}>Save</Button>
                     </WebData.Component.Loading>
-                </div>
+                </div>}
             </div>
         );
     }

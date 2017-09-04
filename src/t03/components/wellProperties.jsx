@@ -277,6 +277,7 @@ class WellProperties extends React.Component {
                                 placeholder="Longitude"
                             />
                         </LayoutComponents.InputGroup>
+                        {!readOnly &&
                         <div style={styles.rightAlign}>
                             <Button
                                 disabled={readOnly}
@@ -296,7 +297,7 @@ class WellProperties extends React.Component {
                             >
                                 Delete
                             </Button>
-                        </div>
+                        </div>}
                         <BoundaryMap
                             styles={mapStyles}
                             area={area}
@@ -307,9 +308,9 @@ class WellProperties extends React.Component {
                         heading="Pumping Rates"
                         style={[styles.columnFlex2]}
                     >
-                        {this.pumpingRate &&
-                            <DataTableAction component={this.pumpingRate} />}
+                        {!readOnly && <DataTableAction component={this.pumpingRate} />}
                         <PumpingRate
+                            readOnly={readOnly}
                             ref={pumpingRate => {
                                 this.pumpingRate = pumpingRate;
                             }}
@@ -317,11 +318,12 @@ class WellProperties extends React.Component {
                         />
                     </LayoutComponents.Column>
                 </div>
+                {!readOnly &&
                 <div style={[styles.saveButtonWrapper]}>
                     <WebData.Component.Loading status={updateStatus}>
                         <Button onClick={this.save}>Save</Button>
                     </WebData.Component.Loading>
-                </div>
+                </div>}
             </div>
         );
     }

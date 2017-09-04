@@ -36,7 +36,7 @@ class PumpingRate extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon
+                                !this.props.readOnly && <Icon
                                     name={'unchecked'}
                                     onClick={DataTable.Action.Callback.onSelectAll(
                                         this
@@ -47,7 +47,7 @@ class PumpingRate extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
+                                !this.props.readOnly && <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
                         ]
                     }
                 },
@@ -59,11 +59,11 @@ class PumpingRate extends DataTable.Component.DataTable {
                         formatters: [DataTable.Helper.header(this)]
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editableDate(this)(
                                 edit.input({ props: { type: 'date' } })
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -78,11 +78,11 @@ class PumpingRate extends DataTable.Component.DataTable {
                         label: 'Rate'
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editable(this)(
                                 edit.input({ props: { type: 'number' } })
                             )
-                        ],
+                        ] : [],
                         formatters: [
                             (value, { rowData }) =>
                                 <span>
@@ -130,7 +130,8 @@ class PumpingRate extends DataTable.Component.DataTable {
 }
 
 PumpingRate.propTypes = {
-    perPage: PropTypes.number
+    perPage: PropTypes.number,
+    readOnly: PropTypes.bool,
 };
 
 export default PumpingRate;

@@ -249,12 +249,14 @@ class ConstantHeadProperties extends React.Component {
         }
 
         const { selectedObservationPoint } = this.state;
+        const { readOnly } = this.props;
 
         return (
             <div>
                 <div style={[styles.observationPointSelection.wrapper]}>
                     <Select
                         style={[styles.observationPointSelection.input]}
+                        clearable={false}
                         options={boundary.observation_points.map(op => ({
                             value: op.id,
                             label: op.name
@@ -291,7 +293,7 @@ class ConstantHeadProperties extends React.Component {
                             style={styles.observationPointSelection.button}
                             iconInside
                             onClick={this.handleObservationPointDelete}
-                            disabled={boundary.observation_points.length <= 1}
+                            disabled={boundary.observation_points.length <= 1 || readOnly}
                             icon={<Icon name="trash" />}
                         />
                     </div>}
@@ -351,14 +353,14 @@ class ConstantHeadProperties extends React.Component {
                                 options={layers}
                             />
                         </LayoutComponents.InputGroup>
-
+                        {!readOnly &&
                         <div style={styles.rightAlign}>
                             <Button
                                 style={styles.buttonMarginRight}
                                 disabled={readOnly}
                                 onClick={editBoundaryOnMap}
                                 type="link"
-                                icon={<Icon name="marker" />}
+                                icon={<Icon name="marker"/>}
                             >
                                 Edit on Map
                             </Button>
@@ -367,11 +369,11 @@ class ConstantHeadProperties extends React.Component {
                                 disabled={readOnly}
                                 onClick={onDelete}
                                 type="link"
-                                icon={<Icon name="trash" />}
+                                icon={<Icon name="trash"/>}
                             >
                                 Delete
                             </Button>
-                        </div>
+                        </div>}
 
                         <BoundaryMap
                             area={area}
@@ -385,10 +387,11 @@ class ConstantHeadProperties extends React.Component {
                     >
                         {this.renderObservationPointsSelection(boundary)}
                         <LayoutComponents.Column heading="Flux Boundaries">
-                            <DataTableAction
+                            {!readOnly && <DataTableAction
                                 component={this.observationPoint}
-                            />
+                            />}
                             <ConstantHeadObservationPoint
+                                readOnly={readOnly}
                                 ref={observationPoint =>
                                     (this.observationPoint = observationPoint)}
                                 rows={observationPoints}
@@ -396,11 +399,12 @@ class ConstantHeadProperties extends React.Component {
                         </LayoutComponents.Column>
                     </LayoutComponents.Column>
                 </div>
+                {!readOnly &&
                 <div style={styles.saveButtonWrapper}>
                     <WebData.Component.Loading status={updateStatus}>
                         <Button onClick={this.save}>Save</Button>
                     </WebData.Component.Loading>
-                </div>
+                </div>}
             </div>
         );
     }

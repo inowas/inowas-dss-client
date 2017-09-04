@@ -36,14 +36,14 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
                         label: '',
                         formatters: [
                             ( value, { rowData } ) => (
-                                <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
+                                !this.props.readOnly && <Icon name={'unchecked'} onClick={DataTable.Action.Callback.onSelectAll( this )}/>
                             )
                         ],
                     },
                     cell: {
                         formatters: [
                             ( value, { rowData } ) =>
-                                <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
+                                !this.props.readOnly && <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
                         ]
                     }
                 },
@@ -57,9 +57,9 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
                         ],
                     },
                     cell: {
-                        transforms: [
+                        transforms: !this.props.readOnly ? [
                             DataTable.Helper.editableDate(this)(edit.input({ props: { type: 'date' }}))
-                        ],
+                        ] : [],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toDate(value)}</span>
@@ -73,7 +73,9 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
                         label: 'sHead',
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
+                        transforms: !this.props.readOnly ? [
+                            DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))
+                        ] : [],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toNumber(value)}</span>
@@ -87,7 +89,9 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
                         label: 'eHead',
                     },
                     cell: {
-                        transforms: [DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))],
+                        transforms: !this.props.readOnly ? [
+                            DataTable.Helper.editable(this)(edit.input({ props: { type: 'number' } }))
+                        ] : [],
                         formatters: [
                             ( value, { rowData } ) => (
                                 <span>{Formatter.toNumber(value)}</span>
@@ -128,6 +132,7 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
 
 ConstantHeadObservationPoint.propTypes = {
     perPage: PropTypes.number,
+    readOnly: PropTypes.bool,
 };
 
 export default ConstantHeadObservationPoint;

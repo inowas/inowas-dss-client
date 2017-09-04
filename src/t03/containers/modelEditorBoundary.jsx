@@ -193,6 +193,7 @@ class ModelEditorBoundary extends React.Component {
                 property={property}
                 id={id}
                 type={type}
+                readOnly={readOnly}
                 removeBoundary={removeBoundary}
                 editBoundary={Routing.editBoundary(routes, params)}
                 createBoundary={Routing.createBoundary(routes, params)}

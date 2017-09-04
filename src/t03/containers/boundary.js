@@ -42,11 +42,12 @@ class BoundariesOverview extends React.PureComponent {
             editBoundary,
             editBoundaryOnMap,
             createBoundary,
+            readOnly
         } = this.props;
 
         let addNew = '';
 
-        if (type) {
+        if (type && !readOnly) {
             addNew = (
                 <Button
                     icon={<Icon name="add" />}
@@ -70,6 +71,7 @@ class BoundariesOverview extends React.PureComponent {
                         editBoundary={editBoundary}
                         editBoundaryOnMap={editBoundaryOnMap}
                         property={property}
+                        readOnly={readOnly}
                     />
                 </div>
             </div>
@@ -86,6 +88,7 @@ BoundariesOverview.propTypes = {
     editBoundary: PropTypes.func.isRequired,
     editBoundaryOnMap: PropTypes.func.isRequired,
     createBoundary: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool,
 };
 
 export default pure(BoundariesOverview);
