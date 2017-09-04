@@ -26,10 +26,16 @@ Add the following to your `etc/hosts`
 172.17.0.1       inowas.local
 ```
 
+Build typescript container in docker-inowas-api repository
+
+```
+docker build -t inowas/typescript typescript
+```
+
 Start development server:
 
 ```
-$ docker run --rm -it -p 8080:8080 -p 3000:3000 --volume $(pwd):/app sandrokeil/typescript yarn run dev
+$ docker run --rm -it -p 8080:8080 -p 3000:3000 --volume $(pwd):/app inowas/typescript yarn run dev
 ```
 
 Open your browser with [http://inowas.local:8080](http://inowas.local:8080).
