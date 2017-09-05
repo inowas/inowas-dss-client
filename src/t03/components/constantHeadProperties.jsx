@@ -279,6 +279,7 @@ class ConstantHeadProperties extends React.Component {
                         >
                             <Input
                                 type="text"
+                                disabled={readOnly}
                                 value={
                                     boundary.observation_points.find(
                                         op => op.id === selectedObservationPoint
