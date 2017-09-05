@@ -57,7 +57,14 @@ const getInitialStyles = () => {
                 fillColor: 'darkgreen',
                 fillOpacity: 0.7
             },
-            iw: {
+            inw: {
+                radius: 3,
+                color: 'black',
+                weight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.7
+            },
+            irw: {
                 radius: 3,
                 color: 'black',
                 weight: 1,
