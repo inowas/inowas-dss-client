@@ -218,6 +218,10 @@ class WellProperties extends React.Component {
                                         value: 'inw'
                                     },
                                     {
+                                        label: 'Industrial Well',
+                                        value: 'iw'
+                                    },
+                                    {
                                         label: 'Irrigation Well',
                                         value: 'irw'
                                     }
