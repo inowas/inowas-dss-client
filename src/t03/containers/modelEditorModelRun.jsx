@@ -42,9 +42,15 @@ class ModelEditorModelRun extends React.Component {
         this.props.updateStressPeriods(id, data);
     };
 
+    calculateStressPeriods = (start, end, time_unit) => {
+        const {id} = this.props.params;
+        this.props.calculateStressPeriods(id, start, end, time_unit);
+    };
+
     renderProperties( ) {
         const {
             stressPeriods,
+            calculateStressPeriodsStatus,
             updateStressPeriodsStatus,
             calculateModflowModel,
             calculateModflowModelStatus,
@@ -73,6 +79,8 @@ class ModelEditorModelRun extends React.Component {
                 return (
                     <StressPeriodProperties stressPeriods={stressPeriods}
                                     onSave={this.updateStressPeriods}
+                                    onCalculate={this.calculateStressPeriods}
+                                    calculateStressPeriodsStatus={calculateStressPeriodsStatus}
                                     updateStressPeriodsStatus={updateStressPeriodsStatus}
                                     readOnly={readOnly}
                     /> );
@@ -99,6 +107,7 @@ class ModelEditorModelRun extends React.Component {
 
 const actions = {
     updateStressPeriods: Command.updateStressPeriods,
+    calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
     getModflowModelCalculation: Query.getModflowModelCalculation,
 };
@@ -107,6 +116,7 @@ const mapStateToProps = (state, { tool, params }) => {
     return {
         stressPeriods: stressPeriods.getState(state[ tool ].model),
         permissions: state[ tool ].model.permissions,
+        calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
         getModflowModelCalculationStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_CALCULATION),

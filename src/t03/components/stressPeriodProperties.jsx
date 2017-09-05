@@ -39,6 +39,10 @@ const stressPeriodsToFlowPy = (rows, start, end) => {
         };
     });
 
+    if (stressPeriods.length === 0) {
+        return [];
+    }
+
     let perlen = 0;
 
     stressPeriods = orderBy(
@@ -120,7 +124,7 @@ class StressPeriodProperties extends React.Component {
                             : Formatter.dateToYmd(
                                   prevState.stressPeriods.end_date_time
                               )
-                    ),
+                    ) && this.dataTable.getRows().length > 0,
                     stressPeriods: {
                         ...prevState.stressPeriods,
                         [name]: Formatter.dateToAtomFormat(value),
@@ -161,6 +165,14 @@ class StressPeriodProperties extends React.Component {
         });
     };
 
+    calculate = () => {
+        this.props.onCalculate(
+                this.state.stressPeriods.start_date_time,
+                this.state.stressPeriods.end_date_time,
+                4
+        );
+    };
+
     onRowChange = () => {
         this.setState(prevState => {
             return {
@@ -170,7 +182,7 @@ class StressPeriodProperties extends React.Component {
                         prevState.stressPeriods.start_date_time
                     ),
                     Formatter.dateToYmd(prevState.stressPeriods.end_date_time)
-                ),
+                ) && this.dataTable.getRows().length > 0,
                 stressPeriods: {
                     ...prevState.stressPeriods,
                     stress_periods: this.dataTable.getRows()
@@ -181,7 +193,7 @@ class StressPeriodProperties extends React.Component {
 
     render() {
         const { stressPeriods, initialized, saveable } = this.state;
-        const { updateStressPeriodsStatus, readOnly } = this.props;
+        const { updateStressPeriodsStatus, readOnly, calculateStressPeriodsStatus } = this.props;
 
         if (!initialized || !stressPeriods) {
             return <p>Loading ...</p>;
@@ -225,6 +237,12 @@ class StressPeriodProperties extends React.Component {
                                 placeholder="End date"
                             />
                         </LayoutComponents.InputGroup>
+
+                        <WebData.Component.Loading status={calculateStressPeriodsStatus}>
+                            <Button onClick={this.calculate} readOnly={readOnly}>
+                                Calculate
+                            </Button>
+                        </WebData.Component.Loading>
                     </LayoutComponents.Column>
 
                     <LayoutComponents.Column
@@ -257,9 +275,11 @@ class StressPeriodProperties extends React.Component {
 
 StressPeriodProperties.propTypes = {
     onSave: PropTypes.func.isRequired,
+    onCalculate: PropTypes.func.isRequired,
     readOnly: PropTypes.bool,
     stressPeriods: PropTypes.object,
-    updateStressPeriodsStatus: PropTypes.object
+    updateStressPeriodsStatus: PropTypes.object,
+    calculateStressPeriodsStatus: PropTypes.object,
 };
 
 export default StressPeriodProperties;

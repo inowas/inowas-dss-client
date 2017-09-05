@@ -100,10 +100,19 @@ export function layerRemoved(tool, id) {
 
 
 export const STRESS_PERIODS_UPDATED = 'stressPeriodsUpdated';
+export const STRESS_PERIODS_CALCULATED = 'stressPeriodsCalculated';
 
 export function stressPeriodsUpdated(tool, data) {
     return {
         type: STRESS_PERIODS_UPDATED,
+        tool,
+        payload: data
+    };
+}
+
+export function stressPeriodsCalculated(tool, data) {
+    return {
+        type: STRESS_PERIODS_CALCULATED,
         tool,
         payload: data
     };

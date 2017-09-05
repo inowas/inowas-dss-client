@@ -67,3 +67,13 @@ export function getModflowModelResults(tool, id) {
         id,
     };
 }
+
+export const GET_STRESS_PERIODS = 'GET_MODFLOW_MODEL_STRESS_PERIODS';
+
+export function getStressPeriods(tool, id) {
+    return {
+        type: GET_STRESS_PERIODS,
+        tool,
+        id,
+    };
+}

@@ -140,6 +140,7 @@ export function removeLayer(tool, layerId, modelId) {
 
 
 export const UPDATE_STRESS_PERIODS = 'updateStressPeriods';
+export const CALCULATE_STRESS_PERIODS = 'calculateStressPeriods';
 
 
 export function updateStressPeriods(tool, modelId, data) {
@@ -149,6 +150,19 @@ export function updateStressPeriods(tool, modelId, data) {
         payload: {
             stress_periods: data,
             id: modelId,
+        }
+    };
+}
+
+export function calculateStressPeriods(tool, modelId, start, end, time_unit) {
+    return {
+        type: CALCULATE_STRESS_PERIODS,
+        tool,
+        payload: {
+            id: modelId,
+            start,
+            end,
+            time_unit
         }
     };
 }
