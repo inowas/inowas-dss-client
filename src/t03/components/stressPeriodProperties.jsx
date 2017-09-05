@@ -238,11 +238,12 @@ class StressPeriodProperties extends React.Component {
                             />
                         </LayoutComponents.InputGroup>
 
+                        {!readOnly &&
                         <WebData.Component.Loading status={calculateStressPeriodsStatus}>
                             <Button onClick={this.calculate} readOnly={readOnly}>
                                 Calculate
                             </Button>
-                        </WebData.Component.Loading>
+                        </WebData.Component.Loading>}
                     </LayoutComponents.Column>
 
                     <LayoutComponents.Column
