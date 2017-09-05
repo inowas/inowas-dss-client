@@ -41,7 +41,7 @@ const routes = store =>
             />
 
             <Route path="T06(/:id)" component={tools.T06} />
-            <Route path="T07A/:id" component={tools.T07A} />
+            <Route path="T07A/:id" component={tools.T07A} tool={'T07'} />
             <Route path="T07B/:id" component={tools.T07B} />
             <Route path="T07C/:id" component={tools.T07C} />
             <Route path="T07D/:id" component={tools.T07D} />

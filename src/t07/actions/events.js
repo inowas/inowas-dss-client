@@ -31,3 +31,23 @@ export function scenarioAnalysisDeleted(tool, id) {
         payload: id
     };
 }
+
+export const SCENARIO_CREATED = 'scenarioCreated';
+export const SCENARIO_DELETED = 'scenarioDeleted';
+
+export function scenarioCreated(tool, id, payload) {
+    return {
+        type: SCENARIO_CREATED,
+        tool,
+        id,
+        payload
+    };
+}
+
+export function scenarioDeleted(tool, payload) {
+    return {
+        type: SCENARIO_DELETED,
+        tool,
+        payload
+    };
+}

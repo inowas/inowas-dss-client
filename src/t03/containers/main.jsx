@@ -53,6 +53,25 @@ class T03 extends React.Component {
         router.push(location.pathname + '#view');
     };
 
+    componentWillMount() {
+        const {said} = this.props.params;
+        if (said) {
+            this.setState( prevState => {
+                return {
+                    ...prevState,
+                    navigation: [
+                        ...prevState.navigation,
+                        {
+                            name: 'Back to scenario analysis',
+                            path: '/tools/T07A/' + said,
+                            icon: <Icon name="layer_horizontal_hatched" />
+                        },
+                    ]
+                };
+            } );
+        }
+    }
+
     renderProperties() {
         const isVisible =
             this.props.location.hash !== '#edit' &&

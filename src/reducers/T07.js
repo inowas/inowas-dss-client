@@ -5,6 +5,7 @@ import TimeSeriesPoint from '../model/TimeSeriesPoint';
 import TotalTime from '../model/TotalTime';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
+import {Modifier} from '../t07';
 
 function getInitialState() {
     return {
@@ -38,6 +39,12 @@ const T07Reducer = ( state = getInitialState(), action ) => {
         case 'T07_ADD_MODEL':
             state = { ...state };
             state.models.push( action.payload );
+            state.resize = true;
+            break;
+
+        case Modifier.Event.SCENARIO_DELETED:
+            state = { ...state };
+            state.models.removeById( action.payload.scenario_id );
             state.resize = true;
             break;
 

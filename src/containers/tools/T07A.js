@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import { Formatter } from '../../core';
@@ -12,6 +13,8 @@ import ArraySlider from '../../components/primitive/ArraySlider';
 import Navbar from '../Navbar';
 import ScenarioSelect from '../../components/tools/ScenarioSelect';
 import { withRouter } from 'react-router';
+import { Modifier } from '../../t07';
+import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
@@ -26,8 +29,7 @@ import {
     setSelectedTotalTimeIndex,
     toggleModelSelection,
     setMapPosition,
-    setActiveCoordinate,
-    cloneScenario
+    setActiveCoordinate
 } from '../../actions/T07';
 
 import LayerNumber from '../../model/LayerNumber';
@@ -36,16 +38,7 @@ import TotalTime from '../../model/TotalTime';
 import ModflowModelResult from '../../model/ModflowModelResult';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
-@connect(store => {
-    return { tool: store.T07 };
-})
-
-class T07A extends Component {
-    static propTypes = {
-        dispatch: PropTypes.func.isRequired,
-        params: PropTypes.object,
-        tool: PropTypes.object.isRequired
-    };
+class T07A extends React.Component {
 
     constructor(props) {
         super(props);
@@ -305,8 +298,14 @@ class T07A extends Component {
 
     cloneScenario() {
         return id => {
-            this.props.dispatch(cloneScenario(id));
-        };
+            this.props.dispatch( Modifier.Command.createScenario(this.props.route.tool, this.props.params.id, id, uuid.v4() ) )
+        }
+    }
+
+    deleteScenario() {
+        return id => {
+            this.props.dispatch( Modifier.Command.deleteScenario(this.props.route.tool, this.props.params.id, id) )
+        }
     }
 
     renderChart() {
@@ -464,6 +463,7 @@ class T07A extends Component {
                                 <ScenarioSelect
                                     said={id}
                                     clone={this.cloneScenario()}
+                                    deleteScenario={this.deleteScenario()}
                                     scenarios={models}
                                     toggleSelection={this.toggleSelection}
                                 />
@@ -490,4 +490,16 @@ class T07A extends Component {
     }
 }
 
-export default withRouter(T07A);
+T07A.propTypes = {
+    tool: PropTypes.object
+};
+
+const mapStateToProps = (state, props) => {
+    return {
+        tool: state[props.route.tool],
+    };
+};
+
+export default withRouter(
+    connect(mapStateToProps)(T07A)
+);

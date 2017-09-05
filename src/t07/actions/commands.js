@@ -40,3 +40,29 @@ export function deleteScenarioAnalysis(tool, id) {
         }
     };
 }
+export const CREATE_SCENARIO = 'createScenario';
+export const DELETE_SCENARIO = 'deleteScenario';
+
+export function createScenario(tool, id, baseModelId, scenarioId) {
+    return {
+        type: CREATE_SCENARIO,
+        tool,
+        id,
+        payload: {
+            id,
+            scenario_id: scenarioId,
+            basemodel_id: baseModelId
+        }
+    };
+}
+
+export function deleteScenario(tool, id, scenarioId) {
+    return {
+        type: DELETE_SCENARIO,
+        tool,
+        payload: {
+            id,
+            scenario_id: scenarioId,
+        }
+    };
+}

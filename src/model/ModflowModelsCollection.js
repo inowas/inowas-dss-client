@@ -1,6 +1,4 @@
-import { unionBy } from 'lodash';
-
-import MfModel from './ModflowModel';
+import { unionBy, remove } from 'lodash';
 
 export default class ModflowModelsCollection {
 
@@ -37,6 +35,11 @@ export default class ModflowModelsCollection {
     push = ( model ) => {
         // don't just push, because we don't wan't duplicates
         this._models = unionBy([model], this._models.reverse(), 'modelId').reverse();
+        return this._models.length;
+    };
+
+    removeById = ( id ) => {
+        this._models = remove(this._models, m => m.modelId !== id);
         return this._models.length;
     };
 

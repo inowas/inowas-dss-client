@@ -1,29 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import '../../less/scenarioSelect.less';
 import Icon from '../primitive/Icon';
 import { Link } from 'react-router';
 import Button from '../primitive/Button'
 
-export default class ScenarioItem extends React.Component {
-
-    static propTypes = {
-        said: React.PropTypes.string.isRequired,
-        scenario: React.PropTypes.object.isRequired,
-        clone: React.PropTypes.func.isRequired,
-        toggleSelection: React.PropTypes.func.isRequired
-    }
-
+class ScenarioItem extends React.Component {
     toggleSelection = ( ) => {
         this.props.toggleSelection( this.props.scenario.id );
-    }
+    };
 
     render( ) {
-        const { scenario, toggleSelection, clone, said } = this.props;
+        const { scenario, toggleSelection, clone, said, deleteScenario } = this.props;
         const { name, description, selected, modelId, isBaseModel } = scenario;
         return (
-            <div className="item" data-selected={selected} onClick={toggleSelection}>
-                <button className="toggle"><Icon name={selected
+            <div className="item" data-selected={selected}>
+                <button className="toggle" onClick={toggleSelection}><Icon name={selected
                 ? 'checked'
                 : 'unchecked'}/></button>
                 <div className="content">
@@ -33,7 +26,10 @@ export default class ScenarioItem extends React.Component {
                         {!isBaseModel
                             ? <Link to={'/tools/T07E/' + said + '/' + modelId}>Edit</Link>
                             : null}
+                        {!isBaseModel && <span> | </span>}
                         <Button type="link" onClick={() => clone(modelId)}>Clone</Button>
+                        {!isBaseModel && <span> | </span>}
+                        {!isBaseModel && <Button type="link" onClick={() => deleteScenario(modelId)}>Delete</Button>}
                     </p>
                 </div>
             </div>
@@ -41,3 +37,13 @@ export default class ScenarioItem extends React.Component {
     }
 
 }
+
+ScenarioItem.PropTypes = {
+    said: PropTypes.string.isRequired,
+    scenario: PropTypes.object.isRequired,
+    clone: PropTypes.func.isRequired,
+    deleteScenario: PropTypes.func.isRequired,
+    toggleSelection: PropTypes.func.isRequired
+};
+
+export default ScenarioItem;

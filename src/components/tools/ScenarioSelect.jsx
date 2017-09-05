@@ -8,9 +8,9 @@ import '../../less/scenarioSelect.less';
 class ScenarioSelect extends React.Component {
 
     renderScenarios( scenarios ) {
-        const { clone, said } = this.props;
+        const { clone, said, deleteScenario } = this.props;
         return scenarios.map((s, index) => {
-            return ( <ScenarioItem clone={clone} key={index} said={said} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
+            return ( <ScenarioItem clone={clone} deleteScenario={deleteScenario} key={index} said={said} scenario={s} toggleSelection={this.props.toggleSelection(s.modelId)}/> );
         });
     }
 
@@ -27,6 +27,7 @@ ScenarioSelect.PropTypes = {
     said: PropTypes.string.isRequired,
     scenarios: PropTypes.object.isRequired,
     clone: PropTypes.func.isRequired,
+    deleteScenario: PropTypes.func.isRequired,
     toggleSelection: PropTypes.func.isRequired
 };
 
