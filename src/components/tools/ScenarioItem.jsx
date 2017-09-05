@@ -5,6 +5,7 @@ import '../../less/scenarioSelect.less';
 import Icon from '../primitive/Icon';
 import { Link } from 'react-router';
 import Button from '../primitive/Button'
+import {includes} from 'lodash';
 
 class ScenarioItem extends React.Component {
     toggleSelection = ( ) => {
@@ -13,7 +14,9 @@ class ScenarioItem extends React.Component {
 
     render( ) {
         const { scenario, toggleSelection, clone, said, deleteScenario } = this.props;
-        const { name, description, selected, modelId, isBaseModel } = scenario;
+        const { name, description, selected, modelId, isBaseModel, permissions } = scenario;
+        const readOnly = !includes(permissions, 'w');
+
         return (
             <div className="item" data-selected={selected}>
                 <button className="toggle" onClick={toggleSelection}><Icon name={selected
@@ -24,12 +27,12 @@ class ScenarioItem extends React.Component {
                     <p>{description}</p>
                     <p>
                         {!isBaseModel
-                            ? <Link to={'/tools/T07E/' + said + '/' + modelId}>Edit</Link>
+                            ? <Link to={'/tools/T07E/' + said + '/' + modelId}>{readOnly ? 'View' : 'Edit'}</Link>
                             : null}
-                        {!isBaseModel && <span> | </span>}
-                        <Button type="link" onClick={() => clone(modelId)}>Clone</Button>
-                        {!isBaseModel && <span> | </span>}
-                        {!isBaseModel && <Button type="link" onClick={() => deleteScenario(modelId)}>Delete</Button>}
+                        {!isBaseModel && !readOnly && <span> | </span>}
+                        {!readOnly && <Button type="link" onClick={() => clone(modelId)}>Clone</Button>}
+                        {!isBaseModel && !readOnly && <span> | </span>}
+                        {!isBaseModel && !readOnly && <Button type="link" onClick={() => deleteScenario(modelId)}>Delete</Button>}
                     </p>
                 </div>
             </div>

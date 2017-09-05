@@ -41,7 +41,8 @@ export default class ModflowModel {
         nx,
         ny,
         calculationId,
-        selected
+        selected,
+        permissions
     ) {
         const model = new ModflowModel(modelId, isBaseModel);
         model.area = area;
@@ -50,6 +51,7 @@ export default class ModflowModel {
         model._grid = new Grid(boundingBox, nx, ny);
         model._calculationId = calculationId;
         model.selected = selected;
+        model.permissions = permissions;
         return model;
     }
 

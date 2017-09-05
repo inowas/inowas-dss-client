@@ -42,6 +42,11 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             state.resize = true;
             break;
 
+        case 'T07_CLEAR_MODELS':
+            state = { ...state };
+            state.models = new ModflowModels();
+            break;
+
         case Modifier.Event.SCENARIO_DELETED:
             state = { ...state };
             state.models.removeById( action.payload.scenario_id );

@@ -33,6 +33,12 @@ export function addModel(model) {
     };
 }
 
+export function clearModels() {
+    return {
+        type: 'T07_CLEAR_MODELS',
+    };
+}
+
 export function reloadDone() {
     return {
         type: 'T07_RELOAD_DONE'
@@ -272,9 +278,11 @@ export function fetchDetails(id, onSuccess) {
                     gridSize.n_x,
                     gridSize.n_y,
                     action.payload.data.base_model.calculation_id,
-                    true
+                    true,
+                    action.payload.data.base_model.permissions,
                 );
 
+                dispatch(clearModels());
                 dispatch(addModel(baseModel));
                 dispatch(setMapPosition({ bounds: boundingBox.toArray() }));
                 dispatch(fetchModelBoundaries(baseModel.modelId));
@@ -300,7 +308,8 @@ export function fetchDetails(id, onSuccess) {
                         gridSize.n_x,
                         gridSize.n_y,
                         sc.calculation_id,
-                        i === scenarios.length - 1
+                        i === scenarios.length - 1,
+                        baseModel.permissions
                     );
 
                     dispatch(addModel(scenario));
