@@ -1,6 +1,6 @@
 import styleGlobals from 'styleGlobals';
 
-const getInitialStyles = () => {
+export const getInitialStyles = () => {
     return {
         area: {
             weight: 5,

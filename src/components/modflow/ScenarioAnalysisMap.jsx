@@ -23,6 +23,7 @@ import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import { sortBy } from 'lodash';
 import styleGlobals from 'styleGlobals';
 import { RainbowVis } from '../../core';
+import { Selector } from '../../t03';
 
 const RadiumMap = ConfiguredRadium(Map);
 
@@ -80,71 +81,6 @@ const styles = {
             weight: 1,
             fillColor: 'darkblue',
             fillOpacity: 1
-        },
-        wells: {
-            cw: {
-                radius: 3,
-                color: 'black',
-                weight: 1,
-                fillColor: 'darkgreen',
-                fillOpacity: 0.7
-            },
-            iw: {
-                radius: 3,
-                color: 'black',
-                weight: 1,
-                fillColor: 'darkgreen',
-                fillOpacity: 0.7
-            },
-            sniw: {
-                radius: 5,
-                color: 'red',
-                weight: 2,
-                fillColor: 'darkgreen',
-                fillOpacity: 0.7
-            },
-            puw: {
-                radius: 3,
-                color: 'black',
-                weight: 1,
-                fillColor: 'darkblue',
-                fillOpacity: 0.7
-            },
-            snpw: {
-                radius: 5,
-                color: 'red',
-                weight: 2,
-                fillColor: 'darkblue',
-                fillOpacity: 0.7
-            },
-            prw: {
-                radius: 3,
-                color: 'black',
-                weight: 1,
-                fillColor: 'darkblue',
-                fillOpacity: 0.7
-            },
-            smw: {
-                radius: 5,
-                color: 'black',
-                weight: 1,
-                fillColor: 'red',
-                fillOpacity: 1
-            },
-            snw: {
-                radius: 5,
-                color: 'black',
-                weight: 1,
-                fillColor: 'yellow',
-                fillOpacity: 1
-            },
-            snifw: {
-                radius: 5,
-                color: '#63b3ea',
-                weight: 2,
-                fillColor: '#bbdff6',
-                fillOpacity: 0.7
-            }
         },
         river: {
             color: '#000',
@@ -349,12 +285,14 @@ export default class ScenarioAnalysisMap extends Component {
             return null;
         }
 
+        const wellStyles = Selector.model.getInitialStyles();
+
         const wells = boundaries.map((b, index) => {
             if (b.type === 'wel') {
                 const geometry = b.geometry;
                 const metadata = b.metadata;
 
-                const style = styles.mapElements.wells[metadata.well_type];
+                const style = wellStyles.wel[metadata.well_type];
                 return (
                     <CircleMarker
                         key={index}
