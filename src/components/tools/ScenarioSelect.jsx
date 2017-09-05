@@ -1,17 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import ScenarioItem from './ScenarioItem';
 
 import '../../less/scenarioSelect.less';
 
-export default class ScenarioSelect extends Component {
-
-    static propTypes = {
-        said: PropTypes.string.isRequired,
-        scenarios: PropTypes.array.isRequired,
-        clone: PropTypes.func.isRequired,
-        toggleSelection: PropTypes.func.isRequired
-    }
+class ScenarioSelect extends React.Component {
 
     renderScenarios( scenarios ) {
         const { clone, said } = this.props;
@@ -27,5 +21,13 @@ export default class ScenarioSelect extends Component {
             </div>
         );
     }
-
 }
+
+ScenarioSelect.PropTypes = {
+    said: PropTypes.string.isRequired,
+    scenarios: PropTypes.object.isRequired,
+    clone: PropTypes.func.isRequired,
+    toggleSelection: PropTypes.func.isRequired
+};
+
+export default ScenarioSelect;

@@ -5,6 +5,7 @@ import * as WebData from './webData';
 import * as Formatter from './formatter';
 import * as Helper from './helpers';
 import * as RainbowVis from './rainbowVis';
+import * as Routing from './routing';
 
 export {
     DataTable,
@@ -13,5 +14,6 @@ export {
     WebData,
     Formatter,
     Helper,
-    RainbowVis
+    RainbowVis,
+    Routing
 };

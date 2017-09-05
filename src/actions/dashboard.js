@@ -1,6 +1,7 @@
 import ConfiguredAxios from 'ConfiguredAxios';
 import { getApiKey } from '../reducers/user';
-import { Modifier } from '../t03';
+import { Modifier as T03 } from '../t03';
+import { Modifier as T07 } from '../t07';
 import uuid from 'uuid';
 
 export function setActiveTool( tool ) {
@@ -50,7 +51,10 @@ export function cloneToolInstance( id ) {
 
         switch (tool) {
             case 'T03':
-                return dispatch( Modifier.Command.cloneModflowModel( tool, id, uuid.v4()) );
+                return dispatch( T03.Command.cloneModflowModel( tool, id, uuid.v4()) );
+                break;
+            case 'T07':
+                return dispatch( T07.Command.cloneScenarioAnalysis( tool, id, uuid.v4()) );
                 break;
             default:
                 break;
@@ -65,7 +69,10 @@ export function deleteToolInstance( id ) {
 
         switch (tool) {
             case 'T03':
-                return dispatch( Modifier.Command.deleteModflowModel( tool, id ) );
+                return dispatch( T03.Command.deleteModflowModel( tool, id ) );
+                break;
+            case 'T07':
+                return dispatch( T07.Command.deleteScenarioAnalysis( tool, id ) );
                 break;
             default:
                 break;

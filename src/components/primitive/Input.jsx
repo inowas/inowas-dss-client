@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 import Icon from './Icon';
@@ -61,47 +62,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class Input extends Component {
-    static propTypes = {
-        type: PropTypes.oneOf([
-            'checkbox',
-            'color',
-            'date',
-            'datetime',
-            'datetime-local',
-            'email',
-            'file',
-            'hidden',
-            'image',
-            'month',
-            'number',
-            'password',
-            'radio',
-            'range',
-            'reset',
-            'search',
-            'submit',
-            'tel',
-            'text',
-            'time',
-            'url',
-            'week',
-            'textarea'
-        ]),
-        appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
-        style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-        inputStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-        onChange: PropTypes.func,
-        value: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number,
-            PropTypes.boolean,
-            PropTypes.object
-        ]),
-        disabled: PropTypes.bool,
-        cast: PropTypes.func,
-        validator: PropTypes.func
-    };
+class Input extends React.Component {
 
     static defaultProps = {
         type: 'text',
@@ -230,3 +191,46 @@ export default class Input extends Component {
         );
     }
 }
+
+Input.PropTypes = {
+    type: PropTypes.oneOf([
+        'checkbox',
+        'color',
+        'date',
+        'datetime',
+        'datetime-local',
+        'email',
+        'file',
+        'hidden',
+        'image',
+        'month',
+        'number',
+        'password',
+        'radio',
+        'range',
+        'reset',
+        'search',
+        'submit',
+        'tel',
+        'text',
+        'time',
+        'url',
+        'week',
+        'textarea'
+    ]),
+    appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    inputStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    onChange: PropTypes.func,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.object
+    ]),
+    disabled: PropTypes.bool,
+    cast: PropTypes.func,
+    validator: PropTypes.func
+};
+
+export default Input;

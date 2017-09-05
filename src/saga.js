@@ -1,6 +1,7 @@
 import { takeEvery, call } from 'redux-saga/effects';
 import { WebData } from './core';
 import { Saga as T03 } from './t03/index';
+import { Saga as T07 } from './t07/index';
 
 export default function* rootSaga() {
     yield [
@@ -26,5 +27,8 @@ export default function* rootSaga() {
         call(T03.loadResultsFlow),
         call(T03.cloneModflowModelFlow),
         call(T03.deleteModlfowModelFlow),
+        call(T07.createScenarioAnalysisFlow),
+        call(T07.cloneScenarioAnalysisFlow),
+        call(T07.deleteScenarioAnalysisFlow),
     ];
 }

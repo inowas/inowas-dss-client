@@ -19,7 +19,7 @@ export default function* calculateModflowModelFlow() {
             const state = yield select();
             const apiKey = getApiKey( state.user );
 
-            const data = yield call(
+            yield call(
                 WebData.Helpers.fetchStatusWrapper,
                 buildRequest( 'messagebox', 'POST', JSON.stringify( {
                     metadata: [],
@@ -30,7 +30,6 @@ export default function* calculateModflowModelFlow() {
             );
             yield put( Query.getModflowModelCalculation( action.tool, action.id ) );
         } catch (err) {
-            console.log( { err } );
             let msg = 'Unknown Error';
 
             if (typeof err === 'string') {
