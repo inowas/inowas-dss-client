@@ -19,7 +19,7 @@ export default function* calculateModflowModelFlow() {
             const state = yield select();
             const apiKey = getApiKey( state.user );
 
-            const data = yield call(
+            yield call(
                 WebData.Helpers.fetchStatusWrapper,
                 buildRequest( 'messagebox', 'POST', JSON.stringify( {
                     metadata: [],
