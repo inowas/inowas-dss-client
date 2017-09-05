@@ -201,11 +201,11 @@ class WellProperties extends React.Component {
                                 id={typeInputId}
                                 value={
                                     boundary.metadata
-                                        ? boundary.metadata.boundary_type
+                                        ? boundary.metadata.well_type
                                         : ''
                                 }
                                 onChange={this.handleSelectChange(
-                                    'boundary_type',
+                                    'well_type',
                                     'metadata'
                                 )}
                                 options={[
