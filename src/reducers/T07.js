@@ -109,7 +109,6 @@ const T07Reducer = ( state = getInitialState(), action ) => {
 
         case 'T07A_SET_MODEL_RESULT':
             state = { ...state };
-            console.log(action.payload._totalTime._totim);
             state.models.map( m => {
                 if ( m.calculationId === action.payload.calculationId ) {
                     m.result = action.payload;

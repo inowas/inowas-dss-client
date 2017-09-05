@@ -25,7 +25,6 @@ export function cloneScenarioAnalysis(tool, id, newId) {
         tool,
         id,
         payload: {
-            is_tool: true,
             id,
             new_id: newId
         }

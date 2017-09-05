@@ -30,7 +30,6 @@ export default function* calculateModflowModelFlow() {
             );
             yield put( Query.getModflowModelCalculation( action.tool, action.id ) );
         } catch (err) {
-            console.log( { err } );
             let msg = 'Unknown Error';
 
             if (typeof err === 'string') {
