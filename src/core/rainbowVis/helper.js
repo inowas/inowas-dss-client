@@ -1,8 +1,15 @@
 import percentile from 'percentile';
 
 export function extractRangeFromHeatMapData(heatMapData) {
-    let min = percentile(5, heatMapData, o => o.value).value;
-    let max = percentile(95, heatMapData, o => o.value).value;
+    if (heatMapData.length === 0) {
+        return {
+            min: -1,
+            max: 1
+        };
+    }
+
+    let min = percentile( 5, heatMapData, o => o.value ).value;
+    let max = percentile( 95, heatMapData, o => o.value ).value;
 
     if (min === max) {
         min = min - 1;
