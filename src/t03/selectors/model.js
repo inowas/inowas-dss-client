@@ -57,6 +57,20 @@ const getInitialStyles = () => {
                 fillColor: 'darkgreen',
                 fillOpacity: 0.7
             },
+            puw: {
+                radius: 3,
+                color: 'black',
+                weight: 1,
+                fillColor: 'darkblue',
+                fillOpacity: 0.7
+            },
+            iw: {
+                radius: 3,
+                color: 'black',
+                weight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.7
+            },
             inw: {
                 radius: 3,
                 color: 'black',
@@ -76,13 +90,6 @@ const getInitialStyles = () => {
                 color: 'red',
                 weight: 2,
                 fillColor: 'darkgreen',
-                fillOpacity: 0.7
-            },
-            puw: {
-                radius: 3,
-                color: 'black',
-                weight: 1,
-                fillColor: 'darkblue',
                 fillOpacity: 0.7
             },
             snpw: {
@@ -125,6 +132,7 @@ const getInitialStyles = () => {
             }
         },
         default: {
+            radius: 5,
             weight: 2,
             opacity: 1,
             color: 'blue',
