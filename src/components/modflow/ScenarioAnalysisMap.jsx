@@ -156,11 +156,7 @@ export default class ScenarioAnalysisMap extends Component {
         if (
             nextProps.mapData &&
             nextProps.mapData.heatMapData &&
-            nextProps.mapData.heatMapData.length > 0 &&
-            (!this.props.mapData ||
-                !this.props.mapData.heatMapData ||
-                nextProps.mapData.heatMapData !==
-                    this.props.mapData.heatMapData)
+            nextProps.mapData.heatMapData.length > 0
         ) {
             const newHeatMapData = this.restructureHeatMapData(
                 nextProps.mapData.heatMapData

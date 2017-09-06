@@ -28,6 +28,10 @@ export default class ModflowModelsCollection {
         return this._models.filter( callback );
     };
 
+    sort = ( callback ) => {
+        return this._models.sort( callback );
+    };
+
     map = ( callback ) => {
         return this._models.map( callback );
     };
