@@ -18,6 +18,7 @@ import styleGlobals from 'styleGlobals';
 import { sendQuery } from '../../actions/messageBox';
 import { HeadResultsChart } from '../components';
 import uuid from 'uuid';
+import {includes} from 'lodash';
 
 const styles = {
     selectWrapper: {
@@ -192,6 +193,9 @@ class ModelEditorResultsHead extends Component {
             activeCoordinate
         } = this.state;
 
+        console.log({model});
+        const readOnly = !includes(model.permissions, 'w');
+
         if (!model || !times || !layerValues) {
             return <div>Loading!</div>;
         }
@@ -296,11 +300,12 @@ class ModelEditorResultsHead extends Component {
                         />
                     </WebData.Component.Loading>
                 </div>
+                {!readOnly &&
                 <div style={[styles.saveButtonWrapper]}>
                     <WebData.Component.Loading status={createScenarioAnalysisStatus}>
                         <Button onClick={this.createScenarioAnalysis}>Create new Scenario Analysis</Button>
                     </WebData.Component.Loading>
-                </div>
+                </div>}
             </div>
         );
     }
