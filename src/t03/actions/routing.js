@@ -43,6 +43,10 @@ export const editBoundary = (routes, params) => (property, type, pid) => {
     Routing.goToUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid})
 };
 
+export const editBoundaryUrl = (routes, params) => (property, type, pid) => {
+    return Routing.buildUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid})
+};
+
 export const editBoundaryOnMap = (routes, params) => (property, type, pid) => {
     Routing.goToUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid}, '#edit')
 };

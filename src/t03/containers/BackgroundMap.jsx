@@ -18,7 +18,7 @@ import { geoJSON, geoJson } from 'leaflet';
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
-import { Action, Command } from '../../t03/actions/index';
+import { Action, Command, Routing } from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
 import {getBoundaryDefaultsByType} from '../selectors/boundary';
 
@@ -27,8 +27,7 @@ import Icon from '../../components/primitive/Icon';
 import L from 'leaflet';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
-import { uniqueId } from 'lodash';
-import {editBoundary} from '../actions/routing';
+import { uniqueId, has } from 'lodash';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -173,7 +172,9 @@ class BackgroundMap extends Component {
             <Popup>
                 <div>
                     <div>{b.name}</div>
-                    <a onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type ) }>Edit</a>
+                    <a href="#" onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type, false ) }>Edit</a>
+                    {/*<span> | </span>*/}
+                    {/*<a href="#" onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type, true ) }>Move</a>*/}
                 </div>
             </Popup>
         );
@@ -361,10 +362,15 @@ class BackgroundMap extends Component {
         return null;
     };
 
-    getStartDate = () => '2000-01-01T00:00:00+00:00';
+    getStartDate = () => has(this.state, 'model.stress_periods.start_date_time')
+        ? this.state.model.stress_periods.start_date_time
+        : '2010-01-01T00:00:00+00:00';
 
     onCreated = e => {
         const type = this.getCreatable();
+        const {routes, params} = this.props;
+        const editBoundary = Routing.editBoundaryUrl(routes, params);
+
         if (type === 'area') {
             const polygon = e.layer;
             const json = polygon.toGeoJSON();
@@ -373,8 +379,10 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'chd') {
-            const linestring = e.layer.bindPopup('my popup text').openPopup();
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const linestring = e.layer.bindPopup(
+                '<a href="' + editBoundary('boundaries', 'chd', type + '-' + newBoundaryNumber) + '" title="Edit Constant Head">Constant Head ' + newBoundaryNumber + '</a>'
+            ).openPopup();
 
             const boundary = getBoundaryDefaultsByType(
                 type,
@@ -388,8 +396,10 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'ghb') {
-            const linestring = e.layer.bindPopup('my popup text').openPopup();
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const linestring = e.layer.bindPopup(
+                '<a href="' + editBoundary('boundaries', 'ghb', type + '-' + newBoundaryNumber) + '" title="Edit General Head">General Head ' + newBoundaryNumber + '</a>'
+            ).openPopup();
 
             const boundary = getBoundaryDefaultsByType(
                 type,
@@ -403,8 +413,11 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'rch') {
-            const polygon = e.layer.bindPopup('my popup text').openPopup();
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const polygon = e.layer.bindPopup(
+                '<a href="' + editBoundary('boundaries', 'rch', type + '-' + newBoundaryNumber) + '" title="Edit Recharge">Recharge ' + newBoundaryNumber + '</a>'
+            ).openPopup();
 
             const boundary = getBoundaryDefaultsByType(
                 type,
@@ -418,8 +431,10 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'riv') {
-            const linestring = e.layer.bindPopup('my popup text').openPopup();
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const linestring = e.layer.bindPopup(
+                '<a href="' + editBoundary('boundaries', 'riv', type + '-' + newBoundaryNumber) + '" title="Edit River">River ' + newBoundaryNumber + '</a>'
+            ).openPopup();
 
             const boundary = getBoundaryDefaultsByType(
                 type,
@@ -433,8 +448,11 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'wel') {
-            const point = e.layer.bindPopup('my popup text').openPopup();
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
+
+            const point = e.layer.bindPopup(
+                '<a href="' + editBoundary('boundaries', 'wel', type + '-' + newBoundaryNumber) + '" title="Edit well">Well ' + newBoundaryNumber + '</a>'
+            ).openPopup();
 
             const boundary = getBoundaryDefaultsByType(
                 type,
@@ -742,9 +760,15 @@ class BackgroundMap extends Component {
         browserHistory.push(this.props.location.pathname);
     };
 
-    returnToBoundariesWithBoundaryId = ( id, type ) => {
+    returnToBoundariesWithBoundaryId = ( id, type, onMap ) => {
         this.invalidateMap();
-        editBoundary('boundaries', type, id);
+        const {routes, params} = this.props;
+
+        if (onMap) {
+            Routing.editBoundaryOnMap(routes, params)('boundaries', type, id);
+        } else {
+            Routing.editBoundary(routes, params)('boundaries', type, id);
+        }
     };
 
     centerToBounds = () => {
