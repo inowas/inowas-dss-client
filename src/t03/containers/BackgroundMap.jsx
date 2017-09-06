@@ -829,10 +829,26 @@ class BackgroundMap extends Component {
                         zoom={3}
                         zoomControl={false}
                     >
-                        <TileLayer
-                            url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-                            attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
-                        />
+                        <LayersControl position="topright">
+                            <LayersControl.BaseLayer name="OSM">
+                                <TileLayer
+                                    url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                                    attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
+                                />
+                            </LayersControl.BaseLayer>
+                            <LayersControl.BaseLayer name="OSM.BlackAndWhite">
+                                <TileLayer
+                                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                                    url="http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                                />
+                            </LayersControl.BaseLayer>
+                            <LayersControl.BaseLayer name="OSM.Mapnik" checked>
+                                <TileLayer
+                                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                                    url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                                />
+                            </LayersControl.BaseLayer>
+                        </LayersControl>
                         {this.renderCreateControl()}
                     </Map>
                     {this.renderToast()}
@@ -854,7 +870,7 @@ class BackgroundMap extends Component {
                     }}
                 >
                     <LayersControl position="topright">
-                        <LayersControl.BaseLayer name="OSM" checked>
+                        <LayersControl.BaseLayer name="OSM">
                             <TileLayer
                                 url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                                 attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> &copy; <a href=&quot;http://cartodb.com/attributions&quot;>CartoDB</a>"
@@ -866,7 +882,7 @@ class BackgroundMap extends Component {
                                 url="http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="OSM.Mapnik">
+                        <LayersControl.BaseLayer name="OSM.Mapnik" checked>
                             <TileLayer
                                 attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                                 url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"

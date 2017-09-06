@@ -55,6 +55,10 @@ export const createBoundary = (routes, params) =>  (property, type) => {
     Routing.goToUrl(routes, {...filterParamsForBoundaryType(params), property, type}, '#create')
 };
 
+export const createArea = (routes, params) =>  () => {
+    Routing.goToUrl(routes, {said: null, id: null, property: null, type: null, pid: null}, '#create')
+};
+
 export const editLayer = (routes, params) => (pid) => {
     Routing.goToUrl(routes, {...filterParamsForBoundaryType(params), property: 'soilmodel', type: '!', pid});
 };

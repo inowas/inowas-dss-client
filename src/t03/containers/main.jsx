@@ -143,12 +143,8 @@ class T03 extends React.Component {
                         name: 'calculation'
                     },
                     {
-                        title: 'Show logs',
-                        name: 'logs'
-                    },
-                    {
-                        title: 'Show Namfile',
-                        name: 'nam'
+                        title: 'Show Listfile',
+                        name: 'listfile'
                     }
                 ]
             },

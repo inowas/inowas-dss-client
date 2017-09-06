@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Query, Command, Action } from '../actions/index';
+import { Query, Command, Action, Routing } from '../actions/index';
 import { model as modelSelector, general } from '../selectors/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
@@ -12,9 +12,8 @@ import {
     hasError,
     isLoading
 } from '../../core/webData/selectors/webData';
-import { WebData } from '../../core';
+import { WebData, LayoutComponents } from '../../core';
 import uuid from 'uuid';
-// import * as filters from '../../calculations/filter';
 import { GeneralMap } from '../components';
 import * as lodash from 'lodash';
 import Button from '../../components/primitive/Button';
@@ -22,7 +21,6 @@ import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import TimeUnit from '../../model/TimeUnit';
 import LengthUnit from '../../model/LengthUnit';
-import { LayoutComponents } from '../../core';
 
 const styles = {
     columnContainer: {
@@ -157,7 +155,7 @@ class ModelEditorGeneral extends Component {
     };
 
     createAreaOnMap = () => {
-        browserHistory.push(this.props.location.pathname + '#create');
+        Routing.createArea(this.props.routes, this.props.params)();
     };
 
     save(id) {
