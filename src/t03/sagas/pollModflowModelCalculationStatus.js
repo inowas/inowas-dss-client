@@ -57,7 +57,7 @@ export default function* pollModflowModelCalculationStatusFlow() {
                 yield put( sendQuery( `modflowmodels/${action.id}/calculation`, Query.GET_MODFLOW_MODEL_CALCULATION ) );
                 continue;
             }
-            if (WebData.Helpers.isSuccess( responseCalculation ) && responseCalculation.webData.data.state === STATE_FINISHED) {
+            if (WebData.Helpers.isSuccess( responseCalculation ) && (responseCalculation.webData.data.state === STATE_FINISHED || responseCalculation.webData.data.state === STATE_NEW)) {
                 yield put( Query.getModflowModelResults(action.tool, action.id) );
 
                 yield put( WebData.Modifier.Action.responseAction( Command.CALCULATE_MODFLOW_MODEL, {
