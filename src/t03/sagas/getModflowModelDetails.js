@@ -18,17 +18,19 @@ export default function* getModflowDetailsFlow() {
             yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
 
             if (storedModel.id !== action.id) {
-                const [model, boundaries, results, soilmodel] = yield all([
+                const [model, boundaries, results, soilmodel, calculation] = yield all([
                     call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id, 'GET'), apiKey),
                     call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/boundaries', 'GET'), apiKey),
                     call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/results', 'GET'), apiKey),
-                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/soilmodel', 'GET'), apiKey)
+                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/soilmodel', 'GET'), apiKey),
+                    call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/calculation', 'GET'), apiKey),
                 ]);
 
                 yield put( Action.setModflowModel( action.tool, payloadToSetModel( model ) ) );
                 yield put( Action.setBoundaries( action.tool, boundaries ) );
                 yield put( Action.setResults( action.tool, results ) );
                 yield put( Action.setSoilmodel( action.tool, soilmodel ) );
+                yield put( Action.setCalculation( action.tool, calculation ) );
             }
 
             if (action.property === 'boundaries' && action.pId) {

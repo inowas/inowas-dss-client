@@ -4,11 +4,11 @@ import { Query, Action } from '../../t03/actions/index';
 import { getApiKey } from '../../reducers/user';
 import { WebData } from '../../core';
 
-export default function* loadResultsFlow() {
+export default function* loadListfileFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
         // eslint-disable-next-line no-shadow
-        const action = yield take( action => WebData.Helpers.waitForAction( action, Query.GET_RESULTS ) );
+        const action = yield take( action => WebData.Helpers.waitForAction( action, Query.GET_LISTFILE ) );
 
         yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
 
@@ -16,14 +16,13 @@ export default function* loadResultsFlow() {
         const apiKey = getApiKey( state.user );
 
         try {
-            const results = yield call(
+            const data = yield call(
                 WebData.Helpers.fetchStatusWrapper,
-                buildRequest( 'modflowmodels/' + action.id + '/results', 'GET' ),
+                buildRequest( 'calculations/' + action.id + '/file/list', 'GET' ),
                 apiKey
             );
 
-            yield put( Action.setResults( action.tool, results ) );
-            yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
+            yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data}));
         } catch (err) {
             let msg = 'Unknown Error';
 

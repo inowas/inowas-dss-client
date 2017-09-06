@@ -77,3 +77,13 @@ export function getStressPeriods(tool, id) {
         id,
     };
 }
+
+export const GET_LISTFILE = 'GET_MODFLOW_MODEL_LISTFILE';
+
+export function getListfile(tool, id) {
+    return {
+        type: GET_LISTFILE,
+        tool,
+        id,
+    };
+}

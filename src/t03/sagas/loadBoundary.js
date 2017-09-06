@@ -25,6 +25,7 @@ export default function* loadBoundaryFlow() {
             );
 
             yield put( Action.setBoundary( action.tool, action.bid, boundary ) );
+            yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
         } catch ( err ) {
             let msg = 'Unknown Error';
 

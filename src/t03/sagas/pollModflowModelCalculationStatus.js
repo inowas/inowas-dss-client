@@ -1,7 +1,7 @@
 import { put, take } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { sendQuery } from '../../actions/messageBox';
-import { Query, Command } from '../../t03/actions/index';
+import { Query, Command, Action } from '../../t03/actions/index';
 import { WebData } from '../../core';
 
 const STATE_NEW = 0;
@@ -59,6 +59,7 @@ export default function* pollModflowModelCalculationStatusFlow() {
             }
             if (WebData.Helpers.isSuccess( responseCalculation ) && (responseCalculation.webData.data.state === STATE_FINISHED || responseCalculation.webData.data.state === STATE_NEW)) {
                 yield put( Query.getModflowModelResults(action.tool, action.id) );
+                yield put( Action.setCalculation( action.tool, responseCalculation.webData.data ) );
 
                 yield put( WebData.Modifier.Action.responseAction( Command.CALCULATE_MODFLOW_MODEL, {
                     type: 'success',

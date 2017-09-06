@@ -10,6 +10,7 @@ import { stressPeriods } from '../../t03/selectors';
 import { StressPeriodProperties } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from "../components/runModelProperties";
+import ListfileProperties from '../components/ListfileProperties';
 
 const styles = {
     container: {
@@ -56,7 +57,10 @@ class ModelEditorModelRun extends React.Component {
             calculateModflowModelStatus,
             getModflowModelCalculationStatus,
             getModflowModelCalculation,
+            getListfileStatus,
+            getListfile,
             permissions,
+            calculation,
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
@@ -73,6 +77,14 @@ class ModelEditorModelRun extends React.Component {
                         getModflowModelCalculationStatus={getModflowModelCalculationStatus}
                         getModflowModelCalculation={getModflowModelCalculation}
                         id={id}
+                    />
+                );
+            case 'listfile':
+                return (
+                    <ListfileProperties
+                        getListfileStatus={getListfileStatus}
+                        getListfile={getListfile}
+                        calculation={calculation}
                     />
                 );
             case 'times':
@@ -110,16 +122,19 @@ const actions = {
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
     getModflowModelCalculation: Query.getModflowModelCalculation,
+    getListfile: Query.getListfile,
 };
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
         stressPeriods: stressPeriods.getState(state[ tool ].model),
         permissions: state[ tool ].model.permissions,
+        calculation: state[ tool ].model.calculation,
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
         getModflowModelCalculationStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_CALCULATION),
+        getListfileStatus: WebData.Selector.getStatusObject(state, Query.GET_LISTFILE),
     };
 };
 

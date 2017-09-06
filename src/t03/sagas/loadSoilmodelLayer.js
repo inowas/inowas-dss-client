@@ -23,6 +23,7 @@ export default function* loadSoilmodelLayerFlow() {
             );
 
             yield put( Action.setLayer( action.tool, action.lid, layer ) );
+            yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
         } catch ( err ) {
             let msg = 'Unknown Error';
 
