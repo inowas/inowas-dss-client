@@ -193,7 +193,6 @@ class ModelEditorResultsHead extends Component {
             activeCoordinate
         } = this.state;
 
-        console.log({model});
         const readOnly = !includes(model.permissions, 'w');
 
         if (!model || !times || !layerValues) {

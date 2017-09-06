@@ -210,6 +210,7 @@ class ModelEditorGeneral extends Component {
         const { model: stateModel } = this.state;
 
         const readOnly = model && !lodash.includes(model.permissions, 'w');
+        const hasArea = model && model.geometry;
 
         // TODO use WebData loading component if ready
         if (id && isLoading(getModflowModelDetailsStatus)) {
@@ -392,7 +393,7 @@ class ModelEditorGeneral extends Component {
                             }
                         >
                             <Button
-                                disabled={readOnly}
+                                disabled={readOnly || !hasArea}
                                 onClick={() => {
                                     this.save(id);
                                 }}
