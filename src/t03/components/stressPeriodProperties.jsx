@@ -252,6 +252,7 @@ class StressPeriodProperties extends React.Component {
                     >
                         {!readOnly && <DataTableAction component={this.dataTable} />}
                         <StressPeriodDataTable
+                            startDate={stressPeriods.start_date_time}
                             readOnly={readOnly}
                             ref={dataTable => (this.dataTable = dataTable)}
                             rows={data}

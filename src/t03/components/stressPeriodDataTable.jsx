@@ -166,7 +166,7 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
         const totim_start =
             lastRow && lastRow.totim_start
                 ? new Date(lastRow.totim_start)
-                : new Date();
+                : this.props.startDate;
         const nstp = lastRow && lastRow.nstp ? lastRow.nstp : 1;
         const tsmult = lastRow && lastRow.tsmult ? lastRow.tsmult : 1;
         const steady = lastRow && lastRow.steady ? lastRow.steady : false;
@@ -191,7 +191,8 @@ class StressPeriodDataTable extends DataTable.Component.DataTable {
 
 StressPeriodDataTable.propTypes = {
     perPage: PropTypes.number,
-    onRowChange: PropTypes.func.isRequired
+    onRowChange: PropTypes.func.isRequired,
+    startDate: PropTypes.string,
 };
 
 export default StressPeriodDataTable;
