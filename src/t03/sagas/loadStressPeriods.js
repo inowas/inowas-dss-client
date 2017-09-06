@@ -23,6 +23,7 @@ export default function* loadStressPeriodsFlow() {
             );
 
             yield put( Action.setStressPeriods( action.tool, stressPeriods ) );
+            yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
         } catch ( err ) {
             let msg = 'Unknown Error';
 

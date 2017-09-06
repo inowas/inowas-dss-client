@@ -7,6 +7,7 @@ import createModelFlow from './createModel';
 import deleteModlfowModelFlow from './deleteModlfowModel';
 import getModflowModelDetailsFlow from './getModflowModelDetails';
 import loadBoundaryFlow from './loadBoundary';
+import loadListfileFlow from './loadListfile';
 import loadModelFlow from './loadModel';
 import loadResultsFlow from './loadResults';
 import loadSoilmodelLayerFlow from './loadSoilmodelLayer';
@@ -29,6 +30,7 @@ export {
     deleteModlfowModelFlow,
     getModflowModelDetailsFlow,
     loadBoundaryFlow,
+    loadListfileFlow,
     loadModelFlow,
     loadResultsFlow,
     loadSoilmodelLayerFlow,

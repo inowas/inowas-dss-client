@@ -159,7 +159,8 @@ export const getInitialState = () => {
         boundaries: null,
         results: null,
         soilmodel: null,
-        permissions: 'rwx'
+        permissions: 'rwx',
+        calculation: {state: 0, calculation_id: '', message: ''}
     };
 };
 

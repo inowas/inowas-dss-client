@@ -117,6 +117,9 @@ const createModelReducer = tool => {
             case Action.SET_SOILMODEL:
                 return {...state, soilmodel: action.payload};
 
+            case Action.SET_CALCULATION:
+                return {...state, calculation: action.payload};
+
             default:
                 return state;
         }

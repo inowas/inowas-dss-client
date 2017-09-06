@@ -18,6 +18,7 @@ export default function* rootSaga() {
         call(T03.deleteModlfowModelFlow),
         call(T03.getModflowModelDetailsFlow),
         call(T03.loadBoundaryFlow),
+        call(T03.loadListfileFlow),
         call(T03.loadModelFlow),
         call(T03.loadResultsFlow),
         call(T03.loadSoilmodelLayerFlow),
