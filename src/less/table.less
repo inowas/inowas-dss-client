@@ -8,10 +8,40 @@
 
     thead tr {
         border-bottom: 1px solid @grey-dark;
+        display: table;
+        table-layout: fixed;
     }
 
     tbody tr {
         border-bottom: 1px solid @grey-semi-bright;
+        display: table;
+        table-layout: fixed;
+    }
+
+    tbody tr.error-row {
+        background-color: @warning-red;
+    }
+
+    thead {
+        flex: 0 0 auto;
+        width: 100%;
+        tr {
+            width: calc(100% - 0.9em); /* 0.9em approximates scrollbar width */
+            display: table;
+        }
+    }
+
+    tbody {
+        display: block;
+        flex: 1 1 auto;
+        overflow-y: scroll;
+
+        tr {
+            width: 100%;
+        }
+
+        tr.selected-row {
+        }
     }
 
     td,
@@ -27,5 +57,32 @@
 
     td {
         font-weight: 300;
+    }
+
+    .sort {
+        cursor: pointer;
+        cursor: hand;
+    }
+    .sort-order {
+        display:none;
+    }
+    .sort:after {
+        padding-left: 1em;
+
+        font-size: 0.5em;
+    }
+    .sort-none:after {
+        content: '\21D5';
+
+        padding-left: 0.5em;
+        font-size: 1em;
+    }
+    .sort-asc:after {
+        content: '\25BC';
+
+    }
+    .sort-desc:after {
+        content: '\25B2';
+
     }
 }

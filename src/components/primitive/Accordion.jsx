@@ -1,56 +1,69 @@
 import React, { Component, PropTypes } from 'react';
 
-import '../../less/accordion.less';
+import ConfiguredRadium from 'ConfiguredRadium';
 
+@ConfiguredRadium
 export default class Accordion extends Component {
 
     static propTypes = {
-        className: PropTypes.string,
+        style: PropTypes.object,
         children: PropTypes.node.isRequired,
+        active: PropTypes.bool,
         firstActive: PropTypes.number
-    }
+    };
 
     static defaultProps = {
-        firstActive: 0
-    }
+        firstActive: 0,
+        active: false
+    };
 
     constructor( props ) {
         super( props );
 
         this.state = {
-            activeIndex: props.firstActive
+            activeIndex: props.firstActive,
+            active: props.active
+
         };
     }
 
+    componentDidUpdate( prevProps ) {
+        const { firstActive, active } = this.props;
+
+        if ( firstActive !== prevProps.firstActive ) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ activeIndex: firstActive });
+        }
+    }
+
     toggleActiveItem = ( index ) => {
-        return () => {
+        return ( ) => {
             let newIndex = index;
             if ( index === this.state.activeIndex ) {
                 newIndex = null;
             }
             this.setState({ activeIndex: newIndex });
         };
-    }
+    };
 
     render( ) {
-        const { className } = this.props;
-
+        const { style } = this.props;
         let index = 0;
         const children = React.Children.map(this.props.children, ( child ) => {
             const currentIndex = index++;
             const active = ( currentIndex === this.state.activeIndex );
             return React.cloneElement(child, {
                 index: currentIndex,
-                active,
-                toggleActive: this.toggleActiveItem(currentIndex)
+                active: active,
+                last: (currentIndex + 1 === this.props.children.length || !( this.props.children instanceof Array )),
+                toggleActive: this.toggleActiveItem( currentIndex )
             });
         });
 
         return (
-            <div className={'accordion' + ' ' + className}>
+            <div style={[ style ]}>
                 {children}
             </div>
         );
     }
-
 }

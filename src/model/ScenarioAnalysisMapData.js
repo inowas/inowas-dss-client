@@ -5,56 +5,83 @@ import BoundingBox from './BoundingBox';
  * CrossSectionMapDataObject Base Class
  */
 export default class ScenarioAnalysisMapData {
-
     _area;
     _grid;
     _boundaries = [];
     _xCrossSection;
     _timeSeriesGridCells = [];
-    _legend;
-    _heatMapUrl;
+    _heatMapData;
+    _globalMin;
+    _globalMax;
 
-    constructor({area, grid, boundaries = null, xCrossSection = null, timeSeriesGridCells = null, legend = null, heatMapUrl = null}) {
+    constructor({
+        area,
+        grid,
+        boundaries = null,
+        xCrossSection = null,
+        timeSeriesGridCells = null,
+        heatMapData = null,
+        globalMin = null,
+        globalMax = null
+    }) {
         this._area = area;
 
-        if ( !( grid instanceof Grid ) ) {
-            throw new Error( 'Expected second parameter to be a Grid, but got ' + ( typeof grid ) );
+        if (!(grid instanceof Grid)) {
+            throw new Error(
+                'Expected second parameter to be a Grid, but got ' + typeof grid
+            );
         }
         this._grid = grid;
 
         // null is permitted
-        if ( !( boundaries instanceof Array ) && boundaries !== null ) {
-            throw new Error( 'Expected third parameter to be an array, but got ' + ( typeof boundaries ) );
+        if (!(boundaries instanceof Array) && boundaries !== null) {
+            throw new Error(
+                'Expected third parameter to be an array, but got ' +
+                    typeof boundaries
+            );
         }
         this._boundaries = boundaries;
 
         // null is permitted
-        if ( !( xCrossSection instanceof BoundingBox ) && xCrossSection !== null ) {
-            throw new Error( 'Expected fourth parameter to be a BoundingBox, but got ' + ( typeof xCrossSection ) );
+        if (!(xCrossSection instanceof BoundingBox) && xCrossSection !== null) {
+            throw new Error(
+                'Expected fourth parameter to be a BoundingBox, but got ' +
+                    typeof xCrossSection
+            );
         }
         this._xCrossSection = xCrossSection;
 
         // null is permitted
-        if ( !( timeSeriesGridCells instanceof Array ) && timeSeriesGridCells !== null ) {
-            throw new Error( 'Expected fifth parameter to be an array, but got ' + ( typeof timeSeriesGridCells ) );
+        if (
+            !(timeSeriesGridCells instanceof Array) &&
+            timeSeriesGridCells !== null
+        ) {
+            throw new Error(
+                'Expected fifth parameter to be an array, but got ' +
+                    typeof timeSeriesGridCells
+            );
         }
         this._timeSeriesGridCells = timeSeriesGridCells;
 
         // null is permitted
-        if ( !( legend instanceof Array ) && legend !== null ) {
-            throw new Error( 'Expected sixth parameter to be an array, but got ' + ( typeof legend ) );
+        if (!(heatMapData instanceof Array) && heatMapData !== null) {
+            throw new Error(
+                'Expected sixth parameter to be a string, but got ' +
+                    typeof heatMapData
+            );
         }
-        this._legend = legend;
+        this._heatMapData = heatMapData;
 
-        // null is permitted
-        if(typeof heatMapUrl !== 'string' && heatMapUrl !== null) {
-            throw new Error('Expected seventh parameter to be a string, but got ' + (typeof heatMapUrl));
-        }
-        this._heatMapUrl = heatMapUrl;
+        this._globalMin = globalMin;
+        this._globalMax = globalMax;
     }
 
     get area() {
         return this._area;
+    }
+
+    get grid() {
+        return this._grid;
     }
 
     get boundingBox() {
@@ -73,11 +100,15 @@ export default class ScenarioAnalysisMapData {
         return this._timeSeriesGridCells;
     }
 
-    get legend() {
-        return this._legend;
+    get heatMapData() {
+        return this._heatMapData;
     }
 
-    get heatMapUrl() {
-        return this._heatMapUrl;
+    get globalMin() {
+        return this._globalMin;
+    }
+
+    get globalMax() {
+        return this._globalMax;
     }
 }

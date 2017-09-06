@@ -7,13 +7,13 @@ export default class Settings extends React.Component {
         var object= [];
         if (this.props.data.xwd >= 0) {
             object= {
-                name: 'Tool 13B',
+                name: 'PropertyWrapper 13B',
                 img: image13B,
                 href: "../T13B/13B_1"
             }
         } else {
             object= {
-                name: 'Tool 13C',
+                name: 'PropertyWrapper 13C',
                 img: image13C,
                 href: "../T13C/13C_1"
             }

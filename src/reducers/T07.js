@@ -5,6 +5,7 @@ import TimeSeriesPoint from '../model/TimeSeriesPoint';
 import TotalTime from '../model/TotalTime';
 import ResultType from '../model/ResultType';
 import LayerNumber from '../model/LayerNumber';
+import {Modifier} from '../t07';
 
 function getInitialState() {
     return {
@@ -38,6 +39,17 @@ const T07Reducer = ( state = getInitialState(), action ) => {
         case 'T07_ADD_MODEL':
             state = { ...state };
             state.models.push( action.payload );
+            state.resize = true;
+            break;
+
+        case 'T07_CLEAR_MODELS':
+            state = { ...state };
+            state.models = new ModflowModels();
+            break;
+
+        case Modifier.Event.SCENARIO_DELETED:
+            state = { ...state };
+            state.models.removeById( action.payload.scenario_id );
             state.resize = true;
             break;
 
@@ -87,7 +99,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             }
 
             if ( state.selectedTotalTimeIndex === null ) {
-                state.selectedTotalTimeIndex = state.totalTimes.length-1;
+                state.selectedTotalTimeIndex = state.totalTimes.length - 1;
             }
 
             break;
@@ -109,7 +121,6 @@ const T07Reducer = ( state = getInitialState(), action ) => {
 
         case 'T07A_SET_MODEL_RESULT':
             state = { ...state };
-            console.log(action.payload);
             state.models.map( m => {
                 if ( m.calculationId === action.payload.calculationId ) {
                     m.result = action.payload;
@@ -128,14 +139,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
             } );
             break;
 
-        case 'T07_SET_BOUNDS':
-            state = {
-                ...state,
-                mapPosition: action.payload
-            };
-            break;
-
-        case 'T07_SET_MAP_VIEW':
+        case 'T07_SET_MAP_POSITION':
             state = {
                 ...state,
                 mapPosition: action.payload

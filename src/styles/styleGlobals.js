@@ -4,6 +4,7 @@ const styleGlobals = {
     colors: {
         primary: '#1EB1ED',
         accent: '#ED8D05',
+        font: '#4C4C4C',
         background: '#FEFEFE',
         backgroundWrapper: '#EFF3F6',
 
@@ -22,7 +23,8 @@ const styleGlobals = {
             large: 20,
             medium: 10,
             small: 5
-        }
+        },
+        borderRadius: 3
     },
 
     boxShadow: '0 0 2px ' + color('#404040').fade(0.3)

@@ -35,7 +35,7 @@ export default class ControlPointList extends Component {
         state: PropTypes.string,
         addControlPoint: PropTypes.func,
         updateControlPoint: PropTypes.func,
-        setState: PropTypes.func,
+        setEditorState: PropTypes.func,
         setActiveControlPoint: PropTypes.func,
         deleteControlPoint: PropTypes.func
     }
@@ -81,7 +81,7 @@ export default class ControlPointList extends Component {
 
     render( ) {
         // eslint-disable-next-line no-shadow
-        const { style, title, list, setState, state, statePrefix, backTo } = this.props;
+        const { style, title, list, setEditorState, state, statePrefix, backTo } = this.props;
         const stateWithoutPrefix = state.replace(statePrefix + '-', '' );
 
         return (

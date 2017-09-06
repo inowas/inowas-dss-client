@@ -2,17 +2,18 @@
 
 import { DefinePlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin } from 'webpack';
 
-import DashboardPlugin from 'webpack-dashboard/plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
 export default {
-    devtool: 'inline-source-map',
+    devtool: "#inline-source-map",
     devServer: {
         historyApiFallback: true,
         hot: true,
-        stats: 'minimal'
+        stats: 'minimal',
+        host: "0.0.0.0",
+        disableHostCheck: true
     },
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
@@ -24,7 +25,8 @@ export default {
     output: {
         path: path.resolve( __dirname, 'build/' ),
         filename: '[name].js',
-        publicPath: '/'
+        publicPath: '/',
+        sourceMapFilename: '[name].map'
     },
     plugins: [
         new HtmlWebpackPlugin( {
@@ -39,7 +41,6 @@ export default {
             'process.env.NODE_ENV': JSON.stringify( 'development' )
         } ),
         new FaviconsWebpackPlugin( 'images/favicon.png' ),
-        new DashboardPlugin()
     ],
     module: {
         rules: [

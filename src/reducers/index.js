@@ -1,14 +1,8 @@
-import { combineReducers } from 'redux';
-import { routerReducer as routing } from 'react-router-redux';
-
-import appState from './applicationStateReducer';
-// import model from './modelReducer';
-import dashboard from './dashboard';
-// import models from './modelsReducer';
 import T02 from './T02';
 import T03 from './T03';
 import T06 from './T06';
 import T07 from './T07';
+import T07E from './T07E';
 import T08 from './T08';
 import T09A from './T09A';
 import T09B from './T09B';
@@ -27,21 +21,22 @@ import T14C from './T14C';
 import T14D from './T14D';
 import T16 from './T16';
 import T18 from './T18';
-// import scenarioAnalysis from './scenarioAnalysisReducer';
+import { combineReducers } from 'redux';
+import dashboard from './dashboard';
+import { routerReducer as routing } from 'react-router-redux';
 import user from './user';
+import {WebData} from '../core';
 
 const rootReducer = combineReducers( {
     routing,
     user,
-    appState,
+    webData: WebData.Reducer.webData,
     dashboard,
-    // models,
-    // model,
-    // scenarioAnalysis,
     T02,
     T03,
     T06,
     T07,
+    T07E,
     T08,
     T09A,
     T09B,

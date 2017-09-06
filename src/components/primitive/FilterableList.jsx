@@ -1,128 +1,133 @@
 /**
- * Takes an array of objects like [{name, type}]
+ * Takes an array of objects shape of [{id, name, type}]
  *
  * @author Martin Wudenka
  */
+import React, { PropTypes } from 'react';
 
-import React, { Component, PropTypes } from 'react';
-
+import Accordion from './Accordion';
+import AccordionItem from './AccordionItem';
 import ConfiguredRadium from 'ConfiguredRadium';
 import List from './List';
-import ListItem from './ListItem';
-import { uniqBy } from 'lodash';
-import levenshtein from 'levenshtein';
+import { groupBy, keys } from 'lodash';
+import { pure } from 'recompose';
 
 const styles = {
     wrapper: {
-        height: '100%',
         display: 'flex',
         flexDirection: 'column'
     },
 
-    filterButton: {
-        base: {
-            background: 'transparent',
-            display: 'inline-block',
-            border: 0,
-            borderRadius: 0,
-            cursor: 'pointer',
-            textDecoration: 'underline',
+    searchWrapper: {
+        marginBottom: 6
+    },
 
-            ':hover': {
-                color: '#000000'
-            }
-        }
+    content: {
+        flex: 1,
+        minHeight: 0,
+        overflow: 'auto'
+    },
+
+    group: {
+        background: '#EEEEEE',
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderBottom: 0
+    },
+
+    overview: {
+        fontWeight: 600,
+        paddingTop: 8,
+        paddingBottom: 8,
+        textTransform: 'uppercase',
+        cursor: 'pointer'
     },
 
     list: {
-        flex: 1,
-        overflow: 'auto'
+        background: '#FBFBFB'
+    },
+
+    accordionTitleNumber: {
+        marginLeft: '0.5em',
+        fontWeight: 400
     }
 };
 
 @ConfiguredRadium
-export default class FilterableList extends Component {
-
+class FilterableList extends React.PureComponent {
     static propTypes = {
         list: PropTypes.array.isRequired,
         style: PropTypes.object,
-        clickAction: PropTypes.func
-    }
+        onCategoryClick: PropTypes.func,
+        itemClickAction: PropTypes.func.isRequired,
+        activeType: PropTypes.string
+    };
 
-    state = {
-        filterType: '',
-        searchTerm: ''
-    }
-
-    setFilterType = type => {
-        return ( ) => {
-            this.setState({ filterType: type });
-        };
-    }
-
-    itemClickAction = id => {
-        return ( ) => {
-            this.props.clickAction( id );
-        };
-    }
-
-    setSearchTerm = e => {
-        this.setState({ searchTerm: e.target.value });
-    }
-
-    renderFilterButton( text, onClick, index = 0 ) {
-        return (
-            <button key={index} onClick={onClick} style={styles.filterButton.base}>{text}</button>
-        );
-    }
-
-    render( ) {
+    render() {
         const {
             style,
             list,
-            // eslint-disable-next-line no-unused-vars
-            clickAction,
-            ...rest
+            activeType,
+            itemClickAction,
+            onCategoryClick
         } = this.props;
-        const { filterType, searchTerm } = this.state;
 
-        const filter = uniqBy( list, 'type' );
-
-        let filteredList = list;
-        if ( filterType ) {
-            filteredList = list.filter(i => ( i.type === filterType ));
-        }
-
-        if ( searchTerm ) {
-            const listWithLevenshteinDistance = filteredList.map(i => {
-                const leven = new levenshtein( i.name, searchTerm );
-                return {
-                    ...i,
-                    levenshtein: leven.distance
-                };
-            });
-
-            listWithLevenshteinDistance.sort(( a, b ) => {
-                return a.levenshtein - b.levenshtein;
-            });
-
-            filteredList = listWithLevenshteinDistance;
-        }
+        const groupedList = groupBy(list, 'type');
+        const keyList = keys(groupedList);
+        const firstActive =
+            keyList.indexOf(activeType) !== -1
+                ? keyList.indexOf(activeType)
+                : 0;
 
         return (
-            <div {...rest} style={[ style, styles.wrapper ]}>
-                <div>
-                    filter: {this.renderFilterButton( 'all', this.setFilterType( null ), filter.length )}
-                    {filter.map(( f, index ) => this.renderFilterButton( f.type, this.setFilterType( f.type ), index ))}
-
-                    <div>
-                        <input className="input" placeholder="search..." value={searchTerm} onChange={this.setSearchTerm}/>
-                    </div>
+            <div style={[styles.wrapper, style]}>
+                <div style={styles.content}>
+                    {(() => {
+                        if (keyList.length === 1) {
+                            return (
+                                <List
+                                    itemClickAction={itemClickAction}
+                                    style={styles.list}
+                                    data={groupedList[keyList[0]]}
+                                />
+                            );
+                        }
+                        return (
+                            <Accordion firstActive={firstActive}>
+                                {keyList.map(key =>
+                                    <AccordionItem
+                                        style={styles.group}
+                                        key={key}
+                                        heading={
+                                            <span>
+                                                {key}
+                                                <span
+                                                    style={[
+                                                        styles.accordionTitleNumber
+                                                    ]}
+                                                >
+                                                    ({groupedList[key].length})
+                                                </span>
+                                            </span>
+                                        }
+                                        onClick={
+                                            onCategoryClick &&
+                                            onCategoryClick(key)
+                                        }
+                                    >
+                                        <List
+                                            itemClickAction={itemClickAction}
+                                            style={styles.list}
+                                            data={groupedList[key]}
+                                        />
+                                    </AccordionItem>
+                                )}
+                            </Accordion>
+                        );
+                    })()}
                 </div>
-                <List style={styles.list}>
-                    {filteredList.map(( i, index ) => <ListItem clickAction={this.itemClickAction( i.id )} key={index}>{i.name}</ListItem>)}
-                </List>
             </div>
         );
     }
 }
+export default pure(FilterableList);

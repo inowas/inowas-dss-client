@@ -1,40 +1,99 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import dateFormat from 'dateformat';
-
-import Accordion from '../components/primitive/Accordion';
-import AccordionItem from '../components/primitive/AccordionItem';
-import { Link } from 'react-router';
-import Icon from '../components/primitive/Icon';
-import Popup from '../components/primitive/Popup';
-import StackedNav from '../components/primitive/StackedNav';
-import { fetchDashboardModelsT07 } from '../actions/dashboard';
-import Navbar from './Navbar';
-
 import '../less/dashboard.less';
 
-@connect(( store ) => {
-    return ({ dashboardStore: store.dashboard });
-})
-export default class Dashboard extends React.Component {
+import React, { PropTypes } from 'react';
+import {
+    deleteToolInstance,
+    cloneToolInstance,
+    fetchInstances,
+    setActiveTool,
+    setPublic
+} from '../actions/dashboard';
+import { getActiveToolSlug, getPublic } from '../reducers/dashboard/ui';
+import { getTool, getTools } from '../reducers/dashboard/tools';
 
+import Button from '../components/primitive/Button';
+import ConfiguredRadium from 'ConfiguredRadium';
+import { Formatter } from '../core';
+import Icon from '../components/primitive/Icon';
+import Input from '../components/primitive/Input';
+import Menu from '../components/primitive/Menu';
+import Navbar from './Navbar';
+import Popup from '../components/primitive/Popup';
+import Table from '../components/primitive/table/Table';
+import Td from '../components/primitive/table/Td';
+import Tr from '../components/primitive/table/Tr';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import styleGlobals from 'styleGlobals';
+
+const styles = {
+    menu: {
+        width:
+            2 * styleGlobals.dimensions.gridColumn +
+            styleGlobals.dimensions.gridGutter,
+        marginRight: styleGlobals.dimensions.gridGutter
+    },
+
+    linkActive: {
+        textDecoration: 'underline'
+    },
+
+    lastTd: {
+        position: 'relative',
+        width: 0,
+        padding: 0
+    },
+
+    actionWrapper: {
+        position: 'absolute',
+        right: 0,
+        width: 500
+    },
+
+    actionContent: {
+        paddingLeft: 50,
+        paddingTop: styleGlobals.dimensions.spacing.small,
+        paddingRight: styleGlobals.dimensions.spacing.small,
+        paddingBottom: styleGlobals.dimensions.spacing.small - 1,
+        background:
+            'linear-gradient(to right, transparent, ' +
+            styleGlobals.colors.background +
+            ' 50px)',
+        float: 'right'
+    },
+
+    action: {
+        marginLeft: styleGlobals.dimensions.spacing.large
+    }
+};
+
+@ConfiguredRadium
+class Dashboard extends React.Component {
     static propTypes = {
-        dispatch: PropTypes.func.isRequired,
-        dashboardStore: PropTypes.object.isRequired
+        tools: PropTypes.array,
+        activeTool: PropTypes.object,
+        publicInstances: PropTypes.bool,
+        setActiveTool: PropTypes.func.isRequired,
+        fetchInstances: PropTypes.func.isRequired,
+        setPublic: PropTypes.func.isRequired,
+        cloneToolInstance: PropTypes.func.isRequired,
+        deleteToolInstance: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired
     };
 
     state = {
-        active: 'T07',
         popupVisible: false,
-        navigation: [{
-            name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/',
-            icon: <Icon name="file"/>
-        }, {
-            name: 'Datasets',
-            path: 'https://kb.inowas.hydro.tu-dresden.de',
-            icon: <Icon name="dataset"/>
-        }/* , {
+        navigation: [
+            {
+                name: 'Documentation',
+                path: 'https://wiki.inowas.hydro.tu-dresden.de/',
+                icon: <Icon name="file" />
+            },
+            {
+                name: 'Datasets',
+                path: 'https://kb.inowas.hydro.tu-dresden.de',
+                icon: <Icon name="dataset" />
+            } /* , {
             name: 'Projects',
             icon: <Icon name="folder"/>
         }, {
@@ -43,168 +102,281 @@ export default class Dashboard extends React.Component {
         }, {
             name: 'Tools',
             icon: <Icon name="layer_horizontal_hatched"/>
-        }*/]
-    }
+        }*/
+        ],
+        hoveredInstance: null
+    };
 
     componentDidMount() {
-        this.props.dispatch(fetchDashboardModelsT07( ));
+        // eslint-disable-next-line no-shadow
+        const { activeTool, fetchInstances, publicInstances } = this.props;
+        fetchInstances(activeTool.slug, publicInstances);
     }
 
-    setToolSelection = ( slug ) => {
-        return ( ) => {
-            if ( slug === 'T07' ) {
-                this.props.dispatch(fetchDashboardModelsT07( ));
-            }
-            this.setState({ active: slug });
-        };
-    }
+    componentDidUpdate(prevProps) {
+        // eslint-disable-next-line no-shadow
+        const { activeTool, publicInstances, fetchInstances } = this.props;
 
-    renderTools( tools ) {
-        return tools.map(( tool, index ) => {
-            return (
-                <li key={index}>
-                    <button onClick={this.setToolSelection( tool.slug )} className="link" href="#">{tool.slug + ': ' + tool.name}</button>
-                </li>
-            );
-        });
-    }
-
-    renderTableRows( basePath, models ) {
-        return models.map(( model, index ) => {
-            const createdAt = new Date(model.created_at);
-            return (
-                <tr key={index}>
-                    <td>{index}</td>
-                    <td>{model.name}</td>
-                    <td>{model.project}</td>
-                    <td>{model.application}</td>
-                    <td>{dateFormat(createdAt, 'mm/dd/yyyy HH:MM')}</td>
-                    <td>{model.user_name}</td>
-                    <td>
-                        {!model.fake && <Link className="link" to={basePath + model.id}>use it <Icon name="arrow_right"/></Link>}
-                    </td>
-                </tr>
-            );
-        });
-    }
-
-    renderDataTable( ) {
-        const { active } = this.state;
-        const { tools } = this.props.dashboardStore;
-        const activeTool = tools.find(t => t.slug === active);
-
-        if ( active ) {
-            return (
-                <div className="tile col col-abs-3 stretch">
-                    <h2 className="section-title">Models of {activeTool.slug}</h2>
-                    <div className="grid-container toolbar">
-                        <div className="col col-rel-1 toolbar-search">
-                            <input className="input" placeholder="Search..." type="text"/>
-                        </div>
-                        <ul className="col stretch toolbar-edit">
-                            <li>
-                                <Link className="link" to={activeTool.path}>
-                                    <Icon name="add"/>
-                                    <span>Add new</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <button className="link" onClick={this.showPopup}>
-                                    <Icon name="import"/>
-                                    <span>Import</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button className="link" onClick={this.showPopup}>
-                                    <Icon name="share"/>
-                                    <span>Share</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button className="link" onClick={this.showPopup}>
-                                    <Icon name="trash"/>
-                                    <span>Delete</span>
-                                </button>
-                            </li>
-                        </ul>
-                        <ul className="col toolbar-public">
-                            {/* <li>
-                                <a className="link" href="#">Personal</a>
-                            </li>*/}
-                            <li>
-                                <button className="link">Public</button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Name</th>
-                                <th>Project</th>
-                                <th>Application</th>
-                                <th>Date created</th>
-                                <th>Created by</th>
-                                <th/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.renderTableRows( activeTool.path, activeTool.models )}
-                        </tbody>
-                    </table>
-                </div>
-            );
+        if (
+            activeTool.slug !== prevProps.activeTool.slug ||
+            publicInstances !== prevProps.publicInstances
+        ) {
+            fetchInstances(activeTool.slug, publicInstances);
         }
-        return null;
+    }
+
+    setToolSelection = slug => {
+        return () => {
+            this.props.setActiveTool(slug);
+        };
+    };
+
+    renderTableRows(basePath, instances) {
+        // eslint-disable-next-line no-shadow
+        const { publicInstances, cloneToolInstance, deleteToolInstance, push } = this.props;
+        return instances.map((i, index) => {
+            return (
+                <Tr
+                    key={index}
+                    onMouseEnter={() =>
+                        this.setState({ hoveredInstance: index })}
+                    onMouseLeave={() =>
+                        this.setState({ hoveredInstance: null })}
+                >
+                    <Td>
+                        {index}
+                    </Td>
+                    <Td>
+                        <Button
+                            type="link"
+                            onClick={() => push(basePath + i.id)}
+                        >
+                            {i.name}
+                        </Button>
+                    </Td>
+                    <Td>
+                        {i.project}
+                    </Td>
+                    <Td>
+                        {i.application}
+                    </Td>
+                    <Td>
+                        {Formatter.dateToDatetime(new Date(i.created_at))}
+                    </Td>
+                    <Td>
+                        {i.user_name}
+                    </Td>
+                    <Td style={[styles.lastTd]}>
+                        {(() => {
+                            if (this.state.hoveredInstance === index) {
+                                return (
+                                    <div style={[styles.actionWrapper]}>
+                                        <div style={[styles.actionContent]}>
+                                            {!i.fake &&
+                                                <Button
+                                                    style={[styles.action]}
+                                                    onClick={() => cloneToolInstance(i.id)}
+                                                    type="link"
+                                                    icon={<Icon name="clone" />}
+                                                >
+                                                    clone
+                                                </Button>}
+                                            {!i.fake &&
+                                                !publicInstances &&
+                                                <Button
+                                                    style={[styles.action]}
+                                                    onClick={() => deleteToolInstance(i.id)}
+                                                    type="link"
+                                                    icon={<Icon name="trash" />}
+                                                >
+                                                    delete
+                                                </Button>}
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            return null;
+                        })()}
+                    </Td>
+                </Tr>
+            );
+        });
+    }
+
+    renderDataTable() {
+        // eslint-disable-next-line no-shadow
+        const { activeTool, setPublic, publicInstances, push } = this.props;
+
+        return (
+            <div className="tile col col-abs-3 stretch">
+                <h2 className="section-title">
+                    Instances of {activeTool.slug}
+                </h2>
+                <div className="grid-container toolbar">
+                    <div className="col col-rel-1 toolbar-search">
+                        <Input placeholder="Search..." type="search" />
+                    </div>
+                    <ul className="col stretch toolbar-edit">
+                        <li>
+                            <Button
+                                type="link"
+                                onClick={() => push(activeTool.path)}
+                                icon={<Icon name="add" />}
+                            >
+                                Add new
+                            </Button>
+                        </li>
+                        <li>
+                            <Button
+                                type="link"
+                                onClick={this.showPopup}
+                                icon={<Icon name="import" />}
+                            >
+                                Import
+                            </Button>
+                        </li>
+                        <li>
+                            <Button
+                                type="link"
+                                onClick={this.showPopup}
+                                icon={<Icon name="share" />}
+                            >
+                                Share
+                            </Button>
+                        </li>
+                        <li>
+                            <Button
+                                type="link"
+                                onClick={this.showPopup}
+                                icon={<Icon name="trash" />}
+                            >
+                                Delete
+                            </Button>
+                        </li>
+                    </ul>
+                    <ul className="col toolbar-public">
+                        <li>
+                            <Button
+                                style={[publicInstances || styles.linkActive]}
+                                onClick={() => setPublic(false)}
+                                type="link"
+                            >
+                                Private
+                            </Button>
+                        </li>
+                        <li>
+                            <Button
+                                style={[publicInstances && styles.linkActive]}
+                                onClick={() => setPublic(true)}
+                                type="link"
+                            >
+                                Public
+                            </Button>
+                        </li>
+                    </ul>
+                </div>
+
+                <Table>
+                    <thead>
+                        <Tr head>
+                            <Td head>No.</Td>
+                            <Td head>Name</Td>
+                            <Td head>Project</Td>
+                            <Td head>Application</Td>
+                            <Td head>Date created</Td>
+                            <Td head>Created by</Td>
+                            <Td style={[styles.lastTd]} head />
+                        </Tr>
+                    </thead>
+                    <tbody>
+                        {this.renderTableRows(
+                            activeTool.path,
+                            activeTool.instances
+                        )}
+                    </tbody>
+                </Table>
+            </div>
+        );
     }
 
     closePopup = () => {
-        this.setState({
-            popupVisible: false
-        });
-    }
+        this.setState({ popupVisible: false });
+    };
 
     showPopup = () => {
-        this.setState({
-            popupVisible: true
-        });
-    }
+        this.setState({ popupVisible: true });
+    };
 
-    render( ) {
-        const {navigation} = this.state;
-        const { tools } = this.props.dashboardStore;
+    render() {
+        const { navigation } = this.state;
+        const { tools } = this.props;
+
+        const menuItems = [
+            {
+                name: 'Projects',
+                icon: <Icon name="folder" />,
+                items: [
+                    {
+                        name: 'Inowas'
+                    }
+                ]
+            },
+            {
+                name: 'Tools',
+                icon: <Icon name="tools" />,
+                items: tools.map(t => {
+                    return {
+                        name: t.slug + ': ' + t.name,
+                        onClick: this.setToolSelection(t.slug)
+                    };
+                })
+            }
+        ];
 
         return (
             <div className="dashboard">
                 <Navbar links={navigation} />
                 <div className="app-width grid-container">
-                    <StackedNav>
-                        <h2>Dashboard</h2>
-                        <Accordion firstActive={1}>
-                            <AccordionItem icon={< Icon name = "folder" />} heading="Projects">
-                                <ul className="nav-sub">
-                                    <li>
-                                        <a className="link" href="#">Inowas</a>
-                                    </li>
-                                </ul>
-                            </AccordionItem>
-                            <AccordionItem icon={< Icon name = "tools" />} heading="Tools">
-                                <ul className="nav-sub">
-                                    {this.renderTools( tools )}
-                                </ul>
-                            </AccordionItem>
-                        </Accordion>
-                    </StackedNav>
-                    {this.renderDataTable( )}
+                    <Menu
+                        firstActive={1}
+                        title="Dashboard"
+                        items={menuItems}
+                        style={styles.menu}
+                    />{' '}
+                    {this.renderDataTable()}
                 </div>
-                <Popup visible={this.state.popupVisible} close={this.closePopup}>
+                <Popup
+                    visible={this.state.popupVisible}
+                    close={this.closePopup}
+                >
                     <h2>Warning</h2>
-                    <p>
-                        You don't have the permissions to do this.
-                    </p>
+                    <p>You don't have the permissions to do this.</p>
                 </Popup>
             </div>
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        tools: getTools(state.dashboard.tools),
+        activeTool: getTool(
+            state.dashboard.tools,
+            getActiveToolSlug(state.dashboard.ui)
+        ),
+        publicInstances: getPublic(state.dashboard.ui)
+    };
+};
+
+// eslint-disable-next-line no-class-assign
+Dashboard = connect(mapStateToProps, {
+    setActiveTool,
+    fetchInstances,
+    setPublic,
+    cloneToolInstance,
+    deleteToolInstance,
+    push
+})(Dashboard);
+
+export default Dashboard;

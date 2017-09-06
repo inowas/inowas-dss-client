@@ -59,10 +59,7 @@ export default class EditableLine extends Component {
     }
 
     addControlPoint = e => {
-        const lat = e.latlng.lat;
-        const lng = e.latlng.lng;
-
-        this.props.addControlPoint( lat, lng );
+        this.props.addControlPoint( e.latlng );
     };
 
     updateControlPoint = nextProps => {
@@ -95,7 +92,7 @@ export default class EditableLine extends Component {
     addControlPoint = ( index, controlPoint ) => {
         return ( ) => {
             const { addControlPoint } = this.props;
-            addControlPoint( index, controlPoint );
+            addControlPoint( controlPoint, index );
         };
     }
 
@@ -161,7 +158,10 @@ export default class EditableLine extends Component {
     renderLine( ) {
         const { line } = this.props;
         if ( line.length > 1 ) {
-            return ( <Polyline positions={line} {...styles.line}/> );
+            return ( <Polyline positions={line.map(c => ({
+                lat: c[1],
+                lng: c[0]
+            }))} {...styles.line}/> );
         }
         return null;
     }

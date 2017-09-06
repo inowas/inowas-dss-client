@@ -1,20 +1,20 @@
-import React, { PropTypes, Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import ScenarioItem from './ScenarioItem';
 
 import '../../less/scenarioSelect.less';
 
-export default class ScenarioSelect extends Component {
+class ScenarioSelect extends React.Component {
 
-    static propTypes = {
-        scenarios: PropTypes.array.isRequired,
-        toggleSelection: PropTypes.func.isRequired
-    }
-
-    renderScenarios( scenarios ) {
-        return scenarios.map((s, index) => {
-            return ( <ScenarioItem key={index} scenario={s} toggleSelection={this.props.toggleSelection(s.calculationId)}/> );
-        });
+    renderScenarios(scenarios) {
+        const { clone, said, deleteScenario } = this.props;
+        return scenarios
+            .sort( (a, b) => a.isBaseModel ? -1 : a.name.localeCompare( b.name ) )
+            .map( (s, index) => {
+                return (<ScenarioItem clone={clone} deleteScenario={deleteScenario} key={index} said={said} scenario={s}
+                                      toggleSelection={this.props.toggleSelection( s.modelId )}/> );
+            } );
     }
 
     render( ) {
@@ -24,5 +24,14 @@ export default class ScenarioSelect extends Component {
             </div>
         );
     }
-
 }
+
+ScenarioSelect.PropTypes = {
+    said: PropTypes.string.isRequired,
+    scenarios: PropTypes.object.isRequired,
+    clone: PropTypes.func.isRequired,
+    deleteScenario: PropTypes.func.isRequired,
+    toggleSelection: PropTypes.func.isRequired
+};
+
+export default ScenarioSelect;
