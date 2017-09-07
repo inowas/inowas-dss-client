@@ -93,7 +93,7 @@ class SoilmodelLayer extends React.Component {
                     </LayoutComponents.InputGroup>
 
                     {layer.top !== 'undefined' &&
-                        <LayoutComponents.InputGroup label="Top elevation">
+                        <LayoutComponents.InputGroup label="Top elevation (m asl.)">
                             <Input
                                 disabled={readOnly}
                                 type={getTypeForInput(layer.botm)}
@@ -105,7 +105,7 @@ class SoilmodelLayer extends React.Component {
                             />
                         </LayoutComponents.InputGroup>}
 
-                    <LayoutComponents.InputGroup label="Bottom elevation">
+                    <LayoutComponents.InputGroup label="Bottom elevation (m asl.)">
                         <Input
                             disabled={readOnly}
                             type={getTypeForInput(layer.botm)}
@@ -187,15 +187,15 @@ class SoilmodelLayer extends React.Component {
                             options={[
                                 {
                                     value: 0,
-                                    label: 'is harmonic mean'
+                                    label: 'harmonic mean'
                                 },
                                 {
                                     value: 1,
-                                    label: 'is logarithmic mean'
+                                    label: 'logarithmic mean'
                                 },
                                 {
                                     value: 2,
-                                    label: 'is arithmetic mean (of saturated thickness and logarithmic mean of hydraulic conductivity)'
+                                    label: 'arithmetic mean (of saturated thickness and logarithmic mean of hydraulic conductivity)'
                                 }
                             ]}
                         />
