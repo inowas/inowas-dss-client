@@ -14,12 +14,6 @@ export default class ModflowModelsCollection {
         return this._models.length;
     }
 
-    // addModel(model) {
-    //     if (model instanceof MfModel) {
-    //         this._models.push(model);
-    //     }
-    // }
-
     forEach = ( callback ) => {
         return this._models.forEach( callback );
     };
@@ -51,9 +45,9 @@ export default class ModflowModelsCollection {
         return this._models.find( m => { return m.isBaseModel; } );
     }
 
-    count() {
+    count = () =>  {
         return this._models.length;
-    }
+    };
 
     countModelsWithResults() {
         let counter = 0;
