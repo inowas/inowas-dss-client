@@ -133,7 +133,7 @@ const T07Reducer = ( state = getInitialState(), action ) => {
         case 'T07_TOGGLE_MODEL_SELECTION':
             state = { ...state };
             state.models.map( m => {
-                if ( m.calculationId === action.payload ) {
+                if ( m.modelId === action.payload ) {
                     m.toggleSelection();
                 }
             } );
