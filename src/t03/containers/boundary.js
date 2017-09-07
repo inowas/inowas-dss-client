@@ -89,6 +89,7 @@ BoundariesOverview.propTypes = {
     editBoundaryOnMap: PropTypes.func.isRequired,
     createBoundary: PropTypes.func.isRequired,
     readOnly: PropTypes.bool,
+    tool: PropTypes.string,
 };
 
 export default pure(BoundariesOverview);
