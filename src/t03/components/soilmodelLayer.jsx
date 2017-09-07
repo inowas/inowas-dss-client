@@ -117,7 +117,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
 
-                    <LayoutComponents.InputGroup label="Hydraulic conductivity (m/day)">
+                    <LayoutComponents.InputGroup label="Horizontal hydraulic conductivity kx (m/day)">
                         <Input
                             disabled={readOnly}
                             type={getTypeForInput(layer.hk)}
@@ -129,7 +129,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
 
-                    <LayoutComponents.InputGroup label="Hydraulic anisotropy">
+                    <LayoutComponents.InputGroup label="Horizontal hydraulic anisotropy (-)">
                         <Input
                             disabled={readOnly}
                             type={getTypeForInput(layer.hani)}
@@ -141,7 +141,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
 
-                    <LayoutComponents.InputGroup label="Vertical hydraulic conductivity">
+                    <LayoutComponents.InputGroup label="Vertical hydraulic conductivity kz (m/day)">
                         <Input
                             disabled={readOnly}
                             type={getTypeForInput(layer.vka)}
@@ -177,7 +177,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
 
-                    <LayoutComponents.InputGroup label="Layer Average">
+                    <LayoutComponents.InputGroup label="Layer average calculation">
                         <Select
                             clearable={false}
                             name="layavg"
@@ -221,7 +221,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
 
-                    <LayoutComponents.InputGroup label="Specific storage">
+                    <LayoutComponents.InputGroup label="Specific storage Ss">
                         <Input
                             disabled={readOnly}
                             type={getTypeForInput(layer.ss)}
@@ -233,7 +233,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
 
-                    <LayoutComponents.InputGroup label="Specific yield">
+                    <LayoutComponents.InputGroup label="Specific yield Sy (1/m)">
                         <Input
                             disabled={readOnly}
                             type={getTypeForInput(layer.sy)}
