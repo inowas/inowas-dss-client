@@ -144,7 +144,7 @@ class Dashboard extends React.Component {
                         this.setState({ hoveredInstance: null })}
                 >
                     <Td>
-                        {index}
+                        {index + 1}
                     </Td>
                     <Td>
                         <Button
