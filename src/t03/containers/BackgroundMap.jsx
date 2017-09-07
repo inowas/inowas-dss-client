@@ -64,7 +64,7 @@ class BackgroundMap extends Component {
         location: PropTypes.object,
         model: PropTypes.object,
         params: PropTypes.object,
-        routes: PropTypes.object,
+        routes: PropTypes.array,
         setBoundaryGeometry: PropTypes.func,
         setModelArea: PropTypes.func,
         tool: PropTypes.string
@@ -342,9 +342,7 @@ class BackgroundMap extends Component {
         );
     }
 
-    getLatLngFromXY = coordinates => {
-        coordinates.map(c => [c[1], c[0]]);
-    };
+    getLatLngFromXY = coordinates => coordinates.map(c => [c[1], c[0]]);
 
     getNewBoundaryNumber = type => {
         let i = 1;
@@ -641,7 +639,6 @@ class BackgroundMap extends Component {
 
     renderEditControl() {
         const editable = this.getEditable();
-
         let editables = [];
 
         if (editable) {
