@@ -64,6 +64,7 @@ class BackgroundMap extends Component {
         location: PropTypes.object,
         model: PropTypes.object,
         params: PropTypes.object,
+        routes: PropTypes.object,
         setBoundaryGeometry: PropTypes.func,
         setModelArea: PropTypes.func,
         tool: PropTypes.string
@@ -98,9 +99,9 @@ class BackgroundMap extends Component {
         );
     }
 
-    generateKeyFunction(geometry) {
+    generateKeyFunction = geometry => {
         return md5(JSON.stringify(geometry));
-    }
+    };
 
     getBounds = geometry => {
         if (geometry) {
@@ -173,8 +174,6 @@ class BackgroundMap extends Component {
                 <div>
                     <div>{b.name}</div>
                     <a href="#" onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type, false ) }>Edit</a>
-                    {/*<span> | </span>*/}
-                    {/*<a href="#" onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type, true ) }>Move</a>*/}
                 </div>
             </Popup>
         );
@@ -343,9 +342,9 @@ class BackgroundMap extends Component {
         );
     }
 
-    getLatLngFromXY(coordinates) {
-        return coordinates.map(c => [c[1], c[0]]);
-    }
+    getLatLngFromXY = coordinates => {
+        coordinates.map(c => [c[1], c[0]]);
+    };
 
     getNewBoundaryNumber = type => {
         let i = 1;
@@ -368,8 +367,6 @@ class BackgroundMap extends Component {
 
     onCreated = e => {
         const type = this.getCreatable();
-        const {routes, params} = this.props;
-        const editBoundary = Routing.editBoundaryUrl(routes, params);
 
         if (type === 'area') {
             const polygon = e.layer;
@@ -380,89 +377,83 @@ class BackgroundMap extends Component {
 
         if (type === 'chd') {
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
-            const linestring = e.layer.bindPopup(
-                '<a href="' + editBoundary('boundaries', 'chd', type + '-' + newBoundaryNumber) + '" title="Edit Constant Head">Constant Head ' + newBoundaryNumber + '</a>'
-            ).openPopup();
+            const id = type + '-' + newBoundaryNumber;
+            const linestring = e.layer;
 
             const boundary = getBoundaryDefaultsByType(
                 type,
-                type + '-' + newBoundaryNumber,
+                id,
                 'Constant Head ' + newBoundaryNumber,
                 linestring.toGeoJSON().geometry,
                 this.getStartDate()
             );
 
             this.props.addBoundary(this.props.model.id, boundary);
+            this.returnToBoundariesWithBoundaryId(id, type, false);
         }
 
         if (type === 'ghb') {
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
-            const linestring = e.layer.bindPopup(
-                '<a href="' + editBoundary('boundaries', 'ghb', type + '-' + newBoundaryNumber) + '" title="Edit General Head">General Head ' + newBoundaryNumber + '</a>'
-            ).openPopup();
-
+            const id = type + '-' + newBoundaryNumber;
+            const linestring = e.layer;
             const boundary = getBoundaryDefaultsByType(
                 type,
-                type + '-' + newBoundaryNumber,
+                id,
                 'General Head ' + newBoundaryNumber,
                 linestring.toGeoJSON().geometry,
                 this.getStartDate()
             );
 
             this.props.addBoundary(this.props.model.id, boundary);
+            this.returnToBoundariesWithBoundaryId(id, type, false);
         }
 
         if (type === 'rch') {
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
-
-            const polygon = e.layer.bindPopup(
-                '<a href="' + editBoundary('boundaries', 'rch', type + '-' + newBoundaryNumber) + '" title="Edit Recharge">Recharge ' + newBoundaryNumber + '</a>'
-            ).openPopup();
-
+            const id = type + '-' + newBoundaryNumber;
+            const polygon = e.layer;
             const boundary = getBoundaryDefaultsByType(
                 type,
-                type + '-' + newBoundaryNumber,
+                id,
                 'Recharge ' + newBoundaryNumber,
                 polygon.toGeoJSON().geometry,
                 this.getStartDate()
             );
 
             this.props.addBoundary(this.props.model.id, boundary);
+            this.returnToBoundariesWithBoundaryId(id, type, false);
         }
 
         if (type === 'riv') {
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
-            const linestring = e.layer.bindPopup(
-                '<a href="' + editBoundary('boundaries', 'riv', type + '-' + newBoundaryNumber) + '" title="Edit River">River ' + newBoundaryNumber + '</a>'
-            ).openPopup();
-
+            const id = type + '-' + newBoundaryNumber;
+            const linestring = e.layer;
             const boundary = getBoundaryDefaultsByType(
                 type,
-                type + '-' + newBoundaryNumber,
+                id,
                 'River ' + newBoundaryNumber,
                 linestring.toGeoJSON().geometry,
                 this.getStartDate()
             );
 
             this.props.addBoundary(this.props.model.id, boundary);
+            this.returnToBoundariesWithBoundaryId(id, type, false);
         }
 
         if (type === 'wel') {
             const newBoundaryNumber = this.getNewBoundaryNumber( type );
-
-            const point = e.layer.bindPopup(
-                '<a href="' + editBoundary('boundaries', 'wel', type + '-' + newBoundaryNumber) + '" title="Edit well">Well ' + newBoundaryNumber + '</a>'
-            ).openPopup();
-
+            const id = type + '-' + newBoundaryNumber;
+            const point = e.layer;
             const boundary = getBoundaryDefaultsByType(
                 type,
-                type + '-' + newBoundaryNumber,
+                id,
                 'Well ' + newBoundaryNumber,
                 point.toGeoJSON().geometry,
                 this.getStartDate()
             );
 
             this.props.addBoundary(this.props.model.id, boundary);
+            this.returnToBoundariesWithBoundaryId(id, type, false);
         }
     };
 
