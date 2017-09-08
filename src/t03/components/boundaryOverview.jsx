@@ -124,13 +124,15 @@ class BoundaryOverview extends DataTable.Component.DataTable {
                     cell: {
                         formatters: [
                             (value, { rowData }) =>
-                                !this.props.readOnly && <Icon
-                                    name={'trash'}
+                                !this.props.readOnly && <Button
+                                    type="link"
                                     onClick={() =>
                                         this.props.removeBoundary(
                                             rowData.id,
                                             this.props.id
                                         )}
+                                    iconInside
+                                    icon={<Icon name="trash" />}
                                 />
                         ]
                     }

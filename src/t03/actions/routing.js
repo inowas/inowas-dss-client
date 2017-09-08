@@ -24,15 +24,15 @@ const filterParamsForModflowModelEdit = (params) => forIn(
 );
 
 export const goToBoundaryTypeOverview = (routes, params) => (property, type) => {
-    Routing.goToUrl(routes, {...filterParamsForBoundaryType(params), property, type})
+    Routing.goToUrl(routes, {...filterParamsForBoundaryType(params), property, type});
 };
 
 export const goToBoundaryOverview  = (routes, params) => (property) => {
-    Routing.goToUrl(routes, {...filterParamsForBoundaryOverview(params), property})
+    Routing.goToUrl(routes, {...filterParamsForBoundaryOverview(params), property});
 };
 
 export const editModflowModel = (routes, params) => (id) => {
-    Routing.goToUrl(routes, {...filterParamsForModflowModelEdit(params), id})
+    Routing.goToUrl(routes, {...filterParamsForModflowModelEdit(params), id});
 };
 
 export const editModflowModelUrl = (routes, params) => (id) => {
@@ -40,23 +40,23 @@ export const editModflowModelUrl = (routes, params) => (id) => {
 };
 
 export const editBoundary = (routes, params) => (property, type, pid) => {
-    Routing.goToUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid})
+    Routing.goToUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid});
 };
 
 export const editBoundaryUrl = (routes, params) => (property, type, pid) => {
-    return Routing.buildUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid})
+    return Routing.buildUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid});
 };
 
 export const editBoundaryOnMap = (routes, params) => (property, type, pid) => {
-    Routing.goToUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid}, '#edit')
+    Routing.goToUrl(routes, {...filterParamsForBoundaryEdit(params), property, type, pid}, '#edit');
 };
 
 export const createBoundary = (routes, params) =>  (property, type) => {
-    Routing.goToUrl(routes, {...filterParamsForBoundaryType(params), property, type}, '#create')
+    Routing.goToUrl(routes, {...filterParamsForBoundaryType(params), property, type}, '#create');
 };
 
 export const createArea = (routes, params) =>  () => {
-    Routing.goToUrl(routes, {said: null, id: null, property: null, type: null, pid: null}, '#create')
+    Routing.goToUrl(routes, {said: null, id: null, property: null, type: null, pid: null}, '#create');
 };
 
 export const editLayer = (routes, params) => (pid) => {

@@ -8,12 +8,12 @@ import '../../less/scenarioSelect.less';
 class ScenarioSelect extends React.Component {
 
     renderScenarios(scenarios) {
-        const { clone, said, deleteScenario } = this.props;
+        const { clone, said, deleteScenario, toggleSelection } = this.props;
         return scenarios
             .sort( (a, b) => a.isBaseModel ? -1 : a.name.localeCompare( b.name ) )
             .map( (s, index) => {
                 return (<ScenarioItem clone={clone} deleteScenario={deleteScenario} key={index} said={said} scenario={s}
-                                      toggleSelection={this.props.toggleSelection( s.modelId )}/> );
+                                      toggleSelection={toggleSelection( s.modelId )}/> );
             } );
     }
 
