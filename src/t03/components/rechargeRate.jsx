@@ -90,7 +90,7 @@ class RechargeRate extends DataTable.Component.DataTable {
                     cell: {
                         transforms: !this.props.readOnly ? [
                             DataTable.Helper.editable(this)(
-                                edit.input({ props: { type: 'number' } })
+                                edit.input({ props: { type: 'number', step: 0.00001 } })
                             )
                         ] : [],
                         formatters: [
