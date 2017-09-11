@@ -28,6 +28,7 @@ import L from 'leaflet';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
 import { uniqueId, has } from 'lodash';
+import GridLayer from '../components/gridLayer';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -164,6 +165,18 @@ class BackgroundMap extends Component {
         return (
             <LayersControl.Overlay name="Bounding Box" checked={false}>
                 <Rectangle bounds={bounds} {...this.getStyle('bounding_box')} />
+            </LayersControl.Overlay>
+        );
+    }
+
+    renderGrid(boundingBox, gridSize) {
+        if (!Array.isArray(boundingBox)) {
+            return null;
+        }
+
+        return (
+            <LayersControl.Overlay name="Grid" checked={false}>
+                <GridLayer boundingBox={boundingBox} gridSize={gridSize} {...this.getStyle('bounding_box')} />
             </LayersControl.Overlay>
         );
     }
@@ -805,6 +818,7 @@ class BackgroundMap extends Component {
     render() {
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
+        const gridSize = this.state.model.grid_size;
         const boundaries = this.state.model.boundaries || [];
 
         if (!area || !area.coordinates) {
@@ -878,6 +892,7 @@ class BackgroundMap extends Component {
                         </LayersControl.BaseLayer>
 
                         {this.renderArea(area)}
+                        {this.renderGrid(boundingBox, gridSize)}
                         {this.renderBoundingBox(boundingBox)}
                         {this.renderConstantHeads(boundaries)}
                         {this.renderGeneralHeads(boundaries)}
