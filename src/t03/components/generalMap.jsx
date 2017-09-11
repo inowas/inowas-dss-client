@@ -7,6 +7,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import { geoJSON } from 'leaflet';
 import md5 from 'js-md5';
+import GridLayer from "./gridLayer";
 
 const styles = {
     map: {
@@ -71,6 +72,7 @@ class ModelEditorGeneralMap extends Component {
         const { style } = this.props;
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
+        const gridSize = this.state.model.grid_size;
         const bounds = [
             [boundingBox[0][1], boundingBox[0][0]],
             [boundingBox[1][1], boundingBox[1][0]]
@@ -100,6 +102,7 @@ class ModelEditorGeneralMap extends Component {
                         bounds={bounds}
                         {...this.getStyle('bounding_box')}
                     />
+                    <GridLayer boundingBox={boundingBox} gridSize={gridSize} />
                 </RadiumMap>
             );
         }
