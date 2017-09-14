@@ -1,5 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import '../../less/4TileTool.less';
 
@@ -12,10 +15,8 @@ import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
 
-@connect((store) => {
-    return {tool: store.T09A};
-})
-export default class T09A extends React.Component {
+
+class T09A extends React.Component {
 
     state = {
         navigation: [{
@@ -23,13 +24,13 @@ export default class T09A extends React.Component {
             path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
             icon: <Icon name="file"/>
         }]
+    };
+
+    componentWillMount() {
+        this.props.calculate();
     }
 
     handleChange = (e) => {
-        if (e.target.name === 'settings') {
-            this.props.dispatch(changeSettings(e.target.value));
-        }
-
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
@@ -37,17 +38,13 @@ export default class T09A extends React.Component {
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter));
+            this.props.changeParameter(parameter);
         }
     };
 
     handleReset = () => {
-        this.props.dispatch(reset());
+        this.props.reset();
     };
-
-    componentWillMount() {
-        this.props.dispatch(calculate());
-    }
 
     render() {
         const { navigation } = this.state;
@@ -76,3 +73,28 @@ export default class T09A extends React.Component {
         );
     }
 }
+
+T09A.propTypes = {
+    tool: PropTypes.object.isRequired,
+    calculate: PropTypes.func.isRequired,
+    changeParameter: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => {
+    return {
+        tool: state.T09A,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        calculate: calculate,
+        changeParameter: changeParameter,
+        reset: reset
+    }, dispatch);
+};
+
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(T09A)
+);

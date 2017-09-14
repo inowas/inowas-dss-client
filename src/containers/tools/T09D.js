@@ -1,5 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import '../../less/4TileTool.less';
 
@@ -12,10 +15,7 @@ import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
 import Icon from '../../components/primitive/Icon';
 
-@connect((store) => {
-    return {tool: store.T09D};
-})
-export default class T09D extends React.Component {
+class T09D extends React.Component {
 
     state = {
         navigation: [{
@@ -25,9 +25,14 @@ export default class T09D extends React.Component {
         }]
     };
 
+    componentWillMount() {
+        this.props.calculate();
+    }
+
+
     handleChange = (e) => {
         if (e.target.name === 'settings') {
-            this.props.dispatch(changeSettings(e.target.value));
+            this.props.changeSettings(e.target.value);
         }
 
         if (e.target.name.startsWith('parameter')) {
@@ -37,17 +42,13 @@ export default class T09D extends React.Component {
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter));
+            this.props.changeParameter(parameter);
         }
     };
 
-    handleReset = (e) => {
-        this.props.dispatch(reset());
+    handleReset = () => {
+        this.props.reset();
     };
-
-    componentWillMount() {
-        this.props.dispatch(calculate());
-    }
 
     render() {
         const { navigation } = this.state;
@@ -78,3 +79,30 @@ export default class T09D extends React.Component {
         );
     }
 }
+
+T09D.propTypes = {
+    tool: PropTypes.object.isRequired,
+    calculate: PropTypes.func.isRequired,
+    changeParameter: PropTypes.func.isRequired,
+    changeSettings: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => {
+    return {
+        tool: state.T09D,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        calculate: calculate,
+        changeParameter: changeParameter,
+        changeSettings: changeSettings,
+        reset: reset
+    }, dispatch);
+};
+
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(T09D)
+);
