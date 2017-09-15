@@ -1,3 +1,15 @@
+import infiltration_pond from '../images/Tool06Icons/Infiltration_pond.png';
+import ASTR from '../images/Tool06Icons/ASTR.png';
+import ASR from '../images/Tool06Icons/ASR.png';
+import IDF from '../images/Tool06Icons/Dune filtration.png';
+import SAT from '../images/Tool06Icons/Soil Aquifer treatment.png';
+import Rooftop from '../images/Tool06Icons/Rainwater harvesting.png';
+import IBF from '../images/Tool06Icons/Bank filtration.png';
+import RD from '../images/Tool06Icons/Recharge release.png';
+import SS_Dam from '../images/Tool06Icons/Underground dam.png';
+import Ponds from '../images/Tool06Icons/Percolation pond.png';
+import Sand_dam from '../images/Tool06Icons/Sand dam.png';
+import image from '../images/Tool06Icons/Sand dam.png';
 function getInitialState() {
     return {
         conditions: [{
@@ -36,13 +48,23 @@ function getInitialState() {
             selected: false,
             applicable_methods: ['Ponds', 'Flooding', 'SAT', 'EI', 'IDF', 'ASR', 'ASTR', 'W-S-B']
         }, {
-            name: 'High (> 0.1 m/d)',
-            category: 'Soil infiltration capacity',
+            name: 'Sandy loams, silt loams',
+            category: 'Soil type',
             selected: true,
             applicable_methods: ['Ponds', 'Flooding', 'Ditches', 'SAT', 'EI', 'IBF', 'IDF', 'SS Dam', 'RD', 'Bund', 'Trenches', 'Rooftop']
         }, {
-            name: 'Low (<0.1 m/d)',
-            category: 'Soil infiltration capacity',
+            name: 'Deep sands, well aggregated soils',
+            category: 'Soil type',
+            selected: true,
+            applicable_methods: ['Ponds', 'Flooding', 'Ditches', 'SAT', 'EI', 'IBF', 'IDF', 'SS Dam', 'RD', 'Bund', 'Trenches', 'Rooftop']
+        }, {
+            name: 'Highly clayey soils',
+            category: 'Soil type',
+            selected: false,
+            applicable_methods: ['ASR', 'ASTR', 'W-S-B', 'Sand dam']
+        }, {
+            name: 'Shallow soils, clay soils, soils low in organic matter',
+            category: 'Soil type',
             selected: false,
             applicable_methods: ['ASR', 'ASTR', 'W-S-B', 'Sand dam']
         }, {
@@ -128,84 +150,116 @@ function getInitialState() {
         }],
         methods: [{
             slug: 'Ponds',
-            name: 'Infiltration Ponds',
+            name: 'infiltration_pond',
             highCost: false,
-            highLandNeed: true
+            highLandNeed: true,
+            image: infiltration_pond,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Flooding',
             name: 'Flooding',
             highCost: false,
-            highLandNeed: true
+            highLandNeed: true,
+            image: image,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Ditches',
             name: 'Ditches and Furrows ',
             highCost: false,
-            highLandNeed: true
+            highLandNeed: true,
+            image: image,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'SAT',
             name: 'Soil Aquifer Treatment',
             highCost: true,
-            highLandNeed: true
+            highLandNeed: true,
+            image: SAT,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'EI',
             name: ' Excess Irrigation',
             highCost: false,
-            highLandNeed: false
+            highLandNeed: false,
+            image: image,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'IBF',
             name: 'River/lake bank filtration',
             highCost: false,
-            highLandNeed: false
+            highLandNeed: false,
+            image: IBF,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'IDF',
             name: 'Dune filtration',
             highCost: false,
-            highLandNeed: true
+            highLandNeed: true,
+            image: IDF,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'ASR',
             name: 'ASR',
             highCost: true,
-            highLandNeed: false
+            highLandNeed: false,
+            image: ASR,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'ASTR',
             name: 'ASTR',
             highCost: true,
-            highLandNeed: false
+            highLandNeed: false,
+            image: ASTR,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'W-S-B',
             name: 'Shallow well/ shaft/ pit infiltration ',
             highCost: true,
-            highLandNeed: false
+            highLandNeed: false,
+            image: image,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'SS Dam',
             name: 'Sub-surface dams',
             highCost: true,
-            highLandNeed: false
+            highLandNeed: false,
+            image: SS_Dam,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'RD',
             name: 'Recharge Dams',
             highCost: false,
-            highLandNeed: false
+            highLandNeed: false,
+            image: RD,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Sand dam',
             name: 'Sand dams',
             highCost: false,
-            highLandNeed: false
+            highLandNeed: false,
+            image: Sand_dam,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Bund',
             name: 'Barrier & Bunds',
             highCost: false,
-            highLandNeed: true
+            highLandNeed: true,
+            image: image,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Trenches',
             name: 'Trenches',
             highCost: false,
-            highLandNeed: true
+            highLandNeed: true,
+            image: image,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Rooftop',
             name: 'Rooftop harvesting',
             highCost: false,
-            highLandNeed: false
+            highLandNeed: false,
+            image: Rooftop,
+            href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }]
     };
 }
