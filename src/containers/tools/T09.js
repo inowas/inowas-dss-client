@@ -8,17 +8,29 @@ import image9B from '../../images/tools/T09B.png';
 import image9C from '../../images/tools/T09C.png';
 import image9D from '../../images/tools/T09D.png';
 import image9E from '../../images/tools/T09E.png';
+import Icon from '../../components/primitive/Icon';
+import Navbar from '../Navbar';
 
 
 class T09 extends React.Component {
+
+    state = {
+        navigation: [{
+            name: 'Documentation',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+            icon: <Icon name="file"/>
+        }]
+    };
 
     pushToTool = tool => {
         return this.props.router.push('/tools/' + tool);
     };
 
     render() {
+        const { navigation } = this.state;
         return (
             <div className="app-width">
+                <Navbar links={navigation} />
                 <h3>Please select the set of boundary conditions that apply to your problem:</h3>
                 <div className="grid-container">
                     <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09A')}  className="tile col col-rel-1-t13">
