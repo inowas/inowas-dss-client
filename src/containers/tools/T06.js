@@ -132,6 +132,11 @@ export default class T06 extends React.Component {
                             ? 'high'
                             : 'low'}
                     </td>
+                    <td className="method-land-need">
+                        <a href={method.href}>
+                        <img className="icon-image" src={method.image}/>
+                            </a>
+                    </td>
                 </tr>
             );
         }));
@@ -159,6 +164,7 @@ export default class T06 extends React.Component {
                                     <th>MAR methods</th>
                                     <th>Unit costs</th>
                                     <th>Area required</th>
+                                    <th>More information</th>
                                 </tr>
                             </thead>
                             <tbody>
