@@ -192,6 +192,7 @@ const initialState = [ {
     name: ' 1D transport model (Ogata-Banks)',
     path: 'tools/T08/',
     instances: [ {
+        id: 'default',
         model_id: '08',
         user_name: 'ADMIN',
         name: 'DEFAULT MODEL',
@@ -206,6 +207,7 @@ const initialState = [ {
     name: 'Simple saltwater intrusion equations',
     path: 'tools/T09/',
     instances: [ {
+        id: 'default',
         model_id: '09',
         user_name: 'ADMIN',
         name: 'DEFAULT MODEL',
