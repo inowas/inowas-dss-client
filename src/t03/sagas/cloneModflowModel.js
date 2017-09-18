@@ -1,8 +1,10 @@
-import { put, take } from 'redux-saga/effects';
+import { put, select, take } from 'redux-saga/effects';
 import { sendCommand } from '../../actions/messageBox';
-import { setPublic } from '../../actions/dashboard';
+import { Modifier } from '../../dashboard';
 import { Command, Event } from '../../t03/actions/index';
+import { Query } from '../../dashboard/actions/index';
 import { WebData } from '../../core';
+import { Selector } from '../../dashboard';
 
 export default function* cloneModflowModelFlow() {
     // eslint-disable-next-line no-constant-condition
@@ -22,8 +24,16 @@ export default function* cloneModflowModelFlow() {
             }
 
             if (response.webData.type === 'success') {
+                const state = yield select();
+                const publicInstances = Selector.ui.getPublic(state.dashboard.ui);
+
                 yield put( Event.modflowModelCloned( action.tool, action.id, action.payload.id ) );
-                yield put(setPublic(false));
+
+                if (publicInstances === false) {
+                    yield put(Query.loadInstances(action.tool, publicInstances));
+                } else {
+                    yield put(Modifier.Action.setPublic(false));
+                }
                 break;
             }
         }

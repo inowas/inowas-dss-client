@@ -22,7 +22,7 @@ import T14D from './T14D';
 import T16 from './T16';
 import T18 from './T18';
 import { combineReducers } from 'redux';
-import dashboard from './dashboard';
+import dashboard from '../dashboard/reducers';
 import { routerReducer as routing } from 'react-router-redux';
 import user from './user';
 import {WebData} from '../core';

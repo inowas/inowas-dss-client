@@ -1,8 +1,9 @@
-import { put, take } from 'redux-saga/effects';
+import { put, select, take } from 'redux-saga/effects';
 import { sendCommand } from '../../actions/messageBox';
-import { setPublic } from '../../actions/dashboard';
 import { Command, Event } from '../actions/index';
 import { WebData } from '../../core';
+import { Modifier, Selector } from '../../dashboard';
+import { Query } from '../../dashboard/actions/index';
 
 export default function* cloneScenarioAnalysisFlow() {
     // eslint-disable-next-line no-constant-condition
@@ -23,7 +24,14 @@ export default function* cloneScenarioAnalysisFlow() {
 
             if (response.webData.type === 'success') {
                 yield put( Event.scenarioAnalysisCloned( action.tool, action.id, action.payload.id ) );
-                yield put(setPublic(false));
+                const state = yield select();
+                const publicInstances = Selector.ui.getPublic(state.dashboard.ui);
+
+                if (publicInstances === false) {
+                    yield put(Query.loadInstances(action.tool, publicInstances));
+                } else {
+                    yield put(Modifier.Action.setPublic(false));
+                }
                 break;
             }
         }
