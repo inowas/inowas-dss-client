@@ -31,6 +31,8 @@ class ScenarioItem extends React.Component {
                             : null}
                         {!isBaseModel && !readOnly && <span> | </span>}
                         {!readOnly && <Button type="link" onClick={() => clone(modelId)}>Clone</Button>}
+                        {!readOnly && isBaseModel && <span> | </span>}
+                        {!readOnly && isBaseModel && <Link to={'/tools/T07E/' + said + '/' + modelId}>Edit</Link>}
                         {!isBaseModel && !readOnly && <span> | </span>}
                         {!isBaseModel && !readOnly && <Button type="link" onClick={() => deleteScenario(modelId)}>Delete</Button>}
                     </p>
