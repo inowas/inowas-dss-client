@@ -208,6 +208,7 @@ class ModelEditorGeneral extends Component {
         const { model: stateModel } = this.state;
 
         const readOnly = model && !lodash.includes(model.permissions, 'w');
+        const readOnlyScenario = lodash.includes(model.permissions, 's');
         const hasArea = model && model.geometry;
 
         // TODO use WebData loading component if ready
@@ -291,7 +292,7 @@ class ModelEditorGeneral extends Component {
 
                         <LayoutComponents.InputGroup label="Grid Resolution">
                             <Input
-                                disabled={readOnly}
+                                disabled={readOnly || readOnlyScenario}
                                 type="number"
                                 min="1"
                                 step="1"
@@ -304,7 +305,7 @@ class ModelEditorGeneral extends Component {
                                 placeholder="X="
                             />
                             <Input
-                                disabled={readOnly}
+                                disabled={readOnly || readOnlyScenario}
                                 type="number"
                                 min="1"
                                 step="1"
