@@ -18,7 +18,7 @@ import styleGlobals from 'styleGlobals';
 import { sendQuery } from '../../actions/messageBox';
 import { HeadResultsChart } from '../components';
 import uuid from 'uuid';
-import {includes} from 'lodash';
+import { includes, max, min } from 'lodash';
 
 const styles = {
     selectWrapper: {
@@ -209,14 +209,14 @@ class ModelEditorResultsHead extends Component {
                 : []
         }));
 
-        const splittedSelectedLayerAndType = selectedLayerAndType
+        const splitSelectedLayerAndType = selectedLayerAndType
             ? selectedLayerAndType.split('_')
             : null;
-        const selectedLayer = splittedSelectedLayerAndType
-            ? splittedSelectedLayerAndType[0]
+        const selectedLayer = splitSelectedLayerAndType
+            ? splitSelectedLayerAndType[0]
             : null;
-        const selectedType = splittedSelectedLayerAndType
-            ? splittedSelectedLayerAndType[1]
+        const selectedType = splitSelectedLayerAndType
+            ? splitSelectedLayerAndType[1]
             : null;
 
         const startDate = new Date(times.start_date_time);
@@ -249,12 +249,15 @@ class ModelEditorResultsHead extends Component {
             }
         }
 
+        const data = getCalculationStatus && getCalculationStatus.type === 'success' ? getCalculationStatus.data : null;
+
         const mapData = new ScenarioAnalysisMapData({
             area: model.geometry,
             grid,
+            type: selectedType,
             boundaries: model.boundaries,
             xCrossSection,
-            heatMapData: getCalculationStatus ? getCalculationStatus.data : null
+            heatMapData: data
         });
 
         return (
@@ -288,11 +291,7 @@ class ModelEditorResultsHead extends Component {
                 <div style={[styles.chartWrapper]}>
                     <WebData.Component.Loading status={getCalculationStatus}>
                         <HeadResultsChart
-                            data={
-                                getCalculationStatus
-                                    ? getCalculationStatus.data
-                                    : null
-                            }
+                            data={mapData.heatMapData}
                             activeCoordinate={activeCoordinate}
                             grid={grid}
                             selectedType={selectedType}

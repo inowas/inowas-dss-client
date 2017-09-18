@@ -227,7 +227,8 @@ class T07A extends React.Component {
     };
 
     renderMaps() {
-        const { models, mapPosition, activeCoordinate } = this.props.tool;
+
+        const { models, mapPosition, activeCoordinate, selectedResultType } = this.props.tool;
         if (models.length <= 0) {
             return null;
         }
@@ -256,6 +257,7 @@ class T07A extends React.Component {
                 const mapData = new ScenarioAnalysisMapData({
                     area: model.area,
                     grid: model.grid,
+                    type: selectedResultType ? selectedResultType.type : null,
                     boundaries: model.boundaries,
                     xCrossSection,
                     heatMapData: model.result ? model.result.data : null,
