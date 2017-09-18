@@ -64,6 +64,7 @@ class ModelEditorModelRun extends React.Component {
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
+        const readOnlyScenario = lodash.includes(permissions, 's');
 
         const {type, id} = this.props.params;
 
@@ -94,7 +95,7 @@ class ModelEditorModelRun extends React.Component {
                                     onCalculate={this.calculateStressPeriods}
                                     calculateStressPeriodsStatus={calculateStressPeriodsStatus}
                                     updateStressPeriodsStatus={updateStressPeriodsStatus}
-                                    readOnly={readOnly}
+                                    readOnly={readOnly || readOnlyScenario}
                     /> );
             default:
                 return null;
