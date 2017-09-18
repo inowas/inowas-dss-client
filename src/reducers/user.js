@@ -4,6 +4,7 @@ function initialState() {
         name: '',
         apiKey: localStorage.getItem( 'apiKey' ),
         email: '',
+        roles: []
     };
 }
 
@@ -31,7 +32,8 @@ const user = ( state = initialState(), action ) => {
                     ...state,
                     userName: action.payload.user_name || state.userName,
                     name: action.payload.name || state.name,
-                    email: action.payload.email || state.email
+                    email: action.payload.email || state.email,
+                    roles: action.payload.roles || state.roles,
                 };
             }
         default:
