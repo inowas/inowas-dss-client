@@ -1,12 +1,15 @@
 import Grid from './Grid';
 import BoundingBox from './BoundingBox';
 
+import { min, max } from 'lodash';
+
 /**
  * CrossSectionMapDataObject Base Class
  */
 export default class ScenarioAnalysisMapData {
     _area;
     _grid;
+    _type;
     _boundaries = [];
     _xCrossSection;
     _timeSeriesGridCells = [];
@@ -17,6 +20,7 @@ export default class ScenarioAnalysisMapData {
     constructor({
         area,
         grid,
+        type = 'head',
         boundaries = null,
         xCrossSection = null,
         timeSeriesGridCells = null,
@@ -32,6 +36,8 @@ export default class ScenarioAnalysisMapData {
             );
         }
         this._grid = grid;
+
+        this._type = type;
 
         // null is permitted
         if (!(boundaries instanceof Array) && boundaries !== null) {
@@ -70,10 +76,47 @@ export default class ScenarioAnalysisMapData {
                     typeof heatMapData
             );
         }
-        this._heatMapData = heatMapData;
+
+        if (heatMapData) {
+            this._heatMapData = heatMapData;
+        }
+
+        if (this._type === 'drawdown' && this._heatMapData) {
+            this._heatMapData = heatMapData.map( row => {
+                return row.map( col => {
+                    if (col) {
+                        return -col;
+                    }
+
+                    return null;
+                });
+            });
+        }
 
         this._globalMin = globalMin;
         this._globalMax = globalMax;
+
+        if (this._type === 'drawdown' && this._heatMapData) {
+            if (!this._globalMin) {
+                this._globalMin = min(this._heatMapData.map( row => {
+                    return min(row);
+                }));
+            }
+
+            if (!this._globalMax) {
+                this._globalMax = max(this._heatMapData.map( row => {
+                    return max(row);
+                }));
+            }
+
+            if (- this._globalMin > this._globalMax) {
+                this._globalMax = - this._globalMin;
+            }
+
+            if (- this._globalMax < this._globalMin) {
+                this._globalMin = - this._globalMax;
+            }
+        }
     }
 
     get area() {

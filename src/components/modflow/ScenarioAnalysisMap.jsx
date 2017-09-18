@@ -97,10 +97,11 @@ function rainbowFactory(numberRange = { min: -50, max: 50 }) {
     const rainbow = new Rainbow();
     rainbow.setSpectrum(
         '#800080',
-        '#FF0000',
-        '#FFFF00',
-        '#00FF00',
-        '#00FFFF',
+        '#ff2200',
+        '#fcff00',
+        '#6dff70',
+        '#00ffff',
+        '#007bff',
         '#0000FF'
     );
     if (numberRange) {

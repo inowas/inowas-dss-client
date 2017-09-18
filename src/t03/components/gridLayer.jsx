@@ -15,8 +15,8 @@ export default class GridLayer extends Component {
         gridSize: PropTypes.object
     };
 
-    renderLine = ( xMin, xMax, yMin, yMax ) => {
-        return ( <Polyline positions={[
+    renderLine = ( key, xMin, xMax, yMin, yMax ) => {
+        return ( <Polyline key={key} positions={[
             {
                 lng: xMin,
                 lat: yMin
@@ -66,8 +66,8 @@ export default class GridLayer extends Component {
 
         return (
             <FeatureGroup>
-                {lineCoordinates.map( c => {
-                    return this.renderLine(c[0], c[1], c[2], c[3]);
+                {lineCoordinates.map( (c, k) => {
+                    return this.renderLine(k, c[0], c[1], c[2], c[3]);
                 })}
             </FeatureGroup>
         );
