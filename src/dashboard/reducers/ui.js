@@ -1,5 +1,5 @@
 const initialState = {
-    activeToolSlug: 'T07',
+    activeToolSlug: 'T02',
     publicInstances: false
 };
 

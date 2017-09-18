@@ -16,6 +16,7 @@ import Tr from '../components/primitive/table/Tr';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import styleGlobals from 'styleGlobals';
+import {includes} from 'lodash';
 
 const styles = {
     menu: {
@@ -301,7 +302,7 @@ class Dashboard extends React.Component {
 
     render() {
         const { navigation } = this.state;
-        const { tools } = this.props;
+        const { tools, roles } = this.props;
 
         const menuItems = [
             {
@@ -316,8 +317,9 @@ class Dashboard extends React.Component {
             {
                 name: 'Tools',
                 icon: <Icon name="tools" />,
-                items: tools.map(t => {
-                    return {
+                items: tools.filter((t => includes(roles, t.role)))
+                    .map(t => {
+                        return {
                         name: t.slug + ': ' + t.name,
                         onClick: this.setToolSelection(t.slug)
                     };
@@ -351,6 +353,7 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = state => {
     return {
+        roles: state.user.roles,
         tools: Selector.tool.getTools(state.dashboard.tools),
         activeTool: Selector.tool.getTool(
             state.dashboard.tools,
