@@ -133,9 +133,9 @@ export default class T06 extends React.Component {
                             : 'low'}
                     </td>
                     <td className="method-land-need">
-                        <a href={method.href}>
-                        <img className="icon-image" src={method.image}/>
-                            </a>
+                        <a href={method.href} target="_blank">
+                            <img className="icon-image" src={method.image}/>
+                        </a>
                     </td>
                 </tr>
             );

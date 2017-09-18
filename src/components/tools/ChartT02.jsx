@@ -28,6 +28,7 @@ export default class Chart extends React.Component {
                 x_max,
                 d_x
             } = this.props,
+
             data = calc.calculateDiagramData(variable, w, L, W, hi, Sy, K, t, x_min, x_max, d_x),
             hmax = data[0].hhi + hi;
         var xAxis = <XAxis type="number" dataKey="y"/>;
@@ -82,5 +83,5 @@ export default class Chart extends React.Component {
                 </div>
             </div>
         </div>
-    }
+    };
 }
