@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
+import Button from '../../components/primitive/Button';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
@@ -11,6 +12,8 @@ import { StressPeriodProperties } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from "../components/runModelProperties";
 import ListfileProperties from '../components/ListfileProperties';
+import FilterableList from '../../components/primitive/FilterableList';
+import { Routing } from '../actions/index';
 
 const styles = {
     container: {
@@ -35,6 +38,26 @@ const styles = {
     },
 };
 
+
+const menu = [
+    {
+        id: "",
+        name: 'Overview'
+    },
+    {
+        id: "times",
+        name: 'Time Discretization'
+    },
+    {
+        id: "calculation",
+        name: 'Show logs'
+    },
+    {
+        id: "listfile",
+        name: 'Show files'
+    }
+];
+
 @ConfiguredRadium
 class ModelEditorModelRun extends React.Component {
 
@@ -48,13 +71,17 @@ class ModelEditorModelRun extends React.Component {
         this.props.calculateStressPeriods(id, start, end, time_unit);
     };
 
+    onMenuClick = (type) => {
+        const { routes, params } = this.props;
+
+        Routing.modelRunType(routes, params)(type);
+    };
+
     renderProperties( ) {
         const {
             stressPeriods,
             calculateStressPeriodsStatus,
             updateStressPeriodsStatus,
-            calculateModflowModel,
-            calculateModflowModelStatus,
             getModflowModelCalculationStatus,
             getModflowModelCalculation,
             getListfileStatus,
@@ -73,8 +100,6 @@ class ModelEditorModelRun extends React.Component {
                 return (
                     <RunModelProperties
                         readOnly={readOnly}
-                        calculateModflowModel={calculateModflowModel}
-                        calculateModflowModelStatus={calculateModflowModelStatus}
                         getModflowModelCalculationStatus={getModflowModelCalculationStatus}
                         getModflowModelCalculation={getModflowModelCalculation}
                         id={id}
@@ -103,10 +128,20 @@ class ModelEditorModelRun extends React.Component {
     }
 
     render() {
+        const {calculateModflowModel, calculateModflowModelStatus, id, permissions} = this.props;
+        const readOnly = !lodash.includes(permissions, 'w');
 
         return (
             <div style={[ styles.container ]}>
                 <div style={styles.left}>
+                    <FilterableList
+                        itemClickAction={this.onMenuClick}
+                        list={menu}
+                    />
+                    {!readOnly &&
+                    <WebData.Component.Loading status={calculateModflowModelStatus}>
+                        <Button onClick={() => calculateModflowModel(id)}>Calculate</Button>
+                    </WebData.Component.Loading>}
                 </div>
                 <div style={styles.properties}>
                     <div style={[ styles.columnFlex2 ]}>

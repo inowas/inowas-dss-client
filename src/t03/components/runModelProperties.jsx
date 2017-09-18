@@ -33,16 +33,10 @@ class RunModelProperties extends React.Component {
     }
 
     render() {
-        const {calculateModflowModel, calculateModflowModelStatus, getModflowModelCalculationStatus, id, readOnly} = this.props;
+        const {getModflowModelCalculationStatus, readOnly} = this.props;
 
         return (
             <div>
-                {!readOnly &&
-                <div style={[styles.columns]}>
-                    <WebData.Component.Loading status={calculateModflowModelStatus}>
-                        <Button onClick={() => calculateModflowModel(id)}>Calculate</Button>
-                    </WebData.Component.Loading>
-                </div>}
                 <div>
                     <Input
                         inputStyle={{height: 500}}
@@ -58,8 +52,6 @@ class RunModelProperties extends React.Component {
 }
 
 RunModelProperties.propTypes = {
-    calculateModflowModel: PropTypes.func.isRequired,
-    calculateModflowModelStatus: PropTypes.object.isRequired,
     getModflowModelCalculationStatus: PropTypes.object.isRequired,
     getModflowModelCalculation: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
