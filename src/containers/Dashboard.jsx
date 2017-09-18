@@ -1,10 +1,10 @@
 import '../less/dashboard.less';
 
-import React, { PropTypes } from 'react';
-import { Selector, Modifier } from '../dashboard';
+import React, {PropTypes} from 'react';
+import {Selector, Modifier} from '../dashboard';
 import Button from '../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
-import { Formatter } from '../core';
+import {Formatter} from '../core';
 import Icon from '../components/primitive/Icon';
 import Input from '../components/primitive/Input';
 import Menu from '../components/primitive/Menu';
@@ -13,16 +13,16 @@ import Popup from '../components/primitive/Popup';
 import Table from '../components/primitive/table/Table';
 import Td from '../components/primitive/table/Td';
 import Tr from '../components/primitive/table/Tr';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import {connect} from 'react-redux';
+import {push} from 'react-router-redux';
 import styleGlobals from 'styleGlobals';
 import {includes} from 'lodash';
 
 const styles = {
     menu: {
         width:
-            2 * styleGlobals.dimensions.gridColumn +
-            styleGlobals.dimensions.gridGutter,
+        2 * styleGlobals.dimensions.gridColumn +
+        styleGlobals.dimensions.gridGutter,
         marginRight: styleGlobals.dimensions.gridGutter
     },
 
@@ -48,9 +48,9 @@ const styles = {
         paddingRight: styleGlobals.dimensions.spacing.small,
         paddingBottom: styleGlobals.dimensions.spacing.small - 1,
         background:
-            'linear-gradient(to right, transparent, ' +
-            styleGlobals.colors.background +
-            ' 50px)',
+        'linear-gradient(to right, transparent, ' +
+        styleGlobals.colors.background +
+        ' 50px)',
         float: 'right'
     },
 
@@ -62,6 +62,7 @@ const styles = {
 @ConfiguredRadium
 class Dashboard extends React.Component {
     static propTypes = {
+        roles: PropTypes.array,
         tools: PropTypes.array,
         activeTool: PropTypes.object,
         publicInstances: PropTypes.bool,
@@ -79,35 +80,26 @@ class Dashboard extends React.Component {
             {
                 name: 'Documentation',
                 path: 'https://wiki.inowas.hydro.tu-dresden.de/',
-                icon: <Icon name="file" />
+                icon: <Icon name="file"/>
             },
             {
                 name: 'Datasets',
                 path: 'https://kb.inowas.hydro.tu-dresden.de',
-                icon: <Icon name="dataset" />
-            } /* , {
-            name: 'Projects',
-            icon: <Icon name="folder"/>
-        }, {
-            name: 'Applications',
-            icon: <Icon name="layer_vertical"/>
-        }, {
-            name: 'Tools',
-            icon: <Icon name="layer_horizontal_hatched"/>
-        }*/
+                icon: <Icon name="dataset"/>
+            }
         ],
         hoveredInstance: null
     };
 
     componentDidMount() {
         // eslint-disable-next-line no-shadow
-        const { activeTool, fetchInstances, publicInstances } = this.props;
+        const {activeTool, fetchInstances, publicInstances} = this.props;
         fetchInstances(activeTool.slug, publicInstances);
     }
 
     componentDidUpdate(prevProps) {
         // eslint-disable-next-line no-shadow
-        const { activeTool, publicInstances, fetchInstances } = this.props;
+        const {activeTool, publicInstances, fetchInstances} = this.props;
 
         if (
             activeTool.slug !== prevProps.activeTool.slug ||
@@ -125,15 +117,15 @@ class Dashboard extends React.Component {
 
     renderTableRows(basePath, instances) {
         // eslint-disable-next-line no-shadow
-        const { publicInstances, cloneToolInstance, deleteToolInstance, push } = this.props;
+        const {publicInstances, cloneToolInstance, deleteToolInstance, push} = this.props;
         return instances.map((i, index) => {
             return (
                 <Tr
                     key={index}
                     onMouseEnter={() =>
-                        this.setState({ hoveredInstance: index })}
+                        this.setState({hoveredInstance: index})}
                     onMouseLeave={() =>
-                        this.setState({ hoveredInstance: null })}
+                        this.setState({hoveredInstance: null})}
                 >
                     <Td>
                         {index + 1}
@@ -165,24 +157,24 @@ class Dashboard extends React.Component {
                                     <div style={[styles.actionWrapper]}>
                                         <div style={[styles.actionContent]}>
                                             {!i.fake &&
-                                                <Button
-                                                    style={[styles.action]}
-                                                    onClick={() => cloneToolInstance(i.id)}
-                                                    type="link"
-                                                    icon={<Icon name="clone" />}
-                                                >
-                                                    clone
-                                                </Button>}
+                                            <Button
+                                                style={[styles.action]}
+                                                onClick={() => cloneToolInstance(i.id)}
+                                                type="link"
+                                                icon={<Icon name="clone"/>}
+                                            >
+                                                clone
+                                            </Button>}
                                             {!i.fake &&
-                                                !publicInstances &&
-                                                <Button
-                                                    style={[styles.action]}
-                                                    onClick={() => deleteToolInstance(i.id)}
-                                                    type="link"
-                                                    icon={<Icon name="trash" />}
-                                                >
-                                                    delete
-                                                </Button>}
+                                            !publicInstances &&
+                                            <Button
+                                                style={[styles.action]}
+                                                onClick={() => deleteToolInstance(i.id)}
+                                                type="link"
+                                                icon={<Icon name="trash"/>}
+                                            >
+                                                delete
+                                            </Button>}
                                         </div>
                                     </div>
                                 );
@@ -198,7 +190,7 @@ class Dashboard extends React.Component {
 
     renderDataTable() {
         // eslint-disable-next-line no-shadow
-        const { activeTool, setPublic, publicInstances, push } = this.props;
+        const {activeTool, setPublic, publicInstances, push} = this.props;
 
         return (
             <div className="tile col col-abs-3 stretch">
@@ -207,14 +199,14 @@ class Dashboard extends React.Component {
                 </h2>
                 <div className="grid-container toolbar">
                     <div className="col col-rel-1 toolbar-search">
-                        <Input placeholder="Search..." type="search" />
+                        <Input placeholder="Search..." type="search"/>
                     </div>
                     <ul className="col stretch toolbar-edit">
                         <li>
                             <Button
                                 type="link"
                                 onClick={() => push(activeTool.path)}
-                                icon={<Icon name="add" />}
+                                icon={<Icon name="add"/>}
                             >
                                 Add new
                             </Button>
@@ -223,7 +215,7 @@ class Dashboard extends React.Component {
                             <Button
                                 type="link"
                                 onClick={this.showPopup}
-                                icon={<Icon name="import" />}
+                                icon={<Icon name="import"/>}
                             >
                                 Import
                             </Button>
@@ -232,7 +224,7 @@ class Dashboard extends React.Component {
                             <Button
                                 type="link"
                                 onClick={this.showPopup}
-                                icon={<Icon name="share" />}
+                                icon={<Icon name="share"/>}
                             >
                                 Share
                             </Button>
@@ -241,7 +233,7 @@ class Dashboard extends React.Component {
                             <Button
                                 type="link"
                                 onClick={this.showPopup}
-                                icon={<Icon name="trash" />}
+                                icon={<Icon name="trash"/>}
                             >
                                 Delete
                             </Button>
@@ -271,21 +263,21 @@ class Dashboard extends React.Component {
 
                 <Table>
                     <thead>
-                        <Tr head>
-                            <Td head>No.</Td>
-                            <Td head>Name</Td>
-                            <Td head>Project</Td>
-                            <Td head>Application</Td>
-                            <Td head>Date created</Td>
-                            <Td head>Created by</Td>
-                            <Td style={[styles.lastTd]} head />
-                        </Tr>
+                    <Tr head>
+                        <Td head>No.</Td>
+                        <Td head>Name</Td>
+                        <Td head>Project</Td>
+                        <Td head>Application</Td>
+                        <Td head>Date created</Td>
+                        <Td head>Created by</Td>
+                        <Td style={[styles.lastTd]} head/>
+                    </Tr>
                     </thead>
                     <tbody>
-                        {this.renderTableRows(
-                            activeTool.path,
-                            activeTool.instances
-                        )}
+                    {this.renderTableRows(
+                        activeTool.path,
+                        activeTool.instances
+                    )}
                     </tbody>
                 </Table>
             </div>
@@ -293,21 +285,21 @@ class Dashboard extends React.Component {
     }
 
     closePopup = () => {
-        this.setState({ popupVisible: false });
+        this.setState({popupVisible: false});
     };
 
     showPopup = () => {
-        this.setState({ popupVisible: true });
+        this.setState({popupVisible: true});
     };
 
     render() {
-        const { navigation } = this.state;
-        const { tools, roles } = this.props;
+        const {navigation} = this.state;
+        const {tools, roles, activeTool} = this.props;
 
         const menuItems = [
             {
                 name: 'Projects',
-                icon: <Icon name="folder" />,
+                icon: <Icon name="folder"/>,
                 items: [
                     {
                         name: 'Inowas'
@@ -316,20 +308,21 @@ class Dashboard extends React.Component {
             },
             {
                 name: 'Tools',
-                icon: <Icon name="tools" />,
-                items: tools.filter((t => includes(roles, t.role)))
+                icon: <Icon name="tools"/>,
+                items: tools.filter(t => includes(roles, t.role))
                     .map(t => {
                         return {
-                        name: t.slug + ': ' + t.name,
-                        onClick: this.setToolSelection(t.slug)
-                    };
-                })
+                            name: t.slug + ': ' + t.name,
+                            onClick: this.setToolSelection(t.slug),
+                            active: (activeTool.slug === t.slug)
+                        };
+                    })
             }
         ];
 
         return (
             <div className="dashboard">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 <div className="app-width grid-container">
                     <Menu
                         firstActive={1}

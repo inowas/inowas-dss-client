@@ -45,6 +45,10 @@ const styles = {
 
     disabled: {
         opacity: 0.5
+    },
+
+    active: {
+        textDecoration: 'underline'
     }
 
 };
@@ -74,8 +78,9 @@ export default class Menu extends Component {
                                             <li style={[styles.listItem, (i.disabled || i2.disabled) && styles.disabled]} key={index2}>
                                                 {(( ) => {
                                                     if ( i2.onClick ) {
+
                                                         return (
-                                                            <button onClick={i2.onClick} className="link" disabled={i.disabled || i2.disabled}>
+                                                            <button onClick={i2.onClick} className="link" style={ [i2.active && styles.active] } disabled={i.disabled || i2.disabled}>
                                                                 {i2.name}
                                                             </button>
                                                         );
