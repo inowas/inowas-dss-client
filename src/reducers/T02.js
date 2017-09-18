@@ -29,10 +29,10 @@ function getInitialState() {
             validMin: function(x) {
                 return x > 0;
             },
-            max: 100,
+            max: 1000,
             value: 40,
             stepSize: 1,
-            decimals: 1
+            decimals: 0
         }, {
             order: 2,
             id: 'W',
@@ -44,7 +44,7 @@ function getInitialState() {
             max: 100,
             value: 20,
             stepSize: 1,
-            decimals: 1
+            decimals: 0
         }, {
             order: 3,
             id: 'hi',
@@ -98,7 +98,7 @@ function getInitialState() {
             max: 100,
             value: 1.5,
             stepSize: 1,
-            decimals: 1
+            decimals: 0
         }]
     };
 }
