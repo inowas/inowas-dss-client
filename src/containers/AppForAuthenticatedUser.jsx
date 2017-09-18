@@ -10,7 +10,7 @@ class AppForAuthenticatedUser extends Component {
         userLoggedIn: PropTypes.bool.isRequired,
         push: PropTypes.func.isRequired,
         children: PropTypes.node
-    }
+    };
 
     constructor( props ) {
         super( props );

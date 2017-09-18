@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import '../../less/4TileTool.less';
 
+import * as calc from '../../calculations/T02';
+
 import Background from '../../components/tools/Background';
 import Chart from '../../components/tools/ChartT02';
 import Settings from '../../components/tools/SettingsT02';
@@ -75,6 +77,7 @@ export default class T02 extends React.Component {
         const t = parameters.find(p => {
             return p.id == 't';
         }).value;
+        const x_max = calc.calculateXmax(variable, w, L, W, hi, Sy, K, t);
 
         return (
             <div className="app-width">
@@ -86,7 +89,7 @@ export default class T02 extends React.Component {
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Chart variable={variable} w={w} L={L} W={W} hi={hi} Sy={Sy} K={K} t={t} x_min={0} x_max={120} d_x={10}/>
+                        <Chart variable={variable} w={w} L={L} W={W} hi={hi} Sy={Sy} K={K} t={t} x_min={0} x_max={x_max+50} d_x={10}/>
                     </section>
                 </div>
 
