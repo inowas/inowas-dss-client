@@ -1,5 +1,6 @@
 import { Modifier as T03 } from '../../t03';
 import { Modifier as T07 } from '../../t07';
+import { Action } from '../actions';
 
 const initialState = [ {
     slug: 'T02',
@@ -291,12 +292,12 @@ const initialState = [ {
 
 const tools = ( state = initialState, action ) => {
     switch ( action.type ) {
-        case 'DASHBOARD_SET_INSTANCES':
+        case Action.SET_INSTANCES:
             return state.map(t => {
-                if (t.slug === action.payload.tool) {
+                if (t.slug === action.tool) {
                     return {
                         ...t,
-                        instances: action.payload.instances
+                        instances: action.payload
                     };
                 }
 
@@ -339,6 +340,3 @@ const tools = ( state = initialState, action ) => {
 };
 
 export default tools;
-
-export const getTools = state => state;
-export const getTool = (state, slug) => state.find(t => (t.slug === slug));

@@ -1,16 +1,7 @@
 import '../less/dashboard.less';
 
 import React, { PropTypes } from 'react';
-import {
-    deleteToolInstance,
-    cloneToolInstance,
-    fetchInstances,
-    setActiveTool,
-    setPublic
-} from '../actions/dashboard';
-import { getActiveToolSlug, getPublic } from '../reducers/dashboard/ui';
-import { getTool, getTools } from '../reducers/dashboard/tools';
-
+import { Selector, Modifier } from '../dashboard';
 import Button from '../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import { Formatter } from '../core';
@@ -360,22 +351,22 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        tools: getTools(state.dashboard.tools),
-        activeTool: getTool(
+        tools: Selector.tool.getTools(state.dashboard.tools),
+        activeTool: Selector.tool.getTool(
             state.dashboard.tools,
-            getActiveToolSlug(state.dashboard.ui)
+            Selector.ui.getActiveToolSlug(state.dashboard.ui)
         ),
-        publicInstances: getPublic(state.dashboard.ui)
+        publicInstances: Selector.ui.getPublic(state.dashboard.ui)
     };
 };
 
 // eslint-disable-next-line no-class-assign
 Dashboard = connect(mapStateToProps, {
-    setActiveTool,
-    fetchInstances,
-    setPublic,
-    cloneToolInstance,
-    deleteToolInstance,
+    setActiveTool: Modifier.Action.setActiveTool,
+    fetchInstances: Modifier.Query.loadInstances,
+    setPublic: Modifier.Action.setPublic,
+    cloneToolInstance: Modifier.Action.cloneToolInstance,
+    deleteToolInstance: Modifier.Action.deleteToolInstance,
     push
 })(Dashboard);
 

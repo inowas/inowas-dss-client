@@ -22,6 +22,3 @@ const ui = ( state = initialState, action ) => {
 };
 
 export default ui;
-
-export const getActiveToolSlug = state => state.activeToolSlug;
-export const getPublic = state => state.publicInstances;
