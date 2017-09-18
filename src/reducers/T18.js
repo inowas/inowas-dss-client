@@ -43,7 +43,7 @@ function getInitialState() {
             inputType: inputType.NUMBER,
             min: 0,
             validMin: function(x) {return x >= 0},
-            max: 500,
+            max: 1000,
             value: 667,
             stepSize: 1,
             decimals: 0
