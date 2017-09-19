@@ -6,7 +6,7 @@ export const CREATE_SCENARIO_ANALYSIS = 'createScenarioAnalysis';
 export const DELETE_SCENARIO_ANALYSIS = 'deleteScenarioAnalysis';
 export const CLONE_SCENARIO_ANALYSIS = 'cloneScenarioAnalysis';
 
-export function createScenarioAnalysis(tool, id, baseModelId, name) {
+export function createScenarioAnalysis(tool, id, baseModelId, name, isPublic) {
     return {
         type: CREATE_SCENARIO_ANALYSIS,
         tool,
@@ -14,7 +14,8 @@ export function createScenarioAnalysis(tool, id, baseModelId, name) {
         payload: {
             id,
             name,
-            basemodel_id: baseModelId
+            basemodel_id: baseModelId,
+            public: isPublic
         }
     };
 }
