@@ -166,7 +166,8 @@ export const getInitialState = () => {
         results: null,
         soilmodel: null,
         permissions: 'rwx',
-        calculation: {state: 0, calculation_id: '', message: ''}
+        calculation: {state: 0, calculation_id: '', message: ''},
+        public: true
     };
 };
 

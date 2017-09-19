@@ -100,6 +100,12 @@ class ModelEditorGeneral extends Component {
         this.props.setModflowModel(this.state.model);
     }
 
+    handleSelectChange = name => {
+        return data => {
+            this.handleInputChangeModflow( name )( data ? data.value : undefined );
+        };
+    };
+
     handleInputChangeModflow(name, key) {
         return value => {
             this.setState(function(prevState) {
@@ -240,6 +246,20 @@ class ModelEditorGeneral extends Component {
                                 value={stateModel.name}
                                 onChange={this.handleInputChangeModflow('name')}
                                 placeholder="Name"
+                            />
+                            <Select
+                                disabled={readOnly}
+                                clearable={false}
+                                value={stateModel.public}
+                                onChange={this.handleSelectChange(
+                                    'public'
+                                )}
+                                options={
+                                    [
+                                        { label: 'public', value: true },
+                                        { label: 'private', value: false },
+                                    ]
+                                }
                             />
                         </LayoutComponents.InputGroup>
 

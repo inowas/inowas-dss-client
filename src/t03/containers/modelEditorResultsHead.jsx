@@ -172,7 +172,8 @@ class ModelEditorResultsHead extends Component {
             tool,
             uuid.v4(),
             model.id,
-            'Scenario of ' + model.name
+            'Scenario Analysis of ' + model.name,
+            true
         );
     };
 

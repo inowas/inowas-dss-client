@@ -9,7 +9,8 @@ export function stateToCreatePayload( state ) {
         bounding_box: state.bounding_box,
         grid_size: state.grid_size,
         time_unit: state.time_unit,
-        length_unit: state.length_unit
+        length_unit: state.length_unit,
+        public: state.public,
     };
 }
 
