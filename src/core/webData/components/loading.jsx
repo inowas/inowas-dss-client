@@ -8,12 +8,12 @@ import { pure } from 'recompose';
 const styles = {
     wrapper: {
         position: 'relative',
-        display: 'inline-block'
+        display: 'inline-block',
     }
 };
 
-const Loading = ({ status, children }) =>
-    <div style={styles.wrapper}>
+const Loading = ({ status, children, style }) =>
+    <div style={[styles.wrapper, style]}>
         {children}
 
         {(() => {

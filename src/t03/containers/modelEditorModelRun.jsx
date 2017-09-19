@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
+import Button from '../../components/primitive/Button';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
@@ -11,6 +12,8 @@ import { StressPeriodProperties } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from "../components/runModelProperties";
 import ListfileProperties from '../components/ListfileProperties';
+import FilterableList from '../../components/primitive/FilterableList';
+import { Routing } from '../actions/index';
 
 const styles = {
     container: {
@@ -35,6 +38,26 @@ const styles = {
     },
 };
 
+
+const menu = [
+    {
+        id: "",
+        name: 'Overview'
+    },
+    {
+        id: "times",
+        name: 'Time Discretization'
+    },
+    {
+        id: "calculation",
+        name: 'Show logs'
+    },
+    {
+        id: "files",
+        name: 'Show files'
+    }
+];
+
 @ConfiguredRadium
 class ModelEditorModelRun extends React.Component {
 
@@ -48,19 +71,30 @@ class ModelEditorModelRun extends React.Component {
         this.props.calculateStressPeriods(id, start, end, time_unit);
     };
 
+    onMenuClick = (type) => {
+        const { routes, params } = this.props;
+
+        Routing.modelRunType(routes, params)(type);
+    };
+
+    loadFile = (file) => {
+        const { calculation, getFile } = this.props;
+
+        if (!file || !calculation.calculation_id) {
+            return;
+        }
+
+        getFile( calculation.calculation_id, lodash.last(lodash.split(file, '.')) );
+    };
+
     renderProperties( ) {
         const {
             stressPeriods,
             calculateStressPeriodsStatus,
             updateStressPeriodsStatus,
-            calculateModflowModel,
-            calculateModflowModelStatus,
-            getModflowModelCalculationStatus,
-            getModflowModelCalculation,
-            getListfileStatus,
-            getListfile,
-            permissions,
+            getFileStatus,
             calculation,
+            permissions,
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
@@ -73,19 +107,16 @@ class ModelEditorModelRun extends React.Component {
                 return (
                     <RunModelProperties
                         readOnly={readOnly}
-                        calculateModflowModel={calculateModflowModel}
-                        calculateModflowModelStatus={calculateModflowModelStatus}
-                        getModflowModelCalculationStatus={getModflowModelCalculationStatus}
-                        getModflowModelCalculation={getModflowModelCalculation}
+                        calculation={calculation}
                         id={id}
                     />
                 );
-            case 'listfile':
+            case 'files':
                 return (
                     <ListfileProperties
-                        getListfileStatus={getListfileStatus}
-                        getListfile={getListfile}
-                        calculation={calculation}
+                        getFileStatus={getFileStatus}
+                        loadFile={this.loadFile}
+                        files={calculation.files || []}
                     />
                 );
             case 'times':
@@ -103,10 +134,21 @@ class ModelEditorModelRun extends React.Component {
     }
 
     render() {
+        const {calculateModflowModel, calculateModflowModelStatus, permissions} = this.props;
+        const {id} = this.props.params;
+        const readOnly = !lodash.includes(permissions, 'w');
 
         return (
             <div style={[ styles.container ]}>
                 <div style={styles.left}>
+                    <FilterableList
+                        itemClickAction={this.onMenuClick}
+                        list={menu}
+                    />
+                    {!readOnly &&
+                    <WebData.Component.Loading status={calculateModflowModelStatus}>
+                        <Button onClick={() => calculateModflowModel(id)}>Calculate</Button>
+                    </WebData.Component.Loading>}
                 </div>
                 <div style={styles.properties}>
                     <div style={[ styles.columnFlex2 ]}>
@@ -122,8 +164,7 @@ const actions = {
     updateStressPeriods: Command.updateStressPeriods,
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
-    getModflowModelCalculation: Query.getModflowModelCalculation,
-    getListfile: Query.getListfile,
+    getFile: Query.getFile,
 };
 
 const mapStateToProps = (state, { tool, params }) => {
@@ -134,8 +175,7 @@ const mapStateToProps = (state, { tool, params }) => {
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
-        getModflowModelCalculationStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_CALCULATION),
-        getListfileStatus: WebData.Selector.getStatusObject(state, Query.GET_LISTFILE),
+        getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
     };
 };
 

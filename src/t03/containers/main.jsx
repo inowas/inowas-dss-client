@@ -129,24 +129,10 @@ class T03 extends React.Component {
                 ]
             },
             {
-                title: 'Model Run',
+                title: 'Run',
                 name: 'model-run',
                 icon: <Icon name="calculator" />,
                 disabled: initial,
-                items: [
-                    {
-                        title: 'Time Discretization',
-                        name: 'times'
-                    },
-                    {
-                        title: 'RUN MODEL',
-                        name: 'calculation'
-                    },
-                    {
-                        title: 'Show Listfile',
-                        name: 'listfile'
-                    }
-                ]
             },
             {
                 title: 'Results',

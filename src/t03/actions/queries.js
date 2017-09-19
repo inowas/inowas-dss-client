@@ -3,6 +3,8 @@
  * Usually it uses a saga for the flow.
  */
 
+import { sendQuery } from '../../actions/messageBox';
+
 export const GET_MODFLOW_MODEL = 'GET_MODFLOW_MODEL';
 
 export function getModflowModel(tool, id) {
@@ -86,4 +88,10 @@ export function getListfile(tool, id) {
         tool,
         id,
     };
+}
+
+export const GET_FILE = 'GET_MODFLOW_MODEL_FILE';
+
+export function getFile(tool, id, ext) {
+    return sendQuery(`calculations/${id}/file/${ext}`, GET_FILE);
 }
