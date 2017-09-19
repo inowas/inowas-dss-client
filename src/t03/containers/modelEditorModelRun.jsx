@@ -14,6 +14,7 @@ import RunModelProperties from "../components/runModelProperties";
 import ListfileProperties from '../components/ListfileProperties';
 import FilterableList from '../../components/primitive/FilterableList';
 import { Routing } from '../actions/index';
+import { model } from '../selectors/index';
 
 const styles = {
     container: {
@@ -142,9 +143,12 @@ class ModelEditorModelRun extends React.Component {
     }
 
     render() {
-        const {calculateModflowModel, calculateModflowModelStatus, permissions, calculation} = this.props;
+        const {calculateModflowModel, calculateModflowModelStatus, permissions, calculation, stopPolling} = this.props;
         const {id} = this.props.params;
         const readOnly = !lodash.includes(permissions, 'w');
+
+        const canCancel = WebData.Selector.isStatusLoading(calculateModflowModelStatus)
+            && calculation.state !== model.CALCULATION_STATE_NEW;
 
         return (
             <div style={[ styles.container ]}>
@@ -153,10 +157,12 @@ class ModelEditorModelRun extends React.Component {
                         itemClickAction={this.onMenuClick}
                         list={menu}
                     />
-                    {!readOnly &&
+                    {!readOnly && !canCancel &&
                     <WebData.Component.Loading status={calculateModflowModelStatus}>
                         <Button type="full" onClick={() => calculateModflowModel(id)}>Calculate</Button>
                     </WebData.Component.Loading>}
+                    {canCancel &&
+                    <Button type="full" onClick={stopPolling}>Cancel calculation</Button>}
                     <h3 style={[styles.heading]}>
                         Calculation Status
                     </h3>
@@ -177,6 +183,7 @@ const actions = {
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
     getFile: Query.getFile,
+    stopPolling: Query.stopGetModflowModelCalculation,
 };
 
 const mapStateToProps = (state, { tool, params }) => {

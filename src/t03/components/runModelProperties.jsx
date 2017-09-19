@@ -34,7 +34,7 @@ const logs = ({calculation}) => {
             heading="Show logs"
             style={[ styles.columnNotLast ]}
         >
-            <Console>{calculation.message}</Console>}
+            <Console>{calculation.message}</Console>
         </LayoutComponents.Column>
     </div>)
 };

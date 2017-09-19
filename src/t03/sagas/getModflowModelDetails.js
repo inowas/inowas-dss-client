@@ -18,6 +18,8 @@ export default function* getModflowDetailsFlow() {
             yield put( WebData.Modifier.Action.responseAction( action.type, { type: 'loading' } ) );
 
             if (storedModel.id !== action.id) {
+                yield put( Action.stopGetModflowModelCalculation( action.tool, storedModel.id ) );
+
                 const [model, boundaries, results, soilmodel, calculation] = yield all([
                     call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id, 'GET'), apiKey),
                     call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/boundaries', 'GET'), apiKey),

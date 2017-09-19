@@ -6,9 +6,10 @@ const webData = ( state = Selector.initialState(), action ) => {
     // TODO ensure uniqueness
     switch ( action.type ) {
         case Action.AT_RESET_WEB_DATA:
+            console.log('reset type', {action});
             return {
                 ...state,
-                [action.type]: {}
+                [action.responseAction]: {}
             };
 
         case Action.AT_CLEAR_WEB_DATA:
