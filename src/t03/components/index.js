@@ -1,5 +1,6 @@
 import BoundaryMap from './boundaryMap';
 import BoundaryOverview from './boundaryOverview';
+import CalculationStatus from './calculationStatus';
 import ConstantHeadObservationPoint from './constantHeadObservationPoint';
 import ConstantHeadProperties from './constantHeadProperties';
 import DataTableAction from './dataTableAction';
@@ -14,10 +15,10 @@ import RechargeProperties from './rechargeProperties';
 import RechargeRate from './rechargeRate';
 import RiverObservationPoint from './riverObservationPoint';
 import RiverProperties from './riverProperties';
-import SoilModelLayerDataTable from './soilModelLayerDataTable';
-import SoilModelLayerOverview from './soilModelLayerOverview';
 import SoilmodelGeneral from './soilmodelGeneral';
 import SoilmodelLayer from './soilmodelLayer';
+import SoilModelLayerDataTable from './soilModelLayerDataTable';
+import SoilModelLayerOverview from './soilModelLayerOverview';
 import StressPeriodDataTable from './stressPeriodDataTable';
 import StressPeriodProperties from './stressPeriodProperties';
 import WellProperties from './wellProperties';
@@ -25,6 +26,7 @@ import WellProperties from './wellProperties';
 export {
     BoundaryMap,
     BoundaryOverview,
+    CalculationStatus,
     ConstantHeadObservationPoint,
     ConstantHeadProperties,
     DataTableAction,

@@ -56,6 +56,17 @@ const styles = {
             }
         },
 
+        full: {
+            width: "100%",
+            background: styleGlobals.colors.accent,
+            color: styleGlobals.colors.grayLight,
+            ':hover': {
+                background: Color(styleGlobals.colors.accent)
+                    .darken(0.15)
+                    .string()
+            }
+        },
+
         link: {
             paddingTop: 0,
             paddingBottom: 0,

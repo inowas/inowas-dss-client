@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
 import { Command, Query } from '../../t03/actions';
 import { stressPeriods } from '../../t03/selectors';
-import { StressPeriodProperties } from '../components';
+import { StressPeriodProperties, CalculationStatus } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from "../components/runModelProperties";
 import ListfileProperties from '../components/ListfileProperties';
@@ -36,6 +36,14 @@ const styles = {
     searchWrapper: {
         marginBottom: 6
     },
+    heading: {
+        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
+        fontWeight: 300,
+        fontSize: 16,
+        textAlign: 'left',
+        paddingBottom: 10,
+        marginTop: 30
+    }
 };
 
 
@@ -134,7 +142,7 @@ class ModelEditorModelRun extends React.Component {
     }
 
     render() {
-        const {calculateModflowModel, calculateModflowModelStatus, permissions} = this.props;
+        const {calculateModflowModel, calculateModflowModelStatus, permissions, calculation} = this.props;
         const {id} = this.props.params;
         const readOnly = !lodash.includes(permissions, 'w');
 
@@ -147,8 +155,12 @@ class ModelEditorModelRun extends React.Component {
                     />
                     {!readOnly &&
                     <WebData.Component.Loading status={calculateModflowModelStatus}>
-                        <Button onClick={() => calculateModflowModel(id)}>Calculate</Button>
+                        <Button type="full" onClick={() => calculateModflowModel(id)}>Calculate</Button>
                     </WebData.Component.Loading>}
+                    <h3 style={[styles.heading]}>
+                        Calculation Status
+                    </h3>
+                    <CalculationStatus calculation={calculation} />
                 </div>
                 <div style={styles.properties}>
                     <div style={[ styles.columnFlex2 ]}>

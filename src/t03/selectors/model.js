@@ -1,5 +1,11 @@
 import styleGlobals from 'styleGlobals';
 
+export const CALCULATION_STATE_NEW = 0;
+export const CALCULATION_STATE_PREPROCESSING = 1;
+export const CALCULATION_STATE_QUEUED = 2;
+export const CALCULATION_STATE_STARTED = 3;
+export const CALCULATION_STATE_FINISHED = 4;
+
 export const getInitialStyles = () => {
     return {
         area: {
