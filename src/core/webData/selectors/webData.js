@@ -10,6 +10,9 @@ export const getErrorMessage = state => state && state.msg ?  state.msg : null;
 export const getType = state => state ? state.type : null;
 export const getData= state => state && state.data ? state.data : null;
 
+export const isStatusLoading = (status) => status.status === 'loading';
+export const isStatusSuccess = (status) => status.status === 'success';
+
 export const getStatusObject = (state, type) => {
     const request = getRequestStatusByType(state, type);
 

@@ -264,3 +264,14 @@ export function setCalculation(tool, calculation) {
         payload: calculation
     };
 }
+
+
+export const STOP_GET_MODFLOW_MODEL_CALCULATION = 'STOP_GET_MODFLOW_MODEL_CALCULATION';
+
+export function stopGetModflowModelCalculation(tool, id) {
+    return {
+        type: STOP_GET_MODFLOW_MODEL_CALCULATION,
+        tool,
+        id,
+    };
+}

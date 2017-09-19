@@ -147,7 +147,7 @@ const Button = ConfiguredRadium(function(props) {
 
 Button.propTypes = {
     children: PropTypes.node,
-    type: PropTypes.oneOf(['default', 'primary', 'accent', 'link']),
+    type: PropTypes.oneOf(['default', 'primary', 'accent', 'link', 'full']),
     iconInside: PropTypes.bool,
     disabled: PropTypes.bool,
     style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),

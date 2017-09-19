@@ -1,18 +1,15 @@
-import { put, take } from 'redux-saga/effects';
+import { put, take, call, cancelled, race } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { sendQuery } from '../../actions/messageBox';
-import { Query, Command, Action } from '../../t03/actions/index';
 import { Selector } from '../../t03';
-import { WebData } from '../../core';
+import { Query, Command, Action } from '../actions/index';
+import { WebData } from '../../core/index';
 
 const MAX_TRY = 20;
 
-export default function* pollModflowModelCalculationStatusFlow() {
+function* pollModflowModelCalculationStatus(tool, id) {
     // eslint-disable-next-line no-constant-condition
-    while (true) {
-        // const action = yield take( action => action.type === Query.GET_MODFLOW_MODEL_CALCULATION );
-        const action = yield take( action => WebData.Helpers.waitForAction( action, Query.GET_MODFLOW_MODEL_CALCULATION ) );
-
+    try {
         let i = 0;
         let multi = 1;
 
@@ -21,7 +18,7 @@ export default function* pollModflowModelCalculationStatusFlow() {
             data: null
         } ) );
 
-        yield put( sendQuery( `modflowmodels/${action.id}/calculation`, Query.GET_MODFLOW_MODEL_CALCULATION ) );
+        yield put( sendQuery( `modflowmodels/${id}/calculation`, Query.GET_MODFLOW_MODEL_CALCULATION ) );
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
@@ -43,22 +40,22 @@ export default function* pollModflowModelCalculationStatusFlow() {
                 && responseCalculation.webData.data.state !== Selector.model.CALCULATION_STATE_NEW
                 && responseCalculation.webData.data.state !== Selector.model.CALCULATION_STATE_FINISHED
             ) {
-                yield put( Action.setCalculation( action.tool, responseCalculation.webData.data ) );
+                yield put( Action.setCalculation( tool, responseCalculation.webData.data ) );
                 i++;
                 yield delay( 3000 * multi );
 
                 if (i % 5 === 0) {
                     multi++;
                 }
-                yield put( sendQuery( `modflowmodels/${action.id}/calculation`, Query.GET_MODFLOW_MODEL_CALCULATION ) );
+                yield put( sendQuery( `modflowmodels/${id}/calculation`, Query.GET_MODFLOW_MODEL_CALCULATION ) );
                 continue;
             }
             if (WebData.Helpers.isSuccess( responseCalculation )
                 && (responseCalculation.webData.data.state === Selector.model.CALCULATION_STATE_FINISHED
                     || responseCalculation.webData.data.state === Selector.model.CALCULATION_STATE_NEW)
             ) {
-                yield put( Query.getModflowModelResults(action.tool, action.id) );
-                yield put( Action.setCalculation( action.tool, responseCalculation.webData.data ) );
+                yield put( Query.getModflowModelResults( tool, id ) );
+                yield put( Action.setCalculation( tool, responseCalculation.webData.data ) );
 
                 yield put( WebData.Modifier.Action.responseAction( Command.CALCULATE_MODFLOW_MODEL, {
                     type: 'success',
@@ -67,5 +64,23 @@ export default function* pollModflowModelCalculationStatusFlow() {
                 break;
             }
         }
+    }
+    finally {
+        if (yield cancelled()) {
+            yield put( WebData.Modifier.Action.reset( Command.CALCULATE_MODFLOW_MODEL ) );
+            yield put( WebData.Modifier.Action.reset( Query.GET_MODFLOW_MODEL_CALCULATION ) );
+        }
+    }
+}
+
+export default function* pollModflowModelCalculationStatusFlow() {
+
+    while (true) {
+        const action = yield take( action => WebData.Helpers.waitForAction( action, Query.GET_MODFLOW_MODEL_CALCULATION ) );
+
+        yield race( {
+            task: call( pollModflowModelCalculationStatus, action.tool, action.id ),
+            cancel: take( action => action.type === Action.STOP_GET_MODFLOW_MODEL_CALCULATION )
+        } );
     }
 }
