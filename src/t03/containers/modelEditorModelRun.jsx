@@ -53,7 +53,7 @@ const menu = [
         name: 'Show logs'
     },
     {
-        id: "listfile",
+        id: "files",
         name: 'Show files'
     }
 ];
@@ -77,17 +77,24 @@ class ModelEditorModelRun extends React.Component {
         Routing.modelRunType(routes, params)(type);
     };
 
+    loadFile = (file) => {
+        const { calculation, getFile } = this.props;
+
+        if (!file || !calculation.calculation_id) {
+            return;
+        }
+
+        getFile( calculation.calculation_id, lodash.last(lodash.split(file, '.')) );
+    };
+
     renderProperties( ) {
         const {
             stressPeriods,
             calculateStressPeriodsStatus,
             updateStressPeriodsStatus,
-            getModflowModelCalculationStatus,
-            getModflowModelCalculation,
-            getListfileStatus,
-            getListfile,
-            permissions,
+            getFileStatus,
             calculation,
+            permissions,
         } = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
@@ -100,17 +107,16 @@ class ModelEditorModelRun extends React.Component {
                 return (
                     <RunModelProperties
                         readOnly={readOnly}
-                        getModflowModelCalculationStatus={getModflowModelCalculationStatus}
-                        getModflowModelCalculation={getModflowModelCalculation}
+                        calculation={calculation}
                         id={id}
                     />
                 );
-            case 'listfile':
+            case 'files':
                 return (
                     <ListfileProperties
-                        getListfileStatus={getListfileStatus}
-                        getListfile={getListfile}
-                        calculation={calculation}
+                        getFileStatus={getFileStatus}
+                        loadFile={this.loadFile}
+                        files={calculation.files || []}
                     />
                 );
             case 'times':
@@ -128,7 +134,8 @@ class ModelEditorModelRun extends React.Component {
     }
 
     render() {
-        const {calculateModflowModel, calculateModflowModelStatus, id, permissions} = this.props;
+        const {calculateModflowModel, calculateModflowModelStatus, permissions} = this.props;
+        const {id} = this.props.params;
         const readOnly = !lodash.includes(permissions, 'w');
 
         return (
@@ -157,8 +164,7 @@ const actions = {
     updateStressPeriods: Command.updateStressPeriods,
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
-    getModflowModelCalculation: Query.getModflowModelCalculation,
-    getListfile: Query.getListfile,
+    getFile: Query.getFile,
 };
 
 const mapStateToProps = (state, { tool, params }) => {
@@ -169,8 +175,7 @@ const mapStateToProps = (state, { tool, params }) => {
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
-        getModflowModelCalculationStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_CALCULATION),
-        getListfileStatus: WebData.Selector.getStatusObject(state, Query.GET_LISTFILE),
+        getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
     };
 };
 
