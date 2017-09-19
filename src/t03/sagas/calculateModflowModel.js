@@ -1,7 +1,7 @@
 import { put, take, call, select } from 'redux-saga/effects';
 import { buildRequest } from '../../actions/messageBox';
 import { getApiKey } from '../../reducers/user';
-import { Command, Query } from '../../t03/actions/index';
+import { Command, Query, Action } from '../../t03/actions/index';
 import { WebData } from '../../core';
 
 export default function* calculateModflowModelFlow() {
@@ -18,6 +18,18 @@ export default function* calculateModflowModelFlow() {
         try {
             const state = yield select();
             const apiKey = getApiKey( state.user );
+
+            yield put(
+                Action.setCalculation(
+                    action.tool,
+                    {
+                        ...state[ action.tool ].calculation,
+                        state: 0,
+                        files: [],
+                        message: '',
+                    }
+                )
+            );
 
             yield call(
                 WebData.Helpers.fetchStatusWrapper,

@@ -2,13 +2,8 @@ import { put, take } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { sendQuery } from '../../actions/messageBox';
 import { Query, Command, Action } from '../../t03/actions/index';
+import { Selector } from '../../t03';
 import { WebData } from '../../core';
-
-const STATE_NEW = 0;
-const STATE_PREPROCESSING = 1;
-const STATE_QUEUED = 2;
-const STATE_STARTED = 3;
-const STATE_FINISHED = 4;
 
 const MAX_TRY = 20;
 
@@ -45,11 +40,12 @@ export default function* pollModflowModelCalculationStatusFlow() {
             }
             if (WebData.Helpers.isSuccess( responseCalculation )
                 && responseCalculation.webData.data.state !== undefined
-                && responseCalculation.webData.data.state !== STATE_NEW
-                && responseCalculation.webData.data.state !== STATE_FINISHED
+                && responseCalculation.webData.data.state !== Selector.model.CALCULATION_STATE_NEW
+                && responseCalculation.webData.data.state !== Selector.model.CALCULATION_STATE_FINISHED
             ) {
+                yield put( Action.setCalculation( action.tool, responseCalculation.webData.data ) );
                 i++;
-                yield delay( 5000 * multi );
+                yield delay( 3000 * multi );
 
                 if (i % 5 === 0) {
                     multi++;
@@ -57,7 +53,10 @@ export default function* pollModflowModelCalculationStatusFlow() {
                 yield put( sendQuery( `modflowmodels/${action.id}/calculation`, Query.GET_MODFLOW_MODEL_CALCULATION ) );
                 continue;
             }
-            if (WebData.Helpers.isSuccess( responseCalculation ) && (responseCalculation.webData.data.state === STATE_FINISHED || responseCalculation.webData.data.state === STATE_NEW)) {
+            if (WebData.Helpers.isSuccess( responseCalculation )
+                && (responseCalculation.webData.data.state === Selector.model.CALCULATION_STATE_FINISHED
+                    || responseCalculation.webData.data.state === Selector.model.CALCULATION_STATE_NEW)
+            ) {
                 yield put( Query.getModflowModelResults(action.tool, action.id) );
                 yield put( Action.setCalculation( action.tool, responseCalculation.webData.data ) );
 
