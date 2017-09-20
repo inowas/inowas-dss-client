@@ -3,12 +3,22 @@
  */
 
 export const SCENARIO_ANALYSIS_CREATED = 'scenarioAnalysisCreated';
+export const SCENARIO_ANALYSIS_UPDATED = 'scenarioAnalysisUpdated';
 export const SCENARIO_ANALYSIS_CLONED = 'scenarioAnalysisCloned';
 export const SCENARIO_ANALYSIS_DELETED = 'scenarioAnalysisDeleted';
 
 export function scenarioAnalysisCreated(tool, id, payload) {
     return {
         type: SCENARIO_ANALYSIS_CREATED,
+        tool,
+        id,
+        payload
+    };
+}
+
+export function scenarioAnalysisUpdated(tool, id, payload) {
+    return {
+        type: SCENARIO_ANALYSIS_UPDATED,
         tool,
         id,
         payload

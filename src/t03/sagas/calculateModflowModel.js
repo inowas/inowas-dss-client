@@ -47,7 +47,7 @@ export default function* calculateModflowModelFlow() {
             if (typeof err === 'string') {
                 msg = err;
             } else {
-                let error = err.error || { message: undefined };
+                const error = err.error || { message: undefined };
                 msg = error.message || msg;
             }
 

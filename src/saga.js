@@ -37,5 +37,7 @@ export default function* rootSaga() {
         call(T07.createScenarioFlow),
         call(T07.deleteScenarioAnalysisFlow),
         call(T07.deleteScenarioFlow),
+        call(T07.loadScenarioAnalysisFlow),
+        call(T07.updateScenarioAnalysisFlow),
     ];
 }

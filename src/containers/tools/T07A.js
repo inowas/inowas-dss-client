@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Chart from 'react-c3js';
 import { Formatter } from '../../core';
-
+import ConfiguredRadium from 'ConfiguredRadium';
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
-import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import ArraySlider from '../../components/primitive/ArraySlider';
 import Navbar from '../Navbar';
 import ScenarioSelect from '../../components/tools/ScenarioSelect';
 import { withRouter } from 'react-router';
-import { Modifier } from '../../t07';
+import { Modifier } from '../../t07/index';
 import uuid from 'uuid';
+import styleGlobals from 'styleGlobals';
+import { push } from 'react-router-redux';
 
 import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
@@ -38,6 +39,17 @@ import TotalTime from '../../model/TotalTime';
 import ModflowModelResult from '../../model/ModflowModelResult';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 
+const styles = {
+    heading: {
+        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
+        fontWeight: 300,
+        fontSize: 16,
+        textAlign: 'left',
+        paddingBottom: 10
+    }
+};
+
+@ConfiguredRadium
 class T07A extends React.Component {
 
     constructor(props) {
@@ -453,12 +465,24 @@ class T07A extends React.Component {
     render() {
         const { navigation } = this.state;
         const { id } = this.props.params;
-        const models = this.props.tool.models;
+        const { models, scenarioAnalysis } = this.props.tool;
 
         return (
             <div className="toolT07 app-width">
                 <Navbar links={navigation} />
-                <Header title={'T07. Scenario Analysis'} />
+                <h3 style={[styles.heading]}>
+                    T07. Scenario Analysis - {scenarioAnalysis.name} | <a href="#" onClick={() => this.props.dispatch(push(Modifier.Routing.editScenarioAnalysisGeneralUrl(scenarioAnalysis.id)))}>Edit</a>
+                </h3>
+                <div className="grid-container">
+                    <div className="tile col stretch">
+                        <Accordion firstActive={null}>
+                            <AccordionItem heading="Description">
+                                <p><pre>{scenarioAnalysis.description}</pre></p>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </div>
+
                 <div className="grid-container">
                     <div className="tile col stretch">
                         <Accordion firstActive={0}>

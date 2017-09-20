@@ -64,8 +64,7 @@ function* pollModflowModelCalculationStatus(tool, id) {
                 break;
             }
         }
-    }
-    finally {
+    }    finally {
         if (yield cancelled()) {
             yield put( WebData.Modifier.Action.reset( Command.CALCULATE_MODFLOW_MODEL ) );
             yield put( WebData.Modifier.Action.reset( Query.GET_MODFLOW_MODEL_CALCULATION ) );
@@ -74,7 +73,6 @@ function* pollModflowModelCalculationStatus(tool, id) {
 }
 
 export default function* pollModflowModelCalculationStatusFlow() {
-
     while (true) {
         const action = yield take( action => WebData.Helpers.waitForAction( action, Query.GET_MODFLOW_MODEL_CALCULATION ) );
 
