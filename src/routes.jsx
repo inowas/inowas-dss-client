@@ -2,13 +2,13 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
-import { Container as T03 } from './t03/index';
+import * as T03 from './t03/index';
+import * as T07 from './t07/index';
 import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
-import { Modifier } from './t03/index';
-import { WebData } from './core';
+import { WebData } from './core/index';
 
 const routes = store =>
     <Route path="/">
@@ -19,14 +19,14 @@ const routes = store =>
             <Route path="T02(/:id)" component={tools.T02} />
             <Route
                 path="T03(/:id)(/:property)(/:type)(/:pid)"
-                component={T03.Main}
+                component={T03.Container.Main}
                 tool={'T03'}
                 onEnter={nextState => {
                     // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
                     store.dispatch(WebData.Modifier.Action.clear());
                     if (nextState.params.id) {
                         store.dispatch(
-                            Modifier.Query.getModflowModelDetails(
+                            T03.Modifier.Query.getModflowModelDetails(
                                 'T03',
                                 nextState.params.id,
                                 nextState.params.property,
@@ -36,11 +36,30 @@ const routes = store =>
                         );
                         return;
                     }
-                    store.dispatch(Modifier.Action.destroyModflowModel('T03'));
+                    store.dispatch(T03.Modifier.Action.destroyModflowModel('T03'));
                 }}
             />
 
             <Route path="T06(/:id)" component={tools.T06} />
+            <Route
+                path="T07(/:id)"
+                component={T07.Container.Main}
+                tool={'T07'}
+                onEnter={nextState => {
+                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
+                    store.dispatch(WebData.Modifier.Action.clear());
+                    if (nextState.params.id) {
+                        store.dispatch(
+                            T07.Modifier.Query.getScenarioAnalysisDetails(
+                                'T07',
+                                nextState.params.id
+                            )
+                        );
+                        return;
+                    }
+                    store.dispatch(T07.Modifier.Action.destroyScenarioAnalysis('T07'));
+                }}
+            />
             <Route path="T07A/:id" component={tools.T07A} tool={'T07'} />
             <Route path="T07B/:id" component={tools.T07B} />
             <Route path="T07C/:id" component={tools.T07C} />
@@ -58,7 +77,7 @@ const routes = store =>
                         store.dispatch(WebData.Modifier.Action.clear());
                         if (nextState.params.id) {
                             store.dispatch(
-                                Modifier.Query.getModflowModelDetails(
+                                T03.Modifier.Query.getModflowModelDetails(
                                     'T07E',
                                     nextState.params.id,
                                     nextState.params.property,
@@ -68,7 +87,7 @@ const routes = store =>
                             );
                             return;
                         }
-                        store.dispatch(Modifier.Action.destroyModflowModel('T07E'));
+                        store.dispatch(T03.Modifier.Action.destroyModflowModel('T07E'));
                     }}
                 />
             </Route>

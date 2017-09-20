@@ -11,7 +11,7 @@ export default function* createScenarioAnalysisFlow() {
         // eslint-disable-next-line no-shadow
         const action = yield take( action => WebData.Helpers.waitForAction( action, Command.CREATE_SCENARIO_ANALYSIS ) );
 
-        yield put( sendCommand( action.type, action.payload ) );
+        yield put( sendCommand( action.type, { ...action.payload, id: action.id } ) );
 
         // eslint-disable-next-line no-constant-condition
         while (true) {

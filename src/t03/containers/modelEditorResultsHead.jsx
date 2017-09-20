@@ -171,9 +171,12 @@ class ModelEditorResultsHead extends Component {
         this.props.createScenarioAnalysis(
             tool,
             uuid.v4(),
-            model.id,
-            'Scenario Analysis of ' + model.name,
-            true
+            {
+                basemodel_id: model.id,
+                name: 'Scenario Analysis of ' + model.name,
+                description: '',
+                public: true,
+            }
         );
     };
 
