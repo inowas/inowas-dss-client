@@ -6,7 +6,7 @@ import LayerNumber from '../../model/LayerNumber';
 import ResultType from '../../model/ResultType';
 import Coordinate from '../../model/Coordinate';
 import ModflowModels from '../../model/ModflowModelsCollection';
-import { Action } from '../actions/index';
+import { Action, Event } from '../actions/index';
 
 function getInitialState() {
     return {
@@ -43,6 +43,14 @@ const createReducer = tool => {
                 return {
                     ...state,
                     scenarioAnalysis: action.payload
+                };
+            case Event.SCENARIO_ANALYSIS_UPDATED:
+                return {
+                    ...state,
+                    scenarioAnalysis: {
+                        ...state.scenarioAnalysis,
+                        ...action.payload
+                    }
                 };
 
             case Action.DESTROY_SCENARIO_ANALYSIS:

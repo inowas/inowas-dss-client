@@ -4,7 +4,8 @@ import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
 import * as T03 from './t03/index';
 import * as T07 from './t07/index';
-import Dashboard from './containers/Dashboard';
+import * as Dashboard from './dashboard/index';
+import DashboardContainer from './containers/Dashboard';
 import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
@@ -15,7 +16,7 @@ const routes = store =>
         <IndexRoute component={LandingPage} />
         <Route path="impressum" component={Impressum} />
         <Route path="tools" component={AppForAuthenticatedUser}>
-            <IndexRoute component={Dashboard} />
+            <IndexRoute component={DashboardContainer} />
             <Route path="T02(/:id)" component={tools.T02} />
             <Route
                 path="T03(/:id)(/:property)(/:type)(/:pid)"
@@ -48,6 +49,7 @@ const routes = store =>
                 onEnter={nextState => {
                     // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
                     store.dispatch(WebData.Modifier.Action.clear());
+                    store.dispatch(Dashboard.Modifier.Query.loadInstances('T03', false));
                     if (nextState.params.id) {
                         store.dispatch(
                             T07.Modifier.Query.getScenarioAnalysisDetails(
@@ -60,7 +62,41 @@ const routes = store =>
                     store.dispatch(T07.Modifier.Action.destroyScenarioAnalysis('T07'));
                 }}
             />
-            <Route path="T07A/:id" component={tools.T07A} tool={'T07'} />
+            <Route
+                path="T07A"
+                component={T07.Container.Main}
+                tool={'T07'}
+                onEnter={nextState => {
+                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
+                    store.dispatch(WebData.Modifier.Action.clear());
+                    store.dispatch(Dashboard.Modifier.Query.loadInstances('T03', false));
+                    if (nextState.params.id) {
+                        store.dispatch(
+                            T07.Modifier.Query.getScenarioAnalysisDetails(
+                                'T07',
+                                nextState.params.id
+                            )
+                        );
+                        return;
+                    }
+                    store.dispatch(T07.Modifier.Action.destroyScenarioAnalysis('T07'));
+                }}
+            />
+            <Route
+                path="T07A/:id"
+                component={tools.T07A}
+                tool={'T07'}
+                onEnter={nextState => {
+                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
+                    store.dispatch( WebData.Modifier.Action.clear() );
+                    store.dispatch(
+                        T07.Modifier.Query.getScenarioAnalysisDetails(
+                            'T07',
+                            nextState.params.id
+                        )
+                    );
+                }}
+            />
             <Route path="T07B/:id" component={tools.T07B} />
             <Route path="T07C/:id" component={tools.T07C} />
             <Route path="T07D/:id" component={tools.T07D} />
@@ -70,7 +106,7 @@ const routes = store =>
             >
                 <Route
                     path=":id(/:property)(/:type)(/:pid)"
-                    component={T03.Main}
+                    component={T03.Container.Main}
                     tool={'T07E'}
                     onEnter={nextState => {
                         // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount

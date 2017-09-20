@@ -12,7 +12,9 @@ export function createScenarioAnalysis(tool, id, payload, routes, params) {
         type: CREATE_SCENARIO_ANALYSIS,
         tool,
         id,
-        payload
+        payload,
+        routes,
+        params,
     };
 }
 

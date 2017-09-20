@@ -3,6 +3,7 @@ export const getInitialState = () => {
         name: 'Scenario of ',
         description: '',
         public: true,
+        basemodel_id: null,
         permissions: 'rwx',
     };
 };

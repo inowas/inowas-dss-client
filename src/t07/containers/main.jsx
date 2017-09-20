@@ -46,8 +46,8 @@ class T07 extends React.Component {
     };
 
     componentWillMount() {
-        const {said} = this.props.params;
-        if (said) {
+        const {id} = this.props.params;
+        if (id) {
             this.setState( prevState => {
                 return {
                     ...prevState,
@@ -55,7 +55,7 @@ class T07 extends React.Component {
                         ...prevState.navigation,
                         {
                             name: 'Back to scenario analysis',
-                            path: '/tools/T07A/' + said,
+                            path: '/tools/T07A/' + id,
                             icon: <Icon name="layer_horizontal_hatched" />
                         },
                     ]
@@ -83,7 +83,6 @@ class T07 extends React.Component {
                     <div style={styles.overlay}>
                         <Properties
                             selectedProperty={this.props.params.property}
-                            close={this.close}
                             tool={tool}
                             type={this.props.params.type}
                         />
