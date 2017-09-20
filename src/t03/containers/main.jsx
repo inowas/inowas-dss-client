@@ -157,7 +157,7 @@ class T03 extends React.Component {
                             items={menuItems}
                             selectedProperty={this.props.params.property}
                             selectedType={this.props.params.type}
-                            onClick={Routing.goToBoundaryTypeOverview(
+                            onClick={Routing.goToPropertyType(
                                 routes,
                                 params
                             )}

@@ -15,6 +15,8 @@ import RechargeProperties from './rechargeProperties';
 import RechargeRate from './rechargeRate';
 import RiverObservationPoint from './riverObservationPoint';
 import RiverProperties from './riverProperties';
+import RunModelOverview from './runModelOverview';
+import RunModelOverviewMap from './runModelOverviewMap';
 import SoilmodelGeneral from './soilmodelGeneral';
 import SoilmodelLayer from './soilmodelLayer';
 import SoilModelLayerDataTable from './soilModelLayerDataTable';
@@ -41,11 +43,13 @@ export {
     RechargeRate,
     RiverObservationPoint,
     RiverProperties,
+    RunModelOverview,
+    RunModelOverviewMap,
     SoilmodelGeneral,
     SoilmodelLayer,
     SoilModelLayerDataTable,
     SoilModelLayerOverview,
     StressPeriodDataTable,
     StressPeriodProperties,
-    WellProperties
+    WellProperties,
 };

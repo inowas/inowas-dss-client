@@ -7,14 +7,13 @@ import styleGlobals from 'styleGlobals';
 import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
 import { Command, Query } from '../../t03/actions';
-import { stressPeriods } from '../../t03/selectors';
-import { StressPeriodProperties, CalculationStatus } from '../components';
+import { Selector } from '../../t03/index';
+import { StressPeriodProperties, CalculationStatus, RunModelOverview } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from "../components/runModelProperties";
 import ListfileProperties from '../components/ListfileProperties';
 import FilterableList from '../../components/primitive/FilterableList';
 import { Routing } from '../actions/index';
-import { model } from '../selectors/index';
 
 const styles = {
     container: {
@@ -102,12 +101,13 @@ class ModelEditorModelRun extends React.Component {
             calculateStressPeriodsStatus,
             updateStressPeriodsStatus,
             getFileStatus,
-            calculation,
-            permissions,
+            model,
+            routes,
+            params
         } = this.props;
 
-        const readOnly = !lodash.includes(permissions, 'w');
-        const readOnlyScenario = lodash.includes(permissions, 's');
+        const readOnly = !lodash.includes(model.permissions, 'w');
+        const readOnlyScenario = lodash.includes(model.permissions, 's');
 
         const {type, id} = this.props.params;
 
@@ -116,7 +116,7 @@ class ModelEditorModelRun extends React.Component {
                 return (
                     <RunModelProperties
                         readOnly={readOnly}
-                        calculation={calculation}
+                        calculation={model.calculation}
                         id={id}
                     />
                 );
@@ -125,7 +125,7 @@ class ModelEditorModelRun extends React.Component {
                     <ListfileProperties
                         getFileStatus={getFileStatus}
                         loadFile={this.loadFile}
-                        files={calculation.files || []}
+                        files={model.calculation.files || []}
                     />
                 );
             case 'times':
@@ -138,17 +138,17 @@ class ModelEditorModelRun extends React.Component {
                                     readOnly={readOnly || readOnlyScenario}
                     /> );
             default:
-                return null;
+                return <RunModelOverview model={model} route={Routing.goToProperty(routes, params)} routeType={Routing.goToPropertyType(routes, params)}/>;
         }
     }
 
     render() {
-        const {calculateModflowModel, calculateModflowModelStatus, permissions, calculation, stopPolling} = this.props;
+        const {calculateModflowModel, calculateModflowModelStatus, model, stopPolling} = this.props;
         const {id} = this.props.params;
-        const readOnly = !lodash.includes(permissions, 'w');
+        const readOnly = !lodash.includes(model.permissions, 'w');
 
         const canCancel = WebData.Selector.isStatusLoading(calculateModflowModelStatus)
-            && calculation.state !== model.CALCULATION_STATE_NEW;
+            && model.calculation.state !== Selector.model.CALCULATION_STATE_NEW;
 
         return (
             <div style={[ styles.container ]}>
@@ -166,7 +166,7 @@ class ModelEditorModelRun extends React.Component {
                     <h3 style={[styles.heading]}>
                         Calculation Status
                     </h3>
-                    <CalculationStatus calculation={calculation} />
+                    <CalculationStatus calculation={model.calculation} />
                 </div>
                 <div style={styles.properties}>
                     <div style={[ styles.columnFlex2 ]}>
@@ -188,9 +188,8 @@ const actions = {
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
-        stressPeriods: stressPeriods.getState(state[ tool ].model),
-        permissions: state[ tool ].model.permissions,
-        calculation: state[ tool ].model.calculation,
+        stressPeriods: Selector.stressPeriods.getState(state[ tool ].model),
+        model: state[ tool ].model,
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
