@@ -247,6 +247,7 @@ class ModelEditorGeneral extends Component {
                                 onChange={this.handleInputChangeModflow('name')}
                                 placeholder="Name"
                             />
+                            {!readOnlyScenario &&
                             <Select
                                 disabled={readOnly}
                                 clearable={false}
@@ -260,7 +261,7 @@ class ModelEditorGeneral extends Component {
                                         { label: 'private', value: false },
                                     ]
                                 }
-                            />
+                            />}
                         </LayoutComponents.InputGroup>
 
                         <LayoutComponents.InputGroup label="Description">
