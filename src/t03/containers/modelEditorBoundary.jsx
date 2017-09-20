@@ -215,7 +215,7 @@ class ModelEditorBoundary extends React.Component {
             const { property } = this.props.params;
             const { routes, params } = this.props;
 
-            Routing.goToBoundaryTypeOverview(routes, params)(property, type);
+            Routing.goToPropertyType(routes, params)(property, type);
         };
     };
 
@@ -224,9 +224,9 @@ class ModelEditorBoundary extends React.Component {
         const { property, type, pid } = params;
 
         if (pid) {
-            Routing.goToBoundaryTypeOverview(routes, params)(property, type);
+            Routing.goToPropertyType(routes, params)(property, type);
         } else if (type) {
-            Routing.goToBoundaryOverview(routes, params)(property);
+            Routing.goToProperty(routes, params)(property);
         }
     };
 

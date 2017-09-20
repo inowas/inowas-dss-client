@@ -45,7 +45,7 @@ export default function* getModflowDetailsFlow() {
                 yield put( Action.setLayer( action.tool, layer ) );
             }
 
-            if (action.property === 'model-run' && action.pType === 'times') {
+            if ((action.property === 'model-run' && action.pType === 'times') || (action.property === 'model-run' && !action.pType)) {
                 const stressperiods = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest( 'modflowmodels/' + action.id + '/stressperiods', 'GET' ), apiKey);
                 yield put( Action.setStressPeriods( action.tool, stressperiods ) );
             }

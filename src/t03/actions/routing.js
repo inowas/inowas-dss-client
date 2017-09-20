@@ -23,11 +23,11 @@ const filterParamsForModflowModelEdit = (params) => forIn(
     (value, key, obj) => obj[ key ] = includes( routeKeyIds, key ) ? value : null
 );
 
-export const goToBoundaryTypeOverview = (routes, params) => (property, type) => {
+export const goToPropertyType = (routes, params) => (property, type) => {
     Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property, type } );
 };
 
-export const goToBoundaryOverview = (routes, params) => (property) => {
+export const goToProperty = (routes, params) => (property) => {
     Routing.goToUrl( routes, { ...filterParamsProperty( params ), property } );
 };
 
