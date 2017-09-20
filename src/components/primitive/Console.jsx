@@ -10,6 +10,8 @@ const styles = {
         whiteSpace: 'nowrap',
         backgroundColor: 'black',
         color: 'white',
+        paddingTop: '5px',
+        paddingLeft: '15px'
     },
 };
 
