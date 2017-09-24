@@ -33,9 +33,10 @@ class T09 extends React.Component {
                 <Navbar links={navigation} />
                 <h3>Please select the set of boundary conditions that apply to your problem:</h3>
                 <div className="grid-container">
+                    <a className="col-rel-1-t13" />
                     <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09A')}  className="tile col col-rel-1-t13">
                        <div className="div-block">
-                            <h1>T9A</h1>
+                            <h1>T09A</h1>
                             <p className="p-height">
                                 Depth of saltwater interface (Ghyben-Herzberg relation)
                             </p>
@@ -66,6 +67,7 @@ class T09 extends React.Component {
                             </div>
                         </div>
                     </a>
+                    { /*
                     <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09D')}  className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T09D</h1>
@@ -88,6 +90,8 @@ class T09 extends React.Component {
                             </div>
                         </div>
                     </a>
+                    */
+                    }
                 </div>
             </div>
         );

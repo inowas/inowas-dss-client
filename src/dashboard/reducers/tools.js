@@ -85,7 +85,7 @@ const initialState = [ {
         } ]
     }, {
         slug: 'T03',
-        name: 'Scenario Editor',
+        name: 'MODFLOW model setup and editor',
         path: 'tools/T03/',
         role: ROLE_NM_MF,
         instances: [
@@ -117,7 +117,7 @@ const initialState = [ {
         } ]
     }, {
         slug: 'T07',
-        name: 'Application-specific scenario analyzer',
+        name: 'MODFLOW model scenario manager',
         path: 'tools/T07A/',
         role: ROLE_NM_MF,
         instances: [
@@ -257,7 +257,7 @@ const initialState = [ {
             created_at: '2017-03-09T19:24:00+00:00',
             fake: false
         } ]
-    }, {
+    }, /*{
         slug: 'T16',
         name: 'Calculation of hydraulic conductivity',
         path: 'tools/T16/',
@@ -272,7 +272,8 @@ const initialState = [ {
             created_at: '2017-03-09T19:41:00+00:00',
             fake: false
         } ]
-    }, {
+    },
+    */ {
         slug: 'T17',
         name: 'Global MAR portal',
         path: 'tools/T17/',
