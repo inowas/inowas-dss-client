@@ -33,6 +33,11 @@ const styles = {
     expandVertical: {
         flex: 1
     },
+
+    link: {
+        cursor: 'pointer',
+        textDecoration: 'underline'
+    }
 };
 
 
@@ -45,17 +50,17 @@ const runModelValidation = ({ model, route, routeType }) => {
     return (
         <Table>
             <Tr>
-                <Td><a href="#" onClick={() => route('boundary')}>Boundaries</a></Td>
+                <Td><a style={[styles.link]} onClick={() => route('boundaries')}>Boundaries</a></Td>
                 <Td>{boundaryLength}</Td>
                 <Td><Icon name="checked"/></Td>
             </Tr>
             <Tr>
-                <Td><a href="#" onClick={() => route('soilmodel')}>Soilmodel Layers</a></Td>
+                <Td><a style={[styles.link]} onClick={() => route('soilmodel')}>Soilmodel Layers</a></Td>
                 <Td>{layersLength}</Td>
                 <Td><Icon name={layersLength > 0 ? 'checked' : 'unchecked'}/></Td>
             </Tr>
             <Tr>
-                <Td><a href="#" onClick={() => routeType('model-run', 'times')}>Time Discretization Stress Periods</a></Td>
+                <Td><a style={[styles.link]} onClick={() => routeType('model-run', 'times')}>Time Discretization Stress Periods</a></Td>
                 <Td>{stressPeriodsLength}</Td>
                 <Td><Icon name={stressPeriodsLength > 0 ? 'checked' : 'unchecked'}/></Td>
             </Tr>

@@ -10,7 +10,7 @@ import { Command, Query } from '../../t03/actions';
 import { Selector } from '../../t03/index';
 import { StressPeriodProperties, CalculationStatus, RunModelOverview } from '../components';
 import { WebData } from '../../core';
-import RunModelProperties from "../components/runModelProperties";
+import RunModelProperties from '../components/runModelProperties';
 import ListfileProperties from '../components/ListfileProperties';
 import FilterableList from '../../components/primitive/FilterableList';
 import { Routing } from '../actions/index';
@@ -36,6 +36,7 @@ const styles = {
     searchWrapper: {
         marginBottom: 6
     },
+
     heading: {
         borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
         fontWeight: 300,
@@ -49,19 +50,19 @@ const styles = {
 
 const menu = [
     {
-        id: "",
+        id: '',
         name: 'Overview'
     },
     {
-        id: "times",
+        id: 'times',
         name: 'Time Discretization'
     },
     {
-        id: "calculation",
+        id: 'calculation',
         name: 'Show logs'
     },
     {
-        id: "files",
+        id: 'files',
         name: 'Show files'
     }
 ];
@@ -74,9 +75,9 @@ class ModelEditorModelRun extends React.Component {
         this.props.updateStressPeriods(id, data);
     };
 
-    calculateStressPeriods = (start, end, time_unit) => {
+    calculateStressPeriods = (start, end, timeUnit) => {
         const {id} = this.props.params;
-        this.props.calculateStressPeriods(id, start, end, time_unit);
+        this.props.calculateStressPeriods(id, start, end, timeUnit);
     };
 
     onMenuClick = (type) => {
@@ -86,13 +87,14 @@ class ModelEditorModelRun extends React.Component {
     };
 
     loadFile = (file) => {
-        const { calculation, getFile } = this.props;
+        const { model, getFile } = this.props;
+        const calculationId = model.calculation.calculation_id;
 
-        if (!file || !calculation.calculation_id) {
+        if (!file || !calculationId) {
             return;
         }
 
-        getFile( calculation.calculation_id, lodash.last(lodash.split(file, '.')) );
+        getFile( calculationId, lodash.last(lodash.split(file, '.')) );
     };
 
     renderProperties( ) {
@@ -216,7 +218,21 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 ModelEditorModelRun = withRouter(connect(mapStateToProps, mapDispatchToProps)(ModelEditorModelRun));
 
 ModelEditorModelRun.propTypes = {
-    tool: PropTypes.string.isRequired,
+    tool: PropTypes.string,
+    getFile: PropTypes.func,
+    calculateStressPeriods: PropTypes.func,
+    calculateStressPeriodsStatus: PropTypes.func,
+    calculateModflowModel: PropTypes.func,
+    calculateModflowModelStatus: PropTypes.func,
+    calculation: PropTypes.object,
+    getFileStatus: PropTypes.func,
+    model: PropTypes.object,
+    params: PropTypes.object,
+    routes: PropTypes.object,
+    stopPolling: PropTypes.func,
+    stressPeriods: PropTypes.object,
+    updateStressPeriods: PropTypes.func,
+    updateStressPeriodsStatus: PropTypes.func
 };
 
 
