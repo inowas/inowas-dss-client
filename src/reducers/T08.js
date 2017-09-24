@@ -60,7 +60,7 @@ function getInitialState() {
             min: 1e-2,
             max: 1e+2,
             value: 2.592,
-            stepSize: 0.1,
+            stepSize: 0.001,
             decimals: 3
         }, {
             order: 4,
@@ -114,7 +114,7 @@ function getInitialState() {
             min: 0,
             max: 10,
             value: 2.25,
-            stepSize: 0.1,
+            stepSize: 0.001,
             decimals: 3
         }]
     }
