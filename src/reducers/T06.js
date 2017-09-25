@@ -9,6 +9,12 @@ import RD from '../images/Tool06Icons/Recharge release.png';
 import SS_Dam from '../images/Tool06Icons/Underground dam.png';
 import Ponds from '../images/Tool06Icons/Percolation pond.png';
 import Sand_dam from '../images/Tool06Icons/Sand dam.png';
+import Bounds from '../images/Tool06Icons/Bounds.png';
+import EI from '../images/Tool06Icons/Excess_irrigation.png';
+import Ditches from '../images/Tool06Icons/Ditches.png';
+import Trenches from '../images/Tool06Icons/Trenches.png';
+import WSB from '../images/Tool06Icons/WSB.png';
+import Flooding from '../images/Tool06Icons/Flooding.png';
 import image from '../images/Tool06Icons/Sand dam.png';
 function getInitialState() {
     return {
@@ -160,14 +166,14 @@ function getInitialState() {
             name: 'Flooding',
             highCost: false,
             highLandNeed: true,
-            image: image,
+            image: Flooding,
             href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Ditches',
             name: 'Ditches and Furrows ',
             highCost: false,
             highLandNeed: true,
-            image: image,
+            image: Ditches,
             href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'SAT',
@@ -181,7 +187,7 @@ function getInitialState() {
             name: ' Excess Irrigation',
             highCost: false,
             highLandNeed: false,
-            image: image,
+            image: EI,
             href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'IBF',
@@ -216,7 +222,7 @@ function getInitialState() {
             name: 'Shallow well/ shaft/ pit infiltration ',
             highCost: true,
             highLandNeed: false,
-            image: image,
+            image: WSB,
             href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'SS Dam',
@@ -244,14 +250,14 @@ function getInitialState() {
             name: 'Barrier & Bunds',
             highCost: false,
             highLandNeed: true,
-            image: image,
+            image: Bounds,
             href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Trenches',
             name: 'Trenches',
             highCost: false,
             highLandNeed: true,
-            image: image,
+            image: Trenches,
             href: "https://wiki.inowas.hydro.tu-dresden.de/"
         }, {
             slug: 'Rooftop',
