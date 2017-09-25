@@ -45,6 +45,13 @@ const styles = {
         fillColor: 'darkblue',
         fillOpacity: 0.7
     },
+    rbf: {
+        radius: 5,
+        color: 'black',
+        weight: 1,
+        fillColor: 'yellow',
+        fillOpacity: 1
+    },
     smw: {
         radius: 5,
         color: 'black',
