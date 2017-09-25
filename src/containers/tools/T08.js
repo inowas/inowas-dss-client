@@ -20,7 +20,7 @@ export default class T08 extends React.Component {
     state = {
         navigation: [{
             name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/T08-1D transport model (Ogata-Banks)/',
+            path: 'https://wiki.inowas.hydro.tu-dresden.de/t08-1d-transport-model-ogata-banks/',
             icon: <Icon name="file"/>
         }]
     };
