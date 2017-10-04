@@ -28,7 +28,7 @@ export default class GridLayer extends Component {
         ]} {...styles.line}/> );
     };
 
-    calculateLineCoodinates = ( boundingBox, gridSize ) => {
+    calculateLineCoordinates = (boundingBox, gridSize ) => {
         const bbXmin = boundingBox[0][0];
         const bbYmin = boundingBox[0][1];
         const bbXmax = boundingBox[1][0];
@@ -62,7 +62,7 @@ export default class GridLayer extends Component {
 
     render( ) {
         const { boundingBox, gridSize } = this.props;
-        const lineCoordinates = this.calculateLineCoodinates(boundingBox, gridSize);
+        const lineCoordinates = this.calculateLineCoordinates(boundingBox, gridSize);
 
         return (
             <FeatureGroup>

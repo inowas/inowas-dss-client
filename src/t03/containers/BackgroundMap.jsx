@@ -28,7 +28,7 @@ import L from 'leaflet';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
 import { uniqueId, has } from 'lodash';
-import GridLayer from '../components/gridLayer';
+import ActiveCellsLayer from '../components/activeCellsLayer';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -169,14 +169,14 @@ class BackgroundMap extends Component {
         );
     }
 
-    renderGrid(boundingBox, gridSize) {
+    renderActiveCells(boundingBox, gridSize, activeCells) {
         if (!Array.isArray(boundingBox)) {
             return null;
         }
 
         return (
-            <LayersControl.Overlay name="Grid" checked={false}>
-                <GridLayer boundingBox={boundingBox} gridSize={gridSize} {...this.getStyle('bounding_box')} />
+            <LayersControl.Overlay name="Active Cells" checked={false}>
+                <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells} />
             </LayersControl.Overlay>
         );
     }
@@ -816,6 +816,7 @@ class BackgroundMap extends Component {
     }
 
     render() {
+        const activeCells = this.state.model.active_cells;
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;
         const gridSize = this.state.model.grid_size;
@@ -892,7 +893,7 @@ class BackgroundMap extends Component {
                         </LayersControl.BaseLayer>
 
                         {this.renderArea(area)}
-                        {this.renderGrid(boundingBox, gridSize)}
+                        {this.renderActiveCells(boundingBox, gridSize, activeCells)}
                         {this.renderBoundingBox(boundingBox)}
                         {this.renderConstantHeads(boundaries)}
                         {this.renderGeneralHeads(boundaries)}
