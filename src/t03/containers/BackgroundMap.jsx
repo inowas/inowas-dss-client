@@ -169,17 +169,17 @@ class BackgroundMap extends Component {
         );
     }
 
-    renderActiveCells(boundingBox, gridSize, activeCells) {
+    renderAreaActiveCells = (boundingBox, gridSize, activeCells) => {
         if (!Array.isArray(boundingBox)) {
             return null;
         }
 
         return (
-            <LayersControl.Overlay name="Active Cells" checked={false}>
+            <LayersControl.Overlay name="Grid" checked={false}>
                 <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells} />
             </LayersControl.Overlay>
         );
-    }
+    };
 
     renderBoundaryPopup = b => {
         return (
@@ -664,7 +664,7 @@ class BackgroundMap extends Component {
                 if (editable.property === 'boundaries') {
                     this.state.model.boundaries.forEach(b => {
                         if (b.id === editable.id) {
-                            editables.push({ id: b.id, geometry: b.geometry });
+                            editables.push({ id: b.id, geometry: b.geometry, activeCells: b.active_cells });
                         }
                     });
                 }
@@ -688,39 +688,50 @@ class BackgroundMap extends Component {
         }
 
         editables = editables.map(e => {
+            const boundingBox = this.state.model.bounding_box;
+            const gridSize = this.state.model.grid_size;
             switch (e.geometry.type.toLowerCase()) {
                 case 'polygon':
                     return (
-                        <Polygon
-                            key={uniqueId()}
-                            id={e.id}
-                            positions={this.getLatLngFromXY(
-                                e.geometry.coordinates[0]
-                            )}
-                        />
+                        <FeatureGroup>
+                            <Polygon
+                                key={uniqueId()}
+                                id={e.id}
+                                positions={this.getLatLngFromXY(
+                                    e.geometry.coordinates[0]
+                                )}
+                            />
+                            { e.activeCells && <ActiveCellsLayer activeCells={e.activeCells} boundingBox={boundingBox} gridSize={gridSize} /> }
+                        </FeatureGroup>
                     );
                 case 'linestring':
                     return (
-                        <Polyline
-                            key={uniqueId()}
-                            id={e.id}
-                            positions={this.getLatLngFromXY(
-                                e.geometry.coordinates
-                            )}
-                        />
+                        <FeatureGroup>
+                            <Polyline
+                                key={uniqueId()}
+                                id={e.id}
+                                positions={this.getLatLngFromXY(
+                                    e.geometry.coordinates
+                                )}
+                            />
+                            { e.activeCells && <ActiveCellsLayer activeCells={e.activeCells} boundingBox={boundingBox} gridSize={gridSize} /> }
+                        </FeatureGroup>
                     );
                 case 'point':
                     return (
-                        <Circle
-                            key={uniqueId()}
-                            id={e.id}
-                            oId={e.oId}
-                            center={[
-                                e.geometry.coordinates[1],
-                                e.geometry.coordinates[0]
-                            ]}
-                            radius={50}
-                        />
+                        <FeatureGroup>
+                            <Circle
+                                key={uniqueId()}
+                                id={e.id}
+                                oId={e.oId}
+                                center={[
+                                    e.geometry.coordinates[1],
+                                    e.geometry.coordinates[0]
+                                ]}
+                                radius={50}
+                            />
+                            { e.activeCells && <ActiveCellsLayer activeCells={e.activeCells} boundingBox={boundingBox} gridSize={gridSize} /> }
+                        </FeatureGroup>
                     );
                 default:
                     return null;
@@ -893,7 +904,7 @@ class BackgroundMap extends Component {
                         </LayersControl.BaseLayer>
 
                         {this.renderArea(area)}
-                        {this.renderActiveCells(boundingBox, gridSize, activeCells)}
+                        {this.renderAreaActiveCells(boundingBox, gridSize, activeCells)}
                         {this.renderBoundingBox(boundingBox)}
                         {this.renderConstantHeads(boundaries)}
                         {this.renderGeneralHeads(boundaries)}
