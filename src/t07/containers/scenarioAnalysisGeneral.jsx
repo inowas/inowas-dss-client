@@ -50,7 +50,7 @@ const initialState = {
 @ConfiguredRadium
 class ScenarioAnalysisGeneral extends Component {
     constructor(props) {
-        super( props );
+        super(props);
         this.state = initialState;
     }
 
@@ -59,39 +59,39 @@ class ScenarioAnalysisGeneral extends Component {
             ? this.props.scenarioAnalysis
             : ScenarioAnalysis.getInitialState();
 
-        this.setState( function (prevState) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 scenarioAnalysis: scenarioAnalysis
             };
-        } );
+        });
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState( function (prevState) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 scenarioAnalysis: newProps.scenarioAnalysis
             };
-        } );
+        });
     }
 
     handleSelectChange = name => {
         return data => {
-            this.handleInputChange( name )( data ? data.value : undefined );
+            this.handleInputChange(name)(data ? data.value : undefined);
         };
     };
 
     handleInputChange(name, key) {
         return value => {
-            this.setState( function (prevState) {
+            this.setState(function(prevState) {
                 if (key) {
                     return {
                         scenarioAnalysis: {
                             ...prevState.scenarioAnalysis,
-                            [ key ]: {
-                                ...prevState.scenarioAnalysis[ key ],
-                                [ name ]: value.hasOwnProperty( 'value' )
+                            [key]: {
+                                ...prevState.scenarioAnalysis[key],
+                                [name]: value.hasOwnProperty('value')
                                     ? value.value
                                     : value // dirty fix for react-select-plus returning an object
                             }
@@ -102,12 +102,12 @@ class ScenarioAnalysisGeneral extends Component {
                 return {
                     scenarioAnalysis: {
                         ...prevState.scenarioAnalysis,
-                        [ name ]: value.hasOwnProperty( 'value' )
+                        [name]: value.hasOwnProperty('value')
                             ? value.value
                             : value // dirty fix for react-select-plus returning an object
                     }
                 };
-            } );
+            });
         };
     }
 
@@ -115,11 +115,21 @@ class ScenarioAnalysisGeneral extends Component {
         const { routes, params } = this.props;
 
         if (id) {
-            this.props.updateScenarioAnalysis(id, this.state.scenarioAnalysis, routes, params);
+            this.props.updateScenarioAnalysis(
+                id,
+                this.state.scenarioAnalysis,
+                routes,
+                params
+            );
             return;
         }
 
-        this.props.createScenarioAnalysis(uuid.v4(), this.state.scenarioAnalysis, routes, params);
+        this.props.createScenarioAnalysis(
+            uuid.v4(),
+            this.state.scenarioAnalysis,
+            routes,
+            params
+        );
     }
 
     render() {
@@ -137,7 +147,10 @@ class ScenarioAnalysisGeneral extends Component {
         }
 
         // TODO use WebData loading component if ready
-        if (id && WebData.Selector.isLoading(getScenarioAnalysisDetailsStatus)) {
+        if (
+            id &&
+            WebData.Selector.isLoading(getScenarioAnalysisDetailsStatus)
+        ) {
             // TODO move to dump component
             return <p>Loading ...</p>;
         }
@@ -145,39 +158,39 @@ class ScenarioAnalysisGeneral extends Component {
             // TODO move to dump component
             return (
                 <p>
-                    Error while loading ... ({WebData.Selector.getErrorMessage(getScenarioAnalysisDetailsStatus )})
+                    Error while loading ... ({WebData.Selector.getErrorMessage(
+                        getScenarioAnalysisDetailsStatus
+                    )})
                 </p>
             );
         }
 
-        const readOnly = scenarioAnalysis && !lodash.includes( scenarioAnalysis.permissions, 'w' );
+        const readOnly =
+            scenarioAnalysis &&
+            !lodash.includes(scenarioAnalysis.permissions, 'w');
 
         return (
-            <div style={[ styles.columnContainer ]}>
+            <div style={[styles.columnContainer]}>
                 <LayoutComponents.Column
                     heading="General Properties"
-                    style={[ styles.columnNotLast ]}
+                    style={[styles.columnNotLast]}
                 >
                     <LayoutComponents.InputGroup label="Name">
                         <Input
                             disabled={readOnly}
                             value={scenarioAnalysis.name}
-                            onChange={this.handleInputChange( 'name' )}
+                            onChange={this.handleInputChange('name')}
                             placeholder="Name"
                         />
                         <Select
                             disabled={readOnly}
                             clearable={false}
                             value={scenarioAnalysis.public}
-                            onChange={this.handleSelectChange(
-                                'public'
-                            )}
-                            options={
-                                [
-                                    { label: 'public', value: true },
-                                    { label: 'private', value: false },
-                                ]
-                            }
+                            onChange={this.handleSelectChange('public')}
+                            options={[
+                                { label: 'public', value: true },
+                                { label: 'private', value: false }
+                            ]}
                         />
                     </LayoutComponents.InputGroup>
                     <LayoutComponents.InputGroup label="Base Model">
@@ -185,12 +198,10 @@ class ScenarioAnalysisGeneral extends Component {
                             disabled={readOnly || !!id}
                             clearable={false}
                             value={scenarioAnalysis.basemodel_id}
-                            onChange={this.handleSelectChange(
-                                'basemodel_id'
-                            )}
-                            options={
-                                lodash.map( models, v => {return { label: v.name, value: v.id };} )
-                            }
+                            onChange={this.handleSelectChange('basemodel_id')}
+                            options={lodash.map(models, v => {
+                                return { label: v.name, value: v.id };
+                            })}
                         />
                     </LayoutComponents.InputGroup>
 
@@ -200,14 +211,12 @@ class ScenarioAnalysisGeneral extends Component {
                             disabled={readOnly}
                             name="description"
                             value={scenarioAnalysis.description}
-                            onChange={this.handleInputChange(
-                                'description'
-                            )}
+                            onChange={this.handleInputChange('description')}
                             placeholder="Description"
                         />
                     </LayoutComponents.InputGroup>
 
-                    <div style={[ styles.saveButtonWrapper ]}>
+                    <div style={[styles.saveButtonWrapper]}>
                         <WebData.Component.Loading
                             status={
                                 id
@@ -217,7 +226,7 @@ class ScenarioAnalysisGeneral extends Component {
                         >
                             <Button
                                 onClick={() => {
-                                    this.save( id );
+                                    this.save(id);
                                 }}
                                 type="accent"
                             >
@@ -233,11 +242,8 @@ class ScenarioAnalysisGeneral extends Component {
 
 const mapStateToProps = (state, { tool }) => {
     return {
-        scenarioAnalysis: state[ tool ].scenarioAnalysis,
-        models: Selector.tool.getTool(
-            state.dashboard.tools,
-            'T03'
-        ).instances,
+        scenarioAnalysis: state[tool].scenarioAnalysis,
+        models: Selector.tool.getTool(state.dashboard.tools, 'T03').instances,
         getScenarioAnalysisDetailsStatus: WebData.Selector.getRequestStatusByType(
             state,
             Query.GET_SCENARIO_ANALYSIS_DETAILS
@@ -262,11 +268,11 @@ const actions = {
 const mapDispatchToProps = (dispatch, { tool }) => {
     const wrappedActions = {};
     for (const key in actions) {
-        if (actions.hasOwnProperty( key )) {
+        if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[ key ] = function () {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch( actions[ key ]( tool, ...args ) );
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
             };
         }
     }
@@ -276,7 +282,7 @@ const mapDispatchToProps = (dispatch, { tool }) => {
 
 // eslint-disable-next-line no-class-assign
 ScenarioAnalysisGeneral = withRouter(
-    connect( mapStateToProps, mapDispatchToProps )( ScenarioAnalysisGeneral )
+    connect(mapStateToProps, mapDispatchToProps)(ScenarioAnalysisGeneral)
 );
 
 ScenarioAnalysisGeneral.propTypes = {

@@ -46,9 +46,9 @@ class T07 extends React.Component {
     };
 
     componentWillMount() {
-        const {id} = this.props.params;
+        const { id } = this.props.params;
         if (id) {
-            this.setState( prevState => {
+            this.setState(prevState => {
                 return {
                     ...prevState,
                     navigation: [
@@ -57,10 +57,10 @@ class T07 extends React.Component {
                             name: 'Back to scenario analysis',
                             path: '/tools/T07A/' + id,
                             icon: <Icon name="layer_horizontal_hatched" />
-                        },
+                        }
                     ]
                 };
-            } );
+            });
         }
     }
 
@@ -80,6 +80,7 @@ class T07 extends React.Component {
         return (
             <div style={styles.wrapper}>
                 <div style={styles.overlayWrapper}>
+                    Test
                     <div style={styles.overlay}>
                         <Properties
                             selectedProperty={this.props.params.property}

@@ -13,7 +13,7 @@ import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import { WebData } from './core/index';
 
-const routes = store =>
+const routes = store => (
     <Route path="/">
         <IndexRoute component={LandingPage} />
         <Route path="impressum" component={Impressum} />
@@ -56,12 +56,15 @@ const routes = store =>
                         );
                         return;
                     }
-                    store.dispatch(T03.Modifier.Action.destroyModflowModel('T03'));
+                    store.dispatch(
+                        T03.Modifier.Action.destroyModflowModel('T03')
+                    );
                 }}
             />
 
             <Route path="T06(/:id)" component={tools.T06} />
-            <Route
+
+            {/* <Route
                 path="T07(/:id)"
                 component={T07.Container.Main}
                 tool={'T07'}
@@ -80,8 +83,9 @@ const routes = store =>
                     }
                     store.dispatch(T07.Modifier.Action.destroyScenarioAnalysis('T07'));
                 }}
-            />
-            <Route
+            />*/}
+            <Route path="T07A/(:id)" component={T07.Container.T07A} />
+            {/* <Route
                 path="T07A"
                 component={T07.Container.Main}
                 tool={'T07'}
@@ -115,14 +119,11 @@ const routes = store =>
                         )
                     );
                 }}
-            />
+            />*/}
             <Route path="T07B/:id" component={tools.T07B} />
             <Route path="T07C/:id" component={tools.T07C} />
             <Route path="T07D/:id" component={tools.T07D} />
-            <Route
-                path="T07E/:said"
-                tool={'T07E'}
-            >
+            <Route path="T07E/:said" tool={'T07E'}>
                 <Route
                     path=":id(/:property)(/:type)(/:pid)"
                     component={T03.Container.Main}
@@ -142,7 +143,9 @@ const routes = store =>
                             );
                             return;
                         }
-                        store.dispatch(T03.Modifier.Action.destroyModflowModel('T07E'));
+                        store.dispatch(
+                            T03.Modifier.Action.destroyModflowModel('T07E')
+                        );
                     }}
                 />
             </Route>
@@ -153,7 +156,7 @@ const routes = store =>
             <Route path="T09C(/:id)" component={tools.T09C} />
             <Route path="T09D(/:id)" component={tools.T09D} />
             <Route path="T09E(/:id)" component={tools.T09E} />
-            <Route path="T12(/:id)" component={tools.T12}/>
+            <Route path="T12(/:id)" component={tools.T12} />
             <Route path="T13(/:id)" component={tools.T13} />
             <Route path="T13A(/:id)" component={tools.T13A} />
             <Route path="T13B(/:id)" component={tools.T13B} />
@@ -170,6 +173,7 @@ const routes = store =>
             <Route path="T18(/:id)" component={tools.T18} />
         </Route>
         <Route path="login" component={Login} />
-    </Route>;
+    </Route>
+);
 
 export default routes;
