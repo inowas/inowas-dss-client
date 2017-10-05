@@ -69,12 +69,12 @@ class T07B extends Component {
                     name: 'Scenarios difference',
                     path: '/tools/T07B/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched" />
+                },
+                {
+                    name: 'Time series',
+                    path: '/tools/T07C/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched" />
                 }
-                // {
-                //     name: 'Time series',
-                //     path: '/tools/T07C/' + props.params.id,
-                //     icon: <Icon name="layer_horizontal_hatched" />
-                // },
                 // {
                 //     name: 'Overall budget',
                 //     path: 'tools/T07D/' + props.params.id,
