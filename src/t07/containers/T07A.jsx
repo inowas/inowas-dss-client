@@ -1,5 +1,6 @@
 import '../../less/toolT07.less';
 
+// TODO move to t07 folder
 import {
     fetchDetails,
     reloadDone,
@@ -25,7 +26,7 @@ import LayerNumber from '../../model/LayerNumber';
 import ModflowModelResult from '../../model/ModflowModelResult';
 import Navbar from '../../containers/Navbar';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import ResultType from '../../model/ResultType';
 import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
@@ -48,7 +49,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class T07A extends React.Component {
+class T07A extends Component {
     static propTypes = {
         totalTimes: PropTypes.object,
         selectedLayerNumber: PropTypes.number,
@@ -87,21 +88,22 @@ class T07A extends React.Component {
                     name: 'Cross section',
                     path: '/tools/T07A/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched" />
-                    // },
-                    // {
-                    //     name: 'Scenarios difference',
-                    //     path: '/tools/T07B/' + props.params.id,
-                    //     icon: <Icon name="layer_horizontal_hatched" />
-                    // },
-                    // {
-                    //     name: 'Time series',
-                    //     path: '/tools/T07C/' + props.params.id,
-                    //     icon: <Icon name="layer_horizontal_hatched" />
-                } /* , {
-                    name: 'Overall budget',
-                    path: 'tools/T07D/' + props.params.id,
-                    icon: <Icon name="layer_horizontal_hatched"/>
-                }*/
+                },
+                {
+                    name: 'Scenarios difference',
+                    path: '/tools/T07B/' + props.params.id,
+                    icon: <Icon name="layer_horizontal_hatched" />
+                }
+                // {
+                //     name: 'Time series',
+                //     path: '/tools/T07C/' + props.params.id,
+                //     icon: <Icon name="layer_horizontal_hatched" />
+                // },
+                // {
+                //     name: 'Overall budget',
+                //     path: 'tools/T07D/' + props.params.id,
+                //     icon: <Icon name="layer_horizontal_hatched"/>
+                // }
             ]
         };
     }
@@ -584,7 +586,6 @@ class T07A extends React.Component {
 
 const mapStateToProps = (state, { params, route }) => {
     return {
-        // tool: state.T07
         selectedLayerNumber: state.T07.selectedLayerNumber,
         totalTimes: state.T07.totalTimes,
         selectedResultType: state.T07.selectedResultType,

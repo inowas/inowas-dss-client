@@ -120,7 +120,7 @@ const routes = store => (
                     );
                 }}
             />*/}
-            <Route path="T07B/:id" component={tools.T07B} />
+            <Route path="T07B/:id" component={T07.Container.T07B} />
             <Route path="T07C/:id" component={tools.T07C} />
             <Route path="T07D/:id" component={tools.T07D} />
             <Route path="T07E/:said" tool={'T07E'}>
