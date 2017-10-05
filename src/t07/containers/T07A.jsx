@@ -1,42 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import Chart from 'react-c3js';
-import { Formatter } from '../../core';
-import ConfiguredRadium from 'ConfiguredRadium';
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
-import Accordion from '../../components/primitive/Accordion';
-import AccordionItem from '../../components/primitive/AccordionItem';
-import Icon from '../../components/primitive/Icon';
-import ArraySlider from '../../components/primitive/ArraySlider';
-import Navbar from '../../containers/Navbar';
-import ScenarioSelect from '../../components/tools/ScenarioSelect';
-import { withRouter } from 'react-router';
-import { Modifier } from '../';
-import uuid from 'uuid';
-import styleGlobals from 'styleGlobals';
-import { push } from 'react-router-redux';
-
 import '../../less/toolT07.less';
 
 import {
     fetchDetails,
-    updateResultsT07A,
-    resizeDone,
     reloadDone,
+    resizeDone,
+    setActiveCoordinate,
+    setMapPosition,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
     toggleModelSelection,
-    setMapPosition,
-    setActiveCoordinate
+    updateResultsT07A
 } from '../../actions/T07';
 
+import Accordion from '../../components/primitive/Accordion';
+import AccordionItem from '../../components/primitive/AccordionItem';
+import ArraySlider from '../../components/primitive/ArraySlider';
+import Chart from 'react-c3js';
+import { Command, Routing } from '../actions';
+import ConfiguredRadium from 'ConfiguredRadium';
+import { Formatter } from '../../core';
+import Icon from '../../components/primitive/Icon';
 import LayerNumber from '../../model/LayerNumber';
-import ResultType from '../../model/ResultType';
-import TotalTime from '../../model/TotalTime';
 import ModflowModelResult from '../../model/ModflowModelResult';
+import Navbar from '../../containers/Navbar';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ResultType from '../../model/ResultType';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
+import ScenarioSelect from '../../components/tools/ScenarioSelect';
+import TotalTime from '../../model/TotalTime';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import styleGlobals from 'styleGlobals';
+import uuid from 'uuid';
+import { withRouter } from 'react-router';
 
 const styles = {
     heading: {
@@ -50,6 +49,35 @@ const styles = {
 
 @ConfiguredRadium
 class T07A extends React.Component {
+    static propTypes = {
+        totalTimes: PropTypes.object,
+        selectedLayerNumber: PropTypes.number,
+        selectedResultType: PropTypes.string,
+        selectedTotalTimeIndex: PropTypes.number,
+        models: PropTypes.array,
+        scenarioAnalysis: PropTypes.object,
+        layerValues: PropTypes.array,
+        mapPosition: PropTypes.object,
+        activeCoordinate: PropTypes.object,
+        resize: PropTypes.bool,
+        reload: PropTypes.bool,
+        route: PropTypes.object,
+        params: PropTypes.object,
+        fetchDetails: PropTypes.func,
+        updateResultsT07A: PropTypes.func,
+        resizeDone: PropTypes.func,
+        reloadDone: PropTypes.func,
+        setSelectedLayer: PropTypes.func,
+        setSelectedResultType: PropTypes.func,
+        setSelectedTotalTimeIndex: PropTypes.func,
+        toggleModelSelection: PropTypes.func,
+        setMapPosition: PropTypes.func,
+        setActiveCoordinate: PropTypes.func,
+        createScenario: PropTypes.func,
+        deleteScenario: PropTypes.func,
+        push: PropTypes.func
+    };
+
     constructor(props) {
         super(props);
 
@@ -79,41 +107,53 @@ class T07A extends React.Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(fetchDetails(this.props.params.id));
+        // eslint-disable-next-line no-shadow
+        const { params, fetchDetails } = this.props;
+        fetchDetails(params.id);
     }
 
-    componentWillReceiveProps(props) {
-        if (props.tool.resize) {
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.resize) {
             // manually emit a resize event so the leaflet maps recalculate their container size
             const event = document.createEvent('HTMLEvents');
             event.initEvent('resize', true, false);
             document.dispatchEvent(event);
-            this.props.dispatch(resizeDone());
+            resizeDone();
         }
 
-        if (props.tool.reload) {
-            if (
-                this.props.tool.totalTimes &&
-                this.props.tool.selectedLayerNumber &&
-                this.props.tool.selectedResultType
-            ) {
+        if (nextProps.reload) {
+            const {
+                totalTimes,
+                selectedLayerNumber,
+                selectedResultType,
+                selectedTotalTimeIndex,
+                reloadDone // eslint-disable-line no-shadow
+            } = this.props;
+
+            if (totalTimes && selectedLayerNumber && selectedResultType) {
                 this.updateModelResults(
-                    this.props.tool.selectedResultType,
-                    this.props.tool.selectedLayerNumber,
-                    this.props.tool.selectedTotalTimeIndex
+                    selectedResultType,
+                    selectedLayerNumber,
+                    selectedTotalTimeIndex
                 );
-                this.props.dispatch(reloadDone());
+                reloadDone();
             }
         }
     }
 
     toggleSelection = id => {
         return e => {
-            this.props.dispatch(toggleModelSelection(id));
+            const {
+                toggleModelSelection, // eslint-disable-line no-shadow
+                selectedResultType,
+                selectedLayerNumber,
+                selectedTotalTimeIndex
+            } = this.props;
+            toggleModelSelection(id);
             this.updateModelResults(
-                this.props.tool.selectedResultType,
-                this.props.tool.selectedLayerNumber,
-                this.props.tool.selectedTotalTimeIndex
+                selectedResultType,
+                selectedLayerNumber,
+                selectedTotalTimeIndex
             );
 
             // manually emit a resize event so the leaflet maps recalculate their container size
@@ -124,38 +164,44 @@ class T07A extends React.Component {
     };
 
     changeLayerValue = (layerNumber, resultType) => {
-        this.props.dispatch(setSelectedLayer(layerNumber));
-        this.props.dispatch(setSelectedResultType(resultType));
+        const {
+            setSelectedLayer, // eslint-disable-line no-shadow
+            setSelectedResultType, // eslint-disable-line no-shadow
+            selectedTotalTimeIndex
+        } = this.props;
+        setSelectedLayer(layerNumber);
+        setSelectedResultType(resultType);
         this.updateModelResults(
             resultType,
             layerNumber,
-            this.props.tool.selectedTotalTimeIndex
+            selectedTotalTimeIndex
         );
     };
 
     updateModelResults(resultType, layerNumber, totalTimeIndex) {
         if (layerNumber instanceof LayerNumber === false) {
-            console.error(
+            throw new Error(
                 'Cannot update ModelResults, due layerNumber is not from Type LayerNumber.'
             );
-            return;
         }
 
         if (resultType instanceof ResultType === false) {
-            console.error(
+            throw new Error(
                 'Cannot update ModelResults, due resultType is not from Type ResultType.'
             );
-            return;
         }
 
-        const totalTimes = this.props.tool.totalTimes.totalTimes;
+        // eslint-disable-next-line no-shadow
+        const { totalTimes, models, updateResultsT07A } = this.props;
 
         const totalTime =
             totalTimeIndex === null
-                ? new TotalTime(totalTimes[totalTimes.length - 1])
-                : new TotalTime(totalTimes[totalTimeIndex]);
+                ? new TotalTime(
+                      totalTimes.totalTimes[totalTimes.totalTimes.length - 1]
+                  )
+                : new TotalTime(totalTimes.totalTimes[totalTimeIndex]);
 
-        this.props.tool.models.forEach(m => {
+        models.forEach(m => {
             if (m.isSelected() === false) {
                 return;
             }
@@ -170,13 +216,11 @@ class T07A extends React.Component {
                 }
             }
 
-            this.props.dispatch(
-                updateResultsT07A(
-                    m.calculationId,
-                    resultType,
-                    layerNumber,
-                    totalTime
-                )
+            updateResultsT07A(
+                m.calculationId,
+                resultType,
+                layerNumber,
+                totalTime
             );
         });
     }
@@ -213,27 +257,32 @@ class T07A extends React.Component {
     }
 
     renderSelect() {
+        const {
+            selectedLayerNumber,
+            selectedResultType,
+            layerValues
+        } = this.props;
         return (
             <select
                 className="select block"
                 onChange={this.selectLayer}
-                value={
-                    this.props.tool.selectedLayerNumber +
-                    '_' +
-                    this.props.tool.selectedResultType
-                }
+                value={selectedLayerNumber + '_' + selectedResultType}
             >
-                {this.renderSelectOptgroups(this.props.tool.layerValues)}
+                {this.renderSelectOptgroups(layerValues)}
             </select>
         );
     }
 
     setMapPosition = mapPosition => {
-        this.props.dispatch(setMapPosition(mapPosition));
+        // eslint-disable-next-line no-shadow
+        const { setMapPosition } = this.props;
+        setMapPosition(mapPosition);
     };
 
     setActiveCoordinateHandler = coordinate => {
-        this.props.dispatch(setActiveCoordinate(coordinate));
+        // eslint-disable-next-line no-shadow
+        const { setActiveCoordinate } = this.props;
+        setActiveCoordinate(coordinate);
     };
 
     renderMaps() {
@@ -242,7 +291,7 @@ class T07A extends React.Component {
             mapPosition,
             activeCoordinate,
             selectedResultType
-        } = this.props.tool;
+        } = this.props;
         if (models.length <= 0) {
             return null;
         }
@@ -313,35 +362,20 @@ class T07A extends React.Component {
 
     cloneScenario() {
         return id => {
-            this.props.dispatch(
-                Modifier.Command.createScenario(
-                    this.props.route.tool,
-                    this.props.params.id,
-                    id,
-                    uuid.v4()
-                )
-            );
+            const { createScenario, route, params } = this.props;
+            createScenario(route.tool, params.id, id, uuid.v4());
         };
     }
 
     deleteScenario() {
         return id => {
-            this.props.dispatch(
-                Modifier.Command.deleteScenario(
-                    this.props.route.tool,
-                    this.props.params.id,
-                    id
-                )
-            );
+            const { deleteScenario, route, params } = this.props;
+            deleteScenario(route.tool, params.id, id);
         };
     }
 
     renderChart() {
-        const {
-            activeCoordinate,
-            models,
-            selectedResultType
-        } = this.props.tool;
+        const { activeCoordinate, models, selectedResultType } = this.props;
         if (models.length <= 0 || !activeCoordinate) {
             return null;
         }
@@ -439,33 +473,39 @@ class T07A extends React.Component {
     }
 
     changeTotalTimeIndex = index => {
-        // this.props.dispatch(setSelectedTotalTime(new TotalTime( value )));
-        this.props.dispatch(setSelectedTotalTimeIndex(index));
+        const {
+            setSelectedTotalTimeIndex, // eslint-disable-line no-shadow
+            selectedResultType,
+            selectedLayerNumber,
+            selectedTotalTimeIndex
+        } = this.props;
+        setSelectedTotalTimeIndex(index);
         this.updateModelResults(
-            this.props.tool.selectedResultType,
-            this.props.tool.selectedLayerNumber,
-            this.props.tool.selectedTotalTimeIndex
+            selectedResultType,
+            selectedLayerNumber,
+            selectedTotalTimeIndex
         );
     };
 
     renderSlider() {
-        if (!this.props.tool.totalTimes) {
+        const { totalTimes, selectedTotalTimeIndex } = this.props;
+        if (!totalTimes) {
             return null;
         }
 
-        const startDate = new Date(this.props.tool.totalTimes.start);
-        const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
+        const startDate = new Date(totalTimes.start);
+        const totalTimesDates = totalTimes.totalTimes.map(t => {
             return startDate.addDays(t);
         });
 
-        let sliderValue = this.props.tool.selectedTotalTimeIndex;
+        let sliderValue = selectedTotalTimeIndex;
         if (sliderValue === null) {
-            sliderValue = totalTimes.length - 1;
+            sliderValue = totalTimesDates.length - 1;
         }
 
         return (
             <ArraySlider
-                data={totalTimes}
+                data={totalTimesDates}
                 value={sliderValue}
                 onChange={this.changeTotalTimeIndex}
                 formatter={function(value) {
@@ -478,7 +518,8 @@ class T07A extends React.Component {
     render() {
         const { navigation } = this.state;
         const { id } = this.props.params;
-        const { models, scenarioAnalysis } = this.props.tool;
+        // eslint-disable-next-line no-shadow
+        const { models, scenarioAnalysis, push } = this.props;
 
         return (
             <div className="toolT07 app-width">
@@ -488,11 +529,9 @@ class T07A extends React.Component {
                     <a
                         href="#"
                         onClick={() =>
-                            this.props.dispatch(
-                                push(
-                                    Modifier.Routing.editScenarioAnalysisGeneralUrl(
-                                        scenarioAnalysis.id
-                                    )
+                            push(
+                                Routing.editScenarioAnalysisGeneralUrl(
+                                    scenarioAnalysis.id
                                 )
                             )}
                     >
@@ -543,11 +582,39 @@ class T07A extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, { params, route }) => {
     return {
-        tool: state.T07
-        // selectedLayerNumber:
+        // tool: state.T07
+        selectedLayerNumber: state.T07.selectedLayerNumber,
+        totalTimes: state.T07.totalTimes,
+        selectedResultType: state.T07.selectedResultType,
+        selectedTotalTimeIndex: state.T07.selectedTotalTimeIndex,
+        models: state.T07.models,
+        scenarioAnalysis: state.T07.scenarioAnalysis,
+        layerValues: state.T07.layerValues,
+        mapPosition: state.T07.mapPosition,
+        activeCoordinate: state.T07.activeCoordinate,
+        resize: state.T07.resize,
+        reload: state.T07.reload,
+        params,
+        route
     };
 };
 
-export default withRouter(connect(mapStateToProps)(T07A));
+export default withRouter(
+    connect(mapStateToProps, {
+        fetchDetails,
+        updateResultsT07A,
+        resizeDone,
+        reloadDone,
+        setSelectedLayer,
+        setSelectedResultType,
+        setSelectedTotalTimeIndex,
+        toggleModelSelection,
+        setMapPosition,
+        setActiveCoordinate,
+        createScenario: Command.createScenario,
+        deleteScenario: Command.deleteScenario,
+        push
+    })(T07A)
+);

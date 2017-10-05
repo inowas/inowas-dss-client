@@ -27,8 +27,6 @@ import { routerReducer as routing } from 'react-router-redux';
 import user from './user';
 import { WebData } from '../core';
 
-console.warn(T07);
-
 const rootReducer = combineReducers({
     routing,
     user,
