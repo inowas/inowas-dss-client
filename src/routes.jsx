@@ -63,66 +63,14 @@ const routes = store => (
             />
 
             <Route path="T06(/:id)" component={tools.T06} />
-
-            {/* <Route
-                path="T07(/:id)"
-                component={T07.Container.Main}
-                tool={'T07'}
-                onEnter={nextState => {
-                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
-                    store.dispatch(WebData.Modifier.Action.clear());
-                    store.dispatch(Dashboard.Modifier.Query.loadInstances('T03', false));
-                    if (nextState.params.id) {
-                        store.dispatch(
-                            T07.Modifier.Query.getScenarioAnalysisDetails(
-                                'T07',
-                                nextState.params.id
-                            )
-                        );
-                        return;
-                    }
-                    store.dispatch(T07.Modifier.Action.destroyScenarioAnalysis('T07'));
-                }}
-            />*/}
             <Route path="T07A/(:id)" component={T07.Container.T07A} />
-            {/* <Route
-                path="T07A"
-                component={T07.Container.Main}
-                tool={'T07'}
-                onEnter={nextState => {
-                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
-                    store.dispatch(WebData.Modifier.Action.clear());
-                    store.dispatch(Dashboard.Modifier.Query.loadInstances('T03', false));
-                    if (nextState.params.id) {
-                        store.dispatch(
-                            T07.Modifier.Query.getScenarioAnalysisDetails(
-                                'T07',
-                                nextState.params.id
-                            )
-                        );
-                        return;
-                    }
-                    store.dispatch(T07.Modifier.Action.destroyScenarioAnalysis('T07'));
-                }}
-            />
-            <Route
-                path="T07A/:id"
-                component={tools.T07A}
-                tool={'T07'}
-                onEnter={nextState => {
-                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
-                    store.dispatch( WebData.Modifier.Action.clear() );
-                    store.dispatch(
-                        T07.Modifier.Query.getScenarioAnalysisDetails(
-                            'T07',
-                            nextState.params.id
-                        )
-                    );
-                }}
-            />*/}
-            <Route path="T07B/:id" component={T07.Container.T07B} />
-            <Route path="T07C/:id" component={tools.T07C} />
-            <Route path="T07D/:id" component={tools.T07D} />
+            <Route path="T07/:id" component={T07.Container.Main}>
+                <IndexRoute component={T07.Component.CrossSection} />
+                <Route
+                    path="CrossSection"
+                    component={T07.Component.CrossSection}
+                />
+            </Route>
             <Route path="T07E/:said" tool={'T07E'}>
                 <Route
                     path=":id(/:property)(/:type)(/:pid)"

@@ -166,18 +166,14 @@ class ModelEditorResultsHead extends Component {
     };
 
     createScenarioAnalysis = () => {
-        const {model, tool} = this.props;
+        const { model, tool } = this.props;
 
-        this.props.createScenarioAnalysis(
-            tool,
-            uuid.v4(),
-            {
-                basemodel_id: model.id,
-                name: 'Scenario Analysis of ' + model.name,
-                description: '',
-                public: true,
-            }
-        );
+        this.props.createScenarioAnalysis(tool, uuid.v4(), {
+            basemodel_id: model.id,
+            name: 'Scenario Analysis of ' + model.name,
+            description: '',
+            public: true
+        });
     };
 
     render() {
@@ -253,7 +249,10 @@ class ModelEditorResultsHead extends Component {
             }
         }
 
-        const data = getCalculationStatus && getCalculationStatus.type === 'success' ? getCalculationStatus.data : null;
+        const data =
+            getCalculationStatus && getCalculationStatus.type === 'success'
+                ? getCalculationStatus.data
+                : null;
 
         const mapData = new ScenarioAnalysisMapData({
             area: model.geometry,
@@ -275,13 +274,14 @@ class ModelEditorResultsHead extends Component {
                         />
                     </div>
                     <div style={[styles.sliderWrapper]}>
-                        {totalTimes.length > 1 &&
+                        {totalTimes.length > 1 && (
                             <ArraySlider
                                 data={totalTimes}
                                 value={selectedTotalTimeIndex}
                                 onChange={this.onTimeSliderChange}
                                 formatter={Formatter.dateToDate}
-                            />}
+                            />
+                        )}
                     </div>
                 </div>
                 <div>
@@ -302,12 +302,17 @@ class ModelEditorResultsHead extends Component {
                         />
                     </WebData.Component.Loading>
                 </div>
-                {!readOnly &&
-                <div style={[styles.saveButtonWrapper]}>
-                    <WebData.Component.Loading status={createScenarioAnalysisStatus}>
-                        <Button onClick={this.createScenarioAnalysis}>Create new Scenario Analysis</Button>
-                    </WebData.Component.Loading>
-                </div>}
+                {!readOnly && (
+                    <div style={[styles.saveButtonWrapper]}>
+                        <WebData.Component.Loading
+                            status={createScenarioAnalysisStatus}
+                        >
+                            <Button onClick={this.createScenarioAnalysis}>
+                                Create new Scenario Analysis
+                            </Button>
+                        </WebData.Component.Loading>
+                    </div>
+                )}
             </div>
         );
     }
@@ -323,18 +328,18 @@ const mapStateToProps = (state, { tool }) => {
         getCalculationStatus: WebData.Selector.getRequestStatusByType(
             state,
             Query.GET_MODFLOW_MODEL_CALCULATION
-        ),
-        createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(
-            state,
-            T07.Command.CREATE_SCENARIO_ANALYSIS
         )
+        // createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(
+        //     state,
+        //     T07.Command.CREATE_SCENARIO_ANALYSIS
+        // )
     };
 };
 
 const actions = {
     getCalculation: Query.getCalculation,
-    sendQuery,
-    createScenarioAnalysis: T07.Command.createScenarioAnalysis,
+    sendQuery
+    // createScenarioAnalysis: T07.Command.createScenarioAnalysis,
 };
 
 export default connect(mapStateToProps, actions)(ModelEditorResultsHead);

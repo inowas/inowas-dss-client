@@ -38,7 +38,7 @@ const initialState = [
     {
         slug: 'T07',
         name: 'MODFLOW model scenario manager',
-        path: 'tools/T07A/',
+        path: 'tools/T07/',
         role: ROLE_NM_MF,
         instances: []
     }, {
