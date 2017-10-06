@@ -20,12 +20,13 @@
     "dependencies": {
         "axios": "^0.15.3",
         "classnames": "^2.2.5",
+        "gwflowjs": "https://github.com/inowas/gwflowjs.git#master",
         "js-md5": "^0.6.0",
         "lodash": "^4.17.4",
         "moment": "^2.18.1",
         "normalizr": "^3.2.2",
         "percentile": "^1.2.0",
-        "prop-types": "^15.5.10",
+        "prop-types": "latest",
         "rainbowvis.js": "https://github.com/inowas/RainbowVis-JS.git#master",
         "react": "^15.4.2",
         "react-dom": "^15.4.2",
@@ -48,8 +49,7 @@
         "searchtabular": "^1.5.1",
         "selectabular": "^2.0.1",
         "sortabular": "^1.4.1",
-        "table-resolver": "^3.1.1",
-        "prop-types": "latest"
+        "table-resolver": "^3.1.1"
     },
     "devDependencies": {
         "autoprefixer": "^6.7.7",

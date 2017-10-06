@@ -7,38 +7,38 @@ export default function applyParameterUpdate(param, newParam) {
         param.max = param.min;
     }
 
-    //make sure min <= value <= max
+    // make sure min <= value <= max
     if (param.hasOwnProperty('value') && newParam.hasOwnProperty('value')) {
-        let newValue = Number(newParam.value);
+        const newValue = Number(newParam.value);
         param.value = newValue;
-        //let valid = true;
+        // let valid = true;
 
         if (param.hasOwnProperty('min') && newValue < param.min) {
-            param.min = newValue
+            param.min = newValue;
         }
 
         if (param.hasOwnProperty('max') && newValue > param.max) {
-            param.max = newValue
+            param.max = newValue;
         }
         // this part is not required anymore.
         // Out of range part is included /components/tools/parameters.jsx
         // if (valid) {
         //     param.value = newValue;
         // }
-
     }
+
     return param;
 }
 
 function validateAndSetNewProperty(param, newParam, property, validator) {
     // check if both parameters have this property
     if(param.hasOwnProperty(property) && newParam.hasOwnProperty(property)) {
-        let newValue = Number(newParam[property]);
-        //check if parameter has a validator for this property
+        const newValue = Number(newParam[property]);
+        // check if parameter has a validator for this property
         if(param.hasOwnProperty(validator)) {
-            //use validator
+            // use validator
             if(param[validator](newValue)) {
-                //valid
+                // valid
                 param[property] = newValue;
             } // not valid
         } else {
