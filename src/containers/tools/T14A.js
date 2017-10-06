@@ -64,7 +64,7 @@ export default class T14A extends React.Component {
                     <section className="tile col col-abs-2" />
 
                     <section className="tile col col-abs-3 stretch">
-                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
+                        <Parameters parameters={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
                     </section>
                 </div>
             </div>

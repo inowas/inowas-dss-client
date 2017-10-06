@@ -1,35 +1,157 @@
 import React from 'react';
-import {connect} from 'react-redux';
+
+import image from '../../images/tools/T02.png';
 
 import '../../less/4TileTool.less';
-
-import * as calc from '../../calculations/T02';
 
 import Background from '../../components/tools/Background';
 import Chart from '../../components/tools/ChartT02';
 import Settings from '../../components/tools/SettingsT02';
 import Parameters from '../../components/tools/Parameters';
-import {changeSettings, changeParameter, calculate, reset} from '../../actions/T02';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../Navbar';
 
-@connect((store) => {
-    return {tool: store.T02};
-})
-export default class T02 extends React.Component {
+import applyParameterUpdate from '../../reducers/applyParameterUpdate';
 
-    state = {
-        navigation: [{
-            name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
-            icon: <Icon name="file"/>
-        }]
+class T02 extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {};
+    }
+
+    componentWillMount() {
+        this.setState(this.defaultState);
+    }
+
+    defaultState = () => {
+        return {
+            navigation: [{
+                name: 'Documentation',
+                path: 'https://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
+                icon: <Icon name="file"/>
+            }],
+            settings: {
+                variable: 'x'
+            },
+            parameters: [{
+                order: 0,
+                id: 'w',
+                name: 'Percolation rate, w (m/d)',
+                min: 0,
+                validMin: function(x) {
+                    return x >= 0;
+                },
+                max: 10,
+                value: 0.045,
+                stepSize: 0.001,
+                decimals: 3
+            }, {
+                order: 1,
+                id: 'L',
+                name: 'Basin length, L (m)',
+                min: 0,
+                validMin: function(x) {
+                    return x > 0;
+                },
+                max: 1000,
+                value: 40,
+                stepSize: 1,
+                decimals: 0
+            }, {
+                order: 2,
+                id: 'W',
+                name: 'Basin width, W (m)',
+                min: 0,
+                validMin: function(x) {
+                    return x > 0;
+                },
+                max: 100,
+                value: 20,
+                stepSize: 1,
+                decimals: 0
+            }, {
+                order: 3,
+                id: 'hi',
+                name: 'Initial groundwater Level, hi (m)',
+                min: 0,
+                validMin: function(x) {
+                    return x >= 0;
+                },
+                max: 100,
+                value: 35,
+                stepSize: 1,
+                decimals: 0
+            }, {
+                order: 4,
+                id: 'Sy',
+                name: 'Specific yield, Sy (-)',
+                min: 0.000,
+                validMin: function(x) {
+                    return x > 0;
+                },
+                max: 0.5,
+                validMax: function(x) {
+                    return x <= 0.5;
+                },
+                value: 0.085,
+                stepSize: 0.001,
+                decimals: 3
+            }, {
+                order: 5,
+                id: 'K',
+                name: 'Hydraulic conductivity, K (m/d)',
+                min: 0.1,
+                validMin: function(x) {
+                    return x > 0;
+                },
+                max: 10,
+                validMax: function(x) {
+                    return x <= 100000;
+                },
+                value: 1.83,
+                stepSize: 0.1,
+                decimals: 1
+            }, {
+                order: 6,
+                id: 't',
+                name: 'Infiltration time, t (d)',
+                min: 0,
+                validMin: function(x) {
+                    return x > 0;
+                },
+                max: 100,
+                value: 1.5,
+                stepSize: 1,
+                decimals: 0
+            }]
+        };
+    };
+
+    updateSettings(value) {
+        this.setState({
+            settings: {
+                variable: value
+            }
+        });
+    }
+
+    updateParameter(updatedParam) {
+        const parameters = this.state.parameters.map( p => {
+            if (p.id === updatedParam.id) {
+                return applyParameterUpdate(p, updatedParam);
+            }
+
+            return p;
+        });
+
+        this.setState({parameters: parameters});
     }
 
     handleChange = (e) => {
-        if (e.target.name == 'variable') {
-            this.props.dispatch(changeSettings(e.target.value));
+        if (e.target.name === 'variable') {
+            this.updateSettings(e.target.value);
         }
 
         if (e.target.name.startsWith('parameter')) {
@@ -39,70 +161,43 @@ export default class T02 extends React.Component {
             parameter.id = param[1];
             parameter[param[2]] = e.target.value;
 
-            this.props.dispatch(changeParameter(parameter));
+            this.updateParameter(parameter);
         }
     };
 
     handleReset = () => {
-        this.props.dispatch(reset());
+        this.setState(this.defaultState);
     };
 
-    componentWillMount() {
-        this.props.dispatch(calculate());
-    }
-
     render() {
-        const { navigation } = this.state;
-
-        const variable = this.props.tool.settings.variable;
-        const parameters = this.props.tool.parameters;
-        const w = parameters.find(p => {
-            return p.id == 'w';
-        }).value;
-        const L = parameters.find(p => {
-            return p.id == 'L';
-        }).value;
-        const W = parameters.find(p => {
-            return p.id == 'W';
-        }).value;
-        const hi = parameters.find(p => {
-            return p.id == 'hi';
-        }).value;
-        const Sy = parameters.find(p => {
-            return p.id == 'Sy';
-        }).value;
-        const K = parameters.find(p => {
-            return p.id == 'K';
-        }).value;
-        const t = parameters.find(p => {
-            return p.id == 't';
-        }).value;
-        const x_max = calc.calculateXmax(variable, w, L, W, hi, Sy, K, t);
+        const { navigation, settings, parameters } = this.state;
 
         return (
             <div className="app-width">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 <Header title={'T02. Groundwater mounding (Hantush)'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
-                        <Background image={this.props.tool.background.image}/>
+                        <Background image={image}/>
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Chart variable={variable} w={w} L={L} W={W} hi={hi} Sy={Sy} K={K} t={t} x_min={0} x_max={x_max+50} d_x={10}/>
+                        <Chart settings={settings} parameters={parameters}/>
                     </section>
                 </div>
 
                 <div className="grid-container">
                     <section className="tile col col-abs-2">
-                        <Settings data={this.props.tool.settings} handleChange={this.handleChange}/>
+                        <Settings settings={settings} handleChange={this.handleChange}/>
                     </section>
 
                     <section className="tile col col-abs-3 stretch">
-                        <Parameters data={this.props.tool.parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
+                        <Parameters parameters={parameters} handleChange={this.handleChange} handleReset={this.handleReset}/>
                     </section>
                 </div>
             </div>
         );
     }
 }
+
+export default T02;

@@ -1,17 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {inputType} from '../../inputType';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
 
-export default class Parameters extends React.Component {
+class Parameters extends React.Component {
 
     handleChange = e => {
-        if (this.props.handleChange)            {this.props.handleChange(e);}
+        this.props.handleChange(e);
     };
 
     handleReset = e => {
-        if (this.props.handleReset)            {this.props.handleReset(e);}
+        this.props.handleReset(e);
     };
 
     renderParam(param) {
@@ -22,29 +23,30 @@ export default class Parameters extends React.Component {
         switch (param.inputType) {
             case inputType.NUMBER:
                 return this.renderNumber(param);
-                break;
             case inputType.RADIO_SELECT:
                 return this.renderRadioSelect(param);
-                break;
             case inputType.SLIDER:
                 return this.renderSlider(param);
-                break;
-            default:
         }
+
+        return null;
     }
 
     renderNumber(param) {
         return (<tr key={param.id} className="parameter">
             <td className="parameter-label">{param.label}</td>
             <td>
-                <input name={'parameter_' + param.id + '_value'} type="number" min={param.min} max={param.max} step={param.stepSize} value={Number(param.value).toFixed(param.decimals)} onChange={this.handleChange}/>
+                <input name={'parameter_' + param.id + '_value'} type="number" min={param.min} max={param.max}
+                       step={param.stepSize} value={Number(param.value).toFixed(param.decimals)}
+                       onChange={this.handleChange}/>
             </td>
         </tr>);
     }
 
     renderRadioOption(param, option) {
         return (<label key={option.id}>
-            <input name={'parameter_' + param.id + '_value'} value={option.value} type="radio" checked={param.value == option.value} onChange={this.handleChange}/> {option.label}
+            <input name={'parameter_' + param.id + '_value'} value={option.value} type="radio"
+                   checked={param.value === option.value} onChange={this.handleChange}/> {option.label}
         </label>);
     }
 
@@ -63,7 +65,9 @@ export default class Parameters extends React.Component {
 
     renderSlider(param) {
         // Should do some refactoring
-        if (!param.label && param.name)            {param.label = param.name;}
+        if (!param.label && param.name) {
+            param.label = param.name;
+        }
         let disable = false;
         if (param.disable) {
             disable = param.disable;
@@ -71,14 +75,21 @@ export default class Parameters extends React.Component {
         return (<tr key={param.id} className="parameter">
             <td className="parameter-label">{param.label}</td>
             <td>
-                <input disabled={disable} name={'parameter_' + param.id + '_min'} className="parameter-min input-max input-xs" type="number" step={param.stepSize} value={Number(param.min).toFixed(param.decimals)} onChange={this.handleChange}/>
+                <input disabled={disable} name={'parameter_' + param.id + '_min'}
+                       className="parameter-min input-max input-xs" type="number" step={param.stepSize}
+                       value={Number(param.min).toFixed(param.decimals)} onChange={this.handleChange}/>
 
-                <input disabled={disable} name={'parameter_' + param.id + '_max'} className="parameter-max input-max input-xs" type="number" step={param.stepSize} value={Number(param.max).toFixed(param.decimals)} onChange={this.handleChange}/>
+                <input disabled={disable} name={'parameter_' + param.id + '_max'}
+                       className="parameter-max input-max input-xs" type="number" step={param.stepSize}
+                       value={Number(param.max).toFixed(param.decimals)} onChange={this.handleChange}/>
 
-                <input disabled={disable} id={param.id + '_range'} name={'parameter_' + param.id + '_value'} className="parameter-input" type="range" min={param.min} max={param.max} step={param.stepSize} value={param.value} onChange={this.handleChange}/>
+                <input disabled={disable} id={param.id + '_range'} name={'parameter_' + param.id + '_value'}
+                       className="parameter-input" type="range" min={param.min} max={param.max} step={param.stepSize}
+                       value={param.value} onChange={this.handleChange}/>
             </td>
             <td>
-                <input disabled={disable} name={'parameter_' + param.id + '_value'} className="parameter-max input input-xs"
+                <input disabled={disable} name={'parameter_' + param.id + '_value'}
+                       className="parameter-max input input-xs"
                        type="number" step={param.stepSize} min={param.min} max={param.max}
                        value={Number(param.value).toFixed(param.decimals)} onChange={this.handleChange}/>
             </td>
@@ -86,15 +97,13 @@ export default class Parameters extends React.Component {
     }
 
     render() {
-        const sortedParameters = this
-            .props
-            .data
-            .sort((a, b) => {
-                if (a.order > b.order) {
-                    return 1;
-                }
-                return -1;
-            });
+        const {parameters} = this.props;
+        const sortedParameters = parameters.sort((a, b) => {
+            if (a.order > b.order) {
+                return 1;
+            }
+            return -1;
+        });
 
         const params = sortedParameters.map(param => {
             return this.renderParam(param);
@@ -105,7 +114,7 @@ export default class Parameters extends React.Component {
                 <div className="col stretch parameters-wrapper">
                     <table className="parameters">
                         <tbody>
-                            {params}
+                        {params}
                         </tbody>
                     </table>
                 </div>
@@ -121,3 +130,11 @@ export default class Parameters extends React.Component {
         );
     }
 }
+
+Parameters.propTypes = {
+    handleChange: PropTypes.func.isRequired,
+    handleReset: PropTypes.func.isRequired,
+    parameters: PropTypes.array.isRequired
+};
+
+export default Parameters;
