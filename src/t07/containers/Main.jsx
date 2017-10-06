@@ -94,70 +94,104 @@ class Main extends Component {
 
     fetchScenarioAnalysisDetails(id) {
         const { apiKey } = this.props;
-        ConfiguredAxios.get('/scenarioanalyses/' + id + '.json', {
+        ConfiguredAxios.get(`/scenarioanalyses/${id}`, {
             headers: { 'X-AUTH-TOKEN': apiKey }
         })
             .then(({ data }) => {
-                console.warn(data);
-                this.setState(prevState => {
-                    const boundingBox = new BoundingBox(
-                        new Coordinate(
-                            data.bounding_box[0][1],
-                            data.bounding_box[0][0]
-                        ),
-                        new Coordinate(
-                            data.bounding_box[1][1],
-                            data.bounding_box[1][0]
-                        )
-                    );
-                    return {
-                        ...prevState,
-                        scenarioAnalysis: {
-                            ...prevState.scenarioAnalysis,
-                            // add fetched scenarioAnalysis to list of all previously fetched scenarioAnalysis
-                            [data.id]: {
-                                id: data.id,
-                                baseModelId: data.base_model.id,
-                                scenarioModelsIds: data.scenarios.map(
-                                    scenario => scenario.id
-                                ),
-                                boundingBox,
-                                createdAt: new Date(data.createdAt),
-                                area: data.geometry,
-                                grid: new Grid(
+                this.setState(
+                    prevState => {
+                        const boundingBox = new BoundingBox(
+                            new Coordinate(
+                                data.bounding_box[0][1],
+                                data.bounding_box[0][0]
+                            ),
+                            new Coordinate(
+                                data.bounding_box[1][1],
+                                data.bounding_box[1][0]
+                            )
+                        );
+                        // add our fetched data to our state
+                        // it will look like
+                        // state = {
+                        //      scenarioAnalysis: {
+                        //          id: {
+                        //              id,
+                        //              baseModelId, (you can find the according object in scenarios)
+                        //              scenarioModelIds: array of ids (you can find the according objects in scenarios)
+                        //              boundingBox,
+                        //              createdAt,
+                        //              area,
+                        //              grid,
+                        //              name,
+                        //              description,
+                        //              permission
+                        //          }
+                        //      },
+                        //      scenarios: {
+                        //          id: {
+                        //              id,
+                        //              name,
+                        //              description,
+                        //              calculationId
+                        //          }
+                        //      },
+                        //      selectedScenarios: array of ids
+                        // }
+                        return {
+                            ...prevState,
+                            scenarioAnalysis: {
+                                ...prevState.scenarioAnalysis,
+                                // add fetched scenarioAnalysis to list of all previously fetched scenarioAnalysis
+                                [data.id]: {
+                                    id: data.id,
+                                    baseModelId: data.base_model.id,
+                                    scenarioModelsIds: data.scenarios.map(
+                                        scenario => scenario.id
+                                    ),
                                     boundingBox,
-                                    data.grid_size.n_x,
-                                    data.grid_size.n_y
-                                ),
-                                name: data.name,
-                                description: data.description,
-                                permissions: data.permissions
-                            }
-                        },
-                        scenarios: {
-                            ...prevState.scenarios,
-                            // add base model
-                            [data.base_model.id]: {
-                                id: data.base_model.id,
-                                name: data.base_model.name,
-                                description: data.base_model.description,
-                                calculationId: data.base_model.calculation_id
+                                    createdAt: new Date(data.createdAt),
+                                    area: data.geometry,
+                                    grid: new Grid(
+                                        boundingBox,
+                                        data.grid_size.n_x,
+                                        data.grid_size.n_y
+                                    ),
+                                    name: data.name,
+                                    description: data.description,
+                                    permissions: data.permissions
+                                }
                             },
-                            // add all scenarios
-                            ...data.scenarios.reduce((acc, scenario) => {
-                                acc[scenario.id] = {
-                                    id: scenario.id,
-                                    name: scenario.name,
-                                    description: scenario.description,
-                                    calculationId: scenario.calculation_id
-                                };
-                                return acc;
-                            }, {})
-                        },
-                        // reset Selection
-                        selectedScenarios: [data.base_model.id]
-                    };
-                });
+                            scenarios: {
+                                ...prevState.scenarios,
+                                // add base model
+                                [data.base_model.id]: {
+                                    id: data.base_model.id,
+                                    name: data.base_model.name,
+                                    description: data.base_model.description,
+                                    calculationId:
+                                        data.base_model.calculation_id
+                                },
+                                // add all scenarios
+                                ...data.scenarios.reduce((acc, scenario) => {
+                                    acc[scenario.id] = {
+                                        id: scenario.id,
+                                        name: scenario.name,
+                                        description: scenario.description,
+                                        calculationId: scenario.calculation_id
+                                    };
+                                    return acc;
+                                }, {})
+                            },
+                            // reset Selection
+                            selectedScenarios: [data.base_model.id]
+                        };
+                    },
+                    () => {
+                        this.fetchLayerScheme(data.id);
+                        this.fetchBoundariesForAllModels();
+                        this.fetchTotalTimes(data.id);
+                    }
+                );
             })
             .catch(error => {
                 // eslint-disable-next-line no-console
@@ -165,6 +199,112 @@ class Main extends Component {
                 // TODO user friendly error handling
             });
     }
+
+    fetchLayerScheme = scenarioAnalysisId => {
+        const { apiKey } = this.props;
+        const { scenarioAnalysis, scenarios } = this.state;
+
+        const currentScenarioAnalysis = scenarioAnalysis[scenarioAnalysisId];
+        const currentBaseModel = scenarios[currentScenarioAnalysis.baseModelId];
+
+        ConfiguredAxios.get(
+            `/calculations/${currentBaseModel.calculationId}/results/layervalues`,
+            { headers: { 'X-AUTH-TOKEN': apiKey } }
+        )
+            .then(({ data }) => {
+                this.setState(prevState => ({
+                    ...prevState,
+                    scenarioAnalysis: {
+                        ...prevState.scenarioAnalysis,
+                        [scenarioAnalysisId]: {
+                            ...prevState.scenarioAnalysis[scenarioAnalysisId],
+                            layerScheme: data
+                        }
+                    }
+                }));
+            })
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.error(error);
+                // TODO user friendly error handling
+            });
+    };
+
+    fetchBoundariesForAllModels = () => {
+        const { apiKey } = this.props;
+        const { scenarios } = this.state;
+
+        // Create a get request for every scenario without boundaries
+        ConfiguredAxios.all(
+            Object.keys(scenarios).map(id => {
+                if (!scenarios[id].hasOwnProperty('boundaries')) {
+                    return ConfiguredAxios.get(
+                        `/modflowmodels/${id}/boundaries`,
+                        {
+                            headers: {
+                                'X-AUTH-TOKEN': apiKey
+                            },
+                            params: {
+                                id
+                            }
+                        }
+                    );
+                }
+                return null;
+            })
+        )
+            .then(results => {
+                // write our fetched boundaries into our state
+                // we stored the id of the according scenario model in config.params
+                results.forEach(result => {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        scenarios: {
+                            ...prevState.scenarios,
+                            [result.config.params.id]: {
+                                ...prevState.scenarios[result.config.params.id],
+                                boundaries: result.data
+                            }
+                        }
+                    }));
+                });
+            })
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.error(error);
+                // TODO user friendly error handling
+            });
+    };
+
+    fetchTotalTimes = scenarioAnalysisId => {
+        const { apiKey } = this.props;
+        const { scenarioAnalysis, scenarios } = this.state;
+
+        const currentScenarioAnalysis = scenarioAnalysis[scenarioAnalysisId];
+        const currentBaseModel = scenarios[currentScenarioAnalysis.baseModelId];
+
+        ConfiguredAxios.get(
+            `/calculations/${currentBaseModel.calculationId}/results/times`,
+            { headers: { 'X-AUTH-TOKEN': apiKey } }
+        )
+            .then(({ data }) => {
+                this.setState(prevState => ({
+                    ...prevState,
+                    scenarioAnalysis: {
+                        ...prevState.scenarioAnalysis,
+                        [scenarioAnalysisId]: {
+                            ...prevState.scenarioAnalysis[scenarioAnalysisId],
+                            totalTimes: data
+                        }
+                    }
+                }));
+            })
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.error(error);
+                // TODO user friendly error handling
+            });
+    };
 
     cloneScenario = id => {
         console.warn('TODO clone scenario model');
@@ -193,7 +333,7 @@ class Main extends Component {
     };
 
     render() {
-        const { children, params } = this.props;
+        const { children, params, apiKey } = this.props;
         const {
             navigation,
             scenarioAnalysis,
@@ -205,6 +345,7 @@ class Main extends Component {
                 <Navbar links={navigation} />
                 {(() => {
                     if (scenarioAnalysis.hasOwnProperty(params.id)) {
+                        // convert our data structure to something useful
                         const currentScenarioAnalysis =
                             scenarioAnalysis[params.id];
                         const currentBaseModel =
@@ -249,7 +390,8 @@ class Main extends Component {
                                         cloneScenario: this.cloneScenario,
                                         deleteScenario: this.deleteScenario,
                                         toggleScenarioSelection: this
-                                            .toggleScenarioSelection
+                                            .toggleScenarioSelection,
+                                        apiKey
                                     })}
                             </div>
                         );

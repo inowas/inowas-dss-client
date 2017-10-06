@@ -32,7 +32,7 @@ const ScenarioSelect = ({
 
 ScenarioSelect.propTypes = {
     scenarioAnalysisId: PropTypes.string.isRequired,
-    scenarios: PropTypes.object.isRequired,
+    scenarios: PropTypes.array.isRequired,
     cloneScenario: PropTypes.func.isRequired,
     deleteScenario: PropTypes.func.isRequired,
     toggleSelection: PropTypes.func.isRequired

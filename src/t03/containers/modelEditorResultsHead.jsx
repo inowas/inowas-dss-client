@@ -10,7 +10,7 @@ import { Formatter, WebData } from '../../core';
 import Grid from '../../model/Grid';
 import { Query } from '../actions/index';
 import { Modifier as T07 } from '../../t07';
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
+import ScenarioAnalysisMap from '../../t07/components/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import Select from '../../components/primitive/Select';
 import { connect } from 'react-redux';
@@ -263,6 +263,8 @@ class ModelEditorResultsHead extends Component {
             heatMapData: data
         });
 
+        // TODO use TotalTimesSlider and LayerSelect Compoennts from t07
+
         return (
             <div>
                 <div style={[styles.selectWrapper]}>
@@ -295,7 +297,12 @@ class ModelEditorResultsHead extends Component {
                 <div style={[styles.chartWrapper]}>
                     <WebData.Component.Loading status={getCalculationStatus}>
                         <HeadResultsChart
-                            data={mapData.heatMapData}
+                            results={[
+                                {
+                                    name: model.name,
+                                    data: mapData.heatMapData
+                                }
+                            ]}
                             activeCoordinate={activeCoordinate}
                             grid={grid}
                             selectedType={selectedType}
@@ -328,11 +335,11 @@ const mapStateToProps = (state, { tool }) => {
         getCalculationStatus: WebData.Selector.getRequestStatusByType(
             state,
             Query.GET_MODFLOW_MODEL_CALCULATION
+        ),
+        createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(
+            state,
+            T07.Command.CREATE_SCENARIO_ANALYSIS
         )
-        // createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(
-        //     state,
-        //     T07.Command.CREATE_SCENARIO_ANALYSIS
-        // )
     };
 };
 

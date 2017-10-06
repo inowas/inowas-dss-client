@@ -12,12 +12,12 @@ import {
 } from 'react-leaflet';
 import React, { Component, PropTypes } from 'react';
 
-import Button from '../primitive/Button';
+import Button from '../../components/primitive/Button';
 import CanvasHeatMapOverlay from '../../core/leafletCanvasHeatMapOverlay/ReactLeafletHeatMapCanvasOverlay';
 import ColorLegend from './ColorLegend';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Coordinate from '../../model/Coordinate';
-import Icon from '../primitive/Icon';
+import Icon from '../../components/primitive/Icon';
 import Rainbow from 'rainbowvis.js';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import { sortBy } from 'lodash';
@@ -261,7 +261,10 @@ export default class ScenarioAnalysisMap extends Component {
         }
 
         // slice() to make an immuatble copy
-        const gradients = rainbow.getGradients().slice().reverse();
+        const gradients = rainbow
+            .getGradients()
+            .slice()
+            .reverse();
         const lastGradient = gradients[gradients.length - 1];
         const legend = gradients.map(gradient => ({
             color: '#' + gradient.getEndColour(),
@@ -310,9 +313,7 @@ export default class ScenarioAnalysisMap extends Component {
 
         return (
             <LayersControl.Overlay name="Wells">
-                <LayerGroup>
-                    {wells}
-                </LayerGroup>
+                <LayerGroup>{wells}</LayerGroup>
             </LayersControl.Overlay>
         );
     }
@@ -392,6 +393,12 @@ export default class ScenarioAnalysisMap extends Component {
         });
     }
 
+    invalidateMap = () => {
+        if (this.map) {
+            this.map.leafletElement.invalidateSize();
+        }
+    };
+
     render() {
         const { mapPosition } = this.props;
 
@@ -404,6 +411,9 @@ export default class ScenarioAnalysisMap extends Component {
                     onClick={this.clickOnMap}
                     zoomControl={false}
                     onMoveEnd={this.handleMove}
+                    ref={map => {
+                        this.map = map;
+                    }}
                 >
                     <TileLayer
                         url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
