@@ -166,3 +166,16 @@ export function calculateStressPeriods(tool, modelId, start, end, time_unit) {
         }
     };
 }
+
+export const UPDATE_SOLVER_PACKAGE = 'updateSolverPackage';
+
+export function updateSolverPackage(tool, modelId, data) {
+    return {
+        type: UPDATE_SOLVER_PACKAGE,
+        tool,
+        payload: {
+            solver: data,
+            id: modelId,
+        }
+    };
+}

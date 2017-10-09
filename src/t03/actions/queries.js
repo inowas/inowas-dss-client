@@ -95,3 +95,15 @@ export const GET_FILE = 'GET_MODFLOW_MODEL_FILE';
 export function getFile(tool, id, ext) {
     return sendQuery(`calculations/${id}/file/${ext}`, GET_FILE);
 }
+
+export const GET_MODFLOW_MODEL_SOLVER_PACKAGE = 'GET_MODFLOW_MODEL_SOLVER_PACKAGE';
+
+export function getSolverPackage(tool, id, packageId) {
+    return sendQuery(`modflowmodels/${id}/packages/${packageId}`, GET_MODFLOW_MODEL_SOLVER_PACKAGE);
+}
+
+export const GET_MODFLOW_MODEL_PACKAGES = 'GET_MODFLOW_MODEL_PACKAGES';
+
+export function getPackages(tool, id) {
+    return sendQuery(`modflowmodels/${id}/packages`, GET_MODFLOW_MODEL_PACKAGES);
+}

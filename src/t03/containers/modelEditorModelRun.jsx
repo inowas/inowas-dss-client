@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
 import { Command, Query } from '../../t03/actions';
 import { Selector } from '../../t03/index';
-import { StressPeriodProperties, CalculationStatus, RunModelOverview } from '../components';
+import { StressPeriodProperties, CalculationStatus, RunModelOverview, SolverProperties } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from '../components/runModelProperties';
 import ListfileProperties from '../components/ListfileProperties';
@@ -58,6 +58,10 @@ const menu = [
         name: 'Time Discretization'
     },
     {
+        id: 'solver',
+        name: 'Solver'
+    },
+    {
         id: 'calculation',
         name: 'Show logs'
     },
@@ -73,6 +77,21 @@ class ModelEditorModelRun extends React.Component {
     updateStressPeriods = (data) => {
         const {id} = this.props.params;
         this.props.updateStressPeriods(id, data);
+    };
+
+    getSolverPackage = (packageId) => {
+        const {id} = this.props.params;
+        this.props.getSolverPackage(id, packageId);
+    };
+
+    getPackages = () => {
+        const {id} = this.props.params;
+        this.props.getPackages(id);
+    };
+
+    updateSolverPackage = (data) => {
+        const {id} = this.props.params;
+        this.props.updateSolverPackage(id, data);
     };
 
     calculateStressPeriods = (start, end, timeUnit) => {
@@ -119,6 +138,19 @@ class ModelEditorModelRun extends React.Component {
                     <RunModelProperties
                         readOnly={readOnly}
                         calculation={model.calculation}
+                        id={id}
+                    />
+                );
+            case 'solver':
+                return (
+                    <SolverProperties
+                        onSave={this.updateSolverPackage}
+                        loadingStatus={this.props.getSolverPackageStatus}
+                        getPackagesStatus={this.props.getPackagesStatus}
+                        getPackages={this.getPackages}
+                        updateStatus={this.props.updateSolverPackageStatus}
+                        load={this.getSolverPackage}
+                        readOnly={readOnly}
                         id={id}
                     />
                 );
@@ -182,9 +214,12 @@ class ModelEditorModelRun extends React.Component {
 
 const actions = {
     updateStressPeriods: Command.updateStressPeriods,
+    updateSolverPackage: Command.updateSolverPackage,
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
     getFile: Query.getFile,
+    getSolverPackage: Query.getSolverPackage,
+    getPackages: Query.getPackages,
     stopPolling: Query.stopGetModflowModelCalculation,
 };
 
@@ -194,6 +229,9 @@ const mapStateToProps = (state, { tool, params }) => {
         model: state[ tool ].model,
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
+        updateSolverPackageStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_SOLVER_PACKAGE),
+        getSolverPackageStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_SOLVER_PACKAGE),
+        getPackagesStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_PACKAGES),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
         getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
     };

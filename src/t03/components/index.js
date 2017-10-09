@@ -21,6 +21,9 @@ import SoilmodelGeneral from './soilmodelGeneral';
 import SoilmodelLayer from './soilmodelLayer';
 import SoilModelLayerDataTable from './soilModelLayerDataTable';
 import SoilModelLayerOverview from './soilModelLayerOverview';
+import SolverProperties from './solverProperties';
+import SolverPropertiesNwt from './solverPropertiesNwt';
+import SolverPropertiesPcg from './solverPropertiesPcg';
 import StressPeriodDataTable from './stressPeriodDataTable';
 import StressPeriodProperties from './stressPeriodProperties';
 import WellProperties from './wellProperties';
@@ -49,6 +52,9 @@ export {
     SoilmodelLayer,
     SoilModelLayerDataTable,
     SoilModelLayerOverview,
+    SolverProperties,
+    SolverPropertiesNwt,
+    SolverPropertiesPcg,
     StressPeriodDataTable,
     StressPeriodProperties,
     WellProperties,
