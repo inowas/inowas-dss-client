@@ -40,7 +40,6 @@ const styles = {
     }
 };
 
-
 const runModelValidation = ({ model, route, routeType }) => {
     const boundaryLength = get( model, 'boundaries.length', 0 );
     const layersLength = get( model, 'soilmodel.layers.length', 0 );
@@ -49,18 +48,20 @@ const runModelValidation = ({ model, route, routeType }) => {
 
     return (
         <Table>
+            <tbody>
             <Tr>
-                <Td><a style={[styles.link]} onClick={() => route('boundaries')}>Boundaries</a></Td>
+                <Td><a style={[ styles.link ]} onClick={() => route( 'boundaries' )}>Boundaries</a></Td>
                 <Td>{boundaryLength}</Td>
                 <Td><Icon name="checked"/></Td>
             </Tr>
             <Tr>
-                <Td><a style={[styles.link]} onClick={() => route('soilmodel')}>Soilmodel Layers</a></Td>
+                <Td><a style={[ styles.link ]} onClick={() => route( 'soilmodel' )}>Soilmodel Layers</a></Td>
                 <Td>{layersLength}</Td>
                 <Td><Icon name={layersLength > 0 ? 'checked' : 'unchecked'}/></Td>
             </Tr>
             <Tr>
-                <Td><a style={[styles.link]} onClick={() => routeType('model-run', 'times')}>Time Discretization Stress Periods</a></Td>
+                <Td><a style={[ styles.link ]} onClick={() => routeType( 'model-run', 'times' )}>Time Discretization
+                    Stress Periods</a></Td>
                 <Td>{stressPeriodsLength}</Td>
                 <Td><Icon name={stressPeriodsLength > 0 ? 'checked' : 'unchecked'}/></Td>
             </Tr>
@@ -79,6 +80,7 @@ const runModelValidation = ({ model, route, routeType }) => {
                 <Td>pcg</Td>
                 <Td><Icon name="checked"/></Td>
             </Tr>
+            </tbody>
         </Table>
     );
 };

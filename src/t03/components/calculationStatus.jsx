@@ -42,7 +42,7 @@ const states = [
 
 const status = ({ calculation }) => {
     return (<ul style={[ styles.list, styles.listItem.base ]}>
-            {states.map( v => <li style={[ styles.listItem.base ]}>
+            {states.map( v => <li key={v.name} style={[ styles.listItem.base ]}>
                 <Icon name={calculation.state >= v.value ? 'checked' : 'unchecked'} style={styles.icon}/>
                 <span>{v.name}</span>
             </li> )}
