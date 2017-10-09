@@ -38,4 +38,14 @@ Start development server:
 $ docker run --rm -it -p 8080:8080 -p 3000:3000 --volume $(pwd):/app inowas/typescript yarn run dev
 ```
 
+Init database
+
+```
+$ docker-compose exec php bash
+$ ./build/build.on.docker.sh 
+$ ./build/test.on.docker.sh
+$ cs inowas:es:migrate 2
+$ cs inowas:es:migrate 3
+```
+
 Open your browser with [http://inowas.local:8080](http://inowas.local:8080).
