@@ -120,6 +120,32 @@ const createModelReducer = tool => {
             case Action.SET_CALCULATION:
                 return {...state, calculation: action.payload};
 
+            case Event.MODFLOW_PACKAGE_UPDATED:
+                return {
+                    ...state,
+                    packages: {
+                        ...state.packages,
+                        [ action.packageType ]: {
+                            ...state.packages[ action.packageType ],
+                            [ action.packageId ]: action.payload.data
+                        }
+                    }
+                };
+            case Action.SET_MODFLOW_PACKAGE:
+                return {
+                    ...state,
+                    packages: {
+                        ...state.packages,
+                        [ action.packageType ]: {
+                            ...state.packages[ action.packageType ],
+                            [ action.packageId ]: action.payload
+                        }
+                    }
+                };
+
+            case Action.SET_MODFLOW_PACKAGES:
+                return {...state, packages: action.payload};
+
             default:
                 return state;
         }

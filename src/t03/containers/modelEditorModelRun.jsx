@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
 import { Command, Query } from '../../t03/actions';
 import { Selector } from '../../t03/index';
-import { StressPeriodProperties, CalculationStatus, RunModelOverview } from '../components';
+import { StressPeriodProperties, CalculationStatus, RunModelOverview, PackageProperties } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from '../components/runModelProperties';
 import ListfileProperties from '../components/ListfileProperties';
@@ -58,6 +58,14 @@ const menu = [
         name: 'Time Discretization'
     },
     {
+        id: 'solver',
+        name: 'Solver'
+    },
+    {
+        id: 'flow',
+        name: 'flow'
+    },
+    {
         id: 'calculation',
         name: 'Show logs'
     },
@@ -73,6 +81,21 @@ class ModelEditorModelRun extends React.Component {
     updateStressPeriods = (data) => {
         const {id} = this.props.params;
         this.props.updateStressPeriods(id, data);
+    };
+
+    getModflowPackage = (packageId, packageType) => {
+        const {id} = this.props.params;
+        this.props.getModflowPackage(id, packageId, packageType);
+    };
+
+    getModflowPackages = () => {
+        const {id} = this.props.params;
+        this.props.getModflowPackages(id);
+    };
+
+    updateModflowPackage = (packageId, packageType, data) => {
+        const {id} = this.props.params;
+        this.props.updateModflowPackage(id, packageId, packageType, data);
     };
 
     calculateStressPeriods = (start, end, timeUnit) => {
@@ -105,7 +128,8 @@ class ModelEditorModelRun extends React.Component {
             getFileStatus,
             model,
             routes,
-            params
+            params,
+            modflowPackages,
         } = this.props;
 
         const readOnly = !lodash.includes(model.permissions, 'w');
@@ -120,6 +144,22 @@ class ModelEditorModelRun extends React.Component {
                         readOnly={readOnly}
                         calculation={model.calculation}
                         id={id}
+                    />
+                );
+            case 'solver':
+            case 'flow':
+                return (
+                    <PackageProperties
+                        onSave={this.updateModflowPackage}
+                        loadingStatus={this.props.getModflowPackageStatus}
+                        getModflowPackagesStatus={this.props.getModflowPackagesStatus}
+                        getModflowPackages={this.getModflowPackages}
+                        updateStatus={this.props.updateModflowPackageStatus}
+                        load={this.getModflowPackage}
+                        readOnly={readOnly}
+                        id={id}
+                        modflowPackages={modflowPackages}
+                        packageType={type}
                     />
                 );
             case 'files':
@@ -182,9 +222,12 @@ class ModelEditorModelRun extends React.Component {
 
 const actions = {
     updateStressPeriods: Command.updateStressPeriods,
+    updateModflowPackage: Command.updateModflowPackage,
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
     getFile: Query.getFile,
+    getModflowPackage: Query.getModflowPackage,
+    getModflowPackages: Query.getModflowPackages,
     stopPolling: Query.stopGetModflowModelCalculation,
 };
 
@@ -192,8 +235,12 @@ const mapStateToProps = (state, { tool, params }) => {
     return {
         stressPeriods: Selector.stressPeriods.getState(state[ tool ].model),
         model: state[ tool ].model,
+        modflowPackages: Selector.model.getModflowPackages(state[ tool ]),
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
+        updateModflowPackageStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_MODFLOW_PACKAGE),
+        getModflowPackageStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGE),
+        getModflowPackagesStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGES),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
         getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
     };

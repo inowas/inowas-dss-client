@@ -117,3 +117,15 @@ export function stressPeriodsCalculated(tool, data) {
         payload: data
     };
 }
+
+export const MODFLOW_PACKAGE_UPDATED = 'modflowPackageUpdated';
+
+export function modflowPackageUpdated(tool, packageId, packageType, data) {
+    return {
+        type: MODFLOW_PACKAGE_UPDATED,
+        tool,
+        packageId,
+        packageType,
+        payload: data
+    };
+}

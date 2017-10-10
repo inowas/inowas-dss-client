@@ -1,3 +1,5 @@
+import { sendCommand } from '../../actions/messageBox';
+
 /**
  * Commands sends a request to server and triggers an event.
  */
@@ -163,6 +165,21 @@ export function calculateStressPeriods(tool, modelId, start, end, time_unit) {
             start,
             end,
             time_unit
+        }
+    };
+}
+
+export const UPDATE_MODFLOW_PACKAGE = 'updateModflowPackage';
+
+export function updateModflowPackage(tool, modelId, packageName, packageType, data) {
+    return {
+        type: UPDATE_MODFLOW_PACKAGE,
+        tool,
+        packageType,
+        payload: {
+            id: modelId,
+            data,
+            package_name: packageName,
         }
     };
 }

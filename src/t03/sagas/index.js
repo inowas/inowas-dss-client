@@ -9,6 +9,8 @@ import getModflowModelDetailsFlow from './getModflowModelDetails';
 import loadBoundaryFlow from './loadBoundary';
 import loadListfileFlow from './loadListfile';
 import loadModelFlow from './loadModel';
+import loadModflowPackageFlow from './loadModflowPackage';
+import loadModflowPackagesFlow from './loadModflowPackages';
 import loadResultsFlow from './loadResults';
 import loadSoilmodelLayerFlow from './loadSoilmodelLayer';
 import loadStressPeriodsFlow from './loadStressPeriods';
@@ -18,6 +20,7 @@ import removeLayerFlow from './removeLayer';
 import updateBoundaryFlow from './updateBoundary';
 import updateLayerFlow from './updateLayer';
 import updateModelFlow from './updateModel';
+import updateModflowPackageFlow from './updateModflowPackage';
 import updateStressPeriodsFlow from './updateStressPeriods';
 
 export {
@@ -32,6 +35,8 @@ export {
     loadBoundaryFlow,
     loadListfileFlow,
     loadModelFlow,
+    loadModflowPackageFlow,
+    loadModflowPackagesFlow,
     loadResultsFlow,
     loadSoilmodelLayerFlow,
     loadStressPeriodsFlow,
@@ -41,5 +46,6 @@ export {
     updateBoundaryFlow,
     updateLayerFlow,
     updateModelFlow,
+    updateModflowPackageFlow,
     updateStressPeriodsFlow,
 };

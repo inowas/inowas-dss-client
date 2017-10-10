@@ -18,7 +18,9 @@ const Loading = ({ status, children, style }) =>
 
         {(() => {
             if (status) {
-                if (status.type === 'error') {
+                if (status.type === 'error' ||
+                    status.status === 'error'
+                ) {
                     return <LoadingError message={status.errorMessage} />;
                 } else if (
                     status.type === 'loading' ||
