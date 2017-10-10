@@ -199,3 +199,5 @@ export const getInitialLayerState = () => {
 export const getPermissions = state => state.model.permissions;
 
 export const getModflowModel = state => state.model;
+
+export const getModflowPackages = state => state.model.packages;

@@ -1,7 +1,31 @@
 export const getInitialState = () => {
     return {
         selected: '',
-        packages: [],
+        packages: {
+            flow: {
+                availablePackages: [],
+            },
+            solver: {
+                availablePackages: [],
+            },
+        },
+        lpf: {
+            hdry: 0.0,
+            wetfct: 0.0,
+            iwetit: 0.0,
+            ihdwet: 0.0,
+            vkcb: 0.0,
+            wetdry: 0.0,
+            storagecoefficient: false,
+            constantcv: false,
+            nocvcorrection: false,
+            novfc: false,
+        },
+        upw: {
+            hdry: 0.0,
+            iphdry: 0.0,
+            vkcb: 0.0,
+        },
         pcg: {
             mxiter: 0,
             iter1: 0,
@@ -49,6 +73,6 @@ export const getInitialState = () => {
             epsrn: 0.0,
             hclosexmd: 0.0,
             mxiterxmd: 0,
-        }
+        },
     };
 };

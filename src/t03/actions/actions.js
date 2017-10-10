@@ -275,3 +275,25 @@ export function stopGetModflowModelCalculation(tool, id) {
         id,
     };
 }
+
+export const SET_MODFLOW_PACKAGE = 'SET_MODFLOW_PACKAGE';
+
+export function setModflowPackage(tool, packageId, packageType, data) {
+    return {
+        type: SET_MODFLOW_PACKAGE,
+        tool,
+        packageId,
+        packageType,
+        payload: data
+    };
+}
+
+export const SET_MODFLOW_PACKAGES = 'SET_MODFLOW_PACKAGES';
+
+export function setModflowPackages(tool, data) {
+    return {
+        type: SET_MODFLOW_PACKAGES,
+        tool,
+        payload: data
+    };
+}

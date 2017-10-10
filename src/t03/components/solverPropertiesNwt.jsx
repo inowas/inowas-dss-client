@@ -34,7 +34,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.maxiterout )}
                 name="maxiterout"
                 value={solver.maxiterout}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'maxiterout' )}
                 placeholder="maxiterout"
             />
@@ -56,7 +56,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.linmeth )}
                 name="linmeth"
                 value={solver.linmeth}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'linmeth' )}
                 placeholder="linmeth"
             />
@@ -67,7 +67,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.iprnwt )}
                 name="iprnwt"
                 value={solver.iprnwt}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'iprnwt' )}
                 placeholder="iprnwt"
             />
@@ -78,7 +78,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.ibotavg )}
                 name="ibotavg"
                 value={solver.ibotavg}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'ibotavg' )}
                 placeholder="ibotavg"
             />
@@ -179,7 +179,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.backflag )}
                 name="backflag"
                 value={solver.backflag}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'backflag' )}
                 placeholder="backflag"
             />
@@ -190,7 +190,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.maxbackiter )}
                 name="maxbackiter"
                 value={solver.maxbackiter}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'maxbackiter' )}
                 placeholder="maxbackiter"
             />
@@ -223,7 +223,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.maxitinner )}
                 name="maxitinner"
                 value={solver.maxitinner}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'maxitinner' )}
                 placeholder="maxitinner"
             />
@@ -234,7 +234,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.ilumethod )}
                 name="ilumethod"
                 value={solver.ilumethod}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'ilumethod' )}
                 placeholder="ilumethod"
             />
@@ -245,7 +245,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.levfill )}
                 name="levfill"
                 value={solver.levfill}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'levfill' )}
                 placeholder="levfill"
             />
@@ -267,7 +267,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.msdr )}
                 name="msdr"
                 value={solver.msdr}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'msdr' )}
                 placeholder="msdr"
             />
@@ -278,7 +278,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.iacl )}
                 name="iacl"
                 value={solver.iacl}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'iacl' )}
                 placeholder="iacl"
             />
@@ -289,7 +289,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.norder )}
                 name="norder"
                 value={solver.norder}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'norder' )}
                 placeholder="norder"
             />
@@ -300,7 +300,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.level )}
                 name="level"
                 value={solver.level}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'level' )}
                 placeholder="level"
             />
@@ -311,7 +311,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.north )}
                 name="north"
                 value={solver.north}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'north' )}
                 placeholder="north"
             />
@@ -322,7 +322,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.iredsys )}
                 name="iredsys"
                 value={solver.iredsys}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'iredsys' )}
                 placeholder="iredsys"
             />
@@ -344,7 +344,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.idroptol )}
                 name="idroptol"
                 value={solver.idroptol}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'idroptol' )}
                 placeholder="idroptol"
             />
@@ -377,7 +377,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.mxiterxmd )}
                 name="mxiterxmd"
                 value={solver.mxiterxmd}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'mxiterxmd' )}
                 placeholder="mxiterxmd"
             />

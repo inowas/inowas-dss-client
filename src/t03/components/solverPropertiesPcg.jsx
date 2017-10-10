@@ -3,7 +3,7 @@ import { pure } from 'recompose';
 import { LayoutComponents } from '../../core';
 import Input from '../../components/primitive/Input';
 
-const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handleSelectChange, readOnly }) => {
+const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, readOnly }) => {
     return (<section>
         <LayoutComponents.InputGroup label="mxiter">
             <Input
@@ -11,7 +11,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.mxiter )}
                 name="mxiter"
                 value={solver.mxiter}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'mxiter' )}
                 placeholder="mxiter"
             />
@@ -22,7 +22,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.iter1 )}
                 name="iter1"
                 value={solver.iter1}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'iter1' )}
                 placeholder="iter1"
             />
@@ -33,7 +33,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.npcond )}
                 name="npcond"
                 value={solver.npcond}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'npcond' )}
                 placeholder="npcond"
             />
@@ -77,7 +77,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.nbpol )}
                 name="nbpol"
                 value={solver.nbpol}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'nbpol' )}
                 placeholder="nbpol"
             />
@@ -88,7 +88,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.iprpcg )}
                 name="iprpcg"
                 value={solver.iprpcg}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'iprpcg' )}
                 placeholder="iprpcg"
             />
@@ -99,7 +99,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.mutpcg )}
                 name="mutpcg"
                 value={solver.mutpcg}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'mutpcg' )}
                 placeholder="mutpcg"
             />
@@ -132,7 +132,7 @@ const solverPropertiesPcg = ({ solver, getTypeForInput, handleInputChange, handl
                 type={getTypeForInput( solver.ihcofadd )}
                 name="ihcofadd"
                 value={solver.ihcofadd}
-                cast={parseFloat}
+                cast={parseInt}
                 onChange={handleInputChange( 'ihcofadd' )}
                 placeholder="ihcofadd"
             />

@@ -96,14 +96,24 @@ export function getFile(tool, id, ext) {
     return sendQuery(`calculations/${id}/file/${ext}`, GET_FILE);
 }
 
-export const GET_MODFLOW_MODEL_SOLVER_PACKAGE = 'GET_MODFLOW_MODEL_SOLVER_PACKAGE';
+export const GET_MODFLOW_PACKAGE = 'GET_MODFLOW_PACKAGE';
 
-export function getSolverPackage(tool, id, packageId) {
-    return sendQuery(`modflowmodels/${id}/packages/${packageId}`, GET_MODFLOW_MODEL_SOLVER_PACKAGE);
+export function getModflowPackage(tool, id, packageId, packageType) {
+    return {
+        type: GET_MODFLOW_PACKAGE,
+        tool,
+        id,
+        packageType,
+        packageId,
+    };
 }
 
-export const GET_MODFLOW_MODEL_PACKAGES = 'GET_MODFLOW_MODEL_PACKAGES';
+export const GET_MODFLOW_PACKAGES = 'GET_MODFLOW_PACKAGES';
 
-export function getPackages(tool, id) {
-    return sendQuery(`modflowmodels/${id}/packages`, GET_MODFLOW_MODEL_PACKAGES);
+export function getModflowPackages(tool, id) {
+    return {
+        type: GET_MODFLOW_PACKAGES,
+        tool,
+        id,
+    };
 }

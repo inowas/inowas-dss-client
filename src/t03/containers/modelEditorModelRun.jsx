@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import * as lodash from 'lodash';
 import { Command, Query } from '../../t03/actions';
 import { Selector } from '../../t03/index';
-import { StressPeriodProperties, CalculationStatus, RunModelOverview, SolverProperties } from '../components';
+import { StressPeriodProperties, CalculationStatus, RunModelOverview, PackageProperties } from '../components';
 import { WebData } from '../../core';
 import RunModelProperties from '../components/runModelProperties';
 import ListfileProperties from '../components/ListfileProperties';
@@ -62,6 +62,10 @@ const menu = [
         name: 'Solver'
     },
     {
+        id: 'flow',
+        name: 'flow'
+    },
+    {
         id: 'calculation',
         name: 'Show logs'
     },
@@ -79,19 +83,19 @@ class ModelEditorModelRun extends React.Component {
         this.props.updateStressPeriods(id, data);
     };
 
-    getSolverPackage = (packageId) => {
+    getModflowPackage = (packageId, packageType) => {
         const {id} = this.props.params;
-        this.props.getSolverPackage(id, packageId);
+        this.props.getModflowPackage(id, packageId, packageType);
     };
 
-    getPackages = () => {
+    getModflowPackages = () => {
         const {id} = this.props.params;
-        this.props.getPackages(id);
+        this.props.getModflowPackages(id);
     };
 
-    updateSolverPackage = (data) => {
+    updateModflowPackage = (packageId, packageType, data) => {
         const {id} = this.props.params;
-        this.props.updateSolverPackage(id, data);
+        this.props.updateModflowPackage(id, packageId, packageType, data);
     };
 
     calculateStressPeriods = (start, end, timeUnit) => {
@@ -124,7 +128,8 @@ class ModelEditorModelRun extends React.Component {
             getFileStatus,
             model,
             routes,
-            params
+            params,
+            modflowPackages,
         } = this.props;
 
         const readOnly = !lodash.includes(model.permissions, 'w');
@@ -142,16 +147,19 @@ class ModelEditorModelRun extends React.Component {
                     />
                 );
             case 'solver':
+            case 'flow':
                 return (
-                    <SolverProperties
-                        onSave={this.updateSolverPackage}
-                        loadingStatus={this.props.getSolverPackageStatus}
-                        getPackagesStatus={this.props.getPackagesStatus}
-                        getPackages={this.getPackages}
-                        updateStatus={this.props.updateSolverPackageStatus}
-                        load={this.getSolverPackage}
+                    <PackageProperties
+                        onSave={this.updateModflowPackage}
+                        loadingStatus={this.props.getModflowPackageStatus}
+                        getModflowPackagesStatus={this.props.getModflowPackagesStatus}
+                        getModflowPackages={this.getModflowPackages}
+                        updateStatus={this.props.updateModflowPackageStatus}
+                        load={this.getModflowPackage}
                         readOnly={readOnly}
                         id={id}
+                        modflowPackages={modflowPackages}
+                        packageType={type}
                     />
                 );
             case 'files':
@@ -214,12 +222,12 @@ class ModelEditorModelRun extends React.Component {
 
 const actions = {
     updateStressPeriods: Command.updateStressPeriods,
-    updateSolverPackage: Command.updateSolverPackage,
+    updateModflowPackage: Command.updateModflowPackage,
     calculateStressPeriods: Command.calculateStressPeriods,
     calculateModflowModel: Command.calculateModflowModel,
     getFile: Query.getFile,
-    getSolverPackage: Query.getSolverPackage,
-    getPackages: Query.getPackages,
+    getModflowPackage: Query.getModflowPackage,
+    getModflowPackages: Query.getModflowPackages,
     stopPolling: Query.stopGetModflowModelCalculation,
 };
 
@@ -227,11 +235,12 @@ const mapStateToProps = (state, { tool, params }) => {
     return {
         stressPeriods: Selector.stressPeriods.getState(state[ tool ].model),
         model: state[ tool ].model,
+        modflowPackages: Selector.model.getModflowPackages(state[ tool ]),
         calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
         updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
-        updateSolverPackageStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_SOLVER_PACKAGE),
-        getSolverPackageStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_SOLVER_PACKAGE),
-        getPackagesStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_MODEL_PACKAGES),
+        updateModflowPackageStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_MODFLOW_PACKAGE),
+        getModflowPackageStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGE),
+        getModflowPackagesStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGES),
         calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
         getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
     };

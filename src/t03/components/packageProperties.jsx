@@ -1,12 +1,11 @@
 import { LayoutComponents, WebData } from '../../core';
-
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Select from '../../components/primitive/Select';
-import { SolverPropertiesPcg, SolverPropertiesNwt } from '../components';
-import { getInitialState } from '../selectors/solverPackage';
+import { SolverPropertiesPcg, SolverPropertiesNwt, FlowPropertiesLpf, FlowPropertiesUpw } from '../components';
+import { getInitialState } from '../selectors/packages';
 import styleGlobals from 'styleGlobals';
 import { map } from 'lodash';
 
@@ -20,7 +19,7 @@ const styles = {
 const getTypeForInput = value => (value instanceof Array ? 'text' : 'number');
 
 @ConfiguredRadium
-class SolverProperties extends React.Component {
+class PackageProperties extends React.Component {
     constructor(props) {
         super( props );
 
@@ -28,32 +27,33 @@ class SolverProperties extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getPackages();
+        this.props.getModflowPackages();
     }
 
     componentWillReceiveProps(nextProps) {
-        if (WebData.Selector.isStatusSuccess( nextProps.loadingStatus )) {
-            this.setState( prevState => {
-                return {
-                    ...prevState,
-                    [ prevState.selected ]: nextProps.loadingStatus.data
+        this.setState( prevState => {
+
+            const selected = !nextProps.modflowPackages || (prevState.selected && this.props.packageType === nextProps.packageType)
+                ? prevState.selected
+                : nextProps.modflowPackages[ nextProps.packageType ].selected;
+
+            let packageData = {};
+
+            if (nextProps.modflowPackages && nextProps.modflowPackages[ nextProps.packageType ][ selected ]) {
+                packageData = {
+                    [ selected ]: nextProps.modflowPackages[ nextProps.packageType ][ selected ]
                 };
-            } );
-        }
-        if (WebData.Selector.isStatusSuccess( nextProps.getPackagesStatus )) {
-            console.log( { nextProps, soliver: nextProps.getPackagesStatus.data.solver } );
-            this.setState( prevState => {
-                if (!prevState.selected) {
-                    // setTimeout(() => this.props.load(nextProps.getPackagesStatus.data.solver.selected), 500)
-                    this.props.load( nextProps.getPackagesStatus.data.solver.selected );
-                }
-                return {
-                    ...prevState,
-                    packages: nextProps.getPackagesStatus.data.solver.available,
-                    selected: prevState.selected ? prevState.selected : nextProps.getPackagesStatus.data.solver.selected,
-                };
-            } );
-        }
+            } else if (selected && !prevState.packages[ this.props.packageType ][ selected ]) {
+                this.props.load( selected, this.props.packageType );
+            }
+
+            return {
+                ...prevState,
+                ...packageData,
+                selected,
+                packages: nextProps.modflowPackages ? nextProps.modflowPackages : prevState.packages
+            };
+        } );
     }
 
     handleInputChange = name => {
@@ -83,27 +83,29 @@ class SolverProperties extends React.Component {
                     selected: data.value,
                 };
             } );
-            if (this.state.selected !== data.value) {
-                this.props.load( data.value );
+            if (this.state.selected !== data.value && !this.state.packages[ this.props.packageType ][ data.value ]) {
+                this.props.load( data.value, this.props.packageType );
             }
         };
     };
 
     save = () => {
-        this.props.onSave( this.state[ this.state.selected ] );
+        this.props.onSave( this.state.selected, this.props.packageType, this.state[ this.state.selected ] );
     };
 
     render() {
-        const { readOnly, updateStatus, getPackagesStatus, loadingStatus } = this.props;
+        const { readOnly, updateStatus, getModflowPackagesStatus, loadingStatus, packageType } = this.props;
         const { selected, packages } = this.state;
-        const solver = this.state[ selected ];
+        const availablePackages = packages[ packageType ].available;
 
-        let solverPackage = '';
+        let packageComponent = '';
+        let packageLabel = '';
 
         switch (selected) {
             case 'nwt':
-                solverPackage = <SolverPropertiesNwt
-                    solver={solver}
+                packageLabel = 'Solver Package';
+                packageComponent = <SolverPropertiesNwt
+                    solver={this.state[ selected ]}
                     handleInputChange={this.handleInputChange}
                     handleSelectChange={this.handleSelectChange}
                     getTypeForInput={getTypeForInput}
@@ -111,31 +113,52 @@ class SolverProperties extends React.Component {
                 />;
                 break;
             case 'pcg':
-                solverPackage = <SolverPropertiesPcg
-                    solver={solver}
+                packageLabel = 'Solver Package';
+                packageComponent = <SolverPropertiesPcg
+                    solver={this.state[ selected ]}
+                    handleInputChange={this.handleInputChange}
+                    getTypeForInput={getTypeForInput}
+                    readOnly={readOnly}
+                />;
+                break;
+            case 'lpf':
+                packageLabel = 'Flow Package';
+                packageComponent = <FlowPropertiesLpf
+                    flow={this.state[ selected ]}
                     handleInputChange={this.handleInputChange}
                     handleSelectChange={this.handleSelectChange}
                     getTypeForInput={getTypeForInput}
                     readOnly={readOnly}
                 />;
                 break;
+            case 'upw':
+                packageLabel = 'Flow Package';
+                packageComponent = <FlowPropertiesUpw
+                    flow={this.state[ selected ]}
+                    handleInputChange={this.handleInputChange}
+                    getTypeForInput={getTypeForInput}
+                    readOnly={readOnly}
+                />;
+                break;
+            default:
+                break;
         }
 
         return (
             <div>
-                <WebData.Component.Loading status={getPackagesStatus} style={[ { width: '100%' } ]}>
-                    <LayoutComponents.InputGroup label="Solver Package">
+                <WebData.Component.Loading status={getModflowPackagesStatus} style={[ { width: '100%' } ]}>
+                    <LayoutComponents.InputGroup label={packageLabel}>
                         <Select
                             clearable={false}
                             name="selected"
                             disabled={readOnly}
                             value={selected}
                             onChange={this.handlePackage( 'selected' )}
-                            options={map( packages, (label, value) => { return { value, label }; } )}
+                            options={map( availablePackages, (label, value) => { return { value, label }; } )}
                         />
                     </LayoutComponents.InputGroup>
                     <WebData.Component.Loading status={loadingStatus} style={[ { width: '100%' } ]}>
-                        {solverPackage}
+                        {packageComponent}
                     </WebData.Component.Loading>
                 </WebData.Component.Loading>
                 {!readOnly &&
@@ -151,14 +174,16 @@ class SolverProperties extends React.Component {
     }
 }
 
-SolverProperties.propTypes = {
+PackageProperties.propTypes = {
     onSave: PropTypes.func.isRequired,
     readOnly: PropTypes.bool.isRequired,
     updateStatus: PropTypes.object,
     loadingStatus: PropTypes.object,
-    getPackagesStatus: PropTypes.object,
-    getPackages: PropTypes.func.isRequired,
+    getModflowPackagesStatus: PropTypes.object,
+    getModflowPackages: PropTypes.func.isRequired,
     load: PropTypes.func.isRequired,
+    packageType: PropTypes.string.isRequired,
+    modflowPackages: PropTypes.object,
 };
 
-export default SolverProperties;
+export default PackageProperties;
