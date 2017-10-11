@@ -23,6 +23,12 @@ const createModelReducer = tool => {
                     ...action.payload
                 };
 
+            case Action.SET_ACTIVE_CELLS:
+                return {
+                    ...state,
+                    active_cells: action.payload
+                };
+
             case Action.UPDATE_GEOMETRY:
                 return {
                     ...state,
