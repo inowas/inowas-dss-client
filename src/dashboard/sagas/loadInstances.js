@@ -9,7 +9,7 @@ export default function* cloneModflowModelFlow() {
         // eslint-disable-next-line no-shadow
         const action = yield take( action => WebData.Helpers.waitForAction( action, Query.LOAD_INSTANCES ) );
 
-        yield put( sendQuery( 'tools/' + action.tool + (action.publicInstances ? '/public' : ''), Query.LOAD_INSTANCES ) );
+        yield put( sendQuery( 'tools/' + action.tool + (action.publicInstances ? '?public=true' : ''), Query.LOAD_INSTANCES ) );
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
