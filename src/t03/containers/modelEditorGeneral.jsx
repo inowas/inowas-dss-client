@@ -83,17 +83,9 @@ class ModelEditorGeneral extends Component {
         this.setState(function(prevState) {
             return {
                 ...prevState,
-                model: newProps.model
+                model: newProps.model,
             };
         });
-    }
-
-    componentWillUpdate() {
-        if (this.refs.map) {
-            this.refs.map.leafletElement.fitBounds(
-                this.getModflowModelState('bounding_box')
-            );
-        }
     }
 
     componentWillUnmount() {
@@ -403,7 +395,7 @@ class ModelEditorGeneral extends Component {
                     <div style={[styles.mapActionToolbar]}>
                         {this.renderEditOnMapIcon(id, readOnly)}
                     </div>
-                    <GeneralMap style={[styles.expandVertical]} model={model} />
+                    <GeneralMap style={styles.expandVertical} model={model} />
                     <div style={[styles.saveButtonWrapper]}>
                         <WebData.Component.Loading
                             status={
