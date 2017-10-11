@@ -11,6 +11,7 @@ export const DESTROY_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_DESTROY';
 export const SET_AREA_LATITUDE = 'MODEL_EDITOR_MODEL_SET_AREA_LATITUDE';
 export const SET_AREA_LONGITUDE = 'MODEL_EDITOR_MODEL_SET_AREA_LONGITUDE';
 export const SET_MODFLOW_MODEL = 'MODEL_EDITOR_MODEL_SET';
+export const SET_ACTIVE_CELLS = 'MODEL_EDITOR_MODEL_SET_ACTIVE_CELLS';
 export const UPDATE_AREA_CONTROL_POINT =
     'MODEL_EDITOR_MODEL_AREA_UPDATE_CONTROL_POINT';
 export const UPDATE_BOUNDING_BOX = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDING_BOX';
@@ -32,6 +33,14 @@ export function setModelArea(tool, geometry, latLngBounds) {
 export function setModflowModel(tool, payload) {
     return {
         type: SET_MODFLOW_MODEL,
+        tool,
+        payload
+    };
+}
+
+export function setActiveCells(tool, payload) {
+    return {
+        type: SET_ACTIVE_CELLS,
         tool,
         payload
     };
