@@ -1,7 +1,11 @@
+import { WebData } from '../../core';
+import * as ToolInstance from '../../toolInstance';
+import {find} from 'lodash';
+
 export const getInitialState = () => {
     return {
-        name: '',
-        description: '',
+        name: 'New simple tool',
+        description: 'Simple tool description',
         settings: {
             variable: 'x'
         },
@@ -101,8 +105,43 @@ export const getInitialState = () => {
 
 const createReducer = tool => {
     return (state = getInitialState(), action) => {
-        switch (action.type) {
+        if (action.tool !== tool) {
+            return state;
+        }
 
+        switch (action.type) {
+            case ToolInstance.Modifier.Query.GET_TOOL_INSTANCE:
+                if (!WebData.Helpers.isSuccess( action )) {
+                    return state;
+                }
+                const instance = action.webData.data;
+                return {
+                    ...state,
+                    name: instance.name,
+                    description: instance.description,
+                    settings: instance.data.settings,
+                    parameters: state.parameters.map( v => {
+                        return {
+                            ...v,
+                            ...find( instance.data.parameters, { id: v.id } )
+                        };
+                    } )
+                };
+            case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
+            case ToolInstance.Modifier.Event.TOOL_INSTANCE_CREATED:
+            case ToolInstance.Modifier.Event.TOOL_INSTANCE_UPDATED:
+                return {
+                    ...state,
+                    name: action.payload.name,
+                    description: action.payload.description,
+                    settings: action.payload.data.settings,
+                    parameters: state.parameters.map( v => {
+                        return {
+                            ...v,
+                            ...find( action.payload.data.parameters, { id: v.id } )
+                        };
+                    } )
+                };
         }
 
         return state;

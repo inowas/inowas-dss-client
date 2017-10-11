@@ -5,6 +5,7 @@ import tools from './containers/tools';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
 import * as T07 from './t07/index';
+import * as ToolInstance from './toolInstance/index';
 import * as Dashboard from './dashboard/index';
 import DashboardContainer from './containers/Dashboard';
 import Login from './containers/Login';
@@ -26,6 +27,12 @@ const routes = store =>
                     // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
                     store.dispatch(WebData.Modifier.Action.clear());
                     if (nextState.params.id) {
+                        store.dispatch(
+                            ToolInstance.Modifier.Query.getToolInstance(
+                                'T02',
+                                nextState.params.id,
+                            )
+                        );
                         return;
                     }
                 }}

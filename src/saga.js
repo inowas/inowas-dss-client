@@ -2,6 +2,7 @@ import { takeEvery, call } from 'redux-saga/effects';
 import { WebData } from './core';
 import { Saga as T03 } from './t03/index';
 import { Saga as T07 } from './t07/index';
+import { Saga as ToolInstance } from './toolInstance/index';
 import { Saga as Dashboard } from './dashboard/index';
 
 export default function* rootSaga() {
@@ -42,5 +43,7 @@ export default function* rootSaga() {
         call(T07.deleteScenarioFlow),
         call(T07.loadScenarioAnalysisFlow),
         call(T07.updateScenarioAnalysisFlow),
+        call(ToolInstance.createToolInstanceFlow),
+        call(ToolInstance.updateToolInstanceFlow),
     ];
 }

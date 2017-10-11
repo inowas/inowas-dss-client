@@ -14,9 +14,10 @@ export function clear ( ) {
     }
 }
 
-export function responseAction ( type, webData ) {
+export function responseAction ( type, webData, tool ) {
     return {
         type: type,
+        tool,
         webData: webData
     }
 }
