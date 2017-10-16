@@ -5,7 +5,7 @@
 export const CREATE_TOOL_INSTANCE = 'createToolInstance';
 export const UPDATE_TOOL_INSTANCE = 'updateToolInstance';
 
-export function createToolInstance(tool, id, name, description, payload, routes, params) {
+export function createToolInstance(tool, id, name, description, visibility, payload, routes, params) {
     return {
         type: CREATE_TOOL_INSTANCE,
         tool,
@@ -15,13 +15,14 @@ export function createToolInstance(tool, id, name, description, payload, routes,
         payload: {
             name,
             description,
+            public: visibility,
             type: tool,
             data: payload
         }
     };
 }
 
-export function updateToolInstance(tool, id, name, description, payload) {
+export function updateToolInstance(tool, id, name, description, visibility, payload) {
     return {
         type: UPDATE_TOOL_INSTANCE,
         tool,
@@ -29,6 +30,7 @@ export function updateToolInstance(tool, id, name, description, payload) {
         payload: {
             name,
             description,
+            public: visibility,
             type: tool,
             data: payload
         }
