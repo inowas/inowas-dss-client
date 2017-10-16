@@ -3,6 +3,7 @@
  */
 import { Modifier as T03 } from '../../t03';
 import { Modifier as T07 } from '../../t07';
+import { Modifier as ToolInstance } from '../../toolInstance';
 import uuid from 'uuid';
 
 export const SET_INSTANCES = 'DASHBOARD_SET_INSTANCES';
@@ -37,6 +38,8 @@ export function cloneToolInstance( id ) {
         const tool = getState().dashboard.ui.activeToolSlug;
 
         switch (tool) {
+            case 'T02':
+                return dispatch( ToolInstance.Command.cloneToolInstance( tool, id, uuid.v4()) );
             case 'T03':
                 return dispatch( T03.Command.cloneModflowModel( tool, id, uuid.v4()) );
             case 'T07':
@@ -53,6 +56,8 @@ export function deleteToolInstance( id ) {
         const tool = getState().dashboard.ui.activeToolSlug;
 
         switch (tool) {
+            case 'T02':
+                return dispatch( ToolInstance.Command.deleteToolInstance( tool, id ) );
             case 'T03':
                 return dispatch( T03.Command.deleteModflowModel( tool, id ) );
             case 'T07':
