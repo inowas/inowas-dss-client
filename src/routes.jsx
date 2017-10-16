@@ -64,12 +64,15 @@ const routes = store => (
 
             <Route path="T06(/:id)" component={tools.T06} />
             <Route path="T07A/(:id)" component={T07.Container.T07A} />
-            <Route path="T07/:id" component={T07.Container.Main}>
-                <IndexRoute component={T07.Component.CrossSection} />
-                <Route
-                    path="CrossSection"
-                    component={T07.Component.CrossSection}
-                />
+            <Route path="T07" component={T07.Container.Main}>
+                <IndexRoute component={T07.Component.New} />
+                <Route path=":id">
+                    <IndexRoute component={T07.Component.CrossSection} />
+                    <Route
+                        path="CrossSection"
+                        component={T07.Component.CrossSection}
+                    />
+                </Route>
             </Route>
             <Route path="T07E/:said" tool={'T07E'}>
                 <Route

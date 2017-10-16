@@ -14,7 +14,7 @@ export function createScenarioAnalysis(tool, id, payload, routes, params) {
         id,
         payload,
         routes,
-        params,
+        params
     };
 }
 
@@ -51,10 +51,9 @@ export function deleteScenarioAnalysis(tool, id) {
 export const CREATE_SCENARIO = 'createScenario';
 export const DELETE_SCENARIO = 'deleteScenario';
 
-export function createScenario(tool, id, baseModelId, scenarioId) {
+export function createScenario(id, baseModelId, scenarioId) {
     return {
         type: CREATE_SCENARIO,
-        tool,
         id,
         payload: {
             id,
@@ -64,13 +63,12 @@ export function createScenario(tool, id, baseModelId, scenarioId) {
     };
 }
 
-export function deleteScenario(tool, id, scenarioId) {
+export function deleteScenario(id, scenarioId) {
     return {
         type: DELETE_SCENARIO,
-        tool,
         payload: {
             id,
-            scenario_id: scenarioId,
+            scenario_id: scenarioId
         }
     };
 }

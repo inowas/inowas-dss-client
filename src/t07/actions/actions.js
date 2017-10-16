@@ -3,19 +3,27 @@
  */
 
 export const SET_SCENARIO_ANALYSIS = 'SET_SCENARIO_ANALYSIS';
-export const DESTROY_SCENARIO_ANALYSIS = 'DESTROY_SCENARIO_ANALYSIS';
 
-export function setScenarioAnalysis(tool, payload) {
+export function setScenarioAnalysis(scenarioAnalysis) {
     return {
         type: SET_SCENARIO_ANALYSIS,
-        tool,
-        payload
+        payload: scenarioAnalysis
     };
 }
 
-export function destroyScenarioAnalysis(tool) {
+export const DESTROY_SCENARIO_ANALYSIS = 'DESTROY_SCENARIO_ANALYSIS';
+
+export function destroyScenarioAnalysis() {
     return {
-        type: DESTROY_SCENARIO_ANALYSIS,
-        tool
+        type: DESTROY_SCENARIO_ANALYSIS
+    };
+}
+
+export const SET_SCENARIO_MODELS = 'SET_SCENARIO_MODELS';
+
+export function setScenarioModels(scenarioModels) {
+    return {
+        type: SET_SCENARIO_MODELS,
+        payload: scenarioModels
     };
 }

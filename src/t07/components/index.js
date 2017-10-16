@@ -1,3 +1,4 @@
 import CrossSection from './CrossSection';
+import New from './New';
 
-export { CrossSection };
+export { CrossSection, New };

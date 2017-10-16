@@ -1,29 +1,30 @@
-import {Action} from "../actions";
-import {webData as Selector} from "../selectors";
+import { Action } from '../actions';
 
-const webData = ( state = Selector.initialState(), action ) => {
-
+const webData = (state = {}, action) => {
     // TODO ensure uniqueness
-    switch ( action.type ) {
-        case Action.AT_RESET_WEB_DATA:
-            console.log('reset type', {action});
+    switch (action.type) {
+        case Action.AT_RESET_WEB_DATA: {
+            console.log('Reset web data for:', { action });
             return {
                 ...state,
-                [action.responseAction]: {}
+                [action.provokingActionType]: undefined
             };
+        }
 
-        case Action.AT_CLEAR_WEB_DATA:
+        case Action.AT_CLEAR_WEB_DATA: {
             return {};
+        }
 
-        default:
-            if ( !action.webData ) {
-                return state;
-            }
-
+        case Action.SET_AJAX_STATUS: {
             return {
                 ...state,
-                [action.type]: action.webData
+                [action.provokingActionType]: action.status
             };
+        }
+
+        default: {
+            return state;
+        }
     }
 };
 

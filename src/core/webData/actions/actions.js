@@ -1,23 +1,31 @@
 export const AT_RESET_WEB_DATA = 'AT_RESET_WEB_DATA';
 export const AT_CLEAR_WEB_DATA = 'AT_CLEAR_WEB_DATA';
 
-export function reset ( responseAction ) {
+export function reset(provokingActionType) {
     return {
         type: AT_RESET_WEB_DATA,
-        responseAction
-    }
+        provokingActionType
+    };
 }
 
-export function clear ( ) {
+export function clear() {
     return {
         type: AT_CLEAR_WEB_DATA
-    }
+    };
 }
 
-export function responseAction ( type, webData, tool ) {
+export const SET_AJAX_STATUS = 'SET_AJAX_STATUS';
+
+export function setAjaxStatus(provokingActionType, status, tool) {
     return {
-        type: type,
+        type: SET_AJAX_STATUS,
+        provokingActionType,
+        status,
         tool,
-        webData: webData
-    }
+        webData: status // legacy
+    };
+}
+// legacy
+export function responseAction(provokingActionType, status, tool) {
+    return setAjaxStatus(provokingActionType, status, tool);
 }

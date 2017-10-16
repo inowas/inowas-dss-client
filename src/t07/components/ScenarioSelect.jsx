@@ -6,14 +6,15 @@ import ScenarioItem from './ScenarioItem';
 import { pure } from 'recompose';
 
 const ScenarioSelect = ({
-    scenarios,
+    scenarioModels,
     cloneScenario,
     scenarioAnalysisId,
     deleteScenario,
-    toggleSelection
+    toggleSelection,
+    permissions
 }) => (
     <div className="scenarioSelect">
-        {scenarios
+        {scenarioModels
             .sort((a, b) => (a.isBaseModel ? -1 : a.name.localeCompare(b.name)))
             .map(s => {
                 return (
@@ -21,9 +22,10 @@ const ScenarioSelect = ({
                         clone={cloneScenario}
                         deleteScenario={deleteScenario}
                         key={s.id}
-                        said={scenarioAnalysisId}
-                        scenario={s}
+                        scenarioAnalysisId={scenarioAnalysisId}
+                        scenarioModel={s}
                         toggleSelection={toggleSelection(s.id)}
+                        permissions={permissions}
                     />
                 );
             })}
@@ -32,10 +34,11 @@ const ScenarioSelect = ({
 
 ScenarioSelect.propTypes = {
     scenarioAnalysisId: PropTypes.string.isRequired,
-    scenarios: PropTypes.array.isRequired,
+    scenarioModels: PropTypes.array.isRequired,
     cloneScenario: PropTypes.func.isRequired,
     deleteScenario: PropTypes.func.isRequired,
-    toggleSelection: PropTypes.func.isRequired
+    toggleSelection: PropTypes.func.isRequired,
+    permissions: PropTypes.string
 };
 
 export default pure(ScenarioSelect);

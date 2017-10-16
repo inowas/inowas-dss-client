@@ -9,62 +9,66 @@ import { includes } from 'lodash';
 
 class ScenarioItem extends React.Component {
     toggleSelection = () => {
-        this.props.toggleSelection(this.props.scenario.id);
+        this.props.toggleSelection(this.props.scenarioModel.id);
     };
 
     render() {
         const {
-            scenario,
+            scenarioModel,
             toggleSelection,
             clone,
-            said,
-            deleteScenario
-        } = this.props;
-        const {
-            name,
-            description,
-            selected,
-            modelId,
-            isBaseModel,
+            scenarioAnalysisId,
+            deleteScenario,
             permissions
-        } = scenario;
+        } = this.props;
         const readOnly = !includes(permissions, 'w');
 
         return (
-            <div className="item" data-selected={selected}>
+            <div className="item" data-selected={scenarioModel.selected}>
                 <button className="toggle" onClick={toggleSelection}>
-                    <Icon name={selected ? 'checked' : 'unchecked'} />
+                    <Icon
+                        name={scenarioModel.selected ? 'checked' : 'unchecked'}
+                    />
                 </button>
                 <div className="content">
-                    <h3>{name}</h3>
-                    <p>{description}</p>
+                    <h3>{scenarioModel.name}</h3>
+                    <p>{scenarioModel.description}</p>
                     <p>
-                        {!isBaseModel ? (
-                            <Link to={'/tools/T07E/' + said + '/' + modelId}>
+                        {!scenarioModel.isBaseModel ? (
+                            <Link
+                                to={`/tools/T07E/${scenarioAnalysisId}/${scenarioModel.id}`}
+                            >
                                 {readOnly ? 'View' : 'Edit'}
                             </Link>
                         ) : null}
-                        {!isBaseModel && !readOnly && <span> | </span>}
+                        {!scenarioModel.isBaseModel &&
+                            !readOnly && <span> | </span>}
                         {!readOnly && (
-                            <Button type="link" onClick={() => clone(modelId)}>
+                            <Button
+                                type="link"
+                                onClick={() => clone(scenarioModel.id)}
+                            >
                                 Clone
                             </Button>
                         )}
-                        {!readOnly && isBaseModel && <span> | </span>}
                         {!readOnly &&
-                            isBaseModel && (
+                            scenarioModel.isBaseModel && <span> | </span>}
+                        {!readOnly &&
+                            scenarioModel.isBaseModel && (
                                 <Link
-                                    to={'/tools/T07E/' + said + '/' + modelId}
+                                    to={`/tools/T07E/${scenarioAnalysisId}/${scenarioModel.id}`}
                                 >
                                     Edit
                                 </Link>
                             )}
-                        {!isBaseModel && !readOnly && <span> | </span>}
-                        {!isBaseModel &&
+                        {!scenarioModel.isBaseModel &&
+                            !readOnly && <span> | </span>}
+                        {!scenarioModel.isBaseModel &&
                             !readOnly && (
                                 <Button
                                     type="link"
-                                    onClick={() => deleteScenario(modelId)}
+                                    onClick={() =>
+                                        deleteScenario(scenarioModel.id)}
                                 >
                                     Delete
                                 </Button>
@@ -77,11 +81,12 @@ class ScenarioItem extends React.Component {
 }
 
 ScenarioItem.propTypes = {
-    said: PropTypes.string.isRequired,
-    scenario: PropTypes.object.isRequired,
+    scenarioAnalysisId: PropTypes.string.isRequired,
+    scenarioModel: PropTypes.object.isRequired,
     clone: PropTypes.func.isRequired,
     deleteScenario: PropTypes.func.isRequired,
-    toggleSelection: PropTypes.func.isRequired
+    toggleSelection: PropTypes.func.isRequired,
+    permissions: PropTypes.string.isRequired
 };
 
 export default ScenarioItem;

@@ -13,7 +13,7 @@ import { Component as T03Component } from '../../t03';
 export default class CrossSection extends Component {
     static propTypes = {
         scenarioAnalysis: PropTypes.object,
-        scenarios: PropTypes.array,
+        scenarioModels: PropTypes.array,
         cloneScenario: PropTypes.func,
         deleteScenario: PropTypes.func,
         toggleScenarioSelection: PropTypes.func,
@@ -71,14 +71,14 @@ export default class CrossSection extends Component {
             prevState.selectedTotalTimeIndex !==
                 this.state.selectedTotalTimeIndex ||
             prevProps.scenarioAnalysis !== this.props.scenarioAnalysis ||
-            prevProps.scenarios !== this.props.scenarios
+            prevProps.scenarioModels !== this.props.scenarioModels
         ) {
             this.fetchCalculationResults();
         }
     }
 
     fetchCalculationResults = () => {
-        const { scenarios, scenarioAnalysis, apiKey } = this.props;
+        const { scenarioModels, scenarioAnalysis, apiKey } = this.props;
         const {
             selectedLayer,
             selectedResultType,
@@ -89,23 +89,24 @@ export default class CrossSection extends Component {
             selectedResultType &&
             selectedTotalTimeIndex !== null &&
             scenarioAnalysis &&
-            scenarioAnalysis.totalTimes
+            scenarioAnalysis.totalTimes &&
+            scenarioModels !== null
         ) {
             const time =
                 scenarioAnalysis.totalTimes.total_times[selectedTotalTimeIndex];
             ConfiguredAxios.all(
-                Object.keys(scenarios)
-                    .map(id => {
-                        const scenario = scenarios[id];
-                        if (scenario.selected) {
+                scenarioModels
+                    .map(scenarioModel => {
+                        if (scenarioModel.selected) {
                             return ConfiguredAxios.get(
-                                `/calculations/${scenario.calculationId}/results/types/${selectedResultType}/layers/${selectedLayer}/totims/${time}`,
+                                `/calculations/${scenarioModel.calculationId}/results/types/${selectedResultType}/layers/${selectedLayer}/totims/${time}`,
                                 {
                                     headers: {
                                         'X-AUTH-TOKEN': apiKey
                                     },
                                     params: {
-                                        calculationId: scenario.calculationId
+                                        calculationId:
+                                            scenarioModel.calculationId
                                     }
                                 }
                             );
@@ -161,18 +162,18 @@ export default class CrossSection extends Component {
     };
 
     renderMaps() {
-        const { scenarios, scenarioAnalysis } = this.props;
+        const { scenarioModels, scenarioAnalysis } = this.props;
         const {
             mapPosition,
             selectedCoordinate,
             selectedResultType,
             calculations
         } = this.state;
-        if (scenarios.length <= 0 || !mapPosition) {
+        if (scenarioModels.length <= 0 || !mapPosition) {
             return null;
         }
 
-        const selectedScenarios = scenarios.filter(
+        const selectedScenarios = scenarioModels.filter(
             scenario => scenario.selected
         );
 
@@ -247,7 +248,7 @@ export default class CrossSection extends Component {
     render() {
         const {
             scenarioAnalysis,
-            scenarios,
+            scenarioModels,
             cloneScenario,
             deleteScenario,
             toggleScenarioSelection
@@ -260,13 +261,17 @@ export default class CrossSection extends Component {
             calculations
         } = this.state;
 
-        const results = scenarios
-            .filter(scenario => scenario.selected)
-            .map(scenario => {
-                if (calculations.hasOwnProperty(scenario.calculationId)) {
+        if (!scenarioAnalysis || !scenarioModels) {
+            return null;
+        }
+
+        const results = scenarioModels
+            .filter(scenarioModel => scenarioModel.selected)
+            .map(scenarioModel => {
+                if (calculations.hasOwnProperty(scenarioModel.calculationId)) {
                     return {
-                        name: scenario.name,
-                        data: calculations[scenario.calculationId]
+                        name: scenarioModel.name,
+                        data: calculations[scenarioModel.calculationId]
                     };
                 }
                 return null;
@@ -283,8 +288,9 @@ export default class CrossSection extends Component {
                                     scenarioAnalysisId={scenarioAnalysis.id}
                                     cloneScenario={cloneScenario}
                                     deleteScenario={deleteScenario}
-                                    scenarios={scenarios}
+                                    scenarioModels={scenarioModels}
                                     toggleSelection={toggleScenarioSelection}
+                                    permissions={scenarioAnalysis.permissions}
                                 />
                             </AccordionItem>
                         </Accordion>
