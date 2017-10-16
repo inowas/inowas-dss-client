@@ -34,19 +34,21 @@ export function buildRequest(url, method, body) {
     return { url: config.baseURL + '/v2/' + url, options };
 }
 
-export function sendMessageBox( responseAction, body ) {
-    return WebData.Modifier.Query.sendHttpRequest( buildRequest('messagebox', 'POST', JSON.stringify( body )), responseAction );
+export function sendMessageBox( responseAction, body, tool ) {
+    return WebData.Modifier.Query.sendHttpRequest( buildRequest('messagebox', 'POST', JSON.stringify( body )), responseAction, tool );
 }
 
-export function sendCommand( messageName, payload, metadata = [] ) {
+export function sendCommand( messageName, payload, metadata = [], tool ) {
     return sendMessageBox(
         messageName, {
             metadata,
             message_name: messageName,
             payload,
-        } );
+        },
+        tool
+    );
 }
 
-export function sendQuery( url, responseAction ) {
-    return WebData.Modifier.Query.sendHttpRequest( buildRequest(url, 'GET'), responseAction );
+export function sendQuery( url, responseAction, tool ) {
+    return WebData.Modifier.Query.sendHttpRequest( buildRequest(url, 'GET'), responseAction, tool );
 }

@@ -1,4 +1,5 @@
 import T03 from './T03';
+import T02 from './T02';
 import T06 from './T06';
 import T07 from './T07';
 import T07E from './T07E';
@@ -31,6 +32,7 @@ const rootReducer = combineReducers( {
     user,
     webData: WebData.Reducer.webData,
     dashboard,
+    T02,
     T03,
     T06,
     T07,

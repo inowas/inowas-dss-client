@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect'
+
 export const initialState = () => {
     return {};
 };
@@ -29,3 +31,13 @@ export const getStatusObject = (state, type) => {
         data: getData(request),
     }
 };
+
+const getStatusForSelector = ( type ) => (state, props) => getStatusObject(state, type);
+
+export const makeGetStatus = (type) => {
+    return createSelector(
+        [getStatusForSelector(type)],
+        (status) => status
+    );
+};
+
