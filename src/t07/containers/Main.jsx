@@ -74,17 +74,9 @@ class Main extends Component {
             });
         }
 
-        // copy scenarioModels to state so we can enhance it with selected
+        // copy scenarioModels to state so we can enhance them with selected
         if (scenarioModels) {
-            // eslint-disable-next-line react/no-did-mount-set-state
-            this.setState({
-                scenarioModels: scenarioModels.map(scenarioModel => {
-                    return {
-                        ...scenarioModel,
-                        selected: scenarioModel.isBaseModel
-                    };
-                })
-            });
+            this.setScenarioModels(scenarioModels);
         }
     }
 
@@ -101,16 +93,9 @@ class Main extends Component {
             });
         }
 
-        // copy scenarioModels to state so we can enhance it with selected
+        // copy scenarioModels to state so we can enhance them with selected
         if (this.props.scenarioModels !== nextProps.scenarioModels) {
-            this.setState({
-                scenarioModels: nextProps.scenarioModels.map(scenarioModel => {
-                    return {
-                        ...scenarioModel,
-                        selected: scenarioModel.isBaseModel
-                    };
-                })
-            });
+            this.setScenarioModels(nextProps.scenarioModels);
         }
     }
 
@@ -142,13 +127,25 @@ class Main extends Component {
         });
     };
 
+    setScenarioModels = scenarioModels => {
+        this.setState({
+            scenarioModels: scenarioModels.map(scenarioModel => {
+                return {
+                    ...scenarioModel,
+                    selected: scenarioModel.isBaseModel
+                };
+            })
+        });
+    };
+
     saveScenarioAnalysis = () => {
         const { updateScenarioAnalysis, createScenarioAnalysis } = this.props;
         const { scenarioAnalysis } = this.state;
         if (scenarioAnalysis.id) {
             updateScenarioAnalysis(scenarioAnalysis.id, scenarioAnalysis);
         } else {
-            createScenarioAnalysis(uuid.v4(), scenarioAnalysis, routes, params);
+            // TODO
+            // createScenarioAnalysis(uuid.v4(), scenarioAnalysis, routes, params);
         }
     };
 
@@ -283,11 +280,12 @@ class Main extends Component {
                                         });
                                     }
                                     // no children - error
-                                    return null;
+                                    return <div>Something went wrong!</div>;
                                 })()}
                             </div>
                         );
                     }
+                    // loading
                     return <div>Loading!</div>;
                 })()}
             </div>
