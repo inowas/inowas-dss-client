@@ -6,6 +6,7 @@ export const getInitialState = () => {
     return {
         name: 'New simple tool',
         description: 'Simple tool description',
+        public: false,
         settings: {
             variable: 'x'
         },
@@ -119,6 +120,7 @@ const createReducer = tool => {
                     ...state,
                     name: instance.name,
                     description: instance.description,
+                    public: instance.public,
                     settings: instance.data.settings,
                     parameters: state.parameters.map( v => {
                         return {
@@ -134,6 +136,7 @@ const createReducer = tool => {
                     ...state,
                     name: action.payload.name,
                     description: action.payload.description,
+                    public: action.payload.public,
                     settings: action.payload.data.settings,
                     parameters: state.parameters.map( v => {
                         return {

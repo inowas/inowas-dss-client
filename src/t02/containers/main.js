@@ -12,6 +12,7 @@ import applyParameterUpdate from '../../reducers/applyParameterUpdate';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
+import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
 import { withRouter } from 'react-router';
 import { Modifier as ToolInstance } from '../../toolInstance';
@@ -19,7 +20,7 @@ import { connect } from 'react-redux';
 import uuid from 'uuid';
 import { find, each } from 'lodash';
 import { makeMapStateToProps } from '../selectors/mapState';
-import { WebData } from '../../core';
+import { WebData, LayoutComponents } from '../../core';
 
 const styles = {
     heading: {
@@ -73,11 +74,11 @@ class T02 extends React.Component {
         const { name, description } = this.state;
 
         if (id) {
-            this.props.updateToolInstance( id, name, description, buildPayload( this.state ) );
+            this.props.updateToolInstance( id, name, description, this.state.public, buildPayload( this.state ) );
             return;
         }
 
-        this.props.createToolInstance( uuid.v4(), name, description, buildPayload( this.state ), routes, params );
+        this.props.createToolInstance( uuid.v4(), name, description, this.state.public, buildPayload( this.state ), routes, params );
     };
 
     updateSettings(value) {
@@ -117,6 +118,12 @@ class T02 extends React.Component {
                     [ name ]: value
                 };
             } );
+        };
+    };
+
+    handleSelectChange = name => {
+        return data => {
+            this.handleInputChange( name )( data ? data.value : undefined );
         };
     };
 
@@ -180,14 +187,32 @@ class T02 extends React.Component {
                         <div className="tile col stretch">
                             <Accordion firstActive={null}>
                                 <AccordionItem heading={heading}>
-                                    <Input
-                                        type="textarea"
-                                        disabled={readOnly}
-                                        name="description"
-                                        value={description}
-                                        onChange={this.handleInputChange( 'description' )}
-                                        placeholder="Description"
-                                    />
+                                    <LayoutComponents.InputGroup label="Visibility">
+                                        <Select
+                                            disabled={readOnly}
+                                            clearable={false}
+                                            value={this.state.public}
+                                            onChange={this.handleSelectChange(
+                                                'public'
+                                            )}
+                                            options={
+                                                [
+                                                    { label: 'public', value: true },
+                                                    { label: 'private', value: false },
+                                                ]
+                                            }
+                                        />
+                                    </LayoutComponents.InputGroup>
+                                    <LayoutComponents.InputGroup label="Description">
+                                        <Input
+                                            type="textarea"
+                                            disabled={readOnly}
+                                            name="description"
+                                            value={description}
+                                            onChange={this.handleInputChange( 'description' )}
+                                            placeholder="Description"
+                                        />
+                                    </LayoutComponents.InputGroup>
                                 </AccordionItem>
                             </Accordion>
                         </div>
