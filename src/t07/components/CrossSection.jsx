@@ -29,6 +29,43 @@ export default class CrossSection extends Component {
         calculations: {}
     };
 
+    componentDidMount() {
+        // init values for LayerSelection as soon as layerScheme is available
+        const { scenarioAnalysis } = this.props;
+        const { selectedLayer, selectedResultType, mapPosition } = this.state;
+        if (
+            !selectedLayer &&
+            scenarioAnalysis &&
+            scenarioAnalysis.layerScheme
+        ) {
+            // eslint-disable-next-line react/no-did-mount-set-state
+            this.setState({
+                selectedLayer: scenarioAnalysis.layerScheme.length - 1
+            });
+        }
+
+        if (
+            !selectedResultType &&
+            scenarioAnalysis &&
+            scenarioAnalysis.layerScheme
+        ) {
+            const layerScheme = scenarioAnalysis.layerScheme;
+            // eslint-disable-next-line react/no-did-mount-set-state
+            this.setState({
+                selectedResultType: layerScheme[layerScheme.length - 1][0]
+            });
+        }
+        if (
+            !mapPosition &&
+            this.props.scenarioAnalysis &&
+            this.props.scenarioAnalysis.boundingBox
+        ) {
+            this.setMapPosition({
+                bounds: this.props.scenarioAnalysis.boundingBox.toArray()
+            });
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         // init values for LayerSelection as soon as layerScheme is available
         const { selectedLayer, selectedResultType, mapPosition } = this.state;
