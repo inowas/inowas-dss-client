@@ -62,7 +62,8 @@ export default function* loadScenarioAnalysis() {
                         ),
                         name: data.name,
                         description: data.description,
-                        permissions: data.permissions
+                        permissions: data.permissions,
+                        public: data.public
                     }
                 };
 

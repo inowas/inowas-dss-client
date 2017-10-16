@@ -7,10 +7,9 @@ export const UPDATE_SCENARIO_ANALYSIS = 'updateScenarioAnalysis';
 export const DELETE_SCENARIO_ANALYSIS = 'deleteScenarioAnalysis';
 export const CLONE_SCENARIO_ANALYSIS = 'cloneScenarioAnalysis';
 
-export function createScenarioAnalysis(tool, id, payload, routes, params) {
+export function createScenarioAnalysis(id, payload, routes, params) {
     return {
         type: CREATE_SCENARIO_ANALYSIS,
-        tool,
         id,
         payload,
         routes,
@@ -18,10 +17,9 @@ export function createScenarioAnalysis(tool, id, payload, routes, params) {
     };
 }
 
-export function updateScenarioAnalysis(tool, id, payload) {
+export function updateScenarioAnalysis(id, payload) {
     return {
         type: UPDATE_SCENARIO_ANALYSIS,
-        tool,
         id,
         payload
     };

@@ -205,44 +205,39 @@ export default class CrossSection extends Component {
             }
         });
 
-        return (
-            selectedScenarios
-                // .sort((a, b) => (a.isBaseModel ? -1 : a.name.localeCompare(b.name)))
-                .map(scenario => {
-                    const mapData = new ScenarioAnalysisMapData({
-                        area: scenarioAnalysis.area,
-                        grid: scenarioAnalysis.grid,
-                        type: selectedResultType,
-                        boundaries: scenario.boundaries,
-                        xCrossSection,
-                        heatMapData:
-                            calculations[scenario.calculationId] || null,
-                        globalMin: min,
-                        globalMax: max
-                    });
-                    return (
-                        <section
-                            key={scenario.id}
-                            className="tile col col-min-2 stretch"
-                        >
-                            <h2>{scenario.name}</h2>
-                            <ScenarioAnalysisMap
-                                ref={map => {
-                                    if (map) {
-                                        map.invalidateMap();
-                                    }
-                                }}
-                                mapData={mapData}
-                                mapPosition={mapPosition}
-                                setMapPosition={this.setMapPosition}
-                                clickCoordinate={
-                                    this.setActiveCoordinateHandler
+        return selectedScenarios
+            .sort((a, b) => (a.isBaseModel ? -1 : a.name.localeCompare(b.name)))
+            .map(scenario => {
+                const mapData = new ScenarioAnalysisMapData({
+                    area: scenarioAnalysis.area,
+                    grid: scenarioAnalysis.grid,
+                    type: selectedResultType,
+                    boundaries: scenario.boundaries,
+                    xCrossSection,
+                    heatMapData: calculations[scenario.calculationId] || null,
+                    globalMin: min,
+                    globalMax: max
+                });
+                return (
+                    <section
+                        key={scenario.id}
+                        className="tile col col-min-2 stretch"
+                    >
+                        <h2>{scenario.name}</h2>
+                        <ScenarioAnalysisMap
+                            ref={map => {
+                                if (map) {
+                                    map.invalidateMap();
                                 }
-                            />
-                        </section>
-                    );
-                })
-        );
+                            }}
+                            mapData={mapData}
+                            mapPosition={mapPosition}
+                            setMapPosition={this.setMapPosition}
+                            clickCoordinate={this.setActiveCoordinateHandler}
+                        />
+                    </section>
+                );
+            });
     }
 
     render() {
