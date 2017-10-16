@@ -32,6 +32,14 @@ Build typescript container in docker-inowas-api repository
 docker build -t inowas/typescript typescript
 ```
 
+Configure `config.js`
+
+```
+export default {
+    baseURL: 'http://inowas.local:8002'
+};
+```
+
 Start development server:
 
 ```
