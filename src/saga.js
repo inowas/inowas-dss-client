@@ -45,5 +45,7 @@ export default function* rootSaga() {
         call(T07.updateScenarioAnalysisFlow),
         call(ToolInstance.createToolInstanceFlow),
         call(ToolInstance.updateToolInstanceFlow),
+        call(ToolInstance.deleteToolInstanceFlow),
+        call(ToolInstance.cloneToolInstanceFlow),
     ];
 }
