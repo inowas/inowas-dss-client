@@ -47,8 +47,10 @@ class Main extends Component {
 
     componentDidMount() {
         const { id, fetchScenarioAnalysisDetails } = this.props;
-        this.setNavigation(id);
-        fetchScenarioAnalysisDetails(id);
+        if (id) {
+            this.setNavigation(id);
+            fetchScenarioAnalysisDetails(id);
+        }
 
         // select first scenario
         if (this.props.scenarioModels && this.props.scenarioModels.length > 0) {
@@ -60,7 +62,7 @@ class Main extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.id !== nextProps.id) {
+        if (this.props.id !== nextProps.id && nextProps.id !== null) {
             this.setNavigation(nextProps.id);
             nextProps.fetchScenarioAnalysisDetails(nextProps.id);
         }

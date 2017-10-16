@@ -54,21 +54,21 @@ class T03 extends React.Component {
     };
 
     componentWillMount() {
-        const {said} = this.props.params;
+        const { said } = this.props.params;
         if (said) {
-            this.setState( prevState => {
+            this.setState(prevState => {
                 return {
                     ...prevState,
                     navigation: [
                         ...prevState.navigation,
                         {
                             name: 'Back to scenario analysis',
-                            path: '/tools/T07A/' + said,
+                            path: '/tools/T07/' + said,
                             icon: <Icon name="layer_horizontal_hatched" />
-                        },
+                        }
                     ]
                 };
-            } );
+            });
         }
     }
 
@@ -132,7 +132,7 @@ class T03 extends React.Component {
                 title: 'Run',
                 name: 'model-run',
                 icon: <Icon name="calculator" />,
-                disabled: initial,
+                disabled: initial
             },
             {
                 title: 'Results',
@@ -157,10 +157,7 @@ class T03 extends React.Component {
                             items={menuItems}
                             selectedProperty={this.props.params.property}
                             selectedType={this.props.params.type}
-                            onClick={Routing.goToPropertyType(
-                                routes,
-                                params
-                            )}
+                            onClick={Routing.goToPropertyType(routes, params)}
                         />
                         <Properties
                             selectedProperty={this.props.params.property}
