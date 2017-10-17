@@ -1,6 +1,6 @@
 
 export const editScenarioAnalysisUrl = (id) => {
-    return `/tools/T07A/${id}`;
+    return `/tools/T07/${id}`;
 };
 
 export const editScenarioAnalysisGeneralUrl = (id) => {

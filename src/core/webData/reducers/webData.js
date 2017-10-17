@@ -4,7 +4,6 @@ const webData = (state = {}, action) => {
     // TODO ensure uniqueness
     switch (action.type) {
         case Action.AT_RESET_WEB_DATA: {
-            console.log('Reset web data for:', { action });
             return {
                 ...state,
                 [action.provokingActionType]: undefined

@@ -10,7 +10,7 @@ export default function* loadInstancesFlow() {
         );
 
         const responseData = yield call(WebData.Saga.singleAjaxRequest, {
-            url: `tools/${tool}` + (publicInstances ? '/public' : ''),
+            url: `tools/${tool}` + (publicInstances ? '?public=true' : ''),
             provokingActionType: type
         });
 

@@ -9,6 +9,7 @@ import ConfiguredAxios from 'ConfiguredAxios';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import ScenarioAnalysisMap from './ScenarioAnalysisMap';
 import { Component as T03Component } from '../../t03';
+import { isEqual } from 'lodash';
 
 export default class CrossSection extends Component {
     static propTypes = {
@@ -102,14 +103,7 @@ export default class CrossSection extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (
-            prevState.selectedLayer !== this.state.selectedLayer ||
-            prevState.selectedResultType !== this.state.selectedResultType ||
-            prevState.selectedTotalTimeIndex !==
-                this.state.selectedTotalTimeIndex ||
-            prevProps.scenarioAnalysis !== this.props.scenarioAnalysis ||
-            prevProps.scenarioModels !== this.props.scenarioModels
-        ) {
+        if (!isEqual( prevState, this.state )) {
             this.fetchCalculationResults();
         }
     }
@@ -129,8 +123,12 @@ export default class CrossSection extends Component {
             scenarioAnalysis.totalTimes &&
             scenarioModels !== null
         ) {
-            const time =
-                scenarioAnalysis.totalTimes.total_times[selectedTotalTimeIndex];
+            const time = scenarioAnalysis.totalTimes.total_times[ selectedTotalTimeIndex ];
+
+            if (time === undefined) {
+                return null;
+            }
+
             ConfiguredAxios.all(
                 scenarioModels
                     .map(scenarioModel => {

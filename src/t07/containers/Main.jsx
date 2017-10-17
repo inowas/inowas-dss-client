@@ -83,6 +83,7 @@ class Main extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.id !== nextProps.id && nextProps.id !== null) {
             this.setNavigation(nextProps.id);
+
             nextProps.fetchScenarioAnalysisDetails(nextProps.id);
         }
 

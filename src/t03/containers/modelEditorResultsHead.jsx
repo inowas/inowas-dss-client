@@ -166,9 +166,9 @@ class ModelEditorResultsHead extends Component {
     };
 
     createScenarioAnalysis = () => {
-        const { model, tool } = this.props;
+        const { model } = this.props;
 
-        this.props.createScenarioAnalysis(tool, uuid.v4(), {
+        this.props.createScenarioAnalysis(uuid.v4(), {
             basemodel_id: model.id,
             name: 'Scenario Analysis of ' + model.name,
             description: '',
@@ -344,9 +344,8 @@ const mapStateToProps = (state, { tool }) => {
 };
 
 const actions = {
-    getCalculation: Query.getCalculation,
-    sendQuery
-    // createScenarioAnalysis: T07.Command.createScenarioAnalysis,
+    sendQuery,
+    createScenarioAnalysis: T07.Command.createScenarioAnalysis,
 };
 
 export default connect(mapStateToProps, actions)(ModelEditorResultsHead);
