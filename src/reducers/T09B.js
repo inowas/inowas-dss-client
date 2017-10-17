@@ -1,5 +1,5 @@
 import * as calc from '../calculations/T09B'
-import applyParameterUpdate from './applyParameterUpdate';
+import applyParameterUpdate from '../core/simpleTools/parameterUpdate';
 import image from '../images/tools/T09B.png';
 
 function getInitialState() {

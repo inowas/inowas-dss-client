@@ -1,5 +1,5 @@
 import * as calc from '../calculations/T18';
-import applyParameterUpdate from './applyParameterUpdate';
+import applyParameterUpdate from '../core/simpleTools/parameterUpdate';
 import image from '../images/tools/T18.jpg';
 import {
     inputType
