@@ -1,6 +1,7 @@
 import '../less/navbar.less';
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { authenticate, loadUserInformation, logout } from '../actions/user';
 import { getApiKey, getName, isUserLoggedIn } from '../reducers/user';
 
@@ -11,17 +12,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 class NavBar extends React.Component {
-
-    static propTypes = {
-        userLoggedIn: PropTypes.bool.isRequired,
-        routing: PropTypes.object.isRequired,
-        links: PropTypes.array,
-        authenticate: PropTypes.func.isRequired,
-        logout: PropTypes.func.isRequired,
-        name: PropTypes.string,
-        loadUserInformation: PropTypes.func.isRequired,
-        apiKey: PropTypes.string
-    };
 
     componentDidMount( ) {
         const { userLoggedIn } = this.props;
@@ -176,6 +166,17 @@ const mapStateToProps = ( state, ownProps ) => {
         name: getName( state.user ),
         ...ownProps
     };
+};
+
+NavBar.propTypes = {
+    userLoggedIn: PropTypes.bool,
+    routing: PropTypes.object,
+    links: PropTypes.array,
+    authenticate: PropTypes.func,
+    logout: PropTypes.func,
+    name: PropTypes.string,
+    loadUserInformation: PropTypes.func,
+    apiKey: PropTypes.string
 };
 
 // eslint-disable-next-line no-class-assign
