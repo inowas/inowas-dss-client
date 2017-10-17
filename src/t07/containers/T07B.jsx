@@ -1,42 +1,59 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import Chart from 'react-c3js';
-import { Formatter } from '../../core';
-
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
-import Header from '../../components/tools/Header';
-import Icon from '../../components/primitive/Icon';
-import ArraySlider from '../../components/primitive/ArraySlider';
-import Navbar from '../Navbar';
-
+// TODO Replace
 import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
+import React, { Component } from 'react';
 import {
     fetchDetails,
-    updateResultsT07B,
+    setActiveCoordinate,
+    setMapPosition,
     setSelectedLayer,
     setSelectedModelIdsT07B,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
-    setMapPosition,
-    setActiveCoordinate,
-    setupT07b
+    setupT07b,
+    updateResultsT07B
 } from '../../actions/T07';
 
+import ArraySlider from '../../components/primitive/ArraySlider';
+import Chart from 'react-c3js';
+import { Formatter } from '../../core';
+import Header from '../../components/tools/Header';
+import Icon from '../../components/primitive/Icon';
 import LayerNumber from '../../model/LayerNumber';
+import Navbar from '../../containers/Navbar';
+import PropTypes from 'prop-types';
 import ResultType from '../../model/ResultType';
-import TotalTime from '../../model/TotalTime';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
+import TotalTime from '../../model/TotalTime';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 
-@connect(store => {
-    return { tool: store.T07 };
-})
-export default class T07B extends Component {
+class T07B extends Component {
     static propTypes = {
-        dispatch: PropTypes.func.isRequired,
+        selectedResultType: PropTypes.string,
+        selectedLayerNumber: PropTypes.number,
+        totalTimes: PropTypes.object,
+        t07bSelectedModelIds: PropTypes.array,
         params: PropTypes.object,
-        tool: PropTypes.object.isRequired
+        selectedTotalTimeIndex: PropTypes.number,
+        layerValues: PropTypes.object,
+        models: PropTypes.object,
+        t07bDifference: PropTypes.object,
+        mapPosition: PropTypes.object,
+        activeCoordinate: PropTypes.object,
+        fetchDetails: PropTypes.func,
+        setActiveCoordinate: PropTypes.func,
+        setMapPosition: PropTypes.func,
+        setSelectedLayer: PropTypes.func,
+        setSelectedModelIdsT07B: PropTypes.func,
+        setSelectedResultType: PropTypes.func,
+        setSelectedTotalTimeIndex: PropTypes.func,
+        setupT07b: PropTypes.func,
+        updateResultsT07B: PropTypes.func,
+        push: PropTypes.func
     };
 
     constructor(props) {
@@ -58,21 +75,22 @@ export default class T07B extends Component {
                     name: 'Time series',
                     path: '/tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched" />
-                } /* , {
-                    name: 'Overall budget',
-                    path: '/tools/T07D/' + props.params.id,
-                    icon: <Icon name="layer_horizontal_hatched"/>
-                } */
+                }
+                // {
+                //     name: 'Overall budget',
+                //     path: 'tools/T07D/' + props.params.id,
+                //     icon: <Icon name="layer_horizontal_hatched"/>
+                // }
             ]
         };
     }
 
     componentWillMount() {
-        this.props.dispatch(
-            fetchDetails(this.props.params.id, dispatch => {
-                dispatch(setupT07b());
-            })
-        );
+        // eslint-disable-next-line no-shadow
+        const { fetchDetails } = this.props;
+        fetchDetails(this.props.params.id, dispatch => {
+            dispatch(setupT07b());
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -81,13 +99,15 @@ export default class T07B extends Component {
             selectedLayerNumber,
             totalTimes,
             t07bSelectedModelIds
-        } = this.props.tool;
+        } = this.props;
+
         const {
             selectedResultType: nextSelectedResultType,
             selectedLayerNumber: nextSelectedLayerNumber,
             totalTimes: nextTotalTimes,
             t07bSelectedModelIds: nextT07bSelectedModelIds
-        } = nextProps.tool;
+        } = nextProps;
+
         if (
             (!selectedResultType ||
                 !selectedLayerNumber ||
@@ -115,6 +135,8 @@ export default class T07B extends Component {
         totalTimes,
         totalTimeIndex
     ) {
+        // eslint-disable-next-line no-shadow
+        const { updateResultsT07B } = this.props;
         if (t07bSelectedModelIds.length !== 2) {
             throw new Error(
                 'Cannot update ModelResults, due to the number of t07bSelectedModelIds is not equal 2.'
@@ -140,26 +162,27 @@ export default class T07B extends Component {
                   )
                 : new TotalTime(totalTimes.totalTimes[totalTimeIndex]);
 
-        this.props.dispatch(
-            updateResultsT07B(
-                t07bSelectedModelIds[0],
-                t07bSelectedModelIds[1],
-                resultType,
-                layerNumber,
-                totalTime
-            )
+        updateResultsT07B(
+            t07bSelectedModelIds[0],
+            t07bSelectedModelIds[1],
+            resultType,
+            layerNumber,
+            totalTime
         );
     }
 
     changeLayerValue = (layerNumber, resultType) => {
-        this.props.dispatch(setSelectedLayer(layerNumber));
-        this.props.dispatch(setSelectedResultType(resultType));
+        // eslint-disable-next-line no-shadow
+        const { setSelectedLayer, setSelectedResultType } = this.props;
+        setSelectedLayer(layerNumber);
+        setSelectedResultType(resultType);
 
         const {
             t07bSelectedModelIds,
             totalTimes,
             selectedTotalTimeIndex
-        } = this.props.tool;
+        } = this.props;
+
         this.updateModelResults(
             t07bSelectedModelIds,
             resultType,
@@ -201,17 +224,18 @@ export default class T07B extends Component {
     }
 
     renderLayerSelect() {
+        const {
+            selectedLayerNumber,
+            selectedResultType,
+            layerValues
+        } = this.props;
         return (
             <select
                 className="select block"
                 onChange={this.selectLayer}
-                value={
-                    this.props.tool.selectedLayerNumber +
-                    '_' +
-                    this.props.tool.selectedResultType
-                }
+                value={selectedLayerNumber + '_' + selectedResultType}
             >
-                {this.renderSelectOptgroups(this.props.tool.layerValues)}
+                {this.renderSelectOptgroups(layerValues)}
             </select>
         );
     }
@@ -227,16 +251,18 @@ export default class T07B extends Component {
     }
 
     selectModel = (id, e) => {
-        const t07bSelectedModelIds = this.props.tool.t07bSelectedModelIds;
-        t07bSelectedModelIds[id] = e.target.value;
-        this.props.dispatch(setSelectedModelIdsT07B(t07bSelectedModelIds));
-
         const {
+            t07bSelectedModelIds,
+            setSelectedModelIdsT07B, // eslint-disable-line no-shadow
             selectedResultType,
             selectedLayerNumber,
             totalTimes,
             selectedTotalTimeIndex
-        } = this.props.tool;
+        } = this.props;
+        t07bSelectedModelIds[id] = e.target.value;
+
+        setSelectedModelIdsT07B(t07bSelectedModelIds);
+
         this.updateModelResults(
             t07bSelectedModelIds,
             selectedResultType,
@@ -247,18 +273,20 @@ export default class T07B extends Component {
     };
 
     renderModelsSelect() {
-        if (this.props.tool.t07bSelectedModelIds === null) {
+        const { t07bSelectedModelIds, models } = this.props;
+        if (t07bSelectedModelIds === null) {
             return null;
         }
+
         return (
             <div className="grid-container stretch">
                 <div className="col stretch">
                     <select
                         className="select block"
-                        onChange={this.selectModel.bind(this, 0)}
-                        value={this.props.tool.t07bSelectedModelIds[0]}
+                        onChange={this.selectModel}
+                        value={t07bSelectedModelIds[0]}
                     >
-                        {this.renderModelSelect(this.props.tool.models.models)}
+                        {this.renderModelSelect(models.models)}
                     </select>
                 </div>
                 <div className="col center-horizontal">
@@ -268,9 +296,9 @@ export default class T07B extends Component {
                     <select
                         className="select block"
                         onChange={this.selectModel.bind(this, 1)}
-                        value={this.props.tool.t07bSelectedModelIds[1]}
+                        value={t07bSelectedModelIds[1]}
                     >
-                        {this.renderModelSelect(this.props.tool.models.models)}
+                        {this.renderModelSelect(models.models)}
                     </select>
                 </div>
             </div>
@@ -278,19 +306,20 @@ export default class T07B extends Component {
     }
 
     setMapPosition = mapPosition => {
-        this.props.dispatch(setMapPosition(mapPosition));
+        // eslint-disable-next-line no-shadow
+        const { setMapPosition } = this.props;
+        setMapPosition(mapPosition);
     };
 
     setActiveCoordinate = coordinate => {
-        this.props.dispatch(setActiveCoordinate(coordinate));
+        // eslint-disable-next-line no-shadow
+        const { setActiveCoordinate } = this.props;
+        setActiveCoordinate(coordinate);
     };
 
     renderMap() {
-        const {
-            t07bDifference,
-            mapPosition,
-            activeCoordinate
-        } = this.props.tool;
+        const { t07bDifference, mapPosition, activeCoordinate } = this.props;
+
         if (!t07bDifference) {
             return null;
         }
@@ -349,7 +378,7 @@ export default class T07B extends Component {
             activeCoordinate,
             t07bDifference,
             selectedResultType
-        } = this.props.tool;
+        } = this.props;
 
         if (!t07bDifference || !activeCoordinate) {
             return null;
@@ -439,14 +468,16 @@ export default class T07B extends Component {
     }
 
     changeTotalTimeIndex = index => {
-        this.props.dispatch(setSelectedTotalTimeIndex(index));
         const {
             t07bSelectedModelIds,
             selectedResultType,
             selectedLayerNumber,
             totalTimes,
-            selectedTotalTimeIndex
-        } = this.props.tool;
+            selectedTotalTimeIndex,
+            setSelectedTotalTimeIndex // eslint-disable-line no-shadow
+        } = this.props;
+        setSelectedTotalTimeIndex(index);
+
         this.updateModelResults(
             t07bSelectedModelIds,
             selectedResultType,
@@ -457,23 +488,24 @@ export default class T07B extends Component {
     };
 
     renderSlider() {
-        if (!this.props.tool.totalTimes) {
+        const { totalTimes, selectedTotalTimeIndex } = this.props;
+        if (!totalTimes) {
             return null;
         }
 
-        const startDate = new Date(this.props.tool.totalTimes.start);
-        const totalTimes = this.props.tool.totalTimes.totalTimes.map(t => {
+        const startDate = new Date(totalTimes.start);
+        const totalTimesDates = totalTimes.totalTimes.map(t => {
             return startDate.addDays(t);
         });
 
-        let sliderValue = this.props.tool.selectedTotalTimeIndex;
+        let sliderValue = selectedTotalTimeIndex;
         if (sliderValue === null) {
             sliderValue = totalTimes.length - 1;
         }
 
         return (
             <ArraySlider
-                data={totalTimes}
+                data={totalTimesDates}
                 value={sliderValue}
                 onChange={this.changeTotalTimeIndex}
                 formatter={function(value) {
@@ -494,13 +526,13 @@ export default class T07B extends Component {
                     <div className="tile col col-abs-1 center-horizontal">
                         {this.renderLayerSelect()}
                     </div>
-                    <div className="tile col col-abs-4 center-horizontal">
+                    <div className="tile col col-abs-4t07bDifference,
+            mapPosition,
+            activeCoordinate center-horizontal">
                         {this.renderModelsSelect()}
                     </div>
                 </div>
-                <div className="grid-container">
-                    {this.renderMap()}
-                </div>
+                <div className="grid-container">{this.renderMap()}</div>
                 <div className="grid-container">
                     <div className="tile col stretch">
                         {this.renderSlider()}
@@ -511,3 +543,35 @@ export default class T07B extends Component {
         );
     }
 }
+
+const mapStateToProps = (state, { params, route }) => {
+    return {
+        selectedResultType: state.T07.selectedResultType,
+        selectedLayerNumber: state.T07.selectedLayerNumber,
+        totalTimes: state.T07.totalTimes,
+        t07bSelectedModelIds: state.T07.t07bSelectedModelIds,
+        selectedTotalTimeIndex: state.T07.selectedTotalTimeIndex,
+        layerValues: state.T07.layerValues,
+        models: state.T07.models,
+        t07bDifference: state.T07.t07bDifference,
+        mapPosition: state.T07.mapPosition,
+        activeCoordinate: state.T07.activeCoordinate,
+        params,
+        route
+    };
+};
+
+export default withRouter(
+    connect(mapStateToProps, {
+        fetchDetails,
+        setActiveCoordinate,
+        setMapPosition,
+        setSelectedLayer,
+        setSelectedModelIdsT07B,
+        setSelectedResultType,
+        setSelectedTotalTimeIndex,
+        setupT07b,
+        updateResultsT07B,
+        push
+    })(T07B)
+);

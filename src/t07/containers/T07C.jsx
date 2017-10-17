@@ -1,45 +1,59 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import Chart from 'react-c3js';
-import { Formatter } from '../../core';
-
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
-import Accordion from '../../components/primitive/Accordion';
-import AccordionItem from '../../components/primitive/AccordionItem';
-import Header from '../../components/tools/Header';
-import Icon from '../../components/primitive/Icon';
-import Navbar from '../Navbar';
-import ScenarioSelect from '../../components/tools/ScenarioSelect';
-
 import '../../less/4TileTool.less';
 import '../../less/toolT07.less';
 
+import React, { Component } from 'react';
 import {
+    addTimeSeriesPoint,
     fetchDetails,
+    fetchTimeSeries,
+    setMapPosition,
     setSelectedLayer,
     setSelectedResultType,
     setSelectedTotalTimeIndex,
-    toggleModelSelection,
-    setMapPosition,
-    addTimeSeriesPoint,
     setTimeSeriesPointSelection,
-    fetchTimeSeries
+    toggleModelSelection
 } from '../../actions/T07';
 
+import Accordion from '../../components/primitive/Accordion';
+import AccordionItem from '../../components/primitive/AccordionItem';
+import Chart from 'react-c3js';
+import { Formatter } from '../../core';
+import Header from '../../components/tools/Header';
+import Icon from '../../components/primitive/Icon';
 import LayerNumber from '../../model/LayerNumber';
+import Navbar from '../../containers/Navbar';
+import PropTypes from 'prop-types';
 import ResultType from '../../model/ResultType';
-import TimeSeriesPoint from '../../model/TimeSeriesPoint';
-import TimeSeriesGridCell from '../../model/TimeSeriesGridCell';
+import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
+import ScenarioSelect from '../../components/tools/ScenarioSelect';
+import TimeSeriesGridCell from '../../model/TimeSeriesGridCell';
+import TimeSeriesPoint from '../../model/TimeSeriesPoint';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 
-@connect(store => {
-    return { tool: store.T07 };
-})
-export default class T07C extends Component {
+class T07C extends Component {
     static propTypes = {
-        dispatch: PropTypes.func.isRequired,
         params: PropTypes.object,
-        tool: PropTypes.object.isRequired
+        models: PropTypes.object,
+        selectedResultType: PropTypes.string,
+        selectedLayerNumber: PropTypes.number,
+        timeSeriesPoints: PropTypes.array,
+        totalTimes: PropTypes.object,
+        layerValues: PropTypes.object,
+        mapPosition: PropTypes.object,
+        selectedTotalTimeIndex: PropTypes.number,
+        addTimeSeriesPoint: PropTypes.func,
+        fetchDetails: PropTypes.func,
+        fetchTimeSeries: PropTypes.func,
+        setMapPosition: PropTypes.func,
+        setSelectedLayer: PropTypes.func,
+        setSelectedResultType: PropTypes.func,
+        setSelectedTotalTimeIndex: PropTypes.func,
+        setTimeSeriesPointSelection: PropTypes.func,
+        toggleModelSelection: PropTypes.func,
+        push: PropTypes.func
     };
 
     constructor(props) {
@@ -61,17 +75,20 @@ export default class T07C extends Component {
                     name: 'Time series',
                     path: '/tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched" />
-                } /* , {
-                    name: 'Overall budget',
-                    path: '/tools/T07D/' + props.params.id,
-                    icon: <Icon name="layer_horizontal_hatched"/>
-                } */
+                }
+                // {
+                //     name: 'Overall budget',
+                //     path: 'tools/T07D/' + props.params.id,
+                //     icon: <Icon name="layer_horizontal_hatched"/>
+                // }
             ]
         };
     }
 
     componentWillMount() {
-        this.props.dispatch(fetchDetails(this.props.params.id));
+        // eslint-disable-next-line no-shadow
+        const { fetchDetails, params } = this.props;
+        fetchDetails(params.id);
     }
 
     fetchTimeSeriesForPoint(
@@ -82,16 +99,16 @@ export default class T07C extends Component {
         gridCell,
         startDate
     ) {
-        this.props.dispatch(
-            fetchTimeSeries(
-                coordinate,
-                modelId,
-                resultType,
-                layerNumber,
-                gridCell.x,
-                gridCell.y,
-                startDate
-            )
+        // eslint-disable-next-line no-shadow
+        const { fetchTimeSeries } = this.props;
+        fetchTimeSeries(
+            coordinate,
+            modelId,
+            resultType,
+            layerNumber,
+            gridCell.x,
+            gridCell.y,
+            startDate
         );
     }
 
@@ -129,7 +146,9 @@ export default class T07C extends Component {
 
     toggleScenarioSelection = id => {
         return () => {
-            this.props.dispatch(toggleModelSelection(id));
+            // eslint-disable-next-line no-shadow
+            const { toggleModelSelection } = this.props;
+            toggleModelSelection(id);
 
             // update results
             const {
@@ -138,7 +157,7 @@ export default class T07C extends Component {
                 selectedLayerNumber,
                 timeSeriesPoints,
                 totalTimes
-            } = this.props.tool;
+            } = this.props;
             this.fetchTimeSeriesForPoints(
                 models,
                 selectedResultType,
@@ -150,11 +169,17 @@ export default class T07C extends Component {
     };
 
     changeLayerValue = (layerNumber, resultType) => {
-        this.props.dispatch(setSelectedLayer(layerNumber));
-        this.props.dispatch(setSelectedResultType(resultType));
+        const {
+            setSelectedLayer, // eslint-disable-line no-shadow
+            setSelectedResultType, // eslint-disable-line no-shadow
+            models,
+            timeSeriesPoints,
+            totalTimes
+        } = this.props;
+        setSelectedLayer(layerNumber);
+        setSelectedResultType(resultType);
 
         // update results
-        const { models, timeSeriesPoints, totalTimes } = this.props.tool;
         this.fetchTimeSeriesForPoints(
             models,
             resultType,
@@ -196,45 +221,49 @@ export default class T07C extends Component {
     }
 
     renderSelect() {
+        const {
+            selectedLayerNumber,
+            selectedResultType,
+            layerValues
+        } = this.props;
         return (
             <select
                 className="layer-select select block"
                 onChange={this.selectLayer}
-                value={
-                    this.props.tool.selectedLayerNumber +
-                    '_' +
-                    this.props.tool.selectedResultType
-                }
+                value={selectedLayerNumber + '_' + selectedResultType}
             >
-                {this.renderSelectOptgroups(this.props.tool.layerValues)}
+                {this.renderSelectOptgroups(layerValues)}
             </select>
         );
     }
 
     setMapPosition = mapPosition => {
-        this.props.dispatch(setMapPosition(mapPosition));
+        // eslint-disable-next-line no-shadow
+        const { setMapPosition } = this.props;
+        setMapPosition(mapPosition);
     };
 
     addPoint = coordinate => {
-        const { models } = this.props.tool;
+        const { models } = this.props;
         const grid = models.baseModel.grid;
         const gridCell = grid.coordinateToGridCell(coordinate);
 
         if (!gridCell) {
             return;
         }
-        const { timeSeriesPoints } = this.props.tool;
+        // eslint-disable-next-line no-shadow
+        const { timeSeriesPoints, addTimeSeriesPoint } = this.props;
         // add Point to store
         const point = new TimeSeriesPoint('Point ' + timeSeriesPoints.length);
         point.coordinate = coordinate;
-        this.props.dispatch(addTimeSeriesPoint(point));
+        addTimeSeriesPoint(point);
 
         // fetch data for this point
         const {
             selectedResultType,
             selectedLayerNumber,
             totalTimes
-        } = this.props.tool;
+        } = this.props;
         models
             .filter(m => {
                 return m.selected;
@@ -252,7 +281,7 @@ export default class T07C extends Component {
     };
 
     renderMap() {
-        const { models, mapPosition, timeSeriesPoints } = this.props.tool;
+        const { models, mapPosition, timeSeriesPoints } = this.props;
 
         if (models.length <= 0) {
             return null;
@@ -289,14 +318,14 @@ export default class T07C extends Component {
 
     setTimeSeriesPointSelection = index => {
         return e => {
-            this.props.dispatch(
-                setTimeSeriesPointSelection(index, e.target.checked)
-            );
+            // eslint-disable-next-line no-shadow
+            const { setTimeSeriesPointSelection } = this.props;
+            setTimeSeriesPointSelection(index, e.target.checked);
         };
     };
 
     renderTable() {
-        const { timeSeriesPoints } = this.props.tool;
+        const { timeSeriesPoints } = this.props;
         return (
             <div
                 style={{
@@ -326,15 +355,9 @@ export default class T07C extends Component {
                                             type="checkbox"
                                         />
                                     </td>
-                                    <td>
-                                        {p.name}
-                                    </td>
-                                    <td>
-                                        {p.coordinate.lat}
-                                    </td>
-                                    <td>
-                                        {p.coordinate.lng}
-                                    </td>
+                                    <td>{p.name}</td>
+                                    <td>{p.coordinate.lat}</td>
+                                    <td>{p.coordinate.lng}</td>
                                 </tr>
                             );
                         })}
@@ -363,7 +386,7 @@ export default class T07C extends Component {
             timeSeriesPoints,
             selectedResultType,
             selectedLayerNumber
-        } = this.props.tool;
+        } = this.props;
 
         if (!models || !totalTimes) {
             return null;
@@ -448,17 +471,23 @@ export default class T07C extends Component {
     }
 
     changeTotalTimeIndex = index => {
-        this.props.dispatch(setSelectedTotalTimeIndex(index));
+        this.props.setSelectedTotalTimeIndex(index);
+
+        const {
+            selectedResultType,
+            selectedLayerNumber,
+            selectedTotalTimeIndex
+        } = this.props;
         this.updateModelResults(
-            this.props.tool.selectedResultType,
-            this.props.tool.selectedLayerNumber,
-            this.props.tool.selectedTotalTimeIndex
+            selectedResultType,
+            selectedLayerNumber,
+            selectedTotalTimeIndex
         );
     };
 
     render() {
         const { navigation } = this.state;
-        const models = this.props.tool.models;
+        const { models } = this.props;
 
         return (
             <div className="toolT07 app-width">
@@ -496,3 +525,33 @@ export default class T07C extends Component {
         );
     }
 }
+
+const mapStateToProps = (state, { params, route }) => {
+    return {
+        models: state.T07.models,
+        selectedResultType: state.T07.selectedResultType,
+        selectedLayerNumber: state.T07.selectedLayerNumber,
+        timeSeriesPoints: state.T07.timeSeriesPoints,
+        totalTimes: state.T07.totalTimes,
+        layerValues: state.T07.layerValues,
+        mapPosition: state.T07.mapPosition,
+        selectedTotalTimeIndex: state.T07.selectedTotalTimeIndex,
+        params,
+        route
+    };
+};
+
+export default withRouter(
+    connect(mapStateToProps, {
+        addTimeSeriesPoint,
+        fetchDetails,
+        fetchTimeSeries,
+        setMapPosition,
+        setSelectedLayer,
+        setSelectedResultType,
+        setSelectedTotalTimeIndex,
+        setTimeSeriesPointSelection,
+        toggleModelSelection,
+        push
+    })(T07C)
+);

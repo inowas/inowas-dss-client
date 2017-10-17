@@ -1,7 +1,3 @@
-import Main from './main';
-import ScenarioAnalysisGeneral from './scenarioAnalysisGeneral';
+import Main from './Main';
 
-export {
-    Main,
-    ScenarioAnalysisGeneral,
-};
+export { Main };

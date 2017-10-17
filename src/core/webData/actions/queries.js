@@ -6,5 +6,5 @@ export function sendHttpRequest ( request, responseAction, tool ) {
         tool,
         request,
         responseAction
-    }
+    };
 }

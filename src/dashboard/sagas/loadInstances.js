@@ -1,29 +1,21 @@
-import { put, take } from 'redux-saga/effects';
-import { sendQuery } from '../../actions/messageBox';
+import { put, take, call } from 'redux-saga/effects';
 import { Query, Action } from '../actions/index';
 import { WebData } from '../../core';
 
-export default function* cloneModflowModelFlow() {
+export default function* loadInstancesFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-        // eslint-disable-next-line no-shadow
-        const action = yield take( action => WebData.Helpers.waitForAction( action, Query.LOAD_INSTANCES ) );
+        const { type, tool, publicInstances } = yield take(
+            Query.LOAD_INSTANCES
+        );
 
-        yield put( sendQuery( 'tools/' + action.tool + (action.publicInstances ? '?public=true' : ''), Query.LOAD_INSTANCES ) );
+        const responseData = yield call(WebData.Saga.singleAjaxRequest, {
+            url: `tools/${tool}` + (publicInstances ? '?public=true' : ''),
+            provokingActionType: type
+        });
 
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-            // eslint-disable-next-line no-shadow
-            const response = yield take( action => WebData.Helpers.waitForResponse( action, Query.LOAD_INSTANCES ) );
-
-            if (response.webData.type === 'error') {
-                break;
-            }
-
-            if (response.webData.type === 'success') {
-                yield put( Action.setInstances( action.tool, response.webData.data ) );
-                break;
-            }
+        if (responseData !== null) {
+            yield put(Action.setInstances(tool, responseData));
         }
     }
 }

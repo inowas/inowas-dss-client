@@ -1,15 +1,7 @@
-import * as Container from './containers/index';
-import * as Component from './components/index';
+import * as Component from './components/';
+import * as Container from './containers/';
 import * as Modifier from './actions/index';
-import * as Reducer from './reducers/index';
-import * as Selector from './selectors/index';
+import Reducer from './reducers/index';
 import * as Saga from './sagas/index';
 
-export {
-    Container,
-    Component,
-    Modifier,
-    Reducer,
-    Selector,
-    Saga,
-};
+export { Container, Component, Modifier, Reducer, Saga };

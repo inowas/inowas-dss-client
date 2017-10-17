@@ -6,15 +6,17 @@ import { WebData } from '../../core';
 export default function* deleteScenarioFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-        // eslint-disable-next-line no-shadow
-        const action = yield take( action => action.type === Command.DELETE_SCENARIO );
+        const action = yield take(Command.DELETE_SCENARIO);
 
-        yield put( sendCommand( action.type, action.payload ) );
+        // console.warn(sendCommand(action.type, action.payload));
+        yield put(sendCommand(action.type, action.payload));
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
             // eslint-disable-next-line no-shadow
-            const response = yield take( action => WebData.Helpers.waitForResponse( action, Command.DELETE_SCENARIO ) );
+            const response = yield take(action =>
+                WebData.Helpers.waitForResponse(action, Command.DELETE_SCENARIO)
+            );
 
             if (response.webData.type === 'error') {
                 break;
@@ -22,7 +24,7 @@ export default function* deleteScenarioFlow() {
 
             if (response.webData.type === 'success') {
                 // TODO remove before send request to server and restore on server error for faster response in frontend
-                yield put( Event.scenarioDeleted( action.tool, action.payload ) );
+                yield put(Event.scenarioDeleted(action.tool, action.payload));
                 break;
             }
         }

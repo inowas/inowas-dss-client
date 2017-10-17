@@ -3,15 +3,15 @@ import ConfiguredRadium from 'ConfiguredRadium';
 
 const styles = {
     container: {
-        height: '600px',
-        maxWidth: '650px',
+        height: 600,
+        maxWidth: 650,
         overflow: 'auto',
         overflowX: 'scroll',
         whiteSpace: 'nowrap',
         backgroundColor: 'black',
         color: 'white',
-        paddingTop: '5px',
-        paddingLeft: '15px'
+        paddingTop: 5,
+        paddingLeft: 15
     },
 };
 

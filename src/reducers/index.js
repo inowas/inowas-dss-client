@@ -1,7 +1,7 @@
 import T03 from './T03';
 import T02 from './T02';
 import T06 from './T06';
-import T07 from './T07';
+import { Reducer as T07 } from '../t07';
 import T07E from './T07E';
 import T08 from './T08';
 import T09A from './T09A';
@@ -25,9 +25,9 @@ import { combineReducers } from 'redux';
 import dashboard from '../dashboard/reducers';
 import { routerReducer as routing } from 'react-router-redux';
 import user from './user';
-import {WebData} from '../core';
+import { WebData } from '../core';
 
-const rootReducer = combineReducers( {
+const rootReducer = combineReducers({
     routing,
     user,
     webData: WebData.Reducer.webData,
@@ -55,6 +55,6 @@ const rootReducer = combineReducers( {
     T14D,
     T16,
     T18
-} );
+});
 
 export default rootReducer;

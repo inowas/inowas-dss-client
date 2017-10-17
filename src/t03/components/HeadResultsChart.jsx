@@ -16,7 +16,7 @@ function labelYAxis(resultType) {
 }
 
 const HeadResultsChart = ({
-    data,
+    results,
     activeCoordinate,
     grid,
     selectedType,
@@ -28,15 +28,18 @@ const HeadResultsChart = ({
     if (activeCoordinate) {
         const activeGridCell = grid.coordinateToGridCell(activeCoordinate);
         if (activeGridCell) {
-            if (data) {
-                const selectedRowData = data[activeGridCell.y];
+            if (results) {
                 const xAxisTicks = grid.lngOfCellCenters;
 
                 chartData = {
                     x: 'x',
                     columns: [
                         ['x'].concat(xAxisTicks),
-                        ['results'].concat(selectedRowData)
+                        ...results.map(result => {
+                            return [result.name].concat(
+                                result.data[activeGridCell.y]
+                            );
+                        })
                     ]
                 };
 
@@ -52,9 +55,11 @@ const HeadResultsChart = ({
                     }
                 };
 
+                const firstResultSelectedRowData =
+                    results[0].data[activeGridCell.y];
                 let leftBorderIndex = 0;
-                for (let i = 0; i < selectedRowData.length; i++) {
-                    if (selectedRowData[i] === null) {
+                for (let i = 0; i < firstResultSelectedRowData.length; i++) {
+                    if (firstResultSelectedRowData[i] === null) {
                         continue;
                     }
 
@@ -63,8 +68,12 @@ const HeadResultsChart = ({
                 }
 
                 let rightBorderIndex = 0;
-                for (let i = selectedRowData.length - 1; i >= 0; i--) {
-                    if (selectedRowData[i] === null) {
+                for (
+                    let i = firstResultSelectedRowData.length - 1;
+                    i >= 0;
+                    i--
+                ) {
+                    if (firstResultSelectedRowData[i] === null) {
                         continue;
                     }
 
@@ -108,7 +117,7 @@ const HeadResultsChart = ({
 };
 
 HeadResultsChart.propTypes = {
-    data: PropTypes.array,
+    results: PropTypes.array,
     activeCoordinate: PropTypes.object,
     grid: PropTypes.object,
     selectedType: PropTypes.string,

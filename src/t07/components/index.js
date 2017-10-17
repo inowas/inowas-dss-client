@@ -1,5 +1,4 @@
-import Properties from './properties';
+import CrossSection from './CrossSection';
+import New from './New';
 
-export {
-    Properties,
-};
+export { CrossSection, New };

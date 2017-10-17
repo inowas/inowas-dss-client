@@ -10,7 +10,7 @@ import { Formatter, WebData } from '../../core';
 import Grid from '../../model/Grid';
 import { Query } from '../actions/index';
 import { Modifier as T07 } from '../../t07';
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
+import ScenarioAnalysisMap from '../../t07/components/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import Select from '../../components/primitive/Select';
 import { connect } from 'react-redux';
@@ -166,18 +166,14 @@ class ModelEditorResultsHead extends Component {
     };
 
     createScenarioAnalysis = () => {
-        const {model, tool} = this.props;
+        const { model } = this.props;
 
-        this.props.createScenarioAnalysis(
-            tool,
-            uuid.v4(),
-            {
-                basemodel_id: model.id,
-                name: 'Scenario Analysis of ' + model.name,
-                description: '',
-                public: true,
-            }
-        );
+        this.props.createScenarioAnalysis(uuid.v4(), {
+            basemodel_id: model.id,
+            name: 'Scenario Analysis of ' + model.name,
+            description: '',
+            public: true
+        });
     };
 
     render() {
@@ -253,7 +249,10 @@ class ModelEditorResultsHead extends Component {
             }
         }
 
-        const data = getCalculationStatus && getCalculationStatus.type === 'success' ? getCalculationStatus.data : null;
+        const data =
+            getCalculationStatus && getCalculationStatus.type === 'success'
+                ? getCalculationStatus.data
+                : null;
 
         const mapData = new ScenarioAnalysisMapData({
             area: model.geometry,
@@ -263,6 +262,8 @@ class ModelEditorResultsHead extends Component {
             xCrossSection,
             heatMapData: data
         });
+
+        // TODO use TotalTimesSlider and LayerSelect Compoennts from t07
 
         return (
             <div>
@@ -275,13 +276,14 @@ class ModelEditorResultsHead extends Component {
                         />
                     </div>
                     <div style={[styles.sliderWrapper]}>
-                        {totalTimes.length > 1 &&
+                        {totalTimes.length > 1 && (
                             <ArraySlider
                                 data={totalTimes}
                                 value={selectedTotalTimeIndex}
                                 onChange={this.onTimeSliderChange}
                                 formatter={Formatter.dateToDate}
-                            />}
+                            />
+                        )}
                     </div>
                 </div>
                 <div>
@@ -295,19 +297,29 @@ class ModelEditorResultsHead extends Component {
                 <div style={[styles.chartWrapper]}>
                     <WebData.Component.Loading status={getCalculationStatus}>
                         <HeadResultsChart
-                            data={mapData.heatMapData}
+                            results={[
+                                {
+                                    name: model.name,
+                                    data: mapData.heatMapData
+                                }
+                            ]}
                             activeCoordinate={activeCoordinate}
                             grid={grid}
                             selectedType={selectedType}
                         />
                     </WebData.Component.Loading>
                 </div>
-                {!readOnly &&
-                <div style={[styles.saveButtonWrapper]}>
-                    <WebData.Component.Loading status={createScenarioAnalysisStatus}>
-                        <Button onClick={this.createScenarioAnalysis}>Create new Scenario Analysis</Button>
-                    </WebData.Component.Loading>
-                </div>}
+                {!readOnly && (
+                    <div style={[styles.saveButtonWrapper]}>
+                        <WebData.Component.Loading
+                            status={createScenarioAnalysisStatus}
+                        >
+                            <Button onClick={this.createScenarioAnalysis}>
+                                Create new Scenario Analysis
+                            </Button>
+                        </WebData.Component.Loading>
+                    </div>
+                )}
             </div>
         );
     }
@@ -332,7 +344,6 @@ const mapStateToProps = (state, { tool }) => {
 };
 
 const actions = {
-    getCalculation: Query.getCalculation,
     sendQuery,
     createScenarioAnalysis: T07.Command.createScenarioAnalysis,
 };

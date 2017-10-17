@@ -3,12 +3,14 @@
  * Usually it uses a saga for the flow.
  */
 
-export const GET_SCENARIO_ANALYSIS_DETAILS = 'GET_SCENARIO_ANALYSIS_DETAILS';
+export const FETCH_SCENARIO_ANALYSIS_DETAILS =
+    'FETCH_SCENARIO_ANALYSIS_DETAILS';
 
-export function getScenarioAnalysisDetails(tool, id) {
+export function fetchScenarioAnalysisDetails(id) {
     return {
-        type: GET_SCENARIO_ANALYSIS_DETAILS,
-        tool,
-        id,
+        type: FETCH_SCENARIO_ANALYSIS_DETAILS,
+        payload: {
+            id
+        }
     };
 }

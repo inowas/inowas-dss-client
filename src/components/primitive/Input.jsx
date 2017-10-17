@@ -63,6 +63,46 @@ const styles = {
 
 @ConfiguredRadium
 class Input extends React.Component {
+    static propTypes = {
+        type: PropTypes.oneOf([
+            'checkbox',
+            'color',
+            'date',
+            'datetime',
+            'datetime-local',
+            'email',
+            'file',
+            'hidden',
+            'image',
+            'month',
+            'number',
+            'password',
+            'radio',
+            'range',
+            'reset',
+            'search',
+            'submit',
+            'tel',
+            'text',
+            'time',
+            'url',
+            'week',
+            'textarea'
+        ]),
+        appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
+        style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+        inputStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+        onChange: PropTypes.func,
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+            PropTypes.bool,
+            PropTypes.object
+        ]),
+        disabled: PropTypes.bool,
+        cast: PropTypes.func,
+        validator: PropTypes.func
+    };
 
     static defaultProps = {
         type: 'text',
@@ -136,9 +176,9 @@ class Input extends React.Component {
                     style
                 ]}
             >
-                {type === 'search'
-                    ? <Icon name="search" style={[styles.icon]} />
-                    : null}
+                {type === 'search' ? (
+                    <Icon name="search" style={[styles.icon]} />
+                ) : null}
 
                 {(() => {
                     switch (type) {
@@ -191,46 +231,5 @@ class Input extends React.Component {
         );
     }
 }
-
-Input.PropTypes = {
-    type: PropTypes.oneOf([
-        'checkbox',
-        'color',
-        'date',
-        'datetime',
-        'datetime-local',
-        'email',
-        'file',
-        'hidden',
-        'image',
-        'month',
-        'number',
-        'password',
-        'radio',
-        'range',
-        'reset',
-        'search',
-        'submit',
-        'tel',
-        'text',
-        'time',
-        'url',
-        'week',
-        'textarea'
-    ]),
-    appearance: PropTypes.oneOf(['default', 'visibleOnFocus']),
-    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    inputStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    onChange: PropTypes.func,
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-        PropTypes.bool,
-        PropTypes.object
-    ]),
-    disabled: PropTypes.bool,
-    cast: PropTypes.func,
-    validator: PropTypes.func
-};
 
 export default Input;
