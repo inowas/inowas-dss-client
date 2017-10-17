@@ -155,7 +155,9 @@ class T02 extends React.Component {
         const readOnly = false;
 
         const chartParams = {settings};
-        each(parameters, v => {chartParams[v.id] = v.value;});
+        each(parameters, v => {
+            chartParams[v.id] = v.value;
+        });
 
         const heading = (
             <div className="grid-container">
@@ -267,12 +269,12 @@ const mapDispatchToProps = (dispatch, props) => {
 
 T02.propTypes = {
     createToolInstance: PropTypes.func,
-    createToolInstanceStatus: PropTypes.func,
-    getToolInstanceStatus: PropTypes.func,
+    createToolInstanceStatus: PropTypes.object,
+    getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
-    routes: PropTypes.object,
+    routes: PropTypes.array,
     updateToolInstance: PropTypes.func,
-    updateToolInstanceStatus: PropTypes.func
+    updateToolInstanceStatus: PropTypes.object
 };
 
 // eslint-disable-next-line no-class-assign

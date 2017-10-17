@@ -62,7 +62,7 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
     }
 
     const variable = settings.variable;
-    const data = calculateDiagramData( variable, w, L, W, hi, Sy, K, t, 0, max, 10 );
+    const data = calculateDiagramData( variable, w, L, W, hi, Sy, K, t, 0, max, Math.round(max / 10) );
     const hMax = data[ 0 ].hhi + hi;
 
     let xAxis = <XAxis type="number" dataKey="y"/>;
@@ -85,7 +85,8 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                                 right: 40,
                                 left: 40,
                                 bottom: 0
-                            }}>
+                            }}
+                            >
                                 {xAxis}
                                 <YAxis type="number"/>
                                 <CartesianGrid strokeDasharray="3 3"/>
@@ -109,7 +110,7 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                         <p className="center-vertical center-horizontal">{xLabel}</p>
                     </div>
                 </div>
-                <div className="col col-rel-0-5">
+{/*                <div className="col col-rel-0-5">
                     <ul className="nav nav-stacked" role="navigation">
                         <li>
                             <button className="button">PNG</button>
@@ -118,7 +119,7 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                             <button className="button">CSV</button>
                         </li>
                     </ul>
-                </div>
+                </div>*/}
             </div>
         </div>
     );
