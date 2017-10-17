@@ -18,6 +18,7 @@ import { getScenarioModelsByIds } from '../reducers/ScenarioModels';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
 import { withRouter } from 'react-router';
+import * as Dashboard from '../../dashboard';
 
 const styles = {
     heading: {
@@ -59,8 +60,11 @@ class Main extends Component {
             id,
             fetchScenarioAnalysisDetails,
             scenarioAnalysis,
-            scenarioModels
+            scenarioModels,
+            loadInstances
         } = this.props;
+        loadInstances('T03', false);
+
         if (id) {
             this.setNavigation(id);
             fetchScenarioAnalysisDetails(id);
@@ -140,13 +144,12 @@ class Main extends Component {
     };
 
     saveScenarioAnalysis = () => {
-        const { updateScenarioAnalysis, createScenarioAnalysis } = this.props;
+        const { updateScenarioAnalysis, createScenarioAnalysis, routes, params } = this.props;
         const { scenarioAnalysis } = this.state;
         if (scenarioAnalysis.id) {
             updateScenarioAnalysis(scenarioAnalysis.id, scenarioAnalysis);
         } else {
-            // TODO
-            // createScenarioAnalysis(uuid.v4(), scenarioAnalysis, routes, params);
+            createScenarioAnalysis(uuid.v4(), scenarioAnalysis, routes, params);
         }
     };
 
@@ -252,7 +255,9 @@ class Main extends Component {
                                     if (children && !id) {
                                         // no id provided - look's like the user want's to create a new ScenarioAnalysis
                                         return React.cloneElement(children, {
-                                            scenarioAnalysis
+                                            handleSelectChange: this.onScenarioAnalysisPropertyInputChange,
+                                            basemodelId: scenarioAnalysis.basemodel_id,
+                                            models: this.props.models
                                         });
                                     }
                                     // no children - error
@@ -280,8 +285,6 @@ class Main extends Component {
                                             apiKey
                                         });
                                     }
-                                    // no children - error
-                                    return <div>Something went wrong!</div>;
                                 })()}
                             </div>
                         );
@@ -300,6 +303,10 @@ const mapStateToProps = (state, props) => {
         props.params.id
     );
     return {
+        models: Dashboard.Selector.tool.getTool(
+            state.dashboard.tools,
+            'T03'
+        ).instances,
         apiKey: getApiKey(state.user),
         scenarioAnalysis,
         scenarioModels: scenarioAnalysis
@@ -311,6 +318,7 @@ const mapStateToProps = (state, props) => {
 
 export default withRouter(
     connect(mapStateToProps, {
+        loadInstances: Dashboard.Modifier.Query.loadInstances,
         fetchScenarioAnalysisDetails: Query.fetchScenarioAnalysisDetails,
         deleteScenario: Command.deleteScenario,
         createScenario: Command.createScenario,
