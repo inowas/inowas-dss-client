@@ -1,4 +1,4 @@
-import applyParameterUpdate from './applyParameterUpdate';
+import applyParameterUpdate from '../core/simpleTools/parameterUpdate';
 import image from '../images/tools/T09A.png';
 
 function getInitialState() {

@@ -1,5 +1,5 @@
 import * as calc from '../calculations/T13D';
-import applyParameterUpdate from './applyParameterUpdate';
+import applyParameterUpdate from '../core/simpleTools/parameterUpdate';
 
 function getInitialState() {
     return {
