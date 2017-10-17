@@ -255,7 +255,7 @@ class Main extends Component {
                                     if (children && !id) {
                                         // no id provided - look's like the user want's to create a new ScenarioAnalysis
                                         return React.cloneElement(children, {
-                                            handleSelectChange: this.onScenarioAnalysisPropertyInputChange,
+                                            handleSelectChange: this.onScenarioAnalysisPropertyInputChange('basemodel_id'),
                                             basemodelId: scenarioAnalysis.basemodel_id,
                                             models: this.props.models
                                         });
@@ -277,11 +277,10 @@ class Main extends Component {
                                         // inject data into children - children come from /routes.jsx
                                         return React.cloneElement(children, {
                                             scenarioAnalysis,
-                                            scenarioModels: scenarioModels,
+                                            scenarioModels,
                                             cloneScenario: this.cloneScenario,
                                             deleteScenario: this.deleteScenario,
-                                            toggleScenarioSelection: this
-                                                .toggleScenarioSelection,
+                                            toggleScenarioSelection: this.toggleScenarioSelection,
                                             apiKey
                                         });
                                     }

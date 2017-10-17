@@ -115,7 +115,7 @@ export default class ScenarioAnalysisMap extends Component {
     static propTypes = {
         mapData: PropTypes.instanceOf(ScenarioAnalysisMapData).isRequired,
         setMapPosition: PropTypes.func,
-        mapPosition: PropTypes.object.isRequired,
+        mapPosition: PropTypes.object,
         clickCoordinate: PropTypes.func.isRequired
     };
 
