@@ -111,8 +111,10 @@ const createReducer = tool => {
         }
 
         switch (action.type) {
-            case ToolInstance.Modifier.Query.GET_TOOL_INSTANCE:
-                if (!WebData.Helpers.isSuccess( action )) {
+            case WebData.Modifier.Action.SET_AJAX_STATUS:
+                if (!WebData.Helpers.isSuccess( action )
+                    || !WebData.Helpers.waitForResponse(action, ToolInstance.Modifier.Query.GET_TOOL_INSTANCE )
+                ) {
                     return state;
                 }
                 const instance = action.webData.data;
