@@ -71,6 +71,10 @@ const routes = store => (
                         path="CrossSection"
                         component={T07.Component.CrossSection}
                     />
+                    <Route
+                        path="Difference"
+                        component={T07.Component.Difference}
+                    />
                 </Route>
             </Route>
             <Route path="T07E/:said" tool={'T07E'}>
