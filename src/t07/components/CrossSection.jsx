@@ -11,7 +11,7 @@ import ScenarioAnalysisMap from './ScenarioAnalysisMap';
 import { Component as T03Component } from '../../t03';
 import { isEqual } from 'lodash';
 
-export default class CrossSection extends Component {
+class CrossSection extends Component {
     static propTypes = {
         scenarioAnalysis: PropTypes.object,
         scenarioModels: PropTypes.array,
@@ -362,3 +362,15 @@ export default class CrossSection extends Component {
         );
     }
 }
+
+
+CrossSection.propTypes = {
+    scenarioAnalysis: PropTypes.object,
+    scenarioModels: PropTypes.array,
+    cloneScenario: PropTypes.func,
+    deleteScenario: PropTypes.func,
+    toggleScenarioSelection: PropTypes.func,
+    apiKey: PropTypes.string
+};
+
+export default CrossSection;
