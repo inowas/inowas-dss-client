@@ -305,7 +305,7 @@ class ModelEditorGeneral extends Component {
 
                         <LayoutComponents.InputGroup label="Grid Resolution">
                             <Input
-                                disabled={readOnly || readOnlyScenario}
+                                disabled={!!id || readOnly || readOnlyScenario}
                                 type="number"
                                 min="1"
                                 step="1"
@@ -318,7 +318,7 @@ class ModelEditorGeneral extends Component {
                                 placeholder="X="
                             />
                             <Input
-                                disabled={readOnly || readOnlyScenario}
+                                disabled={!!id || readOnly || readOnlyScenario}
                                 type="number"
                                 min="1"
                                 step="1"

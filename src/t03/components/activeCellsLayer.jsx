@@ -47,6 +47,10 @@ const calculateActiveCells = (boundingBox, gridSize, activeCells) => {
 
 export default pure( ({ boundingBox, gridSize, activeCells }) => {
 
+    if (!activeCells) {
+        return null;
+    }
+
     const gridCells = calculateActiveCells( boundingBox, gridSize, activeCells );
 
     return (
