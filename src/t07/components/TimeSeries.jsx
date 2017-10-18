@@ -17,6 +17,7 @@ import LayerNumber from '../../model/LayerNumber';
 import TwoDData from '../../model/TwoDData';
 import TimeSeriesResult from '../../model/TimeSeriesResult';
 import Chart from 'react-c3js';
+import TimeSeriesChart from './TimeSeriesChart';
 
 class TimeSeries extends Component {
 
@@ -414,99 +415,6 @@ class TimeSeries extends Component {
         return null;
     };
 
-    renderChart() {
-        const {
-            scenarioModels,
-            scenarioAnalysis,
-        } = this.props;
-
-        const { timeSeriesPoints } = this.state;
-
-        if (!scenarioModels || !scenarioAnalysis.totalTimes || !this.state.selectedResultType) {
-            return null;
-        }
-
-        const selectedResultType = new ResultType(this.state.selectedResultType);
-        const selectedLayer = new LayerNumber(this.state.selectedLayer);
-
-        const chartData = {
-            x: 'x',
-            columns: []
-        };
-
-        const xAxisColumn = ['x'];
-        const startDate = new Date(scenarioAnalysis.totalTimes.start_date_time);
-
-        scenarioAnalysis.totalTimes.total_times.forEach(t => {
-            xAxisColumn.push(startDate.addDays(t));
-        });
-
-        chartData.columns.push(xAxisColumn);
-
-        timeSeriesPoints
-            .filter(p => {
-                return p.selected;
-            })
-            .forEach(p => {
-                scenarioModels
-                    .filter(m => {
-                        return m.selected;
-                    })
-                    .forEach(m => {
-                        const result = p.timeSeriesResults.find(r => {
-                            return (
-                                m.calculationId === r.calculationId
-                                && r.resultType.sameAs( selectedResultType )
-                                && r.layerNumber.sameAs( selectedLayer )
-                            );
-                        });
-                        if (result && result.timeSeries) {
-                            const resultColumn = [p.name + ' ' + m.name];
-                            chartData.columns.push(
-                                resultColumn.concat(result.timeSeries.values)
-                            );
-                        }
-                    });
-            });
-
-        const axis = {
-            x: {
-                type: 'timeseries',
-                tick: {
-                    format: function(x) {
-                        return Formatter.dateToDate(x);
-                    }
-                },
-                label: 'Date'
-            },
-            y: {
-                label: this.labelXAxis(selectedResultType)
-            }
-        };
-
-        const grid = {
-            x: {
-                show: true
-            }
-        };
-
-        return (
-            <div className="grid-container">
-                <section className="tile col stretch">
-                    <Chart
-                        data={chartData}
-                        grid={grid}
-                        axis={axis}
-                        transition={{
-                            duration: 0
-                        }}
-                        element="testchart"
-                    />
-                </section>
-            </div>
-        );
-    }
-
     toggleScenarioSelection = id => () => {
         this.props.toggleScenarioSelection(id)();
 
@@ -539,6 +447,7 @@ class TimeSeries extends Component {
             cloneScenario,
             deleteScenario,
         } = this.props;
+
         const {
             selectedLayer,
             selectedResultType,
@@ -547,6 +456,9 @@ class TimeSeries extends Component {
         if (!scenarioAnalysis || !scenarioModels) {
             return null;
         }
+
+        const resultType = selectedResultType ? new ResultType(selectedResultType) : null;
+        const layerNumber = new LayerNumber(selectedLayer);
 
         return (
             <div>
@@ -587,7 +499,13 @@ class TimeSeries extends Component {
                     </section>
                 </div>
                 <div className="tile">
-                    {this.renderChart()}
+                    <TimeSeriesChart scenarioAnalysis={scenarioAnalysis}
+                                     scenarioModels={scenarioModels}
+                                     resultType={resultType}
+                                     layerNumber={layerNumber}
+                                     timeSeriesPoints={this.state.timeSeriesPoints}
+                                     labelXAxis={this.labelXAxis}
+                    />
                 </div>
             </div>
         );

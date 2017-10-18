@@ -3,6 +3,7 @@ import SelectModel from './SelectModel';
 import Difference from './Difference';
 import New from './New';
 import TimeSeries from './TimeSeries';
+import TimeSeriesChart from './TimeSeriesChart';
 
 export {
     CrossSection,
@@ -10,4 +11,5 @@ export {
     Difference,
     New,
     TimeSeries,
+    TimeSeriesChart,
 };
