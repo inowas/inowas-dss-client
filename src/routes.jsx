@@ -75,6 +75,10 @@ const routes = store => (
                         path="Difference"
                         component={T07.Component.Difference}
                     />
+                    <Route
+                        path="TimeSeries"
+                        component={T07.Component.TimeSeries}
+                    />
                 </Route>
             </Route>
             <Route path="T07E/:said" tool={'T07E'}>
