@@ -4,5 +4,5 @@ export const editScenarioAnalysisUrl = (id) => {
 };
 
 export const editScenarioAnalysisGeneralUrl = (id) => {
-    return `/tools/T07/${id}`;
+    return `/tools/T07/${id}/CrossSection`;
 };

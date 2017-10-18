@@ -115,7 +115,7 @@ class Dashboard extends React.Component {
         };
     };
 
-    renderTableRows(basePath, instances) {
+    renderTableRows(basePath, subPath, instances) {
         // eslint-disable-next-line no-shadow
         const {publicInstances, cloneToolInstance, deleteToolInstance, push} = this.props;
         return instances.map((i, index) => {
@@ -133,7 +133,7 @@ class Dashboard extends React.Component {
                     <Td>
                         <Button
                             type="link"
-                            onClick={() => push(basePath + i.id)}
+                            onClick={() => push(basePath + i.id + subPath)}
                         >
                             {i.name}
                         </Button>
@@ -276,6 +276,7 @@ class Dashboard extends React.Component {
                     <tbody>
                     {this.renderTableRows(
                         activeTool.path,
+                        activeTool.subPath,
                         activeTool.instances
                     )}
                     </tbody>
