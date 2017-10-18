@@ -11,12 +11,14 @@ const initialState = [
         slug: 'T02',
         name: 'Groundwater mounding (Hantush)',
         path: 'tools/T02/',
+        subPath: '',
         role: ROLE_USER,
         instances: []
     }, {
         slug: 'T03',
         name: 'MODFLOW model setup and editor',
         path: 'tools/T03/',
+        subPath: '',
         role: ROLE_NM_MF,
         instances: []
     },
@@ -24,6 +26,7 @@ const initialState = [
         slug: 'T06',
         name: 'MAR method selection',
         path: 'tools/T06/',
+        subPath: '',
         role: ROLE_USER,
         instances: [ {
             model_id: '06_1',
@@ -39,12 +42,14 @@ const initialState = [
         slug: 'T07',
         name: 'MODFLOW model scenario manager',
         path: 'tools/T07/',
+        subPath: '/CrossSection',
         role: ROLE_NM_MF,
         instances: []
     }, {
         slug: 'T08',
         name: ' 1D transport model (Ogata-Banks)',
         path: 'tools/T08/',
+        subPath: '',
         role: ROLE_USER,
         instances: [{
             id: 'default',
@@ -61,6 +66,7 @@ const initialState = [
         slug: 'T09',
         name: 'Simple saltwater intrusion equations',
         path: 'tools/T09/',
+        subPath: '',
         role: ROLE_USER,
         instances: [{
             id: 'default',
@@ -77,6 +83,7 @@ const initialState = [
         slug: 'T13',
         name: 'Travel time through unconfined aquifer',
         path: 'tools/T13/',
+        subPath: '',
         role: ROLE_USER,
         instances: [{
             model_id: '13',
@@ -92,6 +99,7 @@ const initialState = [
         slug: 'T14',
         name: 'Pumping-induced river drawdown',
         path: 'tools/T14/',
+        subPath: '',
         role: ROLE_USER,
         instances: [{
             model_id: '14',
@@ -107,6 +115,7 @@ const initialState = [
         slug: 'T16',
         name: 'Calculation of hydraulic conductivity',
         path: 'tools/T16/',
+        subPath: '',
         role: ROLE_USER,
         instances: [ {
             model_id: '16',
@@ -123,6 +132,7 @@ const initialState = [
         slug: 'T17',
         name: 'Global MAR portal',
         path: 'tools/T17/',
+        subPath: '',
         role: ROLE_USER,
         instances: [{
             model_id: '17_1',
@@ -138,6 +148,7 @@ const initialState = [
         slug: 'T18',
         name: 'SAT basin design',
         path: 'tools/T18/',
+        subPath: '',
         role: ROLE_USER,
         instances: [{
             model_id: '18_1',
