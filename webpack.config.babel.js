@@ -44,17 +44,6 @@ export default {
     ],
     module: {
         rules: [
-            /* {
-                        test: /\.jsx?$/,
-                        enforce: 'pre',
-                        exclude: /node_modules/,
-                        loader: 'eslint-loader',
-                        options: {
-                            configFile: '.eslintrc',
-                            failOnWarning: false,
-                            failOnError: false
-                        }
-                    }, */
             {
                 test: /\.jsx?$/,
                 use: [ 'source-map-loader' ],
@@ -118,7 +107,13 @@ export default {
                         }
                     }
                 } ]
-            }
+            },
+            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]'},
+            { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]&mimetype=application/font-woff'},
+            { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,loader: 'file-loader?name=fonts/[name].[hash:4].[ext]&mimetype=application/font-woff'},
+            { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]&mimetype=application/octet-stream'},
+            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]'}
+
         ]
     },
     resolve: {

@@ -91,7 +91,7 @@ class ModelEditorSoilmodel extends React.Component {
         const readOnly = !lodash.includes(this.props.permissions, 'w');
         const { removeLayer, addLayerStatus, updateLayerStatus } = this.props;
         const { pid, property, id } = this.props.params;
-        const { routes, params } = this.props;
+        const { gridSize, routes, params } = this.props;
 
         if (pid) {
             const layer = soilmodel.layers.filter(b => b.id === pid)[0];
@@ -99,6 +99,7 @@ class ModelEditorSoilmodel extends React.Component {
                 return (
                     <SoilmodelLayer
                         onSave={this.onSave}
+                        gridSize={gridSize}
                         layer={layer}
                         readOnly={readOnly}
                         updateLayerStatus={updateLayerStatus}
@@ -175,6 +176,7 @@ const actions = {
 
 const mapStateToProps = (state, { tool, params }) => {
     return {
+        gridSize: state[tool].model.grid_size,
         soilmodel: state[tool].model.soilmodel,
         permissions: state[tool].model.permissions,
         addLayerStatus: WebData.Selector.getStatusObject(
@@ -209,7 +211,9 @@ ModelEditorSoilmodel = withRouter(
 );
 
 ModelEditorSoilmodel.propTypes = {
-    tool: PropTypes.string.isRequired
+    gridSize: PropTypes.object,
+    soilmodel: PropTypes.object,
+    tool: PropTypes.string.isRequired,
 };
 
 export default ModelEditorSoilmodel;

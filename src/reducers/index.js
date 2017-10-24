@@ -23,6 +23,7 @@ import T16 from './T16';
 import T18 from './T18';
 import { combineReducers } from 'redux';
 import dashboard from '../dashboard/reducers';
+import rasterfiles from './Rasterfiles';
 import { routerReducer as routing } from 'react-router-redux';
 import user from './user';
 import { WebData } from '../core';
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
     user,
     webData: WebData.Reducer.webData,
     dashboard,
+    rasterfiles,
     T02,
     T03,
     T06,

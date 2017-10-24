@@ -1,5 +1,6 @@
 import { LayoutComponents, WebData } from '../../core';
 import { first, last } from 'lodash';
+import * as SUI from 'semantic-ui-react';
 
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -9,16 +10,27 @@ import React from 'react';
 import Select from '../../components/primitive/Select';
 import { getInitialLayerState } from '../selectors/model';
 import styleGlobals from 'styleGlobals';
+import RasterData from '../../core/rasterData/components/rasterData';
 
 const styles = {
     saveButtonWrapper: {
         textAlign: 'right',
         marginTop: styleGlobals.dimensions.spacing.medium
+    },
+
+    input: {
+        backgroundColor: 'transparent',
+        padding: 0
+    },
+
+    grid: {
+        marginTop: 0
     }
 };
 
 const getValueForInput = value =>
     value instanceof Array ? first(value)[0] + '...' + last(value)[1] : value;
+
 const getTypeForInput = value => (value instanceof Array ? 'text' : 'number');
 
 @ConfiguredRadium
@@ -27,7 +39,8 @@ class SoilmodelLayer extends React.Component {
         super(props);
 
         this.state = {
-            layer: getInitialLayerState()
+            layer: getInitialLayerState(),
+            activeIndex: 1
         };
     }
 
@@ -42,7 +55,12 @@ class SoilmodelLayer extends React.Component {
     }
 
     handleInputChange = name => {
-        return value => {
+        return (e, data) => {
+            let value = data;
+            if (e.target.value) {
+                value = e.target.value;
+            }
+
             this.setState(prevState => {
                 return {
                     ...prevState,
@@ -55,9 +73,17 @@ class SoilmodelLayer extends React.Component {
         };
     };
 
+    handleAccordionClick = (e, titleProps) => {
+        const { index } = titleProps;
+        const { activeIndex } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({ activeIndex: newIndex });
+    };
+
     handleSelectChange = name => {
-        return data =>
-            this.handleInputChange(name)(data ? data.value : undefined);
+        return (e, data) =>
+            this.handleInputChange(name)(e, data ? data.value : undefined);
     };
 
     save = () => {
@@ -65,11 +91,195 @@ class SoilmodelLayer extends React.Component {
     };
 
     render() {
-        const { readOnly, updateLayerStatus } = this.props;
-        const { layer } = this.state;
+        const { gridSize, readOnly, updateLayerStatus } = this.props;
+        const { activeIndex, layer } = this.state;
 
         return (
             <div>
+                <SUI.Form>
+                    <SUI.Accordion>
+                        <SUI.Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
+                            <SUI.Header size={'medium'}>
+                                <SUI.Icon name="dropdown" />
+                                Name and Type
+                            </SUI.Header>
+                        </SUI.Accordion.Title>
+                        <SUI.Accordion.Content active={activeIndex === 0}>
+                            <SUI.Form.Group widths={2}>
+                                <SUI.Form.Input
+                                    disabled={readOnly}
+                                    style={styles.input}
+                                    value={layer.name}
+                                    label={'Layer name'}
+                                    onChange={this.handleInputChange('name')}
+                                />
+                                <SUI.Form.TextArea
+                                    disabled={readOnly}
+                                    style={styles.input}
+                                    value={layer.description}
+                                    label={'Layer description'}
+                                    onChange={this.handleInputChange('description')}
+                                />
+                            </SUI.Form.Group>
+                            <SUI.Form.Group widths={3}>
+                                <SUI.Form.Select
+                                    disabled={readOnly}
+                                    label={'Layer type'}
+                                    value={layer.laytyp}
+                                    onChange={this.handleSelectChange('laytyp')}
+                                    options={[
+                                        {
+                                            value: 0,
+                                            text: 'confined',
+                                        },
+                                        {
+                                            value: 1,
+                                            text: 'convertible',
+                                        },
+                                        {
+                                            value: -1,
+                                            text: 'convertible (unless THICKSTRT)',
+                                        }
+                                    ]}
+                                />
+                                <SUI.Form.Select
+                                    disabled={readOnly}
+                                    label={'Layer average calculation'}
+                                    value={layer.layavg}
+                                    onChange={this.handleSelectChange('layavg')}
+                                    options={[
+                                        {
+                                            value: 0,
+                                            text: 'harmonic mean'
+                                        },
+                                        {
+                                            value: 1,
+                                            text: 'logarithmic mean'
+                                        },
+                                        {
+                                            value: 2,
+                                            text: 'arithmetic mean (saturated thickness) and logarithmic mean (hydraulic conductivity)'
+                                        }
+                                    ]}
+                                />
+                                <SUI.Form.Select
+                                    disabled={readOnly}
+                                    label={'Rewetting capability'}
+                                    value={layer.laywet}
+                                    onChange={this.handleSelectChange('laywet')}
+                                    options={[
+                                        {
+                                            value: 0,
+                                            text: 'No'
+                                        },
+                                        {
+                                            value: 1,
+                                            text: 'Yes'
+                                        },
+                                    ]}
+                                />
+                            </SUI.Form.Group>
+                        </SUI.Accordion.Content>
+
+                        <SUI.Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleAccordionClick}>
+                            <SUI.Header size={'medium'}>
+                                <SUI.Icon name="dropdown" />
+                                Elevation
+                            </SUI.Header>
+                        </SUI.Accordion.Title>
+                        <SUI.Accordion.Content active={activeIndex === 1}>
+                            <SUI.Form.Group widths={2}>
+                                <RasterData gridSize={gridSize} name={'Top elevation'} data={layer.top} readOnly={readOnly}/>
+                            </SUI.Form.Group>
+                        </SUI.Accordion.Content>
+
+                        <SUI.Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleAccordionClick}>
+                            <SUI.Header size={'medium'}>
+                                <SUI.Icon name="dropdown" />
+                                Conductivity parameters
+                            </SUI.Header>
+                        </SUI.Accordion.Title>
+                        <SUI.Accordion.Content active={activeIndex === 2}>
+                            <p>
+                                There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of
+                                {' '}dog that they find to be compatible with their own lifestyle and desires from a companion.
+                            </p>
+                        </SUI.Accordion.Content>
+
+                        <SUI.Accordion.Title active={activeIndex === 3} index={3} onClick={this.handleAccordionClick}>
+                            <SUI.Header size={'medium'}>
+                                <SUI.Icon name="dropdown" />
+                                Storage parameters
+                            </SUI.Header>
+                        </SUI.Accordion.Title>
+                        <SUI.Accordion.Content active={activeIndex === 3}>
+                            <p>
+                                There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of
+                                {' '}dog that they find to be compatible with their own lifestyle and desires from a companion.
+                            </p>
+                        </SUI.Accordion.Content>
+
+                    </SUI.Accordion>
+                </SUI.Form>
+
+                {/*
+                <SUI.Segment>
+                    <SUI.Form>
+                        <SUI.Grid style={styles.grid} divided="vertically">
+                            <SUI.Header size={'medium'}>Metadata</SUI.Header>
+                            <SUI.Grid.Row columns={2}>
+                                <SUI.Grid.Column width={5}>
+                                    <SUI.Form.Group widths={2}>
+                                        <SUI.Form.Input
+                                            label={'Layer Name'}
+                                            style={styles.input}
+                                            value={layer.name}
+                                            onChange={this.handleInputChange('name')}
+                                            disabled={readOnly}
+                                        />
+                                    </SUI.Form.Group>
+                                </SUI.Grid.Column>
+                                <SUI.Grid.Column width={11}>
+                                    <SUI.Label pointing="below">Layer description</SUI.Label>
+                                    <SUI.TextArea
+                                        label="Description"
+                                        value={layer.description}
+                                        onChange={this.handleInputChange('description')}
+                                        disabled={readOnly}
+                                    />
+                                </SUI.Grid.Column>
+                            </SUI.Grid.Row>
+
+                            <SUI.Header size={'medium'}>Elevations</SUI.Header>
+                            <SUI.Grid.Row columns={2}>
+                                <SUI.Grid.Column>
+                                    <SUI.Form.Field>
+                                        <SUI.Label pointing="below">Top Elevation</SUI.Label>
+                                        <SUI.Input
+                                            style={styles.input}
+                                            value={layer.top}
+                                            onChange={this.handleInputChange('top')}
+                                            disabled={readOnly}
+                                        />
+                                    </SUI.Form.Field>
+                                </SUI.Grid.Column>
+                                <SUI.Grid.Column>
+                                    <SUI.Form.Field>
+                                        <SUI.Label pointing="below">Bottom Elevation</SUI.Label>
+                                        <SUI.Input
+                                            style={styles.input}
+                                            value={layer.botm}
+                                            onChange={this.handleInputChange('botm')}
+                                            disabled={readOnly}
+                                        />
+                                    </SUI.Form.Field>
+                                </SUI.Grid.Column>
+                            </SUI.Grid.Row>
+                        </SUI.Grid>
+                    </SUI.Form>
+                </SUI.Segment>
+                */}
+                {/*
                 <section>
                     <LayoutComponents.InputGroup label="Name">
                         <Input
@@ -245,6 +455,7 @@ class SoilmodelLayer extends React.Component {
                         />
                     </LayoutComponents.InputGroup>
                 </section>
+                */}
 
                 {!readOnly &&
                 <div style={styles.saveButtonWrapper}>
@@ -259,6 +470,7 @@ class SoilmodelLayer extends React.Component {
 }
 
 SoilmodelLayer.propTypes = {
+    gridSize: PropTypes.object.isRequired,
     layer: PropTypes.object.isRequired,
     onSave: PropTypes.func.isRequired,
     readOnly: PropTypes.bool.isRequired,
