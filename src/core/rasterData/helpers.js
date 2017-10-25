@@ -16,6 +16,10 @@ export function isRaster(data) {
     return !isNaN(data[0][0]);
 }
 
+export function isValid(data) {
+    return isValue(data) || isRaster(data);
+}
+
 export function min(a) {
     if (isValue(a)) {
         return a;
@@ -37,8 +41,6 @@ export function mean(data) {
         return data;
     }
 
-    console.log(isRaster(data));
-
     if (isRaster(data)) {
         let sum = 0.0;
         let numberOfElements = 0;
@@ -52,8 +54,6 @@ export function mean(data) {
             ))
         );
 
-        console.log(sum);
-
         return sum / numberOfElements;
     }
 
@@ -64,14 +64,18 @@ export function getGridSize(data) {
     if (isValue(data)) {
         return {
             x: 1,
-            y: 1
+            n_x: 1,
+            y: 1,
+            n_y: 1
         };
     }
 
     if (isRaster(data)) {
         return {
-            x: length(data[0]),
-            y: length(data),
+            x: data[0].length,
+            n_x: data[0].length,
+            y: data.length,
+            n_y: data.length,
         };
     }
 

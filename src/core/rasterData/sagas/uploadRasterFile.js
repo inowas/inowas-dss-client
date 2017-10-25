@@ -25,8 +25,13 @@ export default function* uploadRasterFileFlow() {
 
             yield put(Event.rasterFileWasUploaded(hash, url));
 
+            let queryParams = '';
+            if (width && height) {
+                queryParams = '?width=' + width + '&height=' + height;
+            }
+
             const rasterData = yield call(WebData.Saga.singleAjaxRequest, {
-                url: 'rasterfile/' + hash + '?width=' + width + '&height=' + height,
+                url: 'rasterfile/' + hash + queryParams,
                 provokingActionType: type,
                 method: 'get'
             });

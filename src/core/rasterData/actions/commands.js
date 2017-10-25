@@ -4,7 +4,7 @@
 
 export const UPLOAD_RASTER_FILE = 'uploadRasterFile';
 
-export function uploadRasterFile(file, width, height) {
+export function uploadRasterFile(file, width = null, height = null) {
     return {
         type: UPLOAD_RASTER_FILE,
         file,

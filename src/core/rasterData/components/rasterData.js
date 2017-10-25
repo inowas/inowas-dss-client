@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
-import { Button, Form, Tab } from 'semantic-ui-react';
+import {connect} from 'react-redux';
+import {Button, Form, Tab} from 'semantic-ui-react';
 import RasterDataImage from './rasterDataImage';
 import {mean} from '../helpers';
-import { Query, Command } from '../actions';
+import {Command} from '../actions';
+import RasterfileUpload from './rasterfileUpload';
 
 
 const styles = {
@@ -32,10 +33,17 @@ class RasterData extends React.Component {
 
     submitHandler = () => {
         this.setState({
-            edit: false
+            edit: false,
+            data: parseFloat(this.state.data) || 1.0
         });
 
         return false;
+    };
+
+    handleValueUpdate = e => {
+        this.setState({
+            data: e.target.value
+        });
     };
 
     handleFileUpload = e => {
@@ -63,15 +71,14 @@ class RasterData extends React.Component {
     };
 
     render() {
-        console.log('Props', this.props);
-        const { edit, data } = this.state;
-        const { gridSize, readOnly } = this.props;
+        const {data, edit} = this.state;
+        const {gridSize, readOnly} = this.props;
 
         if (!edit) {
             return (
                 <div>
                     {this.renderHeading(!readOnly)}
-                    <RasterDataImage data={data} gridSize={gridSize} />
+                    <RasterDataImage data={data} gridSize={gridSize}/>
                 </div>
             );
         }
@@ -79,7 +86,7 @@ class RasterData extends React.Component {
         const tabValue = (
             <Tab.Pane>
                 <Form.Field>
-                    <input value={mean(data)}/>
+                    <input value={mean(data) || data} onChange={this.handleValueUpdate}/>
                 </Form.Field>
                 <Button type="cancel" onClick={this.cancelHandler}>Cancel</Button>
                 <Button type="submit" onClick={this.submitHandler}>Submit</Button>
@@ -88,21 +95,19 @@ class RasterData extends React.Component {
 
         const tabRaster = (
             <Tab.Pane>
-                <Form.Field>
-                    <input type="file" onChange={this.handleFileUpload} />
-                </Form.Field>
+                <RasterfileUpload handleFileUpload={this.handleFileUpload} uploadedFile={this.props.uploadedFile} />
             </Tab.Pane>
         );
 
         const panes = [
-            { menuItem: 'Value', render: () => tabValue },
-            { menuItem: 'Raster', render: () => tabRaster },
+            {menuItem: 'Value', render: () => tabValue},
+            {menuItem: 'Raster', render: () => tabRaster},
         ];
 
         return (
             <div>
                 {this.renderHeading(false)}
-                <Tab panes={panes} />
+                <Tab panes={panes}/>
             </div>
         );
     }
@@ -115,15 +120,20 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-const mapStateToProps = (state, {params}) => ({
-});
+const mapStateToProps = (state, {params}) => {
+    const {rasterfiles} = state;
+    return {
+        uploadedFile: rasterfiles.files.filter(f => (f.hash === rasterfiles.current))[0] || null
+    };
+};
 
 RasterData.propTypes = {
-    gridSize: PropTypes.object.isRequired,
     data: PropTypes.oneOfType([PropTypes.array, PropTypes.number]).isRequired,
+    gridSize: PropTypes.object.isRequired,
     name: PropTypes.string,
     onUploadRasterFile: PropTypes.func.isRequired,
-    readOnly: PropTypes.bool.isRequired
+    readOnly: PropTypes.bool.isRequired,
+    uploadedFile: PropTypes.object,
 };
 
 // eslint-disable-next-line no-class-assign
