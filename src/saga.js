@@ -1,9 +1,10 @@
 import { takeEvery, call } from 'redux-saga/effects';
 import { WebData } from './core';
+import { Saga as Dashboard } from './dashboard/index';
+import { Saga as RasterData } from './core/rasterData/index';
 import { Saga as T03 } from './t03/index';
 import { Saga as T07 } from './t07/index';
 import { Saga as ToolInstance } from './toolInstance/index';
-import { Saga as Dashboard } from './dashboard/index';
 
 export default function* rootSaga() {
     yield [
@@ -12,6 +13,7 @@ export default function* rootSaga() {
             WebData.Saga.sendHttpRequestFlow
         ),
         call(Dashboard.loadInstancesFlow),
+        call(RasterData.uploadRasterFileFlow),
         call(T03.addBoundaryFlow),
         call(T03.addLayerFlow),
         call(T03.calculateModflowModelFlow),
@@ -46,6 +48,7 @@ export default function* rootSaga() {
         call(ToolInstance.createToolInstanceFlow),
         call(ToolInstance.updateToolInstanceFlow),
         call(ToolInstance.deleteToolInstanceFlow),
+        call(ToolInstance.cloneToolInstanceFlow),
         call(ToolInstance.cloneToolInstanceFlow),
     ];
 }

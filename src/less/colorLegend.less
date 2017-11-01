@@ -1,28 +1,42 @@
 @import "variables.less";
 
 .colorLegend {
-    position: absolute;
-    display: flex;
-    z-index: 1000;
+    .vertical {
+        position: absolute;
+        display: flex;
+        z-index: 1000;
 
-    bottom: 0;
-    left: 0;
-    margin-left: 0.5em;
-
-    .stripe {
-        width: @spacing-large;
-        height: 80px;
-        transform: translateY(10px);
-        opacity: 0.5;
-    }
-
-    .labels{
+        bottom: 0;
+        left: 0;
         margin-left: 0.5em;
 
-        .label {
-            height: 20px;
-            display: flex;
-            align-items: center;
+        .stripe {
+            width: @spacing-large;
+            height: 80px;
+            transform: translateY(10px);
+            opacity: 0.5;
         }
+
+        .labels{
+            margin-left: 0.5em;
+
+            .label {
+                height: 20px;
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .horizontal {
+        .legend { list-style: none; }
+        .legend li { float: left; margin-right: 10px; }
+        .legend span { float: left; width: 20px; height: 12px; margin: 2px; }
+
+        /* your colors */
+        .legend .superawesome { background-color: #ff00ff; }
+        .legend .awesome { background-color: #00ffff; }
+        .legend .kindaawesome { background-color: #0000ff; }
+        .legend .notawesome { background-color: #000000; }
     }
 }

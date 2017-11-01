@@ -1,44 +1,88 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import '../../less/colorLegend.less';
 
-export default class ColorLegend extends Component {
+class ColorLegend extends React.Component {
 
-    static propTypes = {
-        legend: PropTypes.array
-    }
+    renderVerticalLabels = () => {
+        const legend = this.props.legend;
 
-    renderLabels( legend ) {
         return legend.map((l, index) => {
             return (
                 <div className="label" key={index}>{l.value}m</div>
             );
         });
-    }
+    };
 
-    render( ) {
-        const { legend } = this.props;
+    renderVerticalGradients = () => {
+        const legend = this.props.legend;
 
         let gradient = 'linear-gradient(to bottom';
-
-        legend.forEach(( l, index ) => {
+        legend.forEach((l, index) => {
             gradient += ', ' + l.color + ' ' + ( (index + 1) / legend.length * 100 ) + '%';
         });
 
         gradient += ')';
-        // console.log('gradient: ', gradient );
+
+        return gradient;
+    };
+
+    renderVerticalColorLegend = () => {
+        const gradient = this.renderVerticalGradients();
+        const labels = this.renderVerticalLabels();
+        const legend = this.props.legend;
 
         return (
             <div className="colorLegend">
-                <div className="stripe" style={{
-                    backgroundImage: gradient,
-                    height: (legend.length - 1) * 20
-                }}/>
-                <div className="labels">
-                    {this.renderLabels( legend )}
+                <div className="vertical">
+                    <div className="stripe" style={{
+                        backgroundImage: gradient,
+                        height: (legend.length - 1) * 20
+                    }}/>
+                    <div className="labels">
+                        {labels}
+                    </div>
                 </div>
             </div>
         );
-    }
+    };
 
+    renderHorizontalColorLegend = () => {
+        const legend = this.props.legend;
+
+        const reducedLegend = [];
+        reducedLegend.push(legend[legend.length - 1]);
+        reducedLegend.push(legend[Math.floor(legend.length / 2)]);
+        reducedLegend.push(legend[0]);
+
+        return (
+            <div className="colorLegend">
+                <div className="horizontal">
+                    <ul className="legend">
+                        <li><span style={{backgroundColor: reducedLegend[0].color}} /> {reducedLegend[0].value}</li>
+                        <li><span style={{backgroundColor: reducedLegend[1].color}} /> {reducedLegend[1].value}</li>
+                        <li><span style={{backgroundColor: reducedLegend[2].color}} /> {reducedLegend[2].value}</li>
+                    </ul>
+                </div>
+            </div>
+        );
+    };
+
+    render() {
+        const {orientation} = this.props;
+
+        if (!orientation || orientation === 'vertical') {
+            return this.renderVerticalColorLegend();
+        }
+
+        return this.renderHorizontalColorLegend();
+    }
 }
+
+ColorLegend.propTypes = {
+    legend: PropTypes.array,
+    orientation: PropTypes.string
+};
+
+export default ColorLegend;
