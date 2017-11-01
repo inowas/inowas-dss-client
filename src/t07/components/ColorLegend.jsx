@@ -49,7 +49,7 @@ class ColorLegend extends React.Component {
     };
 
     renderHorizontalColorLegend = () => {
-        const legend = this.props.legend;
+        const {legend, unit} = this.props;
 
         const reducedLegend = [];
         reducedLegend.push(legend[legend.length - 1]);
@@ -60,9 +60,9 @@ class ColorLegend extends React.Component {
             <div className="colorLegend">
                 <div className="horizontal">
                     <ul className="legend">
-                        <li><span style={{backgroundColor: reducedLegend[0].color}} /> {reducedLegend[0].value}</li>
-                        <li><span style={{backgroundColor: reducedLegend[1].color}} /> {reducedLegend[1].value}</li>
-                        <li><span style={{backgroundColor: reducedLegend[2].color}} /> {reducedLegend[2].value}</li>
+                        <li><span style={{backgroundColor: reducedLegend[0].color}} /> {reducedLegend[0].value} {unit}</li>
+                        <li><span style={{backgroundColor: reducedLegend[1].color}} /> {reducedLegend[1].value} {unit}</li>
+                        <li><span style={{backgroundColor: reducedLegend[2].color}} /> {reducedLegend[2].value} {unit}</li>
                     </ul>
                 </div>
             </div>
@@ -82,7 +82,8 @@ class ColorLegend extends React.Component {
 
 ColorLegend.propTypes = {
     legend: PropTypes.array,
-    orientation: PropTypes.string
+    orientation: PropTypes.string,
+    unit: PropTypes.string
 };
 
 export default ColorLegend;
