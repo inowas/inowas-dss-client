@@ -139,14 +139,11 @@ export function meanValue(data) {
 
 export function rainbowFactory(numberRange = {min: -50, max: 50}) {
     const rainbow = new Rainbow();
+
     rainbow.setSpectrum(
-        '#800080',
-        '#ff2200',
-        '#fcff00',
-        '#6dff70',
-        '#00ffff',
-        '#007bff',
-        '#0000FF'
+        '#31a354',
+        '#addd8e',
+        '#d8b365',
     );
 
     if (numberRange) {

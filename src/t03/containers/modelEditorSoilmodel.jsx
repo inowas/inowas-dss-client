@@ -2,22 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { withRouter } from 'react-router';
-// import { editLayer } from '../../routes';
-import { Routing } from '../actions';
+import {withRouter} from 'react-router';
+import {Routing} from '../actions';
 import * as lodash from 'lodash';
-import { Command } from '../../t03/actions/index';
+import {Command} from '../../t03/actions/index';
 import {
     SoilmodelGeneral,
     SoilModelLayerOverview,
     SoilmodelLayer
 } from '../components';
 import Input from '../../components/primitive/Input';
-import { getInitialLayerState } from '../selectors/model';
+import {getInitialLayerState} from '../selectors/model';
 import uuid from 'uuid';
-import { WebData } from '../../core';
+import {WebData} from '../../core';
+import * as Query from '../actions/queries';
 
 const styles = {
     container: {
@@ -52,20 +52,20 @@ class ModelEditorSoilmodel extends React.Component {
     }
 
     onLayerClick = pid => {
-        const { routes, params } = this.props;
+        const {routes, params} = this.props;
 
         Routing.editLayer(routes, params)(pid);
     };
 
     onSave = data => {
-        const { id } = this.props.params;
+        const {id} = this.props.params;
 
         this.props.updateLayer(id, data);
     };
 
     onCreateLayer = () => {
-        const { id } = this.props.params;
-        const { routes, params } = this.props;
+        const {id} = this.props.params;
+        const {routes, params} = this.props;
 
         this.props.createLayer(
             id,
@@ -79,7 +79,7 @@ class ModelEditorSoilmodel extends React.Component {
     };
 
     handleSearchTerm = value => {
-        this.setState(function(prevState, props) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 searchTerm: value
@@ -89,9 +89,9 @@ class ModelEditorSoilmodel extends React.Component {
 
     renderProperties(soilmodel) {
         const readOnly = !lodash.includes(this.props.permissions, 'w');
-        const { removeLayer, addLayerStatus, updateLayerStatus } = this.props;
-        const { pid, property, id } = this.props.params;
-        const { gridSize, routes, params } = this.props;
+        const {addLayerStatus, removeLayer, updateLayerStatus} = this.props;
+        const {pid, property, id} = this.props.params;
+        const {gridSize, isLoading, params, routes} = this.props;
 
         if (pid) {
             const layer = soilmodel.layers.filter(b => b.id === pid)[0];
@@ -103,6 +103,7 @@ class ModelEditorSoilmodel extends React.Component {
                         layer={layer}
                         readOnly={readOnly}
                         updateLayerStatus={updateLayerStatus}
+                        isLoading={isLoading}
                     />
                 );
             }
@@ -112,7 +113,7 @@ class ModelEditorSoilmodel extends React.Component {
 
         return (
             <div>
-                <SoilmodelGeneral soilmodel={soilmodel} readOnly={readOnly} />
+                <SoilmodelGeneral soilmodel={soilmodel} readOnly={readOnly}/>
                 <SoilModelLayerOverview
                     id={id}
                     property={property}
@@ -128,12 +129,13 @@ class ModelEditorSoilmodel extends React.Component {
     }
 
     render() {
-        const { soilmodel } = this.props;
+        const {soilmodel} = this.props;
+
         if (!soilmodel) {
             return null;
         }
 
-        const { searchTerm } = this.state;
+        const {searchTerm} = this.state;
         let list = soilmodel.layers || [];
 
         if (searchTerm) {
@@ -174,7 +176,7 @@ const actions = {
     updateLayer: Command.updateLayer
 };
 
-const mapStateToProps = (state, { tool, params }) => {
+const mapStateToProps = (state, {tool}) => {
     return {
         gridSize: state[tool].model.grid_size,
         soilmodel: state[tool].model.soilmodel,
@@ -186,11 +188,15 @@ const mapStateToProps = (state, { tool, params }) => {
         updateLayerStatus: WebData.Selector.getStatusObject(
             state,
             Command.UPDATE_LAYER
-        )
+        ),
+        isLoading: WebData.Selector.getRequestStatusByType(
+            state,
+            Query.GET_MODFLOW_MODEL_DETAILS
+        ).type !== 'success'
     };
 };
 
-const mapDispatchToProps = (dispatch, { tool }) => {
+const mapDispatchToProps = (dispatch, {tool}) => {
     const wrappedActions = {};
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
@@ -211,9 +217,18 @@ ModelEditorSoilmodel = withRouter(
 );
 
 ModelEditorSoilmodel.propTypes = {
+    addLayerStatus: PropTypes.object,
+    createLayer: PropTypes.func,
     gridSize: PropTypes.object,
+    isLoading: PropTypes.bool,
+    params: PropTypes.object,
+    permissions: PropTypes.string,
+    removeLayer: PropTypes.func,
+    routes: PropTypes.array,
     soilmodel: PropTypes.object,
     tool: PropTypes.string.isRequired,
+    updateLayer: PropTypes.func,
+    updateLayerStatus: PropTypes.object
 };
 
 export default ModelEditorSoilmodel;

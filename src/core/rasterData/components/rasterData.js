@@ -1,16 +1,28 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button, Form, Tab} from 'semantic-ui-react';
+import {Button, Grid, Header, Input, Modal, Segment} from 'semantic-ui-react';
 import RasterDataImage from './rasterDataImage';
-import {mean} from '../helpers';
+import {isValid, mean} from '../helpers';
 import {Command} from '../actions';
 import RasterfileUpload from './rasterfileUpload';
-
 
 const styles = {
     link: {
         cursor: 'pointer'
+    },
+    header: {
+        textAlign: 'left'
+    },
+    input: {
+        backgroundColor: 'transparent',
+        padding: 0
+    },
+    modalHeader: {
+        textAlign: 'center'
+    },
+    modalContent: {
+        textAlign: 'center'
     }
 };
 
@@ -19,95 +31,180 @@ class RasterData extends React.Component {
         super(props);
         this.state = {
             data: props.data,
-            edit: false
+            tempData: props.data,
+            showEditValueModal: false,
+            showEditRasterModal: false
         };
     }
 
-    cancelHandler = () => {
-        this.setState({
-            edit: false
+    componentWillReceiveProps(nextProps) {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                data: nextProps.data,
+                tempData: nextProps.data
+            };
         });
+    }
 
-        return false;
+    handleValueChange = e => {
+        this.setState({
+            tempData: e.target.value
+        });
     };
 
-    submitHandler = () => {
+    handleCancel = () => {
         this.setState({
-            edit: false,
-            data: parseFloat(this.state.data) || 1.0
+            showEditValueModal: false,
+            showEditRasterModal: false
         });
-
-        return false;
     };
 
-    handleValueUpdate = e => {
-        this.setState({
-            data: e.target.value
+    handleSaveValue = () => {
+        let data = this.state.tempData;
+
+        if (typeof data === 'string') {
+            data = parseFloat(data);
+        }
+
+        if (!isValid(data)) {
+            return;
+        }
+
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                data: data,
+                showEditValueModal: false,
+                showEditRasterModal: false
+            };
         });
+
+        this.props.onChange(null, data);
+    };
+
+    handleSaveRaster = (data) => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                data: data,
+                showEditValueModal: false,
+                showEditRasterModal: false
+            };
+        });
+
+        this.props.onChange(null, data);
+        return null;
     };
 
     handleFileUpload = e => {
         const files = e.target.files;
         const file = files[0];
-        this.props.onUploadRasterFile(file, this.props.gridSize.n_x, this.props.gridSize.n_y);
+        this.props.onUploadRasterfile(file, this.props.gridSize.n_x, this.props.gridSize.n_y);
     };
 
-    toggleEditMode = () => {
-        this.setState({
-            edit: !this.state.edit
-        });
+    showEditModal = (type, edit) => {
+        if (type === 'value') {
+            this.setState({
+                showEditValueModal: edit
+            });
+        }
 
-        return false;
+        if (type === 'raster') {
+            this.setState({
+                showEditRasterModal: edit
+            });
+        }
     };
 
-    renderHeading = edit => {
+    renderValueModal = button => (
+        <Modal trigger={button} dimmer={'blurring'} open={this.state.showEditValueModal} size={'tiny'}>
+            <Modal.Header style={styles.modalHeader}>Set {this.props.name} value for the entire layer</Modal.Header>
+            <Modal.Content style={styles.modalContent}>
+                <Modal.Description>
+                    <Input
+                        value={mean(this.state.tempData)}
+                        label={{basic: true, content: this.props.unit}}
+                        labelPosition="right"
+                        style={styles.input}
+                        type="text"
+                        onChange={this.handleValueChange}
+                    />
+                    <br/>
+                    <br/>
+                    <Button.Group>
+                        <Button onClick={this.handleSaveValue} positive>Save</Button>
+                        <Button.Or/>
+                        <Button onClick={this.handleCancel}>Cancel</Button>
+                    </Button.Group>
+                </Modal.Description>
+            </Modal.Content>
+        </Modal>
+    );
+
+    renderRasterModal = button => (
+        <Modal trigger={button} dimmer={'blurring'} open={this.state.showEditRasterModal}>
+            <Modal.Header style={styles.modalHeader}>Upload rasterData for {this.props.name} values for the entire
+                layer.</Modal.Header>
+            <Modal.Content>
+                <RasterfileUpload
+                    handleFileUpload={this.handleFileUpload}
+                    onCancel={this.handleCancel}
+                    onSave={this.handleSaveRaster}
+                    unit={this.props.unit}
+                    uploadedFile={this.props.uploadedFile}
+                />
+            </Modal.Content>
+        </Modal>
+    );
+
+    renderEditButtons = readOnly => {
+        if (readOnly) {
+            return null;
+        }
+
         return (
-            <h4>
-                {this.props.name}
-                {edit && <a style={styles.link} onClick={this.toggleEditMode}> (edit)</a>}
-                {!edit && <a style={styles.link} onClick={this.toggleEditMode}> (view)</a>}
-            </h4>
+            <Button.Group>
+                {
+                    this.renderValueModal(
+                        <Button floated="left" onClick={() => this.showEditModal('value', true)}>
+                            Set single value
+                        </Button>)
+                }
+                <Button.Or/>
+                {
+                    this.renderRasterModal(
+                        <Button floated="right" onClick={() => this.showEditModal('raster', true)}>
+                            Upload rasterfile
+                        </Button>)
+                }
+            </Button.Group>
         );
     };
 
     render() {
-        const {data, edit} = this.state;
-        const {gridSize, readOnly} = this.props;
-
-        if (!edit) {
-            return (
-                <div>
-                    {this.renderHeading(!readOnly)}
-                    <RasterDataImage data={data} gridSize={gridSize}/>
-                </div>
-            );
-        }
-
-        const tabValue = (
-            <Tab.Pane>
-                <Form.Field>
-                    <input value={mean(data) || data} onChange={this.handleValueUpdate}/>
-                </Form.Field>
-                <Button type="cancel" onClick={this.cancelHandler}>Cancel</Button>
-                <Button type="submit" onClick={this.submitHandler}>Submit</Button>
-            </Tab.Pane>
-        );
-
-        const tabRaster = (
-            <Tab.Pane>
-                <RasterfileUpload handleFileUpload={this.handleFileUpload} uploadedFile={this.props.uploadedFile} />
-            </Tab.Pane>
-        );
-
-        const panes = [
-            {menuItem: 'Value', render: () => tabValue},
-            {menuItem: 'Raster', render: () => tabRaster},
-        ];
+        const {data} = this.state;
+        const {gridSize, name, readOnly, unit} = this.props;
 
         return (
             <div>
-                {this.renderHeading(false)}
-                <Tab panes={panes}/>
+                <Header as="h4" style={styles.header}>{name}</Header>
+                <Grid columns={2} divided>
+                    <Grid.Column>
+                        <Segment>
+                            <RasterDataImage data={data} gridSize={gridSize} unit={unit}/>
+                        </Segment>
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Header as="h4" style={styles.header}>FURTHER INFORMATION</Header>
+                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem</p>
+
+                        {this.renderEditButtons(readOnly)}
+                    </Grid.Column>
+                </Grid>
             </div>
         );
     }
@@ -115,12 +212,12 @@ class RasterData extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onUploadRasterFile(file, width, height) {
+    onUploadRasterfile(file, width, height) {
         dispatch(Command.uploadRasterFile(file, width, height));
     },
 });
 
-const mapStateToProps = (state, {params}) => {
+const mapStateToProps = (state) => {
     const {rasterfiles} = state;
     return {
         uploadedFile: rasterfiles.files.filter(f => (f.hash === rasterfiles.current))[0] || null
@@ -130,9 +227,11 @@ const mapStateToProps = (state, {params}) => {
 RasterData.propTypes = {
     data: PropTypes.oneOfType([PropTypes.array, PropTypes.number]).isRequired,
     gridSize: PropTypes.object.isRequired,
-    name: PropTypes.string,
-    onUploadRasterFile: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onUploadRasterfile: PropTypes.func,
     readOnly: PropTypes.bool.isRequired,
+    unit: PropTypes.string.isRequired,
     uploadedFile: PropTypes.object,
 };
 

@@ -24,19 +24,19 @@ class RasterDataImage extends React.Component {
         };
     }
 
-    componentWillMount() {
-        this.setState({
-            width: this.props.gridSize.n_x,
-            height: this.props.gridSize.n_y,
-            rainbowVis: rainbowFactory({
-                min: min(this.props.data),
-                max: max(this.props.data),
-            })
-        });
-    }
-
     componentDidMount() {
         this.drawCanvas();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            width: nextProps.gridSize.n_x,
+            height: nextProps.gridSize.n_y,
+            rainbowVis: rainbowFactory({
+                min: min(nextProps.data),
+                max: max(nextProps.data),
+            })
+        });
     }
 
     drawCanvas() {
@@ -52,6 +52,8 @@ class RasterDataImage extends React.Component {
 
     drawLegend() {
         const {rainbowVis} = this.state;
+        const {unit} = this.props;
+
         const data = createGridData(this.props.data, this.state.width, this.state.height);
 
         if (!rainbowVis || !data) {
@@ -74,13 +76,10 @@ class RasterDataImage extends React.Component {
             value: Number(lastGradient.getMinNum()).toFixed(2)
         });
 
-        return <ColorLegend legend={legend} orientation={'horizontal'}/>;
+        return <ColorLegend legend={legend} orientation={'horizontal'} unit={unit}/>;
     }
 
     render() {
-
-        console.log(this.props);
-
         if (this.canvas) {
             this.drawCanvas();
         }
@@ -107,6 +106,7 @@ class RasterDataImage extends React.Component {
 RasterDataImage.propTypes = {
     data: PropTypes.oneOfType([PropTypes.array, PropTypes.number]).isRequired,
     gridSize: PropTypes.object.isRequired,
+    unit: PropTypes.string.isRequired
 };
 
 export default RasterDataImage;
