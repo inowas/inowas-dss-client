@@ -39,12 +39,12 @@ this can be used to align up and down
                     <div className="radio-group">
                         <div>
                             <input name="settings" id="radio1" type="radio" value="h0" checked={settings.selected === 'h0'}
-                                   onChange={this.handleChange.bind(this)}/>
+                                   onChange={this.handleRadioChange.bind(this)}/>
                             <label htmlFor="radio1">Left</label>
                         </div>
                         <div>
                             <input name="settings" id="radio2" type="radio" value="hL" checked={settings.selected === 'hL'}
-                                   onChange={this.handleChange.bind(this)}/>
+                                   onChange={this.handleRadioChange.bind(this)}/>
                             <label htmlFor="radio1">Right</label></div>
                     </div>
                 </div>

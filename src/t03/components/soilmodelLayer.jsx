@@ -185,13 +185,24 @@ class SoilmodelLayer extends React.Component {
                             </SUI.Header>
                         </SUI.Accordion.Title>
                         <SUI.Accordion.Content active={activeIndex === 1}>
-                            <RasterData gridSize={gridSize} name={'Top elevation'} unit={'m'} data={layer.top}
-                                        readOnly={readOnly} onChange={this.handleInputChange('top')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Top elevation'}
+                                unit={'m'}
+                                data={layer.top}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('top')}
+                            />
                         </SUI.Accordion.Content>
 
                         <SUI.Accordion.Content active={activeIndex === 1}>
-                            <RasterData gridSize={gridSize} name={'Bottom elevation'} unit={'m'} data={layer.botm}
-                                        readOnly={readOnly} onChange={this.handleInputChange('botm')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Bottom elevation'}
+                                unit={'m'} data={layer.botm}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('botm')}
+                            />
                         </SUI.Accordion.Content>
 
                         <SUI.Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleAccordionClick}>
@@ -202,20 +213,36 @@ class SoilmodelLayer extends React.Component {
                         </SUI.Accordion.Title>
 
                         <SUI.Accordion.Content active={activeIndex === 2}>
-                            <RasterData gridSize={gridSize} name={'Horizontal conductivity along rows'} unit={'m/day'}
-                                        data={layer.hk} readOnly={readOnly} onChange={this.handleInputChange('hk')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Horizontal conductivity along rows'}
+                                unit={'m/day'}
+                                data={layer.hk}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('hk')}
+                            />
                         </SUI.Accordion.Content>
 
                         <SUI.Accordion.Content active={activeIndex === 2}>
-                            <RasterData gridSize={gridSize} name={'Horizontal hydraulic anisotropy'} unit={''}
-                                        data={layer.hani} readOnly={readOnly}
-                                        onChange={this.handleInputChange('hani')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Horizontal hydraulic anisotropy'}
+                                unit={''}
+                                data={layer.hani}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('hani')}
+                            />
                         </SUI.Accordion.Content>
 
                         <SUI.Accordion.Content active={activeIndex === 2}>
-                            <RasterData gridSize={gridSize} name={'Vertical hydraulic conductivity'} unit={'m/day'}
-                                        data={layer.vka} readOnly={readOnly}
-                                        onChange={this.handleInputChange('vka')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Vertical hydraulic conductivity'}
+                                unit={'m/day'}
+                                data={layer.vka}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('vka')}
+                            />
                         </SUI.Accordion.Content>
 
                         <SUI.Accordion.Title active={activeIndex === 3} index={3} onClick={this.handleAccordionClick}>
@@ -226,14 +253,25 @@ class SoilmodelLayer extends React.Component {
                         </SUI.Accordion.Title>
 
                         <SUI.Accordion.Content active={activeIndex === 3}>
-                            <RasterData gridSize={gridSize} name={'Specific storage Ss'} unit={''}
-                                        data={layer.ss} readOnly={readOnly} onChange={this.handleInputChange('ss')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Specific storage Ss'}
+                                unit={''}
+                                data={layer.ss}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('ss')}
+                            />
                         </SUI.Accordion.Content>
 
                         <SUI.Accordion.Content active={activeIndex === 3}>
-                            <RasterData gridSize={gridSize} name={'Specific yield Sy'} unit={'1/m'}
-                                        data={layer.sy} readOnly={readOnly}
-                                        onChange={this.handleInputChange('sy')}/>
+                            <RasterData
+                                gridSize={gridSize}
+                                name={'Specific yield Sy'}
+                                unit={'1/m'}
+                                data={layer.sy}
+                                readOnly={readOnly}
+                                onChange={this.handleInputChange('sy')}
+                            />
                         </SUI.Accordion.Content>
 
                     </SUI.Accordion>

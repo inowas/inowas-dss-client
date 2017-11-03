@@ -192,7 +192,7 @@ class RasterData extends React.Component {
                 <Grid columns={2} divided>
                     <Grid.Column>
                         <Segment>
-                            <RasterDataImage data={data} gridSize={gridSize} unit={unit}/>
+                            <RasterDataImage data={data} gridSize={gridSize} unit={unit} />
                         </Segment>
                     </Grid.Column>
                     <Grid.Column>
