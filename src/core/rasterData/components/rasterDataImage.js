@@ -12,54 +12,31 @@ const styles = {
 };
 
 class RasterDataImage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            width: props.gridSize.n_x,
-            height: props.gridSize.n_y,
-            rainbowVis: rainbowFactory({
-                min: min(props.data),
-                max: max(props.data),
-            })
-        };
-    }
-
     componentDidMount() {
-        this.drawCanvas();
+        if (this.canvas) {
+            const {data, gridSize} = this.props;
+            const rainbowVis = rainbowFactory({min: min(data), max: max(data)});
+            const width = gridSize.n_x;
+            const height = gridSize.n_y;
+            this.drawCanvas(data, width, height, rainbowVis);
+        }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            width: nextProps.gridSize.n_x,
-            height: nextProps.gridSize.n_y,
-            rainbowVis: rainbowFactory({
-                min: min(nextProps.data),
-                max: max(nextProps.data),
-            })
-        });
+    shouldComponentUpdate(nextProps) {
+        return this.props.data !== nextProps.data;
     }
 
-    drawCanvas() {
+    drawCanvas(data, width, height, rainbowVis) {
         const ctx = this.canvas.getContext('2d');
-        ctx.clearRect(0, 0, this.state.width, this.state.height);
-
-        const data = createGridData(this.props.data, this.state.width, this.state.height);
-        data.forEach(d => {
-            ctx.fillStyle = '#' + this.state.rainbowVis.colourAt(d.value);
+        ctx.clearRect(0, 0, width, height);
+        const gridData = createGridData(data, width, height);
+        gridData.forEach(d => {
+            ctx.fillStyle = '#' + rainbowVis.colourAt(d.value);
             ctx.fillRect(d.x, d.y, 1, 1);
         });
     }
 
-    drawLegend() {
-        const {rainbowVis} = this.state;
-        const {unit} = this.props;
-
-        const data = createGridData(this.props.data, this.state.width, this.state.height);
-
-        if (!rainbowVis || !data) {
-            return null;
-        }
-
+    drawLegend(rainbowVis, unit) {
         // slice() to make an immutable copy
         const gradients = rainbowVis
             .getGradients()
@@ -80,8 +57,14 @@ class RasterDataImage extends React.Component {
     }
 
     render() {
+        const {data, gridSize, unit} = this.props;
+
+        const rainbowVis = rainbowFactory({min: min(data), max: max(data)});
+        const width = gridSize.n_x;
+        const height = gridSize.n_y;
+
         if (this.canvas) {
-            this.drawCanvas();
+            this.drawCanvas(data, width, height, rainbowVis);
         }
 
         return (
@@ -92,12 +75,12 @@ class RasterDataImage extends React.Component {
                         ref={(canvas) => {
                             this.canvas = canvas;
                         }}
-                        width={this.state.width}
-                        height={this.state.height}
+                        width={width}
+                        height={height}
                         data-paper-resize
                     />
                 </Image>
-                {this.drawLegend()}
+                {this.drawLegend(rainbowVis, unit)}
             </div>
         );
     }
