@@ -157,8 +157,8 @@ export const CanvasHeatMapOverlay = Layer.extend({
         const canvas = (this._canvas = DomUtil.create(
             'canvas',
             'leaflet-layer ' +
-                (this._zoomAnimated ? 'leaflet-zoom-animated' : '') +
-                (this.options.className || '')
+            (this._zoomAnimated ? 'leaflet-zoom-animated' : '') +
+            (this.options.className || '')
         ));
 
         this._ctx = canvas.getContext('2d');
@@ -212,7 +212,7 @@ export const CanvasHeatMapOverlay = Layer.extend({
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
         this._dataArray.forEach(d => {
             this._ctx.fillStyle = '#' + this._rainbow.colourAt(d.value);
-            this._ctx.fillRect(d.y, d.x, 1, 1);
+            this._ctx.fillRect(d.x, d.y, 1, 1);
         });
     },
 
@@ -241,13 +241,11 @@ export const CanvasHeatMapOverlay = Layer.extend({
     }
 });
 
-export const canvasHeatMapOverlay = function(
-    nX,
-    nY,
-    data,
-    bounds,
-    rainbow,
-    options
-) {
+export const canvasHeatMapOverlay = function(nX,
+                                             nY,
+                                             data,
+                                             bounds,
+                                             rainbow,
+                                             options) {
     return new CanvasHeatMapOverlay(nX, nY, data, bounds, rainbow, options);
 };

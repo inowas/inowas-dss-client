@@ -187,13 +187,13 @@ export default class ScenarioAnalysisMap extends Component {
     // }]
     restructureHeatMapData = heatMapData => {
         const newHeatMapData = [];
-        heatMapData.forEach((x, xIndex) => {
-            x.forEach((y, yIndex) => {
-                if (y !== null) {
+        heatMapData.forEach((y, yIndex) => {
+            y.forEach((x, xIndex) => {
+                if (x !== null) {
                     newHeatMapData.push({
                         x: xIndex,
                         y: yIndex,
-                        value: parseFloat(y)
+                        value: parseFloat(x)
                     });
                 }
             });
@@ -246,7 +246,7 @@ export default class ScenarioAnalysisMap extends Component {
                     nY={grid.nY}
                     rainbow={rainbow}
                     dataArray={heatMapData}
-                    bounds={boundingBox}
+                    bounds={boundingBox.toArray()}
                     opacity={0.5}
                 />
             </LayersControl.Overlay>

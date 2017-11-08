@@ -91,14 +91,16 @@ class ModelEditorSoilmodel extends React.Component {
         const readOnly = !lodash.includes(this.props.permissions, 'w');
         const {addLayerStatus, removeLayer, updateLayerStatus} = this.props;
         const {pid, property, id} = this.props.params;
-        const {gridSize, isLoading, params, routes} = this.props;
+        const {area, boundingBox, gridSize, isLoading, params, routes} = this.props;
 
         if (pid) {
             const layer = soilmodel.layers.filter(b => b.id === pid)[0];
             if (layer) {
                 return (
                     <SoilmodelLayer
+                        area={area}
                         onSave={this.onSave}
+                        boundingBox={boundingBox}
                         gridSize={gridSize}
                         layer={layer}
                         readOnly={readOnly}
@@ -178,6 +180,8 @@ const actions = {
 
 const mapStateToProps = (state, {tool}) => {
     return {
+        area: state[tool].model.geometry,
+        boundingBox: state[tool].model.bounding_box,
         gridSize: state[tool].model.grid_size,
         soilmodel: state[tool].model.soilmodel,
         permissions: state[tool].model.permissions,

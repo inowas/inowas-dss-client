@@ -84,6 +84,7 @@ export function getGridSize(data) {
 
 export function createGridData(value, nx, ny) {
     const data = [];
+
     if (isValue(value)) {
         for (let y = 0; y < ny; y++) {
             for (let x = 0; x < nx; x++) {
