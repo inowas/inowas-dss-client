@@ -1,8 +1,8 @@
-import React from 'react';
+import ColorLegend from '../../../t07/components/ColorLegend';
 import {Image} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import {createGridData, min, max, rainbowFactory} from '../helpers';
-import ColorLegend from '../../../t07/components/ColorLegend';
 
 const styles = {
     canvas: {

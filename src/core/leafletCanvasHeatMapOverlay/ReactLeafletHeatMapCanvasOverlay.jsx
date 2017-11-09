@@ -20,7 +20,7 @@ export default class CanvasHeatMapOverlay extends MapLayer {
             props.nX,
             props.nY,
             props.dataArray,
-            props.bounds.toArray(),
+            props.bounds,
             props.rainbow,
             this.getOptions(props)
         );
@@ -38,7 +38,7 @@ export default class CanvasHeatMapOverlay extends MapLayer {
         }
         if (toProps.bounds !== fromProps.bounds) {
             this.leafletElement.setBounds(
-                latLngBounds(toProps.bounds.toArray())
+                latLngBounds(toProps.bounds)
             );
         }
         if (toProps.rainbow !== fromProps.rainbow) {

@@ -6,6 +6,7 @@ import RasterDataImage from './rasterDataImage';
 import {isValid, mean} from '../helpers';
 import {Command} from '../actions';
 import RasterfileUpload from './rasterfileUpload';
+import RasterDataMap from "./rasterDataMap";
 
 const styles = {
     link: {
@@ -184,15 +185,15 @@ class RasterData extends React.Component {
 
     render() {
         const {data} = this.state;
-        const {gridSize, name, readOnly, unit} = this.props;
+        const {area, boundingBox, gridSize, name, readOnly, unit} = this.props;
 
         return (
             <div>
-                <Header as="h4" style={styles.header}>{name}</Header>
+                <Header as="h4" style={styles.header}>{name} [{unit}]</Header>
                 <Grid columns={2} divided>
                     <Grid.Column>
                         <Segment>
-                            <RasterDataImage data={data} gridSize={gridSize} unit={unit} />
+                            <RasterDataMap area={area} boundingBox={boundingBox} data={data} gridSize={gridSize} unit={unit} />
                         </Segment>
                     </Grid.Column>
                     <Grid.Column>
@@ -225,6 +226,8 @@ const mapStateToProps = (state) => {
 };
 
 RasterData.propTypes = {
+    area: PropTypes.object.isRequired,
+    boundingBox: PropTypes.array.isRequired,
     data: PropTypes.oneOfType([PropTypes.array, PropTypes.number]).isRequired,
     gridSize: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,

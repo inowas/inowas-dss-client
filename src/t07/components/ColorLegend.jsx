@@ -5,12 +5,12 @@ import '../../less/colorLegend.less';
 
 class ColorLegend extends React.Component {
 
-    renderVerticalLabels = () => {
+    renderVerticalLabels = (unit) => {
         const legend = this.props.legend;
 
         return legend.map((l, index) => {
             return (
-                <div className="label" key={index}>{l.value}m</div>
+                <div className="label" key={index}>{l.value} {unit}</div>
             );
         });
     };
@@ -28,9 +28,9 @@ class ColorLegend extends React.Component {
         return gradient;
     };
 
-    renderVerticalColorLegend = () => {
+    renderVerticalColorLegend = (unit) => {
         const gradient = this.renderVerticalGradients();
-        const labels = this.renderVerticalLabels();
+        const labels = this.renderVerticalLabels(unit);
         const legend = this.props.legend;
 
         return (
@@ -60,9 +60,12 @@ class ColorLegend extends React.Component {
             <div className="colorLegend">
                 <div className="horizontal">
                     <ul className="legend">
-                        <li><span style={{backgroundColor: reducedLegend[0].color}} /> {reducedLegend[0].value} {unit}</li>
-                        <li><span style={{backgroundColor: reducedLegend[1].color}} /> {reducedLegend[1].value} {unit}</li>
-                        <li><span style={{backgroundColor: reducedLegend[2].color}} /> {reducedLegend[2].value} {unit}</li>
+                        <li><span style={{backgroundColor: reducedLegend[0].color}}/> {reducedLegend[0].value} {unit}
+                        </li>
+                        <li><span style={{backgroundColor: reducedLegend[1].color}}/> {reducedLegend[1].value} {unit}
+                        </li>
+                        <li><span style={{backgroundColor: reducedLegend[2].color}}/> {reducedLegend[2].value} {unit}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -70,10 +73,10 @@ class ColorLegend extends React.Component {
     };
 
     render() {
-        const {orientation} = this.props;
+        const {orientation, unit = 'm'} = this.props;
 
         if (!orientation || orientation === 'vertical') {
-            return this.renderVerticalColorLegend();
+            return this.renderVerticalColorLegend(unit);
         }
 
         return this.renderHorizontalColorLegend();
