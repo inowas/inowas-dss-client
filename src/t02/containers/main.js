@@ -1,27 +1,29 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import image from '../../images/tools/T02.png';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
+import uuid from 'uuid';
+
 import '../../less/4TileTool.less';
-import Background from '../../components/tools/Background';
-import {Chart, Settings} from '../components/index';
-import Parameters from '../../components/tools/Parameters';
+import styleGlobals from 'styleGlobals';
+import image from '../../images/tools/T02.png';
+
+import {Background, Chart, Parameters, Settings} from '../components';
+import {WebData, LayoutComponents} from '../../core';
+
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
-import {getInitialState} from '../reducers/main';
-import styleGlobals from 'styleGlobals';
-import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {withRouter} from 'react-router';
 import {Modifier as ToolInstance} from '../../toolInstance';
-import {connect} from 'react-redux';
-import uuid from 'uuid';
+
 import {each} from 'lodash';
+import {getInitialState} from '../reducers/main';
+import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import {makeMapStateToProps} from '../selectors/mapState';
-import {WebData, LayoutComponents} from '../../core';
 
 const styles = {
     heading: {
@@ -236,8 +238,11 @@ class T02 extends React.Component {
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
-                            <Parameters parameters={parameters} handleChange={this.handleChange}
-                                        handleReset={this.handleReset}/>
+                            <Parameters
+                                parameters={parameters}
+                                handleChange={this.handleChange}
+                                handleReset={this.handleReset}
+                            />
                         </section>
                     </div>
                 </WebData.Component.Loading>
