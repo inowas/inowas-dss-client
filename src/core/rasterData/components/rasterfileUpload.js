@@ -134,6 +134,11 @@ class RasterfileUpload extends React.Component {
                 <Grid.Row columns={2}>
                     <Grid.Column>
                         <Segment color={'green'}>
+                            <Header as="h3" style={{'textAlign': 'left'}}>Important</Header>
+                            <List bulleted>
+                                <List.Item>The rasterfile should have the same bounds as the model area.</List.Item>
+                                <List.Item>The gridsize will interpolated automatically.</List.Item>
+                            </List>
                             <Input style={styles.input} type="file" onChange={this.props.handleFileUpload}/>
                         </Segment>
                     </Grid.Column>
