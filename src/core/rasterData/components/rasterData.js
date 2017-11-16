@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button, Grid, Header, Input, Modal, Segment} from 'semantic-ui-react';
-import RasterDataImage from './rasterDataImage';
+import {Button, Grid, Header, Icon, Input, Modal, Segment} from 'semantic-ui-react';
 import {isValid, mean} from '../helpers';
 import {Command} from '../actions';
 import RasterfileUpload from './rasterfileUpload';
-import RasterDataMap from "./rasterDataMap";
+import RasterDataMap from './rasterDataMap';
 
 const styles = {
     link: {
@@ -145,8 +144,9 @@ class RasterData extends React.Component {
 
     renderRasterModal = button => (
         <Modal trigger={button} dimmer={'blurring'} open={this.state.showEditRasterModal}>
-            <Modal.Header style={styles.modalHeader}>Upload rasterData for {this.props.name} values for the entire
-                layer.</Modal.Header>
+            <Modal.Header style={styles.modalHeader}>
+                Upload rasterfile for {this.props.name.toLowerCase()}
+            </Modal.Header>
             <Modal.Content>
                 <RasterfileUpload
                     handleFileUpload={this.handleFileUpload}
@@ -197,12 +197,8 @@ class RasterData extends React.Component {
                         </Segment>
                     </Grid.Column>
                     <Grid.Column>
-                        <Header as="h4" style={styles.header}>FURTHER INFORMATION</Header>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                            Lorem ipsum dolor sit amet. Lorem</p>
-
+                        <Header as="h4" style={styles.header}>Set raster data</Header>
+                        <p>You can set a single value or upload a rasterfile.</p>
                         {this.renderEditButtons(readOnly)}
                     </Grid.Column>
                 </Grid>

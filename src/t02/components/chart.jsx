@@ -1,76 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mounding } from 'gwflowjs';
-import { pure } from 'recompose';
+import {mounding} from 'gwflowjs';
+import {pure} from 'recompose';
 
 import '../../less/toolDiagram.less';
 
 import {
-    ResponsiveContainer,
-    LineChart,
+    CartesianGrid,
     Line,
+    LineChart,
+    ReferenceLine,
+    ResponsiveContainer,
     XAxis,
     YAxis,
-    CartesianGrid
 } from 'recharts';
-
-const calculateXMax = (w, L, W, hi, Sy, K, t, stepSize = 50, threshold = 0.01) => {
-    let xMax = stepSize;
-    while (mounding.calculateHi( xMax, 0, w, L, W, hi, Sy, K, t ) > threshold) {
-        xMax += stepSize;
-    }
-
-    return xMax;
-};
-
-const calculateYMax = (w, L, W, hi, Sy, K, t, stepSize = 50, threshold = 0.01) => {
-    let yMax = stepSize;
-    while (mounding.calculateHi( 0, yMax, w, L, W, hi, Sy, K, t ) > threshold) {
-        yMax += stepSize;
-    }
-
-    return yMax;
-};
 
 const calculateDiagramData = (variable, w, L, W, hi, Sy, K, t, min, max, stepSize) => {
     const data = [];
     if (variable === 'x') {
         for (let x = min; x < max; x += stepSize) {
-            data.push( {
-                x,
-                hhi: mounding.calculateHi( x, 0, w, L, W, hi, Sy, K, t )
-            } );
+            data.push({x: x / 2, hhi: mounding.calculateHi(x, 0, w, L, W, hi, Sy, K, t)});
         }
+
+        data.push({x: max / 2, hhi: mounding.calculateHi(max, 0, w, L, W, hi, Sy, K, t)});
     } else {
         for (let y = min; y < max; y += stepSize) {
-            data.push( {
-                y,
-                hhi: mounding.calculateHi( 0, y, w, L, W, hi, Sy, K, t )
-            } );
+            data.push({y: y / 2, hhi: mounding.calculateHi(0, y, w, L, W, hi, Sy, K, t)});
         }
+
+        data.push({y: max / 2, hhi: mounding.calculateHi(0, max, w, L, W, hi, Sy, K, t)});
     }
 
     return data;
 };
 
 const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
-    let max = 0;
+    let max = L;
     if (settings.variable === 'x') {
-        max = calculateXMax( w, L, W, hi, Sy, K, t, 50, 0.01 );
-    } else {
-        max = calculateYMax( w, L, W, hi, Sy, K, t, 50, 0.01 );
+        max = W;
     }
 
     const variable = settings.variable;
-    const data = calculateDiagramData( variable, w, L, W, hi, Sy, K, t, 0, max, Math.round(max / 10) );
-    const hMax = data[ 0 ].hhi + hi;
+    const data = calculateDiagramData(variable, w, L, W, hi, Sy, K, t, 0, max, Math.ceil(max / 10));
+    const hMax = data[0].hhi + hi;
 
     let xAxis = <XAxis type="number" dataKey="y"/>;
     let xLabel = 'y (m)';
+    let rLabel = 'L/2';
 
     if (variable === 'x') {
         xAxis = <XAxis type="number" dataKey="x"/>;
         xLabel = 'x (m)';
+        rLabel = 'W/2';
     }
 
     return (
@@ -90,8 +71,14 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                                 {xAxis}
                                 <YAxis type="number"/>
                                 <CartesianGrid strokeDasharray="3 3"/>
-                                <Line isAnimationActive={false} type="basis" dataKey={'hhi'} stroke="#1EB1ED"
-                                      strokeWidth="5" dot={false}/>
+                                <Line
+                                    isAnimationActive={false}
+                                    type="basis"
+                                    dataKey={'hhi'}
+                                    stroke="#1EB1ED"
+                                    strokeWidth="5" dot={false}
+                                />
+                                <ReferenceLine x={max / 2} stroke="black" strokeWidth="3" label={rLabel} dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-ylabels">
@@ -102,7 +89,7 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                                 <p>
                                     h<sub>max</sub>
                                     =
-                                    <strong>{hMax.toFixed( 2 )}</strong>
+                                    <strong>{hMax.toFixed(2)}</strong>
                                     m
                                 </p>
                             </div>
@@ -110,16 +97,6 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                         <p className="center-vertical center-horizontal">{xLabel}</p>
                     </div>
                 </div>
-{/*                <div className="col col-rel-0-5">
-                    <ul className="nav nav-stacked" role="navigation">
-                        <li>
-                            <button className="button">PNG</button>
-                        </li>
-                        <li>
-                            <button className="button">CSV</button>
-                        </li>
-                    </ul>
-                </div>*/}
             </div>
         </div>
     );
@@ -136,4 +113,4 @@ Chart.propTypes = {
     t: PropTypes.number.isRequired,
 };
 
-export default pure( Chart );
+export default pure(Chart);

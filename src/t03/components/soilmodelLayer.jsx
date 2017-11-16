@@ -1,7 +1,6 @@
-import {WebData} from '../../core';
-import * as SUI from 'semantic-ui-react';
-
 import Button from '../../components/primitive/Button';
+import { Accordion, Header, Icon, Form } from 'semantic-ui-react';
+import {WebData} from '../../core';
 import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -93,33 +92,33 @@ class SoilmodelLayer extends React.Component {
 
         return (
             <div>
-                <SUI.Form loading={isLoading}>
-                    <SUI.Accordion style={styles.accordion} styled>
-                        <SUI.Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
-                            <SUI.Header size={'medium'}>
-                                <SUI.Icon name="dropdown"/>
+                <Form loading={isLoading}>
+                    <Accordion style={styles.accordion} styled>
+                        <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
+                            <Header size={'medium'}>
+                                <Icon name="dropdown"/>
                                 Name and Type
-                            </SUI.Header>
-                        </SUI.Accordion.Title>
-                        <SUI.Accordion.Content active={activeIndex === 0}>
-                            <SUI.Form.Group widths={2}>
-                                <SUI.Form.Input
+                            </Header>
+                        </Accordion.Title>
+                        <Accordion.Content active={activeIndex === 0}>
+                            <Form.Group widths={2}>
+                                <Form.Input
                                     disabled={readOnly}
                                     style={styles.input}
                                     value={layer.name}
                                     label={'Layer name'}
                                     onChange={this.handleInputChange('name')}
                                 />
-                                <SUI.Form.TextArea
+                                <Form.TextArea
                                     disabled={readOnly}
                                     style={styles.input}
                                     value={layer.description}
                                     label={'Layer description'}
                                     onChange={this.handleInputChange('description')}
                                 />
-                            </SUI.Form.Group>
-                            <SUI.Form.Group widths={3}>
-                                <SUI.Form.Select
+                            </Form.Group>
+                            <Form.Group widths={3}>
+                                <Form.Select
                                     disabled={readOnly}
                                     label={'Layer type'}
                                     value={layer.laytyp}
@@ -139,7 +138,7 @@ class SoilmodelLayer extends React.Component {
                                         }
                                     ]}
                                 />
-                                <SUI.Form.Select
+                                <Form.Select
                                     disabled={readOnly}
                                     label={'Layer average calculation'}
                                     value={layer.layavg}
@@ -159,7 +158,7 @@ class SoilmodelLayer extends React.Component {
                                         }
                                     ]}
                                 />
-                                <SUI.Form.Select
+                                <Form.Select
                                     disabled={readOnly}
                                     label={'Rewetting capability'}
                                     value={layer.laywet}
@@ -175,16 +174,16 @@ class SoilmodelLayer extends React.Component {
                                         },
                                     ]}
                                 />
-                            </SUI.Form.Group>
-                        </SUI.Accordion.Content>
+                            </Form.Group>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleAccordionClick}>
-                            <SUI.Header size={'medium'}>
-                                <SUI.Icon name="dropdown"/>
+                        <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleAccordionClick}>
+                            <Header size={'medium'}>
+                                <Icon name="dropdown"/>
                                 Elevation
-                            </SUI.Header>
-                        </SUI.Accordion.Title>
-                        <SUI.Accordion.Content active={activeIndex === 1}>
+                            </Header>
+                        </Accordion.Title>
+                        <Accordion.Content active={activeIndex === 1}>
                             {
                                 activeIndex === 1 && <RasterData
                                     area={area}
@@ -199,30 +198,31 @@ class SoilmodelLayer extends React.Component {
                                 />
                             }
 
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Content active={activeIndex === 1}>
+                        <Accordion.Content active={activeIndex === 1}>
                             {
                                 activeIndex === 1 && <RasterData
                                     area={area}
                                     boundingBox={boundingBox}
                                     gridSize={gridSize}
                                     name={'Bottom elevation'}
-                                    unit={'m'} data={layer.botm}
+                                    unit={'m'}
+                                    data={layer.botm}
                                     readOnly={readOnly}
                                     onChange={this.handleInputChange('botm')}
                                 />
                             }
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleAccordionClick}>
-                            <SUI.Header size={'medium'}>
-                                <SUI.Icon name="dropdown"/>
+                        <Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleAccordionClick}>
+                            <Header size={'medium'}>
+                                <Icon name="dropdown"/>
                                 Conductivity parameters
-                            </SUI.Header>
-                        </SUI.Accordion.Title>
+                            </Header>
+                        </Accordion.Title>
 
-                        <SUI.Accordion.Content active={activeIndex === 2}>
+                        <Accordion.Content active={activeIndex === 2}>
                             {
                                 activeIndex === 2 && <RasterData
                                     area={area}
@@ -235,24 +235,24 @@ class SoilmodelLayer extends React.Component {
                                     onChange={this.handleInputChange('hk')}
                                 />
                             }
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Content active={activeIndex === 2}>
+                        <Accordion.Content active={activeIndex === 2}>
                             {
                                 activeIndex === 2 && <RasterData
                                     area={area}
                                     boundingBox={boundingBox}
                                     gridSize={gridSize}
                                     name={'Horizontal hydraulic anisotropy'}
-                                    unit={''}
+                                    unit={'-'}
                                     data={layer.hani}
                                     readOnly={readOnly}
                                     onChange={this.handleInputChange('hani')}
                                 />
                             }
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Content active={activeIndex === 2}>
+                        <Accordion.Content active={activeIndex === 2}>
                             {
                                 activeIndex === 2 && <RasterData
                                     area={area}
@@ -265,31 +265,31 @@ class SoilmodelLayer extends React.Component {
                                     onChange={this.handleInputChange('vka')}
                                 />
                             }
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Title active={activeIndex === 3} index={3} onClick={this.handleAccordionClick}>
-                            <SUI.Header size={'medium'}>
-                                <SUI.Icon name="dropdown"/>
+                        <Accordion.Title active={activeIndex === 3} index={3} onClick={this.handleAccordionClick}>
+                            <Header size={'medium'}>
+                                <Icon name="dropdown"/>
                                 Storage parameters
-                            </SUI.Header>
-                        </SUI.Accordion.Title>
+                            </Header>
+                        </Accordion.Title>
 
-                        <SUI.Accordion.Content active={activeIndex === 3}>
+                        <Accordion.Content active={activeIndex === 3}>
                             {
                                 activeIndex === 3 && <RasterData
                                     area={area}
                                     boundingBox={boundingBox}
                                     gridSize={gridSize}
                                     name={'Specific storage Ss'}
-                                    unit={''}
+                                    unit={'-'}
                                     data={layer.ss}
                                     readOnly={readOnly}
                                     onChange={this.handleInputChange('ss')}
                                 />
                             }
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                        <SUI.Accordion.Content active={activeIndex === 3}>
+                        <Accordion.Content active={activeIndex === 3}>
                             {
                                 activeIndex === 3 && <RasterData
                                     area={area}
@@ -302,10 +302,10 @@ class SoilmodelLayer extends React.Component {
                                     onChange={this.handleInputChange('sy')}
                                 />
                             }
-                        </SUI.Accordion.Content>
+                        </Accordion.Content>
 
-                    </SUI.Accordion>
-                </SUI.Form>
+                    </Accordion>
+                </Form>
 
                 {!readOnly &&
                 <div style={styles.saveButtonWrapper}>

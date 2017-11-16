@@ -6,7 +6,6 @@ import * as T02 from './t02/index';
 import * as T03 from './t03/index';
 import * as T07 from './t07/index';
 import * as ToolInstance from './toolInstance/index';
-import * as Dashboard from './dashboard/index';
 import DashboardContainer from './containers/Dashboard';
 import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
@@ -33,7 +32,6 @@ const routes = store => (
                                 nextState.params.id,
                             )
                         );
-                        return;
                     }
                 }}
             />
