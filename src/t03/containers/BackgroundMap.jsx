@@ -11,23 +11,23 @@ import {
     Rectangle,
     TileLayer
 } from 'react-leaflet';
-import React, { Component, PropTypes } from 'react';
-import { browserHistory, withRouter } from 'react-router';
-import { geoJSON, geoJson } from 'leaflet';
+import React, {Component, PropTypes} from 'react';
+import {browserHistory, withRouter} from 'react-router';
+import {geoJSON, geoJson} from 'leaflet';
 
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
-import { Action, Command, Routing } from '../../t03/actions/index';
+import {Action, Command, Routing} from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
 import {getBoundaryDefaultsByType} from '../selectors/boundary';
 
 import FloatingToast from '../../components/modflow/FloatingToast';
 import Icon from '../../components/primitive/Icon';
 import L from 'leaflet';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import md5 from 'js-md5';
-import { uniqueId, has } from 'lodash';
+import {uniqueId, has} from 'lodash';
 import ActiveCellsLayer from '../components/activeCellsLayer';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
@@ -51,8 +51,8 @@ const styles = {
     centerToBoundsButton: {
         left: styleGlobals.dimensions.spacing.large,
         top:
-            styleGlobals.dimensions.navBarHeight +
-            styleGlobals.dimensions.spacing.large,
+        styleGlobals.dimensions.navBarHeight +
+        styleGlobals.dimensions.spacing.large,
         position: 'fixed',
         zIndex: 100001
     }
@@ -84,7 +84,7 @@ class BackgroundMap extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ model: nextProps.model });
+        this.setState({model: nextProps.model});
     }
 
     componentWillUnmount() {
@@ -176,7 +176,7 @@ class BackgroundMap extends Component {
 
         return (
             <LayersControl.Overlay name="Grid" checked={false}>
-                <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells} />
+                <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells}/>
             </LayersControl.Overlay>
         );
     };
@@ -186,7 +186,7 @@ class BackgroundMap extends Component {
             <Popup>
                 <div>
                     <div>{b.name}</div>
-                    <a href="#" onClick={ () => this.returnToBoundariesWithBoundaryId( b.id, b.type, false ) }>Edit</a>
+                    <a href="#" onClick={() => this.returnToBoundariesWithBoundaryId(b.id, b.type, false)}>Edit</a>
                 </div>
             </Popup>
         );
@@ -207,7 +207,7 @@ class BackgroundMap extends Component {
                     data={b.geometry}
                     style={this.getStyle(b.type)}
                 >
-                    { this.renderBoundaryPopup( b )}
+                    {this.renderBoundaryPopup(b)}
                 </GeoJSON>
             );
 
@@ -239,7 +239,7 @@ class BackgroundMap extends Component {
                     data={b.geometry}
                     style={this.getStyle(b.type)}
                 >
-                    { this.renderBoundaryPopup( b )}
+                    {this.renderBoundaryPopup(b)}
                 </GeoJSON>
             );
 
@@ -271,7 +271,7 @@ class BackgroundMap extends Component {
                     data={b.geometry}
                     style={this.getStyle(b.type)}
                 >
-                    { this.renderBoundaryPopup( b )}
+                    {this.renderBoundaryPopup(b)}
                 </GeoJSON>
             );
 
@@ -303,7 +303,7 @@ class BackgroundMap extends Component {
                     data={b.geometry}
                     style={this.getStyle(b.type)}
                 >
-                    { this.renderBoundaryPopup( b )}
+                    {this.renderBoundaryPopup(b)}
                 </GeoJSON>
             );
 
@@ -338,7 +338,7 @@ class BackgroundMap extends Component {
                     ]}
                     {...this.getStyle(b.type, b.metadata.well_type)}
                 >
-                { this.renderBoundaryPopup(b) }
+                    {this.renderBoundaryPopup(b)}
                 </CircleMarker>
             );
 
@@ -361,9 +361,9 @@ class BackgroundMap extends Component {
         let i = 1;
         while (i < 100000) {
             // eslint-disable-next-line no-loop-func
-            if (this.props.model.boundaries.filter( b => {
+            if (this.props.model.boundaries.filter(b => {
                 return (b.id === (type + '-' + i));
-            } ).length === 0) {
+            }).length === 0) {
                 return i;
             }
             i++;
@@ -387,7 +387,7 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'chd') {
-            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const linestring = e.layer;
 
@@ -404,7 +404,7 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'ghb') {
-            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const linestring = e.layer;
             const boundary = getBoundaryDefaultsByType(
@@ -420,7 +420,7 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'rch') {
-            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const polygon = e.layer;
             const boundary = getBoundaryDefaultsByType(
@@ -436,7 +436,7 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'riv') {
-            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const linestring = e.layer;
             const boundary = getBoundaryDefaultsByType(
@@ -452,7 +452,7 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'wel') {
-            const newBoundaryNumber = this.getNewBoundaryNumber( type );
+            const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const point = e.layer;
             const boundary = getBoundaryDefaultsByType(
@@ -487,8 +487,8 @@ class BackgroundMap extends Component {
     };
 
     getCreatable = () => {
-        const { hash } = this.props.location;
-        const { params } = this.props;
+        const {hash} = this.props.location;
+        const {params} = this.props;
 
         if (hash !== '#create') {
             return null;
@@ -609,8 +609,8 @@ class BackgroundMap extends Component {
     }
 
     getEditable = () => {
-        const { hash } = this.props.location;
-        const { params } = this.props;
+        const {hash} = this.props.location;
+        const {params} = this.props;
 
         if (hash === '#edit') {
             if (params.id && !params.property && !params.type && !params.pid) {
@@ -652,19 +652,19 @@ class BackgroundMap extends Component {
 
     renderEditControl() {
         const editable = this.getEditable();
-        let editables = [];
+        const editables = [];
 
         if (editable) {
             if (!editable.op) {
                 if (editable.property === 'area' && editable.id === 'area') {
                     const area = this.state.model.geometry;
-                    editables.push({ id: 'area', geometry: area });
+                    editables.push({id: 'area', geometry: area});
                 }
 
                 if (editable.property === 'boundaries') {
                     this.state.model.boundaries.forEach(b => {
                         if (b.id === editable.id) {
-                            editables.push({ id: b.id, geometry: b.geometry, activeCells: b.active_cells });
+                            editables.push({id: b.id, geometry: b.geometry, activeCells: b.active_cells});
                         }
                     });
                 }
@@ -677,7 +677,7 @@ class BackgroundMap extends Component {
                             if (b.observation_points) {
                                 b.observation_points.forEach(
                                     op => {
-                                        editables.push({ id: b.id, oId: op.id, geometry: op.geometry });
+                                        editables.push({id: b.id, oId: op.id, geometry: op.geometry});
                                     }
                                 );
                             }
@@ -687,55 +687,58 @@ class BackgroundMap extends Component {
             }
         }
 
-        editables = editables.map(e => {
-            const boundingBox = this.state.model.bounding_box;
-            const gridSize = this.state.model.grid_size;
+        const geometry = editables.map(e => {
             switch (e.geometry.type.toLowerCase()) {
                 case 'polygon':
                     return (
-                        <FeatureGroup>
-                            <Polygon
-                                key={uniqueId()}
-                                id={e.id}
-                                positions={this.getLatLngFromXY(
-                                    e.geometry.coordinates[0]
-                                )}
-                            />
-                            { e.activeCells && <ActiveCellsLayer activeCells={e.activeCells} boundingBox={boundingBox} gridSize={gridSize} /> }
-                        </FeatureGroup>
+                        <Polygon
+                            key={uniqueId()}
+                            id={e.id}
+                            positions={this.getLatLngFromXY(
+                                e.geometry.coordinates[0]
+                            )}
+                        />
                     );
                 case 'linestring':
                     return (
-                        <FeatureGroup>
-                            <Polyline
-                                key={uniqueId()}
-                                id={e.id}
-                                positions={this.getLatLngFromXY(
-                                    e.geometry.coordinates
-                                )}
-                            />
-                            { e.activeCells && <ActiveCellsLayer activeCells={e.activeCells} boundingBox={boundingBox} gridSize={gridSize} /> }
-                        </FeatureGroup>
+                        <Polyline
+                            key={uniqueId()}
+                            id={e.id}
+                            positions={this.getLatLngFromXY(
+                                e.geometry.coordinates
+                            )}
+                        />
                     );
                 case 'point':
                     return (
-                        <FeatureGroup>
-                            <Circle
-                                key={uniqueId()}
-                                id={e.id}
-                                oId={e.oId}
-                                center={[
-                                    e.geometry.coordinates[1],
-                                    e.geometry.coordinates[0]
-                                ]}
-                                radius={50}
-                            />
-                            { e.activeCells && <ActiveCellsLayer activeCells={e.activeCells} boundingBox={boundingBox} gridSize={gridSize} /> }
-                        </FeatureGroup>
+                        <Circle
+                            key={uniqueId()}
+                            id={e.id}
+                            oId={e.oId}
+                            center={[
+                                e.geometry.coordinates[1],
+                                e.geometry.coordinates[0]
+                            ]}
+                            radius={50}
+                        />
                     );
                 default:
                     return null;
             }
+        });
+
+        const activeCells = editables.map(e => {
+            const boundingBox = this.state.model.bounding_box;
+            const gridSize = this.state.model.grid_size;
+
+            if (!e.activeCells) {
+                return null;
+            }
+
+            return (
+                <ActiveCellsLayer key={uniqueId()} activeCells={e.activeCells} boundingBox={boundingBox}
+                                  gridSize={gridSize}/>
+            );
         });
 
         if (editables.length === 0) {
@@ -757,12 +760,17 @@ class BackgroundMap extends Component {
 
         return (
             <FeatureGroup>
+            <FeatureGroup>
                 <EditControl
                     position="bottomright"
                     onEdited={this.onEditPath}
                     {...options}
                 />{' '}
-                {editables}
+                {geometry}
+            </FeatureGroup>
+                <FeatureGroup>
+                    {activeCells}
+                </FeatureGroup>
             </FeatureGroup>
         );
     }
@@ -772,7 +780,7 @@ class BackgroundMap extends Component {
         browserHistory.push(this.props.location.pathname);
     };
 
-    returnToBoundariesWithBoundaryId = ( id, type, onMap ) => {
+    returnToBoundariesWithBoundaryId = (id, type, onMap) => {
         this.invalidateMap();
         const {routes, params} = this.props;
 
@@ -798,7 +806,7 @@ class BackgroundMap extends Component {
                     style={[styles.centerToBoundsButton]}
                     iconInside
                 >
-                    <Icon name="marker" />
+                    <Icon name="marker"/>
                 </Button>
             );
         }
@@ -924,8 +932,8 @@ class BackgroundMap extends Component {
     }
 }
 
-const mapStateToProps = (state, { tool }) => {
-    return { model: state[tool].model };
+const mapStateToProps = (state, {tool}) => {
+    return {model: state[tool].model};
 };
 
 const actions = {
@@ -934,7 +942,7 @@ const actions = {
     addBoundary: Command.addBoundary
 };
 
-const mapDispatchToProps = (dispatch, { tool }) => {
+const mapDispatchToProps = (dispatch, {tool}) => {
     const wrappedActions = {};
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
