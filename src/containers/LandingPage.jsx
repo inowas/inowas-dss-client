@@ -56,7 +56,7 @@ export default class LandingPage extends React.Component {
     render( ) {
         return (
             <div className="application-wrapper landingPage-wrapper">
-                <Navbar />
+                <Navbar info='Beta version! Public release in 2018. <a href="https://tu-dresden.de/bu/umwelt/hydro/inowas/about/kontakt">Contact us!</a>' />
                 <header className="header">
                     <div className="app-width">
                         <Slider control={<SliderControl><SliderControlItem /><SliderControlItem /><SliderControlItem /><SliderControlItem /></SliderControl>}>
