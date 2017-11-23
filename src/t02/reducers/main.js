@@ -1,4 +1,4 @@
-import { WebData } from '../../core';
+import {WebData} from '../../core';
 import * as ToolInstance from '../../toolInstance';
 import {find} from 'lodash';
 
@@ -10,12 +10,12 @@ export const getInitialState = () => {
         settings: {
             variable: 'x'
         },
-        parameters: [ {
+        parameters: [{
             order: 0,
             id: 'w',
             name: 'Percolation rate, w (m/d)',
             min: 0,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x >= 0;
             },
             max: 10,
@@ -27,7 +27,7 @@ export const getInitialState = () => {
             id: 'L',
             name: 'Basin length, L (m)',
             min: 0,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x > 0;
             },
             max: 1000,
@@ -39,7 +39,7 @@ export const getInitialState = () => {
             id: 'W',
             name: 'Basin width, W (m)',
             min: 0,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x > 0;
             },
             max: 100,
@@ -51,7 +51,7 @@ export const getInitialState = () => {
             id: 'hi',
             name: 'Initial groundwater Level, hi (m)',
             min: 0,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x >= 0;
             },
             max: 100,
@@ -63,11 +63,11 @@ export const getInitialState = () => {
             id: 'Sy',
             name: 'Specific yield, Sy (-)',
             min: 0.000,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x > 0;
             },
             max: 0.5,
-            validMax: function (x) {
+            validMax: function(x) {
                 return x <= 0.5;
             },
             value: 0.085,
@@ -78,11 +78,11 @@ export const getInitialState = () => {
             id: 'K',
             name: 'Hydraulic conductivity, K (m/d)',
             min: 0.1,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x > 0;
             },
             max: 10,
-            validMax: function (x) {
+            validMax: function(x) {
                 return x <= 100000;
             },
             value: 1.83,
@@ -93,14 +93,14 @@ export const getInitialState = () => {
             id: 't',
             name: 'Infiltration time, t (d)',
             min: 0,
-            validMin: function (x) {
+            validMin: function(x) {
                 return x > 0;
             },
             max: 100,
             value: 1.5,
             stepSize: 1,
             decimals: 0
-        } ]
+        }]
     };
 };
 
@@ -112,8 +112,8 @@ const createReducer = tool => {
 
         switch (action.type) {
             case WebData.Modifier.Action.SET_AJAX_STATUS:
-                if (!WebData.Helpers.isSuccess( action )
-                    || !WebData.Helpers.waitForResponse(action, ToolInstance.Modifier.Query.GET_TOOL_INSTANCE )
+                if (!WebData.Helpers.isSuccess(action)
+                    || !WebData.Helpers.waitForResponse(action, ToolInstance.Modifier.Query.GET_TOOL_INSTANCE)
                 ) {
                     return state;
                 }
@@ -124,12 +124,12 @@ const createReducer = tool => {
                     description: instance.description,
                     public: instance.public,
                     settings: instance.data.settings,
-                    parameters: state.parameters.map( v => {
+                    parameters: state.parameters.map(v => {
                         return {
                             ...v,
-                            ...find( instance.data.parameters, { id: v.id } )
+                            ...find(instance.data.parameters, {id: v.id})
                         };
-                    } )
+                    })
                 };
             case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
             case ToolInstance.Modifier.Event.TOOL_INSTANCE_CREATED:
@@ -140,12 +140,12 @@ const createReducer = tool => {
                     description: action.payload.description,
                     public: action.payload.public,
                     settings: action.payload.data.settings,
-                    parameters: state.parameters.map( v => {
+                    parameters: state.parameters.map(v => {
                         return {
                             ...v,
-                            ...find( action.payload.data.parameters, { id: v.id } )
+                            ...find(action.payload.data.parameters, {id: v.id})
                         };
-                    } )
+                    })
                 };
         }
 

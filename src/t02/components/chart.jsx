@@ -103,7 +103,7 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
 };
 
 Chart.propTypes = {
-    settings: PropTypes.object,
+    settings: PropTypes.object.isRequired,
     w: PropTypes.number.isRequired,
     L: PropTypes.number.isRequired,
     W: PropTypes.number.isRequired,

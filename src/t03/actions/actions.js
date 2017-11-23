@@ -215,7 +215,7 @@ export function updatePumpingRate(
         tool,
         payload: {
             boundaryId,
-            observationPointId,
+            editObservationPointId: observationPointId,
             index,
             datetime,
             pumpingRate
@@ -236,7 +236,7 @@ export function addPumpingRate(
         tool,
         payload: {
             boundaryId,
-            observationPointId,
+            editObservationPointId: observationPointId,
             index,
             datetime,
             pumpingRate

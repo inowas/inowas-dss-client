@@ -1,27 +1,22 @@
 import md5 from 'js-md5';
-import React, { Component, PropTypes } from 'react';
-import { GeoJSON, Map, CircleMarker, TileLayer } from 'react-leaflet';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {GeoJSON, Map, CircleMarker, TileLayer} from 'react-leaflet';
+import {geoJSON} from 'leaflet';
 import * as mapHelpers from '../../calculations/map';
 import ConfiguredRadium from 'ConfiguredRadium';
-import styleGlobals from 'styleGlobals';
+import {uniqueId} from 'lodash';
 
 const RadiumMap = ConfiguredRadium(Map);
 
-const styles = {
+const componentStyle = {
     map: {
         zIndex: -1
     }
 };
 
 @ConfiguredRadium
-export default class BoundaryMap extends Component {
-    static propTypes = {
-        area: PropTypes.object,
-        boundary: PropTypes.object,
-        style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-        styles: PropTypes.object
-    };
-
+class BoundaryMap extends Component {
     componentDidMount() {
         mapHelpers.disableMap(this.map);
     }
@@ -31,7 +26,7 @@ export default class BoundaryMap extends Component {
     };
 
     getBounds = geometry => {
-        return L.geoJSON(geometry).getBounds();
+        return geoJSON(geometry).getBounds();
     };
 
     getStyle = (type, subtype) => {
@@ -55,14 +50,15 @@ export default class BoundaryMap extends Component {
     renderObservationPoints(b) {
         if (b.observation_points && b.observation_points.length > 1) {
             return b.observation_points.map(op => {
+                const selected = (op.id === this.props.selectedObservationPointId) ? '_selected' : '';
                 return (
                     <CircleMarker
-                        key={op.id}
+                        key={uniqueId(op.id)}
                         center={[
                             op.geometry.coordinates[1],
                             op.geometry.coordinates[0]
                         ]}
-                        {...this.getStyle(b.type + '_op')}
+                        {...this.getStyle('op' + selected)}
                     />
                 );
             });
@@ -95,11 +91,11 @@ export default class BoundaryMap extends Component {
     }
 
     render() {
-        const { area: areaGeometry, boundary, style } = this.props;
+        const {area: areaGeometry, boundary, style} = this.props;
 
         return (
             <RadiumMap
-                style={[styles.map, style]}
+                style={[style, componentStyle.map]}
                 className="boundaryMap"
                 ref={map => {
                     this.map = map;
@@ -107,7 +103,7 @@ export default class BoundaryMap extends Component {
                 zoomControl={false}
                 bounds={this.getBounds(areaGeometry)}
             >
-                <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" />
+                <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
                 <GeoJSON
                     key={this.generateKeyFunction(areaGeometry)}
                     data={areaGeometry}
@@ -115,7 +111,18 @@ export default class BoundaryMap extends Component {
                 />
                 {this.renderBoundary(boundary)}
                 {this.renderObservationPoints(boundary)}
+
             </RadiumMap>
         );
     }
 }
+
+BoundaryMap.PropTypes = {
+    area: PropTypes.object.isRequired,
+    boundary: PropTypes.object.isRequired,
+    selectedObservationPointId: PropTypes.string,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    styles: PropTypes.object
+};
+
+export default BoundaryMap;

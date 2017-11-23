@@ -13,6 +13,7 @@ const getBoundaries = (state, props) => {
 };
 
 const getArea = (state, props) => state[props.tool].model.geometry;
+const getModel = (state, props) => state[props.tool].model;
 const getPermissions = (state, props) => state[props.tool].model.permissions;
 const getStyles = (state, props) => state[props.tool].model.styles;
 
@@ -20,6 +21,13 @@ export const makeGetArea = () => {
     return createSelector(
         [getArea],
         (geometry) => geometry
+    );
+};
+
+export const makeGetModel = () => {
+    return createSelector(
+        [getModel],
+        (model) => model
     );
 };
 
@@ -67,6 +75,7 @@ export const makeGetSoilmodelLayersForInput = () => {
 
 export const makeMapStateToPropsBoundaries = () => {
     const area = makeGetArea();
+    const model = makeGetModel();
     const boundaries = makeGetBoundaries();
     const permissions = makeGetPermissions();
     const styles = makeGetStyles();
@@ -75,6 +84,7 @@ export const makeMapStateToPropsBoundaries = () => {
 
     return (state, props) => {
         return {
+            model: model(state, props),
             area: area(state, props),
             boundaries: boundaries(state, props),
             permissions: permissions(state, props),

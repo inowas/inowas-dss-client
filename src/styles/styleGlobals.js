@@ -11,7 +11,8 @@ const styleGlobals = {
         grayDark: '#404040',
         graySemidark: '#808080',
         graySemilight: '#D0D0D0',
-        grayLight: '#F5F5F5'
+        grayLight: '#F5F5F5',
+        redDark: '#D50E00',
     },
 
     dimensions: {
