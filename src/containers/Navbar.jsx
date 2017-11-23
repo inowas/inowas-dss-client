@@ -88,6 +88,8 @@ class NavBar extends React.Component {
         });
     }
 
+    renderInfo = (info) => <li style={{margin: 5}}><span dangerouslySetInnerHTML={{__html: info}} /></li>;
+
     renderUserNavigation( ) {
         // eslint-disable-next-line no-shadow
         const { userLoggedIn, logout, authenticate, name } = this.props;
@@ -144,6 +146,7 @@ class NavBar extends React.Component {
                         <ul className="nav-list">
                             {this.renderLinks( standardLinks )}
                             {this.props.userLoggedIn && this.renderLinks(standardLinksAuthenticationRequired.concat( this.props.links ))}
+                            {!this.props.userLoggedIn && this.props.info && this.renderInfo(this.props.info)}
                         </ul>
                     </nav>
                     <nav className="nav-right">
@@ -176,7 +179,8 @@ NavBar.propTypes = {
     logout: PropTypes.func,
     name: PropTypes.string,
     loadUserInformation: PropTypes.func,
-    apiKey: PropTypes.string
+    apiKey: PropTypes.string,
+    info: PropTypes.string
 };
 
 // eslint-disable-next-line no-class-assign
