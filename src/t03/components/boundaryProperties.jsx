@@ -1,4 +1,11 @@
-import {DataTableAction, RiverObservationPoint} from '../../t03/components';
+import {
+    ConstantHeadObservationPoint,
+    DataTableAction,
+    GeneralHeadObservationPoint,
+    RechargeRate,
+    RiverObservationPoint,
+    PumpingRate
+} from '../../t03/components';
 import {LayoutComponents} from '../../core';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,10 +17,10 @@ import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
 import {convertLayersFromSelect, getLayersForInput} from '../selectors/soilModel';
-import * as Helper from '../../core/helpers';
 import BoundaryGeometryEditor from '../../core/boundaryEditor/boundaryGeometryEditor';
 import ObservationPointEditor from '../../core/boundaryEditor/observationPointEditor';
 import {first} from 'lodash';
+import {addIdFromIndex, getDateTimeValues} from '../../core/helpers';
 
 const styles = {
     columns: {
@@ -63,7 +70,7 @@ const styles = {
     }
 };
 
-class RiverProperties extends React.Component {
+class BoundaryProperties extends React.Component {
     constructor(props) {
         super(props);
 
@@ -83,77 +90,10 @@ class RiverProperties extends React.Component {
         });
     }
 
-    getDateTimeValue = () => {
-        const id = this.state.selectedObservationPointId;
-        const observationPoints =
-            this.state.boundary && this.state.boundary.observation_points
-                ? this.state.boundary.observation_points
-                : [];
-
-        const observationPoint = observationPoints.filter(op => op.id === id)[0];
-
-        if (!observationPoint) {
-            return [];
-        }
-
-        return Helper.addIdFromIndex(observationPoint.date_time_values);
-    };
-
     addObservationPoint = () => {
         this.setState({
             showOverlay: 'observationPoint',
             editObservationPointId: null
-        });
-    };
-
-    editObservationPoint = () => {
-        this.setState({
-            showOverlay: 'observationPoint',
-            editObservationPointId: this.state.selectedObservationPointId
-        });
-    };
-
-    editOnMap = () => {
-        this.setState({
-            showOverlay: 'boundaryGeometry',
-        });
-    };
-
-    handleNameChange = name => {
-        this.setState({
-            boundary: {...this.state.boundary, name: name}
-        });
-    };
-
-    handleLayersChange = layers => {
-        this.setState({
-            boundary: {...this.state.boundary, affected_layers: convertLayersFromSelect(layers)}
-        });
-    };
-
-    handleCancel = () => {
-        this.setState({
-            showOverlay: false,
-            editObservationPointId: null,
-        });
-    };
-
-    observationPointExists = (op) => {
-        return this.state.boundary.observation_points.filter(o => o.id === op.id).length > 0;
-    };
-
-    updateObservationPoint = (op) => {
-        const updatedObservationPoints = this.state.boundary.observation_points.map(o => {
-            if (op.id === o.id) {
-                return op;
-            }
-            return o;
-        });
-
-        this.setState({
-            boundary: {...this.state.boundary, observation_points: updatedObservationPoints},
-            showOverlay: false,
-            editObservationPointId: null,
         });
     };
 
@@ -187,6 +127,65 @@ class RiverProperties extends React.Component {
         });
     };
 
+    editObservationPoint = () => {
+        this.setState({
+            showOverlay: 'observationPoint',
+            editObservationPointId: this.state.selectedObservationPointId
+        });
+    };
+
+    editOnMap = () => {
+        this.setState({
+            showOverlay: 'boundaryGeometry',
+        });
+    };
+
+    handleNameChange = name => {
+        this.setState({
+            boundary: {...this.state.boundary, name: name}
+        });
+    };
+
+    handleLayersChange = layers => {
+        this.setState({
+            boundary: {...this.state.boundary, affected_layers: convertLayersFromSelect(layers)}
+        });
+    };
+
+    handleWellTypeChange = wellType => {
+        if (this.state.boundary && this.state.boundary.type === 'wel') {
+            this.setState({
+                boundary: {...this.state.boundary, metadata: {well_type: wellType}}
+            });
+        }
+    };
+
+    handleCancel = () => {
+        this.setState({
+            showOverlay: false,
+            editObservationPointId: null,
+        });
+    };
+
+    observationPointExists = (op) => {
+        return this.state.boundary.observation_points.filter(o => o.id === op.id).length > 0;
+    };
+
+    updateObservationPoint = (op) => {
+        const updatedObservationPoints = this.state.boundary.observation_points.map(o => {
+            if (op.id === o.id) {
+                return op;
+            }
+            return o;
+        });
+
+        this.setState({
+            boundary: {...this.state.boundary, observation_points: updatedObservationPoints},
+            showOverlay: false,
+            editObservationPointId: null,
+        });
+    };
+
     handleSaveObservationPoint = op => {
         /* Update */
         if (this.observationPointExists(op)) {
@@ -210,7 +209,43 @@ class RiverProperties extends React.Component {
         });
     };
 
+    isLoaded = boundary => {
+        if (!boundary) {
+            return false;
+        }
+
+        return (boundary.hasOwnProperty('date_time_values') || boundary.hasOwnProperty('observation_points'));
+    };
+
     save = () => {
+        if (this.state.boundary.hasOwnProperty('date_time_values')) {
+            this.props.onSave({
+                ...this.state.boundary,
+                date_time_values: this.observationPoint.getRows()
+            });
+
+            return;
+        }
+
+        if (this.state.boundary.hasOwnProperty('observation_points')) {
+            const observationPoints = this.state.boundary.observation_points;
+
+            observationPoints.map(op => {
+                if (op.id === this.state.selectedObservationPointId) {
+                    return {...op, date_time_values: this.observationPoint.getRows()}
+                }
+
+                return op;
+            });
+
+            this.props.onSave({
+                ...this.state.boundary,
+                observation_points: observationPoints
+            });
+
+            return;
+        }
+
         this.props.onSave(this.state.boundary);
     };
 
@@ -224,7 +259,7 @@ class RiverProperties extends React.Component {
         const {readOnly} = this.props;
 
         return (
-            <div>
+            <LayoutComponents.Column heading="Observation Points">
                 <div style={[styles.observationPointSelection.wrapper]}>
                     <Select
                         style={[styles.observationPointSelection.input]}
@@ -256,8 +291,67 @@ class RiverProperties extends React.Component {
                         icon={<Icon name="trash"/>}
                     />}
                 </div>
-            </div>
+            </LayoutComponents.Column>
         );
+    };
+
+    renderDataTable = () => {
+        const {readOnly} = this.props;
+        const {boundary, selectedObservationPointId} = this.state;
+
+        switch (boundary.type) {
+            case 'chd':
+                return (
+                    <LayoutComponents.Column heading="Data">
+                        {!readOnly && <DataTableAction component={this.observationPoint}/>}
+                        <ConstantHeadObservationPoint readOnly={readOnly} ref={observationPoint => {
+                            this.observationPoint = observationPoint;
+                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                    </LayoutComponents.Column>
+                );
+
+            case 'ghb':
+                return (
+                    <LayoutComponents.Column heading="Data">
+                        {!readOnly && <DataTableAction component={this.observationPoint}/>}
+                        <GeneralHeadObservationPoint readOnly={readOnly} ref={observationPoint => {
+                            this.observationPoint = observationPoint;
+                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                    </LayoutComponents.Column>
+                );
+            case 'rch':
+                return (
+                    <LayoutComponents.Column heading="Data">
+                        {!readOnly && <DataTableAction component={this.observationPoint}/>}
+                        <RechargeRate readOnly={readOnly} ref={observationPoint => {
+                            this.observationPoint = observationPoint;
+                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                    </LayoutComponents.Column>
+                );
+            case 'riv':
+                return (
+                    <LayoutComponents.Column heading="Data">
+                        {!readOnly && <DataTableAction component={this.observationPoint}/>}
+                        <RiverObservationPoint readOnly={readOnly} ref={observationPoint => {
+                            this.observationPoint = observationPoint;
+                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                    </LayoutComponents.Column>
+                );
+            case 'wel':
+                return (
+                    <LayoutComponents.Column heading="Data">
+                        {!readOnly && <DataTableAction component={this.observationPoint}/>}
+                        <PumpingRate
+                            readOnly={readOnly}
+                            ref={op => {
+                                this.observationPoint = op;
+                            }}
+                            rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                    </LayoutComponents.Column>
+                );
+            default:
+                return null;
+        }
     };
 
     renderSaveButton = () => {
@@ -319,21 +413,12 @@ class RiverProperties extends React.Component {
 
         const {boundary, selectedObservationPointId} = this.state;
 
-        if (!boundary) {
-            return null;
-        }
-
-        const observationPoints = boundary.observation_points;
-        if (!observationPoints) {
+        if (!this.isLoaded(boundary)) {
             return null;
         }
 
         const layers = getLayersForInput(model);
         const mapStyles = model.styles;
-
-        const observationPointRows = Helper.addIdFromIndex(
-            this.getDateTimeValue()
-        );
 
         return (
             <div>
@@ -362,10 +447,45 @@ class RiverProperties extends React.Component {
                                         ? boundary.affected_layers[0]
                                         : undefined
                                 }
+                                multi={boundary.type === 'chd' || boundary.type === 'ghb'}
                                 onChange={this.handleLayersChange}
                                 options={layers}
                             />
                         </LayoutComponents.InputGroup>
+
+                        {boundary.type === 'wel' &&
+                        <LayoutComponents.InputGroup label="Well Type">
+                            <Select
+                                name="type"
+                                disabled={readOnly}
+                                value={
+                                    boundary.metadata
+                                        ? boundary.metadata.well_type
+                                        : ''
+                                }
+                                onChange={(data) => this.handleWellTypeChange(data.value)}
+                                options={[
+                                    {
+                                        label: 'Public Well',
+                                        value: 'puw'
+                                    },
+                                    {
+                                        label: 'Infiltration Well',
+                                        value: 'inw'
+                                    },
+                                    {
+                                        label: 'Industrial Well',
+                                        value: 'iw'
+                                    },
+                                    {
+                                        label: 'Irrigation Well',
+                                        value: 'irw'
+                                    }
+                                ]}
+                            />
+                        </LayoutComponents.InputGroup>
+                        }
+
                         {!readOnly &&
                         <div style={styles.rightAlign}>
                             <Button
@@ -395,24 +515,9 @@ class RiverProperties extends React.Component {
                             styles={mapStyles}
                         />
                     </LayoutComponents.Column>
-
-                    <LayoutComponents.Column
-                        heading="Observation Points"
-                        style={[styles.columnFlex2]}
-                    >
+                    <LayoutComponents.Column style={[styles.columnFlex2]}>
                         {this.renderObservationPointsSelection(boundary)}
-                        <LayoutComponents.Column heading="Flux">
-                            {!readOnly && <DataTableAction
-                                component={this.observationPoint}
-                            />}
-                            <RiverObservationPoint
-                                readOnly={readOnly}
-                                ref={observationPoint => {
-                                    this.observationPoint = observationPoint;
-                                }}
-                                rows={observationPointRows}
-                            />
-                        </LayoutComponents.Column>
+                        {this.renderDataTable()}
                     </LayoutComponents.Column>
                 </div>
                 {this.renderSaveButton()}
@@ -422,7 +527,7 @@ class RiverProperties extends React.Component {
     }
 }
 
-RiverProperties.propTypes = {
+BoundaryProperties.propTypes = {
     model: PropTypes.object.isRequired,
     boundaryId: PropTypes.string.isRequired,
     readOnly: PropTypes.bool.isRequired,
@@ -431,4 +536,4 @@ RiverProperties.propTypes = {
     updateStatus: PropTypes.object.isRequired,
 };
 
-export default RiverProperties;
+export default BoundaryProperties;

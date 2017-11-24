@@ -8,7 +8,7 @@ import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
 class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
-    constructor ( props ) {
+    constructor( props ) {
         super( props );
 
         this.state = {
@@ -106,7 +106,7 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
 
     getRows = () => {
         return this.state.rows.map((data) => {
-            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: data.values.map(v => parseFloat(v))}
+            return {date_time: Formatter.dateToAtomFormat(data.date_time), values: data.values.map(v => parseFloat(v))};
         });
     };
 
@@ -114,10 +114,8 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
         e.preventDefault();
 
         const rows = sortBy(cloneDeep(this.state.rows), 'date_time');
-
         const lastRow = last(rows);
-
-        let date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
+        const date = lastRow && lastRow.date_time ? new Date(lastRow.date_time) : new Date();
         const values = lastRow && lastRow.values ? lastRow.values : [0, 0];
 
         rows.push({
@@ -126,7 +124,7 @@ class ConstantHeadObservationPoint extends DataTable.Component.DataTable {
             values
         });
 
-        this.setState((prevState, props) => {return { ...prevState, rows };});
+        this.setState((prevState) => {return { ...prevState, rows };});
     };
 }
 

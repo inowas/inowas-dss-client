@@ -4,7 +4,7 @@ import {
     ConstantHeadProperties,
     GeneralHeadProperties,
     RechargeProperties,
-    RiverProperties,
+    BoundaryProperties,
     WellProperties
 } from '../components';
 import React from 'react';
@@ -91,93 +91,18 @@ class ModelEditorBoundary extends React.Component {
         const {params, routes} = this.props;
 
         if (pid) {
-            const boundary = boundaries.filter(
-                b => b.type === type && b.id === pid
-            )[0];
-
+            const boundary = boundaries.filter(b => b.type === type && b.id === pid)[0];
             if (boundary) {
-                let selected = '';
-                switch (type) {
-                    case 'wel':
-                        return (
-                            <WellProperties
-                                boundary={boundary}
-                                editBoundaryOnMap={() =>
-                                    this.handleEditBoundaryOnMap(boundary.id)}
-                                area={area}
-                                mapStyles={mapStyles}
-                                onSave={this.updateBoundary}
-                                setBoundary={setBoundary}
-                                updateStatus={updateBoundaryStatus}
-                                readOnly={readOnly}
-                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
-                                layers={soilmodelLayers}
-                            />
-                        );
-                    case 'rch':
-                        return (
-                            <RechargeProperties
-                                editBoundaryOnMap={() =>
-                                    this.handleEditBoundaryOnMap(boundary.id)}
-                                boundary={boundary}
-                                area={area}
-                                mapStyles={mapStyles}
-                                onSave={this.updateBoundary}
-                                setBoundary={setBoundary}
-                                updateStatus={updateBoundaryStatus}
-                                readOnly={readOnly}
-                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
-                            />
-                        );
-                    case 'riv':
-                        return (
-                            <RiverProperties
-                                boundaryId={boundary.id}
-                                model={model}
-                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
-                                onSave={this.updateBoundary}
-                                readOnly={readOnly}
-                                updateStatus={updateBoundaryStatus}
-                            />
-                        );
-                    case 'chd':
-                        selected = first(boundary.observation_points) || [];
-                        return (
-                            <ConstantHeadProperties
-                                editBoundaryOnMap={() =>
-                                    this.handleEditBoundaryOnMap(boundary.id)}
-                                boundary={boundary}
-                                selectedObservationPoint={selected.id || null}
-                                area={area}
-                                mapStyles={mapStyles}
-                                onSave={this.updateBoundary}
-                                setBoundary={setBoundary}
-                                updateStatus={updateBoundaryStatus}
-                                readOnly={readOnly}
-                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
-                                layers={soilmodelLayers}
-                            />
-                        );
-
-                    case 'ghb':
-                        selected = first(boundary.observation_points) || [];
-                        return (
-                            <GeneralHeadProperties
-                                editBoundaryOnMap={() =>
-                                    this.handleEditBoundaryOnMap(boundary.id)}
-                                boundary={boundary}
-                                selectedObservationPoint={selected.id || null}
-                                area={area}
-                                mapStyles={mapStyles}
-                                onSave={this.updateBoundary}
-                                setBoundary={setBoundary}
-                                updateStatus={updateBoundaryStatus}
-                                readOnly={readOnly}
-                                onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
-                                layers={soilmodelLayers}
-                            />
-                        );
-                }
+                return (
+                    <BoundaryProperties
+                        boundaryId={boundary.id}
+                        model={model}
+                        onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
+                        onSave={this.updateBoundary}
+                        readOnly={readOnly}
+                        updateStatus={updateBoundaryStatus}
+                    />
+                );
             }
             return <p>Loading ...</p>;
         }

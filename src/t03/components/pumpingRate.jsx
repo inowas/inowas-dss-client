@@ -10,7 +10,6 @@ import uuid from 'uuid';
 class PumpingRate extends DataTable.Component.DataTable {
     constructor(props) {
         super(props);
-
         this.state = {
             searchColumn: 'all',
             query: {}, // Search query
