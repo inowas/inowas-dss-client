@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { Helper } from '../../core';
 import Icon from '../../components/primitive/Icon';
 import Button from '../../components/primitive/Button';
@@ -52,6 +53,10 @@ const dataTableActions = ({ component }) => {
             </Button>
         </div>
     );
+};
+
+dataTableActions.propTypes = {
+    component: PropTypes.object
 };
 
 export default pure(ConfiguredRadium(dataTableActions));

@@ -19,13 +19,14 @@ const styles = {
     }
 };
 
-const Column = ({ heading, children, style }) =>
-    <div style={[styles.wrapper, style]}>
-        <h3 style={[styles.heading]}>
-            {heading}
-        </h3>
-        {children}
-    </div>;
+const Column = ({ heading, children, style }) => {
+    return (
+        <div style={[styles.wrapper, style]}>
+            {heading && <h3 style={[styles.heading]}>{heading}</h3>}
+            {children}
+        </div>
+    );
+};
 
 Column.propTypes = {
     heading: PropTypes.string,

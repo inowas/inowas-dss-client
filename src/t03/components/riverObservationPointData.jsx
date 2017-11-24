@@ -7,7 +7,7 @@ import Icon from '../../components/primitive/Icon';
 import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
-class RiverObservationPoint extends DataTable.Component.DataTable {
+class RiverObservationPointData extends DataTable.Component.DataTable {
     constructor ( props ) {
         super( props );
 
@@ -146,8 +146,8 @@ class RiverObservationPoint extends DataTable.Component.DataTable {
     };
 }
 
-RiverObservationPoint.propTypes = {
+RiverObservationPointData.propTypes = {
     perPage: PropTypes.number,
 };
 
-export default RiverObservationPoint;
+export default RiverObservationPointData;

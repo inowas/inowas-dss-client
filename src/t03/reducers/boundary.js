@@ -145,7 +145,7 @@ export function handleUpdateBoundaryPumpingRate(state, action) {
             return {
                 ...b,
                 observationPoints: b.observationPoints.map(op => {
-                    if (op.id === action.payload.observationPointId) {
+                    if (op.id === action.payload.editObservationPointId) {
                         return {
                             ...op,
                             values: [
@@ -171,7 +171,7 @@ export function handleAddBoundaryPumpingRate(state, action) {
             return {
                 ...b,
                 observationPoints: b.observationPoints.map(op => {
-                    if (op.id === action.payload.observationPointId) {
+                    if (op.id === action.payload.editObservationPointId) {
                         return {
                             ...op,
                             values: [

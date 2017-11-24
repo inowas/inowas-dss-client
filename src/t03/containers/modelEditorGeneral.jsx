@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Query, Command, Action, Routing } from '../actions/index';
-import { model as modelSelector, general } from '../selectors/index';
+import {Query, Command, Action, Routing} from '../actions/index';
+import {model as modelSelector, general} from '../selectors/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { browserHistory, withRouter } from 'react-router';
+import {browserHistory, withRouter} from 'react-router';
 import {
     getErrorMessage,
     hasError,
     isLoading
 } from '../../core/webData/selectors/webData';
-import { WebData, LayoutComponents } from '../../core';
+import {WebData, LayoutComponents} from '../../core';
 import uuid from 'uuid';
-import { GeneralMap } from '../components';
+import {GeneralMap} from '../components';
 import * as lodash from 'lodash';
 import Button from '../../components/primitive/Button';
 import Input from '../../components/primitive/Input';
@@ -55,28 +55,14 @@ const initialState = {
     model: modelSelector.getInitialState()
 };
 
+let localState = initialState;
+
 @ConfiguredRadium
 class ModelEditorGeneral extends Component {
     constructor(props) {
         super(props);
-        this.state = initialState;
-
-        this.handleInputChangeModflow = this.handleInputChangeModflow.bind(
-            this
-        );
-    }
-
-    componentWillMount() {
-        const model = this.props.model
-            ? this.props.model
-            : modelSelector.getInitialState();
-
-        this.setState(function(prevState) {
-            return {
-                ...prevState,
-                model: model
-            };
-        });
+        this.state = localState;
+        this.handleInputChangeModflow = this.handleInputChangeModflow.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -89,12 +75,12 @@ class ModelEditorGeneral extends Component {
     }
 
     componentWillUnmount() {
-        this.props.setModflowModel(this.state.model);
+        localState = this.state;
     }
 
     handleSelectChange = name => {
         return data => {
-            this.handleInputChangeModflow( name )( data ? data.value : undefined );
+            this.handleInputChangeModflow(name)(data ? data.value : undefined);
         };
     };
 
@@ -173,7 +159,7 @@ class ModelEditorGeneral extends Component {
                 <Button
                     onClick={this.editAreaOnMap}
                     type="link"
-                    icon={<Icon name="marker" />}
+                    icon={<Icon name="marker"/>}
                 >
                     Edit on Map
                 </Button>
@@ -185,7 +171,7 @@ class ModelEditorGeneral extends Component {
                 <Button
                     onClick={this.createAreaOnMap}
                     type="link"
-                    icon={<Icon name="marker" />}
+                    icon={<Icon name="marker"/>}
                 >
                     Draw on Map
                 </Button>
@@ -202,8 +188,8 @@ class ModelEditorGeneral extends Component {
             createModflowModelStatus,
             updateModflowModelStatus
         } = this.props;
-        const { id } = this.props.params;
-        const { model: stateModel } = this.state;
+        const {id} = this.props.params;
+        const {model: stateModel} = this.state;
 
         const readOnly = model && !lodash.includes(model.permissions, 'w');
         const readOnlyScenario = lodash.includes(model.permissions, 's');
@@ -219,8 +205,8 @@ class ModelEditorGeneral extends Component {
             return (
                 <p>
                     Error while loading ... ({getErrorMessage(
-                        getModflowModelDetailsStatus
-                    )})
+                    getModflowModelDetailsStatus
+                )})
                 </p>
             );
         }
@@ -247,12 +233,10 @@ class ModelEditorGeneral extends Component {
                                 onChange={this.handleSelectChange(
                                     'public'
                                 )}
-                                options={
-                                    [
-                                        { label: 'public', value: true },
-                                        { label: 'private', value: false },
-                                    ]
-                                }
+                                options={[
+                                    {label: 'public', value: true},
+                                    {label: 'private', value: false}
+                                ]}
                             />}
                         </LayoutComponents.InputGroup>
 
@@ -395,7 +379,7 @@ class ModelEditorGeneral extends Component {
                     <div style={[styles.mapActionToolbar]}>
                         {this.renderEditOnMapIcon(id, readOnly)}
                     </div>
-                    <GeneralMap style={styles.expandVertical} model={model} />
+                    <GeneralMap style={styles.expandVertical} model={model}/>
                     <div style={[styles.saveButtonWrapper]}>
                         <WebData.Component.Loading
                             status={
@@ -421,7 +405,7 @@ class ModelEditorGeneral extends Component {
     }
 }
 
-const mapStateToProps = (state, { tool }) => {
+const mapStateToProps = (state, {tool}) => {
     return {
         model: general.getModflowModel(state[tool].model),
         getModflowModelDetailsStatus: WebData.Selector.getRequestStatusByType(
@@ -445,7 +429,7 @@ const actions = {
     updateModflowModel: Command.updateModflowModel
 };
 
-const mapDispatchToProps = (dispatch, { tool }) => {
+const mapDispatchToProps = (dispatch, {tool}) => {
     const wrappedActions = {};
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
@@ -469,13 +453,13 @@ ModelEditorGeneral.propTypes = {
     style: PropTypes.object,
     createModflowModel: PropTypes.func,
     updateModflowModel: PropTypes.func,
-    setModflowModel: PropTypes.func,
     model: PropTypes.object,
     location: PropTypes.object,
     params: PropTypes.object,
     getModflowModelDetailsStatus: PropTypes.object,
     createModflowModelStatus: PropTypes.object,
-    updateModflowModelStatus: PropTypes.object
+    updateModflowModelStatus: PropTypes.object,
+    routes: PropTypes.array
 };
 
 export default ModelEditorGeneral;

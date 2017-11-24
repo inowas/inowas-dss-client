@@ -144,6 +144,27 @@ export const getInitialStyles = () => {
                 fillColor: 'yellow'
             }
         },
+        op: {
+            radius: 5,
+            color: styleGlobals.colors.grayDark,
+            weight: 2,
+            fillColor: styleGlobals.colors.grayDark,
+            fillOpacity: 1
+        },
+        op_temp: {
+            radius: 5,
+            color: styleGlobals.colors.grayDark,
+            weight: 1,
+            fillColor: styleGlobals.colors.grayDark,
+            fillOpacity: 0.5
+        },
+        op_selected: {
+            radius: 5,
+            color: styleGlobals.colors.redDark,
+            weight: 1,
+            fillColor: styleGlobals.colors.redDark,
+            fillOpacity: 1
+        },
         default: {
             radius: 5,
             weight: 2,

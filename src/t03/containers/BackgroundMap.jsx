@@ -362,8 +362,8 @@ class BackgroundMap extends Component {
         while (i < 100000) {
             // eslint-disable-next-line no-loop-func
             if (this.props.model.boundaries.filter(b => {
-                return (b.id === (type + '-' + i));
-            }).length === 0) {
+                    return (b.id === (type + '-' + i));
+                }).length === 0) {
                 return i;
             }
             i++;
@@ -760,14 +760,14 @@ class BackgroundMap extends Component {
 
         return (
             <FeatureGroup>
-            <FeatureGroup>
-                <EditControl
-                    position="bottomright"
-                    onEdited={this.onEditPath}
-                    {...options}
-                />{' '}
-                {geometry}
-            </FeatureGroup>
+                <FeatureGroup>
+                    <EditControl
+                        position="bottomright"
+                        onEdited={this.onEditPath}
+                        {...options}
+                    />{' '}
+                    {geometry}
+                </FeatureGroup>
                 <FeatureGroup>
                     {activeCells}
                 </FeatureGroup>
