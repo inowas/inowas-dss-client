@@ -33,13 +33,7 @@ export default {
         }),
         new ExtractTextPlugin('styles.min.css'),
         new OptimizeCssAssetsPlugin(),
-        new FaviconsWebpackPlugin('images/favicon.png'),
-        new optimize.UglifyJsPlugin({sourceMap: true}),
-        // new ImageminPlugin( {
-        //     pngquant: {
-        //         quality: '95-100'
-        //     }
-        // } )
+        new FaviconsWebpackPlugin('images/favicon.png')
     ],
     module: {
         rules: [
