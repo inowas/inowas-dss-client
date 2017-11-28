@@ -8,6 +8,7 @@ import {uniqueId} from 'lodash';
 import {EditControl} from 'react-leaflet-draw';
 import FullscreenControl from 'react-leaflet-fullscreen';
 import * as mapHelpers from '../../calculations/map';
+import * as geoTools from '../geospatial';
 
 class BoundaryGeometryEditorMap extends React.Component {
 
@@ -126,21 +127,27 @@ class BoundaryGeometryEditorMap extends React.Component {
         const layers = e.layers;
         layers.eachLayer(layer => {
             const id = layer.options.id;
-            const geometry = layer.toGeoJSON().geometry;
+            const geoJson = layer.toGeoJSON();
+            const geometry = geoJson.geometry;
+
             const boundary = this.state.boundary;
 
-            if (boundary.id === id) {
+            if (boundary.id === id && boundary.observation_points) {
                 boundary.observation_points.map(op => {
                     const {coordinates} = op.geometry;
                     const latLng = mapHelpers.closestPointOnGeometry(e.target, layer, new LatLng(coordinates[1], coordinates[0]));
                     op.geometry.coordinates = [latLng.lng, latLng.lat];
                     return op;
                 });
-
-                this.setState({
-                    boundary: {...boundary, geometry}
-                });
             }
+
+            this.setState({
+                boundary: {
+                    ...boundary,
+                    geometry,
+                    active_cells: geoTools.calculateActiveCells(geoJson, this.props.boundingBox, this.props.gridSize)
+                }
+            });
 
             this.props.onChange({...boundary, geometry});
         });
@@ -204,6 +211,8 @@ BoundaryGeometryEditorMap.propTypes = {
     area: PropTypes.object.isRequired,
     boundary: PropTypes.object.isRequired,
     boundaries: PropTypes.array,
+    boundingBox: PropTypes.array.isRequired,
+    gridSize: PropTypes.object.isRequired,
     mapStyles: PropTypes.object,
     onChange: PropTypes.func
 };

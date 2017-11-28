@@ -18,6 +18,7 @@
     "homepage": "https://tu-dresden.de/bu/umwelt/hydro/inowas",
     "license": "MIT",
     "dependencies": {
+        "@turf/turf": "^5.0.4",
         "axios": "^0.15.3",
         "classnames": "^2.2.5",
         "gwflowjs": "https://github.com/inowas/gwflowjs.git#master",

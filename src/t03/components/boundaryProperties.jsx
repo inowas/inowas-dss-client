@@ -232,7 +232,7 @@ class BoundaryProperties extends React.Component {
 
             observationPoints.map(op => {
                 if (op.id === this.state.selectedObservationPointId) {
-                    return {...op, date_time_values: this.observationPoint.getRows()}
+                    return {...op, date_time_values: this.observationPoint.getRows()};
                 }
 
                 return op;
@@ -389,6 +389,8 @@ class BoundaryProperties extends React.Component {
             const area = this.props.model.geometry;
             const modelStyles = this.props.model.styles;
             const boundaries = this.props.model.boundaries;
+            const boundingBox = this.props.model.bounding_box;
+            const gridSize = this.props.model.grid_size;
 
             const {boundary} = this.state;
 
@@ -397,6 +399,8 @@ class BoundaryProperties extends React.Component {
                     area={area}
                     boundary={boundary}
                     boundaries={boundaries}
+                    boundingBox={boundingBox}
+                    gridSize={gridSize}
                     mapStyles={modelStyles}
                     onSave={this.handleSaveBoundary}
                     onCancel={this.handleCancel}

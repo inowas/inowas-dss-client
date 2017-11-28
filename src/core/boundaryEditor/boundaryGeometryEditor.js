@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Grid, Form, Header, Modal, Segment} from 'semantic-ui-react';
+import {Button, Grid, Form, Header, Modal, Segment, Menu, Icon} from 'semantic-ui-react';
 import BoundaryGeometryEditorMap from './boundaryGeometryEditorMap';
 
 class BoundaryGeometryEditor extends React.Component {
@@ -9,7 +9,8 @@ class BoundaryGeometryEditor extends React.Component {
 
         this.state = {
             boundary: null,
-            boundaries: null
+            boundaries: null,
+            activeItem: 'geometry'
         };
     }
 
@@ -32,48 +33,79 @@ class BoundaryGeometryEditor extends React.Component {
         });
     };
 
+    handleItemClick = (e, {name}) => this.setState({activeItem: name});
+
     render() {
-        const {area, onCancel, onSave, mapStyles} = this.props;
-        const {boundaries, boundary} = this.state;
+        const {area, boundingBox, gridSize, onCancel, onSave, mapStyles} = this.props;
+        const {activeItem, boundaries, boundary} = this.state;
 
         return (
-            <Modal size={'large'} open onClose={onCancel}>
-                <Modal.Header>Edit boundary properties</Modal.Header>
-                <Modal.Content>
-                    <Grid divided={'vertically'}>
-                        <Grid.Row columns={2}>
-                            <Grid.Column width={6}>
-                                <Segment color="blue">
-                                    <Header as="h3" dividing>Boundary properties</Header>
-                                    <Form>
-                                        <Form.Field>
-                                            <label>Name</label>
-                                            <input placeholder="Boundary name"
-                                                   value={boundary.name}
-                                                   onChange={this.handleChangeName}/>
-                                        </Form.Field>
-                                    </Form>
-                                </Segment>
-                            </Grid.Column>
-                            <Grid.Column width={10}>
-                                <Segment color="blue">
-                                    <BoundaryGeometryEditorMap
-                                        area={area}
-                                        boundary={boundary}
-                                        boundaries={boundaries}
-                                        mapStyles={mapStyles}
-                                        onChange={this.handleChangeBoundary}
-                                    />
-                                </Segment>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button negative onClick={onCancel}>Cancel</Button>
-                    <Button positive onClick={() => onSave(boundary)}>Save</Button>
-                </Modal.Actions>
-            </Modal>
+            <div>
+                <Modal size={'large'} open onClose={onCancel}>
+                    <Modal.Header>Edit boundary properties</Modal.Header>
+                    <Modal.Content>
+                        <Grid divided={'vertically'}>
+                            <Grid.Row columns={2}>
+                                <Grid.Column width={6}>
+                                    <Segment color="blue">
+                                        <Header as="h3" dividing>Boundary properties</Header>
+                                        <Form>
+                                            <Form.Field>
+                                                <label>Name</label>
+                                                <input placeholder="Boundary name"
+                                                       value={boundary.name}
+                                                       onChange={this.handleChangeName}/>
+                                            </Form.Field>
+                                        </Form>
+                                    </Segment>
+                                </Grid.Column>
+                                <Grid.Column width={10}>
+
+                                    <Menu attached="top" tabular>
+                                        <Menu.Item name="geometry" active={activeItem === 'geometry'}
+                                                   onClick={this.handleItemClick}>
+                                            <Icon name="location arrow"/>
+                                            Geometry
+                                        </Menu.Item>
+
+                                        <Menu.Item name="affected cells" active={activeItem === 'affected cells'}
+                                                   onClick={this.handleItemClick}>
+                                            <Icon name="table"/>
+                                            Affected cells
+                                        </Menu.Item>
+
+                                        <Menu.Item name="time series data" active={activeItem === 'time series data'}
+                                                   onClick={this.handleItemClick}>
+                                            <Icon name="list"/>
+                                            Time series data
+                                        </Menu.Item>
+                                    </Menu>
+
+                                    <Segment attached="bottom">
+
+                                        {activeItem === 'geometry' &&
+                                        <BoundaryGeometryEditorMap
+                                            area={area}
+                                            boundary={boundary}
+                                            boundaries={boundaries}
+                                            boundingBox={boundingBox}
+                                            gridSize={gridSize}
+                                            mapStyles={mapStyles}
+                                            onChange={this.handleChangeBoundary}
+                                        />
+                                        }
+
+                                    </Segment>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button negative onClick={onCancel}>Cancel</Button>
+                        <Button positive onClick={() => onSave(boundary)}>Save</Button>
+                    </Modal.Actions>
+                </Modal>
+            </div>
         );
     }
 }
@@ -82,6 +114,8 @@ BoundaryGeometryEditor.propTypes = {
     area: PropTypes.object.isRequired,
     boundary: PropTypes.object.isRequired,
     boundaries: PropTypes.array.isRequired,
+    boundingBox: PropTypes.array.isRequired,
+    gridSize: PropTypes.object.isRequired,
     mapStyles: PropTypes.object.isRequired,
     onCancel: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
