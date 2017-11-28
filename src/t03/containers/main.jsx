@@ -1,12 +1,16 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Properties } from '../../t03/components/index';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
+
+import {Action} from '../../t03/actions/index';
+import {Properties} from '../../t03/components/index';
 import Navbar from '../../containers/Navbar';
-import { withRouter } from 'react-router';
 import BackgroundMap from './BackgroundMap';
 import Sidebar from '../../components/primitive/Sidebar';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import { Routing } from '../../t03/actions';
+import {Routing} from '../../t03/actions';
 
 const styles = {
     wrapper: {
@@ -36,25 +40,13 @@ const styles = {
 };
 
 class T03 extends React.Component {
-    static propTypes = {
-        // push: PropTypes.func.isRequired,
-        // params: PropTypes.object.isRequired,
-        // location: PropTypes.object.isRequired
-    };
 
     state = {
         navigation: []
     };
 
-    close = () => {
-        // eslint-disable-next-line no-shadow
-        const { router, location } = this.props;
-
-        router.push(location.pathname + '#view');
-    };
-
     componentWillMount() {
-        const { said } = this.props.params;
+        const {said} = this.props.params;
         if (said) {
             this.setState(prevState => {
                 return {
@@ -64,13 +56,20 @@ class T03 extends React.Component {
                         {
                             name: 'Back to scenario analysis',
                             path: '/tools/T07/' + said,
-                            icon: <Icon name="layer_horizontal_hatched" />
+                            icon: <Icon name="layer_horizontal_hatched"/>
                         }
                     ]
                 };
             });
         }
     }
+
+    close = () => {
+        // eslint-disable-next-line no-shadow
+        const {router, location} = this.props;
+
+        router.push(location.pathname + '#view');
+    };
 
     renderProperties() {
         const isVisible =
@@ -85,25 +84,25 @@ class T03 extends React.Component {
 
         const initial =
             this.props.params.id === undefined || this.props.params.id === null;
-        const { params, routes } = this.props;
-        const { tool } = this.props.route;
+        const {params, routes} = this.props;
+        const {tool} = this.props.route;
 
         const menuItems = [
             {
                 title: 'General',
                 name: null,
-                icon: <Icon name="settings" />
+                icon: <Icon name="settings"/>
             },
             {
                 title: 'Soilmodel',
                 name: 'soilmodel',
-                icon: <Icon name="layer_horizontal_hatched" />,
+                icon: <Icon name="layer_horizontal_hatched"/>,
                 disabled: initial
             },
             {
                 title: 'Boundaries',
                 name: 'boundaries',
-                icon: <Icon name="marker" />,
+                icon: <Icon name="marker"/>,
                 disabled: initial,
                 items: [
                     {
@@ -131,19 +130,19 @@ class T03 extends React.Component {
             {
                 title: 'Run',
                 name: 'model-run',
-                icon: <Icon name="calculator" />,
+                icon: <Icon name="calculator"/>,
                 disabled: initial
             },
             {
                 title: 'Results',
                 name: 'results',
-                icon: <Icon name="dataset" />,
+                icon: <Icon name="dataset"/>,
                 disabled: initial
             },
             {
                 title: 'Calibration',
                 name: 'calibration',
-                icon: <Icon name="target" />,
+                icon: <Icon name="target"/>,
                 disabled: true
             }
         ];
@@ -172,20 +171,50 @@ class T03 extends React.Component {
     }
 
     render() {
-        const { navigation } = this.state;
-        const { tool } = this.props.route;
+        const {navigation} = this.state;
+        const {tool} = this.props.route;
 
         return (
             <div className="toolT03">
-                <Navbar links={navigation} />
-                <BackgroundMap tool={tool} />
+                <Navbar links={navigation}/>
+                <BackgroundMap tool={tool}/>
                 {this.renderProperties()}
             </div>
         );
     }
 }
 
+T03.propTypes = {
+    location: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    route: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
+    routes: PropTypes.array.isRequired,
+};
+
+const actions = {
+    setModelArea: Action.destroyModflowModel
+};
+
+const mapDispatchToProps = (dispatch, {tool}) => {
+    const wrappedActions = {};
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
+            // eslint-disable-next-line no-loop-func
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
+            };
+        }
+    }
+
+    return wrappedActions;
+};
+
+
 // eslint-disable-next-line no-class-assign
-T03 = withRouter(T03);
+T03 = withRouter(
+    connect(null, mapDispatchToProps)(T03)
+);
 
 export default T03;

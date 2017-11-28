@@ -65,6 +65,12 @@ class ModelEditorGeneral extends Component {
         this.handleInputChangeModflow = this.handleInputChangeModflow.bind(this);
     }
 
+    componentWillMount() {
+        this.setState({
+            model: this.props.model,
+        });
+    }
+
     componentWillReceiveProps(newProps) {
         this.setState(function(prevState) {
             return {

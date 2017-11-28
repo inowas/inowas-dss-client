@@ -60,11 +60,7 @@ const routes = store => (
                     );
                 }}
             />
-            <Route
-                path="T04"
-                component={T04.Container.Main}
-                onEnter={console.log('onEnter')}
-            />
+            <Route path="T04" component={T04.Container.Main}/>
             <Route path="T06(/:id)" component={tools.T06}/>
             <Route path="T07" component={T07.Container.Main}>
                 <IndexRoute component={T07.Component.New}/>
