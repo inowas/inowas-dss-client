@@ -9,6 +9,10 @@ import * as mapHelpers from '../../calculations/map';
 import * as geoTools from '../geospatial';
 import ActiveCellsLayer from './activeCellsLayer';
 import {getActiveCellFromCoordinate} from '../geospatial/index';
+import Control from '../map/Control';
+import Button from '../../components/primitive/Button';
+import Icon from '../../components/primitive/Icon';
+import {cloneDeep} from 'lodash';
 
 class BoundaryGeometryActiveCellsMap extends React.Component {
 
@@ -16,12 +20,14 @@ class BoundaryGeometryActiveCellsMap extends React.Component {
         super(props);
         this.state = {
             boundary: null,
+            bounds: null
         };
     }
 
     componentWillMount() {
         this.setState({
             boundary: this.props.boundary,
+            bounds: this.getBounds(this.props.area)
         });
     }
 
@@ -86,6 +92,15 @@ class BoundaryGeometryActiveCellsMap extends React.Component {
         );
     };
 
+    handleResetViewClick = () => {
+        const newBounds = cloneDeep(this.state.bounds);
+        newBounds._northEast.lat = this.state.bounds._northEast.lat - 0.00001;
+
+        this.setState({
+            bounds: newBounds
+        });
+    };
+
     renderBoundary(b) {
         if (b.type === 'wel') {
             return (
@@ -145,7 +160,7 @@ class BoundaryGeometryActiveCellsMap extends React.Component {
 
     render() {
         const {area, boundingBox, gridSize} = this.props;
-        const {boundary} = this.state;
+        const {boundary, bounds} = this.state;
         const activeCells = boundary.active_cells;
 
         return (
@@ -155,7 +170,7 @@ class BoundaryGeometryActiveCellsMap extends React.Component {
                     this.map = map;
                 }}
                 zoomControl={false}
-                bounds={this.getBounds(area)}
+                bounds={bounds}
                 onClick={this.handleClickOnMap}
             >
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
@@ -169,6 +184,15 @@ class BoundaryGeometryActiveCellsMap extends React.Component {
                 />
 
                 <FullscreenControl position="topright"/>
+                <Control position="topright">
+                    <Button
+                        title="reset view"
+                        onClick={this.handleResetViewClick}
+                        iconInside
+                        icon={<Icon name="marker"/>}
+                    />
+                </Control>
+
                 {this.renderBoundary(boundary)}
                 <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells}/>
             </Map>

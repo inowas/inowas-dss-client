@@ -88,7 +88,5 @@ export const calculateActiveCells = (geometry, boundingBox, gridSize) => {
         });
     }
 
-    console.log(activeCells);
-
     return activeCells;
 };

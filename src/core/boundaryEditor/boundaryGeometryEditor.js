@@ -74,12 +74,6 @@ class BoundaryGeometryEditor extends React.Component {
                                             <Icon name="table"/>
                                             Affected cells
                                         </Menu.Item>
-
-                                        <Menu.Item name="time series data" active={activeItem === 'time series data'}
-                                                   onClick={this.handleItemClick}>
-                                            <Icon name="list"/>
-                                            Time series data
-                                        </Menu.Item>
                                     </Menu>
 
                                     <Segment attached="bottom">
