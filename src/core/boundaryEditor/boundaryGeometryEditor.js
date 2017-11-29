@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Grid, Form, Header, Modal, Segment, Menu, Icon} from 'semantic-ui-react';
 import BoundaryGeometryEditorMap from './boundaryGeometryEditorMap';
+import BoundaryActiveCellsMap from './boundaryGeometryActiveCellsMap';
 
 class BoundaryGeometryEditor extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class BoundaryGeometryEditor extends React.Component {
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
 
     render() {
-        const {area, boundingBox, gridSize, onCancel, onSave, mapStyles} = this.props;
+        const {area, boundingBox, gridSize, onCancel, onSave, mapStyles, readOnly} = this.props;
         const {activeItem, boundaries, boundary} = this.state;
 
         return (
@@ -82,19 +83,26 @@ class BoundaryGeometryEditor extends React.Component {
                                     </Menu>
 
                                     <Segment attached="bottom">
-
-                                        {activeItem === 'geometry' &&
-                                        <BoundaryGeometryEditorMap
+                                        {activeItem === 'geometry' && <BoundaryGeometryEditorMap
                                             area={area}
                                             boundary={boundary}
                                             boundaries={boundaries}
                                             boundingBox={boundingBox}
                                             gridSize={gridSize}
                                             mapStyles={mapStyles}
+                                            readOnly={readOnly}
                                             onChange={this.handleChangeBoundary}
-                                        />
-                                        }
+                                        />}
 
+                                        {activeItem === 'affected cells' && <BoundaryActiveCellsMap
+                                            area={area}
+                                            boundary={boundary}
+                                            boundingBox={boundingBox}
+                                            gridSize={gridSize}
+                                            mapStyles={mapStyles}
+                                            readOnly={readOnly}
+                                            onChange={this.handleChangeBoundary}
+                                        />}
                                     </Segment>
                                 </Grid.Column>
                             </Grid.Row>
@@ -119,6 +127,7 @@ BoundaryGeometryEditor.propTypes = {
     mapStyles: PropTypes.object.isRequired,
     onCancel: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool.isRequired,
 };
 
 export default BoundaryGeometryEditor;

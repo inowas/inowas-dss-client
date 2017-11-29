@@ -391,6 +391,7 @@ class BoundaryProperties extends React.Component {
             const boundaries = this.props.model.boundaries;
             const boundingBox = this.props.model.bounding_box;
             const gridSize = this.props.model.grid_size;
+            const readOnly = this.props.readOnly;
 
             const {boundary} = this.state;
 
@@ -404,6 +405,7 @@ class BoundaryProperties extends React.Component {
                     mapStyles={modelStyles}
                     onSave={this.handleSaveBoundary}
                     onCancel={this.handleCancel}
+                    readOnly={readOnly}
                 />
             );
         }

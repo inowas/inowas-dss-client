@@ -141,19 +141,21 @@ class BoundaryGeometryEditorMap extends React.Component {
                 });
             }
 
+            const activeCells = geoTools.calculateActiveCells(geoJson, this.props.boundingBox, this.props.gridSize);
+
             this.setState({
                 boundary: {
                     ...boundary,
                     geometry,
-                    active_cells: geoTools.calculateActiveCells(geoJson, this.props.boundingBox, this.props.gridSize)
+                    active_cells: activeCells
                 }
             });
 
-            this.props.onChange({...boundary, geometry});
+            this.props.onChange({...boundary, geometry, active_cells: activeCells});
         });
     };
 
-    renderBoundaryToEdit(boundary) {
+    renderBoundaryToEdit(boundary, readOnly) {
         const options = {
             edit: {
                 remove: false
@@ -166,6 +168,10 @@ class BoundaryGeometryEditorMap extends React.Component {
                 marker: false
             }
         };
+
+        if (readOnly) {
+            return this.getGeometry(boundary);
+        }
 
         return (
             <FeatureGroup>
@@ -180,7 +186,7 @@ class BoundaryGeometryEditorMap extends React.Component {
     }
 
     render() {
-        const {area} = this.props;
+        const {area, readOnly} = this.props;
         const {boundary, boundaries} = this.state;
 
         return (
@@ -201,7 +207,7 @@ class BoundaryGeometryEditorMap extends React.Component {
 
                 <FullscreenControl position="topright"/>
                 {this.renderBoundaries(boundaries)}
-                {this.renderBoundaryToEdit(boundary)}
+                {this.renderBoundaryToEdit(boundary, readOnly)}
             </Map>
         );
     }
@@ -214,7 +220,8 @@ BoundaryGeometryEditorMap.propTypes = {
     boundingBox: PropTypes.array.isRequired,
     gridSize: PropTypes.object.isRequired,
     mapStyles: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    readOnly: PropTypes.bool.isRequired
 };
 
 export default BoundaryGeometryEditorMap;

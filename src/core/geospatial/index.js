@@ -1,6 +1,18 @@
 import {lineString} from '@turf/helpers';
 import {booleanCrosses, booleanContains, booleanOverlap, envelope} from '@turf/turf';
-import {floor} from "lodash";
+import {floor, min, max} from 'lodash';
+
+
+export const getMinMaxFromBoundingBox = boundingBox => {
+    const xMin = min([boundingBox[0][0], boundingBox[1][0]]);
+    const xMax = max([boundingBox[0][0], boundingBox[1][0]]);
+    const yMin = min([boundingBox[0][1], boundingBox[1][1]]);
+    const yMax = max([boundingBox[0][1], boundingBox[1][1]]);
+
+    return {
+        xMin, xMax, yMin, yMax
+    };
+};
 
 /* Calculate GridCells
 Structure:
@@ -12,10 +24,7 @@ const cells = [
 ]
 */
 const getGridCells = (boundingBox, gridSize) => {
-    const xMin = boundingBox[0][0];
-    const xMax = boundingBox[1][0];
-    const yMin = boundingBox[0][1];
-    const yMax = boundingBox[1][1];
+    const {xMin, xMax, yMin, yMax} = getMinMaxFromBoundingBox(boundingBox);
     const nX = gridSize.n_x;
     const nY = gridSize.n_y;
     const dx = (xMax - xMin) / nX;
@@ -26,7 +35,7 @@ const getGridCells = (boundingBox, gridSize) => {
         for (let x = 0; x < nX; x++) {
             cells.push({
                 x: x,
-                y: y,
+                y: nY - y - 1,
                 geometry: envelope(lineString([
                     [xMin + x * dx, yMax - (nY - y) * dy],
                     [xMin + (x + 1) * dx, yMax - (nY - y - 1) * dy]
@@ -39,10 +48,7 @@ const getGridCells = (boundingBox, gridSize) => {
 };
 
 export const getActiveCellFromCoordinate = (coordinate, boundingBox, gridSize) => {
-    const xMin = boundingBox[0][0];
-    const xMax = boundingBox[1][0];
-    const yMin = boundingBox[0][1];
-    const yMax = boundingBox[1][1];
+    const {xMin, xMax, yMin, yMax} = getMinMaxFromBoundingBox(boundingBox);
     const nX = gridSize.n_x;
     const nY = gridSize.n_y;
     const dx = (xMax - xMin) / nX;
@@ -81,6 +87,8 @@ export const calculateActiveCells = (geometry, boundingBox, gridSize) => {
             }
         });
     }
+
+    console.log(activeCells);
 
     return activeCells;
 };
