@@ -4,8 +4,9 @@ import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
-import * as T07 from './t07/index';
 import * as T04 from './t04/index';
+import * as T07 from './t07/index';
+import * as T09 from './t09/index';
 import * as ToolInstance from './toolInstance/index';
 import DashboardContainer from './containers/Dashboard';
 import Login from './containers/Login';
@@ -107,8 +108,9 @@ const routes = store => (
                 />
             </Route>
             <Route path="T08/:id" component={tools.T08}/>
+            <Route path="T09Test(/:id)" component={T09.Container.T09}/>
             <Route path="T09(/:id)" component={tools.T09}/>
-            <Route path="T09A(/:id)" component={tools.T09A}/>
+            <Route path="T09A(/:id)" component={T09.Container.T09A}/>
             <Route path="T09B(/:id)" component={tools.T09B}/>
             <Route path="T09C(/:id)" component={tools.T09C}/>
             <Route path="T09D(/:id)" component={tools.T09D}/>
