@@ -1,13 +1,22 @@
 import erfc from './erfc';
 
-export function calculateDiagramData(C0, info, x_max, t_max, cas) {
+export function calculateDiagramData(C0, info, x_max, t_max, cas, infil, tau) {
     var vx = info.vx;
     var DL = info.DL;
     var R  = info.R;
-
+    var tau_max = 10e+8;
+    if (infil === 'OneTime') tau_max = tau;
     function calc_C(t,x) {
         const term1 = erfc((x-(vx*t/R))/(2*Math.sqrt(DL*t/R)));
         const term2 = erfc((x+(vx*t/R))/(2*Math.sqrt(DL*t/R)));
+        return 0.5* (term1+Math.exp(vx*x/DL)*term2);
+    }
+    // this is for one time infiltration
+    function calc_C_tau(t,x) {
+        const term1 = erfc((x-(vx*t/R))/(2*Math.sqrt(DL*t/R)))-erfc((x-(vx*(t-tau)/R))/(2*Math.sqrt(DL*(t-tau)/R)));
+        var term2 = erfc((x+(vx*t/R))/(2*Math.sqrt(DL*t/R)))-erfc((x+(vx*(t-tau)/R))/(2*Math.sqrt(DL*(t-tau)/R)));
+        // this condition is necessary to fix a bug; it can be changed
+        Math.abs(term2) < 10e-16 ? term2 = 0 : term2 = term2
         return 0.5* (term1+Math.exp(vx*x/DL)*term2);
     }
     function calc_t() {
@@ -28,9 +37,11 @@ export function calculateDiagramData(C0, info, x_max, t_max, cas) {
         }
         return x
     }
-    info.C = calc_C(t_max,x_max);
+    // calculate the result (to be shown in info)
+    info.C = (infil === 'OneTime' && t_max>tau) ? calc_C_tau(t_max,x_max) : calc_C(t_max,x_max);
+
     let data = [];
-    if (cas === 'Case1') {
+    if (cas === 'Case1') { //variable time, fixed length
         const x = x_max;
         const t_max = calc_t();
         var dt = Math.floor(t_max/25);
@@ -40,10 +51,17 @@ export function calculateDiagramData(C0, info, x_max, t_max, cas) {
             dt = 1
         }
         for (let t = 0; t <= t_max; t += dt) {
-            data.push({
-                t: t,
-                C: calc_C(t,x)
-            });
+            if (t < tau_max) {
+                data.push({
+                    t: t,
+                    C: calc_C(t,x)
+                });
+            } else {
+                data.push({
+                    t: t,
+                    C: calc_C_tau(t,x)
+                });
+            }
         }
     }
     if (cas === 'Case2') {
@@ -56,10 +74,17 @@ export function calculateDiagramData(C0, info, x_max, t_max, cas) {
             dx = 1
         }
         for (let x = 0; x <= x_max; x += dx) {
-            data.push({
-                x: x,
-                C: calc_C(t,x)
-            });
+            if (t < tau_max) {
+                data.push({
+                    x: x,
+                    C: calc_C(t,x)
+                });
+            } else {
+                data.push({
+                    x: x,
+                    C: calc_C_tau(t,x)
+                });
+            }
         }
     }
     return data;

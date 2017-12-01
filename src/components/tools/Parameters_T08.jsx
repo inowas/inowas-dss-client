@@ -61,10 +61,15 @@ export default class Parameters extends React.Component {
         const stylelink = {
             marginLeft: "70px"
         };
-        const params = this.props.data.slice(0,8).map(param => {
+        var params = this.props.data.slice(0,9).map(param => {
             return this.renderSlider(param);
         });
-        const params_Kd = this.props.data.slice(8,10).map(param => {
+        if (settings.infiltration === 'OneTime') {
+            params = this.props.data.slice(0,10).map(param => {
+            return this.renderSlider(param);
+        });
+        }
+        const params_Kd = this.props.data.slice(10,12).map(param => {
             return this.renderSlider(param);
         });
         return (

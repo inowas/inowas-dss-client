@@ -17,7 +17,8 @@ function getInitialState() {
         },
         settings: {
             retardation: true,
-            case: 'Case2'
+            case: 'Case2',
+            infiltration:'Continuous'
         },
         info: {
             R: 0,
@@ -52,7 +53,7 @@ function getInitialState() {
             max: 500,
             value: 365,
             stepSize: 1,
-            decimals: 1
+            decimals: 0
         }, {
             order: 3,
             id: 'K',
@@ -82,6 +83,15 @@ function getInitialState() {
             decimals: 2
         }, {
             order: 6,
+            id: 'rhoS',
+            name: 'Particle density, ρₛ [g/cc]',
+            min: 0,
+            max: 3.00,
+            value: 2.65,
+            stepSize: 0.01,
+            decimals: 2
+        }, {
+            order: 7,
             id: 'alphaL',
             name: 'Longitudinal dispersivity, alpha [m]',
             min: 0.1,
@@ -90,7 +100,7 @@ function getInitialState() {
             stepSize: 0.001,
             decimals: 3
         }, {
-            order: 7,
+            order: 8,
             id: 'Kd',
             name: 'Sorption partition coefficient,  Kd [l/g]',
             min: 0.0,
@@ -99,7 +109,16 @@ function getInitialState() {
             stepSize: 0.001,
             decimals: 3
         }, {
-            order: 8,
+            order: 9,
+            id: 'tau',
+            name: 'Duration of infiltration, τ [d]',
+            min: 0,
+            max: 500,
+            value: 100,
+            stepSize: 1,
+            decimals: 0
+        }, {
+            order: 10,
             id: 'Corg',
             name: 'Organic carbon content in the soil, Cₒᵣg [-]',
             min: 0,
@@ -108,7 +127,7 @@ function getInitialState() {
             stepSize: 0.001,
             decimals: 3
         }, {
-            order: 9,
+            order: 11,
             id: 'Kow',
             name: 'Logarithmus of octanol/water partition coefficient, log Kₒw [-]',
             min: 0,
@@ -142,7 +161,7 @@ const T08Reducer = (state = getInitialState(), action) => {
                 const newParam = action.payload;
                 var param = state.parameters.find(p => {return p.id === newParam.id});
                 applyParameterUpdate(param, newParam);
-                if(param.order >= 8) {
+                if(param.order >= 10) {
                     calculateKdAndModifyState(state);
                 }
                 calculateAndModifyState(state);
@@ -154,6 +173,15 @@ const T08Reducer = (state = getInitialState(), action) => {
                 ...state,
             };
             state.settings.case = action.payload;
+            calculateAndModifyState(state);
+            break;
+        }
+        case 'CHANGE_TOOL_T08_INFILTRATION':
+        {
+            state = {
+                ...state,
+            };
+            state.settings.infiltration = action.payload;
             calculateAndModifyState(state);
             break;
         }
@@ -208,10 +236,14 @@ function calculateAndModifyState(state) {
             return p.id == 'alphaL'
         })
         .value;
+    const tau = state.parameters.find(p => {
+        return p.id == 'tau'
+    })
+        .value;
     state.info.vx = calc.calculate_vx(K, ne, I);
     state.info.DL = calc.calculate_DL(alphaL,state.info.vx);
     state.info.R = calc.calculate_R(ne, Kd);
-    state.chart.data = calc.calculateDiagramData(C0, state.info, x, t, state.settings.case);
+    state.chart.data = calc.calculateDiagramData(C0, state.info, x, t, state.settings.case, state.settings.infiltration, tau);
 
     return state;
 }
