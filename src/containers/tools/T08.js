@@ -7,7 +7,7 @@ import Background from '../../components/tools/Background';
 import Chart from '../../components/tools/ChartT08';
 import Info from '../../components/tools/InfoT08';
 import Parameters from '../../components/tools/Parameters_T08';
-import {changeParameter, calculate, reset, changeSettings} from '../../actions/T08';
+import {changeParameter, calculate, reset, changeSettings, changeInfiltration} from '../../actions/T08';
 import Header from '../../components/tools/Header';
 import Navbar from '../Navbar';
 import Icon from '../../components/primitive/Icon';
@@ -36,6 +36,9 @@ export default class T08 extends React.Component {
         }
         if ( e.target.name === 'settings' ) {
             this.props.dispatch(changeSettings( e.target.value ));
+        }
+        if ( e.target.name === 'Infilt' ) {
+            this.props.dispatch(changeInfiltration( e.target.value ));
         }
     };
 

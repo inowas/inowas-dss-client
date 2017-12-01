@@ -22,8 +22,9 @@ export default class Info extends React.Component {
                 concentration is <strong>{c} mg/l</strong> at a distance of <strong>{x} m</strong> from constant point source.'</p>
         }
         if (settings.case === 'Case1') {
-            var text = <p>At a fixed distance of <strong>{x} m</strong> m from constant point source the concentration is
-                <strong>{c} mg/l</strong> after <strong>{t} days</strong> days since introduction of constant point source.</p>
+            var text = <p>At a fixed distance of <strong>{x} m</strong> from constant point source the
+                concentration is <strong>{c} mg/l</strong> after <strong>{t} days</strong> since introduction of
+                constant point source.</p>
         }
         return (
             <div className="padding-30">
@@ -46,13 +47,13 @@ export default class Info extends React.Component {
                 <div className="center-vertical center-horizontal">
                     <div className="radio-group">
                         <div>
-                            <input name="settings2" id="radio3" type="radio" checked= {true}
-                                   style={styleupdate} />
+                            <input name="Infilt" id="radio3" type="radio" value="Continuous" checked= {settings.infiltration === 'Continuous'}
+                                   style={styleupdate} onChange={this.handleChange}/>
                             <label htmlFor="radio3">Continuous infiltration</label>
                         </div>
                         <div>
-                            <input name="settings2" id="radio4" type="radio" checked= {false}
-                                   style={styleupdate} />
+                            <input name="Infilt" id="radio4" type="radio" value="OneTime" checked= {settings.infiltration === 'OneTime'}
+                                   style={styleupdate} onChange={this.handleChange} />
                             <label htmlFor="radio4">One-time infiltration</label>
                         </div>
                     </div>

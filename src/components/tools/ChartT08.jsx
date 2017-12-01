@@ -9,6 +9,7 @@ import {
 } from 'recharts';
 
 import '../../less/toolDiagram.less';
+import {max} from "../../core/rasterData/helpers";
 
 export default class Chart extends React.Component {
 
@@ -17,33 +18,45 @@ export default class Chart extends React.Component {
         const data = this.props.data ;
         const settings = this.props.settings;
         const info = this.props.info;
+        var DataMax = 0;
+        for (let i = 1 ; i < data.length; i +=1){
+            (data[i].C > DataMax)? DataMax = data[i].C : DataMax = DataMax;
+        }
+        (settings.infiltration !== 'OneTime') ? DataMax = 1 : DataMax = DataMax;
         if (settings.case === 'Case1') {
             var label = 't (d)';
             var datakey = 't';
+            var variable = 'T';
+            var unit = 'days';
             for (let i = 1; i < data.length; i += 1) {
-                if (data[i].C > 0.00001 && data[i-1].C < 0.00001){
-                    var val0 = data[i].t ; var var0 = 'T' ; var unit = 'days'
+                if (data[i].C > 0.00001*DataMax && data[i-1].C < 0.00001*DataMax){
+                    var val0 = data[i].t
                 }
-                if (data[i].C > 0.50001 && data[i-1].C < 0.50001){
-                    var val50 = data[i].t ; var var50 = 'T'; var unit = 'days'
+                if (data[i].C > 0.50001*DataMax && data[i-1].C < 0.50001*DataMax){
+                    var val50 = data[i].t
                 }
-                if (data[i].C > 0.9999 && data[i-1].C < 0.9999){
-                    var valmax = data[i].t ; var varMax = 'T'; var unit = 'days'
+                if (//(data[i].C > 0.9999*DataMax && data[i-1].C < 0.9999*DataMax) ||
+                    (data[i].C > 0.9999*DataMax) ){
+                    var valmax = data[i].t
                 }
             }
         }
         if (settings.case === 'Case2') {
             label = 'x (m)';
             datakey = 'x';
+            var variable = 'X';
+            var unit = 'm';
+            var valmax = (0).toFixed(2);
             for (let i = 1; i < data.length; i += 1) {
-                if (data[i].C < 0.0001 && data[i-1].C > 0.0001){
-                    var val0 = data[i].x.toFixed(2) ; var var0 = 'X' ; var unit = 'm'
+                if (data[i].C < 0.0001*DataMax && data[i-1].C > 0.0001*DataMax){
+                    var val0 = data[i].x.toFixed(2)
                 }
-                if (data[i].C < 0.5001 && data[i-1].C > 0.5001){
-                    var val50 = data[i].x.toFixed(2) ; var var50 = 'X'; var unit = 'm'
+                if (data[i].C < 0.5001*DataMax && data[i-1].C > 0.5001*DataMax){
+                    var val50 = data[i].x.toFixed(2)
                 }
-                if (data[i].C < 0.9999 && data[i-1].C > 0.9999){
-                    var valmax = data[i].x.toFixed(2) ; var varMax = 'X'; var unit = 'm'
+                if (//(data[i].C > 0.9999*DataMax && data[i-1].C < 0.9999*DataMax) ||
+                    (data[i].C > 0.9999*DataMax ) ){
+                    var valmax = data[i].x.toFixed(2)
                 }
             }
         }
@@ -76,15 +89,15 @@ export default class Chart extends React.Component {
                                         mg/L
                                     </p>
                                     <p>
-                                        {var0}<sub>0</sub>&nbsp;=&nbsp;<strong>{val0}</strong>&nbsp;
+                                        {variable}<sub>0</sub>&nbsp;=&nbsp;<strong>{val0}</strong>&nbsp;
                                         {unit}
                                     </p>
                                     <p>
-                                        {var50}<sub>50</sub>&nbsp;=&nbsp;<strong>{val50}</strong>&nbsp;
+                                        {variable}<sub>50</sub>&nbsp;=&nbsp;<strong>{val50}</strong>&nbsp;
                                         {unit}
                                     </p>
                                     <p>
-                                        {varMax}<sub>max</sub>&nbsp;=&nbsp;<strong>{valmax}</strong>&nbsp;
+                                        {variable}<sub>max</sub>&nbsp;=&nbsp;<strong>{valmax}</strong>&nbsp;
                                         {unit}
                                     </p>
                                 </div>

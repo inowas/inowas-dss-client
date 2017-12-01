@@ -1,3 +1,9 @@
+export function changeInfiltration(newInfilType){
+    return {
+        type: 'CHANGE_TOOL_T08_INFILTRATION',
+        payload: newInfilType
+    }
+}
 export function changeSettings(newSetting){
     return {
         type: 'CHANGE_TOOL_T08_SETTINGS',
