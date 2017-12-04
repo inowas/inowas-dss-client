@@ -8,7 +8,7 @@ import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
 import image from '../../images/tools/T09A.png';
 
-import {Background, Chart, Parameters} from '../components';
+import {Background, ChartT09A, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -154,7 +154,7 @@ class T09A extends React.Component {
         const {id} = this.props.params;
         const readOnly = false;
 
-        const chartParams ={};
+        const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
@@ -225,7 +225,9 @@ class T09A extends React.Component {
                             <Background image={image}/>
                         </section>
 
-                        <section className="tile col col-abs-3 stretch" />
+                        <section className="tile col col-abs-3 stretch">
+                            <ChartT09A {...chartParams}/>
+                        </section>
                     </div>
 
                     <div className="grid-container">

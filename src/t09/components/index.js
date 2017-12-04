@@ -1,11 +1,11 @@
 import Background from './background';
-import Chart from './chart';
+import ChartT09A from './chartT09A';
 import Parameters from './parameters';
 import Settings from './settings';
 
 export {
     Background,
-    Chart,
+    ChartT09A,
     Parameters,
     Settings,
 };

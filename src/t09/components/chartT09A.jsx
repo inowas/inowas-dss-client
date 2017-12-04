@@ -11,23 +11,21 @@ import {
     ResponsiveContainer,
     XAxis
 } from 'recharts';
-//TO DO: implement this eq in library
-const calc_z = (h,df,ds)=>{ return (df * h) / (ds - df) };
 
-const calculateDiagramData = (h,df,ds) => {
-    let z = calc_z(h,df,ds);
-    var data = [{
-        name: '',
-        h,
-        z
-    }];
+// TODO: implement this eq in library
 
-    return data;
+const calculateZ = (h, df, ds) => {
+    return (df * h) / (ds - df);
 };
 
-const Chart = ({h,df,ds}) => {
-    const data = calculateDiagramData(h,df,ds);
-    const z = calc_z(h,df,ds);
+const calculateDiagramData = (h, df, ds) => {
+    const z = calculateZ(h, df, ds);
+    return [{name: '', h, z}];
+};
+
+const Chart = ({h, df, ds}) => {
+    const data = calculateDiagramData(h, df, ds);
+    const z = calculateZ(h, df, ds);
     return (
         <div>
             <h2>Calculation</h2>
@@ -76,7 +74,7 @@ const Chart = ({h,df,ds}) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 Chart.propTypes = {
