@@ -8,6 +8,10 @@ import {find} from 'lodash';
 import {WebData} from '../../core';
 
 export const getInitialState = tool => {
+    if (tool === 'T09') {
+        return null;
+    }
+
     if (tool === 'T09A') {
         return T09A.getInitialState(tool);
     }
@@ -51,12 +55,8 @@ export const createReducer = tool => {
                     description: instance.description,
                     public: instance.public,
                     settings: instance.data.settings,
-                    parameters: state.parameters.map(v => {
-                        return {
-                            ...v,
-                            ...find(instance.data.parameters, {id: v.id})
-                        };
-                    })
+                    parameters: instance.data.parameters,
+                    tool: instance.data.tool
                 };
             case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
             case ToolInstance.Modifier.Event.TOOL_INSTANCE_CREATED:
@@ -67,16 +67,12 @@ export const createReducer = tool => {
                     description: action.payload.description,
                     public: action.payload.public,
                     settings: action.payload.data.settings,
-                    parameters: state.parameters.map(v => {
-                        return {
-                            ...v,
-                            ...find(action.payload.data.parameters, {id: v.id})
-                        };
-                    })
+                    parameters: action.payload.data.parameters,
+                    tool: action.payload.data.tool
+
                 };
         }
 
         return state;
     };
 };
-

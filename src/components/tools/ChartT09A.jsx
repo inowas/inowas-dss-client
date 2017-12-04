@@ -1,5 +1,5 @@
-import React from 'react'
-import {ResponsiveContainer, BarChart, Bar, XAxis, Legend} from 'recharts'
+import React from 'react';
+import {ResponsiveContainer, BarChart, Bar, Legend} from 'recharts';
 
 import '../../less/toolDiagram.less';
 

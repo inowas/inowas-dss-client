@@ -8,7 +8,7 @@ import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
 import image from '../../images/tools/T09A.png';
 
-import {Background, ChartT09A, Parameters} from '../components';
+import {Background, ChartT09A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -34,16 +34,17 @@ const styles = {
     }
 };
 
-const buildPayload = (data) => {
+const buildPayload = (state) => {
     return {
-        parameters: data.parameters.map(v => {
+        parameters: state.parameters.map(v => {
             return {
                 id: v.id,
                 max: v.max,
                 min: v.min,
                 value: v.value,
             };
-        })
+        }),
+        tool: state.tool
     };
 };
 
@@ -57,7 +58,7 @@ class T09A extends React.Component {
 
     constructor() {
         super();
-        this.state = getInitialState();
+        this.state = getInitialState(this.constructor.name);
     }
 
     componentWillReceiveProps(newProps) {
@@ -226,7 +227,7 @@ class T09A extends React.Component {
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
-                            <ChartT09A {...chartParams}/>
+                            <Chart {...chartParams}/>
                         </section>
                     </div>
 
@@ -246,16 +247,17 @@ class T09A extends React.Component {
     }
 }
 
-const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
-};
-
 const mapStateToProps = (state) => {
     return {
         toolInstance: state.T09A.toolInstance
     };
 };
+
+const actions = {
+    createToolInstance: ToolInstance.Command.createToolInstance,
+    updateToolInstance: ToolInstance.Command.updateToolInstance,
+};
+
 
 const mapDispatchToProps = (dispatch, props) => {
     const tool = props.route.tool;

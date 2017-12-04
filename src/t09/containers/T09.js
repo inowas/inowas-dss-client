@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
@@ -21,18 +22,41 @@ const navigation = [{
 
 class T09 extends React.Component {
 
-    pushToTool = tool => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            redirectTo: null
+        };
+    }
+
+    componentWillReceiveProps(props) {
+        const {toolInstance, params} = props;
+        if (params.id && toolInstance && toolInstance.tool) {
+            this.redirectTo(toolInstance.tool, params.id);
+        }
+    }
+
+    redirectTo = (tool, id = null) => {
+        if (id) {
+            return this.props.router.push('/tools/' + tool + '/' + id);
+        }
+
         return this.props.router.push('/tools/' + tool);
     };
 
     render() {
+        if (this.props.params.id) {
+            return null;
+        }
+
         return (
             <div className="app-width">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 <h3>Please select the set of boundary conditions that apply to your problem:</h3>
                 <div className="grid-container">
-                    <a className="col-rel-1-t13" />
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09A')}  className="tile col col-rel-1-t13">
+                    <a className="col-rel-1-t13"/>
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T09A')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T09A</h1>
                             <p className="p-height">
@@ -43,7 +67,8 @@ class T09 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09B')}  className="tile col col-rel-1-t13">
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T09B')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T09B</h1>
                             <p className="p-height">
@@ -54,7 +79,8 @@ class T09 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09C')}  className="tile col col-rel-1-t13">
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T09C')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T09C</h1>
                             <p className="p-height">
@@ -65,39 +91,22 @@ class T09 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    { /*
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T09D')}  className="tile col col-rel-1-t13">
-                        <div className="div-block">
-                            <h1>T09D</h1>
-                            <p className="p-height">
-                                Critical well discharge
-                            </p>
-                            <div className="center-horizontal center-vertical">
-                                <img className="sketch-image" src={image9D}/>
-                            </div>
-                        </div>
-                    </a>
-                    <a className="tile col col-rel-1-t13">
-                        <div className="div-block">
-                            <h1>T09E</h1>
-                            <p className="p-height">
-                                Sea level rise
-                            </p>
-                            <div className="center-horizontal center-vertical">
-                                <img className="sketch-image" src={image9E}/>
-                            </div>
-                        </div>
-                    </a>
-                    */
-                    }
                 </div>
             </div>
         );
     }
 }
 
-T09.propTypes = {
-    router: PropTypes.object.isRequired
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T09
+    };
 };
 
-export default withRouter(T09);
+T09.propTypes = {
+    params: PropTypes.object,
+    router: PropTypes.object.isRequired,
+    toolInstance: PropTypes.object,
+};
+
+export default withRouter(connect(mapStateToProps, null)(T09));

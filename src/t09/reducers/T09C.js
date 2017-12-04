@@ -4,6 +4,9 @@ export const getInitialState = (tool) => {
         description: 'Simple tool description',
         public: false,
         tool: tool,
+        settings: {
+            variable: 'confined'
+        },
         parameters: [{
             order: 0,
             id: 'q',

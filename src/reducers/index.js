@@ -40,6 +40,7 @@ const rootReducer = combineReducers({
     T07,
     T07E,
     T08,
+    T09: T09.createReducer('T09'),
     T09A: T09.createReducer('T09A'),
     T09B: T09.createReducer('T09B'),
     T09C: T09.createReducer('T09C'),
