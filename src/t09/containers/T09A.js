@@ -225,9 +225,7 @@ class T09A extends React.Component {
                             <Background image={image}/>
                         </section>
 
-                        <section className="tile col col-abs-3 stretch">
-                            <Chart {...chartParams}/>
-                        </section>
+                        <section className="tile col col-abs-3 stretch" />
                     </div>
 
                     <div className="grid-container">
