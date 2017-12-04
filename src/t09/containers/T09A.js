@@ -149,12 +149,12 @@ class T09A extends React.Component {
     };
 
     render() {
-        const {settings, parameters, name, description} = this.state;
+        const {parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
 
-        const chartParams = {settings};
+        const chartParams ={};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
