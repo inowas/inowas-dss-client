@@ -2,7 +2,7 @@ import React from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import PapaParse from 'papaparse';
 import styleGlobals from 'styleGlobals';
-import csvFile from '../data/database-2017-11-27.csv';
+import csvFile from '../data/database-2017-12-05.csv';
 import '../../less/4TileTool.less';
 import '../styles/pivottable.less';
 
