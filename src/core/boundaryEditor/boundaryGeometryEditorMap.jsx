@@ -136,7 +136,6 @@ class BoundaryGeometryEditorMap extends React.Component {
             const id = layer.options.id;
             const geoJson = layer.toGeoJSON();
             const geometry = geoJson.geometry;
-
             const boundary = this.state.boundary;
 
             if (boundary.id === id && boundary.observation_points) {

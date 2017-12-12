@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Query, Command, Action, Routing} from '../actions/index';
+import {Query, Command, Routing} from '../actions/index';
 import {model as modelSelector, general} from '../selectors/index';
 import ConfiguredRadium from 'ConfiguredRadium';
-import Icon from '../../components/primitive/Icon';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {browserHistory, withRouter} from 'react-router';
@@ -21,6 +20,8 @@ import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import TimeUnit from '../../model/TimeUnit';
 import LengthUnit from '../../model/LengthUnit';
+import {handleUpdateBoundingBox} from '../reducers/boundary';
+import {calculateActiveCells} from "../../core/geospatial";
 
 const styles = {
     columnContainer: {
@@ -57,7 +58,6 @@ const initialState = {
 
 let localState = initialState;
 
-@ConfiguredRadium
 class ModelEditorGeneral extends Component {
     constructor(props) {
         super(props);
@@ -148,6 +148,18 @@ class ModelEditorGeneral extends Component {
         Routing.createArea(this.props.routes, this.props.params)();
     };
 
+    handleAreaUpdate = (geometry, bounds) => {
+        const boundingBox = handleUpdateBoundingBox(this.state.bounding_box, bounds);
+        const gridSize = this.state.model.grid_size;
+        this.setState({
+            model: {...this.state.model,
+                geometry,
+                bounding_box: boundingBox,
+                active_cells: calculateActiveCells(geometry, boundingBox, gridSize)
+            }
+        });
+    };
+
     save(id) {
         const {routes, params} = this.props;
 
@@ -159,41 +171,10 @@ class ModelEditorGeneral extends Component {
         this.props.createModflowModel(uuid.v4(), this.state.model, routes, params);
     }
 
-    renderEditOnMapIcon = (id, readOnly) => {
-        if (id && !readOnly) {
-            return (
-                <Button
-                    onClick={this.editAreaOnMap}
-                    type="link"
-                    icon={<Icon name="marker"/>}
-                >
-                    Edit on Map
-                </Button>
-            );
-        }
-
-        if (!id) {
-            return (
-                <Button
-                    onClick={this.createAreaOnMap}
-                    type="link"
-                    icon={<Icon name="marker"/>}
-                >
-                    Draw on Map
-                </Button>
-            );
-        }
-
-        return null;
-    };
-
     render() {
-        const {
-            getModflowModelDetailsStatus,
-            model,
-            createModflowModelStatus,
-            updateModflowModelStatus
-        } = this.props;
+        const {getModflowModelDetailsStatus, createModflowModelStatus, updateModflowModelStatus} = this.props;
+        const {model} = this.state;
+
         const {id} = this.props.params;
         const {model: stateModel} = this.state;
 
@@ -379,13 +360,10 @@ class ModelEditorGeneral extends Component {
                 </LayoutComponents.Column>
 
                 <LayoutComponents.Column
-                    heading="Area"
+                    heading="Model Area"
                     style={[styles.expandVerticalContainer]}
                 >
-                    <div style={[styles.mapActionToolbar]}>
-                        {this.renderEditOnMapIcon(id, readOnly)}
-                    </div>
-                    <GeneralMap style={styles.expandVertical} model={model}/>
+                    <GeneralMap style={styles.expandVertical} model={model} readOnly={readOnly} onAreaUpdate={this.handleAreaUpdate}/>
                     <div style={[styles.saveButtonWrapper]}>
                         <WebData.Component.Loading
                             status={
@@ -430,7 +408,6 @@ const mapStateToProps = (state, {tool}) => {
 };
 
 const actions = {
-    setModflowModel: Action.setModflowModel,
     createModflowModel: Command.createModflowModel,
     updateModflowModel: Command.updateModflowModel
 };
@@ -450,11 +427,6 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     return wrappedActions;
 };
 
-// eslint-disable-next-line no-class-assign
-ModelEditorGeneral = withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(ModelEditorGeneral)
-);
-
 ModelEditorGeneral.propTypes = {
     style: PropTypes.object,
     createModflowModel: PropTypes.func,
@@ -468,4 +440,8 @@ ModelEditorGeneral.propTypes = {
     routes: PropTypes.array
 };
 
-export default ModelEditorGeneral;
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(
+        ConfiguredRadium(ModelEditorGeneral)
+    )
+);
