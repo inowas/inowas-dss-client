@@ -20,7 +20,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 import {Action, Command, Routing} from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
-import {getBoundaryDefaultsByType} from '../selectors/boundary';
+import {getBoundaryDefaults} from '../selectors/boundary';
 
 import FloatingToast from '../../components/modflow/FloatingToast';
 import Icon from '../../components/primitive/Icon';
@@ -29,6 +29,7 @@ import {connect} from 'react-redux';
 import md5 from 'js-md5';
 import {uniqueId, has} from 'lodash';
 import ActiveCellsLayer from '../components/activeCellsLayer';
+import {calculateActiveCells} from "../../core/geospatial";
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -391,7 +392,7 @@ class BackgroundMap extends Component {
             const id = type + '-' + newBoundaryNumber;
             const linestring = e.layer;
 
-            const boundary = getBoundaryDefaultsByType(
+            const boundary = getBoundaryDefaults(
                 type,
                 id,
                 'Constant Head ' + newBoundaryNumber,
@@ -399,6 +400,7 @@ class BackgroundMap extends Component {
                 this.getStartDate()
             );
 
+            boundary.active_cells = calculateActiveCells(linestring.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
             this.props.addBoundary(this.props.model.id, boundary);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
@@ -407,7 +409,7 @@ class BackgroundMap extends Component {
             const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const linestring = e.layer;
-            const boundary = getBoundaryDefaultsByType(
+            const boundary = getBoundaryDefaults(
                 type,
                 id,
                 'General Head ' + newBoundaryNumber,
@@ -415,6 +417,7 @@ class BackgroundMap extends Component {
                 this.getStartDate()
             );
 
+            boundary.active_cells = calculateActiveCells(linestring.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
             this.props.addBoundary(this.props.model.id, boundary);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
@@ -423,7 +426,7 @@ class BackgroundMap extends Component {
             const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const polygon = e.layer;
-            const boundary = getBoundaryDefaultsByType(
+            const boundary = getBoundaryDefaults(
                 type,
                 id,
                 'Recharge ' + newBoundaryNumber,
@@ -431,6 +434,7 @@ class BackgroundMap extends Component {
                 this.getStartDate()
             );
 
+            boundary.active_cells = calculateActiveCells(polygon.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
             this.props.addBoundary(this.props.model.id, boundary);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
@@ -439,7 +443,7 @@ class BackgroundMap extends Component {
             const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const linestring = e.layer;
-            const boundary = getBoundaryDefaultsByType(
+            const boundary = getBoundaryDefaults(
                 type,
                 id,
                 'River ' + newBoundaryNumber,
@@ -447,6 +451,7 @@ class BackgroundMap extends Component {
                 this.getStartDate()
             );
 
+            boundary.active_cells = calculateActiveCells(linestring.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
             this.props.addBoundary(this.props.model.id, boundary);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
@@ -455,7 +460,7 @@ class BackgroundMap extends Component {
             const newBoundaryNumber = this.getNewBoundaryNumber(type);
             const id = type + '-' + newBoundaryNumber;
             const point = e.layer;
-            const boundary = getBoundaryDefaultsByType(
+            const boundary = getBoundaryDefaults(
                 type,
                 id,
                 'Well ' + newBoundaryNumber,
@@ -463,6 +468,7 @@ class BackgroundMap extends Component {
                 this.getStartDate()
             );
 
+            boundary.active_cells = calculateActiveCells(point.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
             this.props.addBoundary(this.props.model.id, boundary);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }

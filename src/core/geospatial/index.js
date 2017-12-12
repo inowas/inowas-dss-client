@@ -62,15 +62,23 @@ export const getActiveCellFromCoordinate = (coordinate, boundingBox, gridSize) =
     ];
 };
 
-export const calculateActiveCells = (geometry, boundingBox, gridSize) => {
+export const calculateActiveCells = (geom, boundingBox, gridSize) => {
+
+    let geometry;
+    if (geom.geometry) {
+        geometry = geom.geometry;
+    } else {
+        geometry = geom;
+    }
+
     const activeCells = [];
 
-    if (geometry.geometry.type.toLowerCase() === 'point') {
-        const coordinate = geometry.geometry.coordinates;
+    if (geometry.type.toLowerCase() === 'point') {
+        const coordinate = geometry.coordinates;
         activeCells.push(getActiveCellFromCoordinate(coordinate, boundingBox, gridSize));
     }
 
-    if (geometry.geometry.type.toLowerCase() === 'linestring') {
+    if (geometry.type.toLowerCase() === 'linestring') {
         const gridCells = getGridCells(boundingBox, gridSize);
         gridCells.forEach(cell => {
             if (booleanCrosses(geometry, cell.geometry)) {
@@ -79,7 +87,7 @@ export const calculateActiveCells = (geometry, boundingBox, gridSize) => {
         });
     }
 
-    if (geometry.geometry.type.toLowerCase() === 'polygon') {
+    if (geometry.type.toLowerCase() === 'polygon') {
         const gridCells = getGridCells(boundingBox, gridSize);
         gridCells.forEach(cell => {
             if (booleanContains(geometry, cell.geometry) || booleanOverlap(geometry, cell.geometry)) {
