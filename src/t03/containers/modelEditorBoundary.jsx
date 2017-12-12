@@ -25,6 +25,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {makeMapStateToPropsBoundaries} from '../selectors/mapState';
 import styleGlobals from 'styleGlobals';
+import {getBoundaryDefaults} from "../selectors/boundary";
 
 const styles = {
     container: {
@@ -73,8 +74,9 @@ class ModelEditorBoundary extends React.Component {
         });
     };
 
-    handleEditBoundaryOnMap = () => {
-        browserHistory.push(this.props.location.pathname + '#edit');
+    createBoundary = data => {
+        const {id} = this.props.params;
+        this.props.createBoundary(id, data);
     };
 
     updateBoundary = data => {
@@ -82,20 +84,37 @@ class ModelEditorBoundary extends React.Component {
         this.props.updateBoundary(id, data);
     };
 
+    getNewBoundaryNumber = type => {
+        let i = 1;
+        while (i < 100000) {
+            // eslint-disable-next-line no-loop-func
+            if (this.props.model.boundaries.filter(b => {
+                    return (b.id === (type + '-' + i));
+                }).length === 0) {
+                return i;
+            }
+            i++;
+        }
+
+        return null;
+    };
+
     renderProperties(boundaries) {
-        const {area, permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus, soilmodelLayers, model} = this.props;
+        const {permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus, soilmodelLayers, model} = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
 
         const {type, id, pid, property} = this.props.params;
         const {params, routes} = this.props;
 
-        if (pid) {
+        const viewBoundary = pid && type;
+
+        if (viewBoundary) {
             const boundary = boundaries.filter(b => b.type === type && b.id === pid)[0];
             if (boundary) {
                 return (
                     <BoundaryProperties
-                        boundaryId={boundary.id}
+                        boundary={boundary}
                         model={model}
                         onDelete={() => removeBoundary(pid, id) || this.onBackButtonClick()}
                         onSave={this.updateBoundary}
@@ -106,6 +125,7 @@ class ModelEditorBoundary extends React.Component {
             }
             return <p>Loading ...</p>;
         }
+
         return (
             <BoundaryOverview
                 property={property}
@@ -149,6 +169,9 @@ class ModelEditorBoundary extends React.Component {
     };
 
     render() {
+
+        console.log(this.props);
+
         // eslint-disable-next-line no-shadow
         const {style, boundaries, boundaryType, params} = this.props;
         const {type} = params;
@@ -204,6 +227,7 @@ class ModelEditorBoundary extends React.Component {
 }
 
 const actions = {
+    createBoundary: Command.addBoundary,
     updateBoundary: Command.updateBoundary,
     updatePumpingRate: Action.updatePumpingRate,
     addPumpingRate: Action.addPumpingRate,
@@ -227,6 +251,7 @@ const mapDispatchToProps = (dispatch, {tool}) => {
 };
 
 ModelEditorBoundary.propTypes = {
+    model: PropTypes.object.isRequired,
     tool: PropTypes.string.isRequired,
     updateBoundaryStatus: PropTypes.object,
 };

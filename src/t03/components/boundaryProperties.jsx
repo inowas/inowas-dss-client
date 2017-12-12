@@ -83,10 +83,9 @@ class BoundaryProperties extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const boundary = nextProps.model.boundaries.filter(b => (b.id === nextProps.boundaryId))[0];
         this.setState({
-            boundary: boundary,
-            selectedObservationPointId: boundary.observation_points ? first(boundary.observation_points).id : null
+            boundary: nextProps.boundary,
+            selectedObservationPointId: nextProps.boundary.observation_points ? first(nextProps.boundary.observation_points).id : null
         });
     }
 
@@ -232,7 +231,8 @@ class BoundaryProperties extends React.Component {
 
             observationPoints.map(op => {
                 if (op.id === this.state.selectedObservationPointId) {
-                    return {...op, date_time_values: this.observationPoint.getRows()};
+                    op.date_time_values = this.observationPoint.getRows();
+                    return op;
                 }
 
                 return op;
@@ -325,16 +325,18 @@ class BoundaryProperties extends React.Component {
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
                         <RechargeRate readOnly={readOnly} ref={observationPoint => {
                             this.observationPoint = observationPoint;
-                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                        }} rows={addIdFromIndex(getDateTimeValues(boundary))}/>
                     </LayoutComponents.Column>
                 );
             case 'riv':
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
-                        <RiverObservationPoint readOnly={readOnly} ref={observationPoint => {
-                            this.observationPoint = observationPoint;
-                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                        <RiverObservationPoint
+                            readOnly={readOnly}
+                            ref={op => {this.observationPoint = op;}}
+                            rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}
+                        />
                     </LayoutComponents.Column>
                 );
             case 'wel':
@@ -343,10 +345,8 @@ class BoundaryProperties extends React.Component {
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
                         <PumpingRate
                             readOnly={readOnly}
-                            ref={op => {
-                                this.observationPoint = op;
-                            }}
-                            rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                            ref={op => {this.observationPoint = op;}}
+                            rows={addIdFromIndex(getDateTimeValues(boundary))}/>
                     </LayoutComponents.Column>
                 );
             default:
@@ -534,8 +534,8 @@ class BoundaryProperties extends React.Component {
 }
 
 BoundaryProperties.propTypes = {
+    boundary: PropTypes.object.isRequired,
     model: PropTypes.object.isRequired,
-    boundaryId: PropTypes.string.isRequired,
     readOnly: PropTypes.bool.isRequired,
     onDelete: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
