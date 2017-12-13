@@ -7,6 +7,7 @@ import * as T03 from './t03/index';
 import * as T04 from './t04/index';
 import * as T07 from './t07/index';
 import * as T09 from './t09/index';
+import * as T13 from './t13/index';
 import * as ToolInstance from './toolInstance/index';
 import DashboardContainer from './containers/Dashboard';
 import Login from './containers/Login';
@@ -107,7 +108,7 @@ const routes = store => (
                     }}
                 />
             </Route>
-            <Route path="T08/:id" component={tools.T08}/>
+            <Route path="T08(/:id)" component={tools.T08}/>
             <Route
                 path="T09(/:id)"
                 component={T09.Container.T09}
@@ -131,12 +132,27 @@ const routes = store => (
             <Route path="T09D(/:id)" component={T09.Container.T09D} tool={'T09'}/>
             <Route path="T09E(/:id)" component={T09.Container.T09E} tool={'T09'}/>
             <Route path="T12(/:id)" component={tools.T12}/>
-            <Route path="T13(/:id)" component={tools.T13}/>
-            <Route path="T13A(/:id)" component={tools.T13A}/>
-            <Route path="T13B(/:id)" component={tools.T13B}/>
-            <Route path="T13C(/:id)" component={tools.T13C}/>
-            <Route path="T13D(/:id)" component={tools.T13D}/>
-            <Route path="T13E(/:id)" component={tools.T13E}/>
+
+            <Route
+                path="T13(/:id)"
+                component={T13.Container.T13}
+                tool={'T13'}
+                onEnter={nextState => {
+                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
+                    store.dispatch(WebData.Modifier.Action.clear());
+                    if (nextState.params.id) {
+                        store.dispatch(
+                            ToolInstance.Modifier.Query.getToolInstance(
+                                'T13',
+                                nextState.params.id,
+                            )
+                        );
+                    }
+                }}
+            />
+            <Route path="T13A(/:id)" component={T13.Container.T13A} tool={'T13'}/>
+            <Route path="T13B(/:id)" component={T13.Container.T13B} tool={'T13'}/>
+            <Route path="T13C(/:id)" component={T13.Container.T13C} tool={'T13'}/>
             <Route path="T14(/:id)" component={tools.T14}/>
             <Route path="T14A(/:id)" component={tools.T14A}/>
             <Route path="T14B(/:id)" component={tools.T14B}/>
