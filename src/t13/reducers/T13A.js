@@ -7,7 +7,7 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'W',
-            name: 'Average infiltration rate, W(m/d)',
+            name: 'Average infiltration rate, W [m/d]',
             min: 0.001,
             max: 0.01,
             value: 0.009,
@@ -16,7 +16,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 1,
             id: 'K',
-            name: 'Hydraulic conductivity, K (m/d)',
+            name: 'Hydraulic conductivity, K [m/d]',
             min: 10e-2,
             max: 10e2,
             value: 10.1,
@@ -25,7 +25,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 2,
             id: 'ne',
-            name: 'Effective porosity, n (-)',
+            name: 'Effective porosity, n [-]',
             min: 0,
             max: 0.5,
             value: 0.35,
@@ -34,7 +34,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 3,
             id: 'L',
-            name: 'Aquifer length, L´ (m)',
+            name: 'Aquifer length, L´ [m]',
             min: 0,
             max: 1000,
             value: 500,
@@ -43,7 +43,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 4,
             id: 'hL',
-            name: 'Downstream fixed head boundary, hL´ (m)',
+            name: 'Downstream fixed head boundary, hL´ [m]',
             min: 0,
             max: 10,
             value: 2,
@@ -52,7 +52,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 5,
             id: 'xi',
-            name: 'Initial position, xi (m)',
+            name: 'Initial position, xᵢ [m]',
             min: 0,
             max: 1000,
             value: 50,
@@ -61,7 +61,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 6,
             id: 'xe',
-            name: 'Arrival location, xe (m)',
+            name: 'Arrival location, xₑ [m]',
             min: 1,
             max: 1000,
             value: 500,

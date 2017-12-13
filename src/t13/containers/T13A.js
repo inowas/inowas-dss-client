@@ -130,10 +130,6 @@ class T13A extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'variable') {
-            this.updateSettings(e.target.value);
-        }
-
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
@@ -186,7 +182,7 @@ class T13A extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13A. Saltwater intrusion // Depth of freshwater - saltwater interface (Ghyben-Herzberg relation)
+                    T13A. Travel time // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
