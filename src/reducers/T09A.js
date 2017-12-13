@@ -63,39 +63,39 @@ function getInitialState() {
 const T09AReducer = (state = getInitialState(), action) => {
     switch (action.type) {
         case 'RESET_TOOL_T09A':
-            {
-                state = { ...state
-                };
-                state = getInitialState();
-                calculateAndModifyState(state);
-                break;
-            }
+        {
+            state = { ...state
+            };
+            state = getInitialState();
+            calculateAndModifyState(state);
+            break;
+        }
         case 'CALCULATE_TOOL_T09A':
-            {
-                state = { ...state
-                };
-                calculateAndModifyState(state);
-                break;
-            }
+        {
+            state = { ...state
+            };
+            calculateAndModifyState(state);
+            break;
+        }
         case 'CHANGE_TOOL_T09A_PARAMETER':
-            {
-                state = { ...state,
-                };
-                const newParam = action.payload;
-                var param = state.parameters.find(p => {
-                    return p.id === newParam.id
-                });
-                applyParameterUpdate(param, newParam);
-                // check df <= ds
-                let df = state.parameters.find(p => {return p.id == 'df'}),
-                    ds = state.parameters.find(p => {return p.id == 'ds'})
+        {
+            state = { ...state,
+            };
+            const newParam = action.payload;
+            var param = state.parameters.find(p => {
+                return p.id === newParam.id
+            });
+            applyParameterUpdate(param, newParam);
+            // check df <= ds
+            let df = state.parameters.find(p => {return p.id == 'df'}),
+                ds = state.parameters.find(p => {return p.id == 'ds'})
 
-                if (df.value > ds.value) {
-                    df.value = ds.value;
-                }
-                state = calculateAndModifyState(state);
-                break;
+            if (df.value > ds.value) {
+                df.value = ds.value;
             }
+            state = calculateAndModifyState(state);
+            break;
+        }
     }
     return state;
 };

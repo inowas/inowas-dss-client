@@ -6,9 +6,9 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T02.png';
+import image from '../../images/tools/T09A.png';
 
-import {Background, Chart, Parameters, Settings} from '../components';
+import {Background, ChartT09A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -21,9 +21,8 @@ import Button from '../../components/primitive/Button';
 import {Modifier as ToolInstance} from '../../toolInstance';
 
 import {each} from 'lodash';
-import {getInitialState} from '../reducers/main';
+import {getInitialState} from '../reducers/T09A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
-import {makeMapStateToProps} from '../selectors/mapState';
 
 const styles = {
     heading: {
@@ -35,31 +34,31 @@ const styles = {
     }
 };
 
-const buildPayload = (data) => {
+const buildPayload = (state) => {
     return {
-        settings: data.settings,
-        parameters: data.parameters.map(v => {
+        parameters: state.parameters.map(v => {
             return {
                 id: v.id,
                 max: v.max,
                 min: v.min,
                 value: v.value,
             };
-        })
+        }),
+        tool: state.tool
     };
 };
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
     icon: <Icon name="file"/>
 }];
 
-class T02 extends React.Component {
+class T09A extends React.Component {
 
     constructor() {
         super();
-        this.state = getInitialState();
+        this.state = getInitialState(this.constructor.name);
     }
 
     componentWillReceiveProps(newProps) {
@@ -118,7 +117,7 @@ class T02 extends React.Component {
             this.setState(prevState => {
                 return {
                     ...prevState,
-                    [ name ]: value
+                    [name]: value
                 };
             });
         };
@@ -151,12 +150,12 @@ class T02 extends React.Component {
     };
 
     render() {
-        const {settings, parameters, name, description} = this.state;
+        const {parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
 
-        const chartParams = {settings};
+        const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
@@ -187,7 +186,7 @@ class T02 extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T02. Groundwater mounding (Hantush)
+                    T09A. Saltwater intrusion // Depth of freshwater - saltwater interface (Ghyben-Herzberg relation)
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -233,10 +232,7 @@ class T02 extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2">
-                            <Settings settings={settings} handleChange={this.handleChange}/>
-                        </section>
-
+                        <section className="tile col col-abs-2 stacked"/>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
@@ -251,10 +247,17 @@ class T02 extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T09A.toolInstance
+    };
+};
+
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
+
 
 const mapDispatchToProps = (dispatch, props) => {
     const tool = props.route.tool;
@@ -272,7 +275,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return wrappedActions;
 };
 
-T02.propTypes = {
+T09A.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
     getToolInstanceStatus: PropTypes.object,
@@ -282,7 +285,4 @@ T02.propTypes = {
     updateToolInstanceStatus: PropTypes.object
 };
 
-// eslint-disable-next-line no-class-assign
-T02 = withRouter(connect(makeMapStateToProps, mapDispatchToProps)(T02));
-
-export default T02;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T09A));

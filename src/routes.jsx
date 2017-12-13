@@ -4,8 +4,9 @@ import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
 import tools from './containers/tools';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
-import * as T07 from './t07/index';
 import * as T04 from './t04/index';
+import * as T07 from './t07/index';
+import * as T09 from './t09/index';
 import * as ToolInstance from './toolInstance/index';
 import DashboardContainer from './containers/Dashboard';
 import Login from './containers/Login';
@@ -60,7 +61,7 @@ const routes = store => (
                     );
                 }}
             />
-            <Route path="T04" component={T04.Container.Main}/>
+            <Route path="T04" component={T04.Container.Main} tool={'T04'}/>
             <Route path="T06(/:id)" component={tools.T06}/>
             <Route path="T07" component={T07.Container.Main}>
                 <IndexRoute component={T07.Component.New}/>
@@ -107,12 +108,28 @@ const routes = store => (
                 />
             </Route>
             <Route path="T08/:id" component={tools.T08}/>
-            <Route path="T09(/:id)" component={tools.T09}/>
-            <Route path="T09A(/:id)" component={tools.T09A}/>
-            <Route path="T09B(/:id)" component={tools.T09B}/>
-            <Route path="T09C(/:id)" component={tools.T09C}/>
-            <Route path="T09D(/:id)" component={tools.T09D}/>
-            <Route path="T09E(/:id)" component={tools.T09E}/>
+            <Route
+                path="T09(/:id)"
+                component={T09.Container.T09}
+                tool={'T09'}
+                onEnter={nextState => {
+                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
+                    store.dispatch(WebData.Modifier.Action.clear());
+                    if (nextState.params.id) {
+                        store.dispatch(
+                            ToolInstance.Modifier.Query.getToolInstance(
+                                'T09',
+                                nextState.params.id,
+                            )
+                        );
+                    }
+                }}
+            />
+            <Route path="T09A(/:id)" component={T09.Container.T09A} tool={'T09'}/>
+            <Route path="T09B(/:id)" component={T09.Container.T09B} tool={'T09'}/>
+            <Route path="T09C(/:id)" component={T09.Container.T09C} tool={'T09'}/>
+            <Route path="T09D(/:id)" component={T09.Container.T09D} tool={'T09'}/>
+            <Route path="T09E(/:id)" component={T09.Container.T09E} tool={'T09'}/>
             <Route path="T12(/:id)" component={tools.T12}/>
             <Route path="T13(/:id)" component={tools.T13}/>
             <Route path="T13A(/:id)" component={tools.T13A}/>

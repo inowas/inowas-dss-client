@@ -136,8 +136,9 @@ function getInitialState() {
             stepSize: 0.001,
             decimals: 3
         }]
-    }
+    };
 }
+
 const T08Reducer = (state = getInitialState(), action) => {
     switch (action.type) {
         case 'RESET_TOOL_T08':
