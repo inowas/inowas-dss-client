@@ -5,7 +5,7 @@ export const getInitialState = (tool) => {
         public: false,
         tool: tool,
         settings: {
-            value: 'confined'
+            AqType: 'unconfined'
         },
         parameters: [{
             order: 0,
@@ -45,18 +45,6 @@ export const getInitialState = (tool) => {
             decimals: 1
         }, {
             order: 3,
-            id: 'qw',
-            name: 'Well pumping rate, Qw [m³/d]',
-            min: 1000,
-            validMin: function(x) {
-                return x > 0;
-            },
-            max: 8000,
-            value: 5000,
-            stepSize: 10,
-            decimals: 0
-        }, {
-            order: 4,
             id: 'xw',
             name: 'Distance from well to shoreline, xw [m]',
             min: 1000,
@@ -68,7 +56,7 @@ export const getInitialState = (tool) => {
             stepSize: 1,
             decimals: 0
         }, {
-            order: 5,
+            order: 4,
             id: 'rhof',
             name: 'Density of freshwater, ρ [g/cm³]',
             min: 0.9,
@@ -83,7 +71,7 @@ export const getInitialState = (tool) => {
             stepSize: 0.001,
             decimals: 3
         }, {
-            order: 6,
+            order: 5,
             id: 'rhos',
             name: 'Density of saltwater, ρₛ [g/cm³]',
             min: 0.9,

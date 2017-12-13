@@ -161,6 +161,11 @@ class T09C extends React.Component {
             chartParams[v.id] = v.value;
         });
 
+        const infoParams = {};
+        each(parameters, v => {
+            infoParams[v.id] = v.value;
+        });
+
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -234,7 +239,7 @@ class T09C extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Info />
+                            <Info {...infoParams}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
