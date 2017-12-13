@@ -64,11 +64,11 @@ export function calculateXT(i, b, rho_f, rho_s) {
 
 const Chart = ({b, i, df, ds}) => {
     const yDomain = [-b, 0];
-    const xDomain = [-b * 10, 0];
-    const data = calculateDiagramData(i, b, df, ds, 0, b * 10, 1);
     const z = calculateZ(i, b, df, ds);
     const L = calculateL(i, b, df, ds);
     const xT = calculateXT(i, b, df, ds);
+    const xDomain = [(Math.round(xT/50,0)+1)*50, 0];
+    const data = calculateDiagramData(i, b, df, ds, 0, (Math.round(xT/50,0)+1)*50, 1);
     return (
         <div>
             <h2>Calculation</h2>

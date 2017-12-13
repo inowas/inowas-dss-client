@@ -107,7 +107,7 @@ const routes = store => (
                     }}
                 />
             </Route>
-            <Route path="T08/:id" component={tools.T08}/>
+            <Route path="T08(/:id)" component={tools.T08}/>
             <Route
                 path="T09(/:id)"
                 component={T09.Container.T09}
