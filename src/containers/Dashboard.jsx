@@ -299,15 +299,6 @@ class Dashboard extends React.Component {
 
         const menuItems = [
             {
-                name: 'Projects',
-                icon: <Icon name="folder"/>,
-                items: [
-                    {
-                        name: 'Inowas'
-                    }
-                ]
-            },
-            {
                 name: 'Tools',
                 icon: <Icon name="tools"/>,
                 items: tools.filter(t => includes(roles, t.role))
@@ -326,7 +317,7 @@ class Dashboard extends React.Component {
                 <Navbar links={navigation}/>
                 <div className="app-width grid-container">
                     <Menu
-                        firstActive={1}
+                        firstActive={0}
                         title="Dashboard"
                         items={menuItems}
                         style={styles.menu}

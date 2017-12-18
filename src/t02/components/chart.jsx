@@ -35,9 +35,9 @@ const calculateDiagramData = (variable, w, L, W, hi, Sy, K, t, min, max, stepSiz
 };
 
 const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
-    let max = L;
+    let max = 2 * L;
     if (settings.variable === 'x') {
-        max = W;
+        max = 2 * W;
     }
 
     const variable = settings.variable;
@@ -78,7 +78,7 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                                     stroke="#1EB1ED"
                                     strokeWidth="5" dot={false}
                                 />
-                                <ReferenceLine x={max / 2} stroke="black" strokeWidth="3" label={rLabel} dot={false}/>
+                                <ReferenceLine x={max / 4} stroke="black" strokeWidth="3" label={rLabel} dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-ylabels">
