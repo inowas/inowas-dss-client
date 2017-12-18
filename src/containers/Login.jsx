@@ -1,45 +1,114 @@
 import '../less/login.less';
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 
-import LoginForm from '../components/LoginForm';
-import { authenticate } from '../actions/user';
-import { connect } from 'react-redux';
-import { isUserLoggedIn } from '../reducers/user';
-import { push } from 'react-router-redux';
-import { withRouter } from 'react-router';
+import {authenticate} from '../actions/user';
+import {connect} from 'react-redux';
+import {isUserLoggedIn} from '../reducers/user';
+import {push} from 'react-router-redux';
+import {withRouter} from 'react-router';
+import {Button, Container, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
+import logo from '../images/favicon.png';
+
+const styles = {
+    link: {
+        cursor: 'pointer'
+    }
+};
 
 class Login extends Component {
     static propTypes = {
         userLoggedIn: PropTypes.bool.isRequired,
         push: PropTypes.func.isRequired,
         authenticate: PropTypes.func.isRequired
+    };
+
+
+    constructor(props) {
+        super(props);
+        this.checkAuthentication(this.props);
+        this.state = {
+            username: null,
+            password: null,
+            loading: false
+        };
     }
 
-    constructor( props ) {
-        super( props );
-        this.checkAuthentication( this.props );
+    componentWillReceiveProps(nextProps) {
+        this.checkAuthentication(nextProps);
     }
 
-    componentWillReceiveProps( nextProps ) {
-        this.checkAuthentication( nextProps );
-    }
-
-    checkAuthentication( props ) {
+    checkAuthentication(props) {
         // eslint-disable-next-line no-shadow
-        const { userLoggedIn, push } = props;
-        if ( userLoggedIn ) {
-            push( '/' );
+        const {userLoggedIn, push} = props;
+        if (userLoggedIn) {
+            push('/');
         }
     }
 
-    render( ) {
-        // eslint-disable-next-line no-shadow
-        const { authenticate } = this.props;
+    pushToSignUp = () => {
+        this.props.push('/signup');
+    };
 
+    onUsernameChange = e => {
+        this.setState({
+            username: e.target.value
+        });
+    };
+
+    onPasswordChange = e => {
+        this.setState({
+            password: e.target.value
+        });
+    };
+
+    onLoginClick = () => {
+        this.props.authenticate(this.state.username, this.state.password);
+        this.setState({
+            loading: true
+        });
+    };
+
+    render() {
         return (
-            <div className="login-container center-horizontal center-vertical">
-                <LoginForm className="tile" login={authenticate}/>
+            <div>
+                <Container textAlign={'center'} className={'login'}>
+                    <Grid textAlign="center">
+                        <Grid.Column style={{maxWidth: 350}}>
+                            <Header as="h2">
+                                <Image src={logo}/>
+                                <Header.Content>
+                                    Log-in to your account
+                                </Header.Content>
+                            </Header>
+                            <Form size={'small'} className="fluid segment">
+                                    <Form.Field>
+                                        <input
+                                            onChange={this.onUsernameChange}
+                                            placeholder="Username"
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <input
+                                            onChange={this.onPasswordChange}
+                                            placeholder="Password"
+                                            type="password"
+                                        />
+                                    </Form.Field>
+                                    <Button
+                                        color={'blue'}
+                                        fluid size="large"
+                                        onClick={this.onLoginClick}
+                                    >
+                                        Login
+                                    </Button>
+                            </Form>
+                            <Message attached="bottom" warning>
+                               New to us?&nbsp;<a onClick={this.pushToSignUp} style={styles.link}>Sign Up here!</a>.
+                            </Message>
+                        </Grid.Column>
+                    </Grid>
+                </Container>
             </div>
         );
     }
@@ -47,11 +116,11 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
-        userLoggedIn: isUserLoggedIn( state.user )
+        userLoggedIn: isUserLoggedIn(state.user)
     };
 };
 
 // eslint-disable-next-line no-class-assign
-Login = withRouter( connect(mapStateToProps, { push, authenticate })( Login ));
+Login = withRouter(connect(mapStateToProps, {push, authenticate})(Login));
 
 export default Login;

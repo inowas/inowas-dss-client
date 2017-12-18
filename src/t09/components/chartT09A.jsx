@@ -62,7 +62,7 @@ const Chart = ({h, df, ds}) => {
                         </div>
                     </div>
                 </div>
-                <div className="col col-rel-0-5">
+{/*                <div className="col col-rel-0-5">
                     <ul className="nav nav-stacked" role="navigation">
                         <li>
                             <button className="button">PNG</button>
@@ -71,7 +71,7 @@ const Chart = ({h, df, ds}) => {
                             <button className="button">CSV</button>
                         </li>
                     </ul>
-                </div>
+                </div>*/}
             </div>
         </div>
     );

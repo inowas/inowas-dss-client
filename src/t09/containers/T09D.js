@@ -189,7 +189,7 @@ class T09D extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09C. Saltwater intrusion // Critical well discharge
+                    T09D. Saltwater intrusion // Critical well discharge
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">

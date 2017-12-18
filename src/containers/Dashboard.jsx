@@ -139,10 +139,7 @@ class Dashboard extends React.Component {
                         </Button>
                     </Td>
                     <Td>
-                        {i.project}
-                    </Td>
-                    <Td>
-                        {i.application}
+                        {i.tool}
                     </Td>
                     <Td>
                         {Formatter.dateToDatetime(new Date(i.created_at))}
@@ -266,8 +263,7 @@ class Dashboard extends React.Component {
                     <Tr head>
                         <Td head>No.</Td>
                         <Td head>Name</Td>
-                        <Td head>Project</Td>
-                        <Td head>Application</Td>
+                        <Td head>Tool</Td>
                         <Td head>Date created</Td>
                         <Td head>Created by</Td>
                         <Td style={[styles.lastTd]} head/>
