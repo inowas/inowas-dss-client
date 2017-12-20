@@ -31,6 +31,7 @@ export function calculateDiagramData(w, K, ne, L, hL, x_min, x_max, d_x) {
     }
 
     var data = [];
+    if (x_max<x_min) x_max=x_min;
     for (let x = x_min; x <= x_max; x += d_x) {
         data.push({
             x,

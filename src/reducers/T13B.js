@@ -175,7 +175,6 @@ const T13BReducer = (state = getInitialState(), action) => {
                 }
 
                 calculateAndModifyState(state);
-                console.log('I reach ehre')
                 break;
             }
     }

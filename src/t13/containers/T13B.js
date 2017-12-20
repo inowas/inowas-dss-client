@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 import image from '../../images/tools/T13B.png';
 
-import {Background, ChartT13B as Chart, Parameters} from '../components';
+import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -89,7 +89,7 @@ class T13B extends React.Component {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    variable: value
+                    selected: value
                 }
             };
         });
@@ -130,7 +130,7 @@ class T13B extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'variable') {
+        if (e.target.name === 'settings') {
             this.updateSettings(e.target.value);
         }
 
@@ -150,7 +150,7 @@ class T13B extends React.Component {
     };
 
     render() {
-        const {parameters, name, description} = this.state;
+        const {settings,parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
@@ -159,6 +159,13 @@ class T13B extends React.Component {
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
+        chartParams['settings'] =settings.selected;
+
+        const infoParams = {};
+        each(parameters, v => {
+            infoParams[v.id] = v.value;
+        });
+        infoParams['settings'] =settings.selected;
 
         const heading = (
             <div className="grid-container">
@@ -232,8 +239,12 @@ class T13B extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
-                        <section className="tile col col-abs-3 stretch">
+                        <section className="tile col col-abs-2 stacked">
+                            <Info {...infoParams}/>
+                            <Settings value={settings.selected} handleChange={this.handleChange}/>
+                        </section>
+
+                    <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
                                 handleChange={this.handleChange}

@@ -4,6 +4,12 @@ export const getInitialState = (tool) => {
         description: 'Simple tool description',
         public: false,
         tool: tool,
+        settings: {
+            selected: 'h0'
+        },
+        info: {
+            xwd: 0
+        },
         parameters: [{
             order: 0,
             id: 'W',
