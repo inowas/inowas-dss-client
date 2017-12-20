@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 
 import image from '../../images/tools/T09E.png';
-import {Background, ChartT09D as Chart, Parameters} from '../components';
+import {Background, ChartT09E as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -187,7 +187,7 @@ class T09E extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09C. Saltwater intrusion // Critical well discharge
+                    T09E. Sea level rise
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">

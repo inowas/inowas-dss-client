@@ -10,16 +10,16 @@ export const getInitialState = (tool) => {
             name: 'Hydraulic conductivity, K (m/d)',
             min: 1,
             max: 100,
-            value: 50,
+            value: 10,
             stepSize: 1,
             decimals: 0
         }, {
             order: 1,
-            id: 'z',
+            id: 'z0',
             name: 'Depth to base of aquifer, z0 (m)',
             min: 0,
             max: 100,
-            value: 15,
+            value: 25,
             stepSize: 1,
             decimals: 0
         }, {
@@ -27,8 +27,8 @@ export const getInitialState = (tool) => {
             id: 'l',
             name: 'Distance to inland boundary, L (m)',
             min: 0,
-            max: 100,
-            value: 50,
+            max: 10000,
+            value: 2000,
             stepSize: 1,
             decimals: 0
         }, {
@@ -36,17 +36,17 @@ export const getInitialState = (tool) => {
             id: 'w',
             name: 'Recharge rate, w (m³/d)',
             min: 0,
-            max: 200,
-            value: 50,
-            stepSize: 1,
-            decimals: 0
+            max: 0.001,
+            value: 0.0001,
+            stepSize: 0.0001,
+            decimals: 4
         }, {
             order: 4,
             id: 'dz',
             name: 'Sea level rise, dz0 (m)',
             min: 0,
-            max: 0.5,
-            value: 0.1,
+            max: 2,
+            value: 1,
             stepSize: 0.01,
             decimals: 2
         }, {
@@ -54,10 +54,10 @@ export const getInitialState = (tool) => {
             id: 'hi',
             name: 'Constant head at inland boundary, hi (m)',
             min: 0,
-            max: 100,
-            value: 5,
-            stepSize: 1,
-            decimals: 0
+            max: 10,
+            value: 2,
+            stepSize: 0.1,
+            decimals: 1
         }, {
             order: 6,
             id: 'df',
