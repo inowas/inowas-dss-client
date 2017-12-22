@@ -9,6 +9,7 @@ import {push} from 'react-router-redux';
 import {withRouter} from 'react-router';
 import {Button, Container, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
+import Navbar from "./Navbar";
 
 const styles = {
     link: {
@@ -72,6 +73,7 @@ class Login extends Component {
     render() {
         return (
             <div>
+                <Navbar />
                 <Container textAlign={'center'} className={'login'}>
                     <Grid textAlign="center">
                         <Grid.Column style={{maxWidth: 350}}>

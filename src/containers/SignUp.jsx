@@ -10,6 +10,7 @@ import {push} from 'react-router-redux';
 import {withRouter} from 'react-router';
 import {Button, Container, Form, Grid, Header, Image, Menu, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
+import NavBar from "./Navbar";
 
 const styles = {
     link: {
@@ -185,9 +186,7 @@ class SignUp extends Component {
     render() {
         return (
             <div>
-                <Menu inverted>
-                    <Menu.Item name="home" onClick={() => this.pushTo('/')}/>
-                </Menu>
+                <NavBar />
                 <Container textAlign={'center'} className={'signup'}>
                     <Grid textAlign="center">
                         <Grid.Column style={{maxWidth: 350}}>
