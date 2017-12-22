@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 
 import image from '../../images/tools/T09E.png';
-import {Background, ChartT09D as Chart, Parameters} from '../components';
+import {Background, ChartT09E as Chart, SettingsT09E as Settings, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -84,13 +84,13 @@ class T09E extends React.Component {
         this.props.createToolInstance(uuid.v4(), name, description, this.state.public, buildPayload(this.state), routes, params);
     };
 
-    updateSettings(value) {
+    updateSettings(method) {
         this.setState(prevState => {
             return {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    variable: value
+                    method: method
                 }
             };
         });
@@ -131,7 +131,7 @@ class T09E extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'variable') {
+        if (e.target.name === 'settings') {
             this.updateSettings(e.target.value);
         }
 
@@ -151,16 +151,19 @@ class T09E extends React.Component {
     };
 
     render() {
-        const {parameters, name, description} = this.state;
+        const {parameters, settings, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
+        var params = [];
+        if (settings.method === 'constHead') params = parameters.slice(0,6).concat(parameters.slice(7,10));
+        if (settings.method === 'constFlux') params = parameters.slice(0,5).concat(parameters.slice(6,10));
 
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-
+        chartParams['method'] =settings.method;
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -233,10 +236,12 @@ class T09E extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
+                        <section className="tile col col-abs-2">
+                            <Settings value={settings.method} handleChange={this.handleChange}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
-                                parameters={parameters}
+                                parameters={params}
                                 handleChange={this.handleChange}
                                 handleReset={this.handleReset}
                             />

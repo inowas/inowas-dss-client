@@ -8,6 +8,7 @@ import InfoT09B from './infoT09B';
 import InfoT09C from './infoT09C';
 import Parameters from './parameters';
 import SettingsT09D from './settingsT09D';
+import SettingsT09E from './settingsT09E';
 
 export {
     Background,
@@ -20,4 +21,5 @@ export {
     InfoT09C,
     Parameters,
     SettingsT09D,
+    SettingsT09E
 };

@@ -9,7 +9,7 @@ import image9A from '../../images/tools/T09A.png';
 import image9B from '../../images/tools/T09B.png';
 import image9C from '../../images/tools/T09C.png';
 import image9D from '../../images/tools/T09D.png';
-// import image9E from '../../images/tools/T09E.png';
+import image9E from '../../images/tools/T09E.png';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
@@ -54,7 +54,6 @@ class T09 extends React.Component {
                 <Navbar links={navigation}/>
                 <h3>Please select the set of boundary conditions that apply to your problem:</h3>
                 <div className="grid-container">
-                    <a className="col-rel-1-t13"/>
                     <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T09A')}
                        className="tile col col-rel-1-t13">
                         <div className="div-block">
@@ -100,6 +99,18 @@ class T09 extends React.Component {
                             </p>
                             <div className="center-horizontal center-vertical">
                                 <img className="sketch-image" src={image9D}/>
+                            </div>
+                        </div>
+                    </a>
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T09E')}
+                       className="tile col col-rel-1-t13">
+                        <div className="div-block">
+                            <h1>T09E</h1>
+                            <p className="p-height">
+                                Sea level rise
+                            </p>
+                            <div className="center-horizontal center-vertical">
+                                <img className="sketch-image" src={image9E}/>
                             </div>
                         </div>
                     </a>
