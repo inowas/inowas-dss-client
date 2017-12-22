@@ -10,6 +10,7 @@ import {push} from 'react-router-redux';
 import {withRouter} from 'react-router';
 import {Button, Container, Form, Grid, Header, Image, Menu, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
+import NavBar from "./Navbar";
 
 const styles = {
     link: {
@@ -120,6 +121,16 @@ class SignUp extends Component {
         });
     };
 
+    validateUsername = (username) => {
+        const re = /^[a-zA-Z\-]+$/;
+
+        if (username.length <= 5) {
+            return false;
+        }
+
+        return re.test(username);
+    };
+
     validateEmail = (email) => {
         const re = /\S+@\S+\.\S+/;
         return re.test(email);
@@ -138,7 +149,11 @@ class SignUp extends Component {
             return false;
         }
 
-        return username.length > 5 && name.length > 5;
+        if (!this.validateUsername(username)) {
+            return false;
+        }
+
+        return name.length > 5;
     };
 
     onSignUpClick = () => {
@@ -171,9 +186,7 @@ class SignUp extends Component {
     render() {
         return (
             <div>
-                <Menu inverted>
-                    <Menu.Item name="home" onClick={() => this.pushTo('/')}/>
-                </Menu>
+                <NavBar />
                 <Container textAlign={'center'} className={'signup'}>
                     <Grid textAlign="center">
                         <Grid.Column style={{maxWidth: 350}}>
