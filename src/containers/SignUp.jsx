@@ -120,6 +120,16 @@ class SignUp extends Component {
         });
     };
 
+    validateUsername = (username) => {
+        const re = /^[a-zA-Z\-]+$/;
+
+        if (username.length <= 5) {
+            return false;
+        }
+
+        return re.test(username);
+    };
+
     validateEmail = (email) => {
         const re = /\S+@\S+\.\S+/;
         return re.test(email);
@@ -138,7 +148,11 @@ class SignUp extends Component {
             return false;
         }
 
-        return username.length > 5 && name.length > 5;
+        if (!this.validateUsername(username)) {
+            return false;
+        }
+
+        return name.length > 5;
     };
 
     onSignUpClick = () => {
