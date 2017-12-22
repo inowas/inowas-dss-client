@@ -2,44 +2,44 @@ function initialState() {
     return {
         userName: '',
         name: '',
-        apiKey: localStorage.getItem( 'apiKey' ),
+        apiKey: localStorage.getItem('apiKey'),
         email: '',
+        enabled: false,
         roles: []
     };
 }
 
-const user = ( state = initialState(), action ) => {
-    switch ( action.type ) {
+const user = (state = initialState(), action) => {
+    switch (action.type) {
+
         case 'LOGIN':
-            {
-                localStorage.setItem( 'apiKey', action.payload.apiKey );
-                return {
-                    ...state,
-                    fetching: false,
-                    fetched: true,
-                    apiKey: action.payload.apiKey
-                };
-            }
+        case 'SIGNUP_SUCCESSFUL': {
+            localStorage.setItem('apiKey', action.payload.apiKey);
+            return {
+                ...state,
+                apiKey: action.payload.apiKey
+            };
+        }
+
         case 'UNAUTHORIZED':
-        case 'LOGOUT':
-            {
-                localStorage.removeItem( 'apiKey' );
-                return initialState();
-            }
-        case 'USER_SET_INFORMATION':
-            {
-                return {
-                    ...state,
-                    userName: action.payload.user_name || state.userName,
-                    name: action.payload.name || state.name,
-                    email: action.payload.email || state.email,
-                    roles: action.payload.roles || state.roles,
-                };
-            }
-        default:
-            {
-                return state;
-            }
+        case 'LOGOUT': {
+            localStorage.removeItem('apiKey');
+            return initialState();
+        }
+
+        case 'USER_SET_INFORMATION': {
+            return {
+                ...state,
+                userName: action.payload.user_name || state.userName,
+                name: action.payload.name || state.name,
+                email: action.payload.email || state.email,
+                roles: action.payload.roles || state.roles,
+                enabled: action.payload.enabled || state.enabled
+            };
+        }
+        default: {
+            return state;
+        }
     }
 };
 

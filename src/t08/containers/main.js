@@ -2,11 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
+import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
+import styleGlobals from 'styleGlobals';
+import image from '../../images/tools/T02.png';
 
-import image from '../../images/tools/T09D.png';
-import {Background, ChartT09D as Chart, Parameters, SettingsT09D as Settings} from '../components';
+import {Background, Chart, Parameters, Settings} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -19,10 +21,9 @@ import Button from '../../components/primitive/Button';
 import {Modifier as ToolInstance} from '../../toolInstance';
 
 import {each} from 'lodash';
-import {getInitialState} from '../reducers/T09D';
+import {getInitialState} from '../reducers/main';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
-import styleGlobals from 'styleGlobals';
-import uuid from 'uuid';
+import {makeMapStateToProps} from '../selectors/mapState';
 
 const styles = {
     heading: {
@@ -34,33 +35,31 @@ const styles = {
     }
 };
 
-const buildPayload = (state) => {
+const buildPayload = (data) => {
     return {
-        parameters: state.parameters.map(v => {
+        settings: data.settings,
+        parameters: data.parameters.map(v => {
             return {
                 id: v.id,
                 max: v.max,
                 min: v.min,
                 value: v.value,
             };
-        }),
-        settings: state.settings,
-        tool: state.tool
+        })
     };
 };
 
-
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t08-1d-transport-model-ogata-banks/',
     icon: <Icon name="file"/>
 }];
 
-class T09D extends React.Component {
+class T08 extends React.Component {
 
     constructor() {
         super();
-        this.state = getInitialState(this.constructor.name);
+        this.state = getInitialState();
     }
 
     componentWillReceiveProps(newProps) {
@@ -85,13 +84,13 @@ class T09D extends React.Component {
         this.props.createToolInstance(uuid.v4(), name, description, this.state.public, buildPayload(this.state), routes, params);
     };
 
-    updateSettings(AqType) {
+    updateSettings(value) {
         this.setState(prevState => {
             return {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    AqType: AqType
+                    variable: value
                 }
             };
         });
@@ -119,7 +118,7 @@ class T09D extends React.Component {
             this.setState(prevState => {
                 return {
                     ...prevState,
-                    [name]: value
+                    [ name ]: value
                 };
             });
         };
@@ -132,7 +131,7 @@ class T09D extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'settings') {
+        if (e.target.name === 'variable') {
             this.updateSettings(e.target.value);
         }
 
@@ -157,11 +156,10 @@ class T09D extends React.Component {
         const {id} = this.props.params;
         const readOnly = false;
 
-        const chartParams = {};
+        const chartParams = {settings};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['AqType'] =settings.AqType;
 
         const heading = (
             <div className="grid-container">
@@ -189,7 +187,7 @@ class T09D extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09D. Saltwater intrusion // Critical well discharge
+                    T02. Groundwater mounding (Hantush)
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -229,14 +227,14 @@ class T09D extends React.Component {
                             <Background image={image}/>
                         </section>
 
-                        <section className="tile col col-abs-3 stretch" >
+                        <section className="tile col col-abs-3 stretch">
                             <Chart {...chartParams}/>
                         </section>
                     </div>
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Settings value={settings.AqType} handleChange={this.handleChange}/>
+                            <Settings settings={settings} handleChange={this.handleChange}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
@@ -258,12 +256,6 @@ const actions = {
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
-const mapStateToProps = (state) => {
-    return {
-        toolInstance: state.T09A.toolInstance
-    };
-};
-
 const mapDispatchToProps = (dispatch, props) => {
     const tool = props.route.tool;
     const wrappedActions = {};
@@ -280,7 +272,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return wrappedActions;
 };
 
-T09D.propTypes = {
+T08.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
     getToolInstanceStatus: PropTypes.object,
@@ -290,4 +282,7 @@ T09D.propTypes = {
     updateToolInstanceStatus: PropTypes.object
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T09D));
+// eslint-disable-next-line no-class-assign
+T08 = withRouter(connect(makeMapStateToProps, mapDispatchToProps)(T08));
+
+export default T08;

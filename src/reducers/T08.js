@@ -18,7 +18,7 @@ function getInitialState() {
         settings: {
             retardation: true,
             case: 'Case2',
-            infiltration:'Continuous'
+            infiltration: 'Continuous'
         },
         info: {
             R: 0,
@@ -141,35 +141,35 @@ function getInitialState() {
 
 const T08Reducer = (state = getInitialState(), action) => {
     switch (action.type) {
-        case 'RESET_TOOL_T08':
-            {
-                state = getInitialState();
-                calculateAndModifyState(state);
-                break;
-            }
-        case 'CALCULATE_TOOL_T08':
-            {
-                state = { ...state
-                };
-                calculateAndModifyState(state);
-                break;
-            }
-        case 'CHANGE_TOOL_T08_PARAMETER':
-            {
-                state = { ...state,
-                };
+        case 'RESET_TOOL_T08': {
+            state = getInitialState();
+            calculateAndModifyState(state);
+            break;
+        }
+        case 'CALCULATE_TOOL_T08': {
+            state = {
+                ...state
+            };
+            calculateAndModifyState(state);
+            break;
+        }
+        case 'CHANGE_TOOL_T08_PARAMETER': {
+            state = {
+                ...state,
+            };
 
-                const newParam = action.payload;
-                var param = state.parameters.find(p => {return p.id === newParam.id});
-                applyParameterUpdate(param, newParam);
-                if(param.order >= 10) {
-                    calculateKdAndModifyState(state);
-                }
-                calculateAndModifyState(state);
-                break;
+            const newParam = action.payload;
+            var param = state.parameters.find(p => {
+                return p.id === newParam.id
+            });
+            applyParameterUpdate(param, newParam);
+            if (param.order >= 10) {
+                calculateKdAndModifyState(state);
             }
-        case 'CHANGE_TOOL_T08_SETTINGS':
-            {
+            calculateAndModifyState(state);
+            break;
+        }
+        case 'CHANGE_TOOL_T08_SETTINGS': {
             state = {
                 ...state,
             };
@@ -177,8 +177,7 @@ const T08Reducer = (state = getInitialState(), action) => {
             calculateAndModifyState(state);
             break;
         }
-        case 'CHANGE_TOOL_T08_INFILTRATION':
-        {
+        case 'CHANGE_TOOL_T08_INFILTRATION': {
             state = {
                 ...state,
             };
@@ -189,6 +188,7 @@ const T08Reducer = (state = getInitialState(), action) => {
     }
     return state;
 };
+
 function calculateKdAndModifyState(state) {
     const Kow = state.parameters.find(p => {
         return p.id == 'Kow'
@@ -204,48 +204,52 @@ function calculateKdAndModifyState(state) {
     })
         .value = calc.calculate_kd(Kow, Corg);
 }
+
 function calculateAndModifyState(state) {
     const C0 = state.parameters.find(p => {
-            return p.id == 'C0'
-        })
+        return p.id == 'C0'
+    })
         .value;
     const K = state.parameters.find(p => {
-            return p.id == 'K'
-        })
+        return p.id == 'K'
+    })
         .value;
     const I = state.parameters.find(p => {
         return p.id == 'I'
     })
         .value;
     const ne = state.parameters.find(p => {
-            return p.id == 'ne'
-        })
+        return p.id == 'ne'
+    })
         .value;
     const x = state.parameters.find(p => {
-            return p.id == 'x'
-        })
+        return p.id == 'x'
+    })
         .value;
     const t = state.parameters.find(p => {
-            return p.id == 't'
-        })
+        return p.id == 't'
+    })
         .value;
     const Kd = state.parameters.find(p => {
         return p.id == 'Kd'
     })
         .value;
     const alphaL = state.parameters.find(p => {
-            return p.id == 'alphaL'
-        })
+        return p.id == 'alphaL'
+    })
         .value;
     const tau = state.parameters.find(p => {
         return p.id == 'tau'
     })
         .value;
     state.info.vx = calc.calculate_vx(K, ne, I);
-    state.info.DL = calc.calculate_DL(alphaL,state.info.vx);
+    state.info.DL = calc.calculate_DL(alphaL, state.info.vx);
     state.info.R = calc.calculate_R(ne, Kd);
     state.chart.data = calc.calculateDiagramData(C0, state.info, x, t, state.settings.case, state.settings.infiltration, tau);
 
+    console.log('ChartData', state.chart.data);
+
     return state;
 }
+
 export default T08Reducer;

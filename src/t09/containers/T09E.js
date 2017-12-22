@@ -190,7 +190,7 @@ class T09E extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09E. Sea level rise
+                    T09E. Saltwater intrusion // Sea level rise
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">

@@ -13,6 +13,7 @@ import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {WebData} from './core/index';
+import SignUp from "./containers/SignUp";
 
 const routes = store => (
     <Route path="/">
@@ -125,11 +126,11 @@ const routes = store => (
                     }
                 }}
             />
-            <Route path="T09A(/:id)" component={T09.Container.T09A} tool={'T09'}/>
-            <Route path="T09B(/:id)" component={T09.Container.T09B} tool={'T09'}/>
-            <Route path="T09C(/:id)" component={T09.Container.T09C} tool={'T09'}/>
-            <Route path="T09D(/:id)" component={T09.Container.T09D} tool={'T09'}/>
-            <Route path="T09E(/:id)" component={T09.Container.T09E} tool={'T09'}/>
+            <Route path="T09A(/:id)" component={T09.Container.T09A} tool={'T09A'}/>
+            <Route path="T09B(/:id)" component={T09.Container.T09B} tool={'T09B'}/>
+            <Route path="T09C(/:id)" component={T09.Container.T09C} tool={'T09C'}/>
+            <Route path="T09D(/:id)" component={T09.Container.T09D} tool={'T09D'}/>
+            <Route path="T09E(/:id)" component={T09.Container.T09E} tool={'T09E'}/>
             <Route path="T12(/:id)" component={tools.T12}/>
             <Route path="T13(/:id)" component={tools.T13}/>
             <Route path="T13A(/:id)" component={tools.T13A}/>
@@ -147,6 +148,7 @@ const routes = store => (
             <Route path="T18(/:id)" component={tools.T18}/>
         </Route>
         <Route path="login" component={Login}/>
+        <Route path="signup" component={SignUp} />
     </Route>
 );
 

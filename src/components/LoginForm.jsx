@@ -7,23 +7,23 @@ export default class LoginForm extends Component {
     static propTypes = {
         login: PropTypes.func.isRequired,
         className: PropTypes.string
-    }
+    };
 
     state = {
         identifier: '',
         password: ''
-    }
+    };
 
     submit = ( e ) => {
         e.preventDefault();
         this.props.login( this.state.identifier, this.state.password );
-    }
+    };
 
     onChange = e => {
         this.setState({
             [ e.target.name ]: e.target.value
         });
-    }
+    };
 
     render( ) {
         const { identifier, password } = this.state;
@@ -44,5 +44,4 @@ export default class LoginForm extends Component {
                 </form>
         );
     }
-
 }
