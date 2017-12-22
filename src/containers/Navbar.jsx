@@ -96,7 +96,7 @@ class NavBar extends React.Component {
 
     renderUserNavigation() {
         // eslint-disable-next-line no-shadow
-        const {userLoggedIn, logout, authenticate, name} = this.props;
+        const {userLoggedIn, logout, name} = this.props;
 
         if (userLoggedIn) {
             return (
