@@ -43,7 +43,7 @@ class Login extends Component {
         // eslint-disable-next-line no-shadow
         const {userLoggedIn, push} = props;
         if (userLoggedIn) {
-            push('/');
+            push('/tools');
         }
     }
 
