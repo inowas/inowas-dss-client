@@ -188,7 +188,6 @@ class Dashboard extends React.Component {
     renderDataTable() {
         // eslint-disable-next-line no-shadow
         const {activeTool, setPublic, publicInstances, push} = this.props;
-
         return (
             <div className="tile col col-abs-3 stretch">
                 <h2 className="section-title">

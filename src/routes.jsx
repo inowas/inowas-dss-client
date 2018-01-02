@@ -117,12 +117,7 @@ const routes = store => (
                     // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
                     store.dispatch(WebData.Modifier.Action.clear());
                     if (nextState.params.id) {
-                        store.dispatch(
-                            ToolInstance.Modifier.Query.getToolInstance(
-                                'T09',
-                                nextState.params.id,
-                            )
-                        );
+                        store.dispatch(ToolInstance.Modifier.Query.getToolInstance('T09', nextState.params.id));
                     }
                 }}
             />

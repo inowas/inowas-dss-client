@@ -99,9 +99,8 @@ function rainbowFactory(numberRange = { min: -50, max: 50 }) {
         '#800080',
         '#ff2200',
         '#fcff00',
-        '#6dff70',
-        '#00ffff',
-        '#007bff',
+        '#45ff8e',
+        '#15d6ff',
         '#0000FF'
     );
     if (numberRange) {
