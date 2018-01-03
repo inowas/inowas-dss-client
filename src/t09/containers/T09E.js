@@ -23,6 +23,7 @@ import {getInitialState} from '../reducers/T09E';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+import {isReadOnly} from '../../core/helpers';
 
 const styles = {
     heading: {
@@ -60,6 +61,12 @@ class T09E extends React.Component {
     constructor() {
         super();
         this.state = getInitialState(this.constructor.name);
+    }
+
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -152,18 +159,18 @@ class T09E extends React.Component {
 
     render() {
         const {parameters, settings, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
+        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
-        const readOnly = false;
-        var params = [];
-        if (settings.method === 'constHead') params = parameters.slice(0,6).concat(parameters.slice(7,10));
-        if (settings.method === 'constFlux') params = parameters.slice(0,5).concat(parameters.slice(6,10));
+        const readOnly = isReadOnly(toolInstance.permissions);
+        let params = [];
+        if (settings.method === 'constHead') params = parameters.slice(0, 6).concat(parameters.slice(7, 10));
+        if (settings.method === 'constFlux') params = parameters.slice(0, 5).concat(parameters.slice(6, 10));
 
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['method'] =settings.method;
+        chartParams.method = settings.method;
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -178,9 +185,7 @@ class T09E extends React.Component {
                 </div>
                 <div className="col col-rel-0-5">
                     <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save}>
-                            Save
-                        </Button>
+                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>Save</Button>
                     </WebData.Component.Loading>
                 </div>
             </div>
@@ -255,12 +260,13 @@ class T09E extends React.Component {
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T09A.toolInstance
+        toolInstance: state.T09E
     };
 };
 
@@ -283,9 +289,11 @@ const mapDispatchToProps = (dispatch, props) => {
 T09E.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
+    toolInstance: PropTypes.object,
     updateToolInstance: PropTypes.func,
     updateToolInstanceStatus: PropTypes.object
 };

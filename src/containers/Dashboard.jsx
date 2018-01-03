@@ -137,7 +137,7 @@ class Dashboard extends React.Component {
                     <Td>
                         <Button
                             type="link"
-                            onClick={() => push(basePath + i.id + subPath)}
+                            onClick={() => push(basePath + i.tool + '/' + i.id + subPath)}
                         >
                             {i.name}
                         </Button>
@@ -205,7 +205,7 @@ class Dashboard extends React.Component {
                         <li>
                             <Button
                                 type="link"
-                                onClick={() => push(activeTool.path)}
+                                onClick={() => push(activeTool.path + activeTool.slug)}
                                 icon={<Icon name="add"/>}
                             >
                                 Add new

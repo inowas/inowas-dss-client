@@ -1,4 +1,5 @@
 import moment from 'moment';
+import * as lodash from 'lodash';
 
 export const addIdFromIndex = values =>
     values.map((value, index) => {
@@ -29,4 +30,8 @@ export const getDateTimeValues = (boundary, observationPointId) => {
         return [];
     }
     return observationPoint.date_time_values;
+};
+
+export const isReadOnly = permissions => {
+    return !lodash.includes(permissions, 'w');
 };

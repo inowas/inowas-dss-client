@@ -24,6 +24,7 @@ import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import {makeMapStateToProps} from '../selectors/mapState';
+import {isReadOnly} from "../../core/helpers";
 
 const styles = {
     heading: {
@@ -152,9 +153,9 @@ class T08 extends React.Component {
 
     render() {
         const {settings, parameters, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
+        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
-        const readOnly = false;
+        const readOnly = isReadOnly(toolInstance.permissions);
 
         const chartParams = {settings};
         each(parameters, v => {
@@ -175,7 +176,7 @@ class T08 extends React.Component {
                 </div>
                 <div className="col col-rel-0-5">
                     <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save}>
+                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>
                             Save
                         </Button>
                     </WebData.Component.Loading>
@@ -187,7 +188,7 @@ class T08 extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T02. Groundwater mounding (Hantush)
+                    T08. Groundwater mounding (Hantush)
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
