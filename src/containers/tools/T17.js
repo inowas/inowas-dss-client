@@ -7,7 +7,7 @@ export default class T17 extends React.Component {
         return (
             <div>
                 <Navbar links={[ ]}/>
-                <Iframe url="https://ggis.un-igrac.org/ggis-viewer/viewer/globalmar/public/default"/>
+                <Iframe url="http://marportal.un-igrac.org"/>
             </div>
         );
     }
