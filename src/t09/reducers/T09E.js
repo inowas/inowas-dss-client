@@ -2,6 +2,7 @@ export const getInitialState = (tool) => {
     return {
         name: 'New simple tool',
         description: 'Simple tool description',
+        permissions: 'rwx',
         public: false,
         tool: tool,
         settings: {
