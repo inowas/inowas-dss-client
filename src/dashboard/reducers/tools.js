@@ -51,82 +51,35 @@ const initialState = [
         path: 'tools/T08/',
         subPath: '',
         role: ROLE_USER,
-        instances: [{
-            id: 'default',
-            model_id: '08',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:24:00+00:00',
-            fake: false
-        }]
+        instances: []
     }, {
         slug: 'T09',
         name: 'Simple saltwater intrusion equations',
         path: 'tools/T09/',
         subPath: '',
         role: ROLE_USER,
-        instances: [{
-            id: 'default',
-            model_id: '09',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:24:00+00:00',
-            fake: false
-        }]
+        instances: []
     }, {
         slug: 'T13',
         name: 'Travel time through unconfined aquifer',
         path: 'tools/T13/',
         subPath: '',
         role: ROLE_USER,
-        instances: [{
-            model_id: '13',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:24:00+00:00',
-            fake: false
-        }]
+        instances: []
     }, {
         slug: 'T14',
         name: 'Pumping-induced river drawdown',
         path: 'tools/T14/',
         subPath: '',
         role: ROLE_USER,
-        instances: [{
-            model_id: '14',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:24:00+00:00',
-            fake: false
-        }]
+        instances: []
     }, /* {
         slug: 'T16',
         name: 'Calculation of hydraulic conductivity',
         path: 'tools/T16/',
         subPath: '',
         role: ROLE_USER,
-        instances: [ {
-            model_id: '16',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A04',
-            created_at: '2017-03-09T19:41:00+00:00',
-            fake: false
-        } ]
+        instances: []
     }, */
     {
         slug: 'T17',
@@ -134,32 +87,14 @@ const initialState = [
         path: 'tools/T17/',
         subPath: '',
         role: ROLE_USER,
-        instances: [{
-            model_id: '17_1',
-            user_name: 'ADMIN',
-            name: 'Global MAR portal',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A12',
-            created_at: '2017-03-09T19:41:00+00:00',
-            fake: false
-        }]
+        instances: []
     }, {
         slug: 'T18',
         name: 'SAT basin design',
         path: 'tools/T18/',
         subPath: '',
         role: ROLE_USER,
-        instances: [{
-            model_id: '18_1',
-            user_name: 'ADMIN',
-            name: 'DEFAULT MODEL',
-            description: 'Description',
-            project: 'INOWAS',
-            application: 'A12',
-            created_at: '2017-03-09T19:45:00+00:00',
-            fake: false
-        }]
+        instances: []
     }];
 
 const tools = (state = initialState, action) => {

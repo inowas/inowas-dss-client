@@ -109,7 +109,11 @@ class Dashboard extends React.Component {
         }
     }
 
-    setToolSelection = slug => {
+    onToolClick = slug => {
+        if (slug === 'T17') {
+            return () => window.open('http://marportal.un-igrac.org', '_blank');
+        }
+
         return () => {
             this.props.setActiveTool(slug);
         };
@@ -300,7 +304,7 @@ class Dashboard extends React.Component {
                     .map(t => {
                         return {
                             name: t.slug + ': ' + t.name,
-                            onClick: this.setToolSelection(t.slug),
+                            onClick: this.onToolClick(t.slug),
                             active: (activeTool.slug === t.slug)
                         };
                     })
