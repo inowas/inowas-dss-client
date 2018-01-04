@@ -1,10 +1,9 @@
 import React from 'react';
 import {pure} from 'recompose';
 import PropTypes from 'prop-types';
-import {mounding} from "gwflowjs";
+import {mounding} from 'gwflowjs';
 
 const Settings = ({settings, handleChange, w, L, W, hi, Sy, K, t}) => {
-
     const hhi = mounding.calculateHi(0, 0, w, L, W, hi, Sy, K, t);
     const hMax = (hhi + hi);
 
@@ -39,7 +38,14 @@ const Settings = ({settings, handleChange, w, L, W, hi, Sy, K, t}) => {
 
 Settings.propTypes = {
     handleChange: PropTypes.func,
-    settings: PropTypes.object
+    settings: PropTypes.object,
+    w: PropTypes.number.isRequired,
+    L: PropTypes.number.isRequired,
+    W: PropTypes.number.isRequired,
+    hi: PropTypes.number.isRequired,
+    Sy: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
+    t: PropTypes.number.isRequired,
 };
 
 export default pure(Settings);
