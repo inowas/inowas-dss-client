@@ -19,7 +19,8 @@ const styles = {
     },
     table: {
         backgroundColor: styleGlobals.colors.background,
-        padding: 20
+        padding: 20,
+        overflowY: 'scroll'
     }
 };
 
@@ -47,7 +48,7 @@ class T04 extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T04. GIS Based Site Suitability Mapping
+                    T04. Database for GIS Based Site Suitability Mapping
                 </h3>
                 <div style={styles.table}>
                     <PivotTableUI data={this.loadCsvFile()} onChange={s => this.setState(s)} {...this.state} />
