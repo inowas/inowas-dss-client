@@ -152,6 +152,8 @@ class T02 extends React.Component {
     };
 
     render() {
+        console.log(this.state);
+        console.log(this.props);
         const {settings, parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
@@ -235,7 +237,7 @@ class T02 extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Settings settings={settings} handleChange={this.handleChange}/>
+                            <Settings settings={settings} handleChange={this.handleChange} {...chartParams} />
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
