@@ -140,7 +140,6 @@ const createReducer = tool => {
                     ...state,
                     name: action.payload.name,
                     description: action.payload.description,
-                    permissions: action.payload.permissions,
                     public: action.payload.public,
                     settings: action.payload.data.settings,
                     parameters: state.parameters.map(v => {

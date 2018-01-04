@@ -72,7 +72,6 @@ export const createReducer = tool => {
                     description: action.payload.description,
                     public: action.payload.public,
                     settings: action.payload.data.settings,
-                    permissions: action.payload.permissions,
                     parameters: state.parameters.map(v => {
                         return {
                             ...v,
