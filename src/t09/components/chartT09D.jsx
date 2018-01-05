@@ -14,7 +14,7 @@ import {
     ReferenceLine
 } from 'recharts';
 
-import {calcLambda, calcMu, calculateQCrit, calculateDiagramData} from '../calculations/calculationT09D';
+import {calcLambda, calcMu, calculateQCrit, calculateDiagramData, calcXt} from '../calculations/calculationT09D';
 
 export function resultDiv(rhof, rhos, lambda, qCrit) {
     if (rhof >= rhos) {
