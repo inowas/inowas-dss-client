@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {calcLambda, calcMu, calculateQCrit} from '../calculations/calculationT09D';
+import {calcLambda, calcMu, calculateQCrit, calcXt} from '../calculations/calculationT09D';
 
 const renderInfo = (qCrit, Q, xT) => {
     if (Q >= qCrit) {
@@ -8,7 +8,7 @@ const renderInfo = (qCrit, Q, xT) => {
             <div className="center-vertical center-horizontal" style={{padding: '0px 20px'}}>
                 <p>
                     With the chosen pumping rate of <strong>{Q.toFixed(0)} m³/d</strong>, seawater will intrude
-                    about <strong>{xT}</strong> m inland, which is
+                    about <strong>{xT.toFixed(1)}</strong> m inland, which is
                     higher than the distance from the well to the coast line.<br/>
                     Seawater will most likely intrude the well.<br/>
                     The critical well discharge is <strong>{qCrit.toFixed(0)}</strong> m³/d.<br/>
@@ -22,7 +22,7 @@ const renderInfo = (qCrit, Q, xT) => {
         <div className="center-vertical center-horizontal" style={{padding: '0px 20px'}}>
             <p>
                 With the chosen pumping rate of <strong>{Q.toFixed(0)}</strong> m³/d, seawater will intrude
-                about <strong>{xT}</strong> m inland, which is lower than
+                about <strong>{xT.toFixed(1)}</strong> m inland, which is lower than
                 the distance from the well to the coast line and hence no seawater will intrude the well.<br/>
                 The critical well discharge is <strong>{qCrit.toFixed(0)}</strong> m³/d.<br/>
                 The pumping rate needs to be kept below that threshold so that seawater will not intrude the well.
@@ -35,8 +35,7 @@ const settings = ({value, handleChange, k, b, q, Q, xw, rhof, rhos, AqType}) => 
     const lambda = calcLambda(k, b, q, xw, rhof, rhos, AqType);
     const mu = calcMu(lambda);
     const qCrit = calculateQCrit(q, mu, xw);
-    const xT = '{shouldBeCalculated}';
-
+    const xT = calcXt(k, b, q, Q, xw, rhof, rhos);
     return (
         <div>
             <h2>Settings</h2>
