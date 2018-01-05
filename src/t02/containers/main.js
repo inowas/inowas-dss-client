@@ -152,8 +152,6 @@ class T02 extends React.Component {
     };
 
     render() {
-        console.log(this.state);
-        console.log(this.props);
         const {settings, parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
