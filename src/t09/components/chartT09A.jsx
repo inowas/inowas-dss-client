@@ -47,31 +47,17 @@ const Chart = ({h, df, ds}) => {
                         <div className="diagram-labels-right">
                             <div className="diagram-label">
                                 <p>
-                                    h&nbsp;=&nbsp;
-                                    <strong>{h
-                                        .toFixed(1)}</strong>&nbsp;m
+                                    h&nbsp;=&nbsp;<strong>{h.toFixed(1)}</strong>&nbsp;m
                                 </p>
                             </div>
                             <div className="diagram-label">
                                 <p>
-                                    z&nbsp;=&nbsp;
-                                    <strong>{z
-                                        .toFixed(1)}</strong>&nbsp;m
+                                    z&nbsp;=&nbsp;<strong>{z.toFixed(1)}</strong>&nbsp;m
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-{/*                <div className="col col-rel-0-5">
-                    <ul className="nav nav-stacked" role="navigation">
-                        <li>
-                            <button className="button">PNG</button>
-                        </li>
-                        <li>
-                            <button className="button">CSV</button>
-                        </li>
-                    </ul>
-                </div>*/}
             </div>
         </div>
     );
