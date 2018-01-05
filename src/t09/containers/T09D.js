@@ -168,7 +168,7 @@ class T09D extends React.Component {
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['AqType'] =settings.AqType;
+        chartParams['AqType'] = settings.AqType;
 
         const heading = (
             <div className="grid-container">
@@ -241,7 +241,7 @@ class T09D extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Settings value={settings.AqType} handleChange={this.handleChange}/>
+                            <Settings value={settings.AqType} handleChange={this.handleChange} {...chartParams}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
