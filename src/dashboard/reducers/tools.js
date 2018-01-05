@@ -21,6 +21,13 @@ const initialState = [
         subPath: '',
         role: ROLE_NM_MF,
         instances: []
+    }, {
+        slug: 'T04',
+        name: 'Database for GIS-based suitability mapping',
+        path: '/tools/',
+        subPath: '',
+        role: ROLE_USER,
+        instances: []
     },
     /* {
         slug: 'T06',

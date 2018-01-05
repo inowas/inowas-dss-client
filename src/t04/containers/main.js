@@ -2,7 +2,7 @@ import React from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import PapaParse from 'papaparse';
 import styleGlobals from 'styleGlobals';
-import csvFile from '../data/database-2018-01-04.csv';
+import csvFile from '../data/database-2018-01-05.csv';
 import '../../less/4TileTool.less';
 import '../styles/pivottable.less';
 
@@ -26,7 +26,7 @@ const styles = {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t04-gis-based-site-suitability-mapping/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t04a-database/',
     icon: <Icon name="file"/>
 }];
 

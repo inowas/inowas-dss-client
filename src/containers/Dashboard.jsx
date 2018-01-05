@@ -110,6 +110,10 @@ class Dashboard extends React.Component {
     }
 
     onToolClick = slug => {
+        if (slug === 'T04') {
+            return () => this.props.push('/tools/' + slug);
+        }
+
         if (slug === 'T17') {
             return () => window.open('http://marportal.un-igrac.org', '_blank');
         }
