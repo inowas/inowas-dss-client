@@ -242,7 +242,7 @@ class T09E extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Settings value={settings.method} handleChange={this.handleChange}/>
+                            <Settings value={settings.method} handleChange={this.handleChange} {...chartParams}/>
                         </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
