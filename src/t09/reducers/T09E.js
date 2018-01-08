@@ -14,7 +14,7 @@ export const getInitialState = (tool) => {
             name: 'Hydraulic conductivity, K [m/d]',
             min: 1,
             max: 100,
-            value: 10,
+            value: 20,
             stepSize: 1,
             decimals: 0
         }, {
