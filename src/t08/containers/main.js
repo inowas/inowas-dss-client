@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T02.png';
+import image from '../../images/tools/T08.png';
 
 import {Background, Chart, Parameters, Settings} from '../components';
 import {WebData, LayoutComponents} from '../../core';
@@ -23,8 +23,7 @@ import {Modifier as ToolInstance} from '../../toolInstance';
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
-import {makeMapStateToProps} from '../selectors/mapState';
-import {isReadOnly} from "../../core/helpers";
+import {isReadOnly} from '../../core/helpers';
 
 const styles = {
     heading: {
@@ -36,17 +35,18 @@ const styles = {
     }
 };
 
-const buildPayload = (data) => {
+const buildPayload = (state) => {
     return {
-        settings: data.settings,
-        parameters: data.parameters.map(v => {
+        parameters: state.parameters.map(v => {
             return {
                 id: v.id,
                 max: v.max,
                 min: v.min,
                 value: v.value,
             };
-        })
+        }),
+        settings: state.settings,
+        tool: state.tool
     };
 };
 
@@ -60,7 +60,13 @@ class T08 extends React.Component {
 
     constructor() {
         super();
-        this.state = getInitialState();
+        this.state = getInitialState(this.constructor.name);
+    }
+
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -85,13 +91,13 @@ class T08 extends React.Component {
         this.props.createToolInstance(uuid.v4(), name, description, this.state.public, buildPayload(this.state), routes, params);
     };
 
-    updateSettings(value) {
+    updateSettings(parameter, value) {
         this.setState(prevState => {
             return {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    variable: value
+                    [parameter]: value
                 }
             };
         });
@@ -119,7 +125,7 @@ class T08 extends React.Component {
             this.setState(prevState => {
                 return {
                     ...prevState,
-                    [ name ]: value
+                    [name]: value
                 };
             });
         };
@@ -132,8 +138,9 @@ class T08 extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'variable') {
-            this.updateSettings(e.target.value);
+        if (e.target.name.startsWith('settings')) {
+            const parameter = e.target.name.split('_')[1];
+            this.updateSettings(parameter, e.target.value);
         }
 
         if (e.target.name.startsWith('parameter')) {
@@ -157,7 +164,9 @@ class T08 extends React.Component {
         const {id} = this.props.params;
         const readOnly = isReadOnly(toolInstance.permissions);
 
-        const chartParams = {settings};
+        console.log(readOnly);
+
+        const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
@@ -176,9 +185,7 @@ class T08 extends React.Component {
                 </div>
                 <div className="col col-rel-0-5">
                     <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>
-                            Save
-                        </Button>
+                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>Save</Button>
                     </WebData.Component.Loading>
                 </div>
             </div>
@@ -188,7 +195,7 @@ class T08 extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T08. Groundwater mounding (Hantush)
+                    T08. 1D transport model (Ogata-Banks)
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -229,15 +236,14 @@ class T08 extends React.Component {
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
-                            <Chart {...chartParams}/>
+                            <Chart settings={settings} {...chartParams}/>
                         </section>
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2">
-                            <Settings settings={settings} handleChange={this.handleChange}/>
+                        <section className="tile col col-abs-2 stacked">
+                            <Settings settings={settings} handleChange={this.handleChange} {...chartParams} />
                         </section>
-
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
@@ -252,10 +258,18 @@ class T08 extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T08
+    };
+};
+
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
+    updateToolInstance: ToolInstance.Command.updateToolInstance
 };
+
 
 const mapDispatchToProps = (dispatch, props) => {
     const tool = props.route.tool;
@@ -276,14 +290,13 @@ const mapDispatchToProps = (dispatch, props) => {
 T08.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
+    toolInstance: PropTypes.object,
     updateToolInstance: PropTypes.func,
     updateToolInstanceStatus: PropTypes.object
 };
 
-// eslint-disable-next-line no-class-assign
-T08 = withRouter(connect(makeMapStateToProps, mapDispatchToProps)(T08));
-
-export default T08;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T08));

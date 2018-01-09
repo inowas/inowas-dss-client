@@ -1,23 +1,14 @@
-import {WebData} from '../../core';
 import * as ToolInstance from '../../toolInstance';
+import {WebData} from '../../core';
 import {find} from 'lodash';
 
-export const getInitialState = () => {
+export const getInitialState = (tool) => {
     return {
         name: 'New simple tool',
         description: 'Simple tool description',
+        permissions: 'rwx',
         public: false,
-        settings: {
-            retardation: true,
-            case: 'Case2',
-            infiltration: 'Continuous'
-        },
-        info: {
-            R: 0,
-            DL: 0,
-            vx: 0,
-            C: 0
-        },
+        tool: tool,
         parameters: [{
             order: 0,
             id: 'C0',
@@ -75,7 +66,7 @@ export const getInitialState = () => {
         }, {
             order: 6,
             id: 'rhoS',
-            name: 'Particle density, ρₛ [g/cc]',
+            name: 'Particle density, ρ [g/cc]',
             min: 0,
             max: 3.00,
             value: 2.65,
@@ -84,7 +75,7 @@ export const getInitialState = () => {
         }, {
             order: 7,
             id: 'alphaL',
-            name: 'Longitudinal dispersivity, alpha [m]',
+            name: 'Longitudinal dispersivity, α [m]',
             min: 0.1,
             max: 10,
             value: 0.923,
@@ -93,7 +84,7 @@ export const getInitialState = () => {
         }, {
             order: 8,
             id: 'Kd',
-            name: 'Sorption partition coefficient,  Kd [l/g]',
+            name: 'Sorption partition coefficient, Kd [l/g]',
             min: 0.0,
             max: 0.1,
             value: 0.01,
@@ -102,7 +93,7 @@ export const getInitialState = () => {
         }, {
             order: 9,
             id: 'tau',
-            name: 'Duration of infiltration, τ [d]',
+            name: 'Duration of infiltration, Τ [d]',
             min: 0,
             max: 500,
             value: 100,
@@ -126,7 +117,12 @@ export const getInitialState = () => {
             value: 2.25,
             stepSize: 0.001,
             decimals: 3
-        }]
+        }],
+        settings: {
+            retardation: true,
+            case: 'fixedTime',
+            infiltration: 'continuous'
+        }
     };
 };
 
@@ -148,6 +144,7 @@ const createReducer = tool => {
                     ...state,
                     name: instance.name,
                     description: instance.description,
+                    permissions: instance.permissions,
                     public: instance.public,
                     settings: instance.data.settings,
                     parameters: state.parameters.map(v => {

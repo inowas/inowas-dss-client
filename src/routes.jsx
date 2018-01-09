@@ -6,6 +6,7 @@ import * as T02 from './t02/index';
 import * as T03 from './t03/index';
 import * as T04 from './t04/index';
 import * as T07 from './t07/index';
+import * as T08 from './t08/index';
 import * as T09 from './t09/index';
 import * as ToolInstance from './toolInstance/index';
 import DashboardContainer from './containers/Dashboard';
@@ -13,7 +14,7 @@ import Login from './containers/Login';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {WebData} from './core/index';
-import SignUp from "./containers/SignUp";
+import SignUp from './containers/SignUp';
 
 const routes = store => (
     <Route path="/">
@@ -108,19 +109,8 @@ const routes = store => (
                     }}
                 />
             </Route>
-            <Route path="T08(/:id)" component={tools.T08}/>
-            <Route
-                path="T09(/:id)"
-                component={T09.Container.T09}
-                tool={'T09'}
-                onEnter={nextState => {
-                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
-                    store.dispatch(WebData.Modifier.Action.clear());
-                    if (nextState.params.id) {
-                        store.dispatch(ToolInstance.Modifier.Query.getToolInstance('T09', nextState.params.id));
-                    }
-                }}
-            />
+            <Route path="T08(/:id)" component={T08.Container.Main} tool={'T08'}/>
+            <Route path="T09" component={T09.Container.T09} tool={'T09'}/>
             <Route path="T09A(/:id)" component={T09.Container.T09A} tool={'T09A'}/>
             <Route path="T09B(/:id)" component={T09.Container.T09B} tool={'T09B'}/>
             <Route path="T09C(/:id)" component={T09.Container.T09C} tool={'T09C'}/>
