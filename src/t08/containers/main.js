@@ -164,8 +164,6 @@ class T08 extends React.Component {
         const {id} = this.props.params;
         const readOnly = isReadOnly(toolInstance.permissions);
 
-        console.log(readOnly);
-
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
