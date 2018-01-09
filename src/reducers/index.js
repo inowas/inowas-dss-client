@@ -3,12 +3,8 @@ import T02 from './T02';
 import T06 from './T06';
 import { Reducer as T07 } from '../t07';
 import T07E from './T07E';
-import T08 from './T08';
+import * as T08 from '../t08/reducers';
 import * as T09 from '../t09/reducers';
-import T09B from './T09B';
-import T09C from './T09C';
-import T09D from './T09D';
-import T09E from './T09E';
 import T12 from './T12';
 import T13A from './T13A';
 import T13B from './T13B';
@@ -39,8 +35,7 @@ const rootReducer = combineReducers({
     T06,
     T07,
     T07E,
-    T08,
-    T09: T09.createReducer('T09'),
+    T08: T08.createReducer('T08'),
     T09A: T09.createReducer('T09A'),
     T09B: T09.createReducer('T09B'),
     T09C: T09.createReducer('T09C'),
