@@ -15,7 +15,7 @@ import {
     calcC, calcCTau, calculateDiagramData, calculateDL, calculateR,
     calculateVx
 } from '../calculations/calculationT08';
-import {SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_ONE_TIME} from "../reducers/main";
+import {SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_ONE_TIME} from '../reducers/main';
 
 
 const Chart = ({settings, C0, K, Kd, I, ne, x, t, alphaL, tau}) => {
@@ -137,6 +137,7 @@ Chart.propTypes = {
     x: PropTypes.number.isRequired,
     t: PropTypes.number.isRequired,
     Kd: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
     I: PropTypes.number.isRequired,
     ne: PropTypes.number.isRequired,
     alphaL: PropTypes.number.isRequired,

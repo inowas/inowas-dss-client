@@ -6,7 +6,7 @@ import {calcC, calcCTau, calculateDL, calculateR, calculateVx} from '../calculat
 import {
     SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_CONTINUOUS,
     SETTINGS_INFILTRATION_ONE_TIME
-} from "../reducers/main";
+} from '../reducers/main';
 
 const style = {
     marginTop: '10px',

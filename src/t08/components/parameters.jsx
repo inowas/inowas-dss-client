@@ -6,7 +6,7 @@ import {inputType} from '../../inputType';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
-import {SETTINGS_INFILTRATION_ONE_TIME} from "../reducers/main";
+import {SETTINGS_INFILTRATION_ONE_TIME} from '../reducers/main';
 
 
 const renderParam = (param, handleChange) => {
@@ -36,7 +36,6 @@ const renderNumber = (param, handleChange) => {
         </td>
     </tr>);
 };
-
 
 const renderRadioOption = (param, option, handleChange) => {
     return (<label key={option.id}>
@@ -99,11 +98,11 @@ const Parameters = ({settings, parameters, handleChange, handleReset}) => {
         }
         return -1;
     });
-    let params = sortedParameters.slice(0,9).map(param => {
+    let params = sortedParameters.slice(0, 9).map(param => {
         return renderParam(param, handleChange);
     });
     if (settings.infiltration === SETTINGS_INFILTRATION_ONE_TIME) {
-        params = sortedParameters.slice(0,10).map(param => {
+        params = sortedParameters.slice(0, 10).map(param => {
             return renderParam(param, handleChange);
         });
     }
@@ -132,7 +131,8 @@ const Parameters = ({settings, parameters, handleChange, handleReset}) => {
 Parameters.propTypes = {
     handleChange: PropTypes.func.isRequired,
     handleReset: PropTypes.func.isRequired,
-    parameters: PropTypes.array.isRequired
+    parameters: PropTypes.array.isRequired,
+    settings: PropTypes.array.isRequired,
 };
 
 export default pure(Parameters);
