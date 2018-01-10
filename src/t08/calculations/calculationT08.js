@@ -1,4 +1,5 @@
 import erfc from '../../calculations/erfc';
+import {SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_ONE_TIME} from "../reducers/main";
 
 export function calcC(t, x, vx, R, DL) {
     const term1 = erfc((x - (vx * t / R)) / (2 * Math.sqrt(DL * t / R)));
@@ -56,12 +57,11 @@ export function calculateKd(kOw, cOrg) {
 
 export function calculateDiagramData(settings, vx, DL, R, C0, xMax, tMax, tau) {
     let tauMax = 10e+8;
-    if (settings.infiltration === 'oneTime') {
+    if (settings.infiltration === SETTINGS_INFILTRATION_ONE_TIME) {
         tauMax = tau;
     }
-
     const data = [];
-    if (settings.case === 'variableTime') {
+    if (settings.case === SETTINGS_CASE_VARIABLE_TIME) {
         const x = xMax;
         tMax = calcT(xMax, vx, R, DL);
 
@@ -80,13 +80,13 @@ export function calculateDiagramData(settings, vx, DL, R, C0, xMax, tMax, tau) {
             } else {
                 data.push({
                     t: t,
-                    C: calcCTau(t, x, vx, R, DL)
+                    C: calcCTau(t, x, vx, R, DL, tau)
                 });
             }
         }
     }
 
-    if (settings.case === 'fixedTime') {
+    if (settings.case === SETTINGS_CASE_FIXED_TIME) {
         const t = tMax;
         xMax = calcX(tMax, vx, R, DL);
         let dx = xMax / 25;
@@ -104,7 +104,7 @@ export function calculateDiagramData(settings, vx, DL, R, C0, xMax, tMax, tau) {
             } else {
                 data.push({
                     x: x,
-                    C: calcCTau(t, x, vx, R, DL)
+                    C: calcCTau(t, x, vx, R, DL, tau)
                 });
             }
         }

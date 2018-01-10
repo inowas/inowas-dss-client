@@ -2,6 +2,11 @@ import * as ToolInstance from '../../toolInstance';
 import {WebData} from '../../core';
 import {find} from 'lodash';
 
+export const SETTINGS_CASE_FIXED_TIME = 1;
+export const SETTINGS_CASE_VARIABLE_TIME = 2;
+export const SETTINGS_INFILTRATION_ONE_TIME = 1;
+export const SETTINGS_INFILTRATION_CONTINUOUS = 2;
+
 export const getInitialState = (tool) => {
     return {
         name: 'New simple tool',
@@ -93,7 +98,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 9,
             id: 'tau',
-            name: 'Duration of infiltration, Τ [d]',
+            name: 'Duration of infiltration,  τ  [d]',
             min: 0,
             max: 500,
             value: 100,
@@ -120,8 +125,8 @@ export const getInitialState = (tool) => {
         }],
         settings: {
             retardation: true,
-            case: 'fixedTime',
-            infiltration: 'continuous'
+            case: SETTINGS_CASE_FIXED_TIME,
+            infiltration: SETTINGS_INFILTRATION_CONTINUOUS
         }
     };
 };

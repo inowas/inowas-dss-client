@@ -140,7 +140,7 @@ class T08 extends React.Component {
     handleChange = (e) => {
         if (e.target.name.startsWith('settings')) {
             const parameter = e.target.name.split('_')[1];
-            this.updateSettings(parameter, e.target.value);
+            this.updateSettings(parameter, Number(e.target.value));
         }
 
         if (e.target.name.startsWith('parameter')) {
@@ -244,6 +244,7 @@ class T08 extends React.Component {
                         </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
+                                settings={settings}
                                 parameters={parameters}
                                 handleChange={this.handleChange}
                                 handleReset={this.handleReset}

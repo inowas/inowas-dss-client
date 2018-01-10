@@ -15,9 +15,10 @@ import {
     calcC, calcCTau, calculateDiagramData, calculateDL, calculateR,
     calculateVx
 } from '../calculations/calculationT08';
+import {SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_ONE_TIME} from "../reducers/main";
 
 
-const Chart = ({settings, C0, Kd, I, ne, x, t, alphaL, tau}) => {
+const Chart = ({settings, C0, K, Kd, I, ne, x, t, alphaL, tau}) => {
     let label = '';
     let dataKey = '';
     let variable = '';
@@ -26,20 +27,20 @@ const Chart = ({settings, C0, Kd, I, ne, x, t, alphaL, tau}) => {
     let val50 = 0;
     let valmax = 0;
 
-    const vx = calculateVx(Kd, ne, I);
+    const vx = calculateVx(K, ne, I);
     const DL = calculateDL(alphaL, vx);
     const R = calculateR(ne, Kd);
-    const C = (settings.case === 'oneTime' && t > tau) ? calcCTau(t, x, vx, R, DL) : calcC(t, x, vx, R, DL);
+    const C = (settings.infiltration === SETTINGS_INFILTRATION_ONE_TIME && t > tau) ? calcCTau(t, x, vx, R, DL, tau) : calcC(t, x, vx, R, DL);
     const data = calculateDiagramData(settings, vx, DL, R, C0, x, t, tau);
 
     let dataMax = 0;
-    for (let i = 1; i < data.length; i += 1) {
+    for (let i = 0; i < data.length; i += 1) {
         dataMax = (data[i].C > dataMax) ? data[i].C : dataMax;
     }
 
-    dataMax = (settings.infiltration !== 'oneTime') ? 1 : dataMax;
+    dataMax = (settings.infiltration !== SETTINGS_INFILTRATION_ONE_TIME) ? 1 : dataMax;
 
-    if (settings.case === 'variableTime') {
+    if (settings.case === SETTINGS_CASE_VARIABLE_TIME) {
         label = 't (d)';
         dataKey = 't';
         variable = 'T';
@@ -59,7 +60,7 @@ const Chart = ({settings, C0, Kd, I, ne, x, t, alphaL, tau}) => {
         }
     }
 
-    if (settings.case === 'fixedTime') {
+    if (settings.case === SETTINGS_CASE_FIXED_TIME) {
         label = 'x (m)';
         dataKey = 'x';
         variable = 'X';
