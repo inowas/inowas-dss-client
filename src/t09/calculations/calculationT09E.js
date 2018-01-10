@@ -49,7 +49,7 @@ export function calcXtQ0Head(K, z0, dz, L, W, hi, alpha) {
     return [xt, q0, maxIter, valid];
 }
 
-export function calculateDiagramData(xt, z0, xtSlr, z0Slr, isValid) {
+export function calculateDiagramData(xt, z0, xtSlr, dz, isValid) {
     if (isValid === 'false') {
         return [{
             xt: 0,
@@ -62,14 +62,14 @@ export function calculateDiagramData(xt, z0, xtSlr, z0Slr, isValid) {
         {
             xt: 0,
             z0: 0,
-            z0_new: 0
+            z0_new: dz
         }, {
             xt: -xt,
             z0: -z0,
-            z0_new: -(z0Slr * (xt / xtSlr))
+            z0_new: -((z0+dz) * (xt / xtSlr)-dz)
         }, {
             xt: -xtSlr,
-            z0_new: -z0Slr
+            z0_new: -z0
         }
     ];
 }
