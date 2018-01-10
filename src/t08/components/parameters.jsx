@@ -6,6 +6,8 @@ import {inputType} from '../../inputType';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
+import {SETTINGS_INFILTRATION_ONE_TIME} from "../reducers/main";
+
 
 const renderParam = (param, handleChange) => {
     if (!param.inputType) {
@@ -90,18 +92,21 @@ const renderSlider = (param, handleChange) => {
     );
 };
 
-const Parameters = ({parameters, handleChange, handleReset}) => {
+const Parameters = ({settings, parameters, handleChange, handleReset}) => {
     const sortedParameters = parameters.sort((a, b) => {
         if (a.order > b.order) {
             return 1;
         }
         return -1;
     });
-
-    const params = sortedParameters.map(param => {
+    let params = sortedParameters.slice(0,9).map(param => {
         return renderParam(param, handleChange);
     });
-
+    if (settings.infiltration === SETTINGS_INFILTRATION_ONE_TIME) {
+        params = sortedParameters.slice(0,10).map(param => {
+            return renderParam(param, handleChange);
+        });
+    }
     return (
         <div className="grid-container">
             <div className="col stretch parameters-wrapper">
@@ -119,6 +124,7 @@ const Parameters = ({parameters, handleChange, handleReset}) => {
                     </li>
                 </ul>
             </div>
+
         </div>
     );
 };

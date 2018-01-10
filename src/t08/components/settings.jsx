@@ -3,6 +3,10 @@ import React from 'react';
 import {pure} from 'recompose';
 import PropTypes from 'prop-types';
 import {calcC, calcCTau, calculateDL, calculateR, calculateVx} from '../calculations/calculationT08';
+import {
+    SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_CONTINUOUS,
+    SETTINGS_INFILTRATION_ONE_TIME
+} from "../reducers/main";
 
 const style = {
     marginTop: '10px',
@@ -10,7 +14,7 @@ const style = {
 };
 
 const renderText = (settings, t, c, x) => {
-    if (settings.case === 'fixedTime') {
+    if (settings.case === SETTINGS_CASE_FIXED_TIME) {
         return (
             <p>
                 After fixed <strong>{t} days</strong> since introduction of constant point source the
@@ -34,7 +38,7 @@ const Settings = ({settings, handleChange, x, t, C0, tau, K, ne, I, alphaL, Kd})
     const vx = calculateVx(K, ne, I);
     const DL = calculateDL(alphaL, vx);
     const R = calculateR(ne, Kd);
-    const C = (settings.case === 'oneTime' && t > tau) ? calcCTau(t, x, vx, R, DL) : calcC(t, x, vx, R, DL);
+    const C = (settings.infiltration === SETTINGS_INFILTRATION_ONE_TIME && t > tau) ? calcCTau(t, x, vx, R, DL, tau) : calcC(t, x, vx, R, DL);
     const c = C0 * C;
 
     return (
@@ -43,14 +47,14 @@ const Settings = ({settings, handleChange, x, t, C0, tau, K, ne, I, alphaL, Kd})
             <div className="center-vertical center-horizontal">
                 <div className="radio-group">
                     <div>
-                        <input name="settings_case" id="radio1" type="radio" value="variableTime"
-                               checked={settings.case === 'variableTime'}
+                        <input name="settings_case" id="radio1" type="radio" value={SETTINGS_CASE_VARIABLE_TIME}
+                               checked={settings.case === SETTINGS_CASE_VARIABLE_TIME}
                                style={style} onChange={handleChange}/>
                         <label htmlFor="radio1">Variable time (T), Fixed length (x)</label>
                     </div>
                     <div>
-                        <input name="settings_case" id="radio2" type="radio" value="fixedTime"
-                               checked={settings.case === 'fixedTime'}
+                        <input name="settings_case" id="radio2" type="radio" value={SETTINGS_CASE_FIXED_TIME}
+                               checked={settings.case === SETTINGS_CASE_FIXED_TIME}
                                style={style} onChange={handleChange}/>
                         <label htmlFor="radio2">Fixed time (T), Variable length (x)</label>
                     </div>
@@ -60,14 +64,14 @@ const Settings = ({settings, handleChange, x, t, C0, tau, K, ne, I, alphaL, Kd})
             <div className="center-vertical center-horizontal">
                 <div className="radio-group">
                     <div>
-                        <input name="settings_infiltration" id="radio3" type="radio" value="continuous"
-                               checked={settings.infiltration === 'continuous'}
+                        <input name="settings_infiltration" id="radio3" type="radio" value={SETTINGS_INFILTRATION_CONTINUOUS}
+                               checked={settings.infiltration === SETTINGS_INFILTRATION_CONTINUOUS}
                                style={style} onChange={handleChange}/>
                         <label htmlFor="radio3">Continuous infiltration</label>
                     </div>
                     <div>
-                        <input name="settings_infiltration" id="radio4" type="radio" value="oneTime"
-                               checked={settings.infiltration === 'oneTime'}
+                        <input name="settings_infiltration" id="radio4" type="radio" value={SETTINGS_INFILTRATION_ONE_TIME}
+                               checked={settings.infiltration === SETTINGS_INFILTRATION_ONE_TIME}
                                style={style} onChange={handleChange}/>
                         <label htmlFor="radio4">One-time infiltration</label>
                     </div>
