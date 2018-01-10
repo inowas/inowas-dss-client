@@ -56,9 +56,15 @@ const navigation = [{
 
 class T14B extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = getInitialState(this.constructor.name);
+    }
+
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -254,6 +260,7 @@ class T14B extends React.Component {
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
@@ -282,6 +289,7 @@ const mapDispatchToProps = (dispatch, props) => {
 T14B.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,

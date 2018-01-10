@@ -75,7 +75,7 @@ class T13 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T13C')}
+{/*                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T13C')}
                        className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T13C</h1>
@@ -84,7 +84,7 @@ class T13 extends React.Component {
                                 <img className="sketch-image" src={image13C}/>
                             </div>
                         </div>
-                    </a>
+                    </a>*/}
                 </div>
             </div>
         );

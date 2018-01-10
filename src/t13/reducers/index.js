@@ -45,7 +45,12 @@ export const createReducer = tool => {
                     description: instance.description,
                     public: instance.public,
                     settings: instance.data.settings,
-                    parameters: instance.data.parameters,
+                    parameters: state.parameters.map(v => {
+                        return {
+                            ...v,
+                            ...find(instance.data.parameters, {id: v.id})
+                        };
+                    }),
                     tool: instance.data.tool
                 };
             case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
@@ -57,9 +62,13 @@ export const createReducer = tool => {
                     description: action.payload.description,
                     public: action.payload.public,
                     settings: action.payload.data.settings,
-                    parameters: action.payload.data.parameters,
+                    parameters: state.parameters.map(v => {
+                        return {
+                            ...v,
+                            ...find(action.payload.data.parameters, {id: v.id})
+                        };
+                    }),
                     tool: action.payload.data.tool
-
                 };
         }
 

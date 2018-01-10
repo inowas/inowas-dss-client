@@ -57,9 +57,15 @@ const navigation = [{
 
 class T13C extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = getInitialState(this.constructor.name);
+    }
+
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -258,12 +264,13 @@ class T13C extends React.Component {
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T13A.toolInstance
+        toolInstance: state.T13C
     };
 };
 
@@ -285,6 +292,7 @@ const mapDispatchToProps = (dispatch, props) => {
 
 T13C.propTypes = {
     createToolInstance: PropTypes.func,
+    getToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,

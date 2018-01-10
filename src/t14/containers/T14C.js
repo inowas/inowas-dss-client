@@ -62,6 +62,12 @@ class T14C extends React.Component {
         this.state = getInitialState(this.constructor.name);
     }
 
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
+    }
+
     componentWillReceiveProps(newProps) {
         this.setState(function(prevState) {
             return {
@@ -255,6 +261,7 @@ class T14C extends React.Component {
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
@@ -283,6 +290,7 @@ const mapDispatchToProps = (dispatch, props) => {
 T14C.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,

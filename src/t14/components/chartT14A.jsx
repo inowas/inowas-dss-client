@@ -56,8 +56,7 @@ Chart.propTypes = {
     S: PropTypes.number.isRequired,
     T: PropTypes.number.isRequired,
     d: PropTypes.number.isRequired,
-    t: PropTypes.number.isRequired,
-    dt: PropTypes.number.isRequired
+    t: PropTypes.number.isRequired
 };
 
 export default pure(Chart);
