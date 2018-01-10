@@ -24,7 +24,7 @@ export default class T13B extends React.Component {
             path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
             icon: <Icon name="file"/>
         }]
-    }
+    };
 
     handleChange = ( e ) => {
         if ( e.target.name === 'settings' ) {

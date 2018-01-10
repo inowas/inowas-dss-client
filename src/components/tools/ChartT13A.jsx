@@ -14,7 +14,6 @@ export default class Chart extends React.Component {
 
     render() {
 
-        console.log((this.props.data[this.props.data.length -1].t).toFixed(1))
         return (
             <div>
                 <h2>Calculation</h2>
