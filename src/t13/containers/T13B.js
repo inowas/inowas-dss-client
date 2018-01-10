@@ -89,8 +89,10 @@ class T13B extends React.Component {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    selected: value
+                    selected: value,
+                    part2: true
                 }
+
             };
         });
     }

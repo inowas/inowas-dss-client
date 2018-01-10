@@ -30,7 +30,8 @@ export function calculateDiagramData(w, K, ne, L1, h1, x_min, x_max, d_x) {
         //return ne * Math.sqrt(alpha / K / w) * (x * Math.sqrt(1/(x*x) - 1/alpha) - x_min * Math.sqrt(1/(x_min*x_min) - 1/alpha) + Math.log((Math.sqrt(alpha)/x_min + Math.sqrt(alpha / (x_min*x_min) - 1)) / (Math.sqrt(alpha)/x + Math.sqrt(alpha / (x*x) - 1))) );
     }
 
-    var data = [];
+    let data = [];
+    if (x_max<x_min) x_max=x_min;
     for (let x = x_min; x <= x_max; x += d_x) {
         data.push({
             x: x,
@@ -86,7 +87,7 @@ export function resultDiv(xe, xi, L, data) {
 
 const Chart = ({W, K, L, hL, h0, ne, xi, xe, settings}) => {
     const yDomain = [0, 'auto'];
-    var data = [];
+    let data = [];
     const xwd = calculateXwd(L, K, W, hL, h0).toFixed(1);
     if (settings=== 'h0') {
         data = calculateDiagramData(W, K, ne, (xwd*1), h0, xi, xe, 10);
@@ -136,9 +137,13 @@ const Chart = ({W, K, L, hL, h0, ne, xi, xe, settings}) => {
 };
 
 Chart.propTypes = {
-    h: PropTypes.number.isRequired,
-    df: PropTypes.number.isRequired,
-    ds: PropTypes.number.isRequired
+    W: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
+    ne: PropTypes.number.isRequired,
+    L: PropTypes.number.isRequired,
+    hL: PropTypes.number.isRequired,
+    xi: PropTypes.number.isRequired,
+    xe: PropTypes.number.isRequired
 };
 
 export default pure(Chart);

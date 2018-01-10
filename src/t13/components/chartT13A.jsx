@@ -126,9 +126,13 @@ const Chart = ({W, K, ne, L, hL, xi, xe}) => {
 };
 
 Chart.propTypes = {
-    h: PropTypes.number.isRequired,
-    df: PropTypes.number.isRequired,
-    ds: PropTypes.number.isRequired
+    W: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
+    ne: PropTypes.number.isRequired,
+    L: PropTypes.number.isRequired,
+    hL: PropTypes.number.isRequired,
+    xi: PropTypes.number.isRequired,
+    xe: PropTypes.number.isRequired
 };
 
 export default pure(Chart);

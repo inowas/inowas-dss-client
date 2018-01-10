@@ -19,7 +19,7 @@ const settings = ({value, handleChange}) => {
                             <label htmlFor="radio1">Left</label>
                             <input name="settings" id="radio2" type="radio" value="hL" style={styleupdate} checked={value === 'hL'}
                                    onChange={handleChange}/>
-                            <label htmlFor="radio1">Right</label></div>
+                            <label htmlFor="radio2">Right</label></div>
                     </div>
                 </div>
             </div>

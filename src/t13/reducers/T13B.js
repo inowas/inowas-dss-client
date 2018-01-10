@@ -13,7 +13,7 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'W',
-            name: 'Average infiltration rate, W(m/d)',
+            name: 'Average infiltration rate, W [m/d]',
             min: 0.001,
             max: 0.01,
             value: 0.00112,
@@ -23,7 +23,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 1,
             id: 'K',
-            name: 'Hydraulic conductivity, K (m/d)',
+            name: 'Hydraulic conductivity, K [m/d]',
             min: 10e-2,
             max: 10e2,
             value: 30.2,
@@ -33,7 +33,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 2,
             id: 'L',
-            name: 'Aquifer length, L´ (m)',
+            name: 'Aquifer length, L´ [m]',
             min: 0,
             max: 1000,
             value: 1000,
@@ -43,7 +43,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 3,
             id: 'hL',
-            name: 'Downstream head, hL´ (m)',
+            name: 'Downstream head, hL´ [m]',
             min: 0,
             max: 10,
             value: 2,
@@ -53,7 +53,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 4,
             id: 'h0',
-            name: 'Upstream head, h0 (m)',
+            name: 'Upstream head, h₀ [m]',
             min: 0,
             max: 10,
             value: 5,
@@ -63,33 +63,33 @@ export const getInitialState = (tool) => {
         }, {
             order: 5,
             id: 'ne',
-            name: 'Effective porosity, n (-)',
+            name: 'Effective porosity, n [-]',
             min: 0,
             max: 0.5,
             value: 0.35,
             stepSize: 0.01,
             decimals: 2,
-            disable: true
+            disable: false
         }, {
             order: 6,
             id: 'xi',
-            name: 'Initial position, xi (m)',
+            name: 'Initial position, xᵢ [m]',
             min: 0,
             max: 1000,
             value: 50,
             stepSize: 10,
             decimals: 0,
-            disable: true
+            disable: false
         }, {
             order: 7,
             id: 'xe',
-            name: 'Arrival location, xe (m)',
+            name: 'Arrival location, xₑ [m]',
             min: 1,
             max: 1000,
             value: 200,
             stepSize: 10,
             decimals: 0,
-            disable: true
+            disable: false
         }]
     };
 };
