@@ -40,7 +40,7 @@ export function resultDiv(rhof, rhos, lambda, qCrit) {
         <div className="diagram-labels-bottom-right">
             <div className="diagram-label">
                 <p>
-                    Q<sub>crit</sub>&nbsp;=&nbsp;<strong>{qCrit.toFixed(1)}</strong>&nbsp;m<sup>3</sup>/d
+                    Q<sub>crit</sub>&nbsp;=&nbsp;<strong>{qCrit.toFixed(0)}</strong>&nbsp;m<sup>3</sup>/d
                 </p>
             </div>
         </div>

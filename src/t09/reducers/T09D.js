@@ -65,7 +65,7 @@ export const getInitialState = (tool) => {
                 return x > 0;
             },
             max: 5000,
-            value: 2000,
+            value: 2255,
             stepSize: 1,
             decimals: 0
         }, {

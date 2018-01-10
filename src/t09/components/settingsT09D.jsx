@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {calcLambda, calcMu, calculateQCrit, calcXt} from '../calculations/calculationT09D';
 
-const renderInfo = (qCrit, Q, xT) => {
-    if (Q >= qCrit) {
+const renderInfo = (qCrit, Q, xT, xw) => {
+    if (xT >= xw) {
         return (
             <div className="center-vertical center-horizontal" style={{padding: '0px 20px'}}>
                 <p>
@@ -72,7 +72,7 @@ const settings = ({value, handleChange, k, b, q, Q, xw, rhof, rhos, AqType}) => 
             </div>
 
             <h2>Info</h2>
-            {renderInfo(qCrit, Q, xT)}
+            {renderInfo(qCrit, Q, xT,xw)}
 
         </div>
     );

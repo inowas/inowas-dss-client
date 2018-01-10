@@ -70,13 +70,13 @@ const Chart = ({k, z0, l, w, dz, hi, i, df, ds, method}) => {
         }
 
         dxt = xtSlr - xt;
-        data = calculateDiagramData(xt, z0, xtSlr, z0 + dz, isValid);
+        data = calculateDiagramData(xt, z0, xtSlr, dz, isValid);
     }
 
     if (method === 'constFlux') {
         const [xt, xtSlr] = calcXtQ0Flux(k, z0, dz, l, w, i, alpha);
         dxt = xtSlr - xt;
-        data = calculateDiagramData(xt, z0, xtSlr, z0 + dz, isValid);
+        data = calculateDiagramData(xt, z0, xtSlr, dz, isValid);
     }
 
     return (
@@ -101,8 +101,10 @@ const Chart = ({k, z0, l, w, dz, hi, i, df, ds, method}) => {
                                 <Line isAnimationActive={false} type="basis" dataKey={'z0'} stroke="#ED8D05"
                                       strokeWidth="5" dot={false}/>
                                 <Line isAnimationActive={false} type="basis" dataKey={'z0_new'} stroke="#ED8D05"
-                                      strokeWidth="5" dot={false} strokeDasharray="20 20"/>
-                                <ReferenceLine y={data[1].z0} stroke="black" strokeWidth="1" strokeDasharray="3 3" label="z0" dot={false}/>
+                                      strokeWidth="5" dot={false} strokeDasharray="15 15"/>
+                                <ReferenceLine y={data[1].z0} stroke="black" strokeWidth="1" strokeDasharray="3 3" label="z₀" dot={false}/>
+                                <ReferenceLine x={data[1].xt} stroke="black" strokeWidth="1" strokeDasharray="3 3" label="xt" dot={false}/>
+                                <ReferenceLine x={data[2].xt} stroke="black" strokeWidth="1" strokeDasharray="3 3" label="xt'" dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-ylabels-right">
