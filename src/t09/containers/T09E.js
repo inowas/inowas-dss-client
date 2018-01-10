@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 
 import image from '../../images/tools/T09E.png';
-import {Background, ChartT09D as Chart, Parameters} from '../components';
+import {Background, ChartT09E as Chart, SettingsT09E as Settings, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -23,6 +23,7 @@ import {getInitialState} from '../reducers/T09E';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+import {isReadOnly} from '../../core/helpers';
 
 const styles = {
     heading: {
@@ -62,6 +63,12 @@ class T09E extends React.Component {
         this.state = getInitialState(this.constructor.name);
     }
 
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
+    }
+
     componentWillReceiveProps(newProps) {
         this.setState(function(prevState) {
             return {
@@ -84,13 +91,13 @@ class T09E extends React.Component {
         this.props.createToolInstance(uuid.v4(), name, description, this.state.public, buildPayload(this.state), routes, params);
     };
 
-    updateSettings(value) {
+    updateSettings(method) {
         this.setState(prevState => {
             return {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    variable: value
+                    method: method
                 }
             };
         });
@@ -131,7 +138,7 @@ class T09E extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'variable') {
+        if (e.target.name === 'settings') {
             this.updateSettings(e.target.value);
         }
 
@@ -151,16 +158,19 @@ class T09E extends React.Component {
     };
 
     render() {
-        const {parameters, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
+        const {parameters, settings, name, description} = this.state;
+        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
-        const readOnly = false;
+        const readOnly = isReadOnly(toolInstance.permissions);
+        let params = [];
+        if (settings.method === 'constHead') params = parameters.slice(0, 6).concat(parameters.slice(7, 10));
+        if (settings.method === 'constFlux') params = parameters.slice(0, 5).concat(parameters.slice(6, 10));
 
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-
+        chartParams.method = settings.method;
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -175,9 +185,7 @@ class T09E extends React.Component {
                 </div>
                 <div className="col col-rel-0-5">
                     <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save}>
-                            Save
-                        </Button>
+                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>Save</Button>
                     </WebData.Component.Loading>
                 </div>
             </div>
@@ -187,7 +195,7 @@ class T09E extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09C. Saltwater intrusion // Critical well discharge
+                    T09E. Saltwater intrusion // Sea level rise
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -233,10 +241,12 @@ class T09E extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
+                        <section className="tile col col-abs-2">
+                            <Settings value={settings.method} handleChange={this.handleChange} {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
-                                parameters={parameters}
+                                parameters={params}
                                 handleChange={this.handleChange}
                                 handleReset={this.handleReset}
                             />
@@ -250,12 +260,13 @@ class T09E extends React.Component {
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T09A.toolInstance
+        toolInstance: state.T09E
     };
 };
 
@@ -278,9 +289,11 @@ const mapDispatchToProps = (dispatch, props) => {
 T09E.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
+    toolInstance: PropTypes.object,
     updateToolInstance: PropTypes.func,
     updateToolInstanceStatus: PropTypes.object
 };

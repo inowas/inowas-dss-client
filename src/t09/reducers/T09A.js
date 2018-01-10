@@ -2,12 +2,13 @@ export const getInitialState = (tool) => {
     return {
         name: 'New simple tool',
         description: 'Simple tool description',
+        permissions: 'rwx',
         public: false,
         tool: tool,
         parameters: [{
             order: 0,
             id: 'h',
-            name: 'Thickness of freshwater above sea level, h [m]',
+            name: 'Freshwater thickness, h [m]',
             min: 0,
             max: 10,
             value: 1,

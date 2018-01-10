@@ -23,6 +23,7 @@ import {Modifier as ToolInstance} from '../../toolInstance';
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T09A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
+import {isReadOnly} from '../../core/helpers';
 
 const styles = {
     heading: {
@@ -59,6 +60,12 @@ class T09A extends React.Component {
     constructor() {
         super();
         this.state = getInitialState(this.constructor.name);
+    }
+
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -151,9 +158,9 @@ class T09A extends React.Component {
 
     render() {
         const {parameters, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
+        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
-        const readOnly = false;
+        const readOnly = isReadOnly(toolInstance.permissions);
 
         const chartParams = {};
         each(parameters, v => {
@@ -174,9 +181,7 @@ class T09A extends React.Component {
                 </div>
                 <div className="col col-rel-0-5">
                     <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save}>
-                            Save
-                        </Button>
+                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>Save</Button>
                     </WebData.Component.Loading>
                 </div>
             </div>
@@ -249,13 +254,14 @@ class T09A extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T09A.toolInstance
+        toolInstance: state.T09A
     };
 };
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
+    updateToolInstance: ToolInstance.Command.updateToolInstance
 };
 
 
@@ -278,9 +284,11 @@ const mapDispatchToProps = (dispatch, props) => {
 T09A.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
+    toolInstance: PropTypes.object,
     updateToolInstance: PropTypes.func,
     updateToolInstanceStatus: PropTypes.object
 };

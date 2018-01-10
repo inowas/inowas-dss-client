@@ -6,6 +6,7 @@ export const getInitialState = () => {
     return {
         name: 'New simple tool',
         description: 'Simple tool description',
+        permissions: 'rwx',
         public: false,
         settings: {
             variable: 'x'
@@ -122,6 +123,7 @@ const createReducer = tool => {
                     ...state,
                     name: instance.name,
                     description: instance.description,
+                    permissions: instance.permissions,
                     public: instance.public,
                     settings: instance.data.settings,
                     parameters: state.parameters.map(v => {

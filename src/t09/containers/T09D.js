@@ -23,6 +23,7 @@ import {getInitialState} from '../reducers/T09D';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+import {isReadOnly} from '../../core/helpers';
 
 const styles = {
     heading: {
@@ -61,6 +62,12 @@ class T09D extends React.Component {
     constructor() {
         super();
         this.state = getInitialState(this.constructor.name);
+    }
+
+    componentWillMount() {
+        if (this.props.params.id) {
+            this.props.getToolInstance(this.props.params.id);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -153,15 +160,15 @@ class T09D extends React.Component {
 
     render() {
         const {settings, parameters, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
+        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
-        const readOnly = false;
+        const readOnly = isReadOnly(toolInstance.permissions);
 
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['AqType'] =settings.AqType;
+        chartParams['AqType'] = settings.AqType;
 
         const heading = (
             <div className="grid-container">
@@ -177,9 +184,7 @@ class T09D extends React.Component {
                 </div>
                 <div className="col col-rel-0-5">
                     <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save}>
-                            Save
-                        </Button>
+                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>Save</Button>
                     </WebData.Component.Loading>
                 </div>
             </div>
@@ -189,7 +194,7 @@ class T09D extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09C. Saltwater intrusion // Critical well discharge
+                    T09D. Saltwater intrusion // Critical well discharge
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -236,7 +241,7 @@ class T09D extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Settings value={settings.AqType} handleChange={this.handleChange}/>
+                            <Settings value={settings.AqType} handleChange={this.handleChange} {...chartParams}/>
                         </section>
 
                         <section className="tile col col-abs-3 stretch">
@@ -255,12 +260,13 @@ class T09D extends React.Component {
 
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
+    getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T09A.toolInstance
+        toolInstance: state.T09D
     };
 };
 
@@ -283,9 +289,11 @@ const mapDispatchToProps = (dispatch, props) => {
 T09D.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
+    toolInstance: PropTypes.object,
     updateToolInstance: PropTypes.func,
     updateToolInstanceStatus: PropTypes.object
 };

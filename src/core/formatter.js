@@ -16,6 +16,6 @@ export function toNumber(number) {
 
 export const dateToAtomFormat = (date) => moment(date).format('YYYY-MM-DD[T]00:00:00+00:00');
 export const dateToYmd = (date) => moment(date).format('YYYY-MM-DD');
-export const dateToTime = (date) => moment(date).format('HH:MM');
+export const dateToTime = (date) => moment(date).format('HH:mm');
 export const dateToDate = (date) => moment(date).format('MM/DD/YYYY');
-export const dateToDatetime = (date) => moment(date).format('MM/DD/YYYY HH:MM');
+export const dateToDatetime = (date) => moment(date).format('MM/DD/YYYY HH:mm');

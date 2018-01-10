@@ -11,6 +11,40 @@ export function login( username, apiKey ) {
     };
 }
 
+export function signupSuccessful( name, username, email, apiKey ) {
+    return {
+        type: 'SIGNUP_SUCCESSFUL',
+        payload: {
+            name,
+            username,
+            email,
+            apiKey
+        }
+    };
+}
+
+export function signup( name, username, email, password, redirectTo ) {
+    return dispatch => {
+        return dispatch( {
+            type: 'SIGNUP',
+            payload: {
+                promise: ConfiguredAxios.post( '/users/signup.json', {
+                    name,
+                    username,
+                    email,
+                    password,
+                    redirectTo
+                } )
+            }
+        } ).then( ( { action } ) => {
+            dispatch( signupSuccessful( name, username, email, action.payload.data.api_key ));
+        } ).catch( ( error ) => {
+            // eslint-disable-next-line no-console
+            console.error( error );
+        } );
+    };
+}
+
 export function authenticate( username, password ) {
     return dispatch => {
         return dispatch( {

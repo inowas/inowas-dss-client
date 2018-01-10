@@ -2,7 +2,7 @@ import React from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import PapaParse from 'papaparse';
 import styleGlobals from 'styleGlobals';
-import csvFile from '../data/database-2017-12-05.csv';
+import csvFile from '../data/database-2018-01-05.csv';
 import '../../less/4TileTool.less';
 import '../styles/pivottable.less';
 
@@ -19,13 +19,14 @@ const styles = {
     },
     table: {
         backgroundColor: styleGlobals.colors.background,
-        padding: 20
+        padding: 20,
+        overflowY: 'scroll'
     }
 };
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t04-gis-based-site-suitability-mapping/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t04a-database/',
     icon: <Icon name="file"/>
 }];
 
@@ -47,7 +48,7 @@ class T04 extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T04. GIS Based Site Suitability Mapping
+                    T04. Database for GIS Based Site Suitability Mapping
                 </h3>
                 <div style={styles.table}>
                     <PivotTableUI data={this.loadCsvFile()} onChange={s => this.setState(s)} {...this.state} />

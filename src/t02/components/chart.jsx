@@ -34,14 +34,44 @@ const calculateDiagramData = (variable, w, L, W, hi, Sy, K, t, min, max, stepSiz
     return data;
 };
 
-const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
-    let max = L;
-    if (settings.variable === 'x') {
-        max = W;
+const calculateChartXMax = (variable, w, L, W, hi, Sy, K, t) => {
+    if (variable === 'x') {
+        for (let x = 0; x < 10000; x += 10) {
+            const result = mounding.calculateHi(x, 0, w, L, W, hi, Sy, K, t);
+            if (result <= 0.01) {
+                return x;
+            }
+        }
+        return 0;
     }
 
+    for (let y = 0; y < 10000; y += 10) {
+        const result = mounding.calculateHi(0, y, w, L, W, hi, Sy, K, t);
+        if (result <= 0.01) {
+            return y;
+        }
+    }
+
+    return 0;
+};
+
+const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
     const variable = settings.variable;
-    const data = calculateDiagramData(variable, w, L, W, hi, Sy, K, t, 0, max, Math.ceil(max / 10));
+
+    let chartXMaxFromBasin = 2 * L;
+    if (variable === 'x') {
+        chartXMaxFromBasin = 2 * W;
+    }
+
+    let chartXMax;
+    const chartXMaxFromCurve = calculateChartXMax(variable, w, L, W, hi, Sy, K, t);
+    if (chartXMaxFromCurve < chartXMaxFromBasin) {
+        chartXMax = chartXMaxFromBasin;
+    } else {
+        chartXMax = chartXMaxFromCurve;
+    }
+
+    const data = calculateDiagramData(variable, w, L, W, hi, Sy, K, t, 0, chartXMax, Math.ceil(chartXMax / 10));
     const hMax = data[0].hhi + hi;
 
     let xAxis = <XAxis type="number" dataKey="y"/>;
@@ -78,7 +108,8 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                                     stroke="#1EB1ED"
                                     strokeWidth="5" dot={false}
                                 />
-                                <ReferenceLine x={max / 2} stroke="black" strokeWidth="3" label={rLabel} dot={false}/>
+                                <ReferenceLine x={chartXMaxFromBasin / 4} stroke="black" strokeWidth="3" label={rLabel}
+                                               dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-ylabels">

@@ -109,7 +109,15 @@ class Dashboard extends React.Component {
         }
     }
 
-    setToolSelection = slug => {
+    onToolClick = slug => {
+        if (slug === 'T04') {
+            return () => this.props.push('/tools/' + slug);
+        }
+
+        if (slug === 'T17') {
+            return () => window.open('http://marportal.un-igrac.org', '_blank');
+        }
+
         return () => {
             this.props.setActiveTool(slug);
         };
@@ -133,16 +141,13 @@ class Dashboard extends React.Component {
                     <Td>
                         <Button
                             type="link"
-                            onClick={() => push(basePath + i.id + subPath)}
+                            onClick={() => push(basePath + i.tool + '/' + i.id + subPath)}
                         >
                             {i.name}
                         </Button>
                     </Td>
                     <Td>
-                        {i.project}
-                    </Td>
-                    <Td>
-                        {i.application}
+                        {i.tool}
                     </Td>
                     <Td>
                         {Formatter.dateToDatetime(new Date(i.created_at))}
@@ -191,7 +196,6 @@ class Dashboard extends React.Component {
     renderDataTable() {
         // eslint-disable-next-line no-shadow
         const {activeTool, setPublic, publicInstances, push} = this.props;
-
         return (
             <div className="tile col col-abs-3 stretch">
                 <h2 className="section-title">
@@ -205,7 +209,7 @@ class Dashboard extends React.Component {
                         <li>
                             <Button
                                 type="link"
-                                onClick={() => push(activeTool.path)}
+                                onClick={() => push(activeTool.path + activeTool.slug)}
                                 icon={<Icon name="add"/>}
                             >
                                 Add new
@@ -266,8 +270,7 @@ class Dashboard extends React.Component {
                     <Tr head>
                         <Td head>No.</Td>
                         <Td head>Name</Td>
-                        <Td head>Project</Td>
-                        <Td head>Application</Td>
+                        <Td head>Tool</Td>
                         <Td head>Date created</Td>
                         <Td head>Created by</Td>
                         <Td style={[styles.lastTd]} head/>
@@ -299,22 +302,13 @@ class Dashboard extends React.Component {
 
         const menuItems = [
             {
-                name: 'Projects',
-                icon: <Icon name="folder"/>,
-                items: [
-                    {
-                        name: 'Inowas'
-                    }
-                ]
-            },
-            {
                 name: 'Tools',
                 icon: <Icon name="tools"/>,
                 items: tools.filter(t => includes(roles, t.role))
                     .map(t => {
                         return {
                             name: t.slug + ': ' + t.name,
-                            onClick: this.setToolSelection(t.slug),
+                            onClick: this.onToolClick(t.slug),
                             active: (activeTool.slug === t.slug)
                         };
                     })
@@ -326,7 +320,7 @@ class Dashboard extends React.Component {
                 <Navbar links={navigation}/>
                 <div className="app-width grid-container">
                     <Menu
-                        firstActive={1}
+                        firstActive={0}
                         title="Dashboard"
                         items={menuItems}
                         style={styles.menu}

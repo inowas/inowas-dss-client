@@ -69,7 +69,7 @@ export default class Chart extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col col-rel-0-5">
+{/*                    <div className="col col-rel-0-5">
                         <ul className="nav nav-stacked" role="navigation">
                             <li>
                                 <button className="button">PNG</button>
@@ -78,7 +78,7 @@ export default class Chart extends React.Component {
                                 <button className="button">CSV</button>
                             </li>
                         </ul>
-                    </div>
+                    </div>*/}
                 </div>
             </div>
         )
