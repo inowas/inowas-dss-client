@@ -12,12 +12,11 @@ function initialState() {
 const user = (state = initialState(), action) => {
     switch (action.type) {
 
-        case 'LOGIN':
-        case 'SIGNUP_SUCCESSFUL': {
+        case 'LOGIN': {
             localStorage.setItem('apiKey', action.payload.apiKey);
             return {
                 ...state,
-                apiKey: action.payload.apiKey
+                apiKey: action.payload.apiKey,
             };
         }
 
@@ -45,7 +44,7 @@ const user = (state = initialState(), action) => {
 
 export default user;
 
-export const isUserLoggedIn = state => state.apiKey !== null;
+export const isUserLoggedIn = state => state.apiKey !== null && state.enabled === true;
 export const getApiKey = state => state.apiKey;
 export const getUserName = state => state.userName;
 export const getName = state => state.name;
