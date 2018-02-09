@@ -1,16 +1,17 @@
 import '../less/login.less';
 
+import ConfiguredAxios from 'ConfiguredAxios';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
-import {signup} from '../actions/user';
 import {connect} from 'react-redux';
 import {isUserLoggedIn} from '../reducers/user';
 import {push} from 'react-router-redux';
 import {withRouter} from 'react-router';
-import {Button, Container, Form, Grid, Header, Image, Menu, Message} from 'semantic-ui-react';
+import {Button, Container, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
-import NavBar from "./Navbar";
+import NavBar from './Navbar';
+
 
 const styles = {
     link: {
@@ -30,7 +31,7 @@ class SignUp extends Component {
             password: '',
             passwordConfirmation: '',
             loading: false,
-            validInput: false,
+            showErrorMessages: false,
             success: false,
             error: false,
         };
@@ -38,6 +39,11 @@ class SignUp extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.checkAuthentication(nextProps);
+        if (this.props.userSignUpPending) {
+            this.setState({
+                success: true
+            });
+        }
     }
 
     checkAuthentication() {
@@ -122,7 +128,7 @@ class SignUp extends Component {
     };
 
     validateUsername = (username) => {
-        const re = /^[a-zA-Z\-]+$/;
+        const re = /^[a-zA-Z.\-]+$/;
 
         if (username.length <= 5) {
             return false;
@@ -136,30 +142,94 @@ class SignUp extends Component {
         return re.test(email);
     };
 
+    validateForm = () => {
+        return this.validate(
+            this.state.name,
+            this.state.email,
+            this.state.password,
+            this.state.passwordConfirmation,
+            this.state.username
+        );
+    };
+
     validate = (name, email, password, passwordConfirmation, username) => {
-        if (password.length < 5) {
-            return false;
-        }
-
-        if (!this.validateEmail(email)) {
-            return false;
-        }
-
-        if (password !== passwordConfirmation) {
-            return false;
+        if (name.length <= 5) {
+            return {
+                isValid: false,
+                message: 'The name has to be larger then 5 digits.'
+            };
         }
 
         if (!this.validateUsername(username)) {
-            return false;
+            return {
+                isValid: false,
+                message: 'The username can contain only alphanumeric characters and dots.'
+            };
         }
 
-        return name.length > 5;
+        if (!this.validateEmail(email)) {
+            return {
+                isValid: false,
+                message: 'The email-address is not correct.'
+            };
+        }
+
+        if (password.length <= 5) {
+            return {
+                isValid: false,
+                message: 'The password has to be larger then 5 digits.'
+            };
+        }
+
+        if (password !== passwordConfirmation) {
+            return {
+                isValid: false,
+                message: 'The confirmed password is not the same as the password.'
+            };
+        }
+
+        return {
+            isValid: true,
+            message: ''
+        };
+    };
+
+    signUpRequest = (name, username, email, password, redirectTo) => {
+        ConfiguredAxios.post('/users/signup.json', {
+            name,
+            username,
+            email,
+            password,
+            redirectTo
+        }).then(() => this.setState({success: true, loading: false})
+        ).catch(() => this.setState({error: true, loading: false}));
     };
 
     onSignUpClick = () => {
-        const redirectTo = location.protocol + '//' + location.hostname + '/login';
-        this.props.signup(this.state.name, this.state.username, this.state.email, this.state.password, redirectTo);
-        this.setState({loading: true});
+        const formValidation = this.validateForm();
+        if (formValidation.isValid) {
+            const redirectTo = location.protocol + '//' + location.hostname + '/login';
+            // this.props.signup(this.state.name, this.state.username, this.state.email, this.state.password, redirectTo);
+            this.signUpRequest(this.state.name, this.state.username, this.state.email, this.state.password, redirectTo);
+            this.setState({loading: true});
+        }
+
+        this.setState({
+            showErrorMessages: true
+        });
+    };
+
+    renderErrorMessage = () => {
+        const formValidation = this.validateForm();
+        if (!this.state.showErrorMessages || formValidation.isValid) {
+            return null;
+        }
+
+        return (
+            <Message attached="top" error>
+                {formValidation.message}
+            </Message>
+        );
     };
 
     renderButton = () => {
@@ -171,12 +241,26 @@ class SignUp extends Component {
             );
         }
 
+        if (this.state.error) {
+            return (
+                <Button
+                    color={'red'}
+                    fluid size="large"
+                    onClick={this.onSignUpClick}
+                    loading={this.state.loading}
+                >
+                    There was an error registering the new user.
+                </Button>
+            );
+        }
+
+
         return (
             <Button
                 color={'blue'}
                 fluid size="large"
                 onClick={this.onSignUpClick}
-                disabled={!this.state.validInput}
+                loading={this.state.loading}
             >
                 Sign up
             </Button>
@@ -186,7 +270,7 @@ class SignUp extends Component {
     render() {
         return (
             <div>
-                <NavBar />
+                <NavBar/>
                 <Container textAlign={'center'} className={'signup'}>
                     <Grid textAlign="center">
                         <Grid.Column style={{maxWidth: 350}}>
@@ -196,6 +280,9 @@ class SignUp extends Component {
                                     Sign up for a new account
                                 </Header.Content>
                             </Header>
+
+                            {this.renderErrorMessage()}
+
                             <Form size={'small'} className="fluid segment">
                                 <Form.Field>
                                     <input
@@ -254,11 +341,11 @@ const mapStateToProps = state => {
 
 SignUp.propTypes = {
     push: PropTypes.func.isRequired,
-    signup: PropTypes.func.isRequired,
-    userLoggedIn: PropTypes.bool.isRequired
+    userLoggedIn: PropTypes.bool.isRequired,
+    userSignUpPending: PropTypes.bool.isRequired
 };
 
 // eslint-disable-next-line no-class-assign
-SignUp = withRouter(connect(mapStateToProps, {push, signup})(SignUp));
+SignUp = withRouter(connect(mapStateToProps, {push})(SignUp));
 
 export default SignUp;

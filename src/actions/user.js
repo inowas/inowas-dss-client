@@ -1,7 +1,7 @@
 import ConfiguredAxios from 'ConfiguredAxios';
-import { getApiKey } from '../reducers/user';
+import {getApiKey} from '../reducers/user';
 
-export function login( username, apiKey ) {
+export function login(username, apiKey) {
     return {
         type: 'LOGIN',
         payload: {
@@ -11,56 +11,22 @@ export function login( username, apiKey ) {
     };
 }
 
-export function signupSuccessful( name, username, email, apiKey ) {
-    return {
-        type: 'SIGNUP_SUCCESSFUL',
-        payload: {
-            name,
-            username,
-            email,
-            apiKey
-        }
-    };
-}
-
-export function signup( name, username, email, password, redirectTo ) {
+export function authenticate(username, password) {
     return dispatch => {
-        return dispatch( {
-            type: 'SIGNUP',
-            payload: {
-                promise: ConfiguredAxios.post( '/users/signup.json', {
-                    name,
-                    username,
-                    email,
-                    password,
-                    redirectTo
-                } )
-            }
-        } ).then( ( { action } ) => {
-            dispatch( signupSuccessful( name, username, email, action.payload.data.api_key ));
-        } ).catch( ( error ) => {
-            // eslint-disable-next-line no-console
-            console.error( error );
-        } );
-    };
-}
-
-export function authenticate( username, password ) {
-    return dispatch => {
-        return dispatch( {
+        return dispatch({
             type: 'AUTHENTICATION',
             payload: {
-                promise: ConfiguredAxios.post( '/users/credentials.json', {
+                promise: ConfiguredAxios.post('/users/credentials.json', {
                     username,
                     password
-                } )
+                })
             }
-        } ).then( ( { action } ) => {
-            dispatch( login( username, action.payload.data.api_key ) );
-        } ).catch( ( error ) => {
+        }).then(({action}) => {
+            dispatch(login(username, action.payload.data.api_key));
+        }).catch((error) => {
             // eslint-disable-next-line no-console
-            console.error( error );
-        } );
+            console.error(error);
+        });
     };
 }
 
@@ -76,14 +42,14 @@ export function loadUserInformation() {
         return dispatch({
             type: 'FETCH_DATA',
             payload: {
-                promise: ConfiguredAxios.get( '/users/profile', { headers: { 'X-AUTH-TOKEN': getApiKey( getState().user )}})
+                promise: ConfiguredAxios.get('/users/profile', {headers: {'X-AUTH-TOKEN': getApiKey(getState().user)}})
             }
-        }).then( ( { action } ) => {
-            dispatch( setUserInformation( action.payload.data ) );
-        } ).catch( ( error ) => {
+        }).then(({action}) => {
+            dispatch(setUserInformation(action.payload.data));
+        }).catch((error) => {
             // eslint-disable-next-line no-console
-            console.error( error );
-        } );
+            console.error(error);
+        });
     };
 }
 

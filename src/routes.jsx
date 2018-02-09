@@ -22,6 +22,8 @@ const routes = store => (
     <Route path="/">
         <IndexRoute component={LandingPage}/>
         <Route path="impressum" component={Impressum}/>
+        <Route path="login" component={Login}/>
+        <Route path="signup" component={SignUp}/>
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={DashboardContainer}/>
             <Route
@@ -140,8 +142,6 @@ const routes = store => (
 
             <Route path="T18(/:id)" component={tools.T18}/>
         </Route>
-        <Route path="login" component={Login}/>
-        <Route path="signup" component={SignUp}/>
     </Route>
 );
 
