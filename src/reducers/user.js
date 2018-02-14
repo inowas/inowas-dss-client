@@ -17,6 +17,7 @@ const user = (state = initialState(), action) => {
             return {
                 ...state,
                 apiKey: action.payload.apiKey,
+                enabled: true
             };
         }
 
