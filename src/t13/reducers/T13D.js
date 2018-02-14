@@ -1,7 +1,3 @@
-export const SETTINGS_SELECTED_NOTHING = 1;
-export const SETTINGS_SELECTED_H0 = 2;
-export const SETTINGS_SELECTED_HL = 3;
-
 export const getInitialState = (tool) => {
     return {
         name: 'New simple tool',
@@ -9,16 +5,10 @@ export const getInitialState = (tool) => {
         public: false,
         permissions: 'rwx',
         tool: tool,
-        settings: {
-            selected: SETTINGS_SELECTED_NOTHING
-        },
-        info: {
-            xwd: 0
-        },
         parameters: [{
             order: 0,
             id: 'W',
-            name: 'Average infiltration rate, W [m/d]',
+            name: 'Average infiltration rate, W[m/d]',
             min: 0.001,
             max: 0.01,
             value: 0.00112,
@@ -64,36 +54,6 @@ export const getInitialState = (tool) => {
             value: 5,
             stepSize: 0.1,
             decimals: 1,
-            disable: false
-        }, {
-            order: 5,
-            id: 'ne',
-            name: 'Effective porosity, n [-]',
-            min: 0,
-            max: 0.5,
-            value: 0.35,
-            stepSize: 0.01,
-            decimals: 2,
-            disable: false
-        }, {
-            order: 6,
-            id: 'xi',
-            name: 'Initial position, xᵢ [m]',
-            min: 0,
-            max: 1000,
-            value: 50,
-            stepSize: 10,
-            decimals: 0,
-            disable: false
-        }, {
-            order: 7,
-            id: 'xe',
-            name: 'Arrival location, xₑ [m]',
-            min: 1,
-            max: 1000,
-            value: 200,
-            stepSize: 10,
-            decimals: 0,
             disable: false
         }]
     };

@@ -15,69 +15,26 @@ import {
 
 // TODO: implement this eq in library
 
-export function calculateDiagramData(w, K, ne, L, hL, x_min, x_max, d_x) {
-    const small = 1e-12;
-    const xi = x_min;
-    const alpha = L*L + K * hL*hL / w;
-    const root1 = Math.sqrt(alpha / K / w);
-    const root3 = Math.sqrt(1/((xi*xi)+small) - 1/alpha);
-    const root4 = Math.sqrt( (alpha / ((xi*xi)+small)) - 1);
-
+export function calculateDiagramData(Qw, ne, hL, h0, x, xi) {
     function calcT(x) {
-        const root2 = Math.sqrt(1/(x*x) - 1/alpha);
-        const root5 = Math.sqrt( (alpha / (x*x)) - 1);
-        const ln = Math.log((Math.sqrt(alpha) / xi + root4) / (Math.sqrt(alpha) / x + root5));
-        return ne * root1 * (x * root2 - xi * root3 + ln);
+        return ((0.95*h0 + 0.05*hL)*Math.PI*(xi**2 - x**2)*ne/Qw);
     }
 
     let data = [];
-    if (x_max<x_min) x_max=x_min;
-    for (let x = x_min; x <= x_max; x += d_x) {
+    for (let i = x; i <= xi; i += 10) {
         data.push({
-            x,
-            t: calcT(x)
+            x: i,
+            t: calcT(i)
         });
     }
     return data;
 }
-
-export  function calculateXwd(L, K, w, hL, h0) {
-    return (L/2+K*(hL*hL-h0*h0)/(2*w*L));
-}
-
-export function resultDiv(xe, xi, L, data, xwd) {
-    if (xe < xi){
-        return (
-            <div className="diagram-labels-left">
-                <div className="diagram-label">
-                    <p>Arrival location, x<sub>e</sub>, can not be smaller than initial position, x<sub>i</sub>.</p>
-                </div>
-            </div>
-        );
-    }
-    if (xe > L+Math.abs(xwd)){
-        return (
-            <div className="diagram-labels-left">
-                <div className="diagram-label">
-                    <p>Arrival location, x<sub>e</sub>, can not be bigger than L<sup>'</sup>+|xwd|.</p>
-                </div>
-            </div>
-        );
-    }
-    if (xi > L){
-        return (
-            <div className="diagram-labels-left">
-                <div className="diagram-label">
-                    <p>Initial location, x<sub>i</sub>, can not be bigger than the Aquifer length, L<sup>'</sup>.</p>
-                </div>
-            </div>
-        );
-    }
+export function resultDiv(data) {
     return(
-        <div className="diagram-labels-bottom-right">
+        <div className="diagram-labels-right">
             <div className="diagram-label">
                 <p>
-                    t&nbsp;=&nbsp;<strong>{data[data.length -1].t.toFixed(1)}</strong>&nbsp;d
+                    t&nbsp;=&nbsp;<strong>{(data[0].t/365).toFixed(2)}</strong>&nbsp;y
                 </p>
             </div>
         </div>
@@ -85,10 +42,9 @@ export function resultDiv(xe, xi, L, data, xwd) {
 
 }
 
-const Chart = ({W, K, ne, L, hL, h0, xi, xe}) => {
+const Chart = ({Qw, ne, hL, h0, xi, x}) => {
     const yDomain = [0, 'auto'];
-    const xwd = calculateXwd(L, K, W, hL, h0);
-    const data = calculateDiagramData(W, K, ne, L+Math.abs(xwd), hL, xi, xe, 10);
+    const data = calculateDiagramData(Qw, ne, hL, h0, x, xi);
     return (
         <div>
             <h2>Calculation</h2>
@@ -111,7 +67,7 @@ const Chart = ({W, K, ne, L, hL, h0, xi, xe}) => {
                         <div className="diagram-ylabels">
                             <p>t (d)</p>
                         </div>
-                        {resultDiv(xe, xi, L, data, xwd)}
+                        {resultDiv(data)}
                         <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
                 </div>
@@ -131,14 +87,12 @@ const Chart = ({W, K, ne, L, hL, h0, xi, xe}) => {
 };
 
 Chart.propTypes = {
-    W: PropTypes.number.isRequired,
-    K: PropTypes.number.isRequired,
+    Qw: PropTypes.number.isRequired,
     ne: PropTypes.number.isRequired,
-    L: PropTypes.number.isRequired,
     hL: PropTypes.number.isRequired,
     h0: PropTypes.number.isRequired,
     xi: PropTypes.number.isRequired,
-    xe: PropTypes.number.isRequired
+    x : PropTypes.number.isRequired
 };
 
 export default pure(Chart);

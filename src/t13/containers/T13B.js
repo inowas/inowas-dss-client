@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 import image from '../../images/tools/T13B.png';
 
-import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, Parameters} from '../components';
+import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, ParametersT13B as Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -50,7 +50,7 @@ const buildPayload = (state) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
     icon: <Icon name="file"/>
 }];
 
@@ -95,8 +95,7 @@ class T13B extends React.Component {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    selected: value,
-                    part2: true
+                    selected: value
                 }
 
             };
@@ -139,7 +138,7 @@ class T13B extends React.Component {
 
     handleChange = (e) => {
         if (e.target.name === 'settings') {
-            this.updateSettings(e.target.value);
+            this.updateSettings(Number(e.target.value));
         }
 
         if (e.target.name.startsWith('parameter')) {
@@ -201,7 +200,7 @@ class T13B extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13B. Saltwater intrusion // Shape of freshwater-saltwater interface (Glover equation)
+                    T13B. Aquifer system with a flow divide within of the system
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -254,6 +253,7 @@ class T13B extends React.Component {
 
                     <section className="tile col col-abs-3 stretch">
                             <Parameters
+                                settings={settings}
                                 parameters={parameters}
                                 handleChange={this.handleChange}
                                 handleReset={this.handleReset}
