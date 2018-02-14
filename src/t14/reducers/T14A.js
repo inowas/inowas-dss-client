@@ -8,7 +8,7 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'Qw',
-            name: 'Pumping rate, Qw (m³/d)',
+            name: 'Pumping rate, Q'+'w'.sub()+' [m'+'3'.sup()+'/d]',
             min: 1,
             validMin: function(x) {return x > 0;},
             max: 1000,
@@ -18,7 +18,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 1,
             id: 't',
-            name: 'Duration of pumping, t (d)',
+            name: 'Duration of pumping, t [d]',
             min: 1,
             validMin: function(x) {return x > 1;},
             max: 500,
@@ -28,7 +28,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 2,
             id: 'S',
-            name: 'Aquifer storage coefficient, S (-)',
+            name: 'Aquifer storage coefficient, S [-]',
             min: 0.1,
             validMin: function(x) {return x > 0;},
             max: 0.5,
@@ -39,7 +39,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 3,
             id: 'T',
-            name: 'Aquifer transmissivity, T (m²/d)',
+            name: 'Aquifer transmissivity, T [m'+'2'.sup()+'/d]',
             min: 1000,
             validMin: function(x) {return x > 0;},
             max: 3000,
@@ -49,7 +49,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 4,
             id: 'd',
-            name: 'Distance from stream to well, d (m)',
+            name: 'Distance from stream to well, d [m]',
             min: 200,
             validMin: function(x) {return x > 0;},
             max: 1000,

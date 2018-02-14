@@ -37,7 +37,7 @@ class T14 extends React.Component {
                                 Fully penetrating stream with no streambed resistance (Jenkins, 1968)
                             </p>
                             <div className="center-horizontal center-vertical">
-                                <img className="sketch-image" src={image14A}/>
+                                <img className="sketch-image" src={image14A} width="230px" style={{marginBottom:40}}/>
                             </div>
                         </div>
                     </a>
