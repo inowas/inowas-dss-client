@@ -2,13 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
-import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
-import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T13A.png';
 
-import {Background, ChartT13A as Chart, Parameters} from '../components';
+import {SettingsT13D as Settings, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -21,8 +18,10 @@ import Button from '../../components/primitive/Button';
 import {Modifier as ToolInstance} from '../../toolInstance';
 
 import {each} from 'lodash';
-import {getInitialState} from '../reducers/T13A';
+import {getInitialState} from '../reducers/T13D';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
+import styleGlobals from 'styleGlobals';
+import uuid from 'uuid';
 
 const styles = {
     heading: {
@@ -48,13 +47,14 @@ const buildPayload = (state) => {
     };
 };
 
+
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/T13-simple-saltwater-intrusion-equations/',
     icon: <Icon name="file"/>
 }];
 
-class T13A extends React.Component {
+class T13C extends React.Component {
 
     constructor(props) {
         super(props);
@@ -136,6 +136,10 @@ class T13A extends React.Component {
     };
 
     handleChange = (e) => {
+        if (e.target.name === 'variable') {
+            this.updateSettings(e.target.value);
+        }
+
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
@@ -151,6 +155,10 @@ class T13A extends React.Component {
         this.setState(getInitialState());
     };
 
+    redirectTo = tool => {
+        return this.props.router.push('/tools/' + tool);
+    };
+
     render() {
         const {parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
@@ -160,6 +168,11 @@ class T13A extends React.Component {
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
+        });
+
+        const infoParams = {};
+        each(parameters, v => {
+            infoParams[v.id] = v.value;
         });
 
         const heading = (
@@ -188,7 +201,7 @@ class T13A extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13A. Travel time // Aquifer system with a no-flow boundary and fixed head boundary condition
+                    T13_D. Travel time // Aquifer system with two fixed head boundary conditions
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -224,17 +237,10 @@ class T13A extends React.Component {
                         </div>
                     </div>
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked">
-                            <Background image={image}/>
+                        <section className="tile col col-abs-2">
+                            <Settings {...infoParams} redirectTo={this.redirectTo}/>
                         </section>
 
-                        <section className="tile col col-abs-3 stretch">
-                            <Chart {...chartParams}/>
-                        </section>
-                    </div>
-
-                    <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
@@ -249,18 +255,17 @@ class T13A extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        toolInstance: state.T13A
-    };
-};
-
 const actions = {
     createToolInstance: ToolInstance.Command.createToolInstance,
     getToolInstance: ToolInstance.Query.getToolInstance,
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T13C
+    };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
     const tool = props.route.tool;
@@ -278,10 +283,10 @@ const mapDispatchToProps = (dispatch, props) => {
     return wrappedActions;
 };
 
-T13A.propTypes = {
+T13C.propTypes = {
     createToolInstance: PropTypes.func,
-    createToolInstanceStatus: PropTypes.object,
     getToolInstance: PropTypes.func,
+    createToolInstanceStatus: PropTypes.object,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
@@ -289,4 +294,4 @@ T13A.propTypes = {
     updateToolInstanceStatus: PropTypes.object
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T13A));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T13C));

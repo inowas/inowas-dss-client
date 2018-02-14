@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {SETTINGS_SELECTED_H0, SETTINGS_SELECTED_HL} from "../reducers/T13B";
 
 const settings = ({value, handleChange}) => {
 
@@ -14,10 +15,10 @@ const settings = ({value, handleChange}) => {
                 <div className="center-vertical center-horizontal">
                     <div className="radio-group">
                         <div>
-                            <input name="settings" id="radio1" type="radio" value="h0" checked={value === 'h0'}
+                            <input name="settings" id="radio1" type="radio" value={SETTINGS_SELECTED_H0} checked={value === SETTINGS_SELECTED_H0}
                                    onChange={handleChange}/>
                             <label htmlFor="radio1">Left</label>
-                            <input name="settings" id="radio2" type="radio" value="hL" style={styleupdate} checked={value === 'hL'}
+                            <input name="settings" id="radio2" type="radio" value={SETTINGS_SELECTED_HL} style={styleupdate} checked={value === SETTINGS_SELECTED_HL}
                                    onChange={handleChange}/>
                             <label htmlFor="radio2">Right</label></div>
                     </div>
@@ -28,7 +29,7 @@ const settings = ({value, handleChange}) => {
 
 settings.propTypes = {
     handleChange: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
 };
 
 export default settings;

@@ -12,6 +12,7 @@ import {
     YAxis,
     CartesianGrid
 } from 'recharts';
+import {SETTINGS_SELECTED_H0, SETTINGS_SELECTED_HL, SETTINGS_SELECTED_NOTHING} from "../reducers/T13B";
 
 // TODO: implement this eq in library
 
@@ -89,11 +90,14 @@ const Chart = ({W, K, L, hL, h0, ne, xi, xe, settings}) => {
     const yDomain = [0, 'auto'];
     let data = [];
     const xwd = calculateXwd(L, K, W, hL, h0).toFixed(1);
-    if (settings=== 'h0') {
+    if (settings=== SETTINGS_SELECTED_H0) {
         data = calculateDiagramData(W, K, ne, (xwd*1), h0, xi, xe, 10);
     }
-    if (settings === 'hL') {
+    if (settings === SETTINGS_SELECTED_HL) {
         data = calculateDiagramData(W, K, ne, (L-xwd), hL, xi, xe, 10);
+    }
+    if (settings === SETTINGS_SELECTED_NOTHING) {
+        data = [{x:0,t:0}];
     }
     return (
         <div>

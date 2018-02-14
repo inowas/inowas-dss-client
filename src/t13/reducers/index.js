@@ -1,6 +1,8 @@
 import * as T13A from './T13A';
 import * as T13B from './T13B';
 import * as T13C from './T13C';
+import * as T13D from './T13D';
+import * as T13E from './T13E';
 import * as ToolInstance from '../../toolInstance';
 import {find} from 'lodash';
 import {WebData} from '../../core';
@@ -20,6 +22,14 @@ export const getInitialState = tool => {
 
     if (tool === 'T13C') {
         return T13C.getInitialState(tool);
+    }
+
+    if (tool === 'T13D') {
+        return T13D.getInitialState(tool);
+    }
+
+    if (tool === 'T13E') {
+        return T13E.getInitialState(tool);
     }
 
     return null;

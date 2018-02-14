@@ -8,6 +8,8 @@ import '../../less/4TileTool.less';
 import image13A from '../../images/tools/intro_13a.png';
 import image13B from '../../images/tools/intro_13b.png';
 import image13C from '../../images/tools/intro_13c.png';
+import image13D from '../../images/tools/intro_13d.png';
+import image13E from '../../images/tools/intro_13e.png';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
@@ -75,7 +77,7 @@ class T13 extends React.Component {
                             </div>
                         </div>
                     </a>
-{/*                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T13C')}
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T13C')}
                        className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T13C</h1>
@@ -84,7 +86,27 @@ class T13 extends React.Component {
                                 <img className="sketch-image" src={image13C}/>
                             </div>
                         </div>
-                    </a>*/}
+                    </a>
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T13D')}
+                       className="tile col col-rel-1-t13">
+                        <div className="div-block">
+                            <h1>T13D</h1>
+                            <p className="p-height">Aquifer system with two fixed head boundary conditions, a flow divide outside of the system and constant groundwater recharge</p>
+                            <div className="center-horizontal center-vertical">
+                                <img className="sketch-image" src={image13D}/>
+                            </div>
+                        </div>
+                    </a>
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.redirectTo('T13E')}
+                       className="tile col col-rel-1-t13">
+                        <div className="div-block">
+                            <h1>T13E</h1>
+                            <p className="p-height">Aquifer system with two fixed head boundary conditions, a flow divide outside of the system and constant groundwater recharge</p>
+                            <div className="center-horizontal center-vertical">
+                                <img className="sketch-image" src={image13E}/>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         );
