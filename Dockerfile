@@ -10,7 +10,6 @@ COPY . .
 # Build for production.
 RUN yarn install
 RUN yarn run build
-#RUN VERSION=`git rev-parse --abbrev-ref HEAD` && sed -i -- "s/###VERSION###/$VERSION/g" dist/index.html
 
 RUN \
   VERSION=$(git describe --tags --always --dirty=+) && \
