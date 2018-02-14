@@ -10,6 +10,13 @@ COPY . .
 # Build for production.
 RUN yarn install
 RUN yarn run build
+#RUN VERSION=`git rev-parse --abbrev-ref HEAD` && sed -i -- "s/###VERSION###/$VERSION/g" dist/index.html
+
+RUN \
+  VERSION=$(git describe --tags --always --dirty=+) && \
+  DATE=$(date +%Y-%m-%dT%H:%M:%S) && \
+  sed -i "s/@@__VERSION__@@/${VERSION}/g;s/@@__BUILT__@@/${DATE}/g" ./dist/index.html
+
 
 # Install `serve` to run the application.
 RUN npm install -g serve
