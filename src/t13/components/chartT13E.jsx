@@ -58,7 +58,7 @@ const Chart = ({Qw, ne, hL, h0, xi, x}) => {
                                 left: 30,
                                 bottom: 0
                             }}>
-                                <XAxis type="number" domain={'auto'} dataKey="x" allowDecimals={false} tickLine={false}/>
+                                <XAxis type="number" domain={['auto','auto']} dataKey="x" allowDecimals={false} tickLine={false}/>
                                 <YAxis type="number" domain={yDomain} allowDecimals={false} tickLine={false} tickFormatter={(x) => {return x.toFixed(0)}}/>
                                 <CartesianGrid strokeDasharray="3 3"/>
                                 <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#4C4C4C" strokeWidth="5" dot={false} fillOpacity={1}/>

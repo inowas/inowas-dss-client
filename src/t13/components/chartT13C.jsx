@@ -45,12 +45,30 @@ export  function calculateXwd(L, K, w, hL, h0) {
     return (L/2+K*(hL*hL-h0*h0)/(2*w*L));
 }
 
-export function resultDiv(xe, xi, L, data) {
+export function resultDiv(xe, xi, L, data, xwd) {
     if (xe < xi){
         return (
             <div className="diagram-labels-left">
                 <div className="diagram-label">
                     <p>Arrival location, x<sub>e</sub>, can not be smaller than initial position, x<sub>i</sub>.</p>
+                </div>
+            </div>
+        );
+    }
+    if (xe > L+Math.abs(xwd)){
+        return (
+            <div className="diagram-labels-left">
+                <div className="diagram-label">
+                    <p>Arrival location, x<sub>e</sub>, can not be bigger than L<sup>'</sup>+|xwd|.</p>
+                </div>
+            </div>
+        );
+    }
+    if (xi > L){
+        return (
+            <div className="diagram-labels-left">
+                <div className="diagram-label">
+                    <p>Initial location, x<sub>i</sub>, can not be bigger than the Aquifer length, L<sup>'</sup>.</p>
                 </div>
             </div>
         );
@@ -84,7 +102,7 @@ const Chart = ({W, K, ne, L, hL, h0, xi, xe}) => {
                                 left: 30,
                                 bottom: 0
                             }}>
-                                <XAxis type="number" domain={'auto'} dataKey="x" allowDecimals={false} tickLine={false}/>
+                                <XAxis type="number" domain={['auto','auto']} dataKey="x" allowDecimals={false} tickLine={false}/>
                                 <YAxis type="number" domain={yDomain} allowDecimals={false} tickLine={false} tickFormatter={(x) => {return x.toFixed(0)}}/>
                                 <CartesianGrid strokeDasharray="3 3"/>
                                 <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#4C4C4C" strokeWidth="5" dot={false} fillOpacity={1}/>
@@ -93,7 +111,7 @@ const Chart = ({W, K, ne, L, hL, h0, xi, xe}) => {
                         <div className="diagram-ylabels">
                             <p>t (d)</p>
                         </div>
-                        {resultDiv(xe, xi, L, data)}
+                        {resultDiv(xe, xi, L, data, xwd)}
                         <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
                 </div>
