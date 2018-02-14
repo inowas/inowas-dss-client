@@ -198,7 +198,7 @@ class T13C extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13C. Aquifer system with a flow divide outside of the system
+                    T13E. Aquifer system with one pumping well at constant rate, no groundwater recharge
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">

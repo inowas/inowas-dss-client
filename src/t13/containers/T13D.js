@@ -201,7 +201,7 @@ class T13C extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13_D. Travel time // Aquifer system with two fixed head boundary conditions
+                    T13D. Find position of flow divide: within or outside of the system
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
