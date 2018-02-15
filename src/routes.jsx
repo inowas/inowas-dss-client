@@ -5,6 +5,7 @@ import tools from './containers/tools';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
 import * as T04 from './t04/index';
+import * as T06 from './t06/index';
 import * as T07 from './t07/index';
 import * as T08 from './t08/index';
 import * as T09 from './t09/index';
@@ -67,8 +68,11 @@ const routes = store => (
                     );
                 }}
             />
+
             <Route path="T04" component={T04.Container.Main} tool={'T04'}/>
-            <Route path="T06(/:id)" component={tools.T06}/>
+
+            <Route path="T06" component={T06.Container.Main} tool={'T06'}/>
+
             <Route path="T07" component={T07.Container.Main}>
                 <IndexRoute component={T07.Component.New}/>
                 <Route path=":id">

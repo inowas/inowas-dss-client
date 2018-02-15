@@ -4,7 +4,7 @@ function initialState() {
         name: '',
         apiKey: localStorage.getItem('apiKey'),
         email: '',
-        enabled: false,
+        enabled: localStorage.getItem('apiKey') !== null,
         roles: []
     };
 }
@@ -14,6 +14,7 @@ const user = (state = initialState(), action) => {
 
         case 'LOGIN': {
             localStorage.setItem('apiKey', action.payload.apiKey);
+            localStorage.setItem('enabled', action.payload.apiKey);
             return {
                 ...state,
                 apiKey: action.payload.apiKey,
