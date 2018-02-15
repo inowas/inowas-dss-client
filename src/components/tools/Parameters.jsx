@@ -6,7 +6,8 @@ import {inputType} from '../../inputType';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
-
+import {convertToString} from "../../core/rasterData/helpers";
+import HtmlLabel from "../../components/primitive/HtmlLabel";
 const renderParam = (param, handleChange) => {
     if (!param.inputType) {
         return renderSlider(param, handleChange);
@@ -65,8 +66,9 @@ const renderSlider = (param, handleChange) => {
     if (param.disable) {
         disable = param.disable;
     }
+
     return (<tr key={param.id} className="parameter">
-        <td className="parameter-label">{param.label}</td>
+        <td className="parameter-label"><HtmlLabel html={param.label}/></td>
         <td>
             <input disabled={disable} name={'parameter_' + param.id + '_min'}
                    className="parameter-min input-max input-xs" type="number" step={param.stepSize}
