@@ -3,11 +3,11 @@ import React from 'react';
 import {pure} from 'recompose';
 import PropTypes from 'prop-types';
 import {inputType} from '../../inputType';
+import HtmlLabel from '../../components/primitive/HtmlLabel';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
-import {convertToString} from "../../core/rasterData/helpers";
-import HtmlLabel from "../../components/primitive/HtmlLabel";
+
 const renderParam = (param, handleChange) => {
     if (!param.inputType) {
         return renderSlider(param, handleChange);

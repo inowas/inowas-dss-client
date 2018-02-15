@@ -3,10 +3,11 @@ import React from 'react';
 import {pure} from 'recompose';
 import PropTypes from 'prop-types';
 import {inputType} from '../../inputType';
+import HtmlLabel from '../../components/primitive/HtmlLabel';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
-import {SETTINGS_SELECTED_H0, SETTINGS_SELECTED_HL} from "../reducers/T13B";
+import {SETTINGS_SELECTED_H0, SETTINGS_SELECTED_HL} from '../reducers/T13B';
 
 const renderParam = (param, handleChange) => {
     if (!param.inputType) {
@@ -66,7 +67,7 @@ const renderSlider = (param, handleChange) => {
 
     return (
         <tr key={param.id} className="parameter">
-            <td className="parameter-label">{param.label}</td>
+            <td className="parameter-label"><HtmlLabel html={param.label}/></td>
             <td>
                 <input disabled={disable} name={'parameter_' + param.id + '_min'}
                        className="parameter-min input-max input-xs" type="number" step={param.stepSize}

@@ -257,6 +257,12 @@ const actions = {
     updateToolInstance: ToolInstance.Command.updateToolInstance,
 };
 
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T02
+    };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
     const tool = props.route.tool;
     const wrappedActions = {};
@@ -285,6 +291,6 @@ T02.propTypes = {
 };
 
 // eslint-disable-next-line no-class-assign
-T02 = withRouter(connect(makeMapStateToProps, mapDispatchToProps)(T02));
+T02 = withRouter(connect(mapStateToProps, mapDispatchToProps)(T02));
 
 export default T02;

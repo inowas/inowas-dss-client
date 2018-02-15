@@ -1,35 +1,50 @@
+/* eslint-disable guard-for-in */
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 import '../../less/toolT06.less';
 
-import {groupBy} from 'lodash';
+import lodash from 'lodash';
 
-import {changeCondition} from '../../actions/T06';
 import Header from '../../components/tools/Header';
 import Icon from '../../components/primitive/Icon';
-import Navbar from '../Navbar';
+import Navbar from '../../containers/Navbar';
 
-@connect((store) => {
-    return {tool: store.T06};
-})
-export default class T06 extends React.Component {
+const navigation = [{
+    name: 'Documentation',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t06-mar-method-selection/',
+    icon: <Icon name="file"/>
+}];
 
-    state = {
-        navigation: [{
-            name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/t06-mar-method-selection/',
-            icon: <Icon name="file"/>
-        }]
+class T06 extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = props.toolInstance;
+    }
+
+    changeCondition = (changeCondition) => {
+        const newState = this.state.conditions.map((c) => {
+            if (c.name === changeCondition.name) {
+                c.selected = changeCondition.selected;
+            }
+
+            return c;
+        });
+
+        this.setState({...newState});
     };
 
     handleChange = (e) => {
-        this.props.dispatch(changeCondition({name: e.target.value, selected: e.target.checked}));
+        this.changeCondition({name: e.target.value, selected: e.target.checked});
     };
 
     conditions() {
-        const groupedConditions = groupBy(this.props.tool.conditions, 'category');
+        const conditions = this.state.conditions;
+        const groupedConditions = lodash.groupBy(conditions, 'category');
         const groupedConditionsList = [];
 
         for (const category in groupedConditions) {
@@ -37,7 +52,14 @@ export default class T06 extends React.Component {
                 const conditionsList = groupedConditions[category].map((c) => {
                     return (
                         <li className="condition" key={c.name.replaceAll(' ', '_')}>
-                            <label className="condition-label"><input onChange={this.handleChange} value={c.name} checked={c.selected} type="checkbox"/>{c.name}</label>
+                            <label className="condition-label">
+                                <input
+                                    onChange={this.handleChange}
+                                    value={c.name}
+                                    checked={c.selected}
+                                    type="checkbox"/>
+                                {c.name}
+                            </label>
                         </li>
                     );
                 });
@@ -56,66 +78,36 @@ export default class T06 extends React.Component {
         return groupedConditionsList;
     }
 
-    intersect(a, b) {
-        let t;
-        if (b.length > a.length)            {
-            t = b,
-            b = a,
-            a = t;
-        } // indexOf to loop over shorter
-        return a.filter(function(e) {
-            if (b.indexOf(e) !== -1)                {
-                return true;
-            }
-        }
-        );
-    }
-    addition(a,b){
-        let t= b.filter(function(e) {
-                if (a.indexOf(e) == -1)                {
-                    return true;
-                }
-            });
-        return a.concat(t);
-    }
-
     methods() {
-        const selectedConditions = this.props.tool.conditions.filter((c) => {
+        const selectedConditions = this.state.conditions.filter((c) => {
             return c.selected;
         });
-        const groupSelectedConditions = groupBy(selectedConditions, 'category');
-        let groupSelectedMethods = [];
+
+        const groupSelectedConditions = lodash.groupBy(selectedConditions, 'category');
+        const groupSelectedMethods = [];
         for (const category in groupSelectedConditions) {
             let selectedMethods = [];
-            for(let i = 0; i <groupSelectedConditions[category].length; i++){
-                selectedMethods = this.addition(selectedMethods, groupSelectedConditions[category][i].applicable_methods);
+            for (let i = 0; i < groupSelectedConditions[category].length; i++) {
+                selectedMethods = lodash.union(selectedMethods, groupSelectedConditions[category][i].applicable_methods);
             }
             groupSelectedMethods.push({
                 category: category,
                 selectedMethod: selectedMethods
-            })
+            });
         }
 
-//        for (let i = 0; i < selectedConditions.length; i++) {
-//        for(let i = selectedConditions.length; i  0; i--){
-//            applicable_methods = this.intersect(applicable_methods, selectedConditions[i].applicable_methods);
-//        }
-//        for(let i = 0; i <selectedConditions.length; i++){
-//            applicable_methods = this.addition(applicable_methods, selectedConditions[i].applicable_methods);
-//        }
-
         // get first
-        let applicable_methods = (groupSelectedMethods.length > 0)
+        let applicableMethods = (groupSelectedMethods.length > 0)
             ? groupSelectedMethods[0].selectedMethod
             : [];
 
         for (let i = 0; i < groupSelectedMethods.length; i++) {
-            applicable_methods = this.intersect(applicable_methods, groupSelectedMethods[i].selectedMethod);
+            applicableMethods = lodash.intersection(applicableMethods, groupSelectedMethods[i].selectedMethod);
         }
 
-        return (applicable_methods.map((am) => {
-            const method = this.props.tool.methods.find((m) => {
-                return (m.slug == am);
+        return (applicableMethods.map((am) => {
+            const method = this.state.methods.find((m) => {
+                return (m.slug === am);
             });
             return (
                 <tr className="method" key={method.slug}>
@@ -143,10 +135,9 @@ export default class T06 extends React.Component {
     }
 
     render() {
-        const { navigation } = this.state;
         return (
             <div className="app-width tool-T06">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 <Header title={'T06. MAR method selection'}/>
                 <div className="grid-container">
                     <section className="tile col col-abs-2 stacked">
@@ -160,15 +151,15 @@ export default class T06 extends React.Component {
                         <h2>Methods Suggested</h2>
                         <table className="methods">
                             <thead>
-                                <tr>
-                                    <th>MAR methods</th>
-                                    <th>Unit costs</th>
-                                    <th>Area required</th>
-                                    <th>More information</th>
-                                </tr>
+                            <tr>
+                                <th>MAR methods</th>
+                                <th>Unit costs</th>
+                                <th>Area required</th>
+                                <th>More information</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {this.methods()}
+                            {this.methods()}
                             </tbody>
                         </table>
                     </section>
@@ -177,3 +168,15 @@ export default class T06 extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T06
+    };
+};
+
+T06.propTypes = {
+    toolInstance: PropTypes.object,
+};
+
+export default withRouter(connect(mapStateToProps)(T06));

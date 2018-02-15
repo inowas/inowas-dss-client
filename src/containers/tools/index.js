@@ -1,4 +1,3 @@
-import T06 from './T06';
 import T08 from './T08';
 import T09 from './T09';
 import T09A from './T09A';
@@ -22,7 +21,6 @@ import T16 from './T16';
 import T17 from './T17';
 import T18 from './T18';
 export default {
-    T06,
     T08,
     T09,
     T09A,

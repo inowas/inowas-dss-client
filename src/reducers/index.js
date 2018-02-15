@@ -1,8 +1,7 @@
 import T03 from './T03';
-import T02 from './T02';
-import T06 from './T06';
+import * as T02 from '../t02/reducers';
+import * as T06 from '../t06/reducers';
 import { Reducer as T07 } from '../t07';
-import T07E from './T07E';
 import * as T08 from '../t08/reducers';
 import * as T09 from '../t09/reducers';
 import T12 from './T12';
@@ -23,11 +22,10 @@ const rootReducer = combineReducers({
     webData: WebData.Reducer.webData,
     dashboard,
     rasterfiles,
-    T02,
+    T02: T02.createReducer('T02'),
     T03,
-    T06,
+    T06: T06.createReducer('T06'),
     T07,
-    T07E,
     T08: T08.createReducer('T08'),
     T09A: T09.createReducer('T09A'),
     T09B: T09.createReducer('T09B'),
