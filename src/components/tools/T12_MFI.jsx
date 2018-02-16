@@ -50,7 +50,7 @@ export default class Sieves extends React.Component {
     };
     //Popup window
     corrections() {
-        const corrections = this.props.corrections.map(param => {
+        const corrections = this.props.renderCorrections.map(param => {
         return <tr key={param.name} className="parameter">
             <td className="parameter-label">{param.def}</td>
             <td>{param.name}</td>
