@@ -1,4 +1,4 @@
-import T03 from './T03';
+import * as T03 from './T03';
 import * as T02 from '../t02/reducers';
 import * as T06 from '../t06/reducers';
 import { Reducer as T07 } from '../t07';
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
     dashboard,
     rasterfiles,
     T02: T02.createReducer('T02'),
-    T03,
+    T03: T03.createReducer('T03'),
     T06: T06.createReducer('T06'),
     T07,
     T08: T08.createReducer('T08'),
