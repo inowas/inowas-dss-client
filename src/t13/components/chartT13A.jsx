@@ -90,7 +90,7 @@ const Chart = ({W, K, ne, L, hL, xi, xe}) => {
             <div className="grid-container">
                 <div className="col stretch">
                     <div className="diagram">
-                        <ResponsiveContainer width={'100%'} aspect={2.0 / 1.0}>
+                        <ResponsiveContainer width={'100%'} aspect={2}>
                             <LineChart data={data} margin={{
                                 top: 20,
                                 right: 55,
@@ -110,16 +110,6 @@ const Chart = ({W, K, ne, L, hL, xi, xe}) => {
                         <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
                 </div>
-                {/*<div className="col col-rel-0-5">*/}
-                    {/*<ul className="nav nav-stacked" role="navigation">*/}
-                        {/*<li>*/}
-                            {/*<button className="button">PNG</button>*/}
-                        {/*</li>*/}
-                        {/*<li>*/}
-                            {/*<button className="button">CSV</button>*/}
-                        {/*</li>*/}
-                    {/*</ul>*/}
-                {/*</div>*/}
             </div>
         </div>
     );

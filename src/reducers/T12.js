@@ -42,14 +42,14 @@ function getInitialState() {
             stepSize: 0.1,
             checked: 'true',
             decimals: 2
-        },{
+        }, {
             id: '4',
             t: 48,
             V: 1.0,
             stepSize: 0.1,
             checked: 'true',
             decimals: 2
-        },{
+        }, {
             id: '5',
             t: 0,
             V: 0,
@@ -88,16 +88,16 @@ function getInitialState() {
             stepSize: 0.1,
             unit: 'micrometer'
         }],
-        tempvisctable:{
-            temp:[-30,-20,-10,-5,0,5,10,15,20,25,30,35,40],
-            visc:[8661.1,4362.7,2645.2,2153.5,1792.3,1518.7,1306.4,1138,1002,890.45,797.68,719.62,653.25]
+        tempvisctable: {
+            temp: [-30, -20, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40],
+            visc: [8661.1, 4362.7, 2645.2, 2153.5, 1792.3, 1518.7, 1306.4, 1138, 1002, 890.45, 797.68, 719.62, 653.25]
         },
         parameters: [{
             order: 0,
             id: 'ueq',
-            name: "Infiltration duration, uₑq [h]",
+            name: 'Infiltration duration, uₑq [h]',
             min: 1,
-            validMin: function(x) {return x > 0},
+            validMin: function(x) {return x > 0;},
             max: 10000,
             value: 5000,
             stepSize: 1,
@@ -107,7 +107,7 @@ function getInitialState() {
             id: 'IR',
             name: 'Infiltration rate, Vb [m3/d]',
             min: 1,
-            validMin: function(x) {return x > 0},
+            validMin: function(x) {return x > 0;},
             max: 1000,
             value: 100,
             stepSize: 10,
@@ -117,13 +117,13 @@ function getInitialState() {
             id: 'K',
             name: 'Hydr. conductivity, K [m/d]',
             min: 1,
-            validMin: function(x) {return x > 0},
+            validMin: function(x) {return x > 0;},
             max: 100,
             value: 20,
             stepSize: 1,
             decimals: 0
         }]
-    }
+    };
 }
 const T12Reducer = (state = getInitialState(), action) => {
     switch (action.type) {
@@ -146,7 +146,7 @@ const T12Reducer = (state = getInitialState(), action) => {
 
             const newParam = action.payload;
             var param = state.parameters.find(p => {
-                return p.id === newParam.id
+                return p.id === newParam.id;
             });
             applyParameterUpdate(param, newParam);
 
@@ -159,9 +159,9 @@ const T12Reducer = (state = getInitialState(), action) => {
             };
 
             const newParam = action.payload;
-            console.log(state.mfi)
+            console.log(state.mfi);
             var param = state.mfi.find(p => {
-                return Number(p.id) === Number(newParam.id)
+                return Number(p.id) === Number(newParam.id);
             });
             if (!newParam.V && newParam.t) param.t = newParam.t;
             if (!newParam.t && newParam.V) param.V = newParam.V;
@@ -170,39 +170,38 @@ const T12Reducer = (state = getInitialState(), action) => {
             break;
         }
         case 'CHANGE_TOOL_T12_USEDATA': {
-        state = {
-            ...state,
-        };
-
-        const newParam = action.payload;
-        var param = state.mfi.find(p => {
-            return Number(p.id) === Number(newParam.id)
-        });
-            if (param.checked === 'false') {param.checked = 'true'}
-            else {param.checked = 'false'}
-        calculateAndModifyState(state);
-        break;
-    }
-        case 'CHANGE_TOOL_T12_CORRECTIONS':
-        {
-            state = { ...state,
+            state = {
+                ...state,
             };
 
             const newParam = action.payload;
-            state.corrections.find(p => {
-                return p.name === newParam.name
-            }).value = newParam.value;
+            var param = state.mfi.find(p => {
+                return Number(p.id) === Number(newParam.id);
+            });
+            if (param.checked === 'false') {param.checked = 'true';}            else {param.checked = 'false';}
             calculateAndModifyState(state);
             break;
         }
+        case 'CHANGE_TOOL_T12_CORRECTIONS':
+            {
+                state = { ...state,
+                };
+
+                const newParam = action.payload;
+                state.corrections.find(p => {
+                    return p.name === newParam.name;
+                }).value = newParam.value;
+                calculateAndModifyState(state);
+                break;
+            }
     }
     return state;
 };
 function addEmptyEntry(state) {
     const data = state.mfi;
-    if (data[data.length-1].t != 0 || data[data.length -1].V != 0) {
+    if (data[data.length - 1].t != 0 || data[data.length - 1].V != 0) {
         const newEntry = {
-            id: data.length+1,
+            id: data.length + 1,
             t: 0,
             V: 0,
             stepSize: 0.1,
@@ -213,46 +212,47 @@ function addEmptyEntry(state) {
     }
 }
 function calculateAndModifyState(state) {
-    //calculation of graph data
+    // calculation of graph data
     const data = calc.calculateData(state.mfi);
+
     calc.calcMFI(data, state.info);
-    //corrections
-    const temp = state.corrections.find(p => {
-        return p.name == 'T'
+    // renderCorrections
+    const temp = state.renderCorrections.find(p => {
+        return p.name == 'T';
     })
         .value;
-    const pressure = state.corrections.find(p => {
-        return p.name == 'P'
+    const pressure = state.renderCorrections.find(p => {
+        return p.name == 'P';
     })
         .value;
-    const Af = state.corrections.find(p => {
-        return p.name == 'Af'
+    const Af = state.renderCorrections.find(p => {
+        return p.name == 'Af';
     })
         .value;
-    const D = state.corrections.find(p => {
-        return p.name == 'D'
+    const D = state.renderCorrections.find(p => {
+        return p.name == 'D';
     })
         .value;
-    var MFIcor1 = calc.visc_Correc(state.tempvisctable, temp, state.info.MFI);
-    MFIcor1 = MFIcor1*(pressure/210)*(Af**2/0.00138**2);
+    let MFIcor1 = calc.visc_Correc(state.tempvisctable, temp, state.info.MFI);
+    MFIcor1 = MFIcor1 * (pressure / 210) * (Af ** 2 / 0.00138 ** 2);
 
     const K = state.parameters.find(p => {
-        return p.id == 'K'
+        return p.id == 'K';
     })
         .value;
     const ueq = state.parameters.find(p => {
-        return p.id == 'ueq'
+        return p.id == 'ueq';
     })
         .value;
     const IR = state.parameters.find(p => {
-        return p.id == 'IR'
+        return p.id == 'IR';
     })
         .value;
-    const D50 = (10**(-3)*(K/150)**0.6);
-    const EPS = D50/6;
-    state.info.MFIcor2 = MFIcor1*((D*10**(-6))**2/EPS**2);
-    state.info.vc = 2*10**(-6)*state.info.MFIcor2*(ueq)*(IR**2/(K/150)**1.2);
-    state.chart.data = calc.calculateDiagramData(data,state.info);
+    const D50 = (10 ** (-3) * (K / 150) ** 0.6);
+    const EPS = D50 / 6;
+    state.info.MFIcor2 = MFIcor1 * ((D * 10 ** (-6)) ** 2 / EPS ** 2);
+    state.info.vc = 2 * 10 ** (-6) * state.info.MFIcor2 * (ueq) * (IR ** 2 / (K / 150) ** 1.2);
+    state.chart.data = calc.calculateDiagramData(data, state.info);
     return state;
 }
 export default T12Reducer;

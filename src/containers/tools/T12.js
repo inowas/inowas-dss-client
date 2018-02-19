@@ -14,7 +14,7 @@ import Icon from '../../components/primitive/Icon';
 import Info from '../../components/tools/InfoT12';
 
 @connect(( store ) => {
-    return { tool: store.T12 };
+    return { tool: store.T12old };
 })
 export default class T12 extends React.Component {
 
@@ -82,7 +82,7 @@ export default class T12 extends React.Component {
                     </section>
                     <section className="tile col col-rel-1">
                         <h2>MFI</h2>
-                        <MFI data={this.props.tool.mfi} corrections={this.props.tool.corrections} info={this.props.tool.info}
+                        <MFI data={this.props.tool.mfi} corrections={this.props.tool.renderCorrections} info={this.props.tool.info}
                              handleChange={this.handleChange} handleReset={this.handleReset}/>
                     </section>
                     <section className="tile col col-hydro">
