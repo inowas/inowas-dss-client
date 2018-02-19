@@ -144,9 +144,7 @@ const routes = store => (
             <Route path="T14D(/:id)" component={T14.Container.T14D} tool={'T14D'}/>
 
             <Route path="T16(/:id)" component={tools.T16}/>
-
             <Route path="T17(/:id)" component={tools.T17}/>
-
             <Route path="T18(/:id)" component={tools.T18}/>
         </Route>
     </Route>
