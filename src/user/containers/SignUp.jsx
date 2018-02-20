@@ -1,12 +1,11 @@
-import '../less/login.less';
+import '../../less/login.less';
 
 import ConfiguredAxios from 'ConfiguredAxios';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React from 'react';
 
 import {connect} from 'react-redux';
-import {isUserLoggedIn} from '../reducers/user';
-import {push} from 'react-router-redux';
+import {isUserLoggedIn} from '../reducers';
 import {withRouter} from 'react-router';
 import {Button, Container, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
@@ -19,7 +18,7 @@ const styles = {
     }
 };
 
-class SignUp extends Component {
+class SignUp extends React.Component {
 
     constructor(props) {
         super(props);
@@ -47,13 +46,13 @@ class SignUp extends Component {
     }
 
     checkAuthentication() {
-        if (this.props.userLoggedIn) {
+        if (this.props.userIsLoggedIn) {
             this.pushTo('/');
         }
     }
 
     pushTo = (url) => {
-        this.props.push(url);
+        this.props.router.push(url);
     };
 
     onNameChange = e => {
@@ -335,17 +334,17 @@ class SignUp extends Component {
 
 const mapStateToProps = state => {
     return {
-        userLoggedIn: isUserLoggedIn(state.user)
+        userIsLoggedIn: isUserLoggedIn(state.user)
     };
 };
 
 SignUp.propTypes = {
-    push: PropTypes.func.isRequired,
-    userLoggedIn: PropTypes.bool.isRequired,
+    router: PropTypes.object.isRequired,
+    userIsLoggedIn: PropTypes.bool.isRequired,
     userSignUpPending: PropTypes.bool.isRequired
 };
 
 // eslint-disable-next-line no-class-assign
-SignUp = withRouter(connect(mapStateToProps, {push})(SignUp));
+SignUp = withRouter(connect(mapStateToProps)(SignUp));
 
 export default SignUp;

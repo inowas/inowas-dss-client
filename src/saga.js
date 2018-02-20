@@ -5,6 +5,7 @@ import { Saga as RasterData } from './core/rasterData/index';
 import { Saga as T03 } from './t03/index';
 import { Saga as T07 } from './t07/index';
 import { Saga as ToolInstance } from './toolInstance/index';
+import { Saga as User } from './user/index';
 
 export default function* rootSaga() {
     yield [
@@ -50,5 +51,7 @@ export default function* rootSaga() {
         call(ToolInstance.deleteToolInstanceFlow),
         call(ToolInstance.cloneToolInstanceFlow),
         call(ToolInstance.cloneToolInstanceFlow),
+        call(User.authenticateUser),
+        call(User.fetchUser),
     ];
 }

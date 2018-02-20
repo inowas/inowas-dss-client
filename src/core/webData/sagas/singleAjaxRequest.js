@@ -1,5 +1,5 @@
 import { put, select, call } from 'redux-saga/effects';
-import { getApiKey } from '../../../reducers/user';
+import { getApiKey } from '../../../user/reducers';
 import { Action } from '../actions';
 import ConfiguredAxios from 'ConfiguredAxios';
 
@@ -12,22 +12,23 @@ export default function* singleAjaxRequestFlow({
     const state = yield select();
     const apiKey = getApiKey(state.user);
 
-    yield put(
-        Action.setAjaxStatus(provokingActionType, {
-            type: 'loading'
-        })
-    );
-
-    if (!['post', 'get'].includes(method)) {
+    if (!['post', 'get', 'put'].includes(method)) {
         throw new Error('Invalid http method.');
     }
+
+    let headers = {};
+    if (apiKey) {
+        headers = { 'X-AUTH-TOKEN': apiKey };
+    }
+
+    yield put(Action.setAjaxStatus(provokingActionType, {type: 'loading'}));
 
     try {
         const response = yield call(ConfiguredAxios, {
             method,
             url,
             data,
-            headers: { 'X-AUTH-TOKEN': apiKey }
+            headers: headers
         });
         yield put(
             Action.setAjaxStatus(provokingActionType, {

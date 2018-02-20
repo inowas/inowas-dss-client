@@ -1,3 +1,5 @@
+import {LOGIN, LOGOUT, SET_USER, UNAUTHORIZED} from '../actions/actions';
+
 function initialState() {
     return {
         userName: '',
@@ -5,14 +7,14 @@ function initialState() {
         apiKey: localStorage.getItem('apiKey'),
         email: '',
         enabled: localStorage.getItem('apiKey') !== null,
-        roles: []
+        roles: [],
+        fetched: false
     };
 }
 
-const user = (state = initialState(), action) => {
+export const user = (state = initialState(), action) => {
     switch (action.type) {
-
-        case 'LOGIN': {
+        case LOGIN: {
             localStorage.setItem('apiKey', action.payload.apiKey);
             localStorage.setItem('enabled', action.payload.apiKey);
             return {
@@ -22,13 +24,13 @@ const user = (state = initialState(), action) => {
             };
         }
 
-        case 'UNAUTHORIZED':
-        case 'LOGOUT': {
+        case UNAUTHORIZED:
+        case LOGOUT: {
             localStorage.removeItem('apiKey');
             return initialState();
         }
 
-        case 'USER_SET_INFORMATION': {
+        case SET_USER: {
             return {
                 ...state,
                 userName: action.payload.user_name || state.userName,
@@ -44,10 +46,11 @@ const user = (state = initialState(), action) => {
     }
 };
 
-export default user;
-
 export const isUserLoggedIn = state => state.apiKey !== null && state.enabled === true;
 export const getApiKey = state => state.apiKey;
-export const getUserName = state => state.userName;
-export const getName = state => state.name;
 export const getEmail = state => state.email;
+export const getName = state => state.name;
+export const getRoles = state => state.roles;
+export const getUserName = state => state.userName;
+export const getFetched = state => state.fetched;
+export const isAdmin = state => state.roles && Array.isArray(state.roles) && state.roles.includes('ROLE_ADMIN');

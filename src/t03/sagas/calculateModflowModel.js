@@ -1,6 +1,6 @@
 import { put, take, call, select } from 'redux-saga/effects';
 import { buildRequest } from '../../actions/messageBox';
-import { getApiKey } from '../../reducers/user';
+import { getApiKey } from '../../user/reducers';
 import { Command, Query, Action } from '../../t03/actions/index';
 import { WebData } from '../../core';
 

@@ -1,15 +1,15 @@
-import '../less/login.less';
+import '../../less/login.less';
 
-import React, {Component, PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import {authenticate} from '../actions/user';
+import { Action } from '../actions';
 import {connect} from 'react-redux';
-import {isUserLoggedIn} from '../reducers/user';
-import {push} from 'react-router-redux';
+import {isUserLoggedIn} from '../reducers';
 import {withRouter} from 'react-router';
 import {Button, Container, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
-import Navbar from "./Navbar";
+import Navbar from './Navbar';
 
 const styles = {
     link: {
@@ -17,17 +17,9 @@ const styles = {
     }
 };
 
-class Login extends Component {
-    static propTypes = {
-        userLoggedIn: PropTypes.bool.isRequired,
-        push: PropTypes.func.isRequired,
-        authenticate: PropTypes.func.isRequired
-    };
-
-
+class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.checkAuthentication(this.props);
         this.state = {
             username: null,
             password: null,
@@ -35,20 +27,14 @@ class Login extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.checkAuthentication(nextProps);
-    }
-
-    checkAuthentication(props) {
-        // eslint-disable-next-line no-shadow
-        const {userLoggedIn, push} = props;
-        if (userLoggedIn) {
-            push('/tools');
+    checkAuthentication() {
+        if (this.props.userIsLoggedIn) {
+            this.props.router.push('/tools');
         }
     }
 
     pushToSignUp = () => {
-        this.props.push('/signup');
+        this.props.router.push('/signup');
     };
 
     onUsernameChange = e => {
@@ -71,6 +57,7 @@ class Login extends Component {
     };
 
     render() {
+        this.checkAuthentication();
         return (
             <div>
                 <Navbar />
@@ -118,11 +105,21 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
-        userLoggedIn: isUserLoggedIn(state.user)
+        userIsLoggedIn: isUserLoggedIn(state.user)
     };
 };
 
+const mapDispatchToProps = {
+    authenticate: Action.authentication
+};
+
+Login.propTypes = {
+    authenticate: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired,
+    userIsLoggedIn: PropTypes.bool.isRequired
+};
+
 // eslint-disable-next-line no-class-assign
-Login = withRouter(connect(mapStateToProps, {push, authenticate})(Login));
+Login = withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
 
 export default Login;
