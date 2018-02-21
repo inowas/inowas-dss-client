@@ -8,8 +8,8 @@ import '../../less/4TileTool.less';
 import image13A from '../../images/tools/intro_13a.png';
 import image13B from '../../images/tools/intro_13b.png';
 import image13C from '../../images/tools/intro_13c.png';
-import image13D from '../../images/tools/intro_13d.png';
-import image13E from '../../images/tools/intro_13e.png';
+import image13D from '../../images/tools/intro_13d.svg';
+import image13E from '../../images/tools/intro_13e.svg';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';

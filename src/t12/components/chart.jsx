@@ -5,7 +5,8 @@ import {
     calculateDiagramData,
     calculateMFIcor1,
     calculateMFIcor2,
-    calculateVC
+    calculateVC,
+    calculateR2
 } from '../calculations/calculation';
 
 import {
@@ -19,16 +20,12 @@ import {
 
 import '../../less/toolDiagram.less';
 
-
-const logTick = (e) => {
-    return (Math.pow(10, e)).toFixed(2);
-};
-
 const Chart = ({mfiData, V, P, Af, T, D, ueq, IR, K}) => {
     const yDomain = ['auto', 'auto'];
     const {MFI, a} = calcMFI(mfiData);
 
     const diagramData = calculateDiagramData(mfiData, MFI, a);
+    const rSquared = calculateR2(diagramData);
     const MFIcor1 = calculateMFIcor1(T, MFI, P, Af);
     const MFIcor2 = calculateMFIcor2(MFIcor1, D, K);
     const vc = calculateVC(MFIcor2, ueq, IR, K);
@@ -47,23 +44,23 @@ const Chart = ({mfiData, V, P, Af, T, D, ueq, IR, K}) => {
                                 bottom: 0
                             }}>
 
-                                <XAxis tickCount={6} tickFormatter={logTick} type="number" dataKey="V"/>
+                                <XAxis tickCount={6} type="number" dataKey="V"/>
                                 <YAxis type="number" domain={yDomain}/>
                                 <CartesianGrid strokeDasharray="3 3"/>
                                 <Line isAnimationActive={false} type="basis" dataKey={'tV'} stroke="#4C4C4C"
-                                      strokeWidth="5" dot={false}/>
-                                <Line dataKey={'mfi'} strokeDasharray="3 3" stroke="#4C4C4C" strokeWidth="1"
+                                      strokeWidth="5" dot={true} legendType="none" />
+                                <Line dataKey={'mfi'} strokeDasharray="3 3" stroke="#4C4C4C" strokeWidth="2"
                                       dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
-                        <div className="diagram-ylabels"><p>t/V [s/l]</p></div>
+                        <div className="diagram-ylabels"><p> t/V [s/l] </p></div>
                         <div className="diagram-labels-bottom-right">
                             <div className="diagram-label">
                                 <p>MFi&nbsp;=&nbsp;<strong>{MFI.toFixed(2)}</strong>&nbsp;s/l<sup>2</sup></p>
                                 <p>V<sub>c</sub>&nbsp;=&nbsp;<strong>{vc.toFixed(2)}</strong>&nbsp;m/year</p>
                             </div>
                         </div>
-                        <p className="center-vertical center-horizontal">V [l]</p>
+                        <p className="center-vertical center-horizontal"> V [l]</p>
                     </div>
                 </div>
             </div>

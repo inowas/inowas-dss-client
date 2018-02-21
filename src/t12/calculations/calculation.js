@@ -69,8 +69,8 @@ export function calcMFI(data) {
         sumY += param.tV;
     });
 
-    const xBar = sumX / data.length;
-    const yBar = sumY / data.length;
+    const xBar = sumX / preprocessedData.length;
+    const yBar = sumY / preprocessedData.length;
 
     // second pass: compute summary statistics
     let xxbar = 0.0;
@@ -112,4 +112,23 @@ export function calculateMFIcor2(MFIcor1, D, K) {
 
 export function calculateVC(MFIcor2, ueq, IR, K) {
     return 2 * 10 ** (-6) * MFIcor2 * (ueq) * (IR ** 2 / (K / 150) ** 1.2);
+}
+
+export function calculateR2(data) {
+    let sumX = 0;
+    data.forEach(param => {
+        sumX += param.tV;
+    });
+    const tvBar =  sumX / data.length;
+    let SStot = 0;
+    data.forEach(param => {
+        SStot += (param.tV-tvBar)**2;
+    });
+    let SSres = 0;
+    data.forEach(param => {
+        SSres += (param.tV-param.mfi)**2;
+    });
+    if (SStot == 0) {SStot = 1e-12}
+
+    return (1-(SSres/SStot))
 }
