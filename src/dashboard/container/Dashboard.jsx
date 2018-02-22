@@ -1,22 +1,30 @@
-import '../less/dashboard.less';
+import '../../less/dashboard.less';
 
-import React, {PropTypes} from 'react';
-import {Selector, Modifier} from '../dashboard';
-import Button from '../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
-import {Formatter} from '../core';
-import Icon from '../components/primitive/Icon';
-import Input from '../components/primitive/Input';
-import Menu from '../components/primitive/Menu';
-import Navbar from './Navbar';
-import Popup from '../components/primitive/Popup';
-import Table from '../components/primitive/table/Table';
-import Td from '../components/primitive/table/Td';
-import Tr from '../components/primitive/table/Tr';
+
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import {setActiveTool, setPublic, cloneToolInstance, deleteToolInstance} from '../actions/actions';
+import {loadInstances} from '../actions/queries';
+import {getTool, getTools} from '../selectors/tool';
+import {getActiveToolSlug, getPublic} from '../selectors/ui';
+
+import Button from '../../components/primitive/Button';
+import {Formatter} from '../../core';
+import Icon from '../../components/primitive/Icon';
+import Input from '../../components/primitive/Input';
+import Menu from '../../components/primitive/Menu';
+import Navbar from '../../containers/Navbar';
+import Popup from '../../components/primitive/Popup';
+import Table from '../../components/primitive/table/Table';
+import Td from '../../components/primitive/table/Td';
+import Tr from '../../components/primitive/table/Tr';
 import {connect} from 'react-redux';
-import {push} from 'react-router-redux';
 import styleGlobals from 'styleGlobals';
+
 import {includes} from 'lodash';
+import {withRouter} from 'react-router';
 
 const styles = {
     menu: {
@@ -61,19 +69,6 @@ const styles = {
 
 @ConfiguredRadium
 class Dashboard extends React.Component {
-    static propTypes = {
-        roles: PropTypes.array,
-        tools: PropTypes.array,
-        activeTool: PropTypes.object,
-        publicInstances: PropTypes.bool,
-        setActiveTool: PropTypes.func.isRequired,
-        fetchInstances: PropTypes.func.isRequired,
-        setPublic: PropTypes.func.isRequired,
-        cloneToolInstance: PropTypes.func.isRequired,
-        deleteToolInstance: PropTypes.func.isRequired,
-        push: PropTypes.func.isRequired
-    };
-
     state = {
         popupVisible: false,
         navigation: [
@@ -111,7 +106,7 @@ class Dashboard extends React.Component {
 
     onToolClick = slug => {
         if (slug === 'T04' || slug === 'T06') {
-            return () => this.props.push('/tools/' + slug);
+            return () => this.props.router.push('/tools/' + slug);
         }
 
         if (slug === 'T17') {
@@ -125,7 +120,9 @@ class Dashboard extends React.Component {
 
     renderTableRows(basePath, subPath, instances) {
         // eslint-disable-next-line no-shadow
-        const {publicInstances, cloneToolInstance, deleteToolInstance, push} = this.props;
+        const {publicInstances, cloneToolInstance, deleteToolInstance} = this.props;
+        const {push} = this.props.router;
+
         return instances.map((i, index) => {
             return (
                 <Tr
@@ -195,7 +192,8 @@ class Dashboard extends React.Component {
 
     renderDataTable() {
         // eslint-disable-next-line no-shadow
-        const {activeTool, setPublic, publicInstances, push} = this.props;
+        const {activeTool, setPublic, publicInstances} = this.props;
+        const {push} = this.props.router;
         return (
             <div className="tile col col-abs-3 stretch">
                 <h2 className="section-title">
@@ -342,23 +340,34 @@ class Dashboard extends React.Component {
 const mapStateToProps = state => {
     return {
         roles: state.user.roles,
-        tools: Selector.tool.getTools(state.dashboard.tools),
-        activeTool: Selector.tool.getTool(
+        tools: getTools(state.dashboard.tools),
+        activeTool: getTool(
             state.dashboard.tools,
-            Selector.ui.getActiveToolSlug(state.dashboard.ui)
+            getActiveToolSlug(state.dashboard.ui)
         ),
-        publicInstances: Selector.ui.getPublic(state.dashboard.ui)
+        publicInstances: getPublic(state.dashboard.ui)
     };
 };
 
-// eslint-disable-next-line no-class-assign
-Dashboard = connect(mapStateToProps, {
-    setActiveTool: Modifier.Action.setActiveTool,
-    fetchInstances: Modifier.Query.loadInstances,
-    setPublic: Modifier.Action.setPublic,
-    cloneToolInstance: Modifier.Action.cloneToolInstance,
-    deleteToolInstance: Modifier.Action.deleteToolInstance,
-    push
-})(Dashboard);
+const mapDispatchToProps = {
+    setActiveTool: setActiveTool,
+    fetchInstances: loadInstances,
+    setPublic: setPublic,
+    cloneToolInstance: cloneToolInstance,
+    deleteToolInstance: deleteToolInstance
+};
 
-export default Dashboard;
+Dashboard.propTypes = {
+    roles: PropTypes.array,
+    tools: PropTypes.array,
+    activeTool: PropTypes.object,
+    publicInstances: PropTypes.bool,
+    setActiveTool: PropTypes.func.isRequired,
+    fetchInstances: PropTypes.func.isRequired,
+    setPublic: PropTypes.func.isRequired,
+    cloneToolInstance: PropTypes.func.isRequired,
+    deleteToolInstance: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Dashboard));

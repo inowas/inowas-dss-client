@@ -13,12 +13,11 @@ import * as T12 from './t12/index';
 import * as T13 from './t13/index';
 import * as T14 from './t14/index';
 import * as ToolInstance from './toolInstance/index';
-import DashboardContainer from './containers/Dashboard';
 import {Login, Logout, SignUp} from './user/containers';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {WebData} from './core/index';
-import AdminDashboard from './dashboard/container/AdminDashboard';
+import {AdminDashboard, Dashboard} from './dashboard/container';
 
 const routes = store => (
     <Route path="/">
@@ -31,7 +30,7 @@ const routes = store => (
             <IndexRoute component={AdminDashboard}/>
         </Route>
         <Route path="tools" component={AppForAuthenticatedUser}>
-            <IndexRoute component={DashboardContainer}/>
+            <IndexRoute component={Dashboard}/>
             <Route
                 path="T02(/:id)"
                 component={T02.Container.Main}
