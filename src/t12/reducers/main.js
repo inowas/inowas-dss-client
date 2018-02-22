@@ -90,7 +90,7 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'ueq',
-            name: 'Infiltration duration, uₑq [h]',
+            name: 'Infiltration duration, u<sub>eq</sub>  [h]',
             min: 1,
             validMin: x => x > 0,
             max: 10000,
@@ -100,7 +100,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 1,
             id: 'IR',
-            name: 'Infiltration rate, Vb [m3/d]',
+            name: 'Infiltration rate, V<sub>b</sub> [m<sup>3</sup>/d]',
             min: 1,
             validMin: x => x > 0,
             max: 1000,
