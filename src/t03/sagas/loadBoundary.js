@@ -13,9 +13,8 @@ export default function* loadBoundaryFlow() {
         yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'loading'}));
 
         yield put(Action.destroyModflowModel(action.tool));
-
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
 
         try {
             const boundary = yield call(

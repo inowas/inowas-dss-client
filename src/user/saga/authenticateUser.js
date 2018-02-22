@@ -1,11 +1,11 @@
-import { put, take, call } from 'redux-saga/effects';
-import { Action } from '../actions/index';
-import { WebData } from '../../core';
+import {put, take, call} from 'redux-saga/effects';
+import {Action} from '../actions/index';
+import {WebData} from '../../core';
 
 export default function* authenticateFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-        const { type, username, password } = yield take(Action.AUTHENTICATION);
+        const {type, username, password} = yield take(Action.AUTHENTICATION);
 
         const responseData = yield call(WebData.Saga.singleAjaxRequest, {
             url: '/users/credentials.json',
@@ -16,7 +16,7 @@ export default function* authenticateFlow() {
 
         if (responseData) {
             yield put(Action.login(username, responseData.api_key));
-            return null;
+            continue;
         }
 
         yield put(Action.loginError());

@@ -13,7 +13,7 @@ export default function* loadStressPeriodsFlow() {
         yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'loading'}));
 
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
 
         try {
             const stressPeriods = yield call(

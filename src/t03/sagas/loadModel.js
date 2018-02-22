@@ -13,7 +13,7 @@ export default function* loadModelFlow() {
         yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'loading'}));
 
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
         const storedModel = (state[action.tool].model);
 
         try {

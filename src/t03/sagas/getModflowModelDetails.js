@@ -11,7 +11,7 @@ export default function* getModflowDetailsFlow() {
         const action = yield take(Query.GET_MODFLOW_MODEL_DETAILS);
 
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
         const storedModel = (state[action.tool].model);
 
         try {

@@ -14,7 +14,7 @@ export default function* loadModflowPackage() {
         yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'loading'}));
 
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
 
         try {
             const packageData = yield call(

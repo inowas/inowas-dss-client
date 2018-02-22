@@ -68,22 +68,31 @@ class NavBar extends React.Component {
 
     renderInfo = (info) => <li style={{margin: 5}}><span dangerouslySetInnerHTML={{__html: info}}/></li>;
 
+    renderRoleSpecificItems = roles => {
+        if (roles.includes('ROLE_ADMIN')) {
+            return (
+                <li className="nav-item">
+                    <button className="nav-element" onClick={() => this.historyPushTo('/admin')}>Admin</button>
+                </li>
+            );
+        }
+
+        return null;
+    };
+
     renderUserNavigation(userIsLoggedIn) {
-        const roles = this.props.user.roles;
+        const {roles, name} = this.props.user;
         if (userIsLoggedIn && roles && Array.isArray(roles)) {
             return (
                 <li className="nav-item nav-item-has-children">
                     <span className="nav-element">
-                        <Icon name="person"/>{this.props.user.name}
+                        <Icon name="person"/>{name}
                     </span>
                     <ul className="nav-list">
-                        { roles.includes('ROLE_ADMIN') &&
-                            <li className="nav-item">
-                                <button className="nav-element" onClick={() => this.historyPushTo('/admin')}>Admin</button>
-                            </li>
-                        }
+                        {this.renderRoleSpecificItems(roles)}
                         <li className="nav-item">
-                            <button className="nav-element" onClick={() => this.historyPushTo('/logout')}>logout</button>
+                            <button className="nav-element" onClick={() => this.historyPushTo('/logout')}>logout
+                            </button>
                         </li>
                     </ul>
                 </li>
