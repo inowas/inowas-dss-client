@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {connect} from 'react-redux';
-import {isUserLoggedIn} from '../reducers';
+import {hasSessionKey} from '../reducers';
 import {withRouter} from 'react-router';
 import {Button, Container, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
 import logo from '../images/favicon.png';
@@ -334,7 +334,7 @@ class SignUp extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        userIsLoggedIn: isUserLoggedIn(state.user)
+        userIsLoggedIn: hasSessionKey(state.user)
     };
 };
 

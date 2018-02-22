@@ -115,7 +115,7 @@ class NavBar extends React.Component {
             }
         ];
 
-        const userIsLoggedIn = this.props.user.apiKey && this.props.user.enabled;
+        const userIsLoggedIn = this.props.session.apiKey;
 
         return (
             <header className="navbar-wrapper">
@@ -142,6 +142,7 @@ class NavBar extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         user: state.user,
+        session: state.session,
         routing: state.routing,
         ...ownProps
     };
@@ -150,6 +151,7 @@ const mapStateToProps = (state, ownProps) => {
 NavBar.propTypes = {
     router: PropTypes.object.isRequired,
     routing: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     info: PropTypes.string,
     links: PropTypes.array

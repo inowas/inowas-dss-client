@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Action} from '../actions';
-import {isUserLoggedIn, getFetched} from '../reducers';
+import {hasSessionKey, getFetched} from '../reducers';
 import {withRouter} from 'react-router';
 import App from '../../components/App';
 
@@ -26,7 +26,7 @@ class AppForAuthenticatedUser extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        userIsLoggedIn: isUserLoggedIn(state.user),
+        userIsLoggedIn: hasSessionKey(state.session),
         userShouldBeFetched: !getFetched(state.user)
     };
 };

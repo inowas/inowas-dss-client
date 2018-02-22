@@ -1,12 +1,11 @@
-import {LOGIN, LOGOUT, SET_USER, UNAUTHORIZED} from '../actions/actions';
+import {SET_USER} from '../actions/actions';
 
 function initialState() {
     return {
         userName: '',
         name: '',
-        apiKey: localStorage.getItem('apiKey'),
         email: '',
-        enabled: localStorage.getItem('apiKey') !== null,
+        enabled: true,
         roles: [],
         fetched: false
     };
@@ -14,22 +13,6 @@ function initialState() {
 
 export const user = (state = initialState(), action) => {
     switch (action.type) {
-        case LOGIN: {
-            localStorage.setItem('apiKey', action.payload.apiKey);
-            localStorage.setItem('enabled', action.payload.apiKey);
-            return {
-                ...state,
-                apiKey: action.payload.apiKey,
-                enabled: true
-            };
-        }
-
-        case UNAUTHORIZED:
-        case LOGOUT: {
-            localStorage.removeItem('apiKey');
-            return initialState();
-        }
-
         case SET_USER: {
             return {
                 ...state,
@@ -46,8 +29,6 @@ export const user = (state = initialState(), action) => {
     }
 };
 
-export const isUserLoggedIn = state => state.apiKey !== null && state.enabled === true;
-export const getApiKey = state => state.apiKey;
 export const getEmail = state => state.email;
 export const getName = state => state.name;
 export const getRoles = state => state.roles;

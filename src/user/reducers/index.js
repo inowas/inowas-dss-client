@@ -1,6 +1,10 @@
-import {user as userReducer, isAdmin, getApiKey, getEmail, getFetched, getName, getRoles, getUserName, isUserLoggedIn} from './main';
+import {user, isAdmin, getEmail, getFetched, getName, getRoles, getUserName, } from './user';
+import {session, getApiKey, hasSessionKey} from './session';
 
-export default userReducer;
+export {
+    user,
+    session
+};
 
 export {
     getUserName,
@@ -10,5 +14,5 @@ export {
     getFetched,
     getApiKey,
     isAdmin,
-    isUserLoggedIn
+    hasSessionKey
 };

@@ -14,10 +14,11 @@ import dashboard from '../dashboard/reducers';
 import rasterfiles from './Rasterfiles';
 import {routerReducer as routing} from 'react-router-redux';
 import {WebData} from '../core';
-import user from '../user/reducers';
+import {user, session} from '../user/reducers';
 
 const rootReducer = combineReducers({
     routing,
+    session,
     user,
     webData: WebData.Reducer.webData,
     dashboard,

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Action} from '../actions';
-import {isUserLoggedIn, isAdmin, getFetched} from '../reducers';
+import {hasSessionKey, isAdmin, getFetched} from '../reducers';
 import {withRouter} from 'react-router';
 import App from '../../components/App';
 
@@ -31,7 +31,7 @@ class AppForAdminUser extends React.Component {
 const mapStateToProps = state => {
     return {
         userIsAdmin: isAdmin(state.user),
-        userIsLoggedIn: isUserLoggedIn(state.user),
+        userIsLoggedIn: hasSessionKey(state.session),
         userShouldBeFetched: !getFetched(state.user)
     };
 };

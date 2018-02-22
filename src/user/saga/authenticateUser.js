@@ -16,6 +16,9 @@ export default function* authenticateFlow() {
 
         if (responseData) {
             yield put(Action.login(username, responseData.api_key));
+            return null;
         }
+
+        yield put(Action.loginError());
     }
 }
