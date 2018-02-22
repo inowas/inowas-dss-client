@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, IndexRoute} from 'react-router';
-import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
+import {AppForAuthenticatedUser, AppForAdminUser} from './user/containers';
 import tools from './containers/tools';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
@@ -14,18 +14,22 @@ import * as T13 from './t13/index';
 import * as T14 from './t14/index';
 import * as ToolInstance from './toolInstance/index';
 import DashboardContainer from './containers/Dashboard';
-import Login from './containers/Login';
+import {Login, Logout, SignUp} from './user/containers';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {WebData} from './core/index';
-import SignUp from './containers/SignUp';
+import AdminDashboard from './dashboard/container/AdminDashboard';
 
 const routes = store => (
     <Route path="/">
         <IndexRoute component={LandingPage}/>
         <Route path="impressum" component={Impressum}/>
         <Route path="login" component={Login}/>
+        <Route path="logout" component={Logout}/>
         <Route path="signup" component={SignUp}/>
+        <Route path="admin" component={AppForAdminUser}>
+            <IndexRoute component={AdminDashboard}/>
+        </Route>
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={DashboardContainer}/>
             <Route

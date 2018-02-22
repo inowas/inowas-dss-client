@@ -2,42 +2,16 @@ import '../less/navbar.less';
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {authenticate, loadUserInformation, logout} from '../actions/user';
-import {getApiKey, getName, isUserLoggedIn} from '../reducers/user';
 
 import Icon from '../components/primitive/Icon';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
-import {push} from 'react-router-redux';
 import {withRouter} from 'react-router';
 
 class NavBar extends React.Component {
 
-    componentDidMount() {
-        const {userLoggedIn} = this.props;
-        if (userLoggedIn) {
-            this.loadUserInformation();
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        const {apiKey, userLoggedIn} = this.props;
-        if (apiKey !== prevProps.apiKey && userLoggedIn) {
-            this.loadUserInformation();
-        }
-    }
-
-    loadUserInformation() {
-        // eslint-disable-next-line no-shadow
-        const {name, loadUserInformation} = this.props;
-
-        if (!name || name === '') {
-            loadUserInformation();
-        }
-    }
-
-    pushToLogin = () => {
-        this.props.push('/login');
+    historyPushTo = route => {
+        this.props.router.push(route);
     };
 
     renderLinks(links, recursionDepth = 0) {
@@ -94,19 +68,31 @@ class NavBar extends React.Component {
 
     renderInfo = (info) => <li style={{margin: 5}}><span dangerouslySetInnerHTML={{__html: info}}/></li>;
 
-    renderUserNavigation() {
-        // eslint-disable-next-line no-shadow
-        const {userLoggedIn, logout, name} = this.props;
+    renderRoleSpecificItems = roles => {
+        if (roles.includes('ROLE_ADMIN')) {
+            return (
+                <li className="nav-item">
+                    <button className="nav-element" onClick={() => this.historyPushTo('/admin')}>Admin</button>
+                </li>
+            );
+        }
 
-        if (userLoggedIn) {
+        return null;
+    };
+
+    renderUserNavigation(userIsLoggedIn) {
+        const {roles, name} = this.props.user;
+        if (userIsLoggedIn && roles && Array.isArray(roles)) {
             return (
                 <li className="nav-item nav-item-has-children">
                     <span className="nav-element">
                         <Icon name="person"/>{name}
                     </span>
                     <ul className="nav-list">
+                        {this.renderRoleSpecificItems(roles)}
                         <li className="nav-item">
-                            <button className="nav-element" onClick={logout}>logout</button>
+                            <button className="nav-element" onClick={() => this.historyPushTo('/logout')}>logout
+                            </button>
                         </li>
                     </ul>
                 </li>
@@ -114,7 +100,7 @@ class NavBar extends React.Component {
         }
         return (
             <li className="nav-item nav-item-has-children">
-                <span className="nav-element" onClick={this.pushToLogin}>
+                <span className="nav-element" onClick={() => this.historyPushTo('/login')}>
                     <Icon name="person"/>Login
                 </span>
             </li>
@@ -138,19 +124,21 @@ class NavBar extends React.Component {
             }
         ];
 
+        const userIsLoggedIn = this.props.session.apiKey;
+
         return (
             <header className="navbar-wrapper">
                 <div className="navbar app-width">
                     <nav className="nav-left">
                         <ul className="nav-list">
                             {this.renderLinks(standardLinks)}
-                            {this.props.userLoggedIn && this.renderLinks(standardLinksAuthenticationRequired.concat(this.props.links))}
-                            {!this.props.userLoggedIn && this.props.info && this.renderInfo(this.props.info)}
+                            {userIsLoggedIn && this.renderLinks(standardLinksAuthenticationRequired.concat(this.props.links))}
+                            {!userIsLoggedIn && this.props.info && this.renderInfo(this.props.info)}
                         </ul>
                     </nav>
                     <nav className="nav-right">
                         <ul className="nav-list">
-                            {this.renderUserNavigation()}
+                            {this.renderUserNavigation(userIsLoggedIn)}
                         </ul>
                     </nav>
 
@@ -162,29 +150,23 @@ class NavBar extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        userLoggedIn: isUserLoggedIn(state.user),
-        apiKey: getApiKey(state.user),
+        user: state.user,
+        session: state.session,
         routing: state.routing,
-        name: getName(state.user),
-        push: push,
         ...ownProps
     };
 };
 
 NavBar.propTypes = {
-    userLoggedIn: PropTypes.bool,
-    routing: PropTypes.object,
-    links: PropTypes.array,
-    authenticate: PropTypes.func,
-    push: PropTypes.func,
-    logout: PropTypes.func,
-    name: PropTypes.string,
-    loadUserInformation: PropTypes.func,
-    apiKey: PropTypes.string,
-    info: PropTypes.string
+    router: PropTypes.object.isRequired,
+    routing: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    info: PropTypes.string,
+    links: PropTypes.array
 };
 
 // eslint-disable-next-line no-class-assign
-NavBar = withRouter(connect(mapStateToProps, {push, authenticate, logout, loadUserInformation})(NavBar));
+NavBar = withRouter(connect(mapStateToProps)(NavBar));
 
 export default NavBar;

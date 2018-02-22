@@ -1,4 +1,4 @@
-import {put, call, take} from 'redux-saga/effects';
+import {put, take} from 'redux-saga/effects';
 import {sendCommand, stateToCreatePayload} from '../../actions/messageBox';
 import {Command, Event} from '../../t03/actions/index';
 import {WebData} from '../../core';

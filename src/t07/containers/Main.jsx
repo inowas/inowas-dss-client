@@ -12,7 +12,7 @@ import Navbar from '../../containers/Navbar';
 import PropTypes from 'prop-types';
 import Select from '../../components/primitive/Select';
 import { connect } from 'react-redux';
-import { getApiKey } from '../../reducers/user';
+import { getApiKey } from '../../user/reducers';
 import { getScenarioAnalysisById } from '../reducers/ScenarioAnalysis';
 import { getScenarioModelsByIds } from '../reducers/ScenarioModels';
 import styleGlobals from 'styleGlobals';
