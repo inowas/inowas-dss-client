@@ -1,7 +1,7 @@
 import Background from './background';
 import Chart from './chart';
 import MFI from './mfi';
-import Parameters from './Parameters_T12';
+import Parameters from './parameters';
 import Settings from './settings';
 
 export {
