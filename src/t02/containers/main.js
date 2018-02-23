@@ -23,7 +23,6 @@ import {Modifier as ToolInstance} from '../../toolInstance';
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
-import {makeMapStateToProps} from '../selectors/mapState';
 import {isReadOnly} from '../../core/helpers';
 
 const styles = {

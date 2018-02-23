@@ -20,7 +20,8 @@ export const user = (state = initialState(), action) => {
                 name: action.payload.name || state.name,
                 email: action.payload.email || state.email,
                 roles: action.payload.roles || state.roles,
-                enabled: action.payload.enabled || state.enabled
+                enabled: action.payload.enabled || state.enabled,
+                fetched: true
             };
         }
         default: {

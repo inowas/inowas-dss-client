@@ -44,62 +44,10 @@ export function authentication(username, password) {
     };
 }
 
-export function authenticate(username, password) {
-    return dispatch => {
-        return dispatch({
-            type: AUTHENTICATION,
-            payload: {
-                promise: ConfiguredAxios.post('/users/credentials.json', {
-                    username,
-                    password
-                })
-            }
-        }).then(({action}) => {
-            dispatch(login(username, action.payload.data.api_key));
-        }).catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        });
-    };
-}
-
 export function setUser(userInformation) {
     return {
         type: SET_USER,
         payload: userInformation
-    };
-}
-
-export function getUser() {
-    return (dispatch, getState) => {
-        return dispatch({
-            type: FETCH_USER,
-            payload: {
-                promise: ConfiguredAxios.get('/users', {headers: {'X-AUTH-TOKEN': getApiKey(getState().user)}})
-            }
-        }).then(({action}) => {
-            dispatch(setUser(action.payload.data));
-        }).catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        });
-    };
-}
-
-export function putUser(data) {
-    return (dispatch, getState) => {
-        return dispatch({
-            type: PUT_USER,
-            payload: {
-                promise: ConfiguredAxios.put(
-                    '/users', data, {headers: {'X-AUTH-TOKEN': getApiKey(getState().user)}})
-            }
-        }).then(({action}) => {
-            dispatch(setUser(action.payload.data));
-        }).catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        });
     };
 }
 

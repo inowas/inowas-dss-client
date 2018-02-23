@@ -9,7 +9,6 @@ export default function* getModflowDetailsFlow() {
     while (true) {
         // eslint-disable-next-line no-shadow
         const action = yield take(Query.GET_MODFLOW_MODEL_DETAILS);
-
         const state = yield select();
         const apiKey = getApiKey(state.session);
         const storedModel = (state[action.tool].model);
