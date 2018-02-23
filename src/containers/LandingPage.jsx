@@ -31,12 +31,12 @@ import toolBoxImage01 from '../images/landingPage/toolbox-image-01.png';
 import toolBoxImage02 from '../images/landingPage/toolbox-image-02.png';
 import toolBoxImage03 from '../images/landingPage/toolbox-image-03.png';
 
-export default class LandingPage extends React.Component {
+class LandingPage extends React.Component {
 
     state = {
         screenshotsPopupVisible: false,
         screenshotsSliderIndex: 0
-    }
+    };
 
     openScreenshotsPopup = (index) => {
         return () => {
@@ -45,13 +45,13 @@ export default class LandingPage extends React.Component {
                 screenshotsPopupVisible: true
             });
         };
-    }
+    };
 
     closeScreenshotsPopup = () => {
         this.setState({
             screenshotsPopupVisible: false
         });
-    }
+    };
 
     render( ) {
         return (
@@ -342,7 +342,7 @@ export default class LandingPage extends React.Component {
                         </figure>
                         <p className="description align-center">Detailed documentation of all tools, applications and geo database, including practical examples and references for further read. The documentation can be accessed at any time from the individual pages, providing valuable support for project development.</p>
                         <div className="align-center">
-                            <a className="button button-primary more" href="http:/wiki.inowas.hydro.tu-dresden.de">Read more</a>
+                            <a className="button button-primary more" href="http://wiki.inowas.hydro.tu-dresden.de">Read more</a>
                         </div>
                     </div>
 
@@ -388,3 +388,5 @@ export default class LandingPage extends React.Component {
         );
     }
 }
+
+export default LandingPage;
