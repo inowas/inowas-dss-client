@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T09A.png';
+import image from '../images/T09A.png';
 
 import {Background, ChartT09A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';

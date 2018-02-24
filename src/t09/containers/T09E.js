@@ -5,7 +5,7 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image from '../../images/tools/T09E.png';
+import image from '../images/T09E.png';
 import {Background, ChartT09E as Chart, SettingsT09E as Settings, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
