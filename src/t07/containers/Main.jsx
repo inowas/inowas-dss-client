@@ -306,7 +306,7 @@ const mapStateToProps = (state, props) => {
             state.dashboard.tools,
             'T03'
         ).instances,
-        apiKey: getApiKey(state.user),
+        apiKey: getApiKey(state.session),
         scenarioAnalysis,
         scenarioModels: scenarioAnalysis
             ? getScenarioModelsByIds(state, props)
@@ -315,13 +315,15 @@ const mapStateToProps = (state, props) => {
     };
 };
 
+const mapDispatchToProps = {
+    loadInstances: Dashboard.Modifier.Query.loadInstances,
+    fetchScenarioAnalysisDetails: Query.fetchScenarioAnalysisDetails,
+    deleteScenario: Command.deleteScenario,
+    createScenario: Command.createScenario,
+    updateScenarioAnalysis: Command.updateScenarioAnalysis,
+    createScenarioAnalysis: Command.createScenarioAnalysis
+};
+
 export default withRouter(
-    connect(mapStateToProps, {
-        loadInstances: Dashboard.Modifier.Query.loadInstances,
-        fetchScenarioAnalysisDetails: Query.fetchScenarioAnalysisDetails,
-        deleteScenario: Command.deleteScenario,
-        createScenario: Command.createScenario,
-        updateScenarioAnalysis: Command.updateScenarioAnalysis,
-        createScenarioAnalysis: Command.createScenarioAnalysis
-    })(Main)
+    connect(mapStateToProps, mapDispatchToProps)(Main)
 );

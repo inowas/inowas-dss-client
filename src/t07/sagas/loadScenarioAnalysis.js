@@ -19,7 +19,7 @@ export default function* loadScenarioAnalysis() {
         );
 
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
 
         try {
             // fetch scenarioAnalysis
