@@ -13,7 +13,7 @@ import TimeSeriesResult from '../model/TimeSeriesResult';
 import TotalTimes from '../model/TotalTimes';
 import TwoDData from '../model/TwoDData';
 import config from '../config';
-import { getApiKey } from '../reducers/user';
+import { getApiKey } from '../user/reducers';
 
 export function setTotalTimes(totalTimes) {
     if (totalTimes instanceof TotalTimes === false) {
@@ -36,18 +36,6 @@ export function addModel(model) {
 export function clearModels() {
     return {
         type: 'T07_CLEAR_MODELS',
-    };
-}
-
-export function reloadDone() {
-    return {
-        type: 'T07_RELOAD_DONE'
-    };
-}
-
-export function resizeDone() {
-    return {
-        type: 'T07_RESIZE_DONE'
     };
 }
 
@@ -77,22 +65,6 @@ export function setLayerValues(layerValues) {
     };
 }
 
-export function setResultsT07A(modflowCalculationResult) {
-    if (
-        modflowCalculationResult instanceof ModflowCalculationResult ===
-        false
-    ) {
-        throw Error(
-            'Expected first param to be instance of ModflowCalculationResult'
-        );
-    }
-
-    return {
-        type: 'T07A_SET_MODEL_RESULT',
-        payload: modflowCalculationResult
-    };
-}
-
 export function setResultsT07B(modflowCalculationResult) {
     if (
         modflowCalculationResult instanceof ModflowCalculationResult ===
@@ -108,25 +80,6 @@ export function setResultsT07B(modflowCalculationResult) {
         payload: modflowCalculationResult
     };
 }
-
-// export function setBounds( bounds ) {
-//     return {
-//         type: 'T07_SET_BOUNDS',
-//         payload: {
-//             bounds
-//         }
-//     };
-// }
-//
-// export function setMapView( center, zoom ) {
-//     return {
-//         type: 'T07_SET_MAP_VIEW',
-//         payload: {
-//             center,
-//             zoom
-//         }
-//     };
-// }
 
 export function setMapPosition(mapPosition) {
     return {
@@ -325,53 +278,6 @@ export function fetchDetails(id, onSuccess) {
     };
 }
 
-export function updateResultsT07A(
-    calculationId,
-    resultType,
-    layerNumber,
-    totalTime
-) {
-    const imageURL = config.baseURL + '/image';
-    const url =
-        '/calculations/' +
-        calculationId +
-        '/results/types/' +
-        resultType.toString() +
-        '/layers/' +
-        layerNumber.toString() +
-        '/totims/' +
-        totalTime.toString();
-
-    return (dispatch, getState) => {
-        return dispatch({
-            type: 'FETCH_DATA',
-            payload: {
-                promise: ConfiguredAxios.get(url, {
-                    headers: { 'X-AUTH-TOKEN': getApiKey(getState().user) }
-                })
-            }
-        })
-            .then(({ action }) => {
-                dispatch(
-                    setResultsT07A(
-                        new ModflowCalculationResult(
-                            calculationId,
-                            layerNumber,
-                            resultType,
-                            totalTime,
-                            action.payload.data,
-                            imageURL + url + '.png'
-                        )
-                    )
-                );
-            })
-            .catch(error => {
-                // eslint-disable-next-line no-console
-                console.error(error);
-            });
-    };
-}
-
 export function updateResultsT07B(
     calculation1,
     calculation2,
@@ -397,7 +303,7 @@ export function updateResultsT07B(
             type: 'FETCH_DATA',
             payload: {
                 promise: ConfiguredAxios.get(url + '.json', {
-                    headers: { 'X-AUTH-TOKEN': getApiKey(getState().user) }
+                    headers: { 'X-AUTH-TOKEN': getApiKey(getState().session) }
                 })
             }
         })
@@ -524,7 +430,7 @@ export function fetchTimeSeries(
                         '/y/' +
                         y +
                         '.json',
-                    { headers: { 'X-AUTH-TOKEN': getApiKey(getState().user) } }
+                    { headers: { 'X-AUTH-TOKEN': getApiKey(getState().session) } }
                 )
             }
         })
@@ -544,27 +450,6 @@ export function fetchTimeSeries(
                 dispatch(
                     setTimeSeriesPointResult(coordinate, timeSeriesResult)
                 );
-            })
-            .catch(error => {
-                // eslint-disable-next-line no-console
-                console.error(error);
-            });
-    };
-}
-
-export function cloneScenario(id) {
-    return (dispatch, getState) => {
-        return dispatch({
-            type: 'FETCH_DATA',
-            payload: {
-                // TODO
-                promise: ConfiguredAxios.post('scenarioanalysis...', {
-                    headers: { 'X-AUTH-TOKEN': getApiKey(getState().user) }
-                })
-            }
-        })
-            .then(({ action }) => {
-                console.warn(action.payload.data);
             })
             .catch(error => {
                 // eslint-disable-next-line no-console

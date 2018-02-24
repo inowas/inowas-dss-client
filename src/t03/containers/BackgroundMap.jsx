@@ -841,6 +841,8 @@ class BackgroundMap extends Component {
     }
 
     render() {
+
+        console.log('PROPS', this.props);
         const activeCells = this.state.model.active_cells;
         const area = this.state.model.geometry;
         const boundingBox = this.state.model.bounding_box;

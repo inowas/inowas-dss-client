@@ -166,7 +166,4 @@ NavBar.propTypes = {
     links: PropTypes.array
 };
 
-// eslint-disable-next-line no-class-assign
-NavBar = withRouter(connect(mapStateToProps)(NavBar));
-
-export default NavBar;
+export default withRouter(connect(mapStateToProps)(NavBar));
