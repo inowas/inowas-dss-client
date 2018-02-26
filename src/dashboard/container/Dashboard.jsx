@@ -16,7 +16,6 @@ import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
 import Menu from '../../components/primitive/Menu';
 import Navbar from '../../containers/Navbar';
-import Popup from '../../components/primitive/Popup';
 import Table from '../../components/primitive/table/Table';
 import Td from '../../components/primitive/table/Td';
 import Tr from '../../components/primitive/table/Tr';
@@ -70,7 +69,6 @@ const styles = {
 @ConfiguredRadium
 class Dashboard extends React.Component {
     state = {
-        popupVisible: false,
         navigation: [
             {
                 name: 'Documentation',
@@ -213,33 +211,6 @@ class Dashboard extends React.Component {
                                 Add new
                             </Button>
                         </li>
-                        <li>
-                            <Button
-                                type="link"
-                                onClick={this.showPopup}
-                                icon={<Icon name="import"/>}
-                            >
-                                Import
-                            </Button>
-                        </li>
-                        <li>
-                            <Button
-                                type="link"
-                                onClick={this.showPopup}
-                                icon={<Icon name="share"/>}
-                            >
-                                Share
-                            </Button>
-                        </li>
-                        <li>
-                            <Button
-                                type="link"
-                                onClick={this.showPopup}
-                                icon={<Icon name="trash"/>}
-                            >
-                                Delete
-                            </Button>
-                        </li>
                     </ul>
                     <ul className="col toolbar-public">
                         <li>
@@ -286,14 +257,6 @@ class Dashboard extends React.Component {
         );
     }
 
-    closePopup = () => {
-        this.setState({popupVisible: false});
-    };
-
-    showPopup = () => {
-        this.setState({popupVisible: true});
-    };
-
     render() {
         const {navigation} = this.state;
         const {tools, roles, activeTool} = this.props;
@@ -325,13 +288,6 @@ class Dashboard extends React.Component {
                     />{' '}
                     {this.renderDataTable()}
                 </div>
-                <Popup
-                    visible={this.state.popupVisible}
-                    close={this.closePopup}
-                >
-                    <h2>Warning</h2>
-                    <p>You don't have the permissions to do this.</p>
-                </Popup>
             </div>
         );
     }
