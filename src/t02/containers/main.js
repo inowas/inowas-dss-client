@@ -18,7 +18,7 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
@@ -252,8 +252,8 @@ class T02 extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

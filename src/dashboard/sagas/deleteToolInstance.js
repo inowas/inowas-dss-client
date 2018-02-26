@@ -1,6 +1,6 @@
 import { put, take } from 'redux-saga/effects';
 import { sendCommand } from '../../actions/messageBox';
-import { Command, Event } from '../../toolInstance/actions/index';
+import { Command, Event } from '../actions';
 import { WebData } from '../../core';
 
 export default function* deleteToolInstance() {

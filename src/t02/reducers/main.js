@@ -1,5 +1,5 @@
 import {WebData} from '../../core';
-import * as ToolInstance from '../../toolInstance';
+import * as Dashboard from '../../dashboard';
 import {find} from 'lodash';
 
 export const getInitialState = () => {
@@ -112,9 +112,10 @@ const createReducer = tool => {
         }
 
         switch (action.type) {
+            // eslint-disable-next-line no-case-declarations
             case WebData.Modifier.Action.SET_AJAX_STATUS:
                 if (!WebData.Helpers.isSuccess(action)
-                    || !WebData.Helpers.waitForResponse(action, ToolInstance.Modifier.Query.GET_TOOL_INSTANCE)
+                    || !WebData.Helpers.waitForResponse(action, Dashboard.Modifier.Query.GET_TOOL_INSTANCE)
                 ) {
                     return state;
                 }
@@ -133,9 +134,9 @@ const createReducer = tool => {
                         };
                     })
                 };
-            case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
-            case ToolInstance.Modifier.Event.TOOL_INSTANCE_CREATED:
-            case ToolInstance.Modifier.Event.TOOL_INSTANCE_UPDATED:
+            case Dashboard.Modifier.Action.SET_TOOL_INSTANCE:
+            case Dashboard.Modifier.Event.TOOL_INSTANCE_CREATED:
+            case Dashboard.Modifier.Event.TOOL_INSTANCE_UPDATED:
                 return {
                     ...state,
                     name: action.payload.name,

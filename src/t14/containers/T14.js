@@ -4,10 +4,10 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image14A from '../../images/tools/T14A.png';
-import image14B from '../../images/tools/T14B.png';
-import image14C from '../../images/tools/T14C.png';
-import image14D from '../../images/tools/T14D.png';
+import image14A from '../images/T14A.png';
+import image14B from '../images/T14B.png';
+import image14C from '../images/T14C.png';
+import image14D from '../images/T14D.png';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';

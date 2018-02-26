@@ -1,4 +1,4 @@
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 import {Modifier as T03} from '../../t03';
 import {Modifier as T07} from '../../t07';
 import {Action} from '../actions';
@@ -101,7 +101,7 @@ const tools = (state = initialState, action) => {
                 return t;
             });
 
-        case ToolInstance.Event.TOOL_INSTANCE_DELETED:
+        case Dashboard.Event.TOOL_INSTANCE_DELETED:
         case T03.Event.MODFLOW_MODEL_DELETED:
         case T07.Event.SCENARIO_ANALYSIS_DELETED:
             return state.map(t => {

@@ -4,7 +4,6 @@ import { Saga as Dashboard } from './dashboard/index';
 import { Saga as RasterData } from './core/rasterData/index';
 import { Saga as T03 } from './t03/index';
 import { Saga as T07 } from './t07/index';
-import { Saga as ToolInstance } from './toolInstance/index';
 import { Saga as User } from './user/index';
 
 export default function* rootSaga() {
@@ -13,7 +12,11 @@ export default function* rootSaga() {
             WebData.Modifier.Query.AT_SEND_HTTP_REQUEST,
             WebData.Saga.sendHttpRequestFlow
         ),
+        call(Dashboard.cloneToolInstanceFlow),
+        call(Dashboard.createToolInstanceFlow),
         call(Dashboard.loadInstancesFlow),
+        call(Dashboard.updateToolInstanceFlow),
+        call(Dashboard.deleteToolInstanceFlow),
         call(RasterData.uploadRasterFileFlow),
         call(T03.addBoundaryFlow),
         call(T03.addLayerFlow),
@@ -46,11 +49,6 @@ export default function* rootSaga() {
         call(T07.deleteScenarioFlow),
         call(T07.loadScenarioAnalysisFlow),
         call(T07.updateScenarioAnalysisFlow),
-        call(ToolInstance.createToolInstanceFlow),
-        call(ToolInstance.updateToolInstanceFlow),
-        call(ToolInstance.deleteToolInstanceFlow),
-        call(ToolInstance.cloneToolInstanceFlow),
-        call(ToolInstance.cloneToolInstanceFlow),
         call(User.authenticateUser),
         call(User.fetchUser),
     ];
