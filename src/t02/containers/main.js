@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T02.png';
+import image from '../images/T02.png';
 
 import {Background, Chart, Parameters, Settings} from '../components';
 import {WebData, LayoutComponents} from '../../core';

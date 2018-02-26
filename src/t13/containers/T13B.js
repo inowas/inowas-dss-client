@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
-import image from '../../images/tools/T13B.png';
+import image from '../images/T13B.png';
 
 import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, ParametersT13B as Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
