@@ -1,5 +1,4 @@
 import {put, call, take, select} from 'redux-saga/effects';
-import {buildRequest} from '../../actions/messageBox';
 import {Query, Action} from '../../t03/actions/index';
 import {getApiKey} from '../../user/reducers';
 import {WebData} from '../../core';
@@ -18,7 +17,7 @@ export default function* loadStressPeriodsFlow() {
         try {
             const stressPeriods = yield call(
                 WebData.Helpers.fetchStatusWrapper,
-                buildRequest('modflowmodels/' + action.id + '/stressperiods', 'GET'),
+                WebData.Modifier.Action.buildRequest('modflowmodels/' + action.id + '/stressperiods', 'GET'),
                 apiKey
             );
 

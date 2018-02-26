@@ -1,7 +1,7 @@
 import {put, call, take, select, all} from 'redux-saga/effects';
-import {buildRequest, payloadToSetModel} from '../../actions/messageBox';
 import {Query, Action} from '../../t03/actions/index';
 import {getApiKey} from '../../user/reducers';
+import {buildRequest, payloadToSetModel} from '../../core/webData/actions/actions';
 import {WebData} from '../../core';
 
 export default function* getModflowDetailsFlow() {

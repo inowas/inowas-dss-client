@@ -100,7 +100,7 @@ Parameters.propTypes = {
     handleChange: PropTypes.func.isRequired,
     handleReset: PropTypes.func.isRequired,
     parameters: PropTypes.array.isRequired,
-    settings: PropTypes.array.isRequired,
+    settings: PropTypes.object.isRequired,
 };
 
 export default pure(Parameters);

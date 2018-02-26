@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import image13B from '../../images/tools/intro_13b.png';
-import image13C from '../../images/tools/intro_13c.png';
+import image13B from '../images/intro_13b.png';
+import image13C from '../images/intro_13c.png';
 
 export function image(xwd) {
     let object= [];

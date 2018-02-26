@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T02.png';
+import image from '../images/T02.png';
 
 import {Background, Chart, Parameters, Settings} from '../components';
 import {WebData, LayoutComponents} from '../../core';
@@ -18,7 +18,7 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
@@ -252,8 +252,8 @@ class T02 extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

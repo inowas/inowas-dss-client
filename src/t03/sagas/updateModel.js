@@ -1,9 +1,5 @@
 import { call, put, select, take } from 'redux-saga/effects';
-import {
-    buildRequest,
-    sendCommand,
-    stateToCreatePayload
-} from '../../actions/messageBox';
+import {buildRequest, sendCommand, stateToCreatePayload} from '../../core/webData/actions/actions';
 
 import { Command, Action, Event } from '../../t03/actions/index';
 import { WebData } from '../../core';

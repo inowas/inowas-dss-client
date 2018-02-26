@@ -1,5 +1,4 @@
 import {put, take, call, select} from 'redux-saga/effects';
-import {buildRequest} from '../../actions/messageBox';
 import {getApiKey} from '../../user/reducers';
 import {Command, Query, Action} from '../../t03/actions/index';
 import {WebData} from '../../core';
@@ -33,7 +32,7 @@ export default function* calculateModflowModelFlow() {
 
             yield call(
                 WebData.Helpers.fetchStatusWrapper,
-                buildRequest('messagebox', 'POST', JSON.stringify({
+                WebData.Modifier.Action.buildRequest('messagebox', 'POST', JSON.stringify({
                     metadata: [],
                     message_name: action.type,
                     payload: action.payload,

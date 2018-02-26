@@ -3,7 +3,7 @@ import * as T09B from './T09B';
 import * as T09C from './T09C';
 import * as T09D from './T09D';
 import * as T09E from './T09E';
-import * as ToolInstance from '../../toolInstance';
+import * as Dashboard from '../../dashboard';
 import {find} from 'lodash';
 import {WebData} from '../../core';
 
@@ -41,9 +41,10 @@ export const createReducer = tool => {
             return state;
         }
         switch (action.type) {
+            // eslint-disable-next-line no-case-declarations
             case WebData.Modifier.Action.SET_AJAX_STATUS:
                 if (!WebData.Helpers.isSuccess(action)
-                    || !WebData.Helpers.waitForResponse(action, ToolInstance.Modifier.Query.GET_TOOL_INSTANCE)
+                    || !WebData.Helpers.waitForResponse(action, Dashboard.Modifier.Query.GET_TOOL_INSTANCE)
                 ) {
                     return state;
                 }
@@ -63,9 +64,9 @@ export const createReducer = tool => {
                     }),
                     tool: instance.data.tool
                 };
-            case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
-            case ToolInstance.Modifier.Event.TOOL_INSTANCE_CREATED:
-            case ToolInstance.Modifier.Event.TOOL_INSTANCE_UPDATED:
+            case Dashboard.Modifier.Action.SET_TOOL_INSTANCE:
+            case Dashboard.Modifier.Event.TOOL_INSTANCE_CREATED:
+            case Dashboard.Modifier.Event.TOOL_INSTANCE_UPDATED:
                 return {
                     ...state,
                     name: action.payload.name,

@@ -5,7 +5,7 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image from '../../images/tools/T09E.png';
+import image from '../images/T09E.png';
 import {Background, ChartT09E as Chart, SettingsT09E as Settings, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
@@ -16,7 +16,7 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T09E';
@@ -259,9 +259,9 @@ class T09E extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

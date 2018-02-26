@@ -1,6 +1,6 @@
 import React from 'react';
-import image13B from '../../images/tools/T13B.png';
-import image13C from '../../images/tools/T13C.png';
+import image13B from '../../t13/images/T13B.png';
+import image13C from '../../t13/images/T13C.png';
 
 export default class Settings extends React.Component {
     image() {

@@ -1,4 +1,4 @@
-import erfc from '../../calculations/erfc';
+import erfc from '../../core/calculations/erfc';
 
 const calcDQ = (d, S, T, t, lambda, Qw) => {
     const erfc1 = erfc(Math.sqrt((d * d * S) / (4 * T * t)));

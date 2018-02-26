@@ -5,11 +5,11 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image9A from '../../images/tools/T09A.png';
-import image9B from '../../images/tools/T09B.png';
-import image9C from '../../images/tools/T09C.png';
-import image9D from '../../images/tools/T09D.png';
-import image9E from '../../images/tools/T09E.png';
+import image9A from '../images/T09A.png';
+import image9B from '../images/T09B.png';
+import image9C from '../images/T09C.png';
+import image9D from '../images/T09D.png';
+import image9E from '../images/T09E.png';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';

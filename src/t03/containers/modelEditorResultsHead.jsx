@@ -15,7 +15,6 @@ import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import Select from '../../components/primitive/Select';
 import { connect } from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { sendQuery } from '../../actions/messageBox';
 import { HeadResultsChart } from '../components';
 import uuid from 'uuid';
 import { includes, max, min } from 'lodash';
@@ -344,7 +343,7 @@ const mapStateToProps = (state, { tool }) => {
 };
 
 const actions = {
-    sendQuery,
+    sendQuery: WebData.Modifier.Action.sendQuery,
     createScenarioAnalysis: T07.Command.createScenarioAnalysis,
 };
 

@@ -1,8 +1,4 @@
 import {put, take} from 'redux-saga/effects';
-import {
-    sendCommand,
-} from '../../actions/messageBox';
-
 import {Command, Action, Event} from '../../t03/actions/index';
 import {WebData} from '../../core';
 
@@ -13,7 +9,10 @@ export default function* updateLayerFlow() {
         const action = yield take( action => action.type === Command.UPDATE_LAYER );
 
         yield put( Action.setLayer( action.tool, action.payload.layer ) );
-        yield put( sendCommand( action.type, {...action.payload, layer_id: action.payload.layer.id} ) );
+        yield put(WebData.Modifier.Action.sendCommand(action.type, {
+            ...action.payload,
+            layer_id: action.payload.layer.id
+        }));
 
         // eslint-disable-next-line no-constant-condition
         while ( true ) {
