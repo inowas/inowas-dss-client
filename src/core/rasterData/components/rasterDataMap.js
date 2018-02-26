@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {createGridData, min, max, rainbowFactory} from '../helpers';
 import {Map, GeoJSON, TileLayer} from 'react-leaflet';
-import {disableMap, invalidateSize} from '../../../calculations/map';
+import {disableMap, invalidateSize} from '../../../core/geospatial';
 import CanvasHeatMapOverlay from '../../../core/leafletCanvasHeatMapOverlay/ReactLeafletHeatMapCanvasOverlay';
 import ColorLegend from '../../../t07/components/ColorLegend';
 

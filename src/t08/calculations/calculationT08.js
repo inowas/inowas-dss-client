@@ -1,5 +1,5 @@
-import erfc from '../../calculations/erfc';
-import {SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_ONE_TIME} from "../reducers/main";
+import erfc from '../../core/calculations/erfc';
+import {SETTINGS_CASE_FIXED_TIME, SETTINGS_CASE_VARIABLE_TIME, SETTINGS_INFILTRATION_ONE_TIME} from '../reducers/main';
 
 export function calcC(t, x, vx, R, DL) {
     const term1 = erfc((x - (vx * t / R)) / (2 * Math.sqrt(DL * t / R)));

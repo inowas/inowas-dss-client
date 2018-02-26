@@ -8,7 +8,6 @@ import {cloneDeep, uniqueId} from 'lodash';
 import {EditControl} from 'react-leaflet-draw';
 import FullscreenControl from 'react-leaflet-fullscreen';
 
-import * as mapHelpers from '../../calculations/map';
 import * as geoTools from '../geospatial';
 import Control from '../map/Control';
 
@@ -98,7 +97,7 @@ class BoundaryGeometryEditorMap extends React.Component {
                     <Polygon
                         key={uniqueId()}
                         id={boundary.id}
-                        positions={mapHelpers.getLatLngFromXY(
+                        positions={geoTools.getLatLngFromXY(
                             boundary.geometry.coordinates[0]
                         )}
                     />
@@ -108,7 +107,7 @@ class BoundaryGeometryEditorMap extends React.Component {
                     <Polyline
                         key={uniqueId()}
                         id={boundary.id}
-                        positions={mapHelpers.getLatLngFromXY(
+                        positions={geoTools.getLatLngFromXY(
                             boundary.geometry.coordinates
                         )}
                     />
@@ -141,7 +140,7 @@ class BoundaryGeometryEditorMap extends React.Component {
             if (boundary.id === id && boundary.observation_points) {
                 boundary.observation_points.map(op => {
                     const {coordinates} = op.geometry;
-                    const latLng = mapHelpers.closestPointOnGeometry(e.target, layer, new LatLng(coordinates[1], coordinates[0]));
+                    const latLng = geoTools.closestPointOnGeometry(e.target, layer, new LatLng(coordinates[1], coordinates[0]));
                     op.geometry.coordinates = [latLng.lng, latLng.lat];
                     return op;
                 });

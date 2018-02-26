@@ -5,7 +5,7 @@ import {
     handleUpdateBoundingBox, handleUpdateLayer, handleRemoveLayer, handleAddLayer
 } from './boundary';
 import { Action, Event } from '../actions/index';
-import { calcBoundsOfPolygon } from '../../calculations/geoTools';
+import { calcBoundsOfPolygon } from '../../core/geospatial';
 import { model } from '../selectors/index';
 
 const createModelReducer = tool => {

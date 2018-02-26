@@ -1,4 +1,4 @@
-import erfc from '../../calculations/erfc';
+import erfc from '../../core/calculations/erfc';
 
 export function calcDQ(Qw, d, S, T, t) {
     return Qw * erfc(Math.sqrt((d * d * S) / (4 * T * t)));
