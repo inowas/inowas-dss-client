@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T12.png';
+import image from '../images/T12.png';
 
 import {Background, Chart, Parameters, Settings, MFI} from '../components';
 import {WebData, LayoutComponents} from '../../core';
@@ -113,7 +113,6 @@ class T12 extends React.Component {
     };
 
     handleChange = (e) => {
-        console.log(e.target.name);
         if (e.target.name.startsWith('settings')) {
             const parameter = e.target.name.split('_')[1];
             this.updateSettings(parameter, Number(e.target.value));

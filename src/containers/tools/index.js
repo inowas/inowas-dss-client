@@ -1,4 +1,3 @@
-import T12 from './T12';
 import T13 from './T13';
 import T13A from './T13A';
 import T13B from './T13B';
@@ -14,7 +13,6 @@ import T16 from './T16';
 import T17 from './T17';
 import T18 from './T18';
 export default {
-    T12,
     T13,
     T13A,
     T13B,
