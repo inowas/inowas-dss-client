@@ -55,7 +55,7 @@ const navigation = [{
     icon: <Icon name="file"/>
 }];
 
-class T13C extends React.Component {
+class T13E extends React.Component {
 
     constructor(props) {
         super(props);
@@ -267,7 +267,7 @@ const actions = {
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T13C
+        toolInstance: state.T13E
     };
 };
 
@@ -287,7 +287,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return wrappedActions;
 };
 
-T13C.propTypes = {
+T13E.propTypes = {
     createToolInstance: PropTypes.func,
     getToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
@@ -298,4 +298,4 @@ T13C.propTypes = {
     updateToolInstanceStatus: PropTypes.object
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T13C));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T13E));
