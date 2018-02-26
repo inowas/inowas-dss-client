@@ -1,5 +1,4 @@
 import {put, select, take} from 'redux-saga/effects';
-import {sendCommand} from '../../actions/messageBox';
 import {Selector} from '../../dashboard';
 import {Action, Command, Event, Query} from '../actions/index';
 import {WebData} from '../../core';
@@ -9,8 +8,7 @@ export default function* cloneToolInstance() {
     while (true) {
         // eslint-disable-next-line no-shadow
         const action = yield take(action => WebData.Helpers.waitForAction(action, Command.CLONE_TOOL_INSTANCE));
-
-        yield put(sendCommand(action.type, action.payload));
+        yield put(WebData.Modifier.Action.sendCommand(action.type, action.payload));
 
         // eslint-disable-next-line no-constant-condition
         while (true) {

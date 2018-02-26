@@ -1,5 +1,4 @@
 import {call, put, select, take} from 'redux-saga/effects';
-import {buildRequest} from '../../actions/messageBox';
 import {Query} from '../../t03/actions/index';
 import {WebData} from '../../core';
 import {Action} from '../actions';
@@ -19,7 +18,7 @@ export default function* loadModflowPackage() {
         try {
             const packageData = yield call(
                 WebData.Helpers.fetchStatusWrapper,
-                buildRequest(`modflowmodels/${action.id}/packages/${action.packageId}`, 'GET'),
+                WebData.Modifier.Action.buildRequest(`modflowmodels/${action.id}/packages/${action.packageId}`, 'GET'),
                 apiKey
             );
 

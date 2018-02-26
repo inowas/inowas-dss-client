@@ -1,7 +1,6 @@
-import { put, take } from 'redux-saga/effects';
-import { sendCommand } from '../../actions/messageBox';
-import { Command, Event } from '../actions/index';
-import { WebData } from '../../core';
+import {put, take} from 'redux-saga/effects';
+import {Command, Event} from '../actions/index';
+import {WebData} from '../../core';
 
 export default function* updateScenarioAnalysisFlow() {
     // eslint-disable-next-line no-constant-condition
@@ -22,7 +21,7 @@ export default function* updateScenarioAnalysisFlow() {
             id: action.id
         };
 
-        yield put(sendCommand(action.type, data));
+        yield put(WebData.Modifier.Action.sendCommand(action.type, data));
 
         // eslint-disable-next-line no-constant-condition
         while (true) {

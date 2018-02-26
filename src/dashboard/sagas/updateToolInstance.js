@@ -1,6 +1,4 @@
 import {put, take} from 'redux-saga/effects';
-import {sendCommand} from '../../actions/messageBox';
-
 import {Command, Action, Event} from '../actions';
 import {WebData} from '../../core';
 
@@ -11,7 +9,7 @@ export default function* updateToolInstanceFlow() {
         const action = yield take(action => WebData.Helpers.waitForAction(action, Command.UPDATE_TOOL_INSTANCE));
 
         yield put(Action.setToolInstance(action.tool, action.payload));
-        yield put(sendCommand(action.type, {...action.payload, id: action.id}));
+        yield put(WebData.Modifier.Action.sendCommand(action.type, {...action.payload, id: action.id}));
 
         // eslint-disable-next-line no-constant-condition
         while (true) {

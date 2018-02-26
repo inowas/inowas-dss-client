@@ -1,5 +1,4 @@
 import {put, call, take, select} from 'redux-saga/effects';
-import {buildRequest} from '../../actions/messageBox';
 import {Query} from '../../t03/actions/index';
 import {getApiKey} from '../../user/reducers';
 import {WebData} from '../../core';
@@ -18,7 +17,7 @@ export default function* loadListfileFlow() {
         try {
             const data = yield call(
                 WebData.Helpers.fetchStatusWrapper,
-                buildRequest('calculations/' + action.id + '/file/list', 'GET'),
+                WebData.Modifier.Action.buildRequest('calculations/' + action.id + '/file/list', 'GET'),
                 apiKey
             );
 
