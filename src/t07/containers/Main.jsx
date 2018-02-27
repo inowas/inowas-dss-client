@@ -325,7 +325,7 @@ Main.propTypes = {
     params: PropTypes.object,
     models: PropTypes.array,
     updateScenarioAnalysis: PropTypes.func,
-    routes: PropTypes.object,
+    routes: PropTypes.array,
     scenarioAnalysis: PropTypes.object,
     scenarioModels: PropTypes.array
 };

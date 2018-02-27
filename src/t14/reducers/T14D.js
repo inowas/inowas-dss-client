@@ -60,12 +60,12 @@ export const getInitialState = (tool) => {
             order: 5,
             id: 'W',
             name: 'Width of stream , W (m)',
-            min: 1,
+            min: 100,
             validMin: function(x) {return x > 0;},
-            max: 10,
-            value: 2.5,
-            stepSize: 0.1,
-            decimals: 1
+            max: 1000,
+            value: 400,
+            stepSize: 1,
+            decimals: 0
         }, {
             order: 6,
             id: 'Kdash',
@@ -80,12 +80,12 @@ export const getInitialState = (tool) => {
             order: 7,
             id: 'bdash',
             name: 'Thickness of the semipervious layer, b\' (m)',
-            min: 1,
+            min: 100,
             validMin: function(x) {return x > 0;},
-            max: 10,
-            value: 1,
-            stepSize: 0.1,
-            decimals: 1
+            max: 10000,
+            value: 100,
+            stepSize: 1,
+            decimals: 0
         }]
     };
 };

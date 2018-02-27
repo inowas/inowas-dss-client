@@ -12,7 +12,7 @@ import {
     setSelectedTotalTimeIndex,
     setTimeSeriesPointSelection,
     toggleModelSelection
-} from '../../actions/T07';
+} from '../actions/actions';
 
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';

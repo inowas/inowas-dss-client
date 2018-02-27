@@ -13,7 +13,7 @@ import {
     setSelectedTotalTimeIndex,
     setupT07b,
     updateResultsT07B
-} from '../../actions/T07';
+} from '../actions/actions';
 
 import ArraySlider from '../../components/primitive/ArraySlider';
 import Chart from 'react-c3js';
@@ -85,9 +85,7 @@ class T07B extends Component {
     }
 
     componentWillMount() {
-        // eslint-disable-next-line no-shadow
-        const { fetchDetails } = this.props;
-        fetchDetails(this.props.params.id, dispatch => {
+        this.props.fetchDetails(this.props.params.id, dispatch => {
             dispatch(setupT07b());
         });
     }
@@ -306,15 +304,11 @@ class T07B extends Component {
     }
 
     setMapPosition = mapPosition => {
-        // eslint-disable-next-line no-shadow
-        const { setMapPosition } = this.props;
-        setMapPosition(mapPosition);
+        this.props.setMapPosition(mapPosition);
     };
 
     setActiveCoordinate = coordinate => {
-        // eslint-disable-next-line no-shadow
-        const { setActiveCoordinate } = this.props;
-        setActiveCoordinate(coordinate);
+        this.props.setActiveCoordinate(coordinate);
     };
 
     renderMap() {
