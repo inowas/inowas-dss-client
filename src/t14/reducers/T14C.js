@@ -8,9 +8,11 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'Qw',
-            name: 'Pumping rate, Q'+'w'.sub()+' [m'+'3'.sup()+'/d]',
+            name: 'Pumping rate, Q' + 'w'.sub() + ' [m' + '3'.sup() + '/d]',
             min: 1,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 1000,
             value: 150,
             stepSize: 1,
@@ -20,7 +22,9 @@ export const getInitialState = (tool) => {
             id: 't',
             name: 'Duration of pumping, t [d]',
             min: 100,
-            validMin: function(x) {return x > 1;},
+            validMin: function(x) {
+                return x > 1;
+            },
             max: 500,
             value: 365,
             stepSize: 1,
@@ -30,18 +34,24 @@ export const getInitialState = (tool) => {
             id: 'S',
             name: 'Aquifer storage coefficient, S [-]',
             min: 0.1,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 0.5,
-            validMax: function(x) {return x <= 1;},
+            validMax: function(x) {
+                return x <= 1;
+            },
             value: 0.2,
             stepSize: 0.001,
             decimals: 3
         }, {
             order: 3,
             id: 'T',
-            name: 'Aquifer transmisivity, T [m'+'2'.sup()+'/d]',
+            name: 'Aquifer transmisivity, T [m' + '2'.sup() + '/d]',
             min: 1000,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 3000,
             value: 1500,
             stepSize: 10,
@@ -51,7 +61,9 @@ export const getInitialState = (tool) => {
             id: 'd',
             name: 'Distance from stream to well, d [m]',
             min: 200,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 1000,
             value: 500,
             stepSize: 1,
@@ -61,7 +73,9 @@ export const getInitialState = (tool) => {
             id: 'W',
             name: 'Width of stream , W [m]',
             min: 1,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 10,
             value: 2.5,
             stepSize: 0.1,
@@ -71,7 +85,9 @@ export const getInitialState = (tool) => {
             id: 'Kdash',
             name: 'Permeability of the semipervious layer, K [m/d]',
             min: 0.1,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 1,
             value: 0.1,
             stepSize: 0.1,
@@ -81,7 +97,9 @@ export const getInitialState = (tool) => {
             id: 'bdash',
             name: 'Thickness of the semipervious layer, b [m]',
             min: 1,
-            validMin: function(x) {return x > 0;},
+            validMin: function(x) {
+                return x > 0;
+            },
             max: 10,
             value: 1,
             stepSize: 0.1,
