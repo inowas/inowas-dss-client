@@ -21,7 +21,6 @@
         "@turf/turf": "^5.0.4",
         "axios": "^0.15.3",
         "classnames": "^2.2.5",
-        "default-passive-events": "^1.0.7",
         "gwflowjs": "https://github.com/inowas/gwflowjs.git#master",
         "js-md5": "^0.6.0",
         "leaflet-control-geocoder": "^1.5.8",
