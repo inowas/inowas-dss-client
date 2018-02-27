@@ -1,31 +1,35 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import LayerSelect from './LayerSelect';
 import TotalTimesSlider from './TotalTimesSlider';
 import ConfiguredAxios from 'ConfiguredAxios';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import ScenarioAnalysisMap from './ScenarioAnalysisMap';
-import { Component as T03Component } from '../../t03';
-import { isEqual, find, pick } from 'lodash';
+import {Component as T03Component} from '../../t03';
+import {isEqual, find, pick} from 'lodash';
 import SelectModel from './SelectModel';
 import Icon from '../../components/primitive/Icon';
 
 class Difference extends Component {
-    state = {
-        selectedLayer: null,
-        selectedResultType: null,
-        selectedCoordinate: null,
-        mapPosition: null,
-        selectedTotalTimeIndex: 0,
-        modelLeft: null,
-        modelRight: null,
-        heatMapData: null,
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedLayer: null,
+            selectedResultType: null,
+            selectedCoordinate: null,
+            mapPosition: null,
+            selectedTotalTimeIndex: 0,
+            modelLeft: null,
+            modelRight: null,
+            heatMapData: null,
+        };
+    }
 
     componentDidMount() {
         // init values for LayerSelection as soon as layerScheme is available
-        const { scenarioAnalysis } = this.props;
-        const { selectedLayer, selectedResultType, mapPosition } = this.state;
+        const {scenarioAnalysis} = this.props;
+        const {selectedLayer, selectedResultType, mapPosition} = this.state;
         if (
             !selectedLayer &&
             scenarioAnalysis &&
@@ -61,7 +65,7 @@ class Difference extends Component {
 
     componentWillReceiveProps(nextProps) {
         // init values for LayerSelection as soon as layerScheme is available
-        const { selectedLayer, selectedResultType, mapPosition } = this.state;
+        const {selectedLayer, selectedResultType, mapPosition} = this.state;
         if (
             !selectedLayer &&
             nextProps.scenarioAnalysis &&
@@ -96,8 +100,8 @@ class Difference extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (!isEqual(
-                pick(prevState, ['selectedLayer', 'selectedResultType', 'selectedCoordinate', 'selectedTotalTimeIndex', 'modelLeft', 'modelRight', ]),
-                pick(this.state, ['selectedLayer', 'selectedResultType', 'selectedCoordinate', 'selectedTotalTimeIndex', 'modelLeft', 'modelRight', ])
+                pick(prevState, ['selectedLayer', 'selectedResultType', 'selectedCoordinate', 'selectedTotalTimeIndex', 'modelLeft', 'modelRight']),
+                pick(this.state, ['selectedLayer', 'selectedResultType', 'selectedCoordinate', 'selectedTotalTimeIndex', 'modelLeft', 'modelRight'])
             )
         ) {
             this.fetchCalculationResults();
@@ -105,7 +109,7 @@ class Difference extends Component {
     }
 
     fetchCalculationResults = () => {
-        const { scenarioModels, scenarioAnalysis, apiKey } = this.props;
+        const {scenarioModels, scenarioAnalysis, apiKey} = this.props;
         const {
             selectedLayer,
             selectedResultType,
@@ -122,14 +126,14 @@ class Difference extends Component {
             scenarioAnalysis.totalTimes &&
             scenarioModels !== null
         ) {
-            const time = scenarioAnalysis.totalTimes.total_times[ selectedTotalTimeIndex ];
+            const time = scenarioAnalysis.totalTimes.total_times[selectedTotalTimeIndex];
 
             if (time === undefined) {
                 return null;
             }
 
-            const leftModelCalculation = find( scenarioModels, { id: modelLeft } );
-            const rightModelCalculation = find( scenarioModels, { id: modelRight } );
+            const leftModelCalculation = find(scenarioModels, {id: modelLeft});
+            const rightModelCalculation = find(scenarioModels, {id: modelRight});
 
             if (!leftModelCalculation || !rightModelCalculation) {
                 return null;
@@ -141,20 +145,18 @@ class Difference extends Component {
                     headers: {
                         'X-AUTH-TOKEN': apiKey
                     },
-                } )
-                .then( result => {
-                    this.setState( prevState => ({
-                            ...prevState,
-                            heatMapData: result.data
-                        })
-                    );
-                } )
-                .catch( error => {
+                })
+                .then(result => {
+                    this.setState(prevState => ({...prevState, heatMapData: result.data}));
+                })
+                .catch(error => {
                     // eslint-disable-next-line no-console
-                    console.error( error );
+                    console.error(error);
                     // TODO user friendly error handling
-                } );
+                });
         }
+
+        return null;
     };
 
     onModelChange = property => value => {
@@ -190,7 +192,7 @@ class Difference extends Component {
     };
 
     renderMaps() {
-        const { scenarioAnalysis } = this.props;
+        const {scenarioAnalysis} = this.props;
         const {
             mapPosition,
             selectedCoordinate,
@@ -198,13 +200,14 @@ class Difference extends Component {
             heatMapData,
         } = this.state;
 
-        let xDifference = null;
+        let xCrossSection = null;
         if (selectedCoordinate) {
             const selectedGridCell = scenarioAnalysis.grid.coordinateToGridCell(
                 selectedCoordinate
             );
+
             if (selectedGridCell) {
-                xDifference = scenarioAnalysis.grid.gridCellToXCrossectionBoundingBox(
+                xCrossSection = scenarioAnalysis.grid.gridCellToXCrossectionBoundingBox(
                     selectedGridCell
                 );
             }
@@ -216,23 +219,23 @@ class Difference extends Component {
         let max = null;
 
         if (heatMapData) {
-            heatMapData.forEach( row => {
-                row.forEach( value => {
+            heatMapData.forEach(row => {
+                row.forEach(value => {
                     min = min > value ? value : min;
                     max = max < value ? value : max;
-                } );
-            } );
+                });
+            });
         }
 
-        const mapData = new ScenarioAnalysisMapData( {
+        const mapData = new ScenarioAnalysisMapData({
             area: scenarioAnalysis.area,
             grid: scenarioAnalysis.grid,
             type: selectedResultType,
-            xDifference,
+            xCrossSection: xCrossSection,
             heatMapData: heatMapData,
             globalMin: min,
             globalMax: max
-        } );
+        });
 
         return (
             <section
@@ -286,7 +289,7 @@ class Difference extends Component {
                                 <SelectModel
                                     label={null}
                                     value={modelLeft}
-                                    handleSelectChange={this.onModelChange( 'modelLeft' )}
+                                    handleSelectChange={this.onModelChange('modelLeft')}
                                     models={scenarioModels}
                                 />
                             </div>
@@ -297,7 +300,7 @@ class Difference extends Component {
                                 <SelectModel
                                     label={null}
                                     value={modelRight}
-                                    handleSelectChange={this.onModelChange( 'modelRight' )}
+                                    handleSelectChange={this.onModelChange('modelRight')}
                                     models={scenarioModels}
                                 />
                             </div>

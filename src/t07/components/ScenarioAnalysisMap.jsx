@@ -1,5 +1,7 @@
 import '../../less/leaflet.less';
 import '../../less/crossSectionMap.less';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
     CircleMarker,
@@ -10,7 +12,6 @@ import {
     Rectangle,
     TileLayer
 } from 'react-leaflet';
-import React, { Component, PropTypes } from 'react';
 
 import Button from '../../components/primitive/Button';
 import CanvasHeatMapOverlay from '../../core/leafletCanvasHeatMapOverlay/ReactLeafletHeatMapCanvasOverlay';
@@ -20,10 +21,10 @@ import Coordinate from '../../model/Coordinate';
 import Icon from '../../components/primitive/Icon';
 import Rainbow from 'rainbowvis.js';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
-import { sortBy } from 'lodash';
+import {sortBy} from 'lodash';
 import styleGlobals from 'styleGlobals';
-import { RainbowVis } from '../../core';
-import { Selector } from '../../t03';
+import {RainbowVis} from '../../core';
+import {Selector} from '../../t03';
 
 const RadiumMap = ConfiguredRadium(Map);
 
@@ -75,7 +76,7 @@ const styles = {
             fillColor: 'blue',
             fillOpacity: 0.1
         },
-        hasNoWell: { color: '#000', weight: 0, fillOpacity: 0 },
+        hasNoWell: {color: '#000', weight: 0, fillOpacity: 0},
         hasWell: {
             color: 'blue',
             weight: 1,
@@ -93,7 +94,7 @@ const styles = {
 
 // a factory is needed, so we always get a new Instance
 // we need a new Instance every time the number range changes because ReactLeafletHeatMapCanvasOverlay must update
-function rainbowFactory(numberRange = { min: -50, max: 50 }) {
+function rainbowFactory(numberRange = {min: -50, max: 50}) {
     const rainbow = new Rainbow();
     rainbow.setSpectrum(
         '#800080',
@@ -110,14 +111,7 @@ function rainbowFactory(numberRange = { min: -50, max: 50 }) {
 }
 
 @ConfiguredRadium
-export default class ScenarioAnalysisMap extends Component {
-    static propTypes = {
-        mapData: PropTypes.instanceOf(ScenarioAnalysisMapData).isRequired,
-        setMapPosition: PropTypes.func,
-        mapPosition: PropTypes.object,
-        clickCoordinate: PropTypes.func.isRequired
-    };
-
+class ScenarioAnalysisMap extends React.Component {
     constructor(props) {
         super(props);
 
@@ -204,11 +198,7 @@ export default class ScenarioAnalysisMap extends Component {
     handleMove = e => {
         const zoom = e.target.getZoom();
         const center = e.target.getCenter();
-
-        this.props.setMapPosition({
-            center,
-            zoom
-        });
+        this.props.setMapPosition({center, zoom});
     };
 
     resetView = () => {
@@ -227,13 +217,13 @@ export default class ScenarioAnalysisMap extends Component {
     };
 
     renderHeatMap() {
-        const { rainbow, heatMapData } = this.state;
-        const { mapData } = this.props;
+        const {rainbow, heatMapData} = this.state;
+        const {mapData} = this.props;
         if (!rainbow || !heatMapData || !mapData) {
             return null;
         }
 
-        const { boundingBox, grid } = mapData;
+        const {boundingBox, grid} = mapData;
         if (!boundingBox || !grid) {
             return null;
         }
@@ -253,7 +243,7 @@ export default class ScenarioAnalysisMap extends Component {
     }
 
     renderLegend() {
-        const { rainbow, heatMapData } = this.state;
+        const {rainbow, heatMapData} = this.state;
 
         if (!rainbow || !heatMapData) {
             return null;
@@ -275,7 +265,7 @@ export default class ScenarioAnalysisMap extends Component {
             value: Number(lastGradient.getMinNum()).toFixed(2)
         });
 
-        return <ColorLegend legend={legend} />;
+        return <ColorLegend legend={legend}/>;
     }
 
     renderBoundaries() {
@@ -338,7 +328,7 @@ export default class ScenarioAnalysisMap extends Component {
         const area = this.props.mapData.area;
         return (
             <LayersControl.Overlay name="Area" checked>
-                <GeoJSON data={area} style={styles.mapElements.area} />
+                <GeoJSON data={area} style={styles.mapElements.area}/>
             </LayersControl.Overlay>
         );
     }
@@ -399,7 +389,7 @@ export default class ScenarioAnalysisMap extends Component {
     };
 
     render() {
-        const { mapPosition } = this.props;
+        const {mapPosition} = this.props;
 
         return (
             <div style={[styles.wrapper]}>
@@ -409,7 +399,7 @@ export default class ScenarioAnalysisMap extends Component {
                     {...mapPosition}
                     onClick={this.clickOnMap}
                     zoomControl={false}
-                    onMoveEnd={this.handleMove}
+                    onMouseUp={this.handleMove}
                     ref={map => {
                         this.map = map;
                     }}
@@ -433,10 +423,19 @@ export default class ScenarioAnalysisMap extends Component {
                     style={[styles.resetViewButton]}
                     onClick={this.resetView}
                     iconInside
-                    icon={<Icon name="marker" />}
+                    icon={<Icon name="marker"/>}
                 />
                 {this.renderLegend()}
             </div>
         );
     }
 }
+
+ScenarioAnalysisMap.propTypes = {
+    mapData: PropTypes.instanceOf(ScenarioAnalysisMapData),
+    setMapPosition: PropTypes.func,
+    mapPosition: PropTypes.object,
+    clickCoordinate: PropTypes.func.isRequired
+};
+
+export default ScenarioAnalysisMap;

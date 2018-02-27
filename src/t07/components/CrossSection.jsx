@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -8,32 +8,27 @@ import TotalTimesSlider from './TotalTimesSlider';
 import ConfiguredAxios from 'ConfiguredAxios';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import ScenarioAnalysisMap from './ScenarioAnalysisMap';
-import { Component as T03Component } from '../../t03';
-import { isEqual } from 'lodash';
+import {Component as T03Component} from '../../t03';
+import {isEqual} from 'lodash';
 
-class CrossSection extends Component {
-    static propTypes = {
-        scenarioAnalysis: PropTypes.object,
-        scenarioModels: PropTypes.array,
-        cloneScenario: PropTypes.func,
-        deleteScenario: PropTypes.func,
-        toggleScenarioSelection: PropTypes.func,
-        apiKey: PropTypes.string
-    };
+class CrossSection extends React.Component {
 
-    state = {
-        selectedLayer: null,
-        selectedResultType: null,
-        selectedCoordinate: null,
-        mapPosition: null,
-        selectedTotalTimeIndex: 0,
-        calculations: {}
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedLayer: null,
+            selectedResultType: null,
+            selectedCoordinate: null,
+            mapPosition: null,
+            selectedTotalTimeIndex: 0,
+            calculations: {}
+        };
+    }
 
     componentDidMount() {
         // init values for LayerSelection as soon as layerScheme is available
-        const { scenarioAnalysis } = this.props;
-        const { selectedLayer, selectedResultType, mapPosition } = this.state;
+        const {scenarioAnalysis} = this.props;
+        const {selectedLayer, selectedResultType, mapPosition} = this.state;
         if (
             !selectedLayer &&
             scenarioAnalysis &&
@@ -69,7 +64,7 @@ class CrossSection extends Component {
 
     componentWillReceiveProps(nextProps) {
         // init values for LayerSelection as soon as layerScheme is available
-        const { selectedLayer, selectedResultType, mapPosition } = this.state;
+        const {selectedLayer, selectedResultType, mapPosition} = this.state;
         if (
             !selectedLayer &&
             nextProps.scenarioAnalysis &&
@@ -103,13 +98,13 @@ class CrossSection extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (!isEqual( prevState, this.state )) {
+        if (!isEqual(prevState, this.state)) {
             this.fetchCalculationResults();
         }
     }
 
     fetchCalculationResults = () => {
-        const { scenarioModels, scenarioAnalysis, apiKey } = this.props;
+        const {scenarioModels, scenarioAnalysis, apiKey} = this.props;
         const {
             selectedLayer,
             selectedResultType,
@@ -123,7 +118,7 @@ class CrossSection extends Component {
             scenarioAnalysis.totalTimes &&
             scenarioModels !== null
         ) {
-            const time = scenarioAnalysis.totalTimes.total_times[ selectedTotalTimeIndex ];
+            const time = scenarioAnalysis.totalTimes.total_times[selectedTotalTimeIndex];
 
             if (time === undefined) {
                 return null;
@@ -141,7 +136,7 @@ class CrossSection extends Component {
                                     },
                                     params: {
                                         calculationId:
-                                            scenarioModel.calculationId
+                                        scenarioModel.calculationId
                                     }
                                 }
                             );
@@ -158,7 +153,7 @@ class CrossSection extends Component {
                             calculations: {
                                 ...prevState.calculations,
                                 [result.config.params.calculationId]:
-                                    result.data
+                                result.data
                             }
                         }));
                     });
@@ -197,7 +192,7 @@ class CrossSection extends Component {
     };
 
     renderMaps() {
-        const { scenarioModels, scenarioAnalysis } = this.props;
+        const {scenarioModels, scenarioAnalysis} = this.props;
         const {
             mapPosition,
             selectedCoordinate,
