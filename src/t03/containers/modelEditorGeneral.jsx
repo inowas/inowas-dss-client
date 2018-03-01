@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Query, Command, Routing} from '../actions/index';
+import {Query, Command} from '../actions/index';
 import {model as modelSelector, general} from '../selectors/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import {browserHistory, withRouter} from 'react-router';
-import {
-    getErrorMessage,
-    hasError,
-    isLoading
-} from '../../core/webData/selectors/webData';
+import {withRouter} from 'react-router';
+import {getErrorMessage, hasError, isLoading} from '../../core/webData/selectors/webData';
 import {WebData, LayoutComponents} from '../../core';
 import uuid from 'uuid';
 import {GeneralMap} from '../components';
@@ -21,7 +17,7 @@ import Select from '../../components/primitive/Select';
 import TimeUnit from '../../model/TimeUnit';
 import LengthUnit from '../../model/LengthUnit';
 import {handleUpdateBoundingBox} from '../reducers/boundary';
-import {calculateActiveCells} from "../../core/geospatial";
+import {calculateActiveCells, getGridCellSizeInMeters} from '../../core/geospatial';
 
 const styles = {
     columnContainer: {
@@ -140,19 +136,12 @@ class ModelEditorGeneral extends Component {
         };
     }
 
-    editAreaOnMap = () => {
-        browserHistory.push(this.props.location.pathname + '#edit');
-    };
-
-    createAreaOnMap = () => {
-        Routing.createArea(this.props.routes, this.props.params)();
-    };
-
     handleAreaUpdate = (geometry, bounds) => {
         const boundingBox = handleUpdateBoundingBox(this.state.bounding_box, bounds);
         const gridSize = this.state.model.grid_size;
         this.setState({
-            model: {...this.state.model,
+            model: {
+                ...this.state.model,
                 geometry,
                 bounding_box: boundingBox,
                 active_cells: calculateActiveCells(geometry, boundingBox, gridSize)
@@ -240,13 +229,11 @@ class ModelEditorGeneral extends Component {
                             />
                         </LayoutComponents.InputGroup>
 
-                        <LayoutComponents.InputGroup label="Time Unit">
+                        <LayoutComponents.InputGroup label="Units">
                             <Select
                                 disabled
                                 value={String(stateModel.time_unit)}
-                                onChange={this.handleInputChangeModflow(
-                                    'time_unit'
-                                )}
+                                onChange={this.handleInputChangeModflow('time_unit')}
                                 options={lodash.map(
                                     TimeUnit.numberCodes,
                                     (value, key) => ({
@@ -255,9 +242,7 @@ class ModelEditorGeneral extends Component {
                                     })
                                 )}
                             />
-                        </LayoutComponents.InputGroup>
 
-                        <LayoutComponents.InputGroup label="Length Unit">
                             <Select
                                 disabled
                                 value={String(stateModel.length_unit)}
@@ -274,7 +259,7 @@ class ModelEditorGeneral extends Component {
                             />
                         </LayoutComponents.InputGroup>
 
-                        <LayoutComponents.InputGroup label="Grid Resolution">
+                        <LayoutComponents.InputGroup label="Grid Resolution (X/Y)">
                             <Input
                                 disabled={!!id || readOnly || readOnlyScenario}
                                 type="number"
@@ -300,6 +285,19 @@ class ModelEditorGeneral extends Component {
                                     'grid_size'
                                 )}
                                 placeholder="Y="
+                            />
+                        </LayoutComponents.InputGroup>
+
+                        <LayoutComponents.InputGroup label="Cell Size  (dX/dY)">
+                            <Input
+                                disabled
+                                type="text"
+                                value={getGridCellSizeInMeters(stateModel.bounding_box, stateModel.grid_size).x + 'm'}
+                            />
+                            <Input
+                                disabled
+                                type="text"
+                                value={getGridCellSizeInMeters(stateModel.bounding_box, stateModel.grid_size).y + 'm'}
                             />
                         </LayoutComponents.InputGroup>
 
@@ -363,7 +361,8 @@ class ModelEditorGeneral extends Component {
                     heading="Model Area"
                     style={[styles.expandVerticalContainer]}
                 >
-                    <GeneralMap style={styles.expandVertical} model={model} readOnly={readOnly} onAreaUpdate={this.handleAreaUpdate}/>
+                    <GeneralMap style={styles.expandVertical} model={model} readOnly={readOnly}
+                                onAreaUpdate={this.handleAreaUpdate}/>
                     <div style={[styles.saveButtonWrapper]}>
                         <WebData.Component.Loading
                             status={
