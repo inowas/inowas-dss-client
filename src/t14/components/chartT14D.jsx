@@ -13,9 +13,9 @@ import {
     CartesianGrid
 } from 'recharts';
 
-const Chart = ({Qw, t, S, T, d, W, Kdash, bdash}) => {
+const Chart = ({Qw, t, S, T, d, W, Kdash, Bdashdash, Sy, bdash}) => {
     const lambda = Kdash * W / bdash;
-    const data = calculateDiagramData(Qw, S, T, d, 0, t, lambda, 1);
+    const data = calculateDiagramData(Qw, S, T, d, 0, t, lambda, 1, Kdash, Bdashdash, Sy);
     const dQ = data[data.length - 1].dQ;
 
     return (
@@ -34,7 +34,8 @@ const Chart = ({Qw, t, S, T, d, W, Kdash, bdash}) => {
                                 <XAxis label="T (d)" type="number" dataKey="t"/>
                                 <YAxis label="dQ (m³/d)" type="number" domain={[0, 'auto']}/>
                                 <CartesianGrid strokeDasharray="3 3"/>
-                                <Line isAnimationActive={false} type="basis" dataKey={'dQ'} stroke="#4C4C4C" strokeWidth="5" dot={false}/>
+                                <Line isAnimationActive={false} type="basis" dataKey={'dQ'} stroke="#4C4C4C"
+                                      strokeWidth="5" dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-labels-bottom-right">
@@ -59,6 +60,8 @@ Chart.propTypes = {
     d: PropTypes.number.isRequired,
     W: PropTypes.number.isRequired,
     Kdash: PropTypes.number.isRequired,
+    Bdashdash: PropTypes.number.isRequired,
+    Sy: PropTypes.number.isRequired,
     bdash: PropTypes.number.isRequired,
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {lineString} from '@turf/helpers';
-import {booleanCrosses, booleanContains, booleanOverlap, envelope} from '@turf/turf';
+import {booleanCrosses, booleanContains, booleanOverlap, envelope, point, distance} from '@turf/turf';
 import {floor, min, max, uniqueId} from 'lodash';
 import {closest as leafletClosest} from 'leaflet-geometryutil';
 import {Circle, FeatureGroup, Polygon, Polyline, TileLayer} from 'react-leaflet';
@@ -15,6 +15,41 @@ export const getMinMaxFromBoundingBox = boundingBox => {
 
     return {
         xMin, xMax, yMin, yMax
+    };
+};
+
+export const getBoundingBoxSizeInMeters = boundingBox => {
+    const {xMin, xMax, yMin, yMax} = getMinMaxFromBoundingBox(boundingBox);
+    const options = {units: 'kilometers'};
+    const distanceX = distance(point([xMin, yMin]), point([xMax, yMin]), options);
+    const distanceY = distance(point([xMin, yMin]), point([xMin, yMax]), options);
+
+    return {
+        x: Math.round(distanceX * 1000),
+        y: Math.round(distanceY * 1000),
+    };
+};
+
+export const getGridCellSizeInMeters = (boundingBox, gridSize) => {
+    if (!boundingBox || !gridSize) {
+        return {
+            x: 0,
+            y: 0,
+        };
+    }
+
+    const {xMin, xMax, yMin, yMax} = getMinMaxFromBoundingBox(boundingBox);
+    const {n_x, n_y} = gridSize;
+
+
+    const options = {units: 'kilometers'};
+    const distanceX = distance(point([xMin, yMin]), point([xMax, yMin]), options);
+    const distanceY = distance(point([xMin, yMin]), point([xMin, yMax]), options);
+
+
+    return {
+        x: Math.round(distanceX / n_x * 1000),
+        y: Math.round(distanceY / n_y * 1000),
     };
 };
 
