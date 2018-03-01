@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 
-const summation = ({f, lower, upper}) => {
+const summation = (f, lower, upper) => {
     let result = 0;
     for (let n = lower; n <= upper; n++) {
         result += f(n);
     }
+
     return result;
 };
 
