@@ -1,25 +1,47 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {calculateTravelTimeT13B, calculateXwd} from '../calculations';
+import {SETTINGS_SELECTED_H0, SETTINGS_SELECTED_HL, SETTINGS_SELECTED_NOTHING} from '../reducers/T13B';
 
-export  function calculateXwd(L, K, w, hL, h0) {
-    return (L/2+K*(hL*hL-h0*h0)/(2*w*L));
-}
-
+// eslint-disable-next-line react/no-multi-comp
 const Info = ({W, K, L, hL, h0, ne, xi, xe, settings}) => {
-    const xwd = calculateXwd(L, K, W, hL, h0).toFixed(1);
-    return (
-        <div className="padding-30">
-            <h2>
-                SELECT FLOW DOMAIN
-            </h2>
 
+    if (settings === SETTINGS_SELECTED_NOTHING) {
+        return null;
+    }
+
+    const xwd = calculateXwd(L, K, W, hL, h0).toFixed(1);
+
+    let t = 0;
+    if (settings === SETTINGS_SELECTED_H0) {
+        t = calculateTravelTimeT13B(xe, W, K, ne, (xwd * 1), h0, xi);
+    }
+    if (settings === SETTINGS_SELECTED_HL) {
+        t = calculateTravelTimeT13B(xe, W, K, ne, (L - xwd), hL, xi);
+    }
+
+    return (
+        <div style={{paddingLeft: 30, paddingRight: 30}}>
             <div className="center-vertical center-horizontal">
                 <p>
-                    The regional system is divided into the two subdomains on either side of the water divide.
-                    The water divide is located at <strong>{xwd}m</strong>.
+                    The travel time between initial position and arrival location
+                    is <strong>{t.toFixed(1)} days</strong>.
                 </p>
             </div>
         </div>
-    )
+    );
 };
 
-export default Info
+Info.propTypes = {
+    W: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
+    L: PropTypes.number.isRequired,
+    hL: PropTypes.number.isRequired,
+    h0: PropTypes.number.isRequired,
+    ne: PropTypes.number.isRequired,
+    xi: PropTypes.number.isRequired,
+    xe: PropTypes.number.isRequired,
+    settings: PropTypes.object.isRequired
+};
+
+export default Info;

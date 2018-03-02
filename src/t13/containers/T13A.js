@@ -8,7 +8,7 @@ import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
 import image from '../images/T13A.png';
 
-import {Background, ChartT13A as Chart, Parameters} from '../components';
+import {Background, InfoT13A as Info, ChartT13A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -234,7 +234,9 @@ class T13A extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
+                        <section className="tile col col-abs-2 stacked">
+                            <Info {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}

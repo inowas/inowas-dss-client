@@ -8,7 +8,7 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'Qw',
-            name: 'Constant pumped flow rate, Qw [m3/d]',
+            name: 'Constant pumped flow rate, Q<sub>w [m3/d]',
             min: 0,
             max: 10000,
             value: 1300,
@@ -26,7 +26,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 2,
             id: 'hL',
-            name: 'Downstream head, hL [m]',
+            name: 'Downstream head, h<sub>L</sub> [m]',
             min: 0,
             max: 20,
             value: 6,
@@ -35,7 +35,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 3,
             id: 'h0',
-            name: 'Upstream head, h0 [m]',
+            name: 'Upstream head, h<sub>0</sub> [m]',
             min: 0,
             max: 20,
             value: 10,
@@ -44,7 +44,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 4,
             id: 'xi',
-            name: 'Initial position, xi [m]',
+            name: 'Initial position, x<sub>i</sub> [m]',
             min: 0,
             max: 1000,
             value: 303,

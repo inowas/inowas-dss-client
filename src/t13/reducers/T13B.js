@@ -29,16 +29,16 @@ export const getInitialState = (tool) => {
             order: 1,
             id: 'K',
             name: 'Hydraulic conductivity, K [m/d]',
-            min: 10e-2,
-            max: 10e2,
+            min: 0.1,
+            max: 1000,
             value: 30.2,
-            stepSize: 10,
-            decimals: 2,
+            stepSize: 0.1,
+            decimals: 1,
             disable: false
         }, {
             order: 2,
             id: 'L',
-            name: 'Aquifer length, L´ [m]',
+            name: 'Aquifer length, L [m]',
             min: 0,
             max: 1000,
             value: 1000,
@@ -48,7 +48,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 3,
             id: 'hL',
-            name: 'Downstream head, hL´ [m]',
+            name: 'Downstream head, h<sub>L</sub> [m]',
             min: 0,
             max: 10,
             value: 2,
@@ -58,7 +58,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 4,
             id: 'h0',
-            name: 'Upstream head, h₀ [m]',
+            name: 'Upstream head, h<sub>e</sub> [m]',
             min: 0,
             max: 10,
             value: 5,
@@ -78,7 +78,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 6,
             id: 'xi',
-            name: 'Initial position, xᵢ [m]',
+            name: 'Initial position, x<sub>i</sub> [m]',
             min: 0,
             max: 1000,
             value: 50,
@@ -88,11 +88,11 @@ export const getInitialState = (tool) => {
         }, {
             order: 7,
             id: 'xe',
-            name: 'Arrival location, xₑ [m]',
+            name: 'Arrival location, x<sub>e</sub> [m]',
             min: 1,
             max: 1000,
             value: 200,
-            stepSize: 10,
+            stepSize: 1,
             decimals: 0,
             disable: false
         }]
