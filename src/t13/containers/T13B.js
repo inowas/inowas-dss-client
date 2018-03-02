@@ -157,7 +157,7 @@ class T13B extends React.Component {
     };
 
     render() {
-        const {settings,parameters, name, description} = this.state;
+        const {settings, parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
@@ -166,13 +166,13 @@ class T13B extends React.Component {
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['settings'] =settings.selected;
+        chartParams.settings = settings.selected;
 
         const infoParams = {};
         each(parameters, v => {
             infoParams[v.id] = v.value;
         });
-        infoParams['settings'] =settings.selected;
+        infoParams.settings = settings.selected;
 
         const heading = (
             <div className="grid-container">
@@ -247,8 +247,8 @@ class T13B extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
+                            <Settings value={settings.selected} handleChange={this.handleChange} {...chartParams}/>
                             <Info {...infoParams}/>
-                            <Settings value={settings.selected} handleChange={this.handleChange}/>
                         </section>
 
                     <section className="tile col col-abs-3 stretch">

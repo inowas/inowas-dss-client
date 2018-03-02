@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 
 import image from '../images/T14C.png';
-import {Background, ChartT14C as Chart, Parameters} from '../components';
+import {Background, ChartT14C as Chart, InfoT14C as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -238,13 +238,15 @@ class T14C extends React.Component {
                             <Background image={image}/>
                         </section>
 
-                        <section className="tile col col-abs-3 stretch" >
+                        <section className="tile col col-abs-3 stretch">
                             <Chart {...chartParams}/>
                         </section>
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2" />
+                        <section className="tile col col-abs-2">
+                            <Info {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}

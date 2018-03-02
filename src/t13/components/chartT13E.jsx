@@ -13,29 +13,25 @@ import {
     CartesianGrid
 } from 'recharts';
 
-// TODO: implement this eq in library
+import {calculateTravelTimeT13E} from '../calculations';
 
 export function calculateDiagramData(Qw, ne, hL, h0, x, xi) {
-    function calcT(x) {
-        return ((0.95 * h0 + 0.05 * hL) * Math.PI * (xi ** 2 - x ** 2) * ne / Qw);
-    }
-
     const data = [];
     for (let i = x; i <= xi; i += 10) {
         data.push({
-            x: -i,
-            t: calcT(i)
+            x: i,
+            t: calculateTravelTimeT13E(i, h0, hL, x, ne, Qw)
         });
     }
     return data;
 }
 
-export function resultDiv(data) {
+export function resultDiv(t) {
     return (
         <div className="diagram-labels-left">
             <div className="diagram-label">
                 <p>
-                    t&nbsp;=&nbsp;<strong>{(data[0].t / 365).toFixed(2)}</strong>&nbsp;y
+                    t&nbsp;=&nbsp;<strong>{t.toFixed(1)}</strong>&nbsp;days
                 </p>
             </div>
         </div>
@@ -46,6 +42,7 @@ export function resultDiv(data) {
 const Chart = ({Qw, ne, hL, h0, xi, x}) => {
     const yDomain = [0, 'auto'];
     const data = calculateDiagramData(Qw, ne, hL, h0, x, xi);
+    const tMax = calculateTravelTimeT13E(xi, h0, hL, x, ne, Qw);
     return (
         <div>
             <h2>Calculation</h2>
@@ -70,9 +67,7 @@ const Chart = ({Qw, ne, hL, h0, xi, x}) => {
                                        allowDecimals={false}
                                        tickLine={false}
                                        orientation={'right'}
-                                       tickFormatter={(x) => {
-                                           return x.toFixed(0);
-                                       }}
+                                       tickFormatter={(t) => t.toFixed(0)}
                                 />
                                 <CartesianGrid strokeDasharray="3 3"/>
                                 <Line
@@ -89,7 +84,7 @@ const Chart = ({Qw, ne, hL, h0, xi, x}) => {
                         <div className="diagram-ylabels-right">
                             <p>t (d)</p>
                         </div>
-                        {resultDiv(data)}
+                        {resultDiv(tMax)}
                         <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
                 </div>

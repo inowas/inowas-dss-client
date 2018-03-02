@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 
 import image from '../images/T13E.png';
-import {Background, ChartT13E as Chart, Parameters} from '../components';
+import {Background, ChartT13E as Chart, InfoT13E as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -167,11 +167,6 @@ class T13E extends React.Component {
             chartParams[v.id] = v.value;
         });
 
-        const infoParams = {};
-        each(parameters, v => {
-            infoParams[v.id] = v.value;
-        });
-
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -244,7 +239,9 @@ class T13E extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2"/>
+                        <section className="tile col col-abs-2">
+                            <Info {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}

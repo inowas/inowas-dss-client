@@ -56,7 +56,9 @@ const GTerm = (K, B, S, Sy, alpha, t) => {
     );
 };
 
-const calcDQ = (d, S, T, t, lambda, Kdash, Bdashdash, Sy, Qw) => {
+export const calcDQ = (d, S, T, t, lambda, Kdash, Bdashdash, Sy, Qw) => {
+    return 1.0;
+
     const erfc1 = erfc(Math.sqrt((d * d * S) / (4 * T * t)));
     const exp1 = Math.exp((lambda * lambda * t / (4 * S * T)) + lambda * d / (2 * T));
     const erfc2 = erfc(Math.sqrt((lambda * lambda * t / (4 * S * T))) + Math.sqrt((d * d * S) / (4 * T * t)));
