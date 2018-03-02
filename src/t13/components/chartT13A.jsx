@@ -96,9 +96,7 @@ const Chart = ({W, K, ne, L, hL, xi, xe}) => {
                                       strokeWidth="5" dot={false} fillOpacity={1}/>
                             </LineChart>
                         </ResponsiveContainer>
-                        <div className="diagram-ylabels">
-                            <p>t (d)</p>
-                        </div>
+                        <div className="diagram-ylabels"><p>t (d)</p></div>
                         {resultDiv(xe, xi, L, data)}
                         <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
