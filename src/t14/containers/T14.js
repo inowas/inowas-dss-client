@@ -63,7 +63,7 @@ class T14 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14D')}  className="tile col col-rel-1-t13">
+{/*                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14D')}  className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T14D</h1>
                             <p className="p-height">
@@ -73,7 +73,7 @@ class T14 extends React.Component {
                                 <img className="sketch-image" src={image14D}/>
                             </div>
                         </div>
-                    </a>
+                    </a>*/}
                 </div>
             </div>
         );

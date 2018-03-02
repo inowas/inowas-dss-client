@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
-import {calculateDiagramData} from '../calculations/calculationT14B';
+import {calculateDiagramData, calcDQ} from '../calculations/calculationT14B';
 
 import '../../less/toolDiagram.less';
 
@@ -17,7 +17,7 @@ import {
 const Chart = ({Qw, t, S, T, d, K, Kdash, bdash}) => {
     const L = K * bdash / Kdash;
     const data = calculateDiagramData(Qw, S, T, d, 0, t, L, 1);
-    const dQ = data[data.length - 1].dQ;
+    const dQ = calcDQ(d, S, T, t, L, Qw);
 
     return (
         <div>
