@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {calcLambda, calcMu, calculateQCrit, calcXt} from '../calculations/calculationT09D';
 
-const renderInfo = (qCrit, Q, xT, xw) => {
-    if (xT >= xw) {
+const renderInfo = (qCrit, Q, xT) => {
+    if (Q >= qCrit) {
         return (
             <div className="center-vertical center-horizontal" style={{padding: '0px 20px'}}>
                 <p>
@@ -31,6 +31,7 @@ const renderInfo = (qCrit, Q, xT, xw) => {
     );
 };
 
+// eslint-disable-next-line react/no-multi-comp
 const settings = ({value, handleChange, k, b, q, Q, xw, rhof, rhos, AqType}) => {
     const lambda = calcLambda(k, b, q, xw, rhof, rhos, AqType);
     const mu = calcMu(lambda);
@@ -72,8 +73,7 @@ const settings = ({value, handleChange, k, b, q, Q, xw, rhof, rhos, AqType}) => 
             </div>
 
             <h2>Info</h2>
-            {renderInfo(qCrit, Q, xT,xw)}
-
+            {renderInfo(qCrit, Q, xT, xw)}
         </div>
     );
 };

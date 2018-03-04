@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 import PropTypes from 'prop-types';
 import React from 'react';
-import * as mapHelpers from '../../calculations/map';
+import * as mapHelpers from '../../core/geospatial';
 import {GeoJSON, Map, Rectangle} from 'react-leaflet';
 import ConfiguredRadium from 'ConfiguredRadium';
 import {geoJson, geoJSON} from 'leaflet';

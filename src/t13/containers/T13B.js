@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
-import image from '../../images/tools/T13B.png';
+import image from '../images/T13B.png';
 
 import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, ParametersT13B as Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
@@ -16,7 +16,7 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T13B';
@@ -157,7 +157,7 @@ class T13B extends React.Component {
     };
 
     render() {
-        const {settings,parameters, name, description} = this.state;
+        const {settings, parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
@@ -166,13 +166,13 @@ class T13B extends React.Component {
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['settings'] =settings.selected;
+        chartParams.settings = settings.selected;
 
         const infoParams = {};
         each(parameters, v => {
             infoParams[v.id] = v.value;
         });
-        infoParams['settings'] =settings.selected;
+        infoParams.settings = settings.selected;
 
         const heading = (
             <div className="grid-container">
@@ -247,8 +247,8 @@ class T13B extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
+                            <Settings value={settings.selected} handleChange={this.handleChange} {...chartParams}/>
                             <Info {...infoParams}/>
-                            <Settings value={settings.selected} handleChange={this.handleChange}/>
                         </section>
 
                     <section className="tile col col-abs-3 stretch">
@@ -267,9 +267,9 @@ class T13B extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

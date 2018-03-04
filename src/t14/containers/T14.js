@@ -4,10 +4,10 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image14A from '../../images/tools/T14A.png';
-import image14B from '../../images/tools/T14B.png';
-import image14C from '../../images/tools/T14C.png';
-import image14D from '../../images/tools/T14D.png';
+import image14A from '../images/T14A.png';
+import image14B from '../images/T14B.png';
+import image14C from '../images/T14C.png';
+import image14D from '../images/T14D.png';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
@@ -63,7 +63,7 @@ class T14 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14D')}  className="tile col col-rel-1-t13">
+{/*                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14D')}  className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T14D</h1>
                             <p className="p-height">
@@ -73,7 +73,7 @@ class T14 extends React.Component {
                                 <img className="sketch-image" src={image14D}/>
                             </div>
                         </div>
-                    </a>
+                    </a>*/}
                 </div>
             </div>
         );

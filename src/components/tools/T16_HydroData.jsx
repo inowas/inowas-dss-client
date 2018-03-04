@@ -4,7 +4,7 @@ import '../../less/toolParameters.less';
 import '../../less/input-range.less';
 import '../../less/toolT16.less';
 import Popup from '../primitive/Popup';
-import image from '../../images/tools/Hydrometer.png';
+import image from '../../images/tools/T16_hydrometer.png';
 
 export default class Parameters extends React.Component {
     state = {

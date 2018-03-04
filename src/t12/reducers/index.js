@@ -1,3 +1,3 @@
-import createReducer from './main';
+import {createReducer} from './main';
 
 export { createReducer };

@@ -5,8 +5,8 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image from '../../images/tools/T14D.png';
-import {Background, ChartT14D as Chart, Parameters} from '../components';
+import image from '../images/T14D.png';
+import {Background, ChartT14D as Chart, InfoT14D as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -16,7 +16,7 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T14D';
@@ -243,7 +243,9 @@ class T14D extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2" />
+                        <section className="tile col col-abs-2">
+                            <Info {...chartParams}/>
+                        </section>
 
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
@@ -260,9 +262,9 @@ class T14D extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

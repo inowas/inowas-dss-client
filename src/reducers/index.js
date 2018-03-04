@@ -1,7 +1,8 @@
 import * as T03 from './T03';
 import * as T02 from '../t02/reducers';
 import * as T06 from '../t06/reducers';
-import { Reducer as T07 } from '../t07';
+import {Reducer as T07} from '../t07';
+import T07E from './T07E';
 import * as T08 from '../t08/reducers';
 import * as T09 from '../t09/reducers';
 import * as T12 from '../t12/reducers';
@@ -9,15 +10,16 @@ import * as T13 from '../t13/reducers';
 import * as T14 from '../t14/reducers';
 import T16 from './T16';
 import T18 from './T18';
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import dashboard from '../dashboard/reducers';
 import rasterfiles from './Rasterfiles';
-import { routerReducer as routing } from 'react-router-redux';
-import user from './user';
-import { WebData } from '../core';
+import {routerReducer as routing} from 'react-router-redux';
+import {WebData} from '../core';
+import {user, session} from '../user/reducers';
 
 const rootReducer = combineReducers({
     routing,
+    session,
     user,
     webData: WebData.Reducer.webData,
     dashboard,
@@ -26,6 +28,7 @@ const rootReducer = combineReducers({
     T03: T03.createReducer('T03'),
     T06: T06.createReducer('T06'),
     T07,
+    T07E,
     T08: T08.createReducer('T08'),
     T09A: T09.createReducer('T09A'),
     T09B: T09.createReducer('T09B'),

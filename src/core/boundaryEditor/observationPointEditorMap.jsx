@@ -4,7 +4,7 @@ import React from 'react';
 
 import {GeoJSON, Map, CircleMarker, TileLayer} from 'react-leaflet';
 import {polygon as leafletPolygon, geoJSON as leafletGeoJSON} from 'leaflet';
-import * as mapHelpers from '../../calculations/map';
+import {disableMap, closestPointOnGeometry} from '../../core/geospatial';
 import {uniqueId} from 'lodash';
 
 
@@ -43,7 +43,7 @@ class ObservationPointEditorMap extends React.Component {
     }
 
     componentDidMount() {
-        mapHelpers.disableMap(this.map);
+        disableMap(this.map);
     }
 
     generateKeyFunction = geometry => {
@@ -63,7 +63,7 @@ class ObservationPointEditorMap extends React.Component {
         const polygon = leafletPolygon(latLngs);
 
         this.setState({
-            temporaryPoint: mapHelpers.closestPointOnGeometry(e.target, polygon, e.latlng)
+            temporaryPoint: closestPointOnGeometry(e.target, polygon, e.latlng)
         });
     };
 

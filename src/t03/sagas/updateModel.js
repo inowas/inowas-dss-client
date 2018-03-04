@@ -1,13 +1,9 @@
 import { call, put, select, take } from 'redux-saga/effects';
-import {
-    buildRequest,
-    sendCommand,
-    stateToCreatePayload
-} from '../../actions/messageBox';
+import {buildRequest, sendCommand, stateToCreatePayload} from '../../core/webData/actions/actions';
 
 import { Command, Action, Event } from '../../t03/actions/index';
 import { WebData } from '../../core';
-import { getApiKey } from '../../reducers/user';
+import { getApiKey } from '../../user/reducers';
 
 export default function * updateModelFlow() {
     // eslint-disable-next-line no-constant-condition

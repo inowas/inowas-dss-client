@@ -1,6 +1,6 @@
 import { put, call, take, select, all } from 'redux-saga/effects';
 import { Query, Action } from '../actions';
-import { getApiKey } from '../../reducers/user';
+import { getApiKey } from '../../user/reducers';
 import { WebData } from '../../core';
 import ConfiguredAxios from 'ConfiguredAxios';
 import BoundingBox from '../../model/BoundingBox';
@@ -19,7 +19,7 @@ export default function* loadScenarioAnalysis() {
         );
 
         const state = yield select();
-        const apiKey = getApiKey(state.user);
+        const apiKey = getApiKey(state.session);
 
         try {
             // fetch scenarioAnalysis

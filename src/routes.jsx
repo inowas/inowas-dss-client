@@ -1,7 +1,8 @@
 import React from 'react';
 import {Route, IndexRoute} from 'react-router';
-import AppForAuthenticatedUser from './containers/AppForAuthenticatedUser';
+import {AppForAuthenticatedUser, AppForAdminUser, AppForAllUsers} from './user/containers';
 import tools from './containers/tools';
+import * as Dashboard from './dashboard/index';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
 import * as T04 from './t04/index';
@@ -12,22 +13,23 @@ import * as T09 from './t09/index';
 import * as T12 from './t12/index';
 import * as T13 from './t13/index';
 import * as T14 from './t14/index';
-import * as ToolInstance from './toolInstance/index';
-import DashboardContainer from './containers/Dashboard';
-import Login from './containers/Login';
+import {Login, Logout, SignUp} from './user/containers';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {WebData} from './core/index';
-import SignUp from './containers/SignUp';
 
 const routes = store => (
-    <Route path="/">
+    <Route path="/" component={AppForAllUsers}>
         <IndexRoute component={LandingPage}/>
         <Route path="impressum" component={Impressum}/>
         <Route path="login" component={Login}/>
+        <Route path="logout" component={Logout}/>
         <Route path="signup" component={SignUp}/>
+        <Route path="admin" component={AppForAdminUser}>
+            <IndexRoute component={Dashboard.Container.AdminDashboard}/>
+        </Route>
         <Route path="tools" component={AppForAuthenticatedUser}>
-            <IndexRoute component={DashboardContainer}/>
+            <IndexRoute component={Dashboard.Container.Dashboard}/>
             <Route
                 path="T02(/:id)"
                 component={T02.Container.Main}
@@ -37,7 +39,7 @@ const routes = store => (
                     store.dispatch(WebData.Modifier.Action.clear());
                     if (nextState.params.id) {
                         store.dispatch(
-                            ToolInstance.Modifier.Query.getToolInstance(
+                            Dashboard.Modifier.Query.getToolInstance(
                                 'T02',
                                 nextState.params.id,
                             )
@@ -144,9 +146,7 @@ const routes = store => (
             <Route path="T14D(/:id)" component={T14.Container.T14D} tool={'T14D'}/>
 
             <Route path="T16(/:id)" component={tools.T16}/>
-
             <Route path="T17(/:id)" component={tools.T17}/>
-
             <Route path="T18(/:id)" component={tools.T18}/>
         </Route>
     </Route>

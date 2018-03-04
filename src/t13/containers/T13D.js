@@ -6,16 +6,11 @@ import {withRouter} from 'react-router';
 import '../../less/4TileTool.less';
 
 import {SettingsT13D as Settings, Parameters} from '../components';
-import {WebData, LayoutComponents} from '../../core';
+import {WebData} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
-import Accordion from '../../components/primitive/Accordion';
-import AccordionItem from '../../components/primitive/AccordionItem';
-import Input from '../../components/primitive/Input';
-import Select from '../../components/primitive/Select';
-import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T13D';
@@ -50,7 +45,7 @@ const buildPayload = (state) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/T13-simple-saltwater-intrusion-equations/',
+    path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
     icon: <Icon name="file"/>
 }];
 
@@ -160,11 +155,8 @@ class T13C extends React.Component {
     };
 
     render() {
-        const {parameters, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
-        const {id} = this.props.params;
-        const readOnly = false;
-
+        const {parameters} = this.state;
+        const {getToolInstanceStatus} = this.props;
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
@@ -175,27 +167,6 @@ class T13C extends React.Component {
             infoParams[v.id] = v.value;
         });
 
-        const heading = (
-            <div className="grid-container">
-                <div className="col stretch parameters-wrapper">
-                    <Input
-                        type="text"
-                        disabled={readOnly}
-                        name="name"
-                        value={name}
-                        onChange={this.handleInputChange('name')}
-                        placeholder="Name"
-                    />
-                </div>
-                <div className="col col-rel-0-5">
-                    <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save}>
-                            Save
-                        </Button>
-                    </WebData.Component.Loading>
-                </div>
-            </div>
-        );
 
         return (
             <div className="app-width">
@@ -204,38 +175,6 @@ class T13C extends React.Component {
                     T13D. Find position of flow divide: within or outside of the system
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
-                    <div className="grid-container">
-                        <div className="tile col stretch">
-                            <Accordion firstActive={null}>
-                                <AccordionItem heading={heading}>
-                                    <LayoutComponents.InputGroup label="Visibility">
-                                        <Select
-                                            disabled={readOnly}
-                                            clearable={false}
-                                            value={this.state.public}
-                                            onChange={this.handleSelectChange(
-                                                'public'
-                                            )}
-                                            options={[
-                                                {label: 'public', value: true},
-                                                {label: 'private', value: false}
-                                            ]}
-                                        />
-                                    </LayoutComponents.InputGroup>
-                                    <LayoutComponents.InputGroup label="Description">
-                                        <Input
-                                            type="textarea"
-                                            disabled={readOnly}
-                                            name="description"
-                                            value={description}
-                                            onChange={this.handleInputChange('description')}
-                                            placeholder="Description"
-                                        />
-                                    </LayoutComponents.InputGroup>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
-                    </div>
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
                             <Settings {...infoParams} redirectTo={this.redirectTo}/>
@@ -256,9 +195,9 @@ class T13C extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {
@@ -285,13 +224,14 @@ const mapDispatchToProps = (dispatch, props) => {
 
 T13C.propTypes = {
     createToolInstance: PropTypes.func,
-    getToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
+    getToolInstance: PropTypes.func,
     getToolInstanceStatus: PropTypes.object,
     params: PropTypes.object,
+    router: PropTypes.object.isRequired,
     routes: PropTypes.array,
     updateToolInstance: PropTypes.func,
-    updateToolInstanceStatus: PropTypes.object
+    updateToolInstanceStatus: PropTypes.object,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T13C));

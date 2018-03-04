@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
-import image from '../../images/tools/T14B.png';
+import image from '../images/T14B.png';
 
-import {Background, ChartT14B as Chart, Parameters} from '../components';
+import {Background, ChartT14B as Chart, InfoT14B as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Icon from '../../components/primitive/Icon';
@@ -16,7 +16,7 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T14B';
@@ -166,11 +166,6 @@ class T14B extends React.Component {
             chartParams[v.id] = v.value;
         });
 
-        const infoParams = {};
-        each(parameters, v => {
-            infoParams[v.id] = v.value;
-        });
-
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -243,7 +238,9 @@ class T14B extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked" />
+                        <section className="tile col col-abs-2 stacked">
+                            <Info {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
@@ -259,9 +256,9 @@ class T14B extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

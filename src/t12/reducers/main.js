@@ -1,11 +1,4 @@
-import * as ToolInstance from '../../toolInstance';
-import {WebData} from '../../core';
-import {find} from 'lodash';
-
-export const SETTINGS_CASE_FIXED_TIME = 1;
-export const SETTINGS_CASE_VARIABLE_TIME = 2;
-export const SETTINGS_INFILTRATION_ONE_TIME = 1;
-export const SETTINGS_INFILTRATION_CONTINUOUS = 2;
+import {createSimpleToolReducer} from '../../core/helpers/createSimpleToolReducer';
 
 export const getInitialState = (tool) => {
     return {
@@ -90,7 +83,7 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'ueq',
-            name: 'Infiltration duration, uₑq [h]',
+            name: 'Infiltration duration, u<sub>eq</sub>  [h]',
             min: 1,
             validMin: x => x > 0,
             max: 10000,
@@ -100,7 +93,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 1,
             id: 'IR',
-            name: 'Infiltration rate, Vb [m3/d]',
+            name: 'Infiltration rate, V<sub>b</sub> [m<sup>3</sup>/d]',
             min: 1,
             validMin: x => x > 0,
             max: 1000,
@@ -121,54 +114,6 @@ export const getInitialState = (tool) => {
     };
 };
 
-const createReducer = tool => {
-    return (state = getInitialState(), action) => {
-        if (action.tool !== tool) {
-            return state;
-        }
-
-        switch (action.type) {
-            case WebData.Modifier.Action.SET_AJAX_STATUS:
-                if (!WebData.Helpers.isSuccess(action)
-                    || !WebData.Helpers.waitForResponse(action, ToolInstance.Modifier.Query.GET_TOOL_INSTANCE)
-                ) {
-                    return state;
-                }
-                const instance = action.webData.data;
-                return {
-                    ...state,
-                    name: instance.name,
-                    description: instance.description,
-                    permissions: instance.permissions,
-                    public: instance.public,
-                    settings: instance.data.settings,
-                    parameters: state.parameters.map(v => {
-                        return {
-                            ...v,
-                            ...find(instance.data.parameters, {id: v.id})
-                        };
-                    })
-                };
-            case ToolInstance.Modifier.Action.SET_TOOL_INSTANCE:
-            case ToolInstance.Modifier.Event.TOOL_INSTANCE_CREATED:
-            case ToolInstance.Modifier.Event.TOOL_INSTANCE_UPDATED:
-                return {
-                    ...state,
-                    name: action.payload.name,
-                    description: action.payload.description,
-                    public: action.payload.public,
-                    settings: action.payload.data.settings,
-                    parameters: state.parameters.map(v => {
-                        return {
-                            ...v,
-                            ...find(action.payload.data.parameters, {id: v.id})
-                        };
-                    })
-                };
-        }
-
-        return state;
-    };
+export const createReducer = tool => {
+    return createSimpleToolReducer(tool, getInitialState(tool));
 };
-
-export default createReducer;

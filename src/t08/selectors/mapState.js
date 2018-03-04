@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { WebData } from '../../core';
-import { Modifier } from '../../toolInstance';
+import { Modifier } from '../../dashboard';
 
 const getToolInstance = (state, props) => state[props.route.tool].toolInstance;
 
