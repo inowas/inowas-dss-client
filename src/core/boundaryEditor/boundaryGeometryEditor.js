@@ -42,7 +42,7 @@ class BoundaryGeometryEditor extends React.Component {
 
         return (
             <div>
-                <Modal size={'large'} open onClose={onCancel}>
+                <Modal size={'large'} open onClose={onCancel} dimmer={'inverted'}>
                     <Modal.Header>Edit boundary properties</Modal.Header>
                     <Modal.Content>
                         <Grid divided={'vertically'}>

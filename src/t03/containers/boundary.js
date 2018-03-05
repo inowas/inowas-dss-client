@@ -33,7 +33,6 @@ class BoundariesOverview extends React.PureComponent {
 
     render() {
         const {
-            tool,
             boundaries,
             property,
             type,
