@@ -1,15 +1,9 @@
 import * as lodash from 'lodash';
 
-import {
-    ConstantHeadProperties,
-    GeneralHeadProperties,
-    RechargeProperties,
-    BoundaryProperties,
-    WellProperties
-} from '../components';
+import {BoundaryProperties} from '../components';
 import React from 'react';
-import {browserHistory, withRouter} from 'react-router';
-import {first} from 'lodash';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router';
 
 import {Action} from '../actions/index';
 import {BoundaryOverview} from '../../t03/containers/index';
@@ -21,11 +15,9 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import FilterableList from '../../components/primitive/FilterableList';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {makeMapStateToPropsBoundaries} from '../selectors/mapState';
 import styleGlobals from 'styleGlobals';
-import {getBoundaryDefaults} from "../selectors/boundary";
 
 const styles = {
     container: {
@@ -66,7 +58,7 @@ class ModelEditorBoundary extends React.Component {
     }
 
     handleSearchTerm = value => {
-        this.setState(function(prevState, props) {
+        this.setState(function(prevState) {
             return {
                 ...prevState,
                 searchTerm: value
@@ -74,33 +66,13 @@ class ModelEditorBoundary extends React.Component {
         });
     };
 
-    createBoundary = data => {
-        const {id} = this.props.params;
-        this.props.createBoundary(id, data);
-    };
-
     updateBoundary = data => {
         const {id} = this.props.params;
         this.props.updateBoundary(id, data);
     };
 
-    getNewBoundaryNumber = type => {
-        let i = 1;
-        while (i < 100000) {
-            // eslint-disable-next-line no-loop-func
-            if (this.props.model.boundaries.filter(b => {
-                    return (b.id === (type + '-' + i));
-                }).length === 0) {
-                return i;
-            }
-            i++;
-        }
-
-        return null;
-    };
-
     renderProperties(boundaries) {
-        const {permissions, removeBoundary, mapStyles, setBoundary, updateBoundaryStatus, soilmodelLayers, model} = this.props;
+        const {permissions, removeBoundary, updateBoundaryStatus, model} = this.props;
 
         const readOnly = !lodash.includes(permissions, 'w');
 
@@ -169,10 +141,6 @@ class ModelEditorBoundary extends React.Component {
     };
 
     render() {
-
-        console.log(this.props);
-
-        // eslint-disable-next-line no-shadow
         const {style, boundaries, boundaryType, params} = this.props;
         const {type} = params;
 
@@ -251,16 +219,22 @@ const mapDispatchToProps = (dispatch, {tool}) => {
 };
 
 ModelEditorBoundary.propTypes = {
+    boundaries: PropTypes.array.isRequired,
+    boundaryType: PropTypes.string,
+    createBoundary: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    permissions: PropTypes.string.isRequired,
+    removeBoundary: PropTypes.func.isRequired,
+    routes: PropTypes.array.isRequired,
+    updateBoundary: PropTypes.func.isRequired,
+    updateBoundaryStatus: PropTypes.object.isRequired,
+    style: PropTypes.object,
     tool: PropTypes.string.isRequired,
-    updateBoundaryStatus: PropTypes.object,
 };
 
-// eslint-disable-next-line no-class-assign
-ModelEditorBoundary = withRouter(
+export default withRouter(
     connect(makeMapStateToPropsBoundaries, mapDispatchToProps)(
         ModelEditorBoundary
     )
 );
-
-export default ModelEditorBoundary;

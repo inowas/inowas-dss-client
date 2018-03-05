@@ -86,7 +86,7 @@ export const getInitialState = () => {
 };
 
 const createReducer = tool => {
-    return createSimpleToolReducer(tool, getInitialState);
+    return createSimpleToolReducer(tool, getInitialState(tool));
 };
 
 export default createReducer;
