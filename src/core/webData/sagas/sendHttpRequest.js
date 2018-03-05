@@ -1,5 +1,6 @@
 import {call, put, select} from 'redux-saga/effects';
 import {Action} from '../actions';
+import {Action as UserActions} from '../../../user/actions';
 import {fetchStatusWrapper} from '../helpers';
 import {getApiKey} from '../../../user/reducers';
 
@@ -23,5 +24,9 @@ export default function* sendHttpRequestFlow(action) {
         }
 
         yield put(Action.responseAction(action.responseAction, {type: 'error', msg: msg}, action.tool));
+
+        if (err.response.status === 401) {
+            yield put(UserActions.logout());
+        }
     }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Select from '../../components/primitive/Select';
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -8,14 +8,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-export default class LayerSelect extends Component {
-    static propTypes = {
-        layerScheme: PropTypes.array,
-        onChange: PropTypes.func.isRequired,
-        selectedLayer: PropTypes.number,
-        selectedResultType: PropTypes.string
-    };
-
+class LayerSelect extends React.Component {
     componentDidMount() {
         const { layerScheme, selectedLayer, selectedResultType } = this.props;
         this.setSelectOptions(layerScheme);
@@ -78,3 +71,12 @@ export default class LayerSelect extends Component {
         );
     }
 }
+
+LayerSelect.propTypes = {
+    layerScheme: PropTypes.array,
+    onChange: PropTypes.func.isRequired,
+    selectedLayer: PropTypes.number,
+    selectedResultType: PropTypes.string
+};
+
+export default LayerSelect;

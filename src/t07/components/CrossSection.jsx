@@ -164,6 +164,8 @@ class CrossSection extends React.Component {
                     // TODO user friendly error handling
                 });
         }
+
+        return null;
     };
 
     onLayerSelectChange = (layer, resultType) => {
@@ -223,13 +225,14 @@ class CrossSection extends React.Component {
         // TODO calculation inside the render method will cause unecessary rerendering
         let min = Infinity;
         let max = -Infinity;
+
         selectedScenarios.forEach(scenario => {
             const calculation = calculations[scenario.calculationId];
             if (calculation) {
                 calculation.forEach(row => {
                     row.forEach(value => {
-                        min = min > value ? value : min;
-                        max = max < value ? value : max;
+                        min = (value && min > value) ? value : min;
+                        max = (value && max < value) ? value : max;
                     });
                 });
             }
@@ -270,14 +273,19 @@ class CrossSection extends React.Component {
             });
     }
 
+    onToggleScenarioSelection = (id) => {
+        this.fetchCalculationResults();
+        return this.props.toggleScenarioSelection(id);
+    };
+
     render() {
         const {
             scenarioAnalysis,
             scenarioModels,
             cloneScenario,
-            deleteScenario,
-            toggleScenarioSelection
+            deleteScenario
         } = this.props;
+
         const {
             selectedLayer,
             selectedResultType,
@@ -314,7 +322,7 @@ class CrossSection extends React.Component {
                                     cloneScenario={cloneScenario}
                                     deleteScenario={deleteScenario}
                                     scenarioModels={scenarioModels}
-                                    toggleSelection={toggleScenarioSelection}
+                                    toggleSelection={this.onToggleScenarioSelection}
                                     permissions={scenarioAnalysis.permissions}
                                 />
                             </AccordionItem>
@@ -357,7 +365,6 @@ class CrossSection extends React.Component {
         );
     }
 }
-
 
 CrossSection.propTypes = {
     scenarioAnalysis: PropTypes.object,

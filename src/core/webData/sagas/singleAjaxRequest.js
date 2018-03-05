@@ -1,6 +1,7 @@
 import { put, select, call } from 'redux-saga/effects';
 import { getApiKey } from '../../../user/reducers';
 import { Action } from '../actions';
+import { Action as UserActions } from '../../../user/actions';
 import ConfiguredAxios from 'ConfiguredAxios';
 
 export default function* singleAjaxRequestFlow({
@@ -29,6 +30,9 @@ export default function* singleAjaxRequestFlow({
         return response.data;
     } catch (e) {
         yield put(Action.setAjaxStatus(provokingActionType, {type: 'error', error: e}));
+        if (e.response.status === 401) {
+            yield put(UserActions.logout());
+        }
         return null;
     }
 }
