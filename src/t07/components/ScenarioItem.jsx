@@ -2,15 +2,12 @@ import '../../less/scenarioSelect.less';
 
 import Button from '../../components/primitive/Button';
 import Icon from '../../components/primitive/Icon';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { includes } from 'lodash';
+import {includes} from 'lodash';
 
 class ScenarioItem extends React.Component {
-    toggleSelection = () => {
-        this.props.toggleSelection(this.props.scenarioModel.id);
-    };
 
     render() {
         const {
@@ -42,7 +39,7 @@ class ScenarioItem extends React.Component {
                             </Link>
                         ) : null}
                         {!scenarioModel.isBaseModel &&
-                            !readOnly && <span> | </span>}
+                        !readOnly && <span> | </span>}
                         {!readOnly && (
                             <Button
                                 type="link"
@@ -52,27 +49,27 @@ class ScenarioItem extends React.Component {
                             </Button>
                         )}
                         {!readOnly &&
-                            scenarioModel.isBaseModel && <span> | </span>}
+                        scenarioModel.isBaseModel && <span> | </span>}
                         {!readOnly &&
-                            scenarioModel.isBaseModel && (
-                                <Link
-                                    to={`/tools/T07E/${scenarioAnalysisId}/${scenarioModel.id}`}
-                                >
-                                    Edit
-                                </Link>
-                            )}
+                        scenarioModel.isBaseModel && (
+                            <Link
+                                to={`/tools/T07E/${scenarioAnalysisId}/${scenarioModel.id}`}
+                            >
+                                Edit
+                            </Link>
+                        )}
                         {!scenarioModel.isBaseModel &&
-                            !readOnly && <span> | </span>}
+                        !readOnly && <span> | </span>}
                         {!scenarioModel.isBaseModel &&
-                            !readOnly && (
-                                <Button
-                                    type="link"
-                                    onClick={() =>
-                                        deleteScenario(scenarioModel.id)}
-                                >
-                                    Delete
-                                </Button>
-                            )}
+                        !readOnly && (
+                            <Button
+                                type="link"
+                                onClick={() =>
+                                    deleteScenario(scenarioModel.id)}
+                            >
+                                Delete
+                            </Button>
+                        )}
                     </p>
                 </div>
             </div>
