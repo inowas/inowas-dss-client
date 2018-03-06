@@ -78,10 +78,10 @@ export const getInitialStyles = () => {
                 fillOpacity: 0.7
             },
             inw: {
-                radius: 3,
+                radius: 4,
                 color: 'black',
                 weight: 1,
-                fillColor: 'blue',
+                fillColor: 'yellow',
                 fillOpacity: 0.7
             },
             irw: {
