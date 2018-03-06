@@ -1,4 +1,4 @@
-import {SET_USER} from '../actions/actions';
+import {LOGOUT, SET_USER} from '../actions/actions';
 
 function initialState() {
     return {
@@ -24,6 +24,11 @@ export const user = (state = initialState(), action) => {
                 fetched: true
             };
         }
+
+        case LOGOUT: {
+            return initialState();
+        }
+
         default: {
             return state;
         }
