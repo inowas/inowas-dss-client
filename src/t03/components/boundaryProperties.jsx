@@ -200,6 +200,8 @@ class BoundaryProperties extends React.Component {
             boundary: boundary,
             showOverlay: false
         });
+
+        this.save(boundary);
     };
 
     handleSelectObservationPoint = id => {
@@ -216,18 +218,18 @@ class BoundaryProperties extends React.Component {
         return (boundary.hasOwnProperty('date_time_values') || boundary.hasOwnProperty('observation_points'));
     };
 
-    save = () => {
-        if (this.state.boundary.hasOwnProperty('date_time_values')) {
+    save = boundary => {
+        if (boundary.hasOwnProperty('date_time_values')) {
             this.props.onSave({
-                ...this.state.boundary,
+                ...boundary,
                 date_time_values: this.observationPoint.getRows()
             });
 
             return;
         }
 
-        if (this.state.boundary.hasOwnProperty('observation_points')) {
-            const observationPoints = this.state.boundary.observation_points;
+        if (boundary.hasOwnProperty('observation_points')) {
+            const observationPoints = boundary.observation_points;
 
             observationPoints.map(op => {
                 if (op.id === this.state.selectedObservationPointId) {
@@ -239,14 +241,14 @@ class BoundaryProperties extends React.Component {
             });
 
             this.props.onSave({
-                ...this.state.boundary,
+                ...boundary,
                 observation_points: observationPoints
             });
 
             return;
         }
 
-        this.props.onSave(this.state.boundary);
+        this.props.onSave(boundary);
     };
 
     renderObservationPointsSelection = boundary => {
@@ -334,7 +336,9 @@ class BoundaryProperties extends React.Component {
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
                         <RiverObservationPoint
                             readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
+                            ref={op => {
+                                this.observationPoint = op;
+                            }}
                             rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}
                         />
                     </LayoutComponents.Column>
@@ -345,7 +349,9 @@ class BoundaryProperties extends React.Component {
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
                         <PumpingRate
                             readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
+                            ref={op => {
+                                this.observationPoint = op;
+                            }}
                             rows={addIdFromIndex(getDateTimeValues(boundary))}/>
                     </LayoutComponents.Column>
                 );
@@ -363,7 +369,8 @@ class BoundaryProperties extends React.Component {
 
         return (
             <div style={styles.saveButtonWrapper}>
-                <Btn secondary onClick={this.save} loading={updateStatus.status === 'loading'}>Save</Btn>
+                <Btn secondary onClick={() => this.save(this.state.boundary)}
+                     loading={updateStatus.status === 'loading'}>Save</Btn>
             </div>
         );
     };

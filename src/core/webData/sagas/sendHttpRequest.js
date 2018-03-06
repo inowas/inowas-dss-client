@@ -1,7 +1,7 @@
 import {call, put, select} from 'redux-saga/effects';
 import {Action} from '../actions';
-import {Action as UserActions} from '../../../user/actions';
 import {fetchStatusWrapper} from '../helpers';
+import {Action as UserActions} from '../../../user/actions';
 import {getApiKey} from '../../../user/reducers';
 
 export default function* sendHttpRequestFlow(action) {

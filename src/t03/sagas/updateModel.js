@@ -30,9 +30,13 @@ export default function * updateModelFlow() {
                 yield put(Event.modflowModelUpdated(action.tool, action.id, action.payload));
 
                 const state = yield select();
-                const apiKey = getApiKey( state.user );
+                const apiKey = getApiKey( state.session );
 
-                const activeSells = yield call(WebData.Helpers.fetchStatusWrapper, buildRequest('modflowmodels/' + action.id + '/activecells', 'GET'), apiKey);
+                const activeSells = yield call(
+                    WebData.Helpers.fetchStatusWrapper,
+                    buildRequest('modflowmodels/' + action.id + '/activecells', 'GET'),
+                    apiKey
+                );
                 yield put( Action.setActiveCells( action.tool, activeSells ) );
                 break;
             }
