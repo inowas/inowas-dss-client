@@ -7,6 +7,7 @@ import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 // import ImageminPlugin from 'imagemin-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import path from 'path';
 
 export default {
@@ -34,7 +35,8 @@ export default {
         }),
         new ExtractTextPlugin('styles.min.css'),
         new OptimizeCssAssetsPlugin(),
-        new FaviconsWebpackPlugin('images/favicon.png')
+        new FaviconsWebpackPlugin('images/favicon.png'),
+        new UglifyJsPlugin()
     ],
     module: {
         rules: [
