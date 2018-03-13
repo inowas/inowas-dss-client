@@ -32,7 +32,8 @@ export default {
         new HtmlWebpackPlugin( {
             template: 'src/index.tpl.html',
             inject: 'body',
-            filename: 'index.html'
+            filename: 'index.html',
+            hash: true
         } ),
         new HotModuleReplacementPlugin(),
         new NoEmitOnErrorsPlugin(),
