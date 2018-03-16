@@ -1,4 +1,5 @@
 import {LOGOUT, SET_USER} from '../actions/actions';
+import {SET_USER_PROFILE} from '../actions/events';
 
 function initialState() {
     return {
@@ -7,6 +8,11 @@ function initialState() {
         email: '',
         enabled: true,
         roles: [],
+        profile: {
+            'name': '',
+            'email': '',
+            'institution': ''
+        },
         fetched: false
     };
 }
@@ -20,8 +26,16 @@ export const user = (state = initialState(), action) => {
                 name: action.payload.name || state.name,
                 email: action.payload.email || state.email,
                 roles: action.payload.roles || state.roles,
+                profile: action.payload.profile || state.profile,
                 enabled: action.payload.enabled || state.enabled,
                 fetched: true
+            };
+        }
+
+        case SET_USER_PROFILE: {
+            return {
+                ...state,
+                profile: action.payload
             };
         }
 
