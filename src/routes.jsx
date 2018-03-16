@@ -13,6 +13,7 @@ import * as T09 from './t09/index';
 import * as T12 from './t12/index';
 import * as T13 from './t13/index';
 import * as T14 from './t14/index';
+import * as User from './user/index';
 import {Login, Logout, SignUp} from './user/containers';
 import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
@@ -28,6 +29,15 @@ const routes = store => (
         <Route path="admin" component={AppForAdminUser}>
             <IndexRoute component={Dashboard.Container.AdminDashboard}/>
         </Route>
+
+        <Route path="credentials" component={AppForAuthenticatedUser}>
+            <IndexRoute component={User.Container.UserCredentials}/>
+        </Route>
+
+        <Route path="profile" component={AppForAuthenticatedUser}>
+            <IndexRoute component={User.Container.UserProfile}/>
+        </Route>
+
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard.Container.Dashboard}/>
             <Route

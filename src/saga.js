@@ -50,6 +50,8 @@ export default function* rootSaga() {
         call(T07.loadScenarioAnalysisFlow),
         call(T07.updateScenarioAnalysisFlow),
         call(User.authenticateUser),
+        call(User.changePassword),
         call(User.fetchUser),
+        call(User.updateUserProfile),
     ];
 }

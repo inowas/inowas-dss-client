@@ -4,6 +4,8 @@ import AppForAuthenticatedUser from './AppForAuthenticatedUser';
 import Login from './Login';
 import Logout from './Logout';
 import SignUp from './SignUp';
+import UserCredentials from './UserCredentials';
+import UserProfile from './UserProfile';
 
 export {
     AppForAllUsers,
@@ -11,5 +13,7 @@ export {
     AppForAuthenticatedUser,
     Login,
     Logout,
-    SignUp
+    SignUp,
+    UserCredentials,
+    UserProfile
 };

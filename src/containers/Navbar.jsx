@@ -82,7 +82,7 @@ class NavBar extends React.Component {
 
     renderUserNavigation(userIsLoggedIn) {
         const {roles, name} = this.props.user;
-        if (userIsLoggedIn && roles && Array.isArray(roles)) {
+        if (userIsLoggedIn) {
             return (
                 <li className="nav-item nav-item-has-children">
                     <span className="nav-element">
@@ -91,7 +91,15 @@ class NavBar extends React.Component {
                     <ul className="nav-list">
                         {this.renderRoleSpecificItems(roles)}
                         <li className="nav-item">
-                            <button className="nav-element" onClick={() => this.historyPushTo('/logout')}>logout
+                            <button className="nav-element" onClick={() => this.historyPushTo('/credentials')}>Credentials
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className="nav-element" onClick={() => this.historyPushTo('/profile')}>Profile
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className="nav-element" onClick={() => this.historyPushTo('/logout')}>Logout
                             </button>
                         </li>
                     </ul>
