@@ -91,7 +91,8 @@ class NavBar extends React.Component {
                     <ul className="nav-list">
                         {this.renderRoleSpecificItems(roles)}
                         <li className="nav-item">
-                            <button className="nav-element" onClick={() => this.historyPushTo('/credentials')}>Credentials
+                            <button className="nav-element" onClick={() => this.historyPushTo('/credentials')}>Change
+                                password
                             </button>
                         </li>
                         <li className="nav-item">
