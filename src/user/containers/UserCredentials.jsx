@@ -185,7 +185,7 @@ class UserCredentials extends React.Component {
                                     onClick={this.onSubmitClick}
                                     loading={this.isLoading()}
                                 >
-                                    Submit
+                                    Save
                                 </Button>
                             </Form>
                         </Grid.Column>
