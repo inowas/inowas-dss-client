@@ -34,7 +34,7 @@ class BoundaryGeometryEditor extends React.Component {
         });
     };
 
-    handleItemClick = (e, {name}) => this.setState({activeItem: name});
+    handleItemClick = (e, {name}) => this.setState({activeItemPrimary: name});
 
     render() {
         const {area, boundingBox, gridSize, onCancel, onSave, mapStyles, readOnly} = this.props;

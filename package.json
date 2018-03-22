@@ -39,6 +39,7 @@
         "react": "^15.4.2",
         "react-dom": "^15.4.2",
         "react-edit": "^6.3.0",
+        "react-file-reader": "^1.1.4",
         "react-leaflet-fullscreen": "^0.0.5",
         "react-list": "^0.8.6",
         "react-paginate": "^4.4.3",
