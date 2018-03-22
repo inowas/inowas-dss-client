@@ -4,6 +4,7 @@ import {Button, Form, Grid, Icon, Input, Menu, Modal, Segment, TextArea} from 's
 import Ajv from 'ajv';
 import {GeoJSON, Map, TileLayer} from 'react-leaflet';
 import {geoJSON as leafletGeoJSON} from 'leaflet';
+import md5 from 'js-md5';
 
 const style = {
     textArea: {
@@ -95,6 +96,10 @@ class ImportGeoJsonModal extends React.Component {
 
     getBounds = geometry => {
         return leafletGeoJSON(geometry).getBounds();
+    };
+
+    generateKeyFunction = geometry => {
+        return md5(JSON.stringify(geometry));
     };
 
     render() {
@@ -196,7 +201,10 @@ class ImportGeoJsonModal extends React.Component {
                                     bounds={this.getBounds(parsedGeoJson.geometry)}
                                 >
                                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
-                                    <GeoJSON data={parsedGeoJson.geometry}/>
+                                    <GeoJSON
+                                        data={parsedGeoJson.geometry}
+                                        key={this.generateKeyFunction(parsedGeoJson.geometry)}
+                                    />
                                 </Map>
                                 }
                             </div>
@@ -217,7 +225,6 @@ class ImportGeoJsonModal extends React.Component {
         );
     }
 }
-
 
 ImportGeoJsonModal.propTypes = {
     header: PropTypes.string.isRequired,
