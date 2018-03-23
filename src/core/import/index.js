@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Button, Form, Grid, Icon, Input, Menu, Modal, Segment, TextArea} from 'semantic-ui-react';
+import {Button, Form, Grid, Icon, Input, Menu, Modal, Segment, Table, TextArea} from 'semantic-ui-react';
 import Ajv from 'ajv';
 import {GeoJSON, Map, TileLayer} from 'react-leaflet';
 import {geoJSON as leafletGeoJSON} from 'leaflet';
 import md5 from 'js-md5';
+import {projectGeoJson} from '../geospatial/proj4';
 
 const style = {
     textArea: {
@@ -102,10 +103,36 @@ class ImportGeoJsonModal extends React.Component {
         return md5(JSON.stringify(geometry));
     };
 
+    renderRow = (feature, key) => (
+        <Table.Row key={key}>
+            <Table.Cell/>
+            <Table.Cell>{feature.type}</Table.Cell>
+            <Table.Cell>{feature.geometry.type}</Table.Cell>
+            <Table.Cell>{JSON.stringify(feature.geometry.coordinates)}</Table.Cell>
+        </Table.Row>
+    );
+
+    renderRows = geoJson => {
+        const rows = [];
+        if (geoJson.type && geoJson.type === 'FeatureCollection') {
+            geoJson.features.forEach((f, j) => {
+                rows.push(this.renderRow(f, j));
+            });
+        }
+
+        if (geoJson.type && geoJson.type === 'Feature') {
+            rows.push(this.renderRow(geoJson));
+        }
+
+        return rows;
+    };
+
     render() {
         const {activeItemPrimary, activeItemSecondary, geoJson, geoJsonValid} = this.state;
         const {header, onClose} = this.props;
         const parsedGeoJson = geoJsonValid ? JSON.parse(geoJson) : null;
+        const projectedGeoJson = parsedGeoJson ? projectGeoJson(parsedGeoJson) : null;
+
         return (
             <Modal
                 open
@@ -182,28 +209,33 @@ class ImportGeoJsonModal extends React.Component {
                                 </Form>
                                 }
                                 {activeItemSecondary === 'element' && geoJsonValid &&
-                                <div>
-                                    <p>
-                                        Type: {parsedGeoJson.type}
-                                    </p>
-                                    <p>
-                                        Geometry: <br/>
-                                        Type: {parsedGeoJson.geometry.type} <br/>
-                                        Coordinates: {parsedGeoJson.geometry.coordinates}
-                                    </p>
-                                </div>
+                                <Table size="small">
+                                    <Table.Header>
+                                        <Table.Row>
+                                            <Table.HeaderCell/>
+                                            <Table.HeaderCell>Element</Table.HeaderCell>
+                                            <Table.HeaderCell>Geometry</Table.HeaderCell>
+                                            <Table.HeaderCell>Coordinates</Table.HeaderCell>
+                                        </Table.Row>
+                                    </Table.Header>
+                                    <Table.Body>
+                                        {this.renderRows(projectedGeoJson)}
+                                    </Table.Body>
+                                </Table>
                                 }
                                 {activeItemSecondary === 'map' && geoJsonValid &&
                                 <Map
                                     className="boundaryGeometryMap"
-                                    ref={map => {this.map = map;}}
+                                    ref={map => {
+                                        this.map = map;
+                                    }}
                                     zoomControl={false}
-                                    bounds={this.getBounds(parsedGeoJson.geometry)}
+                                    bounds={this.getBounds(projectedGeoJson)}
                                 >
                                     <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
                                     <GeoJSON
-                                        data={parsedGeoJson.geometry}
-                                        key={this.generateKeyFunction(parsedGeoJson.geometry)}
+                                        data={projectedGeoJson}
+                                        key={this.generateKeyFunction(projectedGeoJson)}
                                     />
                                 </Map>
                                 }
