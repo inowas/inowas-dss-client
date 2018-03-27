@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import {Button, Form, Grid, Icon, Input, Menu, Modal, Segment, Table, TextArea} from 'semantic-ui-react';
-import Ajv from 'ajv';
 import {GeoJSON, Map, TileLayer} from 'react-leaflet';
+import PropTypes from 'prop-types';
+import {Button, Form, Grid, Icon, Input, Menu, Modal, Popup, Radio, Segment, Table, TextArea} from 'semantic-ui-react';
+import Ajv from 'ajv';
 import {geoJSON as leafletGeoJSON} from 'leaflet';
 import md5 from 'js-md5';
 import {projectGeoJson} from '../geospatial/proj4';
@@ -20,7 +20,7 @@ const style = {
     }
 };
 
-class ImportGeoJsonModal extends React.Component {
+class ModelAreaImport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,7 +28,8 @@ class ImportGeoJsonModal extends React.Component {
             activeItemSecondary: 'text',
             geoJson: '',
             geoJsonValid: null,
-            fileValid: null
+            fileValid: null,
+            selectedFeature: null
         };
     }
 
@@ -36,7 +37,7 @@ class ImportGeoJsonModal extends React.Component {
 
     handleItemSecondaryClick = (e, {name}) => this.setState({activeItemSecondary: name});
 
-    onChange = (e) => {
+    onChangeTextInput = (e) => {
         if (e.target.name === 'geoJson') {
             this.setState({
                 [e.target.name]: this.makeJsonPretty(e.target.value),
@@ -103,12 +104,75 @@ class ImportGeoJsonModal extends React.Component {
         return md5(JSON.stringify(geometry));
     };
 
+    importAreaByKey = (geoJson, key) => {
+        if (geoJson.type === 'FeatureCollection') {
+            this.importArea(geoJson.features[key]);
+            this.props.onClose();
+        }
+
+        if (geoJson.type === 'Feature') {
+            this.importArea(geoJson);
+            this.props.onClose();
+        }
+    };
+
+    importArea = feature => {
+        const {geometry} = feature;
+        if (geometry.type === 'LineString') {
+            this.props.onChange({
+                ...feature,
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [geometry.coordinates]
+                }
+            });
+        }
+
+        if (geometry.type === 'Polygon') {
+            this.props.onChange(feature);
+        }
+    };
+
+    handleChangeSelectedFeature = selectedFeature => {
+        this.setState({selectedFeature});
+    };
+
     renderRow = (feature, key) => (
         <Table.Row key={key}>
-            <Table.Cell/>
-            <Table.Cell>{feature.type}</Table.Cell>
-            <Table.Cell>{feature.geometry.type}</Table.Cell>
-            <Table.Cell>{JSON.stringify(feature.geometry.coordinates)}</Table.Cell>
+            <Table.Cell>{key + 1}</Table.Cell>
+            <Table.Cell>
+                <Popup
+                    trigger={<p>{feature.geometry.type}</p>}
+                    content={
+                        <Map
+                            className="boundaryMap"
+                            style={{height: 300, width: 300}}
+                            zoomControl={false}
+                            bounds={this.getBounds(feature)}
+                        >
+                            <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
+                            <GeoJSON
+                                data={feature}
+                                key={this.generateKeyFunction(feature)}
+                            />
+                        </Map>
+                    }
+                    basic
+                />
+            </Table.Cell>
+            <Table.Cell>
+                <Popup
+                    trigger={<p>Properties</p>}
+                    content={JSON.stringify(feature.properties)}
+                    basic
+                />
+            </Table.Cell>
+            <Table.Cell>
+                {(feature.geometry.type === 'LineString' || feature.geometry.type === 'Polygon') &&
+                <Radio fitted checked={this.state.selectedFeature === key}
+                       onChange={() => this.handleChangeSelectedFeature(key)}/>
+                }
+            </Table.Cell>
         </Table.Row>
     );
 
@@ -121,7 +185,7 @@ class ImportGeoJsonModal extends React.Component {
         }
 
         if (geoJson.type && geoJson.type === 'Feature') {
-            rows.push(this.renderRow(geoJson));
+            rows.push(this.renderRow(geoJson, 0));
         }
 
         return rows;
@@ -153,11 +217,13 @@ class ImportGeoJsonModal extends React.Component {
                                     active={activeItemPrimary === 'Geojson'}
                                     onClick={this.handleItemPrimaryClick}
                                 />
+                                {/*
                                 <Menu.Item
                                     name={'Shapefile'}
                                     active={activeItemPrimary === 'Shapefile'}
                                     onClick={this.handleItemPrimaryClick}
                                 />
+                                */}
                             </Menu>
                         </Grid.Column>
                         <Grid.Column stretched width={12}>
@@ -201,7 +267,7 @@ class ImportGeoJsonModal extends React.Component {
                                     <TextArea
                                         style={geoJsonValid ? style.textArea.valid : style.textArea.invalid}
                                         name={'geoJson'}
-                                        onInput={this.onChange}
+                                        onInput={this.onChangeTextInput}
                                         placeholder="Paste geojson here or upload file"
                                         rows={10}
                                         value={geoJson}
@@ -212,10 +278,10 @@ class ImportGeoJsonModal extends React.Component {
                                 <Table size="small">
                                     <Table.Header>
                                         <Table.Row>
-                                            <Table.HeaderCell/>
-                                            <Table.HeaderCell>Element</Table.HeaderCell>
+                                            <Table.HeaderCell>#</Table.HeaderCell>
                                             <Table.HeaderCell>Geometry</Table.HeaderCell>
-                                            <Table.HeaderCell>Coordinates</Table.HeaderCell>
+                                            <Table.HeaderCell>Properties</Table.HeaderCell>
+                                            <Table.HeaderCell/>
                                         </Table.Row>
                                     </Table.Header>
                                     <Table.Body>
@@ -250,17 +316,24 @@ class ImportGeoJsonModal extends React.Component {
                     </Grid>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button negative>Cancel</Button>
-                    <Button positive>Save</Button>
+                    <Button negative onClick={this.props.onClose}>Cancel</Button>
+                    <Button
+                        positive
+                        onClick={() => this.importAreaByKey(projectedGeoJson, this.state.selectedFeature)}
+                        disabled={this.state.selectedFeature === null}
+                    >
+                        Save
+                    </Button>
                 </Modal.Actions>
             </Modal>
         );
     }
 }
 
-ImportGeoJsonModal.propTypes = {
+ModelAreaImport.propTypes = {
     header: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired
 };
 
-export default ImportGeoJsonModal;
+export default ModelAreaImport;

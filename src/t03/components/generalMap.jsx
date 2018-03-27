@@ -10,7 +10,8 @@ import ActiveCellsLayer from './activeCellsLayer';
 import Button from '../../components/primitive/Button';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
-import ImportGeoJsonModal from '../../core/import';
+import ModelAreaImport from '../../core/import/ModelAreaImport';
+
 
 const styles = {
     map: {
@@ -89,12 +90,18 @@ class ModelEditorGeneralMap extends React.Component {
         });
     };
 
+    updateArea = (feature) => {
+        const bounds = geoJson(feature).getBounds();
+        this.props.onAreaUpdate(feature.geometry, bounds);
+    };
+
     renderImportGeoJsonModal = () => {
         if (this.state.import) {
             return (
-                <ImportGeoJsonModal
+                <ModelAreaImport
                     onClose={() => this.toggleImport(false)}
                     header={'Import Area Geometry'}
+                    onChange={this.updateArea}
                 />
             );
         }
