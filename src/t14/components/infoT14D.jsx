@@ -2,9 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {calcDQ} from '../calculations/calculationT14D';
 
-const Info = ({Qw, t, S, T, d, W, Kdash, Bdashdash, Sy, bdash}) => {
-    const lambda = Kdash * W / bdash;
-    const dQ = calcDQ(d, S, T, t, lambda, Kdash, Bdashdash, Sy, Qw);
+const Info = ({Qw, t, S, T, d, W, Kdash, Bdashdash, Sigma, bdash}) => {
+    const Sy = Sigma;
+    const lambda = Kdash * W / Bdashdash;
+    const deps = S/Sigma;
+    const dlam = lambda*d/T;
+    const dk = ((Kdash/bdash)*d*d)/T;
+    const dQ = calcDQ(d, S, T, t, lambda, Kdash, Bdashdash, Sy, Qw, deps,dlam,dk);
+
     return (
         <div className="padding-30">
             <h2>
@@ -29,7 +34,6 @@ Info.propTypes = {
     W: PropTypes.number.isRequired,
     Kdash: PropTypes.number.isRequired,
     Bdashdash: PropTypes.number.isRequired,
-    Sy: PropTypes.number.isRequired,
     bdash: PropTypes.number.isRequired,
 };
 
