@@ -15,10 +15,10 @@ export const getInitialState = (tool) => {
         parameters: [{
             order: 0,
             id: 'C0',
-            name: 'Initial concentration of the solute, C₀ [mg/l]',
+            name: 'Initial concentration of the solute, C<sub>0</sub> [mg/l]',
             min: 0.0,
             max: 1000.0,
-            value: 725,
+            value: 100,
             stepSize: 0.01,
             decimals: 3
         }, {
@@ -27,7 +27,7 @@ export const getInitialState = (tool) => {
             name: 'Distance from the injection point, x [m]',
             min: 0,
             max: 100,
-            value: 15,
+            value: 10,
             stepSize: 1,
             decimals: 2
         }, {
@@ -87,10 +87,10 @@ export const getInitialState = (tool) => {
         }, {
             order: 8,
             id: 'Kd',
-            name: 'Sorption partition coefficient, Kd [l/g]',
+            name: 'Sorption partition coefficient, K<sub>d</sub> [l/g]',
             min: 0.0,
             max: 0.1,
-            value: 0.01,
+            value: 0.0,
             stepSize: 0.001,
             decimals: 3
         }, {
@@ -105,7 +105,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 10,
             id: 'Corg',
-            name: 'Organic carbon content in the soil, Cₒᵣg [-]',
+            name: 'Organic carbon content in the soil, C<sub>org</sub> [-]',
             min: 0,
             max: 0.1,
             value: 0.001,
@@ -114,7 +114,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 11,
             id: 'Kow',
-            name: 'Logarithmus of octanol/water partition coefficient, log Kₒw [-]',
+            name: 'Logarithmus of octanol/water partition coefficient, log K<sub>ow</sub> [-]',
             min: 0,
             max: 10,
             value: 2.25,

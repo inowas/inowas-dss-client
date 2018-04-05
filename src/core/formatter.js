@@ -17,4 +17,5 @@ export const dateToAtomFormat = (date) => moment.utc(date).format('YYYY-MM-DD[T]
 export const dateToYmd = (date) => moment.utc(date).format('YYYY-MM-DD');
 export const dateToTime = (date) => moment.utc(date).format('HH:mm');
 export const dateToDate = (date) => moment.utc(date).format('MM/DD/YYYY');
+export const dateToDateIgnoreTimeZones = (date) => moment.utc(moment(date).format('MM/DD/YYYY')).format('MM/DD/YYYY');
 export const dateToDatetime = (date) => moment.utc(date).format('MM/DD/YYYY HH:mm');

@@ -30,18 +30,20 @@ class T14 extends React.Component {
                 <Navbar links={navigation}/>
                 <h3>Please select the set of boundary conditions that apply to your problem:</h3>
                 <div className="grid-container">
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14A')}  className="tile col col-rel-1-t13">
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14A')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T14A</h1>
                             <p className="p-height">
                                 Fully penetrating stream with no streambed resistance (Jenkins, 1968)
                             </p>
                             <div className="center-horizontal center-vertical">
-                                <img className="sketch-image" src={image14A} width="230px" style={{marginBottom:40}}/>
+                                <img className="sketch-image" src={image14A} width="230px" style={{marginBottom: 40}}/>
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14B')}  className="tile col col-rel-1-t13">
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14B')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T14B</h1>
                             <p className="p-height">
@@ -52,7 +54,8 @@ class T14 extends React.Component {
                             </div>
                         </div>
                     </a>
-                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14C')}  className="tile col col-rel-1-t13">
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14C')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T14C</h1>
                             <p className="p-height">
@@ -63,7 +66,8 @@ class T14 extends React.Component {
                             </div>
                         </div>
                     </a>
-{/*                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14D')}  className="tile col col-rel-1-t13">
+                    <a style={{'cursor': 'pointer'}} onClick={() => this.pushToTool('T14D')}
+                       className="tile col col-rel-1-t13">
                         <div className="div-block">
                             <h1>T14D</h1>
                             <p className="p-height">
@@ -73,7 +77,7 @@ class T14 extends React.Component {
                                 <img className="sketch-image" src={image14D}/>
                             </div>
                         </div>
-                    </a>*/}
+                    </a>
                 </div>
             </div>
         );

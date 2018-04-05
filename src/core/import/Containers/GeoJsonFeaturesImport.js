@@ -6,106 +6,68 @@ import {GeoJSON, Map, TileLayer} from 'react-leaflet';
 import md5 from 'js-md5';
 import {Formatter, LayoutComponents} from '../../../core';
 import Input from '../../../components/primitive/Input';
-import {toDate} from '../../formatter';
+import {dateToAtomFormat, dateToDateIgnoreTimeZones} from '../../formatter';
+import {addDays} from '../../helpers';
 
-const availableTypes = ['area', 'boundary'];
-const availableBoundaryTypes = ['chd', 'ghb', 'rch', 'riv', 'wel'];
-const expectedGeometry = {
-    area: ['LineString', 'Polygon'],
+const importConfiguration = {
+    area: {
+        expectedGeometry: ['LineString', 'Polygon'],
+    },
     boundary: {
-        chd: ['LineString'],
-        ghb: ['LineString'],
-        rch: ['LineString', 'Polygon'],
-        riv: ['LineString'],
-        wel: ['Point']
-    }
-};
-
-const availableProperties = [
-    {
-        key: 'name',
-        label: 'Select name property:',
-        uniqueOption: false,
-        default: 'default'
-    },
-    {
-        key: 'totalTime',
-        label: 'Select time property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'sHead',
-        label: 'Select sHead property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'eHead',
-        label: 'Select eHead property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'stage',
-        label: 'Select stage property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'cond',
-        label: 'Select conductivity property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'rechargeRate',
-        label: 'Select recharge rate property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'rbot',
-        label: 'Select river bottom property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'pumpingRate',
-        label: 'Select pumping rate property:',
-        uniqueOption: true,
-        default: 'default'
-    },
-    {
-        key: 'startDateTime',
-        label: 'Select start dateTime:',
-        uniqueOption: false,
-        dateTime: true,
-        default: new Date('2010-01-01')
-    },
-];
-
-const importPropertyConfiguration = {
-    area: [],
-    boundary: {
-        chd: ['name', 'totalTime', 'startDateTime', 'sHead', 'eHead'],
-        ghb: ['name', 'totalTime', 'startDateTime', 'stage', 'cond'],
-        rch: ['name', 'totalTime', 'startDateTime', 'rechargeRate'],
-        riv: ['name', 'totalTime', 'startDateTime', 'stage', 'rbot', 'cond'],
-        wel: ['name', 'totalTime', 'startDateTime', 'pumpingRate']
+        chd: {
+            values: ['sHead', 'eHead'],
+            startDateTime: new Date('2010-01-01'),
+            expectedGeometry: ['LineString'],
+            nameProperty: 'default',
+            totalTimesProperty: 'default',
+            sHeadProperty: 'default',
+            eHeadProperty: 'default',
+        },
+        ghb: {
+            values: ['stage', 'cond'],
+            startDateTime: new Date('2010-01-01'),
+            expectedGeometry: ['LineString'],
+            nameProperty: 'default',
+            totalTimesProperty: 'default',
+            stageProperty: 'default',
+            condProperty: 'default',
+        },
+        rch: {
+            values: ['rechargeRate'],
+            startDateTime: new Date('2010-01-01'),
+            expectedGeometry: ['LineString, Polygon'],
+            nameProperty: 'default',
+            totalTimesProperty: 'default',
+            rechargeRateProperty: 'default',
+        },
+        riv: {
+            values: ['stage', 'rbot', 'cond'],
+            startDateTime: new Date('2010-01-01'),
+            expectedGeometry: ['LineString'],
+            nameProperty: 'default',
+            totalTimesProperty: 'default',
+            stageProperty: 'default',
+            rbotProperty: 'default',
+            condProperty: 'default',
+        },
+        wel: {
+            values: ['pumpingRate'],
+            startDateTime: new Date('2010-01-01'),
+            expectedGeometry: ['Point'],
+            nameProperty: 'default',
+            totalTimesProperty: 'default',
+            pumpingRateProperty: 'default',
+        }
     }
 };
 
 class GeoJsonFeaturesImport extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
-    }
-
-    componentDidMount() {
-        availableProperties.map(p => {
-            this.setState({[p.key]: p.default});
-        });
+        const configuration = props.type === 'area' ?
+            importConfiguration[props.type] :
+            importConfiguration[props.type][props.boundaryType];
+        this.state = {configuration};
     }
 
     getBounds = geometry => {
@@ -152,58 +114,87 @@ class GeoJsonFeaturesImport extends React.Component {
     handleChangeProperty = property => {
         return (e, {value}) => {
             this.setState({
-                [property]: value
+                ...this.state,
+                configuration: {
+                    ...this.state.configuration,
+                    [property]: value
+                }
             });
         };
     };
 
     handleChangeDateTime = value => {
         this.setState({
-            startDateTime: toDate(value)
+            ...this.state,
+            configuration: {
+                ...this.state.configuration,
+                startDateTime: dateToDateIgnoreTimeZones(value)
+            }
         });
     };
 
     renderProperties = (type, boundaryType, geoJson) => {
-        let propertyConfiguration;
-        if (type === 'area') {
-            propertyConfiguration = importPropertyConfiguration[type];
-        }
+        const {configuration} = this.state;
+        const properties = [];
 
-        if (type === 'boundary') {
-            propertyConfiguration = importPropertyConfiguration[type][boundaryType];
-        }
-
-        const properties = propertyConfiguration.map(pc => {
-            const property = availableProperties.find(p => p.key === pc);
-            if (property.dateTime) {
-                return (
-                    <LayoutComponents.InputGroup
-                        key={property.key}
-                        label={property.label}
-                    >
-                        <Input
-                            name="dateTime"
-                            type="date"
-                            value={Formatter.dateToYmd(this.state.startDateTime)}
-                            onChange={this.handleChangeDateTime}
-                        />
-                    </LayoutComponents.InputGroup>
-                );
-            }
-
-            return (
+        if (configuration.hasOwnProperty('nameProperty')) {
+            properties.push(
                 <Form.Dropdown
-                    key={property.key}
-                    label={property.label}
+                    key={'nameProperty'}
+                    label={'Choose property for name:'}
                     fluid
                     selection
                     closeOnChange
-                    options={this.propertyOptions(geoJson, property.uniqueOption)}
-                    onChange={this.handleChangeProperty(property.key)}
-                    value={this.state[property.key]}
+                    options={this.propertyOptions(geoJson, false)}
+                    onChange={this.handleChangeProperty('nameProperty')}
+                    value={configuration.nameProperty}
                 />
             );
-        });
+        }
+
+        if (configuration.hasOwnProperty('values')) {
+            properties.push(
+                <LayoutComponents.InputGroup
+                    key={'dateTimeValues'}
+                    label={'Set start-dateTime:'}
+                >
+                    <Input
+                        name="dateTime"
+                        type="date"
+                        value={Formatter.dateToYmd(configuration.startDateTime)}
+                        onChange={this.handleChangeDateTime}
+                    />
+                </LayoutComponents.InputGroup>
+            );
+
+            properties.push(
+                <Form.Dropdown
+                    key={'totalTimesProperty'}
+                    label={'Set totalTimesProperty:'}
+                    fluid
+                    selection
+                    closeOnChange
+                    options={this.propertyOptions(geoJson, true)}
+                    onChange={this.handleChangeProperty('totalTimesProperty')}
+                    value={configuration.totalTimesProperty}
+                />
+            );
+
+            configuration.values.forEach(e => {
+                properties.push(
+                    <Form.Dropdown
+                        key={e + 'Property'}
+                        label={'Set ' + e + ':'}
+                        fluid
+                        selection
+                        closeOnChange
+                        options={this.propertyOptions(geoJson, true)}
+                        onChange={this.handleChangeProperty(e + 'Property')}
+                        value={configuration[e + 'Property']}
+                    />
+                );
+            });
+        }
 
         return (
             <Segment color={'blue'}>
@@ -212,33 +203,65 @@ class GeoJsonFeaturesImport extends React.Component {
                     {properties}
                 </Form>
             </Segment>
-        )
-            ;
+        );
     };
 
-    calculateDateTimeValues = (type, boundaryType, feature) => {
-        let propertyConfiguration;
-        if (type === 'area') {
-            return false;
+    calculateDateTimeValues = (feature) => {
+        const {configuration} = this.state;
+
+        const {properties} = feature;
+        const {values} = configuration;
+        let canNotBeCalculated = false;
+
+        // get TotalTimes
+        if (configuration.totalTimesProperty === 'default') {
+            return null;
         }
 
-        if (type === 'boundary') {
-            propertyConfiguration = importPropertyConfiguration[type][boundaryType];
+        const dateTimeValues = [];
+        for (const key in properties) {
+            if (properties.hasOwnProperty(key)) {
+                if (key.startsWith(configuration.totalTimesProperty)) {
+                    dateTimeValues.push({
+                        property: key,
+                        base: configuration.totalTimesProperty,
+                        number: Number(key.replace(configuration.totalTimesProperty, '')),
+                        totalTime: properties[key],
+                        dateTime: dateToAtomFormat(dateToDateIgnoreTimeZones(addDays(properties[key])(dateToDateIgnoreTimeZones(this.state.configuration.startDateTime)))),
+                        values: []
+                    });
+                }
+            }
         }
 
-        let canBeCalculated = true;
-        const properties = [];
-        propertyConfiguration.forEach(pc => {
-            const property = availableProperties.find(p => p.key === pc);
-            canBeCalculated = canBeCalculated && properties.canBeCalculated();
-            properties.push(property);
+        values.forEach(v => {
+            if (configuration[v + 'Property'] === 'default') {
+                canNotBeCalculated = true;
+            }
+
+            const propertyBaseName = configuration[v + 'Property'];
+
+            for (const key in properties) {
+                if (properties.hasOwnProperty(key)) {
+                    if (key.startsWith(propertyBaseName)) {
+                        const number = Number(key.replace(propertyBaseName, ''));
+                        dateTimeValues.forEach( (dtv, index) => {
+                            if (dtv.number === number) {
+                                dateTimeValues[index].values.push(Number(properties[key]));
+                            }
+                        });
+                    }
+                }
+            }
         });
 
-        if (!canBeCalculated) {
-            return false;
+        if (canNotBeCalculated) {
+            // return null;
         }
 
-        // Start with times
+
+
+        return JSON.stringify(dateTimeValues);
     };
 
     renderTableHeader = (type) => {
@@ -277,11 +300,12 @@ class GeoJsonFeaturesImport extends React.Component {
     };
 
     renderRow = (type, key, feature) => {
+        const {configuration} = this.state;
         return (
             <Table.Row key={key}>
                 <Table.Cell>{key + 1}</Table.Cell>
                 <Table.Cell>
-                    {this.state.name === 'default' ? this.props.boundaryType + ' ' + key + 1 : feature.properties[this.state.name]}
+                    {configuration.nameProperty === 'default' ? this.props.boundaryType + ' ' + key + 1 : feature.properties[configuration.nameProperty]}
                 </Table.Cell>
                 <Table.Cell>{feature.geometry.type}</Table.Cell>
                 <Table.Cell>
@@ -313,7 +337,7 @@ class GeoJsonFeaturesImport extends React.Component {
                     &nbsp;|&nbsp;
                     <Popup
                         trigger={<span><u>values</u></span>}
-                        content={JSON.stringify(feature.properties)}
+                        content={this.calculateDateTimeValues(feature)}
                         basic
                     />
                 </Table.Cell>
