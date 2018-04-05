@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import {calcDQ} from '../calculations/calculationT14D';
 
 const Info = ({Qw, t, S, T, d, W, Kdash, Bdashdash, Sigma, bdash}) => {
-    const Sy = Sigma;
     const lambda = Kdash * W / Bdashdash;
-    const deps = S/Sigma;
-    const dlam = lambda*d/T;
-    const dk = ((Kdash/bdash)*d*d)/T;
-    const dQ = calcDQ(d, S, T, t, lambda, Kdash, Bdashdash, Sy, Qw, deps,dlam,dk);
+    const deps = S / Sigma;
+    const dlam = lambda * d / T;
+    const dk = ((Kdash / bdash) * d * d) / T;
+    const dQ = calcDQ(d, S, T, t, lambda, Kdash, Bdashdash, Qw, deps, dlam, dk);
 
     return (
         <div className="padding-30">
@@ -35,6 +34,7 @@ Info.propTypes = {
     Kdash: PropTypes.number.isRequired,
     Bdashdash: PropTypes.number.isRequired,
     bdash: PropTypes.number.isRequired,
+    Sigma: PropTypes.number.isRequired,
 };
 
 export default Info;
