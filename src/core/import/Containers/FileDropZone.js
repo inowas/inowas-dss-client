@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import {isJsonValid, prettifyJson, validateGeoJson} from '../Helpers';
+import {isJsonValid, prettifyJson, validateCsv, validateGeoJson} from '../Helpers';
 
-class GeoJsonFileDropZone extends React.Component {
+class FileDropZone extends React.Component {
 
     onDrop = (files) => {
         const file = files[0];
@@ -15,15 +15,36 @@ class GeoJsonFileDropZone extends React.Component {
 
     fileReaderHandleFile = (e) => {
         const fileContent = e.srcElement.result;
+        if (fileContent.startsWith('{')) {
+            // Supposing json-content
+            this.handleJsonContent(fileContent);
+        }
+
+        // Supposing csv-content
+        this.handleCsvContent(fileContent);
+    };
+
+    handleCsvContent = fileContent => {
+        const [contentValid, contentValidationErrors] = validateCsv(fileContent);
+        const contentType = contentValid ? 'text/csv' : '';
+        this.props.onChange({
+            contentType,
+            content: fileContent,
+            contentValid,
+            contentValidationErrors
+        });
+    };
+
+    handleJsonContent = fileContent => {
         const content = isJsonValid(fileContent) ? prettifyJson(fileContent) : fileContent;
         const [contentValid, contentValidationErrors] = validateGeoJson(fileContent);
         const contentType = contentValid ? 'application/json' : '';
-        this.props.onChange(
+        this.props.onChange({
             contentType,
             content,
             contentValid,
             contentValidationErrors
-        );
+        });
     };
 
     render() {
@@ -42,8 +63,8 @@ class GeoJsonFileDropZone extends React.Component {
     }
 }
 
-GeoJsonFileDropZone.propTypes = {
+FileDropZone.propTypes = {
     onChange: PropTypes.func.isRequired
 };
 
-export default GeoJsonFileDropZone;
+export default FileDropZone;

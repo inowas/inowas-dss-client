@@ -1,4 +1,5 @@
 import Ajv from 'ajv/lib/ajv';
+import Papa from 'papaparse';
 
 export const isJsonValid = (json) => {
     try {
@@ -15,6 +16,12 @@ export const prettifyJson = (geoJson) => {
     }
 
     return JSON.stringify(JSON.parse(geoJson), null, 2);
+};
+
+export const validateCsv = (inputString) => {
+    const validate = Papa.parse(inputString);
+    const isValid = validate.errors.length === 0;
+    return [isValid, validate.errors];
 };
 
 export const validateGeoJson = (geoJson) => {

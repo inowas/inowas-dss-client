@@ -5,9 +5,11 @@ import {Button, Grid, Menu, Modal, Popup, Radio, Segment, Table, TextArea} from 
 import {geoJSON as leafletGeoJSON} from 'leaflet';
 import md5 from 'js-md5';
 import {projectGeoJson} from '../geospatial/proj4';
-import DropZone from './Containers/GeoJsonFileDropZone';
+import DropZone from './Containers/FileDropZone';
 import {prettifyJson} from './Helpers';
 import GeoJsonFeaturesImport from './Containers/GeoJsonFeaturesImport';
+import {importBoundariesFromCsv} from './CsvImporter';
+import CsvBoundariesImport from "./Containers/CsvBoundariesImport";
 
 const style = {
     textArea: {
@@ -81,7 +83,7 @@ class GenericImport extends React.Component {
 
     handleItemPrimaryClick = (e, {name}) => this.setState({activeItemPrimary: name});
 
-    onUploadGeoJson = (contentType, content, contentValid, contentValidationErrors) => this.setState({
+    onUploadFile = ({contentType, content, contentValid, contentValidationErrors}) => this.setState({
         contentType,
         content,
         contentValid,
@@ -189,11 +191,9 @@ class GenericImport extends React.Component {
     render() {
         const {activeItemPrimary, content, contentValid, contentType, contentValidationErrors} = this.state;
         const {onClose} = this.props;
-        const parsedGeoJson = contentValid ? JSON.parse(content) : null;
-        const projectedGeoJson = parsedGeoJson ? projectGeoJson(parsedGeoJson) : null;
 
         let errors = null;
-        if (Array.isArray(contentValidationErrors)) {
+        if (Array.isArray(contentValidationErrors) && contentValidationErrors.length > 0) {
             errors = contentValidationErrors.map((e, key) => (
                 <div key={key}>
                     <p>Error {key + 1}</p>
@@ -223,7 +223,7 @@ class GenericImport extends React.Component {
                             {activeItemPrimary === 'File' &&
                             <div>
                                 <Segment color={'green'} size={'massive'}>
-                                    <DropZone onChange={this.onUploadGeoJson}/>
+                                    <DropZone onChange={this.onUploadFile}/>
                                 </Segment>
 
                                 {errors &&
@@ -244,12 +244,16 @@ class GenericImport extends React.Component {
                             </div>
                             }
 
-                            {activeItemPrimary === 'Elements' &&
+                            {activeItemPrimary === 'Elements' && contentValid && contentType === 'application/json' &&
                             <GeoJsonFeaturesImport
                                 type={this.props.type}
                                 boundaryType={this.props.boundaryType}
-                                geoJson={projectedGeoJson}
+                                geoJson={projectGeoJson(JSON.parse(content))}
                             />
+                            }
+
+                            {activeItemPrimary === 'Elements' && contentValid && contentType === 'text/csv' &&
+                                <CsvBoundariesImport csv={content}/>
                             }
                         </Grid.Column>
                     </Grid>
@@ -258,7 +262,7 @@ class GenericImport extends React.Component {
                     <Button negative onClick={this.props.onClose}>Cancel</Button>
                     <Button
                         positive
-                        onClick={() => this.importAreaByKey(projectedGeoJson, this.state.selectedFeature)}
+                        onClick={() => this.importAreaByKey(projectGeoJson(JSON.parse(content)), this.state.selectedFeature)}
                         disabled={this.state.selectedFeature === null}
                     >
                         Save
