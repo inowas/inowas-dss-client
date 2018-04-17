@@ -20,3 +20,5 @@ export const dateToDate = (date) => moment.utc(date).format('MM/DD/YYYY');
 export const dateToDateIgnoreTimeZones = (date) => moment.utc(moment(date).format('YYYY-MM-DD')).format('YYYY-MM-DD');
 export const dateToDatetime = (date) => moment.utc(date).format('MM/DD/YYYY HH:mm');
 export const removeThousandsSeparatorFromString = (string) => string.replace(/\,/g, '');
+
+export const dateImportFromCSV = (dateString) => moment.utc(moment(dateString).format('YYYY-MM-DD')).toISOString();

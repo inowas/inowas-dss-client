@@ -34,6 +34,7 @@ import md5 from 'js-md5';
 import {uniqueId, has} from 'lodash';
 import ActiveCellsLayer from '../components/activeCellsLayer';
 import {calculateActiveCells} from '../../core/geospatial';
+import {WellBoundary} from "../../core/boundaries/WellBoundary";
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -368,7 +369,7 @@ class BackgroundMap extends React.Component {
 
     getStartDate = () => has(this.state, 'model.stress_periods.start_date_time')
         ? this.state.model.stress_periods.start_date_time
-        : '2010-01-01T00:00:00+00:00';
+        : new Date('2010-01-01').toISOString();
 
     onCreated = e => {
         const type = this.getCreatable();
@@ -446,19 +447,21 @@ class BackgroundMap extends React.Component {
         }
 
         if (type === 'wel') {
-            const id = uuid.v4();
-            const point = e.layer;
-            const boundary = getBoundaryDefaults(
-                type,
-                id,
-                'Well ' + this.getNewBoundaryNumber(type),
-                point.toGeoJSON().geometry,
-                this.getStartDate()
+            const wellBoundary = WellBoundary.createWithStartDate({
+                id: uuid.v4(),
+                name: 'Well ' + this.getNewBoundaryNumber(type),
+                geometry: e.layer.toGeoJSON().geometry,
+                utcIsoStartDateTime: this.getStartDate()
+            });
+
+            wellBoundary.activeCells = calculateActiveCells(
+                e.layer.toGeoJSON().geometry,
+                this.props.model.bounding_box,
+                this.props.model.grid_size
             );
 
-            boundary.active_cells = calculateActiveCells(point.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
-            this.props.addBoundary(this.props.model.id, boundary);
-            this.returnToBoundariesWithBoundaryId(id, type, false);
+            this.props.addBoundary(this.props.model.id, wellBoundary.objectData);
+            this.returnToBoundariesWithBoundaryId(wellBoundary.id, type, false);
         }
     };
 

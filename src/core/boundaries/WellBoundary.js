@@ -2,51 +2,37 @@
 import Uuid from 'uuid';
 import epsg from 'epsg';
 import reproject from 'reproject';
-import {dateToAtomFormat, dateToDateIgnoreTimeZones, removeThousandsSeparatorFromString} from '../formatter';
+import {dateImportFromCSV, removeThousandsSeparatorFromString} from '../formatter';
+import {Boundary} from './Boundary';
 
-export const createDefault = ({id = null, name = '', geometry, startDateTime}) => {
-    return {
-        id: id,
-        name: name,
-        geometry: geometry,
-        type: 'wel',
-        affected_layers: [0],
-        metadata: {
-            well_type: 'puw'
-        },
-        date_time_values: [{
-            date_time: startDateTime,
-            values: [0]
-        }]
-    };
-};
+export class WellBoundary extends Boundary {
 
-
-export class WellBoundary {
-    _id;
-    _name;
-    _geometry;
-    _type = 'wel';
-    _affectedLayers = [0];
+    _hasObservationPoints = false;
     _metadata = {well_type: 'puw'};
-    _dateTimeValues = [];
+    _type = 'wel';
 
-    static createDefault({id = null, name = '', geometry, startDateTime}) {
+    static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
         const self = new this();
         id ? self._id = id : self._id = Uuid.v4();
-        self._name = name;
+        name ? self._name = name : self._name = 'new well';
         self._geometry = geometry;
-        self._startDateTime = startDateTime;
+        self._dateTimeValues = [
+            {date_time: utcIsoStartDateTime, values: [0]}
+        ];
+
         return self;
     }
 
     static createFromCsv({version, generalMetadata, boundaryMetadata, boundaryData}) {
-        const boundary = new this();
+        const boundary = new WellBoundary();
 
         if (version === 'v1') {
             let geojson = {
                 type: boundaryMetadata[2],
-                coordinates: [parseFloat(removeThousandsSeparatorFromString(boundaryMetadata[4])), parseFloat(removeThousandsSeparatorFromString(boundaryMetadata[5]))]
+                coordinates: [
+                    parseFloat(removeThousandsSeparatorFromString(boundaryMetadata[4])),
+                    parseFloat(removeThousandsSeparatorFromString(boundaryMetadata[5]))
+                ]
             };
 
             geojson = reproject.toWgs84(geojson, boundaryMetadata[3], epsg);
@@ -57,7 +43,7 @@ export class WellBoundary {
             boundaryData.filter(bd => boundaryMetadata[1] === bd[1]).forEach(
                 ds => {
                     boundary._dateTimeValues.push({
-                        date_time: dateToAtomFormat(dateToDateIgnoreTimeZones(ds[2])),
+                        date_time: dateImportFromCSV(ds[2]),
                         values: [parseFloat(ds[3])]
                     });
                 }
@@ -67,8 +53,10 @@ export class WellBoundary {
         return boundary;
     }
 
-    static fromObject = ({id, name, geometry, type, affected_layers, metadata, date_time_values}) => {
-        const self = new this();
+    static fromObjectData = (objectData) => {
+        const {id, name, geometry, type, affected_layers, metadata, date_time_values, active_cells} = objectData;
+        const self = new WellBoundary();
+
         self._id = id;
         self._name = name;
         self._geometry = geometry;
@@ -76,20 +64,46 @@ export class WellBoundary {
         self._affectedLayers = affected_layers;
         self._metadata = metadata;
         self._dateTimeValues = date_time_values;
+        self._activeCells = active_cells;
+
         return self;
     };
 
-    isValid = () => {
-        return true;
-    };
+    get isValid() {
+        let valid = super.isValid;
+        this._type === 'wel' ? valid = true : valid = false;
+        this.geometry && this.geometry.type === 'Point' ? valid = true : valid = false;
+        return valid;
+    }
 
-    toObject = () => ({
-        id: this._id,
-        name: this._name,
-        geometry: this._geometry,
-        type: this._type,
-        affected_layers: this._affectedLayers,
-        metadata: this._metadata,
-        date_time_values: this._dateTimeValues
-    })
+    get dateTimeValues() {
+        return this._dateTimeValues;
+    }
+
+    set dateTimeValues(dateTimeValues) {
+        this._dateTimeValues = dateTimeValues;
+    }
+
+    get indexedDateTimeValues() {
+        return this._dateTimeValues.map((value, index) => {
+            return {...value, id: index};
+        });
+    }
+
+    set activeCells(activeCells) {
+        this._activeCells = activeCells;
+    }
+
+    get objectData() {
+        return {
+            id: this._id,
+            name: this._name,
+            geometry: this._geometry,
+            type: this._type,
+            affected_layers: this._affectedLayers,
+            metadata: this._metadata,
+            date_time_values: this._dateTimeValues,
+            active_cells: this._activeCells
+        };
+    }
 }

@@ -21,6 +21,7 @@ import BoundaryGeometryEditor from '../../core/boundaryEditor/boundaryGeometryEd
 import ObservationPointEditor from '../../core/boundaryEditor/observationPointEditor';
 import {first} from 'lodash';
 import {addIdFromIndex, getDateTimeValues} from '../../core/helpers';
+import {WellBoundary} from '../../core/boundaries/WellBoundary';
 
 const styles = {
     columns: {
@@ -311,7 +312,6 @@ class BoundaryProperties extends React.Component {
                         }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
                     </LayoutComponents.Column>
                 );
-
             case 'ghb':
                 return (
                     <LayoutComponents.Column heading="Data">
@@ -344,6 +344,7 @@ class BoundaryProperties extends React.Component {
                     </LayoutComponents.Column>
                 );
             case 'wel':
+                const wellBoundary = WellBoundary.fromObjectData(boundary);
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
@@ -352,7 +353,7 @@ class BoundaryProperties extends React.Component {
                             ref={op => {
                                 this.observationPoint = op;
                             }}
-                            rows={addIdFromIndex(getDateTimeValues(boundary))}/>
+                            rows={wellBoundary.indexedDateTimeValues}/>
                     </LayoutComponents.Column>
                 );
             default:

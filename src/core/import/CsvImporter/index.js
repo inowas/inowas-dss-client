@@ -20,8 +20,6 @@ const readBoundariesFromData = ({version, boundaryType, generalMetadata, boundar
             break;
     }
 
-    console.log(boundaries);
-
     return boundaries;
 };
 
