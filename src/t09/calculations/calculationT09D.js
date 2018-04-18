@@ -23,7 +23,6 @@ export function dRo(rhof, rhos) {
 }
 
 export function calcXt(k, b, q, Qw, xw, rhof, rhos) {
-    let iter = 1;
     const dRho = dRo(rhof, rhos);
     const lhs = 0.5*(1+dRho)*b*b/(dRho*dRho);
     let xt = lhs*k/q;
@@ -34,8 +33,8 @@ export function calcXt(k, b, q, Qw, xw, rhof, rhos) {
         const term2 = Qw*Math.log(Math.pow((xt-xw),2)/Math.pow((xt+xw),2))/(4*Math.PI*k);
         rhs = term1 + term2;
         xt = xt + (lhs - rhs);
-        iter = iter + 1;
-    } while (Math.abs(lhs-rhs)>0.01);
+        console.log(xt)
+    } while (Math.abs(lhs-rhs)>0.000001);
     return xt;
 }
 
@@ -53,7 +52,6 @@ export function calcMu(Lambda) {
     let iter = 1;
     let mu = 0.0000001;
     let rhs = 0;
-
     do {
         const term1 = 2 * Math.sqrt((1 - mu / Math.PI));
         const term2 = (mu / Math.PI) * Math.log((1 - Math.sqrt((1 - mu / Math.PI))) / (1 + Math.sqrt((1 - mu / Math.PI))));
