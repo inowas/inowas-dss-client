@@ -1,21 +1,22 @@
 /* eslint-disable camelcase */
+import Uuid from 'uuid';
 import epsg from 'epsg';
 import reproject from 'reproject';
 import {dateImportFromCSV, removeThousandsSeparatorFromString} from '../formatter';
 import {Boundary} from './Boundary';
 
-export class WellBoundary extends Boundary {
+export class RechargeBoundary extends Boundary {
 
     _hasObservationPoints = false;
-    _metadata = {well_type: 'puw'};
-    _type = 'wel';
+    _type = 'rch';
 
     static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
-        return Boundary.createByTypeAndStartDate({id, name, type: 'wel', geometry, utcIsoStartDateTime});
+        return Boundary.createByTypeAndStartDate({id, name, type: 'rch', geometry, utcIsoStartDateTime});
     }
 
+    // Todo
     static createFromCsv({version, generalMetadata, boundaryMetadata, boundaryData}) {
-        const well = new WellBoundary();
+        const boundary = new RechargeBoundary();
 
         if (version === 'v1') {
             let geojson = {
@@ -27,35 +28,28 @@ export class WellBoundary extends Boundary {
             };
 
             geojson = reproject.toWgs84(geojson, boundaryMetadata[3], epsg);
-            well.wellType = generalMetadata[5];
-            well.name = boundaryMetadata[1];
-            well.geometry = geojson;
+            boundary._metadata.well_type = generalMetadata[5];
+            boundary._name = boundaryMetadata[1];
+            boundary._geometry = geojson;
 
             boundaryData.filter(bd => boundaryMetadata[1] === bd[1]).forEach(
                 ds => {
-                    well._dateTimeValues.push({
-                        date_time: dateImportFromCSV(ds[2]), values: [parseFloat(ds[3])]
+                    boundary._dateTimeValues.push({
+                        date_time: dateImportFromCSV(ds[2]),
+                        values: [parseFloat(ds[3])]
                     });
                 }
             );
         }
 
-        return well;
+        return boundary;
     }
 
     get isValid() {
         let valid = super.isValid;
-        this._type === 'wel' ? valid = true : valid = false;
-        this.geometry && this.geometry.type === 'Point' ? valid = true : valid = false;
+        this._type === 'rch' ? valid = true : valid = false;
+        this.geometry && this.geometry.type === 'Polygon' ? valid = true : valid = false;
         return valid;
-    }
-
-    get wellType() {
-        return (this._metadata && this._metadata.well_type) || 'puw';
-    }
-
-    set wellType(type) {
-        this._metadata.well_type = type;
     }
 
     setStartDateTimeValue(utcIsoStartDateTime) {

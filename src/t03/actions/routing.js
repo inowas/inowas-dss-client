@@ -52,11 +52,11 @@ export const editBoundaryOnMap = (routes, params) => (property, type, pid) => {
 };
 
 export const createBoundary = (routes, params) => (property, type) => {
-    Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property, type }, '#create' );
+    Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property, type }, '#fromType' );
 };
 
 export const createArea = (routes, params) => () => {
-    Routing.goToUrl( routes, { said: null, id: null, property: null, type: null, pid: null }, '#create' );
+    Routing.goToUrl( routes, { said: null, id: null, property: null, type: null, pid: null }, '#fromType' );
 };
 
 export const editLayer = (routes, params) => (pid) => {

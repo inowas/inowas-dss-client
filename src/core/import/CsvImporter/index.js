@@ -7,13 +7,12 @@ const validTimeUnits = ['d'];
 const validVersions = ['v1'];
 
 const readBoundariesFromData = ({version, boundaryType, generalMetadata, boundaryMetaData, boundaryData}) => {
-
     const boundaries = [];
     switch (boundaryType) {
         case 'wel':
             boundaryMetaData.forEach(bmd => {
                 const boundary = WellBoundary.createFromCsv({version, generalMetadata, boundaryMetadata: bmd, boundaryData});
-                if (boundary.isValid()) {
+                if (boundary.isValid) {
                     boundaries.push(boundary);
                 }
             });

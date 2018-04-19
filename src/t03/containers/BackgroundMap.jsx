@@ -90,7 +90,7 @@ class BackgroundMap extends React.Component {
         return (
             this.props.location.hash === '#edit' ||
             this.props.location.hash === '#edit-op' ||
-            this.props.location.hash === '#create' ||
+            this.props.location.hash === '#fromType' ||
             this.props.location.hash === '#view'
         );
     }
@@ -487,7 +487,7 @@ class BackgroundMap extends React.Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash !== '#create') {
+        if (hash !== '#fromType') {
             return null;
         }
 
