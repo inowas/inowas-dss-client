@@ -51,7 +51,6 @@ const Chart = ({k, b, q, xw, rhof, rhos, AqType}) => {
     const lambda = calcLambda(k, b, q, xw, rhof, rhos, AqType);
     const mu = calcMu(lambda);
     const qCrit = calculateQCrit(q, mu, xw);
-    console.log(qCrit, mu)
     const data = calculateDiagramData(q, mu, xw);
 
     return (

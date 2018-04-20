@@ -33,7 +33,6 @@ export function calcXt(k, b, q, Qw, xw, rhof, rhos) {
         const term2 = Qw*Math.log(Math.pow((xt-xw),2)/Math.pow((xt+xw),2))/(4*Math.PI*k);
         rhs = term1 + term2;
         xt = xt + (lhs - rhs);
-        console.log(xt)
     } while (Math.abs(lhs-rhs)>0.000001);
     return xt;
 }
