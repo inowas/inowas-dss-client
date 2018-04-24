@@ -11,10 +11,10 @@ import Sanddam from '../images/sand_dam.png';
 import Bounds from '../images/barriers-and_bunds.png';
 import EI from '../images/excess_irrigation.png';
 import Ditches from '../images/ditches_and_furrows.png';
-import Trenches from '../images/trenches.png';
+import Trenches from '../images/Trenches.png';
 import WSB from '../images/shallow_well_injection.png';
 import CS from '../images/channel_spreading.png';
-import Flooding from '../images/flooding.png';
+import Flooding from '../images/Flooding.png';
 import {find} from 'lodash';
 
 export const getInitialState = () => {
