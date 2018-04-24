@@ -29,6 +29,13 @@ const initialState = [
         role: ROLE_USER,
         instances: []
     }, {
+        slug: 'T06',
+        name: 'MAR method selection',
+        path: '/tools/',
+        subPath: '',
+        role: ROLE_USER,
+        instances: []
+    }, {
         slug: 'T07',
         name: 'MODFLOW model scenario manager',
         path: '/tools/',
