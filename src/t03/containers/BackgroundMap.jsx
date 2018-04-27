@@ -212,7 +212,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="Constant Head Boundaries" checked>
                 <FeatureGroup>
-                    {constantHeads}
+                    <div>{constantHeads}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -244,7 +244,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="General Head Boundaries" checked>
                 <FeatureGroup>
-                    {generalHeads}
+                    <div>{generalHeads}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -276,7 +276,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="Recharge Boundaries" checked>
                 <FeatureGroup>
-                    {recharges}
+                    <div>{recharges}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -308,7 +308,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="River Boundaries" checked>
                 <FeatureGroup>
-                    {rivers}
+                    <div>{rivers}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -343,7 +343,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="Wells" checked>
                 <FeatureGroup>
-                    {wells}
+                    <div>{wells}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -763,7 +763,7 @@ class BackgroundMap extends React.Component {
                     {geometry}
                 </FeatureGroup>
                 <FeatureGroup>
-                    {activeCells}
+                    <div>{activeCells}</div>
                 </FeatureGroup>
             </FeatureGroup>
         );
