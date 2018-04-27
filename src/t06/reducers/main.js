@@ -15,7 +15,6 @@ import Trenches from '../images/trenches.png';
 import WSB from '../images/shallow_well_injection.png';
 import CS from '../images/channel_spreading.png';
 import Flooding from '../images/flooding.png';
-import {find} from 'lodash';
 
 export const getInitialState = () => {
     return {
