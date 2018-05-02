@@ -34,7 +34,6 @@ import md5 from 'js-md5';
 import {uniqueId, has} from 'lodash';
 import ActiveCellsLayer from '../components/activeCellsLayer';
 import {calculateActiveCells} from '../../core/geospatial';
-import {WellBoundary} from "../../core/boundaries/WellBoundary";
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -90,7 +89,7 @@ class BackgroundMap extends React.Component {
         return (
             this.props.location.hash === '#edit' ||
             this.props.location.hash === '#edit-op' ||
-            this.props.location.hash === '#fromType' ||
+            this.props.location.hash === '#create' ||
             this.props.location.hash === '#view'
         );
     }
@@ -213,7 +212,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="Constant Head Boundaries" checked>
                 <FeatureGroup>
-                    {constantHeads}
+                    <div>{constantHeads}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -245,7 +244,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="General Head Boundaries" checked>
                 <FeatureGroup>
-                    {generalHeads}
+                    <div>{generalHeads}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -277,7 +276,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="Recharge Boundaries" checked>
                 <FeatureGroup>
-                    {recharges}
+                    <div>{recharges}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -309,7 +308,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="River Boundaries" checked>
                 <FeatureGroup>
-                    {rivers}
+                    <div>{rivers}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -344,7 +343,7 @@ class BackgroundMap extends React.Component {
         return (
             <LayersControl.Overlay name="Wells" checked>
                 <FeatureGroup>
-                    {wells}
+                    <div>{wells}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -369,7 +368,7 @@ class BackgroundMap extends React.Component {
 
     getStartDate = () => has(this.state, 'model.stress_periods.start_date_time')
         ? this.state.model.stress_periods.start_date_time
-        : new Date('2010-01-01').toISOString();
+        : '2010-01-01T00:00:00+00:00';
 
     onCreated = e => {
         const type = this.getCreatable();
@@ -447,21 +446,19 @@ class BackgroundMap extends React.Component {
         }
 
         if (type === 'wel') {
-            const wellBoundary = WellBoundary.createWithStartDate({
-                id: uuid.v4(),
-                name: 'Well ' + this.getNewBoundaryNumber(type),
-                geometry: e.layer.toGeoJSON().geometry,
-                utcIsoStartDateTime: this.getStartDate()
-            });
-
-            wellBoundary.activeCells = calculateActiveCells(
-                e.layer.toGeoJSON().geometry,
-                this.props.model.bounding_box,
-                this.props.model.grid_size
+            const id = uuid.v4();
+            const point = e.layer;
+            const boundary = getBoundaryDefaults(
+                type,
+                id,
+                'Well ' + this.getNewBoundaryNumber(type),
+                point.toGeoJSON().geometry,
+                this.getStartDate()
             );
 
-            this.props.addBoundary(this.props.model.id, wellBoundary.objectData);
-            this.returnToBoundariesWithBoundaryId(wellBoundary.id, type, false);
+            boundary.active_cells = calculateActiveCells(point.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
+            this.props.addBoundary(this.props.model.id, boundary);
+            this.returnToBoundariesWithBoundaryId(id, type, false);
         }
     };
 
@@ -487,7 +484,7 @@ class BackgroundMap extends React.Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash !== '#fromType') {
+        if (hash.toString() !== '#create') {
             return null;
         }
 
@@ -609,7 +606,7 @@ class BackgroundMap extends React.Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash === '#edit') {
+        if (hash.toString() === '#edit') {
             if (params.id && !params.property && !params.type && !params.pid) {
                 return {property: 'area', type: 'area', id: 'area'};
             }
@@ -628,7 +625,7 @@ class BackgroundMap extends React.Component {
             }
         }
 
-        if (hash === '#edit-op') {
+        if (hash.toString() === '#edit-op') {
             if (
                 params.id &&
                 params.property === 'boundaries' &&
@@ -766,7 +763,7 @@ class BackgroundMap extends React.Component {
                     {geometry}
                 </FeatureGroup>
                 <FeatureGroup>
-                    {activeCells}
+                    <div>{activeCells}</div>
                 </FeatureGroup>
             </FeatureGroup>
         );
