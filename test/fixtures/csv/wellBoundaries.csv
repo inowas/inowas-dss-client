@@ -1,24 +1,24 @@
-#;This is a comment and won't be analyzed;;;;;;;;;;;;;;;;;
-#;0: General Metadata, 1: Geometry, 2: Time-based data;;;;;;;;;;;;;;;;;
-#;;;;;;;;;;;;;;;;;;
-#;0: General metadata;;;;;;;;;;;;;;;;;
-#;Version;BoundaryType;LengthUnit;TimeUnit;WellType;;;;;;;;;;;;;
-0;v1;wel;m;d;inf_well;;;;;;;;;;;;;
-#;;;;;;;;;;;;;;;;;;
-#;Name;GeometryType;Projection;X (long);Y (lat);Layer;;;;;;;;;;;;
-1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;0;;;;;;;;;;;;
-#;;;;;;;;;;;;;;;;;;
-#;2: Time-based data;;;;;;;;;;;;;;;;;
-#;Name;DateTime;PumpingRate;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-01-01;-1000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-02-01;-2000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-03-01;-3000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-04-01;4000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-05-01;5000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-06-01;6000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-07-01;5900;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-08-01;5000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-09-01;4000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-10-01;-3000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-11-01;-2000;;;;;;;;;;;;;;;
-2;Pumping Well 1;2010-12-01;-1000;;;;;;;;;;;;;;;
+#;This is a comment and won't be analyzed;
+#;0: General Metadata, 1: Geometry, 2: Time-based data;
+#
+#;0: General metadata;
+#;Version;BoundaryType;LengthUnit;TimeUnit;WellType;
+0;v1;wel;m;d;inf_well;
+#
+#;Name;GeometryType;Projection;X (long);Y (lat);Layer;
+1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;0;
+#
+#;2: Time-based data;
+#;Name;DateTime;PumpingRate;
+2;Pumping Well 1;2010-01-01;-1000;
+2;Pumping Well 1;2010-02-01;-2000;
+2;Pumping Well 1;2010-03-01;-3000;
+2;Pumping Well 1;2010-04-01;4000;
+2;Pumping Well 1;2010-05-01;5000;
+2;Pumping Well 1;2010-06-01;6000;
+2;Pumping Well 1;2010-07-01;5900;
+2;Pumping Well 1;2010-08-01;5000;
+2;Pumping Well 1;2010-09-01;4000;
+2;Pumping Well 1;2010-10-01;-3000;
+2;Pumping Well 1;2010-11-01;-2000;
+2;Pumping Well 1;2010-12-01;-1000;

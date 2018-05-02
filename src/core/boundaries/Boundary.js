@@ -104,6 +104,10 @@ export class Boundary {
         this._dateTimeValues = dateTimeValues;
     }
 
+    get type() {
+        return this._type;
+    }
+
     get indexedDateTimeValues() {
         return this._dateTimeValues.map((value, index) => {
             return {...value, id: index};
@@ -128,7 +132,7 @@ export class Boundary {
         return this._hasObservationPoints;
     }
 
-    get objectData() {
+    get toObject() {
         return {
             id: this.id,
             name: this.name,

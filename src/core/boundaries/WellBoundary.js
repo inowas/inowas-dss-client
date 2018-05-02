@@ -43,6 +43,11 @@ export class WellBoundary extends Boundary {
         return well;
     }
 
+    static createFromObject(objectData) {
+        objectData.type = 'wel';
+        return Boundary.fromObjectData(objectData);
+    }
+
     get isValid() {
         let valid = super.isValid;
         this._type === 'wel' ? valid = true : valid = false;

@@ -2,6 +2,7 @@ import fs from 'fs';
 import Uuid from 'uuid';
 import {WellBoundary} from '../../../src/core/boundaries/WellBoundary';
 import {importBoundariesFromCsv} from '../../../src/core/import/CsvImporter';
+import * as boundaryObjects from '../../fixtures/obj/boundaryObjects';
 
 test('WellBoundary createWithStartDate', () => {
     const id = Uuid.v4();
@@ -34,4 +35,23 @@ test('Import WellBoundary from CSV', () => {
     expect(Array.isArray(boundaries)).toBe(true);
     expect(boundaries.length).toBe(1);
     expect(boundaries[0]).toBeInstanceOf(WellBoundary);
+});
+
+
+test('Import a WellObjectFromFile', () => {
+    const wellObject = boundaryObjects.wellBoundary();
+    expect(wellObject.hasOwnProperty('id')).toBeTruthy();
+    expect(wellObject.hasOwnProperty('name')).toBeTruthy();
+    expect(wellObject.hasOwnProperty('geometry')).toBeTruthy();
+    expect(wellObject.hasOwnProperty('affected_layers')).toBeTruthy();
+    expect(wellObject.hasOwnProperty('metadata')).toBeTruthy();
+    expect(wellObject.hasOwnProperty('date_time_values')).toBeTruthy();
+    expect(wellObject.hasOwnProperty('active_cells')).toBeTruthy();
+});
+
+test('Get WellBoundary from Object', () => {
+    const wellObject = boundaryObjects.wellBoundary();
+    const wellBoundary = WellBoundary.createFromObject(wellObject);
+    expect(wellBoundary).toBeInstanceOf(WellBoundary);
+    expect(wellBoundary.toObject).toEqual(wellObject);
 });
