@@ -484,7 +484,7 @@ class BackgroundMap extends React.Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash !== '#create') {
+        if (hash.toString() !== '#create') {
             return null;
         }
 
@@ -606,7 +606,7 @@ class BackgroundMap extends React.Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash === '#edit') {
+        if (hash.toString() === '#edit') {
             if (params.id && !params.property && !params.type && !params.pid) {
                 return {property: 'area', type: 'area', id: 'area'};
             }
@@ -625,7 +625,7 @@ class BackgroundMap extends React.Component {
             }
         }
 
-        if (hash === '#edit-op') {
+        if (hash.toString() === '#edit-op') {
             if (
                 params.id &&
                 params.property === 'boundaries' &&
