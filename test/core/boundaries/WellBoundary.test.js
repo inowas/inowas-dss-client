@@ -1,6 +1,6 @@
 import fs from 'fs';
 import Uuid from 'uuid';
-import {WellBoundary} from '../../../src/core/boundaries/WellBoundary';
+import {WellBoundary} from '../../../src/core/boundaries';
 import {importBoundariesFromCsv} from '../../../src/core/import/CsvImporter';
 import * as boundaryObjects from '../../fixtures/obj/boundaryObjects';
 

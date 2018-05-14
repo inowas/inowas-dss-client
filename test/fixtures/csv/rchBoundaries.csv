@@ -1,0 +1,28 @@
+﻿#;This is a comment and won't be analyzed
+#;0: General Metadata, 1: Boundary metadata, 2: Time-based data
+#
+#;0: General metadata
+#;Version;BoundaryType;LengthUnit;TimeUnit
+0;v1;rch;m;d
+#
+#;1: Boundary metadata
+#;Name;GeometryType;Projection;X (long);Y (lat)
+1;Recharge Boundary;Polygon;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59
+1;Recharge Boundary;;;583,240.63;2,319,998.02
+1;Recharge Boundary;;;583,416.35;2,319,998.02
+1;Recharge Boundary;;;583,858.88;2,318,925.59
+#
+#;2: Boundary Data
+#;Name;DateTime;Recharge Rate
+3;Recharge Boundary;2010-01-01;0.0004
+3;Recharge Boundary;2010-02-01;0.0005
+3;Recharge Boundary;2010-03-01;0.0004
+3;Recharge Boundary;2010-04-01;0.0003
+3;Recharge Boundary;2010-05-01;0.0002
+3;Recharge Boundary;2010-06-01;0.0003
+3;Recharge Boundary;2010-07-01;0.0004
+3;Recharge Boundary;2010-08-01;0.0005
+3;Recharge Boundary;2010-09-01;0.0004
+3;Recharge Boundary;2010-10-01;0.0003
+3;Recharge Boundary;2010-11-01;0.0002
+3;Recharge Boundary;2010-12-01;0.0003

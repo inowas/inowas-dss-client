@@ -1,26 +1,11 @@
 import Papa from 'papaparse';
-import {WellBoundary} from '../../boundaries/WellBoundary';
+import * as Importer from './Importer';
+import {uniq} from 'lodash';
 
 const validBoundaryTypes = ['chd', 'ghb', 'rch', 'riv', 'wel'];
 const validLengthUnits = ['m'];
 const validTimeUnits = ['d'];
 const validVersions = ['v1'];
-
-const readBoundariesFromData = ({version, boundaryType, generalMetadata, boundaryMetaData, boundaryData}) => {
-    const boundaries = [];
-    switch (boundaryType) {
-        case 'wel':
-            boundaryMetaData.forEach(bmd => {
-                const boundary = WellBoundary.createFromCsv({version, generalMetadata, boundaryMetadata: bmd, boundaryData});
-                if (boundary.isValid) {
-                    boundaries.push(boundary);
-                }
-            });
-            break;
-    }
-
-    return boundaries;
-};
 
 const assertArrayContains = (needle, haystack, errorMessage) => {
     if (haystack.indexOf(needle) === -1) {
@@ -28,40 +13,74 @@ const assertArrayContains = (needle, haystack, errorMessage) => {
     }
 };
 
-const readBoundariesFromRawData = rawData => {
-    const generalMetadataArray = rawData.filter(d => Number(d[0]) === 0);
+const parseCSV = csv => {
+    const generalMetaDataArray = csv.filter(d => Number(d[0]) === 0);
 
-    if (!Array.isArray(generalMetadataArray) || generalMetadataArray.length === 0) {
+    if (!Array.isArray(generalMetaDataArray) || generalMetaDataArray.length === 0) {
         throw new Error('No valid generalMetadata found');
     }
 
-    const generalMetadata = generalMetadataArray[0];
+    const generalMetaData = generalMetaDataArray[0];
 
-    if (!Array.isArray(generalMetadata) || generalMetadata.length === 0) {
+    if (!Array.isArray(generalMetaData) || generalMetaData.length === 0) {
         throw new Error('No valid generalMetadata found');
     }
 
-    const version = generalMetadata[1];
+    const version = generalMetaData[1];
     assertArrayContains(version, validVersions, 'Invalid protocol version ' + version + '. Valid versions are: ' + validVersions.toString());
 
-    const boundaryType = generalMetadata[2].toLowerCase();
+    const boundaryType = generalMetaData[2].toLowerCase();
     assertArrayContains(boundaryType, validBoundaryTypes, 'Invalid boundaryType ' + boundaryType + '. Valid boundaryTypes are: ' + validBoundaryTypes.toString());
 
-    const lengthUnit = generalMetadata[3];
+    const lengthUnit = generalMetaData[3];
     assertArrayContains(lengthUnit, validLengthUnits, 'Invalid lengthUnit ' + lengthUnit + '. Valid lengthUnits are: ' + validLengthUnits.toString());
 
-    const timeUnit = generalMetadata[4];
+    const timeUnit = generalMetaData[4];
     assertArrayContains(timeUnit, validTimeUnits, 'Invalid timeUnit ' + timeUnit + '. Valid timeUnit are: ' + validTimeUnits.toString());
 
-    const boundaryMetaData = rawData.filter(d => Number(d[0]) === 1);
-    const boundaryData = rawData.filter(d => Number(d[0]) === 2);
+    const boundaryMetaData = csv.filter(d => Number(d[0]) === 1);
+    const boundaryData = csv.filter(d => Number(d[0]) === 2);
 
-    return readBoundariesFromData({version, boundaryType, generalMetadata, boundaryMetaData, boundaryData});
+    return {version, boundaryType, generalMetaData, boundaryMetaData, boundaryData};
 };
 
 export const importBoundariesFromCsv = (inputString) => {
     const rawData = Papa.parse(inputString).data;
-    return readBoundariesFromRawData(rawData);
+    const {version, boundaryType, generalMetaData, boundaryMetaData, boundaryData} = parseCSV(rawData);
+    const boundaries = [];
+
+    const boundaryIds = uniq(boundaryMetaData.map(bmd => bmd.name));
+
+    switch (boundaryType) {
+        case 'rch':
+            boundaryIds.forEach(id => {
+                const boundary = Importer.importRechargeBoundary({
+                    version,
+                    generalMetaData,
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[0] !== id),
+                    boundaryData: boundaryData.filter(bd => bd[0] !== id)
+                });
+                if (boundary.isValid) {
+                    boundaries.push(boundary);
+                }
+            });
+            break;
+        case 'wel':
+            boundaryIds.forEach(id => {
+                const boundary = Importer.importWellBoundary({
+                    version,
+                    generalMetaData,
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[0] !== id),
+                    boundaryData: boundaryData.filter(bd => bd[0] !== id)
+                });
+                if(boundary.isValid) {
+                    boundaries.push(boundary);
+                }
+            });
+            break;
+    }
+
+    return boundaries;
 };
 
 export const validateCsv = (inputString) => {

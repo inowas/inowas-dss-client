@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
-import {WellBoundary} from './WellBoundary';
 import Uuid from 'uuid';
+import {RechargeBoundary} from '.';
+import {WellBoundary} from '.';
 
-export class Boundary {
+export default class Boundary {
     _id;
     _name;
     _geometry;
@@ -11,9 +12,12 @@ export class Boundary {
     _metadata = {};
     _dateTimeValues = [];
     _activeCells = null;
+    _defaultValues = [];
 
     static fromType = (type) => {
         switch (type) {
+            case 'rch':
+                return new RechargeBoundary();
             case 'wel':
                 return new WellBoundary();
         }
@@ -26,7 +30,7 @@ export class Boundary {
         id ? boundary.id = id : boundary._id = Uuid.v4();
         name ? boundary.name = name : boundary._name = 'new ' + type + '-boundary';
         boundary.geometry = geometry;
-        boundary.setStartDateTimeValue(utcIsoStartDateTime);
+        boundary.setStartDateTimeValues(utcIsoStartDateTime);
         return boundary;
     }
 
@@ -143,5 +147,15 @@ export class Boundary {
             date_time_values: this.dateTimeValues,
             active_cells: this.activeCells
         };
+    }
+
+    get defaultValues() {
+        return this._defaultValues;
+    }
+
+    setStartDateTimeValues(utcIsoStartDateTime) {
+        this.dateTimeValues = [
+            {date_time: utcIsoStartDateTime, values: this.defaultValues}
+        ];
     }
 }
