@@ -151,11 +151,11 @@ class BoundaryImport extends React.Component {
 
     boundaryOptions = () => (
         [
-            {key: 'chd', value: 'chd', text: 'Constant Head Boundary'},
-            {key: 'ghb', value: 'ghb', text: 'General Head Boundary'},
-            {key: 'rch', value: 'rch', text: 'Recharge Boundary'},
-            {key: 'riv', value: 'riv', text: 'River Boundary'},
-            {key: 'wel', value: 'wel', text: 'Well Boundary'}
+            {key: 'chd', value: 'chd', text: 'Constant Head SingleOPBoundary'},
+            {key: 'ghb', value: 'ghb', text: 'General Head SingleOPBoundary'},
+            {key: 'rch', value: 'rch', text: 'Recharge SingleOPBoundary'},
+            {key: 'riv', value: 'riv', text: 'River SingleOPBoundary'},
+            {key: 'wel', value: 'wel', text: 'Well SingleOPBoundary'}
         ]
     );
 

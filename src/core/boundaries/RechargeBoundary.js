@@ -1,27 +1,29 @@
-/* eslint-disable camelcase */
-import Boundary from './Boundary';
+import BoundaryFactory from './BoundaryFactory';
+import SingleOPBoundary from './SingleOPBoundary';
 
-export default class RechargeBoundary extends Boundary {
+const boundaryType = 'rch';
+
+export default class RechargeBoundary extends SingleOPBoundary {
 
     static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
-        return Boundary.createByTypeAndStartDate({id, name, type: 'rch', geometry, utcIsoStartDateTime});
+        return BoundaryFactory.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
     }
 
     static createFromObject(objectData) {
-        objectData.type = 'rch';
-        return super.fromObjectData(objectData);
+        objectData.type = boundaryType;
+        return BoundaryFactory.fromObjectData(objectData);
     }
 
     constructor() {
         super();
         this._defaultValues = [0];
         this._hasObservationPoints = false;
-        this._type = 'rch';
+        this._type = boundaryType;
     }
 
     get isValid() {
         let valid = super.isValid;
-        this._type === 'rch' ? valid = true : valid = false;
+        this._type === boundaryType ? valid = true : valid = false;
         this.geometry && this.geometry.type === 'Polygon' ? valid = true : valid = false;
         return valid;
     }

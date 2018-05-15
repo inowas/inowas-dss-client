@@ -1,9 +1,9 @@
 import MultipleOPBoundary from './MultipleOPBoundary';
 import BoundaryFactory from './BoundaryFactory';
 
-const boundaryType = 'chd';
+const boundaryType = 'riv';
 
-export default class ConstantHeadBoundary extends MultipleOPBoundary {
+export default class RiverBoundary extends MultipleOPBoundary {
 
     static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
         return BoundaryFactory.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
@@ -11,18 +11,20 @@ export default class ConstantHeadBoundary extends MultipleOPBoundary {
 
     static createFromObject(objectData) {
         objectData.type = boundaryType;
-        return BoundaryFactory.fromObjectData(objectData);
+        return super.fromObjectData(objectData);
     }
 
     constructor() {
         super();
 
-        // Shead—is the head at the boundary at the start of the stress period.
-        const sHead = 0;
-        // Ehead—is the head at the boundary at the end of the stress period.
-        const eHead = 0;
+        // Stage—is the head in the river.
+        const stage = 0;
+        // Cond—is the riverbed hydraulic conductance.
+        const cond = 0;
+        // Rbot—is the elevation of the bottom of the riverbed.
+        const rBot = 0;
 
-        this._defaultValues = [sHead, eHead];
+        this._defaultValues = [stage, cond, rBot];
         this._hasObservationPoints = true;
         this._type = boundaryType;
     }

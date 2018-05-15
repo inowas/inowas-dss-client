@@ -1,15 +1,17 @@
-/* eslint-disable camelcase */
-import Boundary from './Boundary';
+import SingleOPBoundary from './SingleOPBoundary';
+import BoundaryFactory from './BoundaryFactory';
 
-export default class WellBoundary extends Boundary {
+const boundaryType = 'wel';
+
+export default class WellBoundary extends SingleOPBoundary {
 
     static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
-        return Boundary.createByTypeAndStartDate({id, name, type: 'wel', geometry, utcIsoStartDateTime});
+        return BoundaryFactory.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
     }
 
     static createFromObject(objectData) {
-        objectData.type = 'wel';
-        return super.fromObjectData(objectData);
+        objectData.type = boundaryType;
+        return BoundaryFactory.fromObjectData(objectData);
     }
 
     constructor() {
@@ -17,7 +19,7 @@ export default class WellBoundary extends Boundary {
         this._defaultValues = [0];
         this._hasObservationPoints = false;
         this._metadata = {well_type: 'puw'};
-        this._type = 'wel';
+        this._type = boundaryType;
     }
 
     get wellType() {
@@ -30,7 +32,7 @@ export default class WellBoundary extends Boundary {
 
     get isValid() {
         let valid = super.isValid;
-        this._type === 'wel' ? valid = true : valid = false;
+        this._type === boundaryType ? valid = true : valid = false;
         this.geometry && this.geometry.type === 'Point' ? valid = true : valid = false;
         return valid;
     }

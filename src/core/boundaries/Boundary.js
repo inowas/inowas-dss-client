@@ -1,53 +1,13 @@
 /* eslint-disable camelcase */
-import Uuid from 'uuid';
-import {RechargeBoundary} from '.';
-import {WellBoundary} from '.';
 
 export default class Boundary {
     _id;
     _name;
     _geometry;
-    _hasObservationPoints;
     _affectedLayers = [0];
     _metadata = {};
-    _dateTimeValues = [];
     _activeCells = null;
     _defaultValues = [];
-
-    static fromType = (type) => {
-        switch (type) {
-            case 'rch':
-                return new RechargeBoundary();
-            case 'wel':
-                return new WellBoundary();
-        }
-
-        throw new Error('BoundaryType ' + type + ' not implemented yet.');
-    };
-
-    static createByTypeAndStartDate({id = null, name = null, type, geometry, utcIsoStartDateTime}) {
-        const boundary = Boundary.fromType(type);
-        id ? boundary.id = id : boundary._id = Uuid.v4();
-        name ? boundary.name = name : boundary._name = 'new ' + type + '-boundary';
-        boundary.geometry = geometry;
-        boundary.setStartDateTimeValues(utcIsoStartDateTime);
-        return boundary;
-    }
-
-    static fromObjectData = (objectData) => {
-        const {id, name, geometry, type, affected_layers, metadata, date_time_values, active_cells} = objectData;
-        const boundary = Boundary.fromType(type);
-
-        boundary.id = id;
-        boundary.name = name;
-        boundary.geometry = geometry;
-        boundary.affectedLayers = affected_layers;
-        boundary.metadata = metadata;
-        boundary.dateTimeValues = date_time_values;
-        boundary.activeCells = active_cells;
-
-        return boundary;
-    };
 
     get id() {
         return this._id;
@@ -97,25 +57,8 @@ export default class Boundary {
         this._activeCells = activeCells;
     }
 
-    get dateTimeValues() {
-        if (this.hasObservationPoints) {
-            return null;
-        }
-        return this._dateTimeValues;
-    }
-
-    set dateTimeValues(dateTimeValues) {
-        this._dateTimeValues = dateTimeValues;
-    }
-
     get type() {
         return this._type;
-    }
-
-    get indexedDateTimeValues() {
-        return this._dateTimeValues.map((value, index) => {
-            return {...value, id: index};
-        });
     }
 
     get isValid() {
@@ -132,10 +75,6 @@ export default class Boundary {
         return valid;
     }
 
-    get hasObservationPoints() {
-        return this._hasObservationPoints;
-    }
-
     get toObject() {
         return {
             id: this.id,
@@ -145,17 +84,12 @@ export default class Boundary {
             affected_layers: this.affectedLayers,
             metadata: this.metadata,
             date_time_values: this.dateTimeValues,
+            observation_points: this.observationPoints,
             active_cells: this.activeCells
         };
     }
 
     get defaultValues() {
         return this._defaultValues;
-    }
-
-    setStartDateTimeValues(utcIsoStartDateTime) {
-        this.dateTimeValues = [
-            {date_time: utcIsoStartDateTime, values: this.defaultValues}
-        ];
     }
 }

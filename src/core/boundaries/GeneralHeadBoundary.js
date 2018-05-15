@@ -1,28 +1,29 @@
+/* eslint-disable camelcase */
+import Boundary from './Boundary';
 import MultipleOPBoundary from './MultipleOPBoundary';
-import BoundaryFactory from './BoundaryFactory';
 
 const boundaryType = 'chd';
 
-export default class ConstantHeadBoundary extends MultipleOPBoundary {
+export default class GeneralHeadBoundary extends MultipleOPBoundary {
 
     static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
-        return BoundaryFactory.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
+        return Boundary.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
     }
 
     static createFromObject(objectData) {
         objectData.type = boundaryType;
-        return BoundaryFactory.fromObjectData(objectData);
+        return super.fromObjectData(objectData);
     }
 
     constructor() {
         super();
 
-        // Shead—is the head at the boundary at the start of the stress period.
-        const sHead = 0;
-        // Ehead—is the head at the boundary at the end of the stress period.
-        const eHead = 0;
+        // head—is the head on the boundary.
+        const head = 0;
+        // cond—is the hydraulic conductance of the interface between the aquifer cell and the boundary.
+        const cond = 0;
 
-        this._defaultValues = [sHead, eHead];
+        this._defaultValues = [head, cond];
         this._hasObservationPoints = true;
         this._type = boundaryType;
     }

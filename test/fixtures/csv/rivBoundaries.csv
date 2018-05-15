@@ -3,37 +3,37 @@
 #
 #;0: General metadata
 #;Version;BoundaryType;LengthUnit;TimeUnit
-0;v1;riv;m;d
+0;v1;ghb;m;d
 #
 #;1: Boundary metadata
-#;Name;GeometryType;Projection;X (long);Y (lat);OP-Name
-1;Red River;LineString;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;RR_1
-1;Red River;;;583,240.63;2,319,998.02;
-1;Red River;;;583,416.35;2,319,998.02;RR_2
+#;Name;GeometryType;Projection;X (long);Y (lat);opId;opName;Layers
+1;General Head 1;LineString;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;GHB1_south;GHB 1 south;0,1
+1;General Head 1;;;583,240.63;2,319,998.02;
+1;General Head 1;;;583,416.35;2,319,998.02;GHB1_north;GHB 1 north
 #
 #;2: Boundary Data
-#;Name;OP-Name;DateTime;stage;bottom;cond
-2;Red River;RR_1;2010-01-01;230;228;1000
-2;Red River;RR_1;2010-02-01;230;228;1000
-2;Red River;RR_1;2010-03-01;230;228;1000
-2;Red River;RR_1;2010-04-01;230;228;1000
-2;Red River;RR_1;2010-05-01;230;228;1000
-2;Red River;RR_1;2010-06-01;230;228;1000
-2;Red River;RR_1;2010-07-01;230;228;1000
-2;Red River;RR_1;2010-08-01;230;228;1000
-2;Red River;RR_1;2010-09-01;230;228;1000
-2;Red River;RR_1;2010-10-01;230;228;1000
-2;Red River;RR_1;2010-11-01;230;228;1000
-2;Red River;RR_1;2010-12-01;230;228;1000
-2;Red River;RR_2;2010-01-01;230;228;1000
-2;Red River;RR_2;2010-02-01;230;228;1000
-2;Red River;RR_2;2010-03-01;230;228;1000
-2;Red River;RR_2;2010-04-01;230;228;1000
-2;Red River;RR_2;2010-05-01;230;228;1000
-2;Red River;RR_2;2010-06-01;230;228;1000
-2;Red River;RR_2;2010-07-01;230;228;1000
-2;Red River;RR_2;2010-08-01;230;228;1000
-2;Red River;RR_2;2010-09-01;230;228;1000
-2;Red River;RR_2;2010-10-01;230;228;1000
-2;Red River;RR_2;2010-11-01;230;228;1000
-2;Red River;RR_2;2010-12-01;230;228;1000
+#;Name;opId;DateTime;stage;cond
+2;General Head 1;GHB1_south;2010-01-01;230;1000
+2;General Head 1;GHB1_south;2010-02-01;230;1000
+2;General Head 1;GHB1_south;2010-03-01;230;1000
+2;General Head 1;GHB1_south;2010-04-01;230;1000
+2;General Head 1;GHB1_south;2010-05-01;230;1000
+2;General Head 1;GHB1_south;2010-06-01;230;1000
+2;General Head 1;GHB1_south;2010-07-01;230;1000
+2;General Head 1;GHB1_south;2010-08-01;230;1000
+2;General Head 1;GHB1_south;2010-09-01;230;1000
+2;General Head 1;GHB1_south;2010-10-01;230;1000
+2;General Head 1;GHB1_south;2010-11-01;230;1000
+2;General Head 1;GHB1_south;2010-12-01;230;1000
+2;General Head 1;GHB1_north;2010-01-01;230;1000
+2;General Head 1;GHB1_north;2010-02-01;230;1000
+2;General Head 1;GHB1_north;2010-03-01;230;1000
+2;General Head 1;GHB1_north;2010-04-01;230;1000
+2;General Head 1;GHB1_north;2010-05-01;230;1000
+2;General Head 1;GHB1_north;2010-06-01;230;1000
+2;General Head 1;GHB1_north;2010-07-01;230;1000
+2;General Head 1;GHB1_north;2010-08-01;230;1000
+2;General Head 1;GHB1_north;2010-09-01;230;1000
+2;General Head 1;GHB1_north;2010-10-01;230;1000
+2;General Head 1;GHB1_north;2010-11-01;230;1000
+2;General Head 1;GHB1_north;2010-12-01;230;1000

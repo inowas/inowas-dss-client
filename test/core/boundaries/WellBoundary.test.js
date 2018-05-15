@@ -23,9 +23,8 @@ test('WellBoundary createWithStartDate', () => {
     expect(wellBoundary.geometry).toEqual(geometry);
     expect(wellBoundary.affectedLayers).toEqual([0]);
     expect(wellBoundary.metadata).toEqual({well_type: 'puw'});
-    expect(wellBoundary.hasObservationPoints).toEqual(false);
-    expect(wellBoundary.dateTimeValues).toEqual([{date_time: startDateTime, values: [0]}]);
-    expect(wellBoundary.indexedDateTimeValues).toEqual([{id: 0, date_time: startDateTime, values: [0]}]);
+    expect(wellBoundary.getDateTimeValues()).toEqual([{date_time: startDateTime, values: [0]}]);
+    expect(wellBoundary.getIndexedDateTimeValues()).toEqual([{id: 0, date_time: startDateTime, values: [0]}]);
     expect(wellBoundary.activeCells).toBeNull();
 });
 

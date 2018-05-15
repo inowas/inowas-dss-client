@@ -3,37 +3,37 @@
 #
 #;0: General metadata
 #;Version;BoundaryType;LengthUnit;TimeUnit
-0;v1;ghb;m;d
+0;v1;chd;m;d
 #
 #;1: Boundary metadata
-#;Name;GeometryType;Projection;X (long);Y (lat);OP-Name;Layers
-1;General Head 1;LineString;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;GHB1_south;0,1
-1;General Head 1;;;583,240.63;2,319,998.02;
-1;General Head 1;;;583,416.35;2,319,998.02;GHB1_north
+#;Name;GeometryType;Projection;X (long);Y (lat);opId;opName;Layers
+1;Constant Head 1;LineString;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;CHD1_south;CHD 1 Sounth;0,1
+1;Constant Head 1;;;583,240.63;2,319,998.02;
+1;Constant Head 1;;;583,416.35;2,319,998.02;CHD1_north;CHD 1 Sounth
 #
 #;2: Boundary Data
-#;Name;OP-Name;DateTime;stage;cond
-2;General Head 1;GHB1_south;2010-01-01;230;1000
-2;General Head 1;GHB1_south;2010-02-01;230;1000
-2;General Head 1;GHB1_south;2010-03-01;230;1000
-2;General Head 1;GHB1_south;2010-04-01;230;1000
-2;General Head 1;GHB1_south;2010-05-01;230;1000
-2;General Head 1;GHB1_south;2010-06-01;230;1000
-2;General Head 1;GHB1_south;2010-07-01;230;1000
-2;General Head 1;GHB1_south;2010-08-01;230;1000
-2;General Head 1;GHB1_south;2010-09-01;230;1000
-2;General Head 1;GHB1_south;2010-10-01;230;1000
-2;General Head 1;GHB1_south;2010-11-01;230;1000
-2;General Head 1;GHB1_south;2010-12-01;230;1000
-2;General Head 1;GHB1_north;2010-01-01;230;1000
-2;General Head 1;GHB1_north;2010-02-01;230;1000
-2;General Head 1;GHB1_north;2010-03-01;230;1000
-2;General Head 1;GHB1_north;2010-04-01;230;1000
-2;General Head 1;GHB1_north;2010-05-01;230;1000
-2;General Head 1;GHB1_north;2010-06-01;230;1000
-2;General Head 1;GHB1_north;2010-07-01;230;1000
-2;General Head 1;GHB1_north;2010-08-01;230;1000
-2;General Head 1;GHB1_north;2010-09-01;230;1000
-2;General Head 1;GHB1_north;2010-10-01;230;1000
-2;General Head 1;GHB1_north;2010-11-01;230;1000
-2;General Head 1;GHB1_north;2010-12-01;230;1000
+#;Name;OP-Name;DateTime;sHead;eHead
+2;Constant Head 1;CHD1_south;2010-01-01;230;230
+2;Constant Head 1;CHD1_south;2010-02-01;230;230
+2;Constant Head 1;CHD1_south;2010-03-01;230;230
+2;Constant Head 1;CHD1_south;2010-04-01;230;230
+2;Constant Head 1;CHD1_south;2010-05-01;230;230
+2;Constant Head 1;CHD1_south;2010-06-01;230;230
+2;Constant Head 1;CHD1_south;2010-07-01;230;230
+2;Constant Head 1;CHD1_south;2010-08-01;230;230
+2;Constant Head 1;CHD1_south;2010-09-01;230;230
+2;Constant Head 1;CHD1_south;2010-10-01;230;230
+2;Constant Head 1;CHD1_south;2010-11-01;230;230
+2;Constant Head 1;CHD1_south;2010-12-01;230;230
+2;Constant Head 1;CHD1_north;2010-01-01;230;230
+2;Constant Head 1;CHD1_north;2010-02-01;230;230
+2;Constant Head 1;CHD1_north;2010-03-01;230;230
+2;Constant Head 1;CHD1_north;2010-04-01;230;230
+2;Constant Head 1;CHD1_north;2010-05-01;230;230
+2;Constant Head 1;CHD1_north;2010-06-01;230;230
+2;Constant Head 1;CHD1_north;2010-07-01;230;230
+2;Constant Head 1;CHD1_north;2010-08-01;230;230
+2;Constant Head 1;CHD1_north;2010-09-01;230;230
+2;Constant Head 1;CHD1_north;2010-10-01;230;230
+2;Constant Head 1;CHD1_north;2010-11-01;230;230
+2;Constant Head 1;CHD1_north;2010-12-01;230;230

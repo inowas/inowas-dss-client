@@ -52,6 +52,19 @@ export const importBoundariesFromCsv = (inputString) => {
     const boundaryIds = uniq(boundaryMetaData.map(bmd => bmd.name));
 
     switch (boundaryType) {
+        case 'chd':
+            boundaryIds.forEach(id => {
+                const boundary = Importer.importConstantHeadBoundary({
+                    version,
+                    generalMetaData,
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[0] !== id),
+                    boundaryData: boundaryData.filter(bd => bd[0] !== id)
+                });
+                if (boundary.isValid) {
+                    boundaries.push(boundary);
+                }
+            });
+            break;
         case 'rch':
             boundaryIds.forEach(id => {
                 const boundary = Importer.importRechargeBoundary({
