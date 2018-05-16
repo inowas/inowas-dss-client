@@ -26,7 +26,8 @@ export default class MultipleOPBoundary extends Boundary {
             return this.observationPoints[0].date_time_values;
         }
 
-        return this.observationPoints.filter(op => op.id === observationPointId)[0];
+        const observationPoint = this.observationPoints.filter(op => op.id === observationPointId)[0];
+        return observationPoint.date_time_values;
     }
 
     setDateTimeValues(dateTimeValues, observationPointId = null) {

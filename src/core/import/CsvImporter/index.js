@@ -56,8 +56,8 @@ export const importBoundariesFromCsv = (inputString) => {
                 const boundary = Importer.importConstantHeadBoundary({
                     version,
                     generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[0] !== id),
-                    boundaryData: boundaryData.filter(bd => bd[0] !== id)
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
+                    boundaryData: boundaryData.filter(bd => bd[1] === id)
                 });
                 if (boundary.isValid) {
                     boundaries.push(boundary);
@@ -69,8 +69,8 @@ export const importBoundariesFromCsv = (inputString) => {
                 const boundary = Importer.importRechargeBoundary({
                     version,
                     generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[0] !== id),
-                    boundaryData: boundaryData.filter(bd => bd[0] !== id)
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
+                    boundaryData: boundaryData.filter(bd => bd[1] === id)
                 });
                 if (boundary.isValid) {
                     boundaries.push(boundary);
@@ -82,8 +82,8 @@ export const importBoundariesFromCsv = (inputString) => {
                 const boundary = Importer.importWellBoundary({
                     version,
                     generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] !== id),
-                    boundaryData: boundaryData.filter(bd => bd[1] !== id)
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
+                    boundaryData: boundaryData.filter(bd => bd[1] === id)
                 });
                 if(boundary.isValid) {
                     boundaries.push(boundary);

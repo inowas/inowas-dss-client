@@ -75,7 +75,7 @@ function parseObservationPoints({boundaryMetaData, boundaryData}) {
 export function importConstantHeadBoundary({version, generalMetaData, boundaryMetaData, boundaryData}) {
     if (version === 'v1') {
         const boundary = BoundaryFactory.fromType('chd');
-        boundary.name = boundaryMetaData[1];
+        boundary.name = boundaryMetaData[0][1];
         boundary.geometry = parseGeoJsonFromCSV(boundaryMetaData);
         boundary.observationPoints = parseObservationPoints({boundaryMetaData, boundaryData});
         return boundary;
@@ -87,16 +87,17 @@ export function importConstantHeadBoundary({version, generalMetaData, boundaryMe
 export function importRechargeBoundary({version, generalMetaData, boundaryMetaData, boundaryData}) {
     if (version === 'v1') {
         const boundary = BoundaryFactory.fromType('rch');
-        boundary.name = boundaryMetaData[1];
+        boundary.name = boundaryMetaData[0][1];
         boundary.geometry = parseGeoJsonFromCSV(boundaryMetaData);
 
-        boundaryData.filter(bd => boundaryMetaData[1] !== bd[1]).forEach(
+        boundaryData.filter(bd => boundary.name === bd[1]).forEach(
             ds => {
-                boundary._dateTimeValues.push({
+                boundary.addDateTimeValue({
                     date_time: dateImportFromCSV(ds[2]), values: [parseFloat(ds[3])]
                 });
             }
         );
+
         return boundary;
     }
 
@@ -111,9 +112,9 @@ export function importWellBoundary({version, generalMetaData, boundaryMetaData, 
         boundary.affectedLayers = [parseInt(boundaryMetaData[0][6], 10)];
         boundary.geometry = parseGeoJsonFromCSV(boundaryMetaData);
 
-        boundaryData.filter(bd => boundaryMetaData[1] !== bd[1]).forEach(
+        boundaryData.filter(bd => boundary.name === bd[1]).forEach(
             ds => {
-                boundary._dateTimeValues.push({
+                boundary.addDateTimeValue({
                     date_time: dateImportFromCSV(ds[2]), values: [parseFloat(ds[3])]
                 });
             }
@@ -124,4 +125,3 @@ export function importWellBoundary({version, generalMetaData, boundaryMetaData, 
 
     throw new Error('Unknown Version ' + version + '.');
 }
-

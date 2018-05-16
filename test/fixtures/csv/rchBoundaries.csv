@@ -7,22 +7,42 @@
 #
 #;1: Boundary metadata
 #;Name;GeometryType;Projection;X (long);Y (lat)
-1;Recharge Boundary;Polygon;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59
-1;Recharge Boundary;;;583,240.63;2,319,998.02
-1;Recharge Boundary;;;583,416.35;2,319,998.02
-1;Recharge Boundary;;;583,858.88;2,318,925.59
+1;Recharge Boundary 1;Polygon;urn:ogc:def:crs:EPSG::32648;583858.88;2318925.59
+1;Recharge Boundary 1;;;583240.63;2319998.02
+1;Recharge Boundary 1;;;583416.35;2319998.02
+1;Recharge Boundary 1;;;583858.88;2318925.59
+#
+1;Recharge Boundary 2;Polygon;urn:ogc:def:crs:EPSG::32648;583850;2318925
+1;Recharge Boundary 2;;;583240;2319997
+1;Recharge Boundary 2;;;583415;2319997
+1;Recharge Boundary 2;;;583858;2318926
 #
 #;2: Boundary Data
 #;Name;DateTime;Recharge Rate
-3;Recharge Boundary;2010-01-01;0.0004
-3;Recharge Boundary;2010-02-01;0.0005
-3;Recharge Boundary;2010-03-01;0.0004
-3;Recharge Boundary;2010-04-01;0.0003
-3;Recharge Boundary;2010-05-01;0.0002
-3;Recharge Boundary;2010-06-01;0.0003
-3;Recharge Boundary;2010-07-01;0.0004
-3;Recharge Boundary;2010-08-01;0.0005
-3;Recharge Boundary;2010-09-01;0.0004
-3;Recharge Boundary;2010-10-01;0.0003
-3;Recharge Boundary;2010-11-01;0.0002
-3;Recharge Boundary;2010-12-01;0.0003
+2;Recharge Boundary 1;2010-01-01;0.0004
+2;Recharge Boundary 1;2010-02-01;0.0005
+2;Recharge Boundary 1;2010-03-01;0.0004
+2;Recharge Boundary 1;2010-04-01;0.0003
+2;Recharge Boundary 1;2010-05-01;0.0002
+2;Recharge Boundary 1;2010-06-01;0.0003
+2;Recharge Boundary 1;2010-07-01;0.0004
+2;Recharge Boundary 1;2010-08-01;0.0005
+2;Recharge Boundary 1;2010-09-01;0.0004
+2;Recharge Boundary 1;2010-10-01;0.0003
+2;Recharge Boundary 1;2010-11-01;0.0002
+2;Recharge Boundary 1;2010-12-01;0.0003
+#
+#;2: Boundary Data
+#;Name;DateTime;Recharge Rate
+2;Recharge Boundary 2;2010-01-01;0.0003
+2;Recharge Boundary 2;2010-02-01;0.0002
+2;Recharge Boundary 2;2010-03-01;0.0003
+2;Recharge Boundary 2;2010-04-01;0.0003
+2;Recharge Boundary 2;2010-05-01;0.0002
+2;Recharge Boundary 2;2010-06-01;0.0003
+2;Recharge Boundary 2;2010-07-01;0.0004
+2;Recharge Boundary 2;2010-08-01;0.0005
+2;Recharge Boundary 2;2010-09-01;0.0004
+2;Recharge Boundary 2;2010-10-01;0.0003
+2;Recharge Boundary 2;2010-11-01;0.0002
+2;Recharge Boundary 2;2010-12-01;0.0003

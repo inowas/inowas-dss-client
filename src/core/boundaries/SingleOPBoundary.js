@@ -14,6 +14,10 @@ export default class SingleOPBoundary extends Boundary {
         return this._dateTimeValues;
     }
 
+    addDateTimeValue(dateTimeValue) {
+        this._dateTimeValues.push(dateTimeValue);
+    }
+
     setDateTimeValues(dateTimeValues) {
         this._dateTimeValues = dateTimeValues;
     }

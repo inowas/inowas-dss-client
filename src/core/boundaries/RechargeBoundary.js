@@ -17,7 +17,6 @@ export default class RechargeBoundary extends SingleOPBoundary {
     constructor() {
         super();
         this._defaultValues = [0];
-        this._hasObservationPoints = false;
         this._type = boundaryType;
     }
 
