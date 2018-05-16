@@ -48,8 +48,7 @@ export const importBoundariesFromCsv = (inputString) => {
     const rawData = Papa.parse(inputString).data;
     const {version, boundaryType, generalMetaData, boundaryMetaData, boundaryData} = parseCSV(rawData);
     const boundaries = [];
-
-    const boundaryIds = uniq(boundaryMetaData.map(bmd => bmd.name));
+    const boundaryIds = uniq(boundaryMetaData.map(bmd => bmd[1]));
 
     switch (boundaryType) {
         case 'chd':
@@ -83,8 +82,8 @@ export const importBoundariesFromCsv = (inputString) => {
                 const boundary = Importer.importWellBoundary({
                     version,
                     generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[0] !== id),
-                    boundaryData: boundaryData.filter(bd => bd[0] !== id)
+                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] !== id),
+                    boundaryData: boundaryData.filter(bd => bd[1] !== id)
                 });
                 if(boundary.isValid) {
                     boundaries.push(boundary);

@@ -32,8 +32,8 @@ test('Import WellBoundary from CSV', () => {
     const content = fs.readFileSync('test/fixtures/csv/wellBoundaries.csv', 'utf8');
     const boundaries = importBoundariesFromCsv(content);
     expect(Array.isArray(boundaries)).toBe(true);
-    expect(boundaries.length).toBe(1);
-    const wellBoundary = boundaries[0];
+    expect(boundaries.length).toBe(2);
+    const wellBoundary = boundaries.filter(b => b.name === 'Pumping Well 1')[0];
     expect(wellBoundary).toBeInstanceOf(WellBoundary);
     expect(wellBoundary.name).toBe('Pumping Well 1');
     expect(wellBoundary.wellType).toBe('inf_well');

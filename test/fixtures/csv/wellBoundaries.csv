@@ -7,6 +7,7 @@
 #
 #;Name;GeometryType;Projection;X (long);Y (lat);Layer
 1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;1
+1;Pumping Well 2;Point;urn:ogc:def:crs:EPSG::32648;583,850.1;2,318,900.1;2
 #
 #;2: Time-based data
 #;Name;DateTime;PumpingRate
@@ -22,3 +23,18 @@
 2;Pumping Well 1;2010-10-01;-3000
 2;Pumping Well 1;2010-11-01;-2000
 2;Pumping Well 1;2010-12-01;-1000
+# Second Well
+#;2: Time-based data
+#;Name;DateTime;PumpingRate
+2;Pumping Well 2;2010-01-01;-1000
+2;Pumping Well 2;2010-02-01;-2000
+2;Pumping Well 2;2010-03-01;-3000
+2;Pumping Well 2;2010-04-01;4000
+2;Pumping Well 2;2010-05-01;5000
+2;Pumping Well 2;2010-06-01;6000
+2;Pumping Well 2;2010-07-01;5900
+2;Pumping Well 2;2010-08-01;5000
+2;Pumping Well 2;2010-09-01;4000
+2;Pumping Well 2;2010-10-01;-2000
+2;Pumping Well 2;2010-11-01;-1000
+2;Pumping Well 2;2010-12-01;-2000
