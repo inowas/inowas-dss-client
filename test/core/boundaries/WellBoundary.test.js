@@ -33,7 +33,27 @@ test('Import WellBoundary from CSV', () => {
     const boundaries = importBoundariesFromCsv(content);
     expect(Array.isArray(boundaries)).toBe(true);
     expect(boundaries.length).toBe(1);
-    expect(boundaries[0]).toBeInstanceOf(WellBoundary);
+    const wellBoundary = boundaries[0];
+    expect(wellBoundary).toBeInstanceOf(WellBoundary);
+    expect(wellBoundary.name).toBe('Pumping Well 1');
+    expect(wellBoundary.wellType).toBe('inf_well');
+    expect(wellBoundary.geometry).toEqual({type: 'Point', coordinates: [105.80670115581347, 20.96897765302136]});
+    expect(wellBoundary.affectedLayers).toEqual([1]);
+    expect(wellBoundary.getDateTimeValues().length).toEqual(12);
+    expect(wellBoundary.getDateTimeValues()).toEqual([
+        {'date_time': '2010-01-01T00:00:00.000Z', 'values': [-1000]},
+        {'date_time': '2010-02-01T00:00:00.000Z', 'values': [-2000]},
+        {'date_time': '2010-03-01T00:00:00.000Z', 'values': [-3000]},
+        {'date_time': '2010-04-01T00:00:00.000Z', 'values': [4000]},
+        {'date_time': '2010-05-01T00:00:00.000Z', 'values': [5000]},
+        {'date_time': '2010-06-01T00:00:00.000Z', 'values': [6000]},
+        {'date_time': '2010-07-01T00:00:00.000Z', 'values': [5900]},
+        {'date_time': '2010-08-01T00:00:00.000Z', 'values': [5000]},
+        {'date_time': '2010-09-01T00:00:00.000Z', 'values': [4000]},
+        {'date_time': '2010-10-01T00:00:00.000Z', 'values': [-3000]},
+        {'date_time': '2010-11-01T00:00:00.000Z', 'values': [-2000]},
+        {'date_time': '2010-12-01T00:00:00.000Z', 'values': [-1000]}
+    ]);
 });
 
 

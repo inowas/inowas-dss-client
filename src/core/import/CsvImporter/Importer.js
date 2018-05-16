@@ -9,6 +9,18 @@ function parseGeoJsonFromCSV(boundaryMetaData) {
     const projection = boundaryMetaData[0][3];
     const type = boundaryMetaData[0][2];
 
+    if (type === 'Point') {
+        const pointGeojson = {
+            type: 'Point',
+            coordinates: [
+                parseFloat(removeThousandsSeparatorFromString(boundaryMetaData[0][4])),
+                parseFloat(removeThousandsSeparatorFromString(boundaryMetaData[0][5]))
+            ]
+        };
+
+        return reproject.toWgs84(pointGeojson, projection, epsg);
+    }
+
     const coordinates = [];
     boundaryMetaData.forEach(bmd => {
         coordinates.push([
@@ -42,8 +54,8 @@ function parseObservationPoints({boundaryMetaData, boundaryData}) {
         }
     });
 
-    observationPoints.forEach( op => {
-        boundaryData.forEach( bd => {
+    observationPoints.forEach(op => {
+        boundaryData.forEach(bd => {
             const opId = bd[2];
             if (op.id === opId) {
                 const dateTime = dateImportFromCSV(bd[3]);
@@ -78,7 +90,7 @@ export function importRechargeBoundary({version, generalMetaData, boundaryMetaDa
         boundary.name = boundaryMetaData[1];
         boundary.geometry = parseGeoJsonFromCSV(boundaryMetaData);
 
-        boundaryData.filter(bd => boundaryMetaData[1] === bd[1]).forEach(
+        boundaryData.filter(bd => boundaryMetaData[1] !== bd[1]).forEach(
             ds => {
                 boundary._dateTimeValues.push({
                     date_time: dateImportFromCSV(ds[2]), values: [parseFloat(ds[3])]
@@ -95,10 +107,11 @@ export function importWellBoundary({version, generalMetaData, boundaryMetaData, 
     if (version === 'v1') {
         const boundary = BoundaryFactory.fromType('wel');
         boundary.wellType = generalMetaData[5];
-        boundary.name = boundaryMetaData[1];
+        boundary.name = boundaryMetaData[0][1];
+        boundary.affectedLayers = [parseInt(boundaryMetaData[0][6], 10)];
         boundary.geometry = parseGeoJsonFromCSV(boundaryMetaData);
 
-        boundaryData.filter(bd => boundaryMetaData[1] === bd[1]).forEach(
+        boundaryData.filter(bd => boundaryMetaData[1] !== bd[1]).forEach(
             ds => {
                 boundary._dateTimeValues.push({
                     date_time: dateImportFromCSV(ds[2]), values: [parseFloat(ds[3])]

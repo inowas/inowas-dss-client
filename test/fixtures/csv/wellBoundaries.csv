@@ -6,7 +6,7 @@
 0;v1;wel;m;d;inf_well
 #
 #;Name;GeometryType;Projection;X (long);Y (lat);Layer
-1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;0
+1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;1
 #
 #;2: Time-based data
 #;Name;DateTime;PumpingRate
