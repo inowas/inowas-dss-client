@@ -33,14 +33,14 @@ test('Import WellBoundary from CSV', () => {
     const boundaries = importBoundariesFromCsv(content);
     expect(Array.isArray(boundaries)).toBe(true);
     expect(boundaries.length).toBe(2);
-    const wellBoundary = boundaries.filter(b => b.name === 'Pumping Well 1')[0];
-    expect(wellBoundary).toBeInstanceOf(WellBoundary);
-    expect(wellBoundary.name).toBe('Pumping Well 1');
-    expect(wellBoundary.wellType).toBe('inf_well');
-    expect(wellBoundary.geometry).toEqual({type: 'Point', coordinates: [105.80670115581347, 20.96897765302136]});
-    expect(wellBoundary.affectedLayers).toEqual([1]);
-    expect(wellBoundary.getDateTimeValues().length).toEqual(12);
-    expect(wellBoundary.getDateTimeValues()).toEqual([
+    const wellBoundary1 = boundaries.filter(b => b.name === 'Pumping Well 1')[0];
+    expect(wellBoundary1).toBeInstanceOf(WellBoundary);
+    expect(wellBoundary1.name).toBe('Pumping Well 1');
+    expect(wellBoundary1.wellType).toBe('inf_well');
+    expect(wellBoundary1.geometry).toEqual({type: 'Point', coordinates: [105.80670115581347, 20.96897765302136]});
+    expect(wellBoundary1.affectedLayers).toEqual([1]);
+    expect(wellBoundary1.getDateTimeValues().length).toEqual(12);
+    expect(wellBoundary1.getDateTimeValues()).toEqual([
         {'date_time': '2010-01-01T00:00:00.000Z', 'values': [-1000]},
         {'date_time': '2010-02-01T00:00:00.000Z', 'values': [-2000]},
         {'date_time': '2010-03-01T00:00:00.000Z', 'values': [-3000]},
@@ -54,8 +54,28 @@ test('Import WellBoundary from CSV', () => {
         {'date_time': '2010-11-01T00:00:00.000Z', 'values': [-2000]},
         {'date_time': '2010-12-01T00:00:00.000Z', 'values': [-1000]}
     ]);
+    const wellBoundary2 = boundaries.filter(b => b.name === 'Pumping Well 2')[0];
+    expect(wellBoundary2).toBeInstanceOf(WellBoundary);
+    expect(wellBoundary2.name).toBe('Pumping Well 2');
+    expect(wellBoundary2.wellType).toBe('inf_well');
+    expect(wellBoundary2.geometry).toEqual({type: 'Point', coordinates: [105.80661546542011, 20.968747756127655]});
+    expect(wellBoundary2.affectedLayers).toEqual([2]);
+    expect(wellBoundary2.getDateTimeValues().length).toEqual(12);
+    expect(wellBoundary2.getDateTimeValues()).toEqual([
+        {'date_time': '2010-01-01T00:00:00.000Z', 'values': [-1000]},
+        {'date_time': '2010-02-01T00:00:00.000Z', 'values': [-2000]},
+        {'date_time': '2010-03-01T00:00:00.000Z', 'values': [-3000]},
+        {'date_time': '2010-04-01T00:00:00.000Z', 'values': [4000]},
+        {'date_time': '2010-05-01T00:00:00.000Z', 'values': [5000]},
+        {'date_time': '2010-06-01T00:00:00.000Z', 'values': [6000]},
+        {'date_time': '2010-07-01T00:00:00.000Z', 'values': [5900]},
+        {'date_time': '2010-08-01T00:00:00.000Z', 'values': [5000]},
+        {'date_time': '2010-09-01T00:00:00.000Z', 'values': [4000]},
+        {'date_time': '2010-10-01T00:00:00.000Z', 'values': [-2000]},
+        {'date_time': '2010-11-01T00:00:00.000Z', 'values': [-1000]},
+        {'date_time': '2010-12-01T00:00:00.000Z', 'values': [-2000]}
+    ]);
 });
-
 
 test('Import a WellObjectFromFile', () => {
     const wellObject = boundaryObjects.wellBoundary();
