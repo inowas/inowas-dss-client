@@ -14,10 +14,6 @@ export default class SingleOPBoundary extends Boundary {
         return this._dateTimeValues;
     }
 
-    addDateTimeValue(dateTimeValue) {
-        this._dateTimeValues.push(dateTimeValue);
-    }
-
     setDateTimeValues(dateTimeValues) {
         this._dateTimeValues = dateTimeValues;
     }
@@ -28,14 +24,12 @@ export default class SingleOPBoundary extends Boundary {
         });
     }
 
-    isValid() {
-        if (!super.isValid) {
-            return false;
-        }
+    get isValid() {
+        super.isValid;
 
         // noinspection RedundantIfStatementJS
         if (!(Array.isArray(this._dateTimeValues) && (this._dateTimeValues.length > 0))) {
-            return false;
+            throw new Error('The parameter _dateTimeValues is not not valid.');
         }
 
         return true;

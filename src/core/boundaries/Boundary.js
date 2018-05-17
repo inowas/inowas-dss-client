@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 
+import Uuid from 'uuid';
+
 export default class Boundary {
     _id;
     _name;
@@ -8,6 +10,10 @@ export default class Boundary {
     _metadata = {};
     _activeCells = null;
     _defaultValues = [];
+
+    constructor() {
+        this._id = Uuid.v4();
+    }
 
     get id() {
         return this._id;
@@ -63,24 +69,22 @@ export default class Boundary {
 
     get isValid() {
         if (!this._id) {
-            return false;
+            throw new Error('The parameter id is not not valid.');
         }
         if (!this._name) {
-            return false;
+            throw new Error('The parameter name is not not valid.');
         }
-        if (!this._geometry) {
-            return false;
+        if (!(this._geometry && this.geometry.type && this.geometry.coordinates && this.geometry.coordinates.length > 0)) {
+            throw new Error('The parameter geometry is not not valid.');
         }
+
         if (!(Array.isArray(this._affectedLayers) && (this._affectedLayers.length > 0))) {
-            return false;
-        }
-        if (typeof this._metadata !== 'object') {
-            return false;
+            throw new Error('The parameter affectedLayers is not not valid.');
         }
 
         // noinspection RedundantIfStatementJS
-        if (!(Array.isArray(this._activeCells) && (this._activeCells.length > 0))) {
-            return false;
+        if (typeof this._metadata !== 'object') {
+            throw new Error('The parameter metadata is not not valid.');
         }
 
         return true;

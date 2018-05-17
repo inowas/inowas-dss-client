@@ -21,9 +21,17 @@ export default class RechargeBoundary extends SingleOPBoundary {
     }
 
     get isValid() {
-        let valid = super.isValid;
-        this._type === boundaryType ? valid = true : valid = false;
-        this.geometry && this.geometry.type === 'Polygon' ? valid = true : valid = false;
-        return valid;
+        super.isValid;
+
+        if (!(this._type === boundaryType)) {
+            throw new Error('The parameter type is not not valid.');
+        }
+
+        // noinspection RedundantIfStatementJS
+        if (this.geometry.type !== 'Polygon') {
+            throw new Error('The parameter geometry.type is not not valid.');
+        }
+
+        return true;
     }
 }
