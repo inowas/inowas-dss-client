@@ -6,13 +6,13 @@
 0;v1;rch;m;d
 #
 #;1: Boundary metadata
-#;Name;GeometryType;Projection;X (long);Y (lat)
-1;Recharge Boundary 1;Polygon;urn:ogc:def:crs:EPSG::32648;583858.88;2318925.59
+#;Name;GeometryType;Projection;X (long);Y (lat);Layer
+1;Recharge Boundary 1;Polygon;urn:ogc:def:crs:EPSG::32648;583858.88;2318925.59;1
 1;Recharge Boundary 1;;;583240.63;2319998.02
 1;Recharge Boundary 1;;;583416.35;2319998.02
 1;Recharge Boundary 1;;;583858.88;2318925.59
 #
-1;Recharge Boundary 2;Polygon;urn:ogc:def:crs:EPSG::32648;583850;2318925
+1;Recharge Boundary 2;Polygon;urn:ogc:def:crs:EPSG::32648;583850;2318925;1
 1;Recharge Boundary 2;;;583240;2319997
 1;Recharge Boundary 2;;;583415;2319997
 1;Recharge Boundary 2;;;583858;2318926

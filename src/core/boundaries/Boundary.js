@@ -62,17 +62,28 @@ export default class Boundary {
     }
 
     get isValid() {
-        let valid = true;
+        if (!this._id) {
+            return false;
+        }
+        if (!this._name) {
+            return false;
+        }
+        if (!this._geometry) {
+            return false;
+        }
+        if (!(Array.isArray(this._affectedLayers) && (this._affectedLayers.length > 0))) {
+            return false;
+        }
+        if (typeof this._metadata !== 'object') {
+            return false;
+        }
 
-        this._id ? valid = true : valid = false;
-        this._name ? valid = true : valid = false;
-        this._geometry ? valid = true : valid = false;
-        Array.isArray(this._affectedLayers) && (this._affectedLayers.length > 0) ? valid = true : valid = false;
-        typeof this._metadata === 'object' ? valid = true : valid = false;
-        Array.isArray(this._dateTimeValues) && (this._dateTimeValues.length > 0) ? valid = true : valid = false;
-        Array.isArray(this._activeCells) && (this._activeCells.length > 0) ? valid = true : valid = false;
+        // noinspection RedundantIfStatementJS
+        if (!(Array.isArray(this._activeCells) && (this._activeCells.length > 0))) {
+            return false;
+        }
 
-        return valid;
+        return true;
     }
 
     get toObject() {
@@ -83,13 +94,15 @@ export default class Boundary {
             type: this.type,
             affected_layers: this.affectedLayers,
             metadata: this.metadata,
-            date_time_values: this.dateTimeValues,
-            observation_points: this.observationPoints,
             active_cells: this.activeCells
         };
     }
 
     get defaultValues() {
         return this._defaultValues;
+    }
+
+    get numberOfValues() {
+        return this.defaultValues.length;
     }
 }

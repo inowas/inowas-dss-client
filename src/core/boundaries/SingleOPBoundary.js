@@ -27,4 +27,24 @@ export default class SingleOPBoundary extends Boundary {
             return {...value, id: index};
         });
     }
+
+    isValid() {
+        if (!super.isValid) {
+            return false;
+        }
+
+        // noinspection RedundantIfStatementJS
+        if (!(Array.isArray(this._dateTimeValues) && (this._dateTimeValues.length > 0))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    get toObject() {
+        return {
+            ...super.toObject,
+            date_time_values: this.dateTimeValues
+        };
+    }
 }

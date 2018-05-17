@@ -2,12 +2,12 @@
 #;0: General Metadata, 1: Geometry, 2: Time-based data
 #
 #;0: General metadata
-#;Version;BoundaryType;LengthUnit;TimeUnit;WellType
-0;v1;wel;m;d;inf_well
+#;Version;BoundaryType;LengthUnit;TimeUnit
+0;v1;wel;m;d
 #
-#;Name;GeometryType;Projection;X (long);Y (lat);Layer
-1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;1
-1;Pumping Well 2;Point;urn:ogc:def:crs:EPSG::32648;583,850.1;2,318,900.1;2
+#;Name;GeometryType;Projection;X (long);Y (lat);Layer;Well Type
+1;Pumping Well 1;Point;urn:ogc:def:crs:EPSG::32648;583,858.88;2,318,925.59;1;inf
+1;Pumping Well 2;Point;urn:ogc:def:crs:EPSG::32648;583,850.1;2,318,900.1;2;puw
 #
 #;2: Time-based data
 #;Name;DateTime;PumpingRate

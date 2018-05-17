@@ -23,7 +23,6 @@ export default class ConstantHeadBoundary extends MultipleOPBoundary {
         const eHead = 0;
 
         this._defaultValues = [sHead, eHead];
-        this._hasObservationPoints = true;
         this._type = boundaryType;
     }
 

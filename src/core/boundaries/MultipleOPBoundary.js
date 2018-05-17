@@ -50,4 +50,11 @@ export default class MultipleOPBoundary extends Boundary {
             return {...value, id: index};
         });
     }
+
+    get toObject() {
+        return {
+            ...super.toObject,
+            observation_points: this.observationPoints,
+        };
+    }
 }

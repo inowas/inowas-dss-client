@@ -2,7 +2,7 @@ import fs from 'fs';
 import Uuid from 'uuid';
 import {importBoundariesFromCsv} from '../../../src/core/import/CsvImporter';
 import * as boundaryObjects from '../../fixtures/obj/boundaryObjects';
-import {ConstantHeadBoundary, RechargeBoundary} from '../../../src/core/boundaries';
+import {ConstantHeadBoundary} from '../../../src/core/boundaries';
 
 test('ChdBoundary createWithStartDate', () => {
     const id = Uuid.v4();

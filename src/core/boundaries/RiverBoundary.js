@@ -11,7 +11,7 @@ export default class RiverBoundary extends MultipleOPBoundary {
 
     static createFromObject(objectData) {
         objectData.type = boundaryType;
-        return super.fromObjectData(objectData);
+        return BoundaryFactory.fromObjectData(objectData);
     }
 
     constructor() {
@@ -25,7 +25,6 @@ export default class RiverBoundary extends MultipleOPBoundary {
         const rBot = 0;
 
         this._defaultValues = [stage, cond, rBot];
-        this._hasObservationPoints = true;
         this._type = boundaryType;
     }
 

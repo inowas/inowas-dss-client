@@ -17,7 +17,6 @@ export default class WellBoundary extends SingleOPBoundary {
     constructor() {
         super();
         this._defaultValues = [0];
-        this._hasObservationPoints = false;
         this._metadata = {well_type: 'puw'};
         this._type = boundaryType;
     }

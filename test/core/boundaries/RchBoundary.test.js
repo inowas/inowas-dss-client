@@ -45,6 +45,8 @@ test('Import RchBoundary from CSV', () => {
             [105.80670115581347, 20.96897765302136]
         ]
     });
+    expect(rchBoundary1.affectedLayers).toEqual([1]);
+    expect(rchBoundary1.metadata).toEqual({});
     expect(rchBoundary1.getDateTimeValues().length).toEqual(12);
     expect(rchBoundary1.getDateTimeValues()).toEqual([
         {'date_time': '2010-01-01T00:00:00.000Z', 'values': [0.0004]},

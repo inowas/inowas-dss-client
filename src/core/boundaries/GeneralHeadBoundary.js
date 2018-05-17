@@ -1,18 +1,18 @@
 /* eslint-disable camelcase */
-import Boundary from './Boundary';
 import MultipleOPBoundary from './MultipleOPBoundary';
+import BoundaryFactory from './BoundaryFactory';
 
-const boundaryType = 'chd';
+const boundaryType = 'ghb';
 
 export default class GeneralHeadBoundary extends MultipleOPBoundary {
 
     static createWithStartDate({id = null, name = null, geometry, utcIsoStartDateTime}) {
-        return Boundary.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
+        return BoundaryFactory.createByTypeAndStartDate({id, name, type: boundaryType, geometry, utcIsoStartDateTime});
     }
 
     static createFromObject(objectData) {
         objectData.type = boundaryType;
-        return super.fromObjectData(objectData);
+        return BoundaryFactory.fromObjectData(objectData);
     }
 
     constructor() {
@@ -24,7 +24,6 @@ export default class GeneralHeadBoundary extends MultipleOPBoundary {
         const cond = 0;
 
         this._defaultValues = [head, cond];
-        this._hasObservationPoints = true;
         this._type = boundaryType;
     }
 

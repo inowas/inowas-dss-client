@@ -36,7 +36,7 @@ test('Import WellBoundary from CSV', () => {
     const wellBoundary1 = boundaries.filter(b => b.name === 'Pumping Well 1')[0];
     expect(wellBoundary1).toBeInstanceOf(WellBoundary);
     expect(wellBoundary1.name).toBe('Pumping Well 1');
-    expect(wellBoundary1.wellType).toBe('inf_well');
+    expect(wellBoundary1.wellType).toBe('inf');
     expect(wellBoundary1.geometry).toEqual({type: 'Point', coordinates: [105.80670115581347, 20.96897765302136]});
     expect(wellBoundary1.affectedLayers).toEqual([1]);
     expect(wellBoundary1.getDateTimeValues().length).toEqual(12);
@@ -57,7 +57,7 @@ test('Import WellBoundary from CSV', () => {
     const wellBoundary2 = boundaries.filter(b => b.name === 'Pumping Well 2')[0];
     expect(wellBoundary2).toBeInstanceOf(WellBoundary);
     expect(wellBoundary2.name).toBe('Pumping Well 2');
-    expect(wellBoundary2.wellType).toBe('inf_well');
+    expect(wellBoundary2.wellType).toBe('puw');
     expect(wellBoundary2.geometry).toEqual({type: 'Point', coordinates: [105.80661546542011, 20.968747756127655]});
     expect(wellBoundary2.affectedLayers).toEqual([2]);
     expect(wellBoundary2.getDateTimeValues().length).toEqual(12);

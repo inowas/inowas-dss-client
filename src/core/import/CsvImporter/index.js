@@ -46,51 +46,22 @@ const parseCSV = csv => {
 
 export const importBoundariesFromCsv = (inputString) => {
     const rawData = Papa.parse(inputString).data;
-    const {version, boundaryType, generalMetaData, boundaryMetaData, boundaryData} = parseCSV(rawData);
+    const {version, generalMetaData, boundaryMetaData, boundaryData} = parseCSV(rawData);
     const boundaries = [];
     const boundaryIds = uniq(boundaryMetaData.map(bmd => bmd[1]));
 
-    switch (boundaryType) {
-        case 'chd':
-            boundaryIds.forEach(id => {
-                const boundary = Importer.importConstantHeadBoundary({
-                    version,
-                    generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
-                    boundaryData: boundaryData.filter(bd => bd[1] === id)
-                });
-                if (boundary.isValid) {
-                    boundaries.push(boundary);
-                }
-            });
-            break;
-        case 'rch':
-            boundaryIds.forEach(id => {
-                const boundary = Importer.importRechargeBoundary({
-                    version,
-                    generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
-                    boundaryData: boundaryData.filter(bd => bd[1] === id)
-                });
-                if (boundary.isValid) {
-                    boundaries.push(boundary);
-                }
-            });
-            break;
-        case 'wel':
-            boundaryIds.forEach(id => {
-                const boundary = Importer.importWellBoundary({
-                    version,
-                    generalMetaData,
-                    boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
-                    boundaryData: boundaryData.filter(bd => bd[1] === id)
-                });
-                if(boundary.isValid) {
-                    boundaries.push(boundary);
-                }
-            });
-            break;
-    }
+    boundaryIds.forEach(id => {
+        const boundary = Importer.importBoundary({
+            version,
+            generalMetaData,
+            boundaryMetaData: boundaryMetaData.filter(bmd => bmd[1] === id),
+            boundaryData: boundaryData.filter(bd => bd[1] === id)
+        });
+
+        if (boundary.isValid) {
+            boundaries.push(boundary);
+        }
+    });
 
     return boundaries;
 };
