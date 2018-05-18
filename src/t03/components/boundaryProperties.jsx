@@ -17,11 +17,10 @@ import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import styleGlobals from 'styleGlobals';
 import {convertLayersFromSelect, getLayersForInput} from '../selectors/soilModel';
+import BoundaryFactory from '../../core/boundaries/BoundaryFactory';
 import BoundaryGeometryEditor from '../../core/boundaryEditor/boundaryGeometryEditor';
 import ObservationPointEditor from '../../core/boundaryEditor/observationPointEditor';
 import {first} from 'lodash';
-import {addIdFromIndex, getDateTimeValues} from '../../core/helpers';
-import {WellBoundary} from '../../core/boundaries/WellBoundary';
 
 const styles = {
     columns: {
@@ -300,34 +299,47 @@ class BoundaryProperties extends React.Component {
 
     renderDataTable = () => {
         const {readOnly} = this.props;
-        const {boundary, selectedObservationPointId} = this.state;
+        const {selectedObservationPointId} = this.state;
+        const boundary = BoundaryFactory.fromObjectData(this.state.boundary);
 
         switch (boundary.type) {
             case 'chd':
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
-                        <ConstantHeadObservationPoint readOnly={readOnly} ref={observationPoint => {
-                            this.observationPoint = observationPoint;
-                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                        <ConstantHeadObservationPoint
+                            readOnly={readOnly}
+                            ref={op => {
+                                this.observationPoint = op;
+                            }}
+                            rows={boundary.getDateTimeValues(selectedObservationPointId)}
+                        />
                     </LayoutComponents.Column>
                 );
             case 'ghb':
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
-                        <GeneralHeadObservationPoint readOnly={readOnly} ref={observationPoint => {
-                            this.observationPoint = observationPoint;
-                        }} rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}/>
+                        <GeneralHeadObservationPoint
+                            readOnly={readOnly}
+                            ref={op => {
+                                this.observationPoint = op;
+                            }}
+                            rows={boundary.getDateTimeValues(selectedObservationPointId)}
+                        />
                     </LayoutComponents.Column>
                 );
             case 'rch':
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
-                        <RechargeRate readOnly={readOnly} ref={observationPoint => {
-                            this.observationPoint = observationPoint;
-                        }} rows={addIdFromIndex(getDateTimeValues(boundary))}/>
+                        <RechargeRate
+                            readOnly={readOnly}
+                            ref={op => {
+                                this.observationPoint = op;
+                            }}
+                            rows={boundary.dateTimeValues}
+                        />
                     </LayoutComponents.Column>
                 );
             case 'riv':
@@ -339,12 +351,11 @@ class BoundaryProperties extends React.Component {
                             ref={op => {
                                 this.observationPoint = op;
                             }}
-                            rows={addIdFromIndex(getDateTimeValues(boundary, selectedObservationPointId))}
+                            rows={boundary.getDateTimeValues(selectedObservationPointId)}
                         />
                     </LayoutComponents.Column>
                 );
             case 'wel':
-                const wellBoundary = WellBoundary.fromObjectData(boundary);
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
@@ -353,7 +364,7 @@ class BoundaryProperties extends React.Component {
                             ref={op => {
                                 this.observationPoint = op;
                             }}
-                            rows={wellBoundary.indexedDateTimeValues}/>
+                            rows={boundary.indexedDateTimeValues}/>
                     </LayoutComponents.Column>
                 );
             default:

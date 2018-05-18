@@ -34,6 +34,7 @@ import md5 from 'js-md5';
 import {uniqueId, has} from 'lodash';
 import ActiveCellsLayer from '../components/activeCellsLayer';
 import {calculateActiveCells} from '../../core/geospatial';
+import BoundaryFactory from '../../core/boundaries/BoundaryFactory';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -380,68 +381,22 @@ class BackgroundMap extends React.Component {
             this.returnToProperties();
         }
 
-        if (type === 'chd') {
+        if (type === 'chd' || type === 'ghb' || type === 'riv' || type === 'rch') {
             const id = uuid.v4();
+            const name = type.toUpperCase() + '-boundary ' + this.getNewBoundaryNumber(type);
             const linestring = e.layer;
+            const geometry = linestring.toGeoJSON().geometry;
 
-            const boundary = getBoundaryDefaults(
-                type,
+            const boundary = BoundaryFactory.createByTypeAndStartDate({
                 id,
-                'Constant Head ' + this.getNewBoundaryNumber(type),
-                linestring.toGeoJSON().geometry,
-                this.getStartDate()
-            );
-
-            boundary.active_cells = calculateActiveCells(linestring.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
-            this.props.addBoundary(this.props.model.id, boundary);
-            this.returnToBoundariesWithBoundaryId(id, type, false);
-        }
-
-        if (type === 'ghb') {
-            const id = uuid.v4();
-            const linestring = e.layer;
-            const boundary = getBoundaryDefaults(
+                name,
+                geometry,
                 type,
-                id,
-                'General Head ' + this.getNewBoundaryNumber(type),
-                linestring.toGeoJSON().geometry,
-                this.getStartDate()
-            );
+                utcIsoStartDateTime: this.getStartDate()
+            });
 
-            boundary.active_cells = calculateActiveCells(linestring.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
-            this.props.addBoundary(this.props.model.id, boundary);
-            this.returnToBoundariesWithBoundaryId(id, type, false);
-        }
-
-        if (type === 'rch') {
-            const id = uuid.v4();
-            const polygon = e.layer;
-            const boundary = getBoundaryDefaults(
-                type,
-                id,
-                'Recharge ' + this.getNewBoundaryNumber(type),
-                polygon.toGeoJSON().geometry,
-                this.getStartDate()
-            );
-
-            boundary.active_cells = calculateActiveCells(polygon.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
-            this.props.addBoundary(this.props.model.id, boundary);
-            this.returnToBoundariesWithBoundaryId(id, type, false);
-        }
-
-        if (type === 'riv') {
-            const id = uuid.v4();
-            const linestring = e.layer;
-            const boundary = getBoundaryDefaults(
-                type,
-                id,
-                'River ' + this.getNewBoundaryNumber(type),
-                linestring.toGeoJSON().geometry,
-                this.getStartDate()
-            );
-
-            boundary.active_cells = calculateActiveCells(linestring.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
-            this.props.addBoundary(this.props.model.id, boundary);
+            boundary.activeCells = calculateActiveCells(geometry, this.props.model.bounding_box, this.props.model.grid_size);
+            this.props.addBoundary(this.props.model.id, boundary.toObject);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
 

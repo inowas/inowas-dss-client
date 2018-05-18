@@ -76,7 +76,8 @@ export function getBoundaryDefaults(type, id, name, geometry, startDateTime) {
                 date_time_values: [{
                     date_time: startDateTime,
                     values: [0]
-                }]
+                }],
+                active_cells: null
             };
     }
 

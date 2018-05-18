@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
-import {ConstantHeadBoundary, GeneralHeadBoundary, RechargeBoundary, RiverBoundary, WellBoundary} from './index';
 import Uuid from 'uuid';
+import ConstantHeadBoundary from './ConstantHeadBoundary';
+import GeneralHeadBoundary from './GeneralHeadBoundary';
+import RechargeBoundary from './RechargeBoundary';
+import RiverBoundary from './RiverBoundary';
+import WellBoundary from './WellBoundary';
 
 export default class BoundaryFactory {
     static fromType = (type) => {
