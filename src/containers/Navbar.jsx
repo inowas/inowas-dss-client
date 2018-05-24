@@ -117,14 +117,7 @@ class NavBar extends React.Component {
     }
 
     render() {
-        const standardLinks = [
-            {
-                name: 'Home',
-                path: '/',
-                icon: <Icon name="world"/>
-            }
-        ];
-
+        const standardLinks = [];
         const standardLinksAuthenticationRequired = [
             {
                 name: 'Dashboard',
