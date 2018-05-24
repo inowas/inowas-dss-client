@@ -11,7 +11,6 @@ import image from '../images/T12.png';
 import {Background, Chart, Parameters, Settings, MFI} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -50,11 +49,7 @@ const buildPayload = (state) => {
     };
 };
 
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://inowas..hydro.tu-dresden.de/t12-clogging-estimation-by-mfi-Index/',
-    icon: <Icon name="file"/>
-}];
+const navigation = [];
 
 class T12 extends React.Component {
 

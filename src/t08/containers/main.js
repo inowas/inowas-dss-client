@@ -52,7 +52,7 @@ const buildPayload = (state) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://inowas..hydro.tu-dresden.de/t08-1d-transport-model-ogata-banks/',
+    path: 'https://inowas.hydro.tu-dresden.de/tools/t08-one-dimensional-transport-equation/',
     icon: <Icon name="file"/>
 }];
 

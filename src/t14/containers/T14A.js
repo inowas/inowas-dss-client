@@ -11,7 +11,6 @@ import image from '../images/T14A.png';
 import {Background, ChartT14A as Chart, InfoT14A as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -23,6 +22,8 @@ import {Modifier as Dashboard} from '../../dashboard';
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T14A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
+
+import {navigation} from './T14';
 
 const styles = {
     heading: {
@@ -47,12 +48,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://inowas..hydro.tu-dresden.de/t14-pumping-induced-river-drawdown/',
-    icon: <Icon name="file"/>
-}];
 
 class T14A extends React.Component {
 

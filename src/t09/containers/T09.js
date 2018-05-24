@@ -14,9 +14,9 @@ import image9E from '../images/T09E.png';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 
-const navigation = [{
+export const navigation = [{
     name: 'Documentation',
-    path: 'https://inowas..hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+    path: 'https://inowas.hydro.tu-dresden.de/tools/t09-simple-saltwater-intrusion-equations/',
     icon: <Icon name="file"/>
 }];
 

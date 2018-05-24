@@ -69,7 +69,7 @@ class AdminDashboard extends React.Component {
         navigation: [
             {
                 name: 'Documentation',
-                path: 'https://inowas..hydro.tu-dresden.de/',
+                path: 'https://inowas.hydro.tu-dresden.de/',
                 icon: <Icon name="file"/>
             },
             {

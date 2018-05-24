@@ -12,9 +12,9 @@ import image14D from '../images/T14D.png';
 import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 
-const navigation = [{
+export const navigation = [{
     name: 'Documentation',
-    path: 'https://inowas..hydro.tu-dresden.de/t14-pumping-induced-river-drawdown/',
+    path: 'https://inowas.hydro.tu-dresden.de/tools/t14-pumping-induced-river-drawdown/',
     icon: <Icon name="file"/>
 }];
 

@@ -34,7 +34,13 @@ const styles = {
 class Main extends Component {
 
     state = {
-        navigation: [],
+        navigation: [
+            {
+                name: 'Documentation',
+                path: 'https://inowas.hydro.tu-dresden.de/tools/t07-application-specific-scenarios-analyzer/',
+                icon: <Icon name="file"/>
+            }
+        ],
         scenarioAnalysis: {
             name: 'New Scenario Analysis',
             description: '',

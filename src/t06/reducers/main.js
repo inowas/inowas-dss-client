@@ -160,119 +160,119 @@ export const getInitialState = () => {
             highCost: false,
             highLandNeed: true,
             image: Ponds,
-            href: 'https://inowas..hydro.tu-dresden.de/surface-spreading-and-infiltration-ponds/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/infiltration-ponds-and-basins/'
         }, {
             slug: 'Flooding',
             name: 'Flooding',
             highCost: false,
             highLandNeed: true,
             image: Flooding,
-            href: 'https://inowas..hydro.tu-dresden.de/flooding/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/flooding/'
         }, {
             slug: 'Ditches',
             name: 'Ditches and furrows ',
             highCost: false,
             highLandNeed: true,
             image: Ditches,
-            href: 'https://inowas..hydro.tu-dresden.de/ditch-or-trenches/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/ditches-and-furrows/'
         }, {
             slug: 'SAT',
             name: 'Soil Aquifer Treatment',
             highCost: true,
             highLandNeed: true,
             image: SAT,
-            href: 'https://inowas..hydro.tu-dresden.de/soil-aquifer-treatment-sat/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/soil-aquifer-treatment-sat/'
         }, {
             slug: 'EI',
             name: ' Excess irrigation',
             highCost: false,
             highLandNeed: false,
             image: EI,
-            href: 'https://inowas..hydro.tu-dresden.de/excess-irrigation-2/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/excess-irrigation/'
         }, {
             slug: 'IBF',
-            name: 'River/lake bank filtration',
+            name: 'Induced bank filtration',
             highCost: false,
             highLandNeed: false,
             image: IBF,
-            href: 'https://inowas..hydro.tu-dresden.de/induced-bank-filtration/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/induced-bank-filtration/'
         }, {
             slug: 'IDF',
             name: 'Dune filtration',
             highCost: false,
             highLandNeed: true,
             image: IDF,
-            href: 'https://inowas..hydro.tu-dresden.de/dune-filtration/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/dune-filtration/'
         }, {
             slug: 'ASR',
             name: 'ASR',
             highCost: true,
             highLandNeed: false,
             image: ASR,
-            href: 'https://inowas..hydro.tu-dresden.de/aquifer-storage-and-recovery-asr/'
+            href: 'https://inowas.hydro.tu-dresden.de/tools/aquifer-storage-and-recovery-asr/'
         }, {
             slug: 'ASTR',
             name: 'ASTR',
             highCost: true,
             highLandNeed: false,
             image: ASTR,
-            href: 'https://inowas..hydro.tu-dresden.de/aquifer-storage-transit-and-recovery-astr/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/aquifer-storage-transfer-and-recovery-astr/'
         }, {
             slug: 'W-S-B',
-            name: 'Shallow well/ shaft/ pit infiltration ',
+            name: 'Shallow wells, shafts and pits infiltration',
             highCost: true,
             highLandNeed: false,
             image: WSB,
-            href: 'https://inowas..hydro.tu-dresden.de/shallow-well-shaft-or-pit-infiltration/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/shallow-wells-shafts-and-pits-infiltration/'
         }, {
             slug: 'SS Dam',
             name: 'Subsurface dams',
             highCost: true,
             highLandNeed: false,
             image: SSDam,
-            href: 'https://inowas..hydro.tu-dresden.de/subsurface-dams/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/subsurface-dams/'
         }, {
             slug: 'RD',
             name: 'Recharge dams',
             highCost: false,
             highLandNeed: false,
             image: RD,
-            href: 'https://inowas..hydro.tu-dresden.de/recharge-dams/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/recharge-dams/'
         }, {
             slug: 'Sand dam',
             name: 'Sand dams',
             highCost: false,
             highLandNeed: false,
             image: Sanddam,
-            href: 'https://inowas..hydro.tu-dresden.de/sand-dams/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/sand-dams/'
         }, {
             slug: 'Bund',
             name: 'Barrier and bunds',
             highCost: false,
             highLandNeed: true,
             image: Bounds,
-            href: 'https://inowas..hydro.tu-dresden.de/barriers-and-bunds/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/barriers-and-bunds/'
         }, {
             slug: 'Trenches',
             name: 'Trenches',
             highCost: false,
             highLandNeed: true,
             image: Trenches,
-            href: 'https://inowas..hydro.tu-dresden.de/trenches/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/trenches/'
         }, {
             slug: 'Rooftop',
             name: 'Rooftop rainwater harvesting',
             highCost: false,
             highLandNeed: false,
             image: Rooftop,
-            href: 'https://inowas..hydro.tu-dresden.de/rooftop-rainwater-harvesting/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/rooftop-rainwater-harvesting/'
         }, {
             slug: 'CS',
             name: 'Channel spreading',
             highCost: false,
             highLandNeed: true,
             image: CS,
-            href: 'https://inowas..hydro.tu-dresden.de/channel-spreading/'
+            href: 'https://inowas.hydro.tu-dresden.de/mar-methods/channel-spreading/'
         }]
     };
 };

@@ -9,7 +9,6 @@ import image from '../images/T13C.png';
 import {Background, ChartT13C as Chart, InfoT13C as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -23,6 +22,8 @@ import {getInitialState} from '../reducers/T13C';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+
+import {navigation} from './T13';
 
 const styles = {
     heading: {
@@ -47,13 +48,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://inowas..hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
-    icon: <Icon name="file"/>
-}];
 
 class T13C extends React.Component {
 
