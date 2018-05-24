@@ -53,7 +53,7 @@ const buildPayload = (state) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
+    path: 'https://inowas..hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
     icon: <Icon name="file"/>
 }];
 

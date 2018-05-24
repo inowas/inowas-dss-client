@@ -52,7 +52,7 @@ const buildPayload = (state) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t12-clogging-estimation-by-mfi-Index/',
+    path: 'https://inowas..hydro.tu-dresden.de/t12-clogging-estimation-by-mfi-Index/',
     icon: <Icon name="file"/>
 }];
 

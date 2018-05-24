@@ -52,7 +52,7 @@ const buildPayload = (state) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t08-1d-transport-model-ogata-banks/',
+    path: 'https://inowas..hydro.tu-dresden.de/t08-1d-transport-model-ogata-banks/',
     icon: <Icon name="file"/>
 }];
 

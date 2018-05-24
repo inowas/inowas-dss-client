@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
         navigation: [
             {
                 name: 'Documentation',
-                path: 'https://wiki.inowas.hydro.tu-dresden.de/',
+                path: 'https://inowas..hydro.tu-dresden.de/',
                 icon: <Icon name="file"/>
             },
             {

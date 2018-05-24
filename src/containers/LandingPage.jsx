@@ -139,26 +139,26 @@ class LandingPage extends React.Component {
 
                         </Slider>
 
-                        <p className="description align-center">There are 13 applications available on the INOWAS platform that cover most of the challanges encountered at MAR sites, both from the quantitative and qualitative perspective: from optimization of MAR site location (<a href="https://wiki.inowas.hydro.tu-dresden.de/a13-optimisation-of-mar-site-location/" target="_blank">
+                        <p className="description align-center">There are 13 applications available on the INOWAS platform that cover most of the challanges encountered at MAR sites, both from the quantitative and qualitative perspective: from optimization of MAR site location (<a href="https://inowas..hydro.tu-dresden.de/a13-optimisation-of-mar-site-location/" target="_blank">
                                 <strong>A11</strong>
-                            </a>), assessment of saltwater intrusion (<a href="https://wiki.inowas.hydro.tu-dresden.de/a07-assessment-of-seawater-intrusion/" target="_blank">
+                            </a>), assessment of saltwater intrusion (<a href="https://inowas..hydro.tu-dresden.de/a07-assessment-of-seawater-intrusion/" target="_blank">
                                 <strong>A07</strong>
-                            </a>), application of MAR for the restoration of groundwater levels in overexploited aquifers (<a href="https://wiki.inowas.hydro.tu-dresden.de/a03-restoration-of-groundwater-levels/" target="_blank">
+                            </a>), application of MAR for the restoration of groundwater levels in overexploited aquifers (<a href="https://inowas..hydro.tu-dresden.de/a03-restoration-of-groundwater-levels/" target="_blank">
                                 <strong>A03</strong>
-                            </a>), for the maximization of natural storage capacity of the aquifers (<a href="https://wiki.inowas.hydro.tu-dresden.de/a02-maximise-natural-storage-capacity/" target="_blank">
+                            </a>), for the maximization of natural storage capacity of the aquifers (<a href="https://inowas..hydro.tu-dresden.de/a02-maximise-natural-storage-capacity/" target="_blank">
                                 <strong>A02</strong>
-                            </a>), for improvement of water quality (<a href="https://wiki.inowas.hydro.tu-dresden.de/a08-improve-water-quality/" target="_blank">
+                            </a>), for improvement of water quality (<a href="https://inowas..hydro.tu-dresden.de/a08-improve-water-quality/" target="_blank">
                                 <strong>A08</strong>
-                            </a>), through design and operational optimization of MAR schemes (<a href="https://wiki.inowas.hydro.tu-dresden.de/a12-design-optimization-of-mar-schemes/" target="_blank">
+                            </a>), through design and operational optimization of MAR schemes (<a href="https://inowas..hydro.tu-dresden.de/a12-design-optimization-of-mar-schemes/" target="_blank">
                                 <strong>A12</strong>
-                            </a>), clogging development (<a href="https://wiki.inowas.hydro.tu-dresden.de/a10-clogging-development-assessment/" target="_blank">
+                            </a>), clogging development (<a href="https://inowas..hydro.tu-dresden.de/a10-clogging-development-assessment/" target="_blank">
                                 <strong>A10</strong>
-                            </a>), assessment of the risk associated with MAR (<a href="https://wiki.inowas.hydro.tu-dresden.de/a09-risk-assessment/" target="_blank">
+                            </a>), assessment of the risk associated with MAR (<a href="https://inowas..hydro.tu-dresden.de/a09-risk-assessment/" target="_blank">
                                 <strong>A09</strong>
                             </a>) etc.</p>
 
                         <div className="align-center">
-                            <a className="button button-primary more" href="https://wiki.inowas.hydro.tu-dresden.de/category/applications/" target="_blank">Read more</a>
+                            <a className="button button-primary more" href="https://inowas..hydro.tu-dresden.de/category/applications/" target="_blank">Read more</a>
                         </div>
 
                     </div>
@@ -281,7 +281,7 @@ class LandingPage extends React.Component {
                         </div>
                     </div>
                     <div className="align-center">
-                        <a className="button button-primary more" href="https://wiki.inowas.hydro.tu-dresden.de/category/tools/">Read more</a>
+                        <a className="button button-primary more" href="https://inowas..hydro.tu-dresden.de/category/tools/">Read more</a>
                     </div>
 
                     <div className="row geo-database">

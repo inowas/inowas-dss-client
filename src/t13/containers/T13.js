@@ -16,7 +16,7 @@ import Navbar from '../../containers/Navbar';
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
+    path: 'https://inowas..hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
     icon: <Icon name="file"/>
 }];
 

@@ -15,7 +15,7 @@ import Navbar from '../../containers/Navbar';
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t06-mar-method-selection/',
+    path: 'https://inowas..hydro.tu-dresden.de/t06-mar-method-selection/',
     icon: <Icon name="file"/>
 }];
 

@@ -14,7 +14,7 @@ import Navbar from '../../containers/Navbar';
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t14-pumping-induced-river-drawdown/',
+    path: 'https://inowas..hydro.tu-dresden.de/t14-pumping-induced-river-drawdown/',
     icon: <Icon name="file"/>
 }];
 

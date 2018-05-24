@@ -26,7 +26,7 @@ const styles = {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t04a-database/',
+    path: 'https://inowas..hydro.tu-dresden.de/t04a-database/',
     icon: <Icon name="file"/>
 }];
 

@@ -22,7 +22,7 @@ export default class T16A extends React.Component {
     state = {
         navigation: [{
             name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/t16-calculation-of-hydraulic-conductivity/',
+            path: 'https://inowas..hydro.tu-dresden.de/t16-calculation-of-hydraulic-conductivity/',
             icon: <Icon name="file"/>
         }]
     }

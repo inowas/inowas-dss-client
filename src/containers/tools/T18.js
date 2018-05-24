@@ -21,7 +21,7 @@ export default class T18 extends React.Component {
     state = {
         navigation: [{
             name: 'Documentation',
-            path: 'https://wiki.inowas.hydro.tu-dresden.de/t18-sat-basin-design/',
+            path: 'https://inowas..hydro.tu-dresden.de/t18-sat-basin-design/',
             icon: <Icon name="file"/>
         }]
     }

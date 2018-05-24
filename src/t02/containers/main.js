@@ -51,7 +51,7 @@ const buildPayload = (data) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
+    path: 'https://inowas..hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
     icon: <Icon name="file"/>
 }];
 
