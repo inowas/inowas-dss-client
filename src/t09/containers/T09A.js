@@ -11,7 +11,6 @@ import image from '../images/T09A.png';
 import {Background, ChartT09A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -24,6 +23,8 @@ import {each} from 'lodash';
 import {getInitialState} from '../reducers/T09A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import {isReadOnly} from '../../core/helpers';
+
+import {navigation} from './T09';
 
 const styles = {
     heading: {
@@ -48,12 +49,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
-    icon: <Icon name="file"/>
-}];
 
 class T09A extends React.Component {
 

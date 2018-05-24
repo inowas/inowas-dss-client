@@ -153,7 +153,7 @@ class UserProfile extends React.Component {
                                     onClick={this.onSubmitClick}
                                     loading={this.state.loading}
                                 >
-                                    Submit
+                                    Save
                                 </Button>
                             </Form>
                         </Grid.Column>

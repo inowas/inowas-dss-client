@@ -8,7 +8,6 @@ import '../../less/4TileTool.less';
 import {SettingsT13D as Settings, Parameters} from '../components';
 import {WebData} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import {Modifier as Dashboard} from '../../dashboard';
 
@@ -17,6 +16,8 @@ import {getInitialState} from '../reducers/T13D';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+
+import {navigation} from './T13';
 
 const styles = {
     heading: {
@@ -41,13 +42,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
-    icon: <Icon name="file"/>
-}];
 
 class T13C extends React.Component {
 

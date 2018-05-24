@@ -26,7 +26,7 @@ const styles = {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t04a-database/',
+    path: 'https://inowas.hydro.tu-dresden.de/tools/t04a-database-for-gis-based-suitability-mapping/',
     icon: <Icon name="file"/>
 }];
 

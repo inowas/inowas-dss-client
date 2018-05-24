@@ -11,7 +11,6 @@ import image from '../images/T13A.png';
 import {Background, InfoT13A as Info, ChartT13A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -23,6 +22,8 @@ import {Modifier as Dashboard} from '../../dashboard';
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T13A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
+
+import {navigation} from './T13';
 
 const styles = {
     heading: {
@@ -48,11 +49,6 @@ const buildPayload = (state) => {
     };
 };
 
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t13-travel-time-through-unconfined-aquifer/',
-    icon: <Icon name="file"/>
-}];
 
 class T13A extends React.Component {
 

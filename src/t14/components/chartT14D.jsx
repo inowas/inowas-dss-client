@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
-import {calculateDiagramData, calcDQ} from '../calculations/calculationT14D';
+import {calculateDiagramData} from '../calculations/calculationT14D';
 import '../../less/toolDiagram.less';
 
 import {
@@ -13,11 +13,9 @@ import {
     CartesianGrid
 } from 'recharts';
 
-const Chart = ({Qw, t, S, T, d, W, Kdash, Bdashdash, Sy, bdash}) => {
-    const lambda = Kdash * W / bdash;
-    const data = calculateDiagramData(Qw, S, T, d, 0, t, lambda, 1, Kdash, Bdashdash, Sy);
-    const dQ = calcDQ(d, S, T, t, lambda, Kdash, Bdashdash, Sy, Qw);
-
+const Chart = ({Qw, t, S, T, d, W, Kdash, Bdashdash, Sigma, bdash}) => {
+    const data = calculateDiagramData(Qw, S, T, d, 0, t, Kdash, bdash, Bdashdash, Sigma, W);
+    const dQ = data[data.length - 1].dQ;
     return (
         <div>
             <h2>Calculation</h2>
@@ -60,8 +58,8 @@ Chart.propTypes = {
     W: PropTypes.number.isRequired,
     Kdash: PropTypes.number.isRequired,
     Bdashdash: PropTypes.number.isRequired,
-    Sy: PropTypes.number.isRequired,
     bdash: PropTypes.number.isRequired,
+    Sigma: PropTypes.number.isRequired,
 };
 
 export default pure(Chart);

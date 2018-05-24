@@ -15,9 +15,9 @@ import * as T13 from './t13/index';
 import * as T14 from './t14/index';
 import * as User from './user/index';
 import {Login, Logout, SignUp} from './user/containers';
-import LandingPage from './containers/LandingPage';
 import Impressum from './containers/Impressum';
 import {WebData} from './core/index';
+import LandingPage from './containers/LandingPage';
 
 const routes = store => (
     <Route path="/" component={AppForAllUsers}>

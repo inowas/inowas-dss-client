@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Action} from '../actions';
-import {hasSessionKey, getFetched} from '../reducers';
+import {hasSessionKey, getFetched} from '../user/reducers/index';
 import {withRouter} from 'react-router';
 
-class AppForAllUsers extends React.Component {
+class LandingPage extends React.Component {
     render() {
-        if (this.props.userIsLoggedIn && this.props.userShouldBeFetched) {
-            this.props.fetchUser();
-        }
-
-        return this.props.children;
+        this.props.userIsLoggedIn ? this.props.router.push('/tools') : this.props.router.push('/login');
+        return null;
     }
 }
 
@@ -22,11 +18,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = {
-    fetchUser: Action.fetchUser,
-};
-
-AppForAllUsers.propTypes = {
+LandingPage.propTypes = {
     children: PropTypes.node,
     fetchUser: PropTypes.func.isRequired,
     router: PropTypes.object.isRequired,
@@ -34,4 +26,4 @@ AppForAllUsers.propTypes = {
     userShouldBeFetched: PropTypes.bool.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppForAllUsers));
+export default withRouter(connect(mapStateToProps)(LandingPage));
