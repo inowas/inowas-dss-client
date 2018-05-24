@@ -1,7 +1,6 @@
-import { put, take } from 'redux-saga/effects';
-import { sendCommand } from '../../actions/messageBox';
-import { Command, Query } from '../actions/';
-import { WebData } from '../../core';
+import {put, take} from 'redux-saga/effects';
+import {Command, Query} from '../actions/';
+import {WebData} from '../../core';
 // import { fetchDetails } from '../../actions/T07';
 
 export default function* createScenarioFlow() {
@@ -12,7 +11,7 @@ export default function* createScenarioFlow() {
             WebData.Helpers.waitForAction(action, Command.CREATE_SCENARIO)
         );
 
-        yield put(sendCommand(action.type, action.payload));
+        yield put(WebData.Modifier.Action.sendCommand(action.type, action.payload));
 
         // eslint-disable-next-line no-constant-condition
         while (true) {

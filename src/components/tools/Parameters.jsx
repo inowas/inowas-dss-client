@@ -7,9 +7,11 @@ import {inputType} from '../../inputType';
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
 
+import ParameterSlider from '../../core/parameterSlider';
+
 const renderParam = (param, handleChange) => {
     if (!param.inputType) {
-        return renderSlider(param, handleChange);
+        return (<ParameterSlider key={param.id} handleChange={handleChange} param={param}/>);
     }
 
     switch (param.inputType) {
@@ -18,7 +20,7 @@ const renderParam = (param, handleChange) => {
         case inputType.RADIO_SELECT:
             return renderRadioSelect(param, handleChange);
         case inputType.SLIDER:
-            return renderSlider(param, handleChange);
+            return (<ParameterSlider key={param.id} handleChange={handleChange} param={param}/>);
     }
 
     return null;
@@ -53,39 +55,6 @@ const renderRadioSelect = (param) => {
     return (<tr key={param.id} className="parameter">
         <td className="parameter-label">{param.label}</td>
         <td>{options}</td>
-    </tr>);
-};
-
-const renderSlider = (param, handleChange) => {
-    // Should do some refactoring
-    if (!param.label && param.name) {
-        param.label = param.name;
-    }
-    let disable = false;
-    if (param.disable) {
-        disable = param.disable;
-    }
-    return (<tr key={param.id} className="parameter">
-        <td className="parameter-label">{param.label}</td>
-        <td>
-            <input disabled={disable} name={'parameter_' + param.id + '_min'}
-                   className="parameter-min input-max input-xs" type="number" step={param.stepSize}
-                   value={Number(param.min).toFixed(param.decimals)} onChange={handleChange}/>
-
-            <input disabled={disable} name={'parameter_' + param.id + '_max'}
-                   className="parameter-max input-max input-xs" type="number" step={param.stepSize}
-                   value={Number(param.max).toFixed(param.decimals)} onChange={handleChange}/>
-
-            <input disabled={disable} id={param.id + '_range'} name={'parameter_' + param.id + '_value'}
-                   className="parameter-input" type="range" min={param.min} max={param.max} step={param.stepSize}
-                   value={param.value} onChange={handleChange}/>
-        </td>
-        <td>
-            <input disabled={disable} name={'parameter_' + param.id + '_value'}
-                   className="parameter-max input input-xs"
-                   type="number" step={param.stepSize} min={param.min} max={param.max}
-                   value={Number(param.value).toFixed(param.decimals)} onChange={handleChange}/>
-        </td>
     </tr>);
 };
 

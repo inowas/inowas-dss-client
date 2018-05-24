@@ -6,23 +6,24 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T14A.png';
+import image from '../images/T14A.png';
 
-import {Background, ChartT14A as Chart, Parameters} from '../components';
+import {Background, ChartT14A as Chart, InfoT14A as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T14A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
+
+import {navigation} from './T14';
 
 const styles = {
     heading: {
@@ -47,12 +48,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t14-pumping-induced-river-drawdown/',
-    icon: <Icon name="file"/>
-}];
 
 class T14A extends React.Component {
 
@@ -234,7 +229,9 @@ class T14A extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
+                        <section className="tile col col-abs-2 stacked">
+                            <Info {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
@@ -256,9 +253,9 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 

@@ -13,7 +13,7 @@ import {
     setSelectedTotalTimeIndex,
     setupT07b,
     updateResultsT07B
-} from '../../actions/T07';
+} from '../actions/actions';
 
 import ArraySlider from '../../components/primitive/ArraySlider';
 import Chart from 'react-c3js';
@@ -24,12 +24,11 @@ import LayerNumber from '../../model/LayerNumber';
 import Navbar from '../../containers/Navbar';
 import PropTypes from 'prop-types';
 import ResultType from '../../model/ResultType';
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
-import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import TotalTime from '../../model/TotalTime';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { withRouter } from 'react-router';
+import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
+import ScenarioAnalysisMap from '../components/ScenarioAnalysisMap';
 
 class T07B extends Component {
     static propTypes = {
@@ -86,9 +85,7 @@ class T07B extends Component {
     }
 
     componentWillMount() {
-        // eslint-disable-next-line no-shadow
-        const { fetchDetails } = this.props;
-        fetchDetails(this.props.params.id, dispatch => {
+        this.props.fetchDetails(this.props.params.id, dispatch => {
             dispatch(setupT07b());
         });
     }
@@ -240,7 +237,8 @@ class T07B extends Component {
         );
     }
 
-    renderModelSelect(models) {
+    renderModelSelect() {
+        const {models} = this.props.models;
         return models.map(m => {
             return (
                 <option key={m.modelId} value={m.modelId}>
@@ -286,7 +284,7 @@ class T07B extends Component {
                         onChange={this.selectModel}
                         value={t07bSelectedModelIds[0]}
                     >
-                        {this.renderModelSelect(models.models)}
+                        {this.renderModelSelect()}
                     </select>
                 </div>
                 <div className="col center-horizontal">
@@ -306,15 +304,11 @@ class T07B extends Component {
     }
 
     setMapPosition = mapPosition => {
-        // eslint-disable-next-line no-shadow
-        const { setMapPosition } = this.props;
-        setMapPosition(mapPosition);
+        this.props.setMapPosition(mapPosition);
     };
 
     setActiveCoordinate = coordinate => {
-        // eslint-disable-next-line no-shadow
-        const { setActiveCoordinate } = this.props;
-        setActiveCoordinate(coordinate);
+        this.props.setActiveCoordinate(coordinate);
     };
 
     renderMap() {
@@ -544,7 +538,7 @@ class T07B extends Component {
     }
 }
 
-const mapStateToProps = (state, { params, route }) => {
+const mapStateToProps = (state, { params }) => {
     return {
         selectedResultType: state.T07.selectedResultType,
         selectedLayerNumber: state.T07.selectedLayerNumber,
@@ -556,22 +550,20 @@ const mapStateToProps = (state, { params, route }) => {
         t07bDifference: state.T07.t07bDifference,
         mapPosition: state.T07.mapPosition,
         activeCoordinate: state.T07.activeCoordinate,
-        params,
-        route
+        params
     };
 };
 
-export default withRouter(
-    connect(mapStateToProps, {
-        fetchDetails,
-        setActiveCoordinate,
-        setMapPosition,
-        setSelectedLayer,
-        setSelectedModelIdsT07B,
-        setSelectedResultType,
-        setSelectedTotalTimeIndex,
-        setupT07b,
-        updateResultsT07B,
-        push
-    })(T07B)
-);
+const mapDispatchToProps = {
+    fetchDetails,
+    setActiveCoordinate,
+    setMapPosition,
+    setSelectedLayer,
+    setSelectedModelIdsT07B,
+    setSelectedResultType,
+    setSelectedTotalTimeIndex,
+    setupT07b,
+    updateResultsT07B
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T07B));

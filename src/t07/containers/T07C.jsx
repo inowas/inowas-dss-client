@@ -12,7 +12,7 @@ import {
     setSelectedTotalTimeIndex,
     setTimeSeriesPointSelection,
     toggleModelSelection
-} from '../../actions/T07';
+} from '../actions/actions';
 
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -24,38 +24,14 @@ import LayerNumber from '../../model/LayerNumber';
 import Navbar from '../../containers/Navbar';
 import PropTypes from 'prop-types';
 import ResultType from '../../model/ResultType';
-import ScenarioAnalysisMap from '../../components/modflow/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
-import ScenarioSelect from '../../components/tools/ScenarioSelect';
 import TimeSeriesGridCell from '../../model/TimeSeriesGridCell';
 import TimeSeriesPoint from '../../model/TimeSeriesPoint';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import { push } from 'react-router-redux';
+import ScenarioAnalysisMap from '../components/ScenarioAnalysisMap';
+import ScenarioSelect from '../components/ScenarioSelect';
 
 class T07C extends Component {
-    static propTypes = {
-        params: PropTypes.object,
-        models: PropTypes.object,
-        selectedResultType: PropTypes.string,
-        selectedLayerNumber: PropTypes.number,
-        timeSeriesPoints: PropTypes.array,
-        totalTimes: PropTypes.object,
-        layerValues: PropTypes.object,
-        mapPosition: PropTypes.object,
-        selectedTotalTimeIndex: PropTypes.number,
-        addTimeSeriesPoint: PropTypes.func,
-        fetchDetails: PropTypes.func,
-        fetchTimeSeries: PropTypes.func,
-        setMapPosition: PropTypes.func,
-        setSelectedLayer: PropTypes.func,
-        setSelectedResultType: PropTypes.func,
-        setSelectedTotalTimeIndex: PropTypes.func,
-        setTimeSeriesPointSelection: PropTypes.func,
-        toggleModelSelection: PropTypes.func,
-        push: PropTypes.func
-    };
-
     constructor(props) {
         super(props);
 
@@ -76,11 +52,6 @@ class T07C extends Component {
                     path: '/tools/T07C/' + props.params.id,
                     icon: <Icon name="layer_horizontal_hatched" />
                 }
-                // {
-                //     name: 'Overall budget',
-                //     path: 'tools/T07D/' + props.params.id,
-                //     icon: <Icon name="layer_horizontal_hatched"/>
-                // }
             ]
         };
     }
@@ -541,17 +512,37 @@ const mapStateToProps = (state, { params, route }) => {
     };
 };
 
-export default withRouter(
-    connect(mapStateToProps, {
-        addTimeSeriesPoint,
-        fetchDetails,
-        fetchTimeSeries,
-        setMapPosition,
-        setSelectedLayer,
-        setSelectedResultType,
-        setSelectedTotalTimeIndex,
-        setTimeSeriesPointSelection,
-        toggleModelSelection,
-        push
-    })(T07C)
-);
+const mapDispatchToProps = {
+    addTimeSeriesPoint,
+    fetchDetails,
+    fetchTimeSeries,
+    setMapPosition,
+    setSelectedLayer,
+    setSelectedResultType,
+    setSelectedTotalTimeIndex,
+    setTimeSeriesPointSelection,
+    toggleModelSelection
+};
+
+T07C.propTypes = {
+    params: PropTypes.object,
+    models: PropTypes.object,
+    selectedResultType: PropTypes.string,
+    selectedLayerNumber: PropTypes.number,
+    timeSeriesPoints: PropTypes.array,
+    totalTimes: PropTypes.object,
+    layerValues: PropTypes.object,
+    mapPosition: PropTypes.object,
+    selectedTotalTimeIndex: PropTypes.number,
+    addTimeSeriesPoint: PropTypes.func,
+    fetchDetails: PropTypes.func,
+    fetchTimeSeries: PropTypes.func,
+    setMapPosition: PropTypes.func,
+    setSelectedLayer: PropTypes.func,
+    setSelectedResultType: PropTypes.func,
+    setSelectedTotalTimeIndex: PropTypes.func,
+    setTimeSeriesPointSelection: PropTypes.func,
+    toggleModelSelection: PropTypes.func
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(T07C);

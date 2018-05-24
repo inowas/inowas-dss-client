@@ -1,15 +1,12 @@
-import { put, take } from 'redux-saga/effects';
-import { sendCommand } from '../../actions/messageBox';
-import { Command, Event } from '../actions/index';
-import { WebData } from '../../core';
+import {put, take} from 'redux-saga/effects';
+import {Command, Event} from '../actions/index';
+import {WebData} from '../../core';
 
 export default function* deleteScenarioFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
         const action = yield take(Command.DELETE_SCENARIO);
-
-        // console.warn(sendCommand(action.type, action.payload));
-        yield put(sendCommand(action.type, action.payload));
+        yield put(WebData.Modifier.Action.sendCommand(action.type, action.payload));
 
         // eslint-disable-next-line no-constant-condition
         while (true) {

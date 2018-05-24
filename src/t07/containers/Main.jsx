@@ -1,5 +1,5 @@
-import { Command, Query } from '../actions';
-import React, { Component } from 'react';
+import {Command, Query} from '../actions';
+import React, {Component} from 'react';
 
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
@@ -7,17 +7,17 @@ import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Input from '../../components/primitive/Input';
-import { LayoutComponents } from '../../core/';
+import {LayoutComponents} from '../../core/';
 import Navbar from '../../containers/Navbar';
 import PropTypes from 'prop-types';
 import Select from '../../components/primitive/Select';
-import { connect } from 'react-redux';
-import { getApiKey } from '../../reducers/user';
-import { getScenarioAnalysisById } from '../reducers/ScenarioAnalysis';
-import { getScenarioModelsByIds } from '../reducers/ScenarioModels';
+import {connect} from 'react-redux';
+import {getApiKey} from '../../user/reducers';
+import {getScenarioAnalysisById} from '../reducers/ScenarioAnalysis';
+import {getScenarioModelsByIds} from '../reducers/ScenarioModels';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
 import * as Dashboard from '../../dashboard';
 
 const styles = {
@@ -32,21 +32,15 @@ const styles = {
 
 @ConfiguredRadium
 class Main extends Component {
-    static propTypes = {
-        children: PropTypes.node,
-        id: PropTypes.string,
-        fetchScenarioAnalysisDetails: PropTypes.func,
-        deleteScenario: PropTypes.func,
-        createScenario: PropTypes.func,
-        updateScenarioAnalysis: PropTypes.func,
-        createScenarioAnalysis: PropTypes.func,
-        apiKey: PropTypes.string,
-        scenarioAnalysis: PropTypes.object,
-        scenarioModels: PropTypes.array
-    };
 
     state = {
-        navigation: [],
+        navigation: [
+            {
+                name: 'Documentation',
+                path: 'https://inowas.hydro.tu-dresden.de/tools/t07-application-specific-scenarios-analyzer/',
+                icon: <Icon name="file"/>
+            }
+        ],
         scenarioAnalysis: {
             name: 'New Scenario Analysis',
             description: '',
@@ -111,17 +105,17 @@ class Main extends Component {
                 {
                     name: 'Cross section',
                     path: `/tools/T07/${id}/CrossSection`,
-                    icon: <Icon name="layer_horizontal_hatched" />
+                    icon: <Icon name="layer_horizontal_hatched"/>
                 },
                 {
                     name: 'Scenarios difference',
                     path: `/tools/T07/${id}/Difference`,
-                    icon: <Icon name="layer_horizontal_hatched" />
+                    icon: <Icon name="layer_horizontal_hatched"/>
                 },
                 {
                     name: 'Time series',
                     path: `/tools/T07/${id}/TimeSeries`,
-                    icon: <Icon name="layer_horizontal_hatched" />
+                    icon: <Icon name="layer_horizontal_hatched"/>
                 }
                 // {
                 //     name: 'Overall budget',
@@ -144,8 +138,8 @@ class Main extends Component {
     };
 
     saveScenarioAnalysis = () => {
-        const { updateScenarioAnalysis, createScenarioAnalysis, routes, params } = this.props;
-        const { scenarioAnalysis } = this.state;
+        const {updateScenarioAnalysis, createScenarioAnalysis, routes, params} = this.props;
+        const {scenarioAnalysis} = this.state;
         if (scenarioAnalysis.id) {
             updateScenarioAnalysis(scenarioAnalysis.id, scenarioAnalysis);
         } else {
@@ -154,14 +148,14 @@ class Main extends Component {
     };
 
     cloneScenario = id => {
-        const { createScenario } = this.props;
-        const { scenarioAnalysis } = this.state;
+        const {createScenario} = this.props;
+        const {scenarioAnalysis} = this.state;
         createScenario(scenarioAnalysis.id, id, uuid.v4());
     };
 
     deleteScenario = id => {
-        const { deleteScenario } = this.props;
-        const { scenarioAnalysis } = this.state;
+        const {deleteScenario} = this.props;
+        const {scenarioAnalysis} = this.state;
         deleteScenario(scenarioAnalysis.id, id);
     };
 
@@ -192,11 +186,11 @@ class Main extends Component {
     };
 
     render() {
-        const { children, id, apiKey } = this.props;
-        const { navigation, scenarioAnalysis, scenarioModels } = this.state;
+        const {children, id, apiKey} = this.props;
+        const {navigation, scenarioAnalysis, scenarioModels} = this.state;
         return (
             <div className="toolT07 app-width">
-                <Navbar links={navigation} />
+                <Navbar links={navigation}/>
                 {(() => {
                     // if we god an id but no models, than we are still loading
                     if (!id || scenarioModels.length > 0) {
@@ -284,6 +278,7 @@ class Main extends Component {
                                             apiKey
                                         });
                                     }
+                                    return null;
                                 })()}
                             </div>
                         );
@@ -306,7 +301,7 @@ const mapStateToProps = (state, props) => {
             state.dashboard.tools,
             'T03'
         ).instances,
-        apiKey: getApiKey(state.user),
+        apiKey: getApiKey(state.session),
         scenarioAnalysis,
         scenarioModels: scenarioAnalysis
             ? getScenarioModelsByIds(state, props)
@@ -315,13 +310,32 @@ const mapStateToProps = (state, props) => {
     };
 };
 
+const mapDispatchToProps = {
+    loadInstances: Dashboard.Modifier.Query.loadInstances,
+    fetchScenarioAnalysisDetails: Query.fetchScenarioAnalysisDetails,
+    deleteScenario: Command.deleteScenario,
+    createScenario: Command.createScenario,
+    updateScenarioAnalysis: Command.updateScenarioAnalysis,
+    createScenarioAnalysis: Command.createScenarioAnalysis
+};
+
+Main.propTypes = {
+    apiKey: PropTypes.string,
+    children: PropTypes.node,
+    createScenario: PropTypes.func,
+    createScenarioAnalysis: PropTypes.func,
+    deleteScenario: PropTypes.func,
+    fetchScenarioAnalysisDetails: PropTypes.func,
+    id: PropTypes.string,
+    loadInstances: PropTypes.func,
+    params: PropTypes.object,
+    models: PropTypes.array,
+    updateScenarioAnalysis: PropTypes.func,
+    routes: PropTypes.array,
+    scenarioAnalysis: PropTypes.object,
+    scenarioModels: PropTypes.array
+};
+
 export default withRouter(
-    connect(mapStateToProps, {
-        loadInstances: Dashboard.Modifier.Query.loadInstances,
-        fetchScenarioAnalysisDetails: Query.fetchScenarioAnalysisDetails,
-        deleteScenario: Command.deleteScenario,
-        createScenario: Command.createScenario,
-        updateScenarioAnalysis: Command.updateScenarioAnalysis,
-        createScenarioAnalysis: Command.createScenarioAnalysis
-    })(Main)
+    connect(mapStateToProps, mapDispatchToProps)(Main)
 );

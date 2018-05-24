@@ -5,7 +5,6 @@ import {GeoJSON, Map, TileLayer, CircleMarker} from 'react-leaflet';
 import {geoJSON as leafletGeoJSON, LatLng} from 'leaflet';
 import {EditControl} from 'react-leaflet-draw';
 import FullscreenControl from 'react-leaflet-fullscreen';
-import * as mapHelpers from '../../calculations/map';
 import * as geoTools from '../geospatial';
 import ActiveCellsLayer from './activeCellsLayer';
 import {getActiveCellFromCoordinate} from '../geospatial/index';
@@ -140,7 +139,7 @@ class BoundaryGeometryActiveCellsMap extends React.Component {
             if (boundary.id === id && boundary.observation_points) {
                 boundary.observation_points.map(op => {
                     const {coordinates} = op.geometry;
-                    const latLng = mapHelpers.closestPointOnGeometry(e.target, layer, new LatLng(coordinates[1], coordinates[0]));
+                    const latLng = geoTools.closestPointOnGeometry(e.target, layer, new LatLng(coordinates[1], coordinates[0]));
                     op.geometry.coordinates = [latLng.lng, latLng.lat];
                     return op;
                 });

@@ -42,7 +42,13 @@ const styles = {
 class T03 extends React.Component {
 
     state = {
-        navigation: []
+        navigation: [
+            {
+                name: 'Documentation',
+                path: 'https://inowas.hydro.tu-dresden.de/tools/t03-modflow-model-setup-and-editor/',
+                icon: <Icon name="file"/>
+            }
+        ]
     };
 
     componentWillMount() {

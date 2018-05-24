@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
     Circle,
     CircleMarker,
@@ -11,9 +14,10 @@ import {
     Rectangle,
     TileLayer
 } from 'react-leaflet';
-import React, {Component, PropTypes} from 'react';
+
 import {browserHistory, withRouter} from 'react-router';
 import {geoJSON, geoJson} from 'leaflet';
+import uuid from 'uuid';
 
 import Button from '../../components/primitive/Button';
 import ConfiguredRadium from 'ConfiguredRadium';
@@ -29,7 +33,7 @@ import {connect} from 'react-redux';
 import md5 from 'js-md5';
 import {uniqueId, has} from 'lodash';
 import ActiveCellsLayer from '../components/activeCellsLayer';
-import {calculateActiveCells} from "../../core/geospatial";
+import {calculateActiveCells} from '../../core/geospatial';
 
 // see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -60,18 +64,7 @@ const styles = {
 };
 
 @ConfiguredRadium
-class BackgroundMap extends Component {
-    static propTypes = {
-        addBoundary: PropTypes.func,
-        location: PropTypes.object,
-        model: PropTypes.object,
-        params: PropTypes.object,
-        routes: PropTypes.array,
-        setBoundaryGeometry: PropTypes.func,
-        setModelArea: PropTypes.func,
-        tool: PropTypes.string
-    };
-
+class BackgroundMap extends React.Component {
     constructor(props) {
         super(props);
 
@@ -219,7 +212,7 @@ class BackgroundMap extends Component {
         return (
             <LayersControl.Overlay name="Constant Head Boundaries" checked>
                 <FeatureGroup>
-                    {constantHeads}
+                    <div>{constantHeads}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -251,7 +244,7 @@ class BackgroundMap extends Component {
         return (
             <LayersControl.Overlay name="General Head Boundaries" checked>
                 <FeatureGroup>
-                    {generalHeads}
+                    <div>{generalHeads}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -283,7 +276,7 @@ class BackgroundMap extends Component {
         return (
             <LayersControl.Overlay name="Recharge Boundaries" checked>
                 <FeatureGroup>
-                    {recharges}
+                    <div>{recharges}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -315,7 +308,7 @@ class BackgroundMap extends Component {
         return (
             <LayersControl.Overlay name="River Boundaries" checked>
                 <FeatureGroup>
-                    {rivers}
+                    <div>{rivers}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -350,7 +343,7 @@ class BackgroundMap extends Component {
         return (
             <LayersControl.Overlay name="Wells" checked>
                 <FeatureGroup>
-                    {wells}
+                    <div>{wells}</div>
                 </FeatureGroup>
             </LayersControl.Overlay>
         );
@@ -363,8 +356,8 @@ class BackgroundMap extends Component {
         while (i < 100000) {
             // eslint-disable-next-line no-loop-func
             if (this.props.model.boundaries.filter(b => {
-                    return (b.id === (type + '-' + i));
-                }).length === 0) {
+                return (b.id === (type + '-' + i));
+            }).length === 0) {
                 return i;
             }
             i++;
@@ -388,14 +381,13 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'chd') {
-            const newBoundaryNumber = this.getNewBoundaryNumber(type);
-            const id = type + '-' + newBoundaryNumber;
+            const id = uuid.v4();
             const linestring = e.layer;
 
             const boundary = getBoundaryDefaults(
                 type,
                 id,
-                'Constant Head ' + newBoundaryNumber,
+                'Constant Head ' + this.getNewBoundaryNumber(type),
                 linestring.toGeoJSON().geometry,
                 this.getStartDate()
             );
@@ -406,13 +398,12 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'ghb') {
-            const newBoundaryNumber = this.getNewBoundaryNumber(type);
-            const id = type + '-' + newBoundaryNumber;
+            const id = uuid.v4();
             const linestring = e.layer;
             const boundary = getBoundaryDefaults(
                 type,
                 id,
-                'General Head ' + newBoundaryNumber,
+                'General Head ' + this.getNewBoundaryNumber(type),
                 linestring.toGeoJSON().geometry,
                 this.getStartDate()
             );
@@ -423,13 +414,12 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'rch') {
-            const newBoundaryNumber = this.getNewBoundaryNumber(type);
-            const id = type + '-' + newBoundaryNumber;
+            const id = uuid.v4();
             const polygon = e.layer;
             const boundary = getBoundaryDefaults(
                 type,
                 id,
-                'Recharge ' + newBoundaryNumber,
+                'Recharge ' + this.getNewBoundaryNumber(type),
                 polygon.toGeoJSON().geometry,
                 this.getStartDate()
             );
@@ -440,13 +430,12 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'riv') {
-            const newBoundaryNumber = this.getNewBoundaryNumber(type);
-            const id = type + '-' + newBoundaryNumber;
+            const id = uuid.v4();
             const linestring = e.layer;
             const boundary = getBoundaryDefaults(
                 type,
                 id,
-                'River ' + newBoundaryNumber,
+                'River ' + this.getNewBoundaryNumber(type),
                 linestring.toGeoJSON().geometry,
                 this.getStartDate()
             );
@@ -457,13 +446,12 @@ class BackgroundMap extends Component {
         }
 
         if (type === 'wel') {
-            const newBoundaryNumber = this.getNewBoundaryNumber(type);
-            const id = type + '-' + newBoundaryNumber;
+            const id = uuid.v4();
             const point = e.layer;
             const boundary = getBoundaryDefaults(
                 type,
                 id,
-                'Well ' + newBoundaryNumber,
+                'Well ' + this.getNewBoundaryNumber(type),
                 point.toGeoJSON().geometry,
                 this.getStartDate()
             );
@@ -496,7 +484,7 @@ class BackgroundMap extends Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash !== '#create') {
+        if (hash.toString() !== '#create') {
             return null;
         }
 
@@ -618,7 +606,7 @@ class BackgroundMap extends Component {
         const {hash} = this.props.location;
         const {params} = this.props;
 
-        if (hash === '#edit') {
+        if (hash.toString() === '#edit') {
             if (params.id && !params.property && !params.type && !params.pid) {
                 return {property: 'area', type: 'area', id: 'area'};
             }
@@ -637,7 +625,7 @@ class BackgroundMap extends Component {
             }
         }
 
-        if (hash === '#edit-op') {
+        if (hash.toString() === '#edit-op') {
             if (
                 params.id &&
                 params.property === 'boundaries' &&
@@ -775,7 +763,7 @@ class BackgroundMap extends Component {
                     {geometry}
                 </FeatureGroup>
                 <FeatureGroup>
-                    {activeCells}
+                    <div>{activeCells}</div>
                 </FeatureGroup>
             </FeatureGroup>
         );
@@ -963,9 +951,15 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     return wrappedActions;
 };
 
-// eslint-disable-next-line no-class-assign
-BackgroundMap = withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(BackgroundMap)
-);
+BackgroundMap.propTypes = {
+    addBoundary: PropTypes.func,
+    location: PropTypes.object,
+    model: PropTypes.object,
+    params: PropTypes.object,
+    routes: PropTypes.array,
+    setBoundaryGeometry: PropTypes.func,
+    setModelArea: PropTypes.func,
+    tool: PropTypes.string
+};
 
-export default BackgroundMap;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BackgroundMap));

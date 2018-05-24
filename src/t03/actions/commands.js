@@ -1,5 +1,3 @@
-import { sendCommand } from '../../actions/messageBox';
-
 /**
  * Commands sends a request to server and triggers an event.
  */

@@ -5,24 +5,25 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image from '../../images/tools/T13C.png';
+import image from '../images/T13C.png';
 import {Background, ChartT13C as Chart, InfoT13C as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T13C';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+
+import {navigation} from './T13';
 
 const styles = {
     heading: {
@@ -47,13 +48,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/T13-simple-saltwater-intrusion-equations/',
-    icon: <Icon name="file"/>
-}];
 
 class T13C extends React.Component {
 
@@ -198,7 +192,7 @@ class T13C extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13C. Saltwater intrusion // Upconing
+                    T13C. Aquifer system with a flow divide outside of the system
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -263,9 +257,9 @@ class T13C extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

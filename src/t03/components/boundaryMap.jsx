@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {GeoJSON, Map, CircleMarker, TileLayer} from 'react-leaflet';
 import {geoJSON} from 'leaflet';
-import * as mapHelpers from '../../calculations/map';
+import {disableMap} from '../../core/geospatial';
 import ConfiguredRadium from 'ConfiguredRadium';
 import {uniqueId} from 'lodash';
 
@@ -18,7 +18,7 @@ const componentStyle = {
 @ConfiguredRadium
 class BoundaryMap extends Component {
     componentDidMount() {
-        mapHelpers.disableMap(this.map);
+        disableMap(this.map);
     }
 
     generateKeyFunction = geometry => {

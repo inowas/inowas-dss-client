@@ -3,9 +3,10 @@
  */
 import {Modifier as T03} from '../../t03';
 import {Modifier as T07} from '../../t07';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as DashboardModifier} from '../../dashboard/';
 import uuid from 'uuid';
 
+export const SET_TOOL_INSTANCE = 'SET_TOOL_INSTANCE';
 export const SET_INSTANCES = 'DASHBOARD_SET_INSTANCES';
 export const SET_SET_ACTIVE_TOOL = 'DASHBOARD_SET_ACTIVE_TOOL';
 export const SET_SET_PUBLIC = 'DASHBOARD_SET_PUBLIC';
@@ -42,8 +43,7 @@ export function cloneToolInstance(id) {
             case 'T07':
                 return dispatch(T07.Command.cloneScenarioAnalysis(tool, id, uuid.v4()));
             default:
-                return dispatch(ToolInstance.Command.cloneToolInstance(tool, id, uuid.v4()));
-
+                return dispatch(DashboardModifier.Command.cloneToolInstance(tool, id, uuid.v4()));
         }
     };
 }
@@ -58,7 +58,15 @@ export function deleteToolInstance(id) {
             case 'T07':
                 return dispatch(T07.Command.deleteScenarioAnalysis(tool, id));
             default:
-                return dispatch(ToolInstance.Command.deleteToolInstance(tool, id));
+                return dispatch(DashboardModifier.Command.deleteToolInstance(tool, id));
         }
+    };
+}
+
+export function setToolInstance(tool, payload) {
+    return {
+        type: SET_TOOL_INSTANCE,
+        tool,
+        payload
     };
 }

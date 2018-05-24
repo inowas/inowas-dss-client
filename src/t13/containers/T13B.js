@@ -4,25 +4,26 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
-import image from '../../images/tools/T13B.png';
+import image from '../images/T13B.png';
 
-import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, Parameters} from '../components';
+import {Background, ChartT13B as Chart, InfoT13B as Info, SettingsT13B as Settings, ParametersT13B as Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T13B';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
+
+import {navigation} from './T13';
 
 const styles = {
     heading: {
@@ -47,12 +48,6 @@ const buildPayload = (state) => {
         tool: state.tool
     };
 };
-
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
-    icon: <Icon name="file"/>
-}];
 
 class T13B extends React.Component {
 
@@ -95,8 +90,7 @@ class T13B extends React.Component {
                 ...prevState,
                 settings: {
                     ...prevState.settings,
-                    selected: value,
-                    part2: true
+                    selected: value
                 }
 
             };
@@ -139,7 +133,7 @@ class T13B extends React.Component {
 
     handleChange = (e) => {
         if (e.target.name === 'settings') {
-            this.updateSettings(e.target.value);
+            this.updateSettings(Number(e.target.value));
         }
 
         if (e.target.name.startsWith('parameter')) {
@@ -158,7 +152,7 @@ class T13B extends React.Component {
     };
 
     render() {
-        const {settings,parameters, name, description} = this.state;
+        const {settings, parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus} = this.props;
         const {id} = this.props.params;
         const readOnly = false;
@@ -167,13 +161,13 @@ class T13B extends React.Component {
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams['settings'] =settings.selected;
+        chartParams.settings = settings.selected;
 
         const infoParams = {};
         each(parameters, v => {
             infoParams[v.id] = v.value;
         });
-        infoParams['settings'] =settings.selected;
+        infoParams.settings = settings.selected;
 
         const heading = (
             <div className="grid-container">
@@ -201,7 +195,7 @@ class T13B extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13B. Saltwater intrusion // Shape of freshwater-saltwater interface (Glover equation)
+                    T13B. Aquifer system with a flow divide within of the system
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -248,12 +242,13 @@ class T13B extends React.Component {
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2 stacked">
+                            <Settings value={settings.selected} handleChange={this.handleChange} {...chartParams}/>
                             <Info {...infoParams}/>
-                            <Settings value={settings.selected} handleChange={this.handleChange}/>
                         </section>
 
                     <section className="tile col col-abs-3 stretch">
                             <Parameters
+                                settings={settings}
                                 parameters={parameters}
                                 handleChange={this.handleChange}
                                 handleReset={this.handleReset}
@@ -267,9 +262,9 @@ class T13B extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 const mapStateToProps = (state) => {

@@ -28,6 +28,7 @@ export default class ScenarioAnalysisMapData {
         globalMin = null,
         globalMax = null
     }) {
+
         this._area = area;
 
         if (!(grid instanceof Grid)) {

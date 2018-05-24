@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T02.png';
+import image from '../images/T02.png';
 
 import {Background, Chart, Parameters, Settings} from '../components';
 import {WebData, LayoutComponents} from '../../core';
@@ -18,12 +18,11 @@ import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
-import {makeMapStateToProps} from '../selectors/mapState';
 import {isReadOnly} from '../../core/helpers';
 
 const styles = {
@@ -52,7 +51,7 @@ const buildPayload = (data) => {
 
 const navigation = [{
     name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t02-groundwater-mounding-hantush/',
+    path: 'https://inowas.hydro.tu-dresden.de/tools/t02-groundwater-mounding-hantush/',
     icon: <Icon name="file"/>
 }];
 
@@ -253,8 +252,14 @@ class T02 extends React.Component {
 }
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        toolInstance: state.T02
+    };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -285,6 +290,6 @@ T02.propTypes = {
 };
 
 // eslint-disable-next-line no-class-assign
-T02 = withRouter(connect(makeMapStateToProps, mapDispatchToProps)(T02));
+T02 = withRouter(connect(mapStateToProps, mapDispatchToProps)(T02));
 
 export default T02;

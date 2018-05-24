@@ -1,63 +1,45 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {calculateTravelTimeT13C, calculateXwd} from '../calculations';
 
-export  function calculateQ(k, d, df, ds) {
-    return (0.6 * Math.PI * d * d * k * dRo(df, ds));
-}
-
-export  function calculateZCrit(d) {
-    return 0.3 * d;
-}
-
-export  function calculateZ(q, k, d, df, ds) {
-    return (q/(2*Math.PI*d*k*dRo(df, ds)));
-}
-
-export function dRo(df, ds){
-    return ((ds-df)/df);
-}
-
-const Info = ({q, k, d, df, ds}) => {
-    const z = calculateZ(q, k, d, df, ds);
-    const qmax = calculateQ(k, d, df, ds);
-    const zCrit = calculateZCrit(d);
-
-    if (Number(z) > Number(zCrit)) {
-        return (
-            <div className="padding-30">
-                <h2>
-                    Warning
-                    <i className="glyphicon glyphicon-warning-sign pull-right"/>
-                </h2>
-
-                <div className="center-vertical center-horizontal">
-                    <p>
-                        The calculated upconing level of <strong>{z.toFixed(2)} m </strong>
-                        is higher than the critical elevation of <strong>{zCrit.toFixed(1)} m</strong>.
-                        At the current pumping rate, saltwater might enter the well.
-                        We recommend a maximum pumping rate of <strong>{qmax.toFixed(2)} m<sup>3</sup>/d</strong>.
-                    </p>
-                </div>
-            </div>
-        );
-    }
+const Info = ({W, K, L, hL, h0, ne, xi, xe}) => {
+    const xwd = calculateXwd(L, K, W, hL, h0);
+    const t = calculateTravelTimeT13C(xe, W, K, ne, L + Math.abs(xwd), hL, xi);
 
     return (
         <div className="padding-30">
             <h2>
-                OK
-                <i className="glyphicon glyphicon-ok-circle pull-right"/>
+                Info
             </h2>
 
             <div className="center-vertical center-horizontal">
                 <p>
-                    The calculated upconing level of <strong>{z.toFixed(2)} m </strong>
-                    is lower than the critical elevation of <strong>{zCrit.toFixed(1)} m </strong>
-                    so saltwater shouldn't enter the well. However, we recommend a maximum
-                    pumping rate of <strong>{qmax.toFixed(2)} m<sup>3</sup>/d</strong>.
+                    The regional system is divided into the two subdomains on either side of the water divide.<br/>
+                    The water divide is located at <strong>{xwd.toFixed(1)} m</strong>.<br/>
+                    Note that for this case the departure point x<sub>i</sub> is between |x<sub>wd</sub>| and
+                    L+|x<sub>wd</sub>|.
+                </p>
+            </div>
+
+            <div className="center-vertical center-horizontal" style={{marginTop: 20}}>
+                <p>
+                    The travel time between initial position and arrival location
+                    is <strong>{t.toFixed(1)} days</strong>.
                 </p>
             </div>
         </div>
     );
+};
+
+Info.propTypes = {
+    W: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
+    L: PropTypes.number.isRequired,
+    hL: PropTypes.number.isRequired,
+    h0: PropTypes.number.isRequired,
+    ne: PropTypes.number.isRequired,
+    xi: PropTypes.number.isRequired,
+    xe: PropTypes.number.isRequired
 };
 
 export default Info;

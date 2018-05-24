@@ -1,9 +1,9 @@
+import {WebData} from '../../core';
+
 /**
  * Queries send a get/load request to server and triggers an action to set data in store.
  * Usually it uses a saga for the flow.
  */
-
-import { sendQuery } from '../../actions/messageBox';
 
 export const GET_MODFLOW_MODEL = 'GET_MODFLOW_MODEL';
 
@@ -93,7 +93,7 @@ export function getListfile(tool, id) {
 export const GET_FILE = 'GET_MODFLOW_MODEL_FILE';
 
 export function getFile(tool, id, ext) {
-    return sendQuery(`calculations/${id}/file/${ext}`, GET_FILE);
+    return WebData.Modifier.Action.sendQuery(`calculations/${id}/file/${ext}`, GET_FILE);
 }
 
 export const GET_MODFLOW_PACKAGE = 'GET_MODFLOW_PACKAGE';

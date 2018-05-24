@@ -6,23 +6,24 @@ import uuid from 'uuid';
 
 import '../../less/4TileTool.less';
 import styleGlobals from 'styleGlobals';
-import image from '../../images/tools/T13A.png';
+import image from '../images/T13A.png';
 
-import {Background, ChartT13A as Chart, Parameters} from '../components';
+import {Background, InfoT13A as Info, ChartT13A as Chart, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 import Accordion from '../../components/primitive/Accordion';
 import AccordionItem from '../../components/primitive/AccordionItem';
 import Input from '../../components/primitive/Input';
 import Select from '../../components/primitive/Select';
 import Button from '../../components/primitive/Button';
-import {Modifier as ToolInstance} from '../../toolInstance';
+import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/T13A';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
+
+import {navigation} from './T13';
 
 const styles = {
     heading: {
@@ -48,11 +49,6 @@ const buildPayload = (state) => {
     };
 };
 
-const navigation = [{
-    name: 'Documentation',
-    path: 'https://wiki.inowas.hydro.tu-dresden.de/t09-simple-saltwater-intrusion-equations/',
-    icon: <Icon name="file"/>
-}];
 
 class T13A extends React.Component {
 
@@ -188,7 +184,7 @@ class T13A extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T13A. Travel time // Aquifer system with a no-flow boundary and fixed head boundary condition and constant groundwater recharge
+                    T13A. Travel time // Aquifer system with a no-flow boundary and fixed head boundary condition
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -234,7 +230,9 @@ class T13A extends React.Component {
                     </div>
 
                     <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked"/>
+                        <section className="tile col col-abs-2 stacked">
+                            <Info {...chartParams}/>
+                        </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
                                 parameters={parameters}
@@ -256,9 +254,9 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-    createToolInstance: ToolInstance.Command.createToolInstance,
-    getToolInstance: ToolInstance.Query.getToolInstance,
-    updateToolInstance: ToolInstance.Command.updateToolInstance,
+    createToolInstance: Dashboard.Command.createToolInstance,
+    getToolInstance: Dashboard.Query.getToolInstance,
+    updateToolInstance: Dashboard.Command.updateToolInstance,
 };
 
 

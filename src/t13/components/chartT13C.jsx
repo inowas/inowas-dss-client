@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
+import {calculateXwd, calculateTravelTimeT13C} from '../calculations';
 
 import '../../less/toolDiagram.less';
 
@@ -10,132 +11,113 @@ import {
     Line,
     XAxis,
     YAxis,
-    CartesianGrid,
-    ReferenceLine
-} from "recharts";
+    CartesianGrid
+} from 'recharts';
 
-// TODO: implement this eq in library
+export function calculateDiagramData(w, K, ne, L, hL, xMin, xMax, dX) {
+    const data = [];
+    if (xMax < xMin) {
+        // eslint-disable-next-line no-param-reassign
+        xMax = xMin;
+    }
 
-function range(start, stop, step) {
-    let a=[start], b=start;
-    while(b<stop){b+=step;a.push(b)}
-    return a;
-}
-
-export function calculateDiagramData(q, k, d, df, ds, start, stop, step) {
-
-    const xRange = range(start, stop, step);
-    let data = [];
-    for(let i=0; i<xRange.length; i++){
-        let dataSet = {};
-        const x = xRange[i];
-        const h = calculateZ(q, k, d, df, ds);
-        dataSet['x'] = Number(x);
-        dataSet['h'] = calculateZofX(x, q, d, k, ds, df);
-        data.push(dataSet);
+    for (let x = xMin; x <= xMax; x += dX) {
+        data.push({
+            x,
+            t: calculateTravelTimeT13C(x, w, K, ne, L, hL, xMin)
+        });
     }
     return data;
 }
 
-export  function calculateZCrit(d) {
-    return 0.3 * d;
+export function resultDiv(xe, xi, L, data, xwd) {
+    if (xe < xi) {
+        return (
+            <div className="diagram-labels-left">
+                <div className="diagram-label">
+                    <p>Arrival location, x<sub>e</sub>, can not be smaller than initial position, x<sub>i</sub>.</p>
+                </div>
+            </div>
+        );
+    }
+    if (xe > L + Math.abs(xwd)) {
+        return (
+            <div className="diagram-labels-left">
+                <div className="diagram-label">
+                    <p>Arrival location, x<sub>e</sub>, can not be bigger than L<sup>'</sup>+|xwd|.</p>
+                </div>
+            </div>
+        );
+    }
+    if (xi > L) {
+        return (
+            <div className="diagram-labels-left">
+                <div className="diagram-label">
+                    <p>Initial location, x<sub>i</sub>, can not be bigger than the Aquifer length, L<sup>'</sup>.</p>
+                </div>
+            </div>
+        );
+    }
+    return (
+        <div className="diagram-labels-bottom-right">
+            <div className="diagram-label">
+                <p>
+                    t&nbsp;=&nbsp;<strong>{data[data.length - 1].t.toFixed(1)}</strong>&nbsp;d
+                </p>
+            </div>
+        </div>
+    );
 }
 
-export  function calculateZ(q, k, d, df, ds) {
-    return (q/(2*Math.PI*d*k*dRo(df, ds)));
-}
-
-export function dRo(df, ds){
-    return ((ds-df)/df);
-}
-
-export function calculateR(x, d) {
-    return x/d;
-}
-
-export function calculateT(df, ds, k, d) {
-    const t = 1000000000;
-    const n = 0.25;
-    const deltaS = dRo(df, ds);
-    return (deltaS * k * t)/(n*d*(2+deltaS));
-}
-
-export  function calculateZofX(x, q, d, k, ds, df) {
-    return (1/(Math.sqrt(Math.pow(calculateR(x,d), 2)+1)) - (1/(Math.sqrt(Math.pow(calculateR(x,d),2)+Math.pow(1+calculateT(df, ds, k, d),2))))) * calculateZ(q, k, d, df, ds);
-}
-
-export  function calculateQ(k, d, df, ds) {
-    return (0.6 * Math.PI * d * d * k * dRo(df, ds));
-}
-
-const Chart = ({q, k, d, df, ds}) => {
-    const data = calculateDiagramData(q, k, d, df, ds, 0, 1000, 1);
-    const yDomain = [0, 2 * calculateZCrit(d)];
-    const z = calculateZ(q, k, d, df, ds);
-    const qmax = calculateQ(k, d, df, ds);
-    const zCrit = calculateZCrit(d);
-
+// eslint-disable-next-line react/no-multi-comp
+const Chart = ({W, K, ne, L, hL, h0, xi, xe}) => {
+    const yDomain = [0, 'auto'];
+    const xwd = calculateXwd(L, K, W, hL, h0);
+    const data = calculateDiagramData(W, K, ne, L + Math.abs(xwd), hL, xi, xe, 10);
     return (
         <div>
             <h2>Calculation</h2>
             <div className="grid-container">
                 <div className="col stretch">
                     <div className="diagram">
-                        <ResponsiveContainer width={'100%'} aspect={2.0 / 1.0}>
+                        <ResponsiveContainer width={'100%'} aspect={2}>
                             <LineChart data={data} margin={{
                                 top: 20,
                                 right: 55,
-                                left: 20,
+                                left: 30,
                                 bottom: 0
                             }}>
-
-                                <XAxis type="number" dataKey="x"/>
-                                <YAxis type="number" domain={yDomain} allowDecimals={false} tickLine={false} tickFormatter={(x) => {return x.toFixed(1)}}/>
+                                <XAxis type="number" domain={['auto', 'auto']} dataKey="x" allowDecimals={false}
+                                       tickLine={false}/>
+                                <YAxis type="number" domain={yDomain} allowDecimals={false} tickLine={false}
+                                       tickFormatter={(x) => x.toFixed(0)}
+                                />
                                 <CartesianGrid strokeDasharray="3 3"/>
-                                <Line isAnimationActive={false} type="basis" dataKey={'h'} stroke="#ED8D05" strokeWidth="5" dot={false}/>
-                                <ReferenceLine y={zCrit} stroke="#ED8D05" strokeWidth="5" strokeDasharray="20 20"/>
+                                <Line isAnimationActive={false} type="basis" dataKey={'t'} stroke="#4C4C4C"
+                                      strokeWidth="5" dot={false} fillOpacity={1}/>
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-ylabels">
-                            <p>d (m)</p>
+                            <p>t (d)</p>
                         </div>
-                        <div className="diagram-labels-right">
-                            <div className="diagram-label">
-                                <p>
-                                    z&nbsp;=&nbsp;<strong>{z.toFixed(1)}</strong>&nbsp;
-                                    m
-                                </p>
-                            </div>
-                            <div className="diagram-label">
-                                <p>
-                                    Q<sub>max</sub>&nbsp;=&nbsp;<strong>{qmax.toFixed(1)}</strong>&nbsp;m<sup>3</sup>/d
-                                </p>
-                            </div>
-                        </div>
+                        {resultDiv(xe, xi, L, data, xwd)}
                         <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
                 </div>
-                {/*<div className="col col-rel-0-5">*/}
-                    {/*<ul className="nav nav-stacked" role="navigation">*/}
-                        {/*<li>*/}
-                            {/*<button className="button">PNG</button>*/}
-                        {/*</li>*/}
-                        {/*<li>*/}
-                            {/*<button className="button">CSV</button>*/}
-                        {/*</li>*/}
-                    {/*</ul>*/}
-                {/*</div>*/}
             </div>
         </div>
     );
 };
 
 Chart.propTypes = {
-    q: PropTypes.number.isRequired,
-    k: PropTypes.number.isRequired,
-    d: PropTypes.number.isRequired,
-    df: PropTypes.number.isRequired,
-    ds: PropTypes.number.isRequired
+    W: PropTypes.number.isRequired,
+    K: PropTypes.number.isRequired,
+    ne: PropTypes.number.isRequired,
+    L: PropTypes.number.isRequired,
+    hL: PropTypes.number.isRequired,
+    h0: PropTypes.number.isRequired,
+    xi: PropTypes.number.isRequired,
+    xe: PropTypes.number.isRequired
 };
 
 export default pure(Chart);

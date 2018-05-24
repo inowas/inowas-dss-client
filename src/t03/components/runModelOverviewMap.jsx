@@ -1,4 +1,4 @@
-import * as mapHelpers from '../../calculations/map';
+import {disableMap, invalidateSize} from '../../core/geospatial';
 
 import { GeoJSON, Map, Rectangle, TileLayer } from 'react-leaflet';
 import React, { Component } from 'react';
@@ -7,7 +7,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import { geoJSON } from 'leaflet';
 import md5 from 'js-md5';
-import GridLayer from "./gridLayer";
+import GridLayer from './gridLayer';
 
 const styles = {
     map: {
@@ -28,8 +28,8 @@ class RunModelOverviewMap extends Component {
     }
 
     componentDidMount() {
-        mapHelpers.disableMap(this.map);
-        mapHelpers.invalidateSize(this.map);
+        disableMap(this.map);
+        invalidateSize(this.map);
     }
 
     componentWillReceiveProps(nextProps) {
