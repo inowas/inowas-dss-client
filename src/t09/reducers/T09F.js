@@ -81,7 +81,7 @@ export const getInitialState = (tool) => {
             order: 8,
             id: 'ds',
             name: 'Density of saltwater [g/cm³]',
-            min: 1.20,
+            min: 1.020,
             max: 1.030,
             value: 1.025,
             stepSize: 0.001,

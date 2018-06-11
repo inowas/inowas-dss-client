@@ -118,7 +118,7 @@ const Chart = ({dz, k, z0, l, w, theta, x, df, ds}) => {
                                 <p>dx<sub>t</sub>&nbsp;=&nbsp;<strong>{dxt.toFixed(1)}</strong>&nbsp;m</p>
                             </div>
                         </div>
-                        <p className="center-vertical center-horizontal">x<sub>w</sub> (m)</p>
+                        <p className="center-vertical center-horizontal">x (m)</p>
                     </div>
                 </div>
             </div>
