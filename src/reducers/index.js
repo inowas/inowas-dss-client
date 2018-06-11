@@ -35,6 +35,7 @@ const rootReducer = combineReducers({
     T09C: T09.createReducer('T09C'),
     T09D: T09.createReducer('T09D'),
     T09E: T09.createReducer('T09E'),
+    T09F: T09.createReducer('T09F'),
     T12: T12.createReducer('T12'),
     T13A: T13.createReducer('T13A'),
     T13B: T13.createReducer('T13B'),

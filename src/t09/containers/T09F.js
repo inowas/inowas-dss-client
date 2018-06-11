@@ -5,8 +5,8 @@ import {withRouter} from 'react-router';
 
 import '../../less/4TileTool.less';
 
-import image from '../images/T09E.png';
-import {Background, ChartT09E as Chart, SettingsT09E as Settings, Parameters} from '../components';
+import image from '../images/T09F.png';
+import {Background, ChartT09F as Chart, InfoT09F as Info, Parameters} from '../components';
 import {WebData, LayoutComponents} from '../../core';
 
 import Navbar from '../../containers/Navbar';
@@ -18,7 +18,7 @@ import Button from '../../components/primitive/Button';
 import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
-import {getInitialState} from '../reducers/T09E';
+import {getInitialState} from '../reducers/T09F';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import styleGlobals from 'styleGlobals';
 import uuid from 'uuid';
@@ -51,7 +51,7 @@ const buildPayload = (state) => {
     };
 };
 
-class T09E extends React.Component {
+class T09F extends React.Component {
 
     constructor() {
         super();
@@ -133,10 +133,6 @@ class T09E extends React.Component {
     };
 
     handleChange = (e) => {
-        if (e.target.name === 'settings') {
-            this.updateSettings(e.target.value);
-        }
-
         if (e.target.name.startsWith('parameter')) {
             const param = e.target.name.split('_');
 
@@ -153,19 +149,14 @@ class T09E extends React.Component {
     };
 
     render() {
-        const {parameters, settings, name, description} = this.state;
+        const {parameters, name, description} = this.state;
         const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
         const {id} = this.props.params;
         const readOnly = isReadOnly(toolInstance.permissions);
-        let params = [];
-        if (settings.method === 'constHead') params = parameters.slice(0, 6).concat(parameters.slice(7, 10));
-        if (settings.method === 'constFlux') params = parameters.slice(0, 5).concat(parameters.slice(6, 10));
-
         const chartParams = {};
         each(parameters, v => {
             chartParams[v.id] = v.value;
         });
-        chartParams.method = settings.method;
         const heading = (
             <div className="grid-container">
                 <div className="col stretch parameters-wrapper">
@@ -190,7 +181,7 @@ class T09E extends React.Component {
             <div className="app-width">
                 <Navbar links={navigation}/>
                 <h3 style={styles.heading}>
-                    T09E. Saltwater intrusion // Sea level rise (vertical cliff)
+                    T09F. Saltwater intrusion // Sea level rise (inclined coast)
                 </h3>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
                     <div className="grid-container">
@@ -230,18 +221,18 @@ class T09E extends React.Component {
                             <Background image={image}/>
                         </section>
 
-                        <section className="tile col col-abs-3 stretch" >
+                        <section className="tile col col-abs-3 stretch">
                             <Chart {...chartParams}/>
                         </section>
                     </div>
 
                     <div className="grid-container">
                         <section className="tile col col-abs-2">
-                            <Settings value={settings.method} handleChange={this.handleChange} {...chartParams}/>
+                            <Info {...chartParams}/>
                         </section>
                         <section className="tile col col-abs-3 stretch">
                             <Parameters
-                                parameters={params}
+                                parameters={parameters}
                                 handleChange={this.handleChange}
                                 handleReset={this.handleReset}
                             />
@@ -261,7 +252,7 @@ const actions = {
 
 const mapStateToProps = (state) => {
     return {
-        toolInstance: state.T09E
+        toolInstance: state.T09F
     };
 };
 
@@ -281,7 +272,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return wrappedActions;
 };
 
-T09E.propTypes = {
+T09F.propTypes = {
     createToolInstance: PropTypes.func,
     createToolInstanceStatus: PropTypes.object,
     getToolInstance: PropTypes.func,
@@ -293,4 +284,4 @@ T09E.propTypes = {
     updateToolInstanceStatus: PropTypes.object
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T09E));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(T09F));
