@@ -18,7 +18,7 @@ RUN \
 
 
 # Install `serve` to run the application.
-RUN npm install -g serve
+RUN npm install -g serve@6.5.8
 
 # Set the command to start the node server.
 CMD serve -s dist
