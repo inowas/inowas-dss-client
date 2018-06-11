@@ -46,7 +46,7 @@ export const getInitialState = (tool) => {
             id: 'w',
             name: 'Recharge rate, w [m³/d]',
             min: 0,
-            max: 0.001,
+            max: 0.002,
             value: 0.0014,
             stepSize: 0.0001,
             decimals: 4
@@ -62,7 +62,7 @@ export const getInitialState = (tool) => {
         }, {
             order: 6,
             id: 'x',
-            name: 'Inland distance from coast, x [m] ',
+            name: 'Distance from inland boundary, x [m] ',
             min: 0,
             max: 2000,
             value: 500,
