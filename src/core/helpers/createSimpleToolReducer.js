@@ -1,5 +1,6 @@
 import {Modifier} from '../../dashboard';
 import * as WebData from '../webData';
+import {find} from 'lodash';
 
 export function createSimpleToolReducer(tool, initialState) {
     return (state = initialState, action) => {
