@@ -16,40 +16,8 @@ import {
 
 import * as calc from '../calculations/calculationT09F';
 
-const calculationErrorOverlay = (maxIter, valid, dxt) => {
-    if (!valid) {
-        return (
-            <div className="diagram-labels-left">
-                <div className="diagram-label">
-                    <p>Invalid values: square root gets minus.</p>
-                    <p>Offshore discharge rate is less than minimum discharge rate</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (maxIter) {
-        return (
-            <div className="diagram-labels-left">
-                <div className="diagram-label">
-                    <p>Maximum number of iterations are conducted.</p>
-                    <p>Change in x <sub>t</sub>&nbsp;=&nbsp;<strong>{dxt.toFixed(1)}</strong>&nbsp;m</p>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="diagram-labels-left">
-            <div className="diagram-label">
-                <p>Change in x <sub>t</sub>&nbsp;=&nbsp;<strong>{dxt.toFixed(1)}</strong>&nbsp;m</p>
-            </div>
-        </div>
-    );
-};
-
+// eslint-disable-next-line react/no-multi-comp
 const Chart = ({dz, k, z0, l, w, theta, x, df, ds}) => {
-
     const newXt = calc.calcNewXt({dz, k, z0, l, w, theta, x, df, ds});
     const xt = calc.calcXt({dz, k, z0, l, w, theta, x, df, ds});
     const dxt = calc.calcDeltaXt({dz, k, z0, l, w, theta, x, df, ds});
