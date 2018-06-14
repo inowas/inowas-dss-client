@@ -6,7 +6,8 @@ import {
     ModelEditorGeneral,
     ModelEditorBoundary,
     ModelEditorSoilmodel,
-    ModelEditorModelRun
+    ModelEditorModelRun,
+    ModelEditorOptimization
 } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
@@ -94,6 +95,18 @@ const properties = ({ tool, close, selectedProperty, type }) => {
                     closeable
                 >
                     {null}
+                </LayoutComponents.CloseableWindow>
+            );
+
+        case 'optimization':
+            return (
+                <LayoutComponents.CloseableWindow
+                    heading="Optimization"
+                    style={styles.window}
+                    close={close}
+                    closeable
+                >
+                    <ModelEditorOptimization type={type} tool={tool} />
                 </LayoutComponents.CloseableWindow>
             );
 

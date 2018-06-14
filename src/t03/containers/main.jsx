@@ -150,6 +150,12 @@ class T03 extends React.Component {
                 name: 'calibration',
                 icon: <Icon name="target"/>,
                 disabled: true
+            },
+            {
+                title: 'Optimization',
+                name: 'optimization',
+                icon: <Icon name="success"/>,
+                disabled: initial
             }
         ];
 
