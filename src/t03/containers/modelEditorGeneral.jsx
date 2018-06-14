@@ -361,8 +361,12 @@ class ModelEditorGeneral extends Component {
                     heading="Model Area"
                     style={[styles.expandVerticalContainer]}
                 >
-                    <GeneralMap style={styles.expandVertical} model={model} readOnly={readOnly}
-                                onAreaUpdate={this.handleAreaUpdate}/>
+                    <GeneralMap
+                        style={styles.expandVertical}
+                        model={model}
+                        readOnly={readOnly}
+                        onAreaUpdate={this.handleAreaUpdate}
+                    />
                     <div style={[styles.saveButtonWrapper]}>
                         <WebData.Component.Loading
                             status={

@@ -9,7 +9,7 @@ export const getBoundary = ( state, id ) => {
     return boundary ? new Boundary( boundary.id, boundary.name, new BoundaryType( boundary.type ), boundary.geometry, boundary.affected_layers, boundary.metadata ? boundary.metadata : null, boundary.observationPoints ) : null;
 };
 
-export function getBoundaryDefaults(type, id, name, geometry, startDateTime ) {
+export function getBoundaryDefaults(type, id, name, geometry, startDateTime) {
     switch (type) {
         case 'chd':
         case 'ghb':
@@ -37,7 +37,6 @@ export function getBoundaryDefaults(type, id, name, geometry, startDateTime ) {
                     }
                 ]
             };
-
         case 'riv':
             return {
                 id: id,
@@ -63,7 +62,6 @@ export function getBoundaryDefaults(type, id, name, geometry, startDateTime ) {
                     }
                 ]
             };
-
         case 'rch':
         case 'wel':
             return {
@@ -78,7 +76,8 @@ export function getBoundaryDefaults(type, id, name, geometry, startDateTime ) {
                 date_time_values: [{
                     date_time: startDateTime,
                     values: [0]
-                }]
+                }],
+                active_cells: null
             };
     }
 

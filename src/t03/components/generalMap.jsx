@@ -4,12 +4,14 @@ import React from 'react';
 import * as mapHelpers from '../../core/geospatial';
 import {GeoJSON, Map, Rectangle} from 'react-leaflet';
 import ConfiguredRadium from 'ConfiguredRadium';
-import {geoJson, geoJSON} from 'leaflet';
+import {geoJSON, geoJson} from 'leaflet';
 import md5 from 'js-md5';
 import ActiveCellsLayer from './activeCellsLayer';
 import Button from '../../components/primitive/Button';
 import Icon from '../../components/primitive/Icon';
 import styleGlobals from 'styleGlobals';
+import ModelAreaImport from '../../core/import/ModelAreaImport';
+
 
 const styles = {
     map: {
@@ -18,7 +20,7 @@ const styles = {
     mapActionToolbar: {
         textAlign: 'right',
         marginBottom: styleGlobals.dimensions.spacing.medium
-    },
+    }
 };
 
 const RadiumMap = ConfiguredRadium(Map);
@@ -28,7 +30,8 @@ class ModelEditorGeneralMap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mapInteraction: null
+            import: null,
+            mapInteraction: null,
         };
     }
 
@@ -62,6 +65,8 @@ class ModelEditorGeneralMap extends React.Component {
         return modelStyles[type][subtype];
     };
 
+    toggleImport = (value) => this.setState({import: value});
+
     handleMapInteractionClick = value => this.setState({mapInteraction: value});
 
     onAreaHasBeenCreated = e => {
@@ -83,6 +88,24 @@ class ModelEditorGeneralMap extends React.Component {
                 mapInteraction: false
             });
         });
+    };
+
+    updateArea = (feature) => {
+        const bounds = geoJson(feature).getBounds();
+        this.props.onAreaUpdate(feature.geometry, bounds);
+    };
+
+    renderImportGeoJsonModal = () => {
+        if (this.state.import) {
+            return (
+                <ModelAreaImport
+                    onClose={() => this.toggleImport(false)}
+                    header={'Import Area Geometry'}
+                    onChange={this.updateArea}
+                />
+            );
+        }
+        return null;
     };
 
     render() {
@@ -107,7 +130,16 @@ class ModelEditorGeneralMap extends React.Component {
                 mapHelpers.invalidateSize(this.map);
                 return (
                     <div>
+                        {this.renderImportGeoJsonModal()}
                         <div style={styles.mapActionToolbar}>
+                            <Button
+                                type="link"
+                                icon={<Icon name="import"/>}
+                                onClick={() => this.toggleImport(true)}
+                                style={{marginRight: 10}}
+                            >
+                                Import
+                            </Button>
                             <Button
                                 type="link"
                                 icon={<Icon name="marker"/>}
@@ -132,6 +164,7 @@ class ModelEditorGeneralMap extends React.Component {
 
             return (
                 <div>
+                    {this.renderImportGeoJsonModal()}
                     <RadiumMap
                         className="crossSectionMap"
                         style={[styles.map, style]}
@@ -142,7 +175,6 @@ class ModelEditorGeneralMap extends React.Component {
                         {mapHelpers.getDefaultTileLayer()}
                         {mapHelpers.renderCreateControl('area', this.onAreaHasBeenCreated)}
                         {mapHelpers.renderFullScreenControl()}
-
                     </RadiumMap>
                 </div>
             );
@@ -152,8 +184,17 @@ class ModelEditorGeneralMap extends React.Component {
             if (!mapInteraction) {
                 return (
                     <div>
+                        {this.renderImportGeoJsonModal()}
                         {!readOnly &&
                         <div style={styles.mapActionToolbar}>
+                            <Button
+                                type="link"
+                                icon={<Icon name="import"/>}
+                                onClick={() => this.toggleImport(true)}
+                                style={{marginRight: 10}}
+                            >
+                                Import
+                            </Button>
                             <Button
                                 type="link"
                                 icon={<Icon name="marker"/>}
@@ -183,29 +224,36 @@ class ModelEditorGeneralMap extends React.Component {
                                 bounds={bounds}
                                 {...this.getStyle('bounding_box')}
                             />
-                            <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells}/>
+                            <ActiveCellsLayer
+                                boundingBox={boundingBox}
+                                gridSize={gridSize}
+                                activeCells={activeCells}
+                            />
                         </RadiumMap>
                     </div>
                 );
             }
 
             return (
-                <RadiumMap
-                    className="crossSectionMap"
-                    style={[styles.map, style]}
-                    zoomControl={false}
-                    bounds={this.getBounds(area)}
-                >
-                    {mapHelpers.getDefaultTileLayer()}
-                    <Rectangle
-                        bounds={bounds}
-                        {...this.getStyle('bounding_box')}
-                    />
+                <div>
+                    {this.renderImportGeoJsonModal()}
+                    <RadiumMap
+                        className="crossSectionMap"
+                        style={[styles.map, style]}
+                        zoomControl={false}
+                        bounds={this.getBounds(area)}
+                    >
+                        {mapHelpers.getDefaultTileLayer()}
+                        <Rectangle
+                            bounds={bounds}
+                            {...this.getStyle('bounding_box')}
+                        />
 
-                    {mapHelpers.renderEditControl('area', area, this.onAreaHasBeenEdited)}
-                    {mapHelpers.renderFullScreenControl()}
-                    <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells}/>
-                </RadiumMap>
+                        {mapHelpers.renderEditControl('area', area, this.onAreaHasBeenEdited)}
+                        {mapHelpers.renderFullScreenControl()}
+                        <ActiveCellsLayer boundingBox={boundingBox} gridSize={gridSize} activeCells={activeCells}/>
+                    </RadiumMap>
+                </div>
             );
         }
 

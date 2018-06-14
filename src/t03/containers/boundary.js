@@ -1,12 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { pure } from 'recompose';
 
 import ConfiguredRadium from 'ConfiguredRadium';
 import Icon from '../../components/primitive/Icon';
 import Button from '../../components/primitive/Button';
 import styleGlobals from 'styleGlobals';
-import { BoundaryOverview } from '../components';
+import {BoundaryOverview} from '../components';
+import GenericImport from '../../core/import/GenericImport';
 
 const styles = {
     wrapper: {
@@ -28,8 +28,23 @@ const styles = {
     }
 };
 
+const state = {};
+state.import = false;
+
 @ConfiguredRadium
-class BoundariesOverview extends React.PureComponent {
+class BoundariesOverview extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            import: false
+        };
+    }
+
+    toggleImport = () => {
+        this.setState({
+            import: !this.state.import
+        });
+    };
 
     render() {
         const {
@@ -45,11 +60,22 @@ class BoundariesOverview extends React.PureComponent {
         } = this.props;
 
         let addNew = '';
+        let upload = '';
 
         if (type && !readOnly) {
+            upload = (
+                <Button
+                    type="link"
+                    icon={<Icon name="import"/>}
+                    onClick={this.toggleImport}
+                    style={{marginRight: 10}}
+                >
+                    Upload
+                </Button>
+            );
             addNew = (
                 <Button
-                    icon={<Icon name="add" />}
+                    icon={<Icon name="add"/>}
                     type="link"
                     onClick={() => createBoundary(property, type)}>
                     Add new
@@ -60,6 +86,7 @@ class BoundariesOverview extends React.PureComponent {
         return (
             <div style={[styles.wrapper]}>
                 <div style={[styles.header]}>
+                    {upload}
                     {addNew}
                 </div>
                 <div style={[styles.body]}>
@@ -73,6 +100,9 @@ class BoundariesOverview extends React.PureComponent {
                         readOnly={readOnly}
                     />
                 </div>
+                {this.state.import &&
+                <GenericImport onClose={this.toggleImport} type={'boundary'} boundaryType={type}/>
+                }
             </div>
         );
     }
@@ -91,4 +121,4 @@ BoundariesOverview.propTypes = {
     tool: PropTypes.string,
 };
 
-export default pure(BoundariesOverview);
+export default BoundariesOverview;

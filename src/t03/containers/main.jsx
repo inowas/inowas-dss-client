@@ -116,7 +116,7 @@ class T03 extends React.Component {
                         name: 'chd'
                     },
                     {
-                        title: 'General Head Boundary (GHB)',
+                        title: 'General Head SingleOPBoundary (GHB)',
                         name: 'ghb'
                     },
                     {

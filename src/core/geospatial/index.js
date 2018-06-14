@@ -366,3 +366,4 @@ export const renderFullScreenControl = (position = 'topright') => {
         <FullscreenControl position={position}/>
     );
 };
+
