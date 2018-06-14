@@ -134,6 +134,12 @@ class T03 extends React.Component {
                 ]
             },
             {
+                title: 'Observations',
+                name: 'observations',
+                icon: <Icon name="file"/>,
+                disabled: initial
+            },
+            {
                 title: 'Run',
                 name: 'model-run',
                 icon: <Icon name="calculator"/>,
