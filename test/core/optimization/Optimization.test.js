@@ -3,7 +3,7 @@ import OptimizationParameters from '../../../src/core/optimization/OptimizationP
 import OptimizationObjective from '../../../src/core/optimization/OptimizationObjective';
 import OptimizationConstraint from '../../../src/core/optimization/OptimizationConstraint';
 import OptimizationObject from '../../../src/core/optimization/OptimizationObject';
-import {defaultParameters} from './Parameters.test';
+import {defaultParameters} from './OptimizationParameters.test';
 import {concentrationObjective, headObjective} from './OptimizationObjective.test';
 import {optimizationObjects} from './OptimizationObject.test';
 import {concentrationConstraint} from './OptimizationConstraint.test';

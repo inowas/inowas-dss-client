@@ -1,4 +1,6 @@
 import OptimizationObjective from '../../../src/core/optimization/OptimizationObjective';
+import {exampleLocation} from './Location.test';
+import Location from '../../../src/core/optimization/Location';
 
 export const concentrationObjective = {
     'type': 'concentration',
@@ -6,13 +8,7 @@ export const concentrationObjective = {
     'summary_method': 'max',
     'weight': -1,
     'penalty_value': 999,
-    'location': {
-        'type': 'bbox',
-        'ts': [0, 0],
-        'lay': [0, 0],
-        'row': [90, 90],
-        'col': [90, 90]
-    }
+    'location': Location.fromObject(exampleLocation)
 };
 
 export const headObjective = {
@@ -20,10 +16,10 @@ export const headObjective = {
     'summary_method': 'max',
     'weight': -1,
     'penalty_value': 999,
-    'location': {
+    'location': Location.fromObject({
         'type': 'object',
         'objects': [0, 1]
-    }
+    })
 };
 
 test('Get concentration Objective from Object.', () => {

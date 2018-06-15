@@ -1,22 +1,20 @@
-import Object from './Object';
-
-class Objective {
+class Location {
     _type;
     _ts;
     _lay;
     _row;
     _col;
-    _objects; // List of Object
+    _objects;
 
     static fromObject(obj) {
-        const objective = new Objective();
-        objective.type = obj.type;
-        objective.ts = obj.ts;
-        objective.lay = obj.lay;
-        objective.row = obj.row;
-        objective.col = obj.col;
-        objective.objects = obj.objects;
-        return objective;
+        const location = new Location();
+        location.type = obj.type;
+        location.ts = obj.ts;
+        location.lay = obj.lay;
+        location.row = obj.row;
+        location.col = obj.col;
+        location.objects = obj.objects;
+        return location;
     }
 
     constructor() {}
@@ -71,14 +69,14 @@ class Objective {
 
     get toObject() {
         return ({
-            'type': this._type,
-            'ts': this._ts,
-            'lay': this._lay,
-            'row': this._row,
-            'col': this._col,
-            'objects': this._objects
+            'type': this.type,
+            'ts': this.ts,
+            'lay': this.lay,
+            'row': this.row,
+            'col': this.col,
+            'objects': this.objects
         });
     }
 }
 
-export default Objective;
+export default Location;

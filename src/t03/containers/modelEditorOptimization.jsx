@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
 import OptimizationObjects from '../components/optimizationObjects';
 import OptimizationParameters from '../components/optimizationParameters';
 import FilterableList from '../../components/primitive/FilterableList';
-import { Routing } from '../actions/index';
+import {Routing} from '../actions/index';
+import Optimization from "../../core/optimization/Optimization";
 
 const styles = {
     container: {
@@ -61,27 +62,49 @@ const menu = [
     }
 ];
 
-@ConfiguredRadium
 class ModelEditorOptimization extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            optimization: null
+        };
+    }
+
+    componentWillMount() {
+        let opt = Optimization.fromDefaults();
+        if (this.props.model.hasOwnProperty('optimization') && this.props.model.optimization !== null) {
+            opt = Optimization.fromObject(this.props.model.optimization);
+        }
+
+        this.setState({
+            optimization: opt.toObject
+        });
+    }
+
     onMenuClick = (type) => {
-        const { routes, params } = this.props;
+        const {routes, params} = this.props;
 
         Routing.modelOptimizationType(routes, params)(type);
     };
 
-    renderProperties( ) {
-        const {
-            model,
-            routes,
-            params,
-        } = this.props;
+    onChangeParameters = (parameters) => {
+        const opt = Optimization.fromObject(this.state.optimization);
+        opt.parameters = parameters;
+        return this.setState({
+            optimization: opt.toObject
+        });
+    };
 
+    renderProperties() {
         const {type} = this.props.params;
+        const optimization = Optimization.fromObject(this.state.optimization);
 
-        switch ( type ) {
+        switch (type) {
             case 'objects':
-                return <OptimizationObjects model={model} route={Routing.goToProperty(routes, params)} routeType={Routing.goToPropertyType(routes, params)}/>;
+                return (
+                    <p>Objectives</p>
+                );
             case 'objectives':
                 return (
                     <p>Objectives</p>
@@ -91,13 +114,16 @@ class ModelEditorOptimization extends React.Component {
                     <p>Constrains</p>
                 );
             default:
-                return <OptimizationParameters model={model} route={Routing.goToProperty(routes, params)} routeType={Routing.goToPropertyType(routes, params)}/>;
+                // subcomponent + onChange handler
+                return (
+                    <OptimizationParameters parameters={optimization.parameters} onChange={this.onChangeParameters}/>
+                );
         }
     }
 
     render() {
         return (
-            <div style={[ styles.container ]}>
+            <div style={[styles.container]}>
                 <div style={styles.left}>
                     <FilterableList
                         itemClickAction={this.onMenuClick}
@@ -105,7 +131,7 @@ class ModelEditorOptimization extends React.Component {
                     />
                 </div>
                 <div style={styles.properties}>
-                    <div style={[ styles.columnFlex2 ]}>
+                    <div style={[styles.columnFlex2]}>
                         {this.renderProperties()}
                     </div>
                 </div>
@@ -114,24 +140,22 @@ class ModelEditorOptimization extends React.Component {
     }
 }
 
-const actions = {
+const actions = {};
 
-};
-
-const mapStateToProps = (state, { tool, params }) => {
+const mapStateToProps = (state, {tool}) => {
     return {
-        model: state[ tool ].model,
+        model: state[tool].model,
     };
 };
 
-const mapDispatchToProps = (dispatch, { tool }) => {
+const mapDispatchToProps = (dispatch, {tool}) => {
     const wrappedActions = {};
-    for ( const key in actions ) {
-        if (actions.hasOwnProperty( key )) {
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function( ) {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch(actions[key]( tool, ...args ));
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
             };
         }
     }
@@ -158,4 +182,4 @@ ModelEditorOptimization.propTypes = {
 };
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ModelEditorOptimization));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));

@@ -8,6 +8,7 @@ class Optimization {
     _objectives = [];
     _objects = [];
     _parameters;
+    _enabled = false;
 
     static fromDefaults() {
         const optimization = new Optimization;
@@ -33,6 +34,7 @@ class Optimization {
         obj.objects.forEach( (object) => {
             optimization.addObject(OptimizationObject.fromObject(object));
         });
+        optimization.enabled = obj.enabled;
 
         return optimization;
     }
@@ -71,12 +73,21 @@ class Optimization {
         this._objects = value;
     }
 
+    get enabled() {
+        return this._enabled;
+    }
+
+    set enabled(value) {
+        this._enabled = value;
+    }
+
     get toObject() {
         return {
             'parameters': this.parameters.toObject,
             'constraints': this.constraints.map( c => c.toObject ),
             'objectives': this.objectives.map( c => c.toObject ),
-            'objects': this.objects.map( c => c.toObject )
+            'objects': this.objects.map( c => c.toObject ),
+            'enabled': this.enabled
         };
     }
 

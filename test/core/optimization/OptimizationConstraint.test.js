@@ -1,4 +1,6 @@
 import OptimizationConstraint from '../../../src/core/optimization/OptimizationConstraint';
+import Location from '../../../src/core/optimization/Location';
+import { exampleLocation } from './Location.test';
 
 export const concentrationConstraint = {
     'type': 'concentration',
@@ -6,13 +8,7 @@ export const concentrationConstraint = {
     'summary_method': 'max',
     'operator': 'less',
     'value': 2,
-    'location': {
-        'type': 'bbox',
-        'ts': [0, 0],
-        'lay': [0, 0],
-        'row': [90, 90],
-        'col': [90, 90]
-    }
+    'location': Location.fromObject(exampleLocation)
 };
 
 test('Get concentration Constraint from Object.', () => {

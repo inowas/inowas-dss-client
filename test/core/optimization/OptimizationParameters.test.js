@@ -1,18 +1,18 @@
 import OptimizationParameters from '../../../src/core/optimization/OptimizationParameters';
 
 export const defaultParameters = {
-    'ngen': 5,
-    'pop_size': 10,
+    'ngen': 100,
+    'pop_size': 100,
     'mutpb': 0.1,
     'cxpb': 0.9,
     'eta': 20,
-    'indpb': 0.2,
-    'ncls': 3,
-    'nlocal': 1,
-    'maxf': 10,
+    'indpb': 0.1,
+    'ncls': 1,
+    'nlocal': 0,
+    'maxf': 50,
     'qbound': 0.25,
-    'diversity_flg': true,
-    'local_opt_flg': true,
+    'diversity_flg': false,
+    'local_opt_flg': false,
     'refpoint': [0, 0]
 };
 
@@ -41,4 +41,12 @@ test('Create from Object', () => {
     const parameters = OptimizationParameters.fromObject(obj);
     expect(parameters).toBeInstanceOf(OptimizationParameters);
     expect(parameters.toObject).toEqual(obj);
+});
+
+// TODO: Better test for applyMinMax
+test('ApplyMinMax', () => {
+    const parameters = OptimizationParameters.fromDefaults();
+    expect(parameters.applyMinMax(50, parameters._ngen.min, parameters._ngen.max)).toBe(50);
+    expect(parameters.applyMinMax(150, parameters._ngen.min, parameters._ngen.max)).toBe(100);
+    expect(parameters.applyMinMax(-100, parameters._ngen.min, parameters._ngen.max)).toBe(1);
 });
