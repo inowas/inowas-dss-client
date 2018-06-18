@@ -2,12 +2,12 @@ class OptimizationParameters {
 
     _ngen = {value: 100, parse: (x) => parseInt(x, 10), min: 1, max: 100};
     _ncls = {value: 1, parse: (x) => parseInt(x, 10), min: 1, max: 10};
-    _popSize = {value: 100, parse: (x) => parseInt(x, 10), min: (this._ncls.value < 2 ? 2 : this._ncls.value), max: 100};
+    _popSize = {value: 100, parse: (x) => parseInt(x, 10), min: 2, max: 100};
     _mutpb = {value: 0.1, parse: (x) => parseFloat(x), min: 0, max: 1};
     _cxpb = {value: 0.9, parse: (x) => parseFloat(x), min: 0, max: 1};
     _eta = {value: 20, parse: (x) => parseFloat(x), min: 1, max: 30};
     _indpb = {value: 0.1, parse: (x) => parseFloat(x), min: 0, max: 1};
-    _nlocal = {value: 0, parse: (x) => parseInt(x, 10), min: 0, max: this._popSize.value};
+    _nlocal = {value: 0, parse: (x) => parseInt(x, 10), min: 0, max: 100};
     _maxf = {value: 50, parse: (x) => parseInt(x, 10), min: 1, max: 200};
     _qbound = {value: 0.25, parse: (x) => parseFloat(x), min: 0, max: 1};
     _diversityFlg = {value: false};
@@ -150,6 +150,9 @@ class OptimizationParameters {
         }
         if (value > max) {
             return max;
+        }
+        if (isNaN(value)) {
+            return min;
         }
         return value;
     };

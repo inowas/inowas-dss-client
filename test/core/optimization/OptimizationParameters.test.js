@@ -43,10 +43,12 @@ test('Create from Object', () => {
     expect(parameters.toObject).toEqual(obj);
 });
 
-// TODO: Better test for applyMinMax
 test('ApplyMinMax', () => {
     const parameters = OptimizationParameters.fromDefaults();
     expect(parameters.applyMinMax(50, parameters._ngen.min, parameters._ngen.max)).toBe(50);
     expect(parameters.applyMinMax(150, parameters._ngen.min, parameters._ngen.max)).toBe(100);
     expect(parameters.applyMinMax(-100, parameters._ngen.min, parameters._ngen.max)).toBe(1);
+    parameters.ncls = 5;
+    parameters.popSize = 1;
+    expect(parameters.popSize).toBe(5);
 });
