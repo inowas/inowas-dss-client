@@ -5,10 +5,11 @@ import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
 import OptimizationObjects from '../components/optimizationObjects';
-import OptimizationParameters from '../components/optimizationParameters';
+import OptimizationObjectivesComponent from '../components/optimizationObjectives';
+import OptimizationParametersComponent from '../components/optimizationParameters';
 import FilterableList from '../../components/primitive/FilterableList';
 import {Routing} from '../actions/index';
-import Optimization from "../../core/optimization/Optimization";
+import Optimization from '../../core/optimization/Optimization';
 
 const styles = {
     container: {
@@ -96,6 +97,14 @@ class ModelEditorOptimization extends React.Component {
         });
     };
 
+    onChangeObjectives = (objectives) => {
+        const opt = Optimization.fromObject(this.state.optimization);
+        opt.objectives = objectives;
+        return this.setState({
+            optimization: opt.toObject
+        });
+    };
+
     renderProperties() {
         const {type} = this.props.params;
         const optimization = Optimization.fromObject(this.state.optimization);
@@ -107,16 +116,15 @@ class ModelEditorOptimization extends React.Component {
                 );
             case 'objectives':
                 return (
-                    <p>Objectives</p>
+                    <OptimizationObjectivesComponent objectives={optimization.objectives} onChange={this.onChangeObjectives}/>
                 );
             case 'constrains':
                 return (
                     <p>Constrains</p>
                 );
             default:
-                // subcomponent + onChange handler
                 return (
-                    <OptimizationParameters parameters={optimization.parameters} onChange={this.onChangeParameters}/>
+                    <OptimizationParametersComponent parameters={optimization.parameters} objectives={optimization.objectives} onChange={this.onChangeParameters}/>
                 );
         }
     }

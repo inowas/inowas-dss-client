@@ -47,6 +47,7 @@ test('ApplyMinMax', () => {
     const parameters = OptimizationParameters.fromDefaults();
     expect(parameters.applyMinMax(50, parameters._ngen.min, parameters._ngen.max)).toBe(50);
     expect(parameters.applyMinMax(150, parameters._ngen.min, parameters._ngen.max)).toBe(100);
+    expect(parameters.applyMinMax(NaN, parameters._ngen.min, parameters._ngen.max)).toBe(1);
     expect(parameters.applyMinMax(-100, parameters._ngen.min, parameters._ngen.max)).toBe(1);
     parameters.ncls = 5;
     parameters.popSize = 1;

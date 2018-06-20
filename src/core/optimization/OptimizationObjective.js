@@ -1,6 +1,6 @@
 class OptimizationObjective {
 
-    _type;
+    _type = 'new objective';
     _concFileName = 'MT3D001.UCN';
     _summaryMethod;
     _weight = -1;
@@ -86,6 +86,11 @@ class OptimizationObjective {
 
     set location2(value) {
         this._location2 = value;
+    }
+
+    get isValid() {
+        // TODO: Validierung
+        return true;
     }
 
     get toObject() {

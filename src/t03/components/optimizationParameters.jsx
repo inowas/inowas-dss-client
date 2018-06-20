@@ -77,6 +77,7 @@ class OptimizationParametersComponent extends React.Component {
             }
         ];
         const {parameters} = this.state;
+        const {objectives} = this.props;
 
         return (<div style={[styles.columnContainer]}>
             <LayoutComponents.Column heading="Parameters" style={[styles.columnNotLast]}>
@@ -239,32 +240,26 @@ class OptimizationParametersComponent extends React.Component {
                                 />
                             </Form.Field>
                         </Form.Group>
-                        <Form.Field>
-                            <label>Reference point for the local optimization aka ideal objective vector.</label>
-                            <Form.Input
-                                type="number"
-                                name="refpoint_x"
-                                value={parameters.refpoint[0]}
-                                placeholder="refpoint_x ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                style={styles.input}
-                                disabled={(parameters.local_opt_flg === false)}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <Form.Input
-                                type="number"
-                                name="refpoint_y"
-                                value={parameters.refpoint[1]}
-                                placeholder="refpoint_y ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                style={styles.input}
-                                disabled={(parameters.local_opt_flg === false)}
-                            />
-                        </Form.Field>
-
+                        {
+                            objectives.map((o, i) => {
+                                return (
+                                    <Form.Field key={i}>
+                                        {(i === 0 ?
+                                            <label>Reference point for the local optimization aka ideal objective
+                                                vector.</label> : '')}
+                                        <Form.Input
+                                            type="number"
+                                            name="refpoint_x"
+                                            placeholder={`refpoint_${i} =`}
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleSubmit}
+                                            style={styles.input}
+                                            disabled={(parameters.local_opt_flg === false)}
+                                        />
+                                    </Form.Field>
+                                );
+                            })
+                        }
                     </Segment>
                 </Form>
             </LayoutComponents.Column>
@@ -274,6 +269,7 @@ class OptimizationParametersComponent extends React.Component {
 
 OptimizationParametersComponent.propTypes = {
     parameters: PropTypes.instanceOf(OptimizationParameters),
+    objectives: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired
 };
 

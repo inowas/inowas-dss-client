@@ -2,6 +2,7 @@ import OptimizationParameters from './OptimizationParameters';
 import OptimizationObject from './OptimizationObject';
 import OptimizationObjective from './OptimizationObjective';
 import OptimizationConstraint from './OptimizationConstraint';
+import Location from './Location';
 
 class Optimization {
     _constraints = [];
@@ -14,7 +15,33 @@ class Optimization {
         const optimization = new Optimization;
         optimization.parameters = OptimizationParameters.fromDefaults();
         optimization.constraints = [];
-        optimization.objectives = [];
+        optimization.objectives = [
+            // TODO: Examples only for testing
+            OptimizationObjective.fromObject({
+                'type': 'head',
+                'summary_method': 'max',
+                'weight': -1,
+                'penalty_value': 999,
+                'location': Location.fromObject({
+                    'type': 'object',
+                    'objects': [0, 1]
+                })
+            }),
+            OptimizationObjective.fromObject({
+                'type': 'concentration',
+                'conc_file_name': 'MT3D001.UCN',
+                'summary_method': 'max',
+                'weight': -1,
+                'penalty_value': 999,
+                'location': Location.fromObject({
+                    'type': 'bbox',
+                    'ts': [0, 0],
+                    'lay': [0, 0],
+                    'row': [90, 90],
+                    'col': [90, 90]
+                })
+            })
+        ];
         optimization.objects = [];
         return optimization;
     }
@@ -23,15 +50,15 @@ class Optimization {
         const optimization = new Optimization;
         optimization.parameters = OptimizationParameters.fromObject(obj.parameters);
 
-        obj.constraints.forEach( (constraint) => {
+        obj.constraints.forEach((constraint) => {
             optimization.addConstraint(OptimizationConstraint.fromObject(constraint));
         });
 
-        obj.objectives.forEach( (objective) => {
+        obj.objectives.forEach((objective) => {
             optimization.addObjective(OptimizationObjective.fromObject(objective));
         });
 
-        obj.objects.forEach( (object) => {
+        obj.objects.forEach((object) => {
             optimization.addObject(OptimizationObject.fromObject(object));
         });
         optimization.enabled = obj.enabled;
@@ -39,7 +66,8 @@ class Optimization {
         return optimization;
     }
 
-    constructor() {}
+    constructor() {
+    }
 
     get parameters() {
         return this._parameters;
@@ -84,9 +112,9 @@ class Optimization {
     get toObject() {
         return {
             'parameters': this.parameters.toObject,
-            'constraints': this.constraints.map( c => c.toObject ),
-            'objectives': this.objectives.map( c => c.toObject ),
-            'objects': this.objects.map( c => c.toObject ),
+            'constraints': this.constraints.map(c => c.toObject),
+            'objectives': this.objectives.map(c => c.toObject),
+            'objects': this.objects.map(c => c.toObject),
             'enabled': this.enabled
         };
     }
