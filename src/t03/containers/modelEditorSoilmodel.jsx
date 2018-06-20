@@ -42,7 +42,6 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
 class ModelEditorSoilmodel extends React.Component {
     constructor(props) {
         super(props);
@@ -235,4 +234,4 @@ ModelEditorSoilmodel.propTypes = {
     updateLayerStatus: PropTypes.object
 };
 
-export default ModelEditorSoilmodel;
+export default ConfiguredRadium(ModelEditorSoilmodel);

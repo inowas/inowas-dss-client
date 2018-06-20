@@ -66,7 +66,7 @@ class BoundaryGeometryEditorMap extends React.Component {
     renderBoundaries(boundaries) {
         return (
             boundaries.map(b => {
-                if (b.type === 'wel') {
+                if (b.type === 'wel' || b.type === 'hob') {
                     return (
                         <CircleMarker
                             key={b.id}
@@ -179,6 +179,7 @@ class BoundaryGeometryEditorMap extends React.Component {
                 polygon: false,
                 rectangle: false,
                 circle: false,
+                circlemarker: false,
                 marker: false
             }
         };

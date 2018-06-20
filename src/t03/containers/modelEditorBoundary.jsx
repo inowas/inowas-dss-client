@@ -48,7 +48,6 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
 class ModelEditorBoundary extends React.Component {
     constructor(props) {
         super(props);
@@ -79,9 +78,9 @@ class ModelEditorBoundary extends React.Component {
         const {type, id, pid, property} = this.props.params;
         const {params, routes} = this.props;
 
-        const viewBoundary = pid && type;
+        const showDetails = pid && type;
 
-        if (viewBoundary) {
+        if (showDetails) {
             const boundary = boundaries.filter(b => b.type === type && b.id === pid)[0];
             if (boundary) {
                 return (
@@ -235,6 +234,6 @@ ModelEditorBoundary.propTypes = {
 
 export default withRouter(
     connect(makeMapStateToPropsBoundaries, mapDispatchToProps)(
-        ModelEditorBoundary
+        ConfiguredRadium(ModelEditorBoundary)
     )
 );

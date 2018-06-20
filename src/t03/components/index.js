@@ -9,6 +9,7 @@ import FlowPropertiesUpw from './flowPropertiesUpw';
 import GeneralHeadObservationPoint from './generalHeadObservationPoint';
 import GeneralMap from './generalMap';
 import HeadResultsChart from './HeadResultsChart';
+import HeadObservationData from './headObservationData';
 import ModelEditorResults from './ModelEditorResults';
 import PackageProperties from './packageProperties';
 import Properties from './properties';
@@ -37,6 +38,7 @@ export {
     FlowPropertiesUpw,
     GeneralHeadObservationPoint,
     GeneralMap,
+    HeadObservationData,
     HeadResultsChart,
     ModelEditorResults,
     PackageProperties,

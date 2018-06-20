@@ -3,14 +3,15 @@
  *
  * @author Martin Wudenka
  */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import Accordion from './Accordion';
 import AccordionItem from './AccordionItem';
 import ConfiguredRadium from 'ConfiguredRadium';
 import List from './List';
-import { groupBy, keys } from 'lodash';
-import { pure } from 'recompose';
+import {groupBy, keys} from 'lodash';
+import {pure} from 'recompose';
 
 const styles = {
     wrapper: {
@@ -53,81 +54,68 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
-class FilterableList extends React.PureComponent {
-    static propTypes = {
-        list: PropTypes.array.isRequired,
-        style: PropTypes.object,
-        onCategoryClick: PropTypes.func,
-        itemClickAction: PropTypes.func.isRequired,
-        activeType: PropTypes.string
-    };
+const FilterableList = ({style, list, activeType, itemClickAction, onCategoryClick}) => {
+    const groupedListByTypeProperty = groupBy(list, 'type');
+    const types = keys(groupedListByTypeProperty);
+    const firstActive = types.indexOf(activeType) !== -1 ? types.indexOf(activeType) : 0;
 
-    render() {
-        const {
-            style,
-            list,
-            activeType,
-            itemClickAction,
-            onCategoryClick
-        } = this.props;
-
-        const groupedList = groupBy(list, 'type');
-        const keyList = keys(groupedList);
-        const firstActive =
-            keyList.indexOf(activeType) !== -1
-                ? keyList.indexOf(activeType)
-                : 0;
-
-        return (
-            <div style={[styles.wrapper, style]}>
-                <div style={styles.content}>
-                    {(() => {
-                        if (keyList.length === 1) {
-                            return (
-                                <List
-                                    itemClickAction={itemClickAction}
-                                    style={styles.list}
-                                    data={groupedList[keyList[0]]}
-                                />
-                            );
-                        }
+    return (
+        <div style={[styles.wrapper, style]}>
+            <div style={styles.content}>
+                {(() => {
+                    if (types.length === 1) {
                         return (
-                            <Accordion firstActive={firstActive}>
-                                {keyList.map(key =>
-                                    <AccordionItem
-                                        style={styles.group}
-                                        key={key}
-                                        heading={
-                                            <span>
+                            <List
+                                itemClickAction={itemClickAction}
+                                style={styles.list}
+                                data={groupedListByTypeProperty[types[0]]}
+                            />
+                        );
+                    }
+                    return (
+                        <Accordion firstActive={firstActive}>
+                            {types.map(key =>
+                                <AccordionItem
+                                    style={styles.group}
+                                    key={key}
+                                    heading={
+                                        <span>
                                                 {key}
-                                                <span
-                                                    style={[
-                                                        styles.accordionTitleNumber
-                                                    ]}
-                                                >
-                                                    ({groupedList[key].length})
+                                            <span
+                                                style={[
+                                                    styles.accordionTitleNumber
+                                                ]}
+                                            >
+                                                    ({groupedListByTypeProperty[key].length})
                                                 </span>
                                             </span>
-                                        }
-                                        onClick={
-                                            onCategoryClick &&
-                                            onCategoryClick(key)
-                                        }
-                                    >
-                                        <List
-                                            itemClickAction={itemClickAction}
-                                            style={styles.list}
-                                            data={groupedList[key]}
-                                        />
-                                    </AccordionItem>
-                                )}
-                            </Accordion>
-                        );
-                    })()}
-                </div>
+                                    }
+                                    onClick={
+                                        onCategoryClick &&
+                                        onCategoryClick(key)
+                                    }
+                                >
+                                    <List
+                                        itemClickAction={itemClickAction}
+                                        style={styles.list}
+                                        data={groupedListByTypeProperty[key]}
+                                    />
+                                </AccordionItem>
+                            )}
+                        </Accordion>
+                    );
+                })()}
             </div>
-        );
-    }
-}
-export default pure(FilterableList);
+        </div>
+    );
+};
+
+FilterableList.propTypes = {
+    list: PropTypes.array.isRequired,
+    style: PropTypes.object,
+    onCategoryClick: PropTypes.func,
+    itemClickAction: PropTypes.func.isRequired,
+    activeType: PropTypes.string
+};
+
+export default pure(ConfiguredRadium(FilterableList));

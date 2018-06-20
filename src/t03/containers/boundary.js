@@ -31,7 +31,6 @@ const styles = {
 const state = {};
 state.import = false;
 
-@ConfiguredRadium
 class BoundariesOverview extends React.Component {
     constructor(props) {
         super(props);
@@ -121,4 +120,4 @@ BoundariesOverview.propTypes = {
     tool: PropTypes.string,
 };
 
-export default BoundariesOverview;
+export default ConfiguredRadium(BoundariesOverview);

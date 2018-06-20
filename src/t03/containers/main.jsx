@@ -130,14 +130,12 @@ class T03 extends React.Component {
                     {
                         title: 'Wells (WEL)',
                         name: 'wel'
+                    },
+                    {
+                        title: 'Head Observation Wells (HOB)',
+                        name: 'hob'
                     }
                 ]
-            },
-            {
-                title: 'Observations',
-                name: 'observations',
-                icon: <Icon name="file"/>,
-                disabled: initial
             },
             {
                 title: 'Run',

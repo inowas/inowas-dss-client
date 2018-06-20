@@ -1,12 +1,14 @@
 import '../../less/leaflet.less';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {LayoutComponents} from '../../core/index';
 import {
-    ModelEditorGeneral,
     ModelEditorBoundary,
+    ModelEditorGeneral,
+    ModelEditorModelRun,
+    ModelEditorObservations,
     ModelEditorSoilmodel,
-    ModelEditorModelRun
 } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
@@ -65,12 +67,12 @@ const properties = ({tool, close, selectedProperty, type}) => {
         case 'observations':
             return (
                 <LayoutComponents.CloseableWindow
-                    heading="Boundary Conditions"
+                    heading="Observations"
                     style={styles.window}
                     close={close}
                     closeable
                 >
-                    {null}
+                    <ModelEditorBoundary tool={tool} boundaryType={'hob'} />
                 </LayoutComponents.CloseableWindow>
             );
 
@@ -124,5 +126,13 @@ const properties = ({tool, close, selectedProperty, type}) => {
             );
     }
 };
+
+properties.propTypes = {
+    close: PropTypes.func.isRequired,
+    tool: PropTypes.string.isRequired,
+    selectedProperty: PropTypes.string,
+    type: PropTypes.string
+};
+
 
 export default pure(ConfiguredRadium(properties));

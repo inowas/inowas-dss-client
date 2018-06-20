@@ -2,13 +2,13 @@ import fs from 'fs';
 import Uuid from 'uuid';
 import * as boundaryObjects from '../../fixtures/obj/boundaryObjects';
 import HeadObservation from '../../../src/core/boundaries/HeadObservation';
-import {importBoundariesFromCsv} from "../../../src/core/import/CsvImporter";
+import {importBoundariesFromCsv} from '../../../src/core/import/CsvImporter';
 
 test('HeadObservation createWithStartDate', () => {
     const id = Uuid.v4();
     const name = 'NameOfHeadObservation';
     const geometry = {type: 'Point', coordinates: [[3, 4]]};
-    const startDateTime = new Date('2015-01-02').toUTCString();
+    const startDateTime = new Date('2015-01-02').toISOString();
 
     const headObservation = HeadObservation.createWithStartDate({
         id,
@@ -97,7 +97,7 @@ test('Get BoundaryDefaults equals fromStartDate', () => {
     const id = Uuid.v4();
     const name = 'NameOfHeadObservation';
     const geometry = {type: 'Point', coordinates: [[3, 4]]};
-    const startDateTime = new Date('2015-01-02').toUTCString();
+    const startDateTime = new Date('2015-01-02').toISOString();
 
     const headObservation = HeadObservation.createWithStartDate({
         id,

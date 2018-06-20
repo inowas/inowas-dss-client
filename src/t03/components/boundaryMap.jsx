@@ -15,7 +15,6 @@ const componentStyle = {
     }
 };
 
-@ConfiguredRadium
 class BoundaryMap extends Component {
     componentDidMount() {
         disableMap(this.map);
@@ -68,7 +67,7 @@ class BoundaryMap extends Component {
     }
 
     renderBoundary(b) {
-        if (b.type === 'wel') {
+        if (b.type === 'wel' || b.type === 'hob') {
             return (
                 <CircleMarker
                     key={b.id}
@@ -117,7 +116,7 @@ class BoundaryMap extends Component {
     }
 }
 
-BoundaryMap.PropTypes = {
+BoundaryMap.propTypes = {
     area: PropTypes.object.isRequired,
     boundary: PropTypes.object.isRequired,
     selectedObservationPointId: PropTypes.string,
@@ -125,4 +124,4 @@ BoundaryMap.PropTypes = {
     styles: PropTypes.object
 };
 
-export default BoundaryMap;
+export default ConfiguredRadium(BoundaryMap);
