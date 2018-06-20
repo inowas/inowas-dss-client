@@ -5,6 +5,7 @@ import GeneralHeadBoundary from './GeneralHeadBoundary';
 import RechargeBoundary from './RechargeBoundary';
 import RiverBoundary from './RiverBoundary';
 import WellBoundary from './WellBoundary';
+import HeadObservation from "./HeadObservation";
 
 export default class BoundaryFactory {
     static fromType = (type) => {
@@ -13,6 +14,8 @@ export default class BoundaryFactory {
                 return new ConstantHeadBoundary();
             case 'ghb':
                 return new GeneralHeadBoundary();
+            case 'hob':
+                return new HeadObservation();
             case 'rch':
                 return new RechargeBoundary();
             case 'riv':
