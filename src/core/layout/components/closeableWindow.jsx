@@ -36,6 +36,7 @@ const styles = {
         marginTop: 0,
         marginBottom: 0,
         minHeight: 0,
+        overflowX: 'hidden',
         overflowY: 'auto'
     }
 };

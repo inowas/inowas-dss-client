@@ -1,8 +1,8 @@
 class OptimizationObjective {
 
-    _type = 'new objective';
+    _type = '';
     _concFileName = 'MT3D001.UCN';
-    _summaryMethod;
+    _summaryMethod ='';
     _weight = -1;
     _penaltyValue = 999;
     _location; // Location

@@ -19,6 +19,7 @@ class Optimization {
             // TODO: Examples only for testing
             OptimizationObjective.fromObject({
                 'type': 'head',
+                'conc_file_name': 'MT3D001.UCN',
                 'summary_method': 'max',
                 'weight': -1,
                 'penalty_value': 999,
