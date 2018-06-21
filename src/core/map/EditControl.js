@@ -1,9 +1,11 @@
-import { PropTypes } from 'prop-types';
-import Draw from 'leaflet-draw'; // eslint-disable-line
+import {PropTypes} from 'prop-types';
+
+// eslint-disable-line
+import Draw from 'leaflet-draw';
 import isEqual from 'lodash.isequal';
 
-import { LayersControl } from 'react-leaflet';
-import { Map } from 'leaflet';
+import {LayersControl} from 'react-leaflet';
+import {Map} from 'leaflet';
 
 const eventHandlers = {
     onEdited: 'draw:edited',
@@ -14,53 +16,18 @@ const eventHandlers = {
     onDeleteStop: 'draw:deletestop',
 };
 
-export default class EditControl extends LayersControl {
-    static propTypes = {
-        ...Object.keys(eventHandlers).reduce((acc, val) => {
-            acc[val] = PropTypes.func;
-            return acc;
-        }, {}),
-        onCreated: PropTypes.func,
-        onMounted: PropTypes.func,
-        draw: PropTypes.shape({
-            polyline: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            polygon: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            rectangle: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            circle: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            marker: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-        }),
-        edit: PropTypes.shape({
-            edit: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            remove: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            poly: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-            allowIntersection: PropTypes.bool,
-        }),
-        position: PropTypes.oneOf([
-            'topright',
-            'topleft',
-            'bottomright',
-            'bottomleft'
-        ])
-    };
-
-    static contextTypes = {
-        map: PropTypes.instanceOf(Map),
-        layerContainer: PropTypes.shape({
-            addLayer: PropTypes.func.isRequired,
-            removeLayer: PropTypes.func.isRequired
-        })
-    };
+class EditControl extends LayersControl {
 
     onDrawCreate = (e) => {
-        const { onCreated } = this.props;
-        const { layerContainer } = this.context;
+        const {onCreated} = this.props;
+        const {layerContainer} = this.context;
 
         layerContainer.addLayer(e.layer);
         onCreated && onCreated(e);
     };
 
     componentWillMount() {
-        const { map } = this.context;
+        const {map} = this.context;
 
         this.updateDrawControls();
 
@@ -74,13 +41,13 @@ export default class EditControl extends LayersControl {
     }
 
     componentDidMount() {
-        const { onMounted } = this.props;
+        const {onMounted} = this.props;
         super.componentDidMount();
         onMounted && onMounted(this.leafletElement);
     }
 
     componentWillUnmount() {
-        const { map } = this.context;
+        const {map} = this.context;
         this.leafletElement.remove(map);
 
         map.off('draw:created', this.onDrawCreate);
@@ -93,14 +60,14 @@ export default class EditControl extends LayersControl {
     }
 
     componentDidUpdate(prevProps) {
-    // super updates positions if thats all that changed so call this first
+        // super updates positions if thats all that changed so call this first
         super.componentDidUpdate(prevProps);
 
         if (isEqual(this.props.draw, prevProps.draw) || this.props.position !== prevProps.position) {
             return false;
         }
 
-        const { map } = this.context;
+        const {map} = this.context;
 
         this.leafletElement.remove(map);
         this.updateDrawControls();
@@ -110,8 +77,8 @@ export default class EditControl extends LayersControl {
     }
 
     updateDrawControls = () => {
-        const { layerContainer } = this.context;
-        const { draw, edit, position } = this.props;
+        const {layerContainer} = this.context;
+        const {draw, edit, position} = this.props;
         const options = {
             edit: {
                 ...edit,
@@ -127,6 +94,45 @@ export default class EditControl extends LayersControl {
             options.position = position;
         }
 
-    this.leafletElement = new L.Control.Draw(options); // eslint-disable-line
+        this.leafletElement = new L.Control.Draw(options); // eslint-disable-line
     };
 }
+
+EditControl.contextTypes = {
+    map: PropTypes.instanceOf(Map),
+    layerContainer: PropTypes.shape({
+        addLayer: PropTypes.func.isRequired,
+        removeLayer: PropTypes.func.isRequired
+    })
+};
+
+EditControl.propTypes = {
+    ...Object.keys(eventHandlers).reduce((acc, val) => {
+        acc[val] = PropTypes.func;
+        return acc;
+    }, {}),
+    onCreated: PropTypes.func,
+    onMounted: PropTypes.func,
+    draw: PropTypes.shape({
+        polyline: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        polygon: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        rectangle: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        circle: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        marker: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+    }),
+    edit: PropTypes.shape({
+        edit: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        remove: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        poly: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        allowIntersection: PropTypes.bool,
+    }),
+    position: PropTypes.oneOf([
+        'topright',
+        'topleft',
+        'bottomright',
+        'bottomleft'
+    ])
+};
+
+export default EditControl;
+

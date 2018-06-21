@@ -5,7 +5,7 @@ import React from 'react';
 import {GeoJSON, Map, TileLayer, Polygon, Polyline, Circle, FeatureGroup, CircleMarker} from 'react-leaflet';
 import {geoJSON as leafletGeoJSON, LatLng} from 'leaflet';
 import {cloneDeep, uniqueId} from 'lodash';
-import {EditControl} from 'react-leaflet-draw';
+
 import FullscreenControl from 'react-leaflet-fullscreen';
 
 import * as geoTools from '../geospatial';
@@ -13,6 +13,7 @@ import Control from '../map/Control';
 
 import Button from '../../components/primitive/Button';
 import Icon from '../../components/primitive/Icon';
+import EditControl from '../map/EditControl';
 
 class BoundaryGeometryEditorMap extends React.Component {
 

@@ -30,7 +30,7 @@
         "js-md5": "^0.6.0",
         "leaflet": "^1.2.0",
         "leaflet-control-geocoder": "^1.5.8",
-        "leaflet-draw": "^1.0.2",
+        "leaflet-draw": "0.4.10",
         "leaflet-geometryutil": "^0.8.1",
         "lodash": "^4.17.4",
         "moment": "^2.18.1",

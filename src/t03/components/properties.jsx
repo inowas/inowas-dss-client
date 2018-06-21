@@ -7,7 +7,7 @@ import {
     ModelEditorBoundary,
     ModelEditorGeneral,
     ModelEditorModelRun,
-    ModelEditorObservations,
+    ModelEditorCalibration,
     ModelEditorSoilmodel,
 } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
@@ -104,12 +104,12 @@ const properties = ({tool, close, selectedProperty, type}) => {
         case 'calibration':
             return (
                 <LayoutComponents.CloseableWindow
-                    heading="Model Run"
+                    heading="Calibration Statistics"
                     style={styles.window}
                     close={close}
                     closeable
                 >
-                    {null}
+                    <ModelEditorCalibration type={type} tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 

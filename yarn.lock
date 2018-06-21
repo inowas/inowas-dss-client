@@ -7265,9 +7265,9 @@ leaflet-control-geocoder@^1.5.8:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/leaflet-control-geocoder/-/leaflet-control-geocoder-1.5.8.tgz#c52dfbb9be5f6388d683346acb49bf017fd5b6a8"
 
-leaflet-draw@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-1.0.2.tgz#212d1d958a53b849bec19a2135d39c13ed012559"
+leaflet-draw@0.4.10:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.4.10.tgz#a611a29925a32cde63638e891c3bfc93163e2f43"
 
 leaflet-geometryutil@^0.8.1:
   version "0.8.1"
