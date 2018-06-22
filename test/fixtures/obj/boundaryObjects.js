@@ -99,3 +99,16 @@ export const wellBoundary = () => {
         active_cells: null
     };
 };
+
+export const headObservation = () => {
+    return {
+        id: uuid.v4(),
+        name: 'ANewRandomHeadObservation' + Math.random(),
+        geometry: {type: 'Point', coordinates: [[3, 4]]},
+        type: 'hob',
+        affected_layers: [0],
+        metadata: {},
+        date_time_values: [{date_time: new Date('2015-01-02').toISOString(), values: [0]}],
+        active_cells: null
+    };
+};

@@ -130,6 +130,10 @@ class T03 extends React.Component {
                     {
                         title: 'Wells (WEL)',
                         name: 'wel'
+                    },
+                    {
+                        title: 'Head Observation Wells (HOB)',
+                        name: 'hob'
                     }
                 ]
             },
@@ -144,12 +148,6 @@ class T03 extends React.Component {
                 name: 'results',
                 icon: <Icon name="dataset"/>,
                 disabled: initial
-            },
-            {
-                title: 'Calibration',
-                name: 'calibration',
-                icon: <Icon name="target"/>,
-                disabled: true
             }
         ];
 

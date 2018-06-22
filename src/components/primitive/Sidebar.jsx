@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import Accordion from './Accordion';
 import AccordionItem from './AccordionItem';
@@ -42,14 +43,7 @@ const styles = {
     }
 };
 
-export default class Sidebar extends Component {
-    static propTypes = {
-        title: PropTypes.string,
-        items: PropTypes.array,
-        onClick: PropTypes.func,
-        selectedProperty: PropTypes.string,
-        selectedType: PropTypes.string
-    };
+class Sidebar extends React.Component {
 
     handleClick = (property, type) => {
         this.props.onClick(property, type);
@@ -129,3 +123,14 @@ export default class Sidebar extends Component {
         );
     }
 }
+
+
+Sidebar.propTypes = {
+    title: PropTypes.string,
+    items: PropTypes.array,
+    onClick: PropTypes.func,
+    selectedProperty: PropTypes.string,
+    selectedType: PropTypes.string
+};
+
+export default Sidebar;

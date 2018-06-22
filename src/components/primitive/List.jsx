@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ReactList from 'react-list';
 import ConfiguredRadium from 'ConfiguredRadium';
 import ListItem from './ListItem';
@@ -11,17 +12,9 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
-export default class List extends Component {
-
-    static propTypes = {
-        style: PropTypes.object,
-        data: PropTypes.array,
-        itemClickAction: PropTypes.func.isRequired,
-    };
+class List extends React.Component {
 
     renderItems = (children, ref) => {
-
         const style = {
             ...this.props.style,
             ...styles.list
@@ -32,23 +25,30 @@ export default class List extends Component {
         );
     };
 
-    renderItem = (index, key) => {
+    renderItem = (index) => {
         const b = this.props.data[index];
 
         return (
-            <ListItem clickAction={() => this.props.itemClickAction( b.id, b.type )} key={b.id}>{b.name}</ListItem>
+            <ListItem clickAction={() => this.props.itemClickAction(b.id, b.type)} key={b.id}>{b.name}</ListItem>
         );
     };
 
-    render( ) {
+    render() {
         return (
-                <ReactList
-                    itemRenderer={this.renderItem}
-                    itemsRenderer={this.renderItems}
-                    length={this.props.data.length}
-                    type='uniform'
-                />
+            <ReactList
+                itemRenderer={this.renderItem}
+                itemsRenderer={this.renderItems}
+                length={this.props.data.length}
+                type="uniform"
+            />
         );
     }
-
 }
+
+List.propTypes = {
+    style: PropTypes.object,
+    data: PropTypes.array,
+    itemClickAction: PropTypes.func.isRequired,
+};
+
+export default ConfiguredRadium(List);

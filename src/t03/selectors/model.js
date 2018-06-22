@@ -37,6 +37,13 @@ export const getInitialStyles = () => {
             opacity: 1,
             fill: false
         },
+        hob: {
+            radius: 3,
+            color: 'green',
+            weight: 1,
+            fillColor: 'yellow',
+            fillOpacity: 1
+        },
         rch: {
             weight: 2,
             color: styleGlobals.colors.accent,

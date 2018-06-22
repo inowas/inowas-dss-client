@@ -24,7 +24,6 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import styleGlobals from 'styleGlobals';
 import {Action, Command, Routing} from '../../t03/actions/index';
 import EditControl from '../../core/map/EditControl';
-import {getBoundaryDefaults} from '../selectors/boundary';
 
 import FloatingToast from '../../components/modflow/FloatingToast';
 import Icon from '../../components/primitive/Icon';
@@ -64,7 +63,6 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
 class BackgroundMap extends React.Component {
     constructor(props) {
         super(props);
@@ -350,21 +348,45 @@ class BackgroundMap extends React.Component {
         );
     }
 
+    renderHeadObservationWells(boundaries) {
+        const hobWells = boundaries
+            .filter(b => b.type === 'hob')
+            .filter(
+                b =>
+                    !this.getEditable() ||
+                    this.getEditable().type !== b.type ||
+                    this.getEditable().id !== b.id
+            )
+            .map(b =>
+                <CircleMarker
+                    key={b.id}
+                    center={[
+                        b.geometry.coordinates[1],
+                        b.geometry.coordinates[0]
+                    ]}
+                    {...this.getStyle(b.type, b.metadata.well_type)}
+                >
+                    {this.renderBoundaryPopup(b)}
+                </CircleMarker>
+            );
+
+        if (hobWells.length === 0) {
+            return null;
+        }
+
+        return (
+            <LayersControl.Overlay name="Head observations" checked>
+                <FeatureGroup>
+                    <div>{hobWells}</div>
+                </FeatureGroup>
+            </LayersControl.Overlay>
+        );
+    }
+
     getLatLngFromXY = coordinates => coordinates.map(c => [c[1], c[0]]);
 
     getNewBoundaryNumber = type => {
-        let i = 1;
-        while (i < 100000) {
-            // eslint-disable-next-line no-loop-func
-            if (this.props.model.boundaries.filter(b => {
-                return (b.id === (type + '-' + i));
-            }).length === 0) {
-                return i;
-            }
-            i++;
-        }
-
-        return null;
+        return this.props.model.boundaries.filter(b => b.type === type).length + 1;
     };
 
     getStartDate = () => has(this.state, 'model.stress_periods.start_date_time')
@@ -400,19 +422,19 @@ class BackgroundMap extends React.Component {
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
 
-        if (type === 'wel') {
+        if (type === 'wel' || type === 'hob') {
             const id = uuid.v4();
             const point = e.layer;
-            const boundary = getBoundaryDefaults(
-                type,
+            const boundary = BoundaryFactory.createByTypeAndStartDate({
                 id,
-                'Well ' + this.getNewBoundaryNumber(type),
-                point.toGeoJSON().geometry,
-                this.getStartDate()
-            );
+                name: type + '-boundary ' + this.getNewBoundaryNumber(type),
+                type,
+                geometry: point.toGeoJSON().geometry,
+                utcIsoStartDateTime: new Date(this.getStartDate()).toISOString()
+            });
 
-            boundary.active_cells = calculateActiveCells(point.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
-            this.props.addBoundary(this.props.model.id, boundary);
+            boundary.activeCells = calculateActiveCells(point.toGeoJSON().geometry, this.props.model.bounding_box, this.props.model.grid_size);
+            this.props.addBoundary(this.props.model.id, boundary.toObject);
             this.returnToBoundariesWithBoundaryId(id, type, false);
         }
     };
@@ -447,12 +469,7 @@ class BackgroundMap extends React.Component {
             return 'area';
         }
 
-        if (
-            params.id &&
-            params.property === 'boundaries' &&
-            params.type &&
-            !params.pid
-        ) {
+        if (params.id && params.property === 'boundaries' && params.type && !params.pid) {
             return params.type;
         }
 
@@ -472,6 +489,7 @@ class BackgroundMap extends React.Component {
                     rectangle: false,
                     circle: false,
                     marker: false,
+                    circlemarker: false,
                     delete: false
                 }
             },
@@ -485,6 +503,7 @@ class BackgroundMap extends React.Component {
                     polygon: false,
                     rectangle: false,
                     circle: false,
+                    circlemarker: false,
                     marker: false
                 }
             },
@@ -498,6 +517,7 @@ class BackgroundMap extends React.Component {
                     polygon: false,
                     rectangle: false,
                     circle: false,
+                    circlemarker: false,
                     marker: false
                 }
             },
@@ -511,6 +531,7 @@ class BackgroundMap extends React.Component {
                     polygon: true,
                     rectangle: false,
                     circle: false,
+                    circlemarker: false,
                     marker: false
                 }
             },
@@ -524,6 +545,7 @@ class BackgroundMap extends React.Component {
                     polygon: false,
                     rectangle: false,
                     circle: false,
+                    circlemarker: false,
                     marker: false
                 }
             },
@@ -537,6 +559,21 @@ class BackgroundMap extends React.Component {
                     polygon: false,
                     rectangle: false,
                     circle: false,
+                    circlemarker: false,
+                    marker: true
+                }
+            },
+            hob: {
+                edit: {
+                    edit: true,
+                    remove: false
+                },
+                draw: {
+                    polyline: false,
+                    polygon: false,
+                    rectangle: false,
+                    circle: false,
+                    circlemarker: false,
                     marker: true
                 }
             }
@@ -868,6 +905,7 @@ class BackgroundMap extends React.Component {
                         {this.renderRecharges(boundaries)}
                         {this.renderRivers(boundaries)}
                         {this.renderWells(boundaries)}
+                        {this.renderHeadObservationWells(boundaries)}
                     </LayersControl>
 
                     {this.renderCreateControl()}
@@ -917,4 +955,4 @@ BackgroundMap.propTypes = {
     tool: PropTypes.string
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BackgroundMap));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(BackgroundMap)));

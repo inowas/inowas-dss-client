@@ -7265,11 +7265,11 @@ leaflet-control-geocoder@^1.5.8:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/leaflet-control-geocoder/-/leaflet-control-geocoder-1.5.8.tgz#c52dfbb9be5f6388d683346acb49bf017fd5b6a8"
 
-leaflet-draw@^0.4.10:
-  version "0.4.14"
-  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.4.14.tgz#1b5b06d570873a015aa96b80d664dab496c45a4a"
+leaflet-draw@0.4.10:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.4.10.tgz#a611a29925a32cde63638e891c3bfc93163e2f43"
 
-leaflet-geometryutil@^0.8.0:
+leaflet-geometryutil@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/leaflet-geometryutil/-/leaflet-geometryutil-0.8.1.tgz#d12c70c9db466497c13bab4e8067b6d5fb4423fe"
   dependencies:
@@ -9765,17 +9765,17 @@ react-input-autosize@^2.1.2:
   dependencies:
     prop-types "^15.5.8"
 
-react-leaflet-draw@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/react-leaflet-draw/-/react-leaflet-draw-0.16.0.tgz#d7b64442113bac8d73f976eb33b5c8cf24867cbb"
+react-leaflet-draw@^0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet-draw/-/react-leaflet-draw-0.18.0.tgz#bb523bc6f0f93139ebc968b074720a65282cebb2"
 
-react-leaflet-fullscreen@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-leaflet-fullscreen/-/react-leaflet-fullscreen-0.0.5.tgz#9bb1fb0ee9e72c5be8526bf832843965bcec9442"
+react-leaflet-fullscreen@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-leaflet-fullscreen/-/react-leaflet-fullscreen-0.0.6.tgz#03cdc15a8bba414990b45b7974285c69bfd22005"
   dependencies:
     leaflet.fullscreen "^1.4.x"
 
-react-leaflet@^1.5.0:
+react-leaflet@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.9.1.tgz#0a282d8d26f66ea2d719ebb8f4a5fa156b33b8c8"
   dependencies:

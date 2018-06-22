@@ -1,53 +1,56 @@
 @import "variables.less";
 
 .diagram {
-    position: relative;
+  position: relative;
 }
 
 .diagram-labels-right {
-    position: absolute;
-    top: 20px;
-    right: 50px;
+  position: absolute;
+  top: 20px;
+  right: 50px;
 }
 
 .diagram-labels-left {
-    position: absolute;
-    top: 30px;
-    left: 80px;
+  position: absolute;
+  top: 30px;
+  left: 80px;
 }
 
 .diagram-labels-bottom-right {
-    position: absolute;
-    bottom: 70px;
-    right: 50px;
+  position: absolute;
+  bottom: 70px;
+  right: 50px;
 }
 
 .diagram-labels-bottom-left {
-    position: absolute;
-    bottom: 50px;
-    left: 50px;
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
 }
-.diagram-ylabels {
-    position: absolute;
-    bottom: 170px;
-    left: 5px;
-    transform: rotate(-90deg);
-}
-.diagram-ylabels-right{
-    position: absolute;
-    bottom: 170px;
-    left: 625px;
-    transform: rotate(90deg);
-}
-.diagram-label {
-    text-align: center;
-    background: #EFF3F6;
-    box-shadow: @diagram-label-shadow;
-    opacity: 0.9;
-    padding: 5px;
-    margin: 5px;
 
-    p {
-        margin: 0;
-    }
+.diagram-ylabels {
+  position: absolute;
+  bottom: 170px;
+  left: 5px;
+  transform: rotate(-90deg);
+}
+
+.diagram-ylabels-right {
+  position: absolute;
+  bottom: 170px;
+  left: 625px;
+  transform: rotate(90deg);
+}
+
+.diagram-label {
+  text-align: center;
+  background: #EFF3F6;
+  box-shadow: @diagram-label-shadow;
+  opacity: 0.9;
+  padding: 5px;
+  margin: 5px;
+
+  p {
+    margin: 0;
+  }
 }

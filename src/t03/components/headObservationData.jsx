@@ -7,7 +7,7 @@ import Icon from '../../components/primitive/Icon';
 import { cloneDeep, sortBy, last } from 'lodash';
 import uuid from 'uuid';
 
-class PumpingRate extends DataTable.Component.DataTable {
+class HeadObservationData extends DataTable.Component.DataTable {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,7 +74,7 @@ class PumpingRate extends DataTable.Component.DataTable {
                 {
                     property: 'values',
                     header: {
-                        label: 'Pumping Rate'
+                        label: 'Observed Head'
                     },
                     cell: {
                         transforms: !this.props.readOnly ? [
@@ -128,9 +128,9 @@ class PumpingRate extends DataTable.Component.DataTable {
     };
 }
 
-PumpingRate.propTypes = {
+HeadObservationData.propTypes = {
     perPage: PropTypes.number,
     readOnly: PropTypes.bool,
 };
 
-export default PumpingRate;
+export default HeadObservationData;

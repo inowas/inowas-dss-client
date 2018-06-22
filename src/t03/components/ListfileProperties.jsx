@@ -1,11 +1,10 @@
+import React from 'react';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Console from '../../components/primitive/Console';
 import Select from '../../components/primitive/Select';
 import PropTypes from 'prop-types';
-import React from 'react';
 import styleGlobals from 'styleGlobals';
-import * as lodash from 'lodash';
-import { WebData, LayoutComponents } from '../../core';
+import {WebData, LayoutComponents} from '../../core';
 
 const styles = {
     columnContainer: {
@@ -30,11 +29,10 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
-class ListfileProperties extends React.Component {
+class ListFileProperties extends React.Component {
 
     constructor(props) {
-        super( props );
+        super(props);
 
         this.state = {
             file: ''
@@ -43,54 +41,43 @@ class ListfileProperties extends React.Component {
 
     handleSelectChange = name => {
         return data => {
-            this.props.loadFile( data ? data.value : undefined );
-            this.handleInputChange( name )( data ? data.value : undefined );
+            this.props.loadFile(data ? data.value : undefined);
+            this.handleInputChange(name)(data ? data.value : undefined);
         };
     };
 
     handleInputChange = name => {
         return value => {
-            this.setState( prevState => {
+            this.setState(prevState => {
                 return {
                     ...prevState,
-                    [ name ]: value,
+                    [name]: value,
                 };
-            } );
+            });
         };
     };
 
     render() {
-        const { getFileStatus } = this.props;
-        let file = this.state.file;
-
-        let files = this.props.files;
-
-        if (!files) {
-            files = [];
-        }
+        const {getFileStatus} = this.props;
+        const file = this.state.file;
+        const files = this.props.files || [];
 
         return (
-            <div style={[ styles.columnContainer ]}>
+            <div style={[styles.columnContainer]}>
                 <LayoutComponents.Column
                     heading="Show files"
-                    style={[ styles.columnNotLast ]}
+                    style={[styles.columnNotLast]}
                 >
                     <form>
                         <LayoutComponents.InputGroup label="Files">
                             <Select
                                 value={file}
-                                onChange={this.handleSelectChange( 'file' )}
+                                onChange={this.handleSelectChange('file')}
                                 clearable={false}
-                                options={lodash.map(
-                                    files,
-                                    (value) => ({
-                                        label: value,
-                                        value: value
-                                    })
-                                )}
+                                options={files.map(value => ({label: value, value: value}))}
                             />
                         </LayoutComponents.InputGroup>
-                        <WebData.Component.Loading status={getFileStatus} style={[ { width: '100%' } ]}>
+                        <WebData.Component.Loading status={getFileStatus} style={[{width: '100%'}]}>
                             <Console>{getFileStatus.data}</Console>
                         </WebData.Component.Loading>
                     </form>
@@ -100,9 +87,10 @@ class ListfileProperties extends React.Component {
     }
 }
 
-ListfileProperties.propTypes = {
-    loadFile: PropTypes.func.isRequired,
+ListFileProperties.propTypes = {
     files: PropTypes.array,
+    getFileStatus: PropTypes.object.isRequired,
+    loadFile: PropTypes.func.isRequired,
 };
 
-export default ListfileProperties;
+export default ConfiguredRadium(ListFileProperties);

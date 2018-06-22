@@ -2,7 +2,7 @@ import Papa from 'papaparse';
 import * as Importer from './Importer';
 import {uniq} from 'lodash';
 
-const validBoundaryTypes = ['chd', 'ghb', 'rch', 'riv', 'wel'];
+const validBoundaryTypes = ['chd', 'ghb', 'hob', 'rch', 'riv', 'wel'];
 const validLengthUnits = ['m'];
 const validTimeUnits = ['d'];
 const validVersions = ['v1'];

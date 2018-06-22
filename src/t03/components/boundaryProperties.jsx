@@ -2,6 +2,7 @@ import {
     ConstantHeadObservationPoint,
     DataTableAction,
     GeneralHeadObservationPoint,
+    HeadObservationData,
     RechargeRate,
     RiverObservationPoint,
     PumpingRate
@@ -367,6 +368,16 @@ class BoundaryProperties extends React.Component {
                             rows={boundary.indexedDateTimeValues}/>
                     </LayoutComponents.Column>
                 );
+            case 'hob':
+                return (
+                    <LayoutComponents.Column heading="Data">
+                        {!readOnly && <DataTableAction component={this.observationPoint}/>}
+                        <HeadObservationData
+                            readOnly={readOnly}
+                            ref={op => {this.observationPoint = op;}}
+                            rows={boundary.indexedDateTimeValues}/>
+                    </LayoutComponents.Column>
+                );
             default:
                 return null;
         }
@@ -467,11 +478,7 @@ class BoundaryProperties extends React.Component {
                             <Select
                                 name="affected_layers"
                                 disabled={readOnly}
-                                value={
-                                    boundary.affected_layers
-                                        ? boundary.affected_layers[0]
-                                        : undefined
-                                }
+                                value={boundary.affected_layers ? boundary.affected_layers[0] : undefined}
                                 multi={boundary.type === 'chd' || boundary.type === 'ghb'}
                                 onChange={this.handleLayersChange}
                                 options={layers}
@@ -483,11 +490,7 @@ class BoundaryProperties extends React.Component {
                             <Select
                                 name="type"
                                 disabled={readOnly}
-                                value={
-                                    boundary.metadata
-                                        ? boundary.metadata.well_type
-                                        : ''
-                                }
+                                value={boundary.metadata ? boundary.metadata.well_type : ''}
                                 onChange={(data) => this.handleWellTypeChange(data.value)}
                                 options={[
                                     {

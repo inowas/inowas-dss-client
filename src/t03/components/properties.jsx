@@ -1,29 +1,31 @@
 import '../../less/leaflet.less';
 
 import React from 'react';
-import { LayoutComponents } from '../../core/index';
+import PropTypes from 'prop-types';
+import {LayoutComponents} from '../../core/index';
 import {
-    ModelEditorGeneral,
     ModelEditorBoundary,
+    ModelEditorGeneral,
+    ModelEditorModelRun,
+    ModelEditorCalibration,
     ModelEditorSoilmodel,
-    ModelEditorModelRun
 } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
-import { pure } from 'recompose';
+import {pure} from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
 
 const styles = {
     window: {
         width:
-            4 * styleGlobals.dimensions.gridColumn +
-            3 * styleGlobals.dimensions.gridGutter,
+        4 * styleGlobals.dimensions.gridColumn +
+        3 * styleGlobals.dimensions.gridGutter,
         position: 'relative',
         zIndex: 1100
     }
 };
 
-const properties = ({ tool, close, selectedProperty, type }) => {
+const properties = ({tool, close, selectedProperty, type}) => {
     switch (selectedProperty) {
         case 'create':
             return (
@@ -33,7 +35,20 @@ const properties = ({ tool, close, selectedProperty, type }) => {
                     close={close}
                     closeable={false}
                 >
-                    <ModelEditorGeneral tool={tool} />
+                    <ModelEditorGeneral tool={tool}/>
+                </LayoutComponents.CloseableWindow>
+            );
+
+
+        case 'soilmodel':
+            return (
+                <LayoutComponents.CloseableWindow
+                    heading="Soilmodel"
+                    style={styles.window}
+                    close={close}
+                    closeable
+                >
+                    <ModelEditorSoilmodel tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 
@@ -45,31 +60,19 @@ const properties = ({ tool, close, selectedProperty, type }) => {
                     close={close}
                     closeable
                 >
-                    <ModelEditorBoundary tool={tool} />
+                    <ModelEditorBoundary tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 
-        case 'soilmodel':
+        case 'observations':
             return (
                 <LayoutComponents.CloseableWindow
-                    heading="Soilmodel"
+                    heading="Observations"
                     style={styles.window}
                     close={close}
                     closeable
                 >
-                    <ModelEditorSoilmodel tool={tool} />
-                </LayoutComponents.CloseableWindow>
-            );
-
-        case 'results':
-            return (
-                <LayoutComponents.CloseableWindow
-                    heading="Results"
-                    style={styles.window}
-                    close={close}
-                    closeable
-                >
-                    <ModelEditorResults type={type} tool={tool} />
+                    <ModelEditorBoundary tool={tool} boundaryType={'hob'} />
                 </LayoutComponents.CloseableWindow>
             );
 
@@ -81,19 +84,32 @@ const properties = ({ tool, close, selectedProperty, type }) => {
                     close={close}
                     closeable
                 >
-                    <ModelEditorModelRun type={type} tool={tool} />
+                    <ModelEditorModelRun type={type} tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 
-        case 'calibration':
+        case 'results':
             return (
                 <LayoutComponents.CloseableWindow
-                    heading="Model Run"
+                    heading="Results"
                     style={styles.window}
                     close={close}
                     closeable
                 >
-                    {null}
+                    <ModelEditorResults type={type} tool={tool}/>
+                </LayoutComponents.CloseableWindow>
+            );
+
+
+        case 'calibration':
+            return (
+                <LayoutComponents.CloseableWindow
+                    heading="Calibration Statistics"
+                    style={styles.window}
+                    close={close}
+                    closeable
+                >
+                    <ModelEditorCalibration type={type} tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
 
@@ -105,10 +121,18 @@ const properties = ({ tool, close, selectedProperty, type }) => {
                     close={close}
                     closeable
                 >
-                    <ModelEditorGeneral tool={tool} />
+                    <ModelEditorGeneral tool={tool}/>
                 </LayoutComponents.CloseableWindow>
             );
     }
 };
+
+properties.propTypes = {
+    close: PropTypes.func.isRequired,
+    tool: PropTypes.string.isRequired,
+    selectedProperty: PropTypes.string,
+    type: PropTypes.string
+};
+
 
 export default pure(ConfiguredRadium(properties));
