@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
-import Button from '../../components/primitive/Button';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
@@ -12,9 +11,10 @@ import {StressPeriodProperties, CalculationStatus, RunModelOverview, PackageProp
 import {WebData} from '../../core';
 import RunModelProperties from '../components/runModelProperties';
 import ListFileProperties from '../components/ListFileProperties';
-import FilterableList from '../../components/primitive/FilterableList';
 import {Routing} from '../actions/index';
 import Calibration from '../components/Calibration';
+import VerticalMenu from '../../components/primitive/VerticalMenu';
+import {Button, Segment} from 'semantic-ui-react';
 
 const styles = {
     container: {
@@ -49,9 +49,9 @@ const styles = {
 };
 
 
-const menu = [
+const sideBarTopMenu = [
     {
-        id: '',
+        id: undefined,
         name: 'Overview'
     },
     {
@@ -65,20 +65,25 @@ const menu = [
     {
         id: 'flow',
         name: 'Flow Package'
-    },
+    }
+];
+
+
+const sideBarBottomMenu = [
     {
         id: 'calculation',
-        name: 'Show logs'
+        name: 'Calculation logs'
     },
     {
         id: 'files',
-        name: 'Show files'
+        name: 'Modflow files'
     },
     {
         id: 'calibration',
-        name: 'Calibration'
+        name: 'Calibration data'
     }
 ];
+
 
 class ModelEditorModelRun extends React.Component {
 
@@ -200,32 +205,68 @@ class ModelEditorModelRun extends React.Component {
         }
     }
 
-    render() {
+    renderSidebar = () => {
         const {calculateModflowModel, calculateModflowModelStatus, model, stopPolling} = this.props;
-        const {id} = this.props.params;
+        const {id, type} = this.props.params;
         const readOnly = !lodash.includes(model.permissions, 'w');
 
         const canCancel = WebData.Selector.isStatusLoading(calculateModflowModelStatus)
             && model.calculation.state !== Selector.model.CALCULATION_STATE_NEW;
 
         return (
-            <div style={[styles.container]}>
-                <div style={styles.left}>
-                    <FilterableList
-                        itemClickAction={this.onMenuClick}
-                        list={menu}
-                    />
-                    {!readOnly && !canCancel &&
-                    <WebData.Component.Loading status={calculateModflowModelStatus}>
-                        <Button type="full" onClick={() => calculateModflowModel(id)}>Calculate</Button>
-                    </WebData.Component.Loading>}
-                    {canCancel &&
-                    <Button type="full" onClick={stopPolling}>Cancel calculation</Button>}
-                    <h3 style={[styles.heading]}>
-                        Calculation Status
+            <div style={styles.left}>
+                <VerticalMenu
+                    activeItem={type}
+                    items={sideBarTopMenu}
+                    onClick={this.onMenuClick}
+                    style={{marginBottom: 20}}
+                />
+
+                <Segment style={{marginRight: 15}}>
+
+                    <h3 style={{...styles.heading, marginTop: 10}}>
+                        Calculation
                     </h3>
+
+                    {!readOnly && !canCancel &&
+                    <Button
+                        size="big"
+                        positive
+                        fluid
+                        onClick={() => calculateModflowModel(id)}
+                    >
+                        Calculate
+                    </Button>
+                    }
+
+                    {canCancel &&
+                    <Button
+                        size="big"
+                        negative
+                        fluid
+                        onClick={stopPolling}
+                    >
+                        Cancel calculation
+                    </Button>
+                    }
+
+                    <h3 style={[styles.heading]}>
+                        Progress
+                    </h3>
+
                     <CalculationStatus calculation={model.calculation}/>
-                </div>
+                </Segment>
+
+                <VerticalMenu activeItem={type} items={sideBarBottomMenu} onClick={this.onMenuClick}/>
+            </div>
+        );
+    };
+
+
+    render() {
+        return (
+            <div style={[styles.container]}>
+                {this.renderSidebar()}
                 <div style={styles.properties}>
                     <div style={[styles.columnFlex2]}>
                         {this.renderProperties()}
@@ -287,16 +328,19 @@ ModelEditorModelRun.propTypes = {
     calculation: PropTypes.object,
     getFileStatus: PropTypes.object,
     getModflowPackage: PropTypes.func,
+    getModflowPackageStatus: PropTypes.object,
+    getModflowPackagesStatus: PropTypes.object,
     getModflowPackages: PropTypes.func,
     model: PropTypes.object,
+    modflowPackages: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
     stopPolling: PropTypes.func,
     stressPeriods: PropTypes.object,
     updateModflowPackage: PropTypes.func,
+    updateModflowPackageStatus: PropTypes.object,
     updateStressPeriods: PropTypes.func,
     updateStressPeriodsStatus: PropTypes.object
 };
-
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorModelRun)));
