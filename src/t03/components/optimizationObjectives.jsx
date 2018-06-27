@@ -5,6 +5,7 @@ import OptimizationObjective from '../../core/optimization/OptimizationObjective
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../core';
 import {Button, Dropdown, Form, Grid, Icon, Segment, Table} from 'semantic-ui-react';
+import InputRange from './inputRange';
 
 class OptimizationObjectivesComponent extends React.Component {
 
@@ -30,9 +31,29 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     }
 
-    handleChange = (e, {name, value}) => this.setState({
-        selectedObjective: {...this.state.selectedObjective, [name]: value}
-    });
+    handleChange = (e, {name, value}) => {
+        return this.setState({
+            selectedObjective: {...this.state.selectedObjective, [name]: value}
+        });
+    };
+
+    handleChangeLocation = (e, {name, value}) => {
+        return this.setState({
+            selectedObjective: {
+                ...this.state.selectedObjective,
+                location: {...this.state.selectedObjective.location, [name]: value}
+            }
+        });
+    };
+
+    handleChangeLocationRange = ({name, from, to}) => {
+        return this.setState({
+            selectedObjective: {
+                ...this.state.selectedObjective,
+                location: {...this.state.selectedObjective.location, [name]: {from: from, to: to}}
+            }
+        });
+    };
 
     onBackButtonClick = () => {
         return this.setState({
@@ -49,7 +70,7 @@ class OptimizationObjectivesComponent extends React.Component {
     };
 
     onClickObjectiveList = (objective) => {
-        this.setState({
+        return this.setState({
             selectedObjective: objective
         });
     };
@@ -213,6 +234,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                         placeholder="weight ="
                                                         style={styles.inputfix}
                                                         onChange={this.handleChange}
+                                                        defaultChecked
                                                     />
                                                 </Form.Field>
                                                 <Form.Field>
@@ -229,19 +251,53 @@ class OptimizationObjectivesComponent extends React.Component {
                                             </Form.Group>
                                             <Segment>
                                                 <h4>Location</h4>
-                                                <Form.Field>
-                                                    <label>Type of location</label>
-                                                    <Form.Select
-                                                        name="location.type"
-                                                        // value={this.state.selectedObjective.location.type}
-                                                        placeholder="type ="
-                                                        options={[
-                                                            {key: 'bbox', text: 'bbox', value: 'bbox'},
-                                                            {key: 'object', text: 'object', value: 'object'}
-                                                        ]}
-                                                        onChange={this.handleChange}
-                                                    />
-                                                </Form.Field>
+                                                <Grid celled="internally">
+                                                    <Grid.Row textAlign="center">
+                                                        <Grid.Column width={6}>
+                                                            <Form.Checkbox
+                                                                name="type"
+                                                                label="At optimization object"
+                                                                value="object"
+                                                                checked={this.state.selectedObjective.location.type === 'object'}
+                                                                onChange={this.handleChangeLocation}
+                                                            />
+                                                        </Grid.Column>
+                                                        <Grid.Column width={10}>
+                                                            <Form.Checkbox
+                                                                name="type"
+                                                                label="At bounding box"
+                                                                value="bbox"
+                                                                checked={this.state.selectedObjective.location.type === 'bbox'}
+                                                                onChange={this.handleChangeLocation}
+                                                            />
+                                                        </Grid.Column>
+                                                    </Grid.Row>
+                                                    <Grid.Row>
+                                                        <Grid.Column width={6}>
+                                                            <Form.Field>
+                                                                <label>Optimization object</label>
+                                                                <Form.Select
+                                                                    disabled={this.state.selectedObjective.location.type !== 'object'}
+                                                                    name="type"
+                                                                    value={this.state.selectedObjective.type}
+                                                                    placeholder="type ="
+                                                                    options={typeOptions}
+                                                                    onChange={this.handleChange}
+                                                                />
+                                                            </Form.Field>
+                                                        </Grid.Column>
+                                                        <Grid.Column width={10}>
+                                                            <InputRange
+                                                                name="ts"
+                                                                from={this.state.selectedObjective.location.ts.from}
+                                                                to={this.state.selectedObjective.location.ts.to}
+                                                                label="Time steps"
+                                                                disabled={this.state.selectedObjective.location.type !== 'bbox'}
+                                                                onChange={this.handleChangeLocationRange}
+                                                            />
+                                                        </Grid.Column>
+                                                    </Grid.Row>
+                                                </Grid>
                                             </Segment>
                                         </Form>
                                         :
@@ -271,7 +327,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                         labelPosition="left"
                                                                         style={styles.iconfix}
                                                                         onClick={() => this.onClickDelete(objective)}>
-                                                                    <Icon name="trash alternate"/>
+                                                                    <Icon name="trash"/>
                                                                     Delete
                                                                 </Button>
                                                             </Table.Cell>

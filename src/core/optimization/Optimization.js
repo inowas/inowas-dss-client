@@ -36,7 +36,10 @@ class Optimization {
                 'penalty_value': 999,
                 'location': Location.fromObject({
                     'type': 'bbox',
-                    'ts': [0, 0],
+                    'ts': {
+                        'from': 0,
+                        'to': 0
+                    },
                     'lay': [0, 0],
                     'row': [90, 90],
                     'col': [90, 90]

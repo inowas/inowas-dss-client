@@ -1,3 +1,5 @@
+import Location from './Location';
+
 class OptimizationObjective {
 
     _type = '';
@@ -5,7 +7,7 @@ class OptimizationObjective {
     _summaryMethod ='';
     _weight = -1;
     _penaltyValue = 999;
-    _location; // Location
+    _location = new Location(); // Location
     _location1; // Location
     _location2; // Location
 
@@ -16,7 +18,7 @@ class OptimizationObjective {
         objective.summaryMethod = obj.summary_method;
         objective.weight = obj.weight;
         objective.penaltyValue = obj.penalty_value;
-        objective.location = obj.location;
+        objective.location = Location.fromObject(obj.location);
         objective.location1 = obj.location_1;
         objective.location2 = obj.location_2;
         return objective;
@@ -100,7 +102,7 @@ class OptimizationObjective {
             'summary_method': this.summaryMethod,
             'weight': this.weight,
             'penalty_value': this.penaltyValue,
-            'location': this.location,
+            'location': this.location.toObject,
             'location_1': this.location1,
             'location_2': this.location2
         });

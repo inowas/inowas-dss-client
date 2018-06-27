@@ -1,6 +1,6 @@
 class Location {
     _type;
-    _ts;
+    _ts = {from: 0, to: 0};
     _lay;
     _row;
     _col;
@@ -32,7 +32,9 @@ class Location {
     }
 
     set ts(value) {
-        this._ts = value;
+        if(value) {
+            this._ts = value;
+        }
     }
 
     get lay() {
