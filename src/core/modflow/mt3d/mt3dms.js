@@ -1,11 +1,24 @@
 import AbstractMt3dPackage from './AbstractMt3dPackage';
 import {includes} from 'lodash';
+import MtPackage from './mtPackage';
+import BtnPackage from './btnPackage';
+import AdvPackage from './advPackage';
+import DspPackage from './dspPackage';
+import GcgPackage from './gcgPackage';
+import SsmPackage from './ssmPackage';
 
 class mt3dms {
 
     _availablePackages = ['mt', 'btn', 'adv', 'dsp', 'gcg', 'ssm'];
 
-    _packages = {};
+    _packages = {
+        'mt': MtPackage.fromDefault(),
+        'btn': BtnPackage.fromDefault(),
+        'adv': AdvPackage.fromDefault(),
+        'dsp': DspPackage.fromDefault(),
+        'gcg': GcgPackage.fromDefault(),
+        'ssm': SsmPackage.fromDefault()
+    };
 
     get packages() {
         return this._packages;
