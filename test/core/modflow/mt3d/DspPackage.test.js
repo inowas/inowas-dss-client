@@ -3,6 +3,7 @@ import DspPackage from '../../../../src/core/modflow/mt3d/dspPackage';
 test('Get DspPackage from Default', () => {
     const dsp = DspPackage.fromDefault();
     expect(dsp).toBeInstanceOf(DspPackage);
+    expect(dsp.packageName).toEqual('dsp');
     expect(dsp.al).toEqual(0.01);
     expect(dsp.trpt).toEqual(0.1);
     expect(dsp.trpv).toEqual(0.01);

@@ -3,6 +3,7 @@ import MtPackage from '../../../../src/core/modflow/mt3d/mtPackage';
 test('Get MtPackage from Default', () => {
     const mt = MtPackage.fromDefault();
     expect(mt).toBeInstanceOf(MtPackage);
+    expect(mt.packageName).toEqual('mt');
     expect(mt.modelname).toEqual('mt');
     expect(mt.namefileExt).toEqual('nam');
     expect(mt.exeName).toEqual('mt3dms');

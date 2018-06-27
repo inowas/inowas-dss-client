@@ -3,6 +3,7 @@ import AdvPackage from '../../../../src/core/modflow/mt3d/advPackage';
 test('Get AdvPackage from Default', () => {
     const adv = AdvPackage.fromDefault();
     expect(adv).toBeInstanceOf(AdvPackage);
+    expect(adv.packageName).toEqual('adv');
     expect(adv.mixelm).toEqual(3);
     expect(adv.percel).toEqual(0.75);
     expect(adv.mxpart).toEqual(800000);

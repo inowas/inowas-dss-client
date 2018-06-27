@@ -3,6 +3,7 @@ import BtnPackage from '../../../../src/core/modflow/mt3d/btnPackage';
 test('Get BtnPackage from Default', () => {
     const btn = BtnPackage.fromDefault();
     expect(btn).toBeInstanceOf(BtnPackage);
+    expect(btn.packageName).toEqual('btn');
     expect(btn.MFStyleArr).toEqual(false);
     expect(btn.DRYCell).toEqual(false);
     expect(btn.Legacy99Stor).toEqual(false);
