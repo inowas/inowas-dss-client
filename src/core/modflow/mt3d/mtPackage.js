@@ -27,8 +27,7 @@ class MtPackage extends AbstractMt3dPackage {
     }
 
     constructor() {
-        super();
-        this._packageName = 'mt';
+        super('mt');
     }
 
     get modelname() {

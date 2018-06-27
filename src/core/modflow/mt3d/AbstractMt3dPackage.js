@@ -1,5 +1,9 @@
 class AbstractMt3dPackage {
-    _packageName = 'apn';
+    _packageName = '';
+
+    constructor(packageName) {
+        this._packageName = packageName;
+    }
 
     get packageName() {
         return this._packageName;

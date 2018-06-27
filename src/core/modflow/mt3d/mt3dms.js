@@ -12,9 +12,15 @@ class mt3dms {
     }
 
     addPackage = (p) => {
-        if ((p instanceof AbstractMt3dPackage) && includes(this._availablePackages, p.packageName)) {
-            this._packages[p.packageName] = p;
+        if (!(p instanceof AbstractMt3dPackage)) {
+            throw new Error('Package is not from type AbstractMt3dPackage');
         }
+
+        if (!includes(this._availablePackages, p.packageName)) {
+            throw new Error('Package is not in list of available Packages');
+        }
+
+        this._packages[p.packageName] = p;
     };
 
     get toObject() {
