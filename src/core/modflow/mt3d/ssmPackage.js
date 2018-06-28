@@ -2,6 +2,9 @@ import AbstractMt3dPackage from './AbstractMt3dPackage';
 
 class SsmPackage extends AbstractMt3dPackage {
 
+    // SET stress_period_data
+    // ssm_data[0] = [
+    // [4, 4, 4, 1.0, itype['GHB'], 1.0, 100.0)]
     _crch = null;
     _cevt = null;
     _mxss = null;
