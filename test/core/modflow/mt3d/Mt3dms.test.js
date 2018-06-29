@@ -12,6 +12,19 @@ test('Create Mt3Dms', () => {
     expect(mt3dms).toBeInstanceOf(Mt3dms);
 });
 
+test('Create Mt3Dms from defaults', () => {
+    const mt3dms = Mt3dms.fromDefaults();
+    expect(mt3dms).toBeInstanceOf(Mt3dms);
+});
+
+test('It can enable and disable Mt3dms', () => {
+    const mt3dms = Mt3dms.fromDefaults();
+    expect(mt3dms.enabled).toEqual(false);
+    mt3dms.enabled = true;
+    expect(mt3dms.enabled).toEqual(true);
+    expect(mt3dms).toBeInstanceOf(Mt3dms);
+});
+
 test('Set mt-package', () => {
     const mt3dms = new Mt3dms();
     expect(mt3dms).toBeInstanceOf(Mt3dms);
@@ -24,6 +37,7 @@ test('Mt3Ds toObject', () => {
     expect(mt3dms).toBeInstanceOf(Mt3dms);
     mt3dms.addPackage(MtPackage.fromDefault());
     expect(mt3dms.toObject).toEqual({
+        enabled: false,
         packages: ['mt', 'btn', 'adv', 'dsp', 'gcg', 'ssm'],
         run_model: true,
         write_input: true,
@@ -34,6 +48,12 @@ test('Mt3Ds toObject', () => {
         gcg: GcgPackage.fromDefault().toObject,
         ssm: SsmPackage.fromDefault().toObject
     });
+});
+
+test('Mt3Ds fromObject', () => {
+    const mt3dmsObj = new Mt3dms().toObject;
+    const mt3dms = Mt3dms.fromObject(mt3dmsObj);
+    expect(mt3dms).toBeInstanceOf(Mt3dms);
 });
 
 test('Not valid packages throws errors', () => {
