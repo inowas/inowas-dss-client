@@ -5,6 +5,7 @@ import AdvPackage from '../../../../src/core/modflow/mt3d/advPackage';
 import DspPackage from '../../../../src/core/modflow/mt3d/dspPackage';
 import GcgPackage from '../../../../src/core/modflow/mt3d/gcgPackage';
 import SsmPackage from '../../../../src/core/modflow/mt3d/ssmPackage';
+import AbstractMt3dPackage from '../../../../src/core/modflow/mt3d/AbstractMt3dPackage';
 
 test('Create Mt3Dms', () => {
     const mt3dms = new Mt3dms();
@@ -37,5 +38,6 @@ test('Mt3Ds toObject', () => {
 
 test('Not valid packages throws errors', () => {
     const mt3dms = new Mt3dms();
-    expect(() => mt3dms.addPackage({}).toThrow());
+    expect(() => mt3dms.addPackage('string')).toThrow();
+    expect(() => mt3dms.addPackage(new AbstractMt3dPackage)).toThrow();
 });

@@ -36,6 +36,7 @@ test('Method toArray', () => {
 });
 
 test('Invalid array throws error', () => {
+    expect(() => new Mt3dStressPeriodDataSet('notAnArray')).toThrow();
     expect(() => new Mt3dStressPeriodDataSet({})).toThrow();
     expect(() => new Mt3dStressPeriodDataSet([])).toThrow();
 });

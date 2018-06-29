@@ -8,15 +8,16 @@ class Mt3dStressPeriodData {
     _data = {};
 
     static fromObject = (obj) => {
-        const spData = Mt3dStressPeriodData();
-        Object.keys(obj).forEach((key) => {
-            const sp = obj[key];
-            sp.forEach(spItems => {
-                spItems.forEach(
-                    item => spData.addData(sp, Mt3dStressPeriodDataSet.fromArray(item))
-                );
-            });
+        const spData = new Mt3dStressPeriodData();
+        const keys = Object.keys(obj);
+        keys.forEach((sp) => {
+            const spItems = obj[sp];
+            spItems.forEach(
+                item => spData.addData(sp, Mt3dStressPeriodDataSet.fromArray(item))
+            );
         });
+
+        return spData;
     };
 
     get data() {
@@ -38,14 +39,17 @@ class Mt3dStressPeriodData {
     };
 
     get toObject() {
-        const obj = this.data;
-        const keys = Object.keys(obj);
-        keys.forEach((key) => {
-            obj[key] = obj[key].map(
+        const response = {};
+        Object.keys(this.data).forEach((key) => {
+            response[key] = this.data[key].map(
                 spItem => spItem.toArray
             );
         });
-        return obj;
+        return response;
+    }
+
+    get toPackageData() {
+        return this.toObject;
     }
 }
 
