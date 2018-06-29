@@ -1,12 +1,10 @@
-import Mt3dPackageFactory from '../../../../src/core/modflow/mt3d/Mt3dPackageFactory';
-import MtPackage from '../../../../src/core/modflow/mt3d/mtPackage';
-import Mt3dms from '../../../../src/core/modflow/mt3d/mt3dms';
-import BtnPackage from '../../../../src/core/modflow/mt3d/btnPackage';
 import AdvPackage from '../../../../src/core/modflow/mt3d/advPackage';
+import BtnPackage from '../../../../src/core/modflow/mt3d/btnPackage';
 import DspPackage from '../../../../src/core/modflow/mt3d/dspPackage';
 import GcgPackage from '../../../../src/core/modflow/mt3d/gcgPackage';
+import Mt3dPackageFactory from '../../../../src/core/modflow/mt3d/Mt3dPackageFactory';
+import MtPackage from '../../../../src/core/modflow/mt3d/mtPackage';
 import SsmPackage from '../../../../src/core/modflow/mt3d/ssmPackage';
-import AbstractMt3dPackage from '../../../../src/core/modflow/mt3d/AbstractMt3dPackage';
 
 test('Create Adv-Package from Object', () => {
     const p = AdvPackage.fromDefault();
