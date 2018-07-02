@@ -7,8 +7,8 @@ import {
     ModelEditorBoundary,
     ModelEditorGeneral,
     ModelEditorModelRun,
-    ModelEditorCalibration,
     ModelEditorSoilmodel,
+    ModelEditorTransport,
 } from '../containers/index';
 import ModelEditorResults from './ModelEditorResults';
 import styleGlobals from 'styleGlobals';
@@ -64,7 +64,7 @@ const properties = ({tool, close, selectedProperty, type}) => {
                 </LayoutComponents.CloseableWindow>
             );
 
-        case 'observations':
+        case 'transport':
             return (
                 <LayoutComponents.CloseableWindow
                     heading="Observations"
@@ -72,7 +72,7 @@ const properties = ({tool, close, selectedProperty, type}) => {
                     close={close}
                     closeable
                 >
-                    <ModelEditorBoundary tool={tool} boundaryType={'hob'} />
+                    <ModelEditorTransport tool={tool}  />
                 </LayoutComponents.CloseableWindow>
             );
 

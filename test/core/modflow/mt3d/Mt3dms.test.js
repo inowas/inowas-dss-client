@@ -17,11 +17,13 @@ test('Create Mt3Dms from defaults', () => {
     expect(mt3dms).toBeInstanceOf(Mt3dms);
 });
 
-test('It can enable and disable Mt3dms', () => {
+test('It can enable, disable and toggleEnabled Mt3dms', () => {
     const mt3dms = Mt3dms.fromDefaults();
     expect(mt3dms.enabled).toEqual(false);
     mt3dms.enabled = true;
     expect(mt3dms.enabled).toEqual(true);
+    mt3dms.toggleEnabled();
+    expect(mt3dms.enabled).toEqual(false);
     expect(mt3dms).toBeInstanceOf(Mt3dms);
 });
 

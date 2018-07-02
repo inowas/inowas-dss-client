@@ -138,6 +138,12 @@ class T03 extends React.Component {
                 ]
             },
             {
+                title: 'Transport',
+                name: 'transport',
+                icon: <Icon name="target"/>,
+                disabled: initial
+            },
+            {
                 title: 'Run',
                 name: 'model-run',
                 icon: <Icon name="calculator"/>,

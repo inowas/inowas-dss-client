@@ -47,6 +47,10 @@ class mt3dms {
         return this._enabled;
     }
 
+    toggleEnabled() {
+        this._enabled = !this._enabled;
+    }
+
     set enabled(value) {
         this._enabled = value;
     }

@@ -5,6 +5,7 @@ import ModelEditorGeneral from './modelEditorGeneral';
 import ModelEditorModelRun from './modelEditorModelRun';
 import ModelEditorResultsHead from './modelEditorResultsHead';
 import ModelEditorSoilmodel from './modelEditorSoilmodel';
+import ModelEditorTransport from './modelEditorTransport';
 
 export {
     BoundaryOverview,
@@ -14,4 +15,5 @@ export {
     ModelEditorModelRun,
     ModelEditorResultsHead,
     ModelEditorSoilmodel,
+    ModelEditorTransport
 };
