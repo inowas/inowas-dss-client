@@ -40,7 +40,8 @@ class mt3dms {
         return mt;
     }
 
-    constructor() {}
+    constructor() {
+    }
 
     get enabled() {
         return this._enabled;
@@ -68,6 +69,14 @@ class mt3dms {
         }
 
         this.packages[p.packageName] = p;
+    };
+
+    getPackage = (packageName) => {
+        if (this.packages.hasOwnProperty(packageName)) {
+            return this.packages[packageName];
+        }
+
+        throw new Error('Package with packageName: ' + packageName + ' not found.');
     };
 
     get toObject() {

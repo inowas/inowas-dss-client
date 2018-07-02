@@ -32,6 +32,18 @@ test('Set mt-package', () => {
     expect(mt3dms.packages.mt).toEqual(MtPackage.fromDefault());
 });
 
+test('Get mt-package', () => {
+    const mt3dms = new Mt3dms();
+    expect(mt3dms).toBeInstanceOf(Mt3dms);
+    mt3dms.addPackage(MtPackage.fromDefault());
+    expect(mt3dms.getPackage('mt')).toEqual(MtPackage.fromDefault());
+});
+
+test('Get not available package throws an error', () => {
+    const mt3dms = new Mt3dms();
+    expect(() => mt3dms.getPackage('unknown')).toThrow();
+});
+
 test('Mt3Ds toObject', () => {
     const mt3dms = new Mt3dms();
     expect(mt3dms).toBeInstanceOf(Mt3dms);
