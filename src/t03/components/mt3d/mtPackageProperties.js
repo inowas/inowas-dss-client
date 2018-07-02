@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import MtPackage from '../../../core/modflow/mt3d/mtPackage';
-import {Button, Checkbox, Form} from 'semantic-ui-react';
+import {Checkbox, Form} from 'semantic-ui-react';
 
 class MtPackageProperties extends React.Component {
     constructor(props) {
@@ -17,19 +17,9 @@ class MtPackageProperties extends React.Component {
         });
     }
 
-    handleChange = (name, value) => {
-        const mt = {
-            ...this.state.mt,
-            [name]: value
-        };
-
-        this.setState(mt);
-        this.props.onChange(MtPackage.fromObject(mt));
-    };
-
     render() {
         const {enabled, readonly, toggleEnabled} = this.props;
-        const mtPackage = MtPackage.fromObject(this.state.mt);
+        const {mt} = this.state;
 
         return (
             <div>
@@ -40,17 +30,16 @@ class MtPackageProperties extends React.Component {
                     </Form.Field>
                     <Form.Field>
                         <label>Version</label>
-                        <input value={mtPackage.version} readOnly disabled={readonly}/>
+                        <input value={mt.version} readOnly/>
                     </Form.Field>
                     <Form.Field>
                         <label>Ftl filename</label>
-                        <input value={mtPackage.ftlfilename} readOnly/>
+                        <input value={mt.ftlfilename} readOnly/>
                     </Form.Field>
                     <Form.Field>
                         <label>Verbose</label>
-                        <input value={mtPackage.verbose} readOnly/>
+                        <input value={mt.verbose} readOnly/>
                     </Form.Field>
-                    <Button type={'submit'} disabled={readonly}>Save</Button>
                 </Form>
             </div>
         );

@@ -15,9 +15,10 @@ import {Routing} from '../actions/index';
 import Calibration from '../components/Calibration';
 import VerticalMenu from '../../components/primitive/VerticalMenu';
 import {Button, Segment} from 'semantic-ui-react';
-import MtPackageProperties from "../components/mt3d/mtPackageProperties";
-import mt3dms from "../../core/modflow/mt3d/mt3dms";
-import AbstractMt3dPackage from "../../core/modflow/mt3d/AbstractMt3dPackage";
+import MtPackageProperties from '../components/mt3d/mtPackageProperties';
+import Mt3dms from '../../core/modflow/mt3d/mt3dms';
+import AbstractMt3dPackage from '../../core/modflow/mt3d/AbstractMt3dPackage';
+import BtnPackageProperties from "../components/mt3d/btnPackageProperties";
 
 const styles = {
     container: {
@@ -88,15 +89,19 @@ class ModelEditorTransport extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.state = {
-            mt3dms: nextProps.mt3dms.toObject
-        };
+        if (!this.state.mt3dms) {
+            this.state = {
+                mt3dms: nextProps.mt3dms.toObject
+            };
+        }
     }
 
-    handleChange = (p) => {
+    handleChangePackage = (p) => {
         if (p instanceof AbstractMt3dPackage) {
+            const newMt3dms = Mt3dms.fromObject(this.state.mt3dms);
+            newMt3dms.addPackage(p);
             return this.setState({
-                mt3dms: mt3dms.fromObject(this.state.mt3dms).addPackage(p).toObject
+                mt3dms: newMt3dms.toObject
             });
         }
 
@@ -104,9 +109,9 @@ class ModelEditorTransport extends React.Component {
     };
 
     handleToggleEnabled = () => {
-        const changedMt3dms =  mt3dms.fromObject(this.state.mt3dms);
+        const changedMt3dms = Mt3dms.fromObject(this.state.mt3dms);
         changedMt3dms.toggleEnabled();
-        this.setState({
+        return this.setState({
             mt3dms: changedMt3dms.toObject
         });
     };
@@ -121,18 +126,26 @@ class ModelEditorTransport extends React.Component {
             return null;
         }
 
-        const mt3d = mt3dms.fromObject(this.state.mt3dms);
+        const mt3d = Mt3dms.fromObject(this.state.mt3dms);
         const {model} = this.props;
         const readOnly = !lodash.includes(model.permissions, 'w');
 
         const {type} = this.props.params;
 
         switch (type) {
+            case 'btn':
+                return (
+                    <BtnPackageProperties
+                        btn={mt3d.getPackage('btn')}
+                        onChange={this.handleChangePackage}
+                        readonly={readOnly}
+                    />
+                );
             default:
                 return (
                     <MtPackageProperties
                         mt={mt3d.getPackage('mt')}
-                        onChange={this.handleChange}
+                        onChange={this.handleChangePackage}
                         enabled={mt3d.enabled}
                         toggleEnabled={this.handleToggleEnabled}
                         readonly={readOnly}
@@ -197,7 +210,7 @@ const mapDispatchToProps = (dispatch, {tool}) => {
 ModelEditorTransport.propTypes = {
     tool: PropTypes.string,
     model: PropTypes.object,
-    mt3dms: PropTypes.instanceOf(mt3dms),
+    mt3dms: PropTypes.instanceOf(Mt3dms),
     params: PropTypes.object.isRequired,
     routes: PropTypes.array
 };

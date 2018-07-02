@@ -100,19 +100,6 @@ const properties = ({tool, close, selectedProperty, type}) => {
                 </LayoutComponents.CloseableWindow>
             );
 
-
-        case 'calibration':
-            return (
-                <LayoutComponents.CloseableWindow
-                    heading="Calibration Statistics"
-                    style={styles.window}
-                    close={close}
-                    closeable
-                >
-                    <ModelEditorCalibration type={type} tool={tool}/>
-                </LayoutComponents.CloseableWindow>
-            );
-
         default:
             return (
                 <LayoutComponents.CloseableWindow
