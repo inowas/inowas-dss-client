@@ -10,6 +10,8 @@ class OptimizationParameters {
     _indpb = {value: 0.1, parse: (x) => parseFloat(x), min: 0, max: 1};
     _maxf = {value: 50, parse: (x) => parseInt(x, 10), min: 1, max: 200};
     _qbound = {value: 0.25, parse: (x) => parseFloat(x), min: 0, max: 1};
+    _xtol = {value: 0.0001, parse: (x) => parseFloat(x), min: 0, max: 1};
+    _ftol = {value: 0.0001, parse: (x) => parseFloat(x), min: 0, max: 1};
     _diversityFlg = {value: false};
 
     static fromDefaults() {
@@ -28,6 +30,8 @@ class OptimizationParameters {
         parameters.ncls = obj.ncls;
         parameters.maxf = obj.maxf;
         parameters.qbound = obj.qbound;
+        parameters.xtol = obj.xtol;
+        parameters.ftol = obj.ftol;
         parameters.diversityFlg = obj.diversity_flg;
         return parameters;
     }
@@ -122,6 +126,22 @@ class OptimizationParameters {
         this._qbound.value = this.applyMinMax(this._qbound.parse(value), this._qbound.min, this._qbound.max);
     }
 
+    get xtol() {
+        return this._xtol.value;
+    }
+
+    set xtol(value) {
+        this._xtol.value = this.applyMinMax(this._xtol.parse(value), this._xtol.min, this._xtol.max);
+    }
+
+    get ftol() {
+        return this._ftol.value;
+    }
+
+    set ftol(value) {
+        this._ftol.value = this.applyMinMax(this._ftol.parse(value), this._ftol.min, this._ftol.max);
+    }
+
     get diversityFlg() {
         return this._diversityFlg.value;
     }
@@ -155,6 +175,8 @@ class OptimizationParameters {
             'ncls': this.ncls,
             'maxf': this.maxf,
             'qbound': this.qbound,
+            'xtol': this.xtol,
+            'ftol': this.ftol,
             'diversity_flg': this.diversityFlg,
         });
     }

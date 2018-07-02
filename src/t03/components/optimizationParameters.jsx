@@ -239,6 +239,34 @@ class OptimizationParametersComponent extends React.Component {
                                     disabled={(parameters.method !== 'simplex')}
                                 />
                             </Form.Field>
+                            <Form.Group widths="equal">
+                                <Form.Field>
+                                    <label>xtol</label>
+                                    <Form.Input
+                                        type="number"
+                                        name="xtol"
+                                        value={parameters.xtol}
+                                        placeholder="xtol ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        style={styles.input}
+                                        disabled={(parameters.method !== 'simplex')}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>ftol</label>
+                                    <Form.Input
+                                        type="number"
+                                        name="ftol"
+                                        value={parameters.ftol}
+                                        placeholder="ftol ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        style={styles.input}
+                                        disabled={(parameters.method !== 'simplex')}
+                                    />
+                                </Form.Field>
+                            </Form.Group>
                         </div>
                     )}
                 </Form>
