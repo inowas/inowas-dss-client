@@ -38,8 +38,6 @@ const styles = {
     }
 };
 
-// TODO: onChange refpoint
-
 class OptimizationParametersComponent extends React.Component {
 
     constructor(props) {
@@ -77,155 +75,157 @@ class OptimizationParametersComponent extends React.Component {
             }
         ];
         const {parameters} = this.state;
-        const {objectives} = this.props;
 
         return (<div style={[styles.columnContainer]}>
             <LayoutComponents.Column heading="Parameters" style={[styles.columnNotLast]}>
                 <Form>
-                    <Form.Group widths="equal">
-                        <Form.Field>
-                            <label>Number of generations of genetic algorithm</label>
-                            <Form.Input
-                                type="text"
-                                name="ngen"
-                                value={parameters.ngen}
-                                placeholder="ngen ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                style={styles.input}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>Population size of genetic algorithm</label>
-                            <Form.Input
-                                type="number"
-                                name="pop_size"
-                                value={parameters.pop_size}
-                                placeholder="pop_size ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                style={styles.input}
-                            />
-                        </Form.Field>
-                    </Form.Group>
-                    <Form.Group widths="equal">
-                        <Form.Field>
-                            <label>Probability of individual to be produced by mutation</label>
-                            <Form.Input
-                                type="number"
-                                name="mutpb"
-                                value={parameters.mutpb}
-                                placeholder="mutpb ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                style={styles.input}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>Probability of individual to be produced by cross-over</label>
-                            <Form.Input
-                                type="number"
-                                name="cxpb"
-                                value={parameters.cxpb}
-                                placeholder="cxpb ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                style={styles.input}
-                            />
-                        </Form.Field>
-                    </Form.Group>
                     <Form.Field>
-                        <label>ETA crowding factor</label>
-                        <Form.Input
-                            type="number"
-                            name="eta"
-                            value={parameters.eta}
-                            placeholder="eta ="
+                        <label>Method of optimization</label>
+                        <Form.Select
+                            name="method"
+                            value={parameters.method}
+                            placeholder="method ="
                             onChange={this.handleChange}
                             onBlur={this.handleSubmit}
-                            style={styles.input}
+                            options={[
+                                {
+                                    key: 'ga',
+                                    value: 'ga',
+                                    text: 'GA'
+                                },
+                                {
+                                    key: 'simplex',
+                                    value: 'simplex',
+                                    text: 'Simplex'
+                                }
+                            ]}
                         />
                     </Form.Field>
-                    <Form.Field>
-                        <label>Probability of mutation of a single value of an individual</label>
-                        <Form.Input
-                            name="indpb"
-                            type="number"
-                            value={parameters.indpb}
-                            placeholder="indpb ="
-                            onChange={this.handleChange}
-                            onBlur={this.handleSubmit}
-                            style={styles.input}
-                        />
-                    </Form.Field>
-                    <Segment>
-                        <Form.Field>
-                            <label>Flag defining whether or not Diversity preserving module will be included</label>
-                            <Form.Select
-                                name="diversity_flg"
-                                value={parameters.diversity_flg}
-                                placeholder="diversity_flg ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                options={boolOptions}
-                            />
-                        </Form.Field>
-                        <Form.Group widths="equal">
+                    {(parameters.method === 'ga' &&
+                        <div>
+                            <Form.Group widths="equal">
+                                <Form.Field>
+                                    <label>Number of generations of genetic algorithm</label>
+                                    <Form.Input
+                                        type="text"
+                                        name="ngen"
+                                        value={parameters.ngen}
+                                        placeholder="ngen ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        style={styles.input}
+                                        disabled={(parameters.method !== 'ga')}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Population size of genetic algorithm</label>
+                                    <Form.Input
+                                        type="number"
+                                        name="pop_size"
+                                        value={parameters.pop_size}
+                                        placeholder="pop_size ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        style={styles.input}
+                                    />
+                                </Form.Field>
+                            </Form.Group>
+                            <Form.Group widths="equal">
+                                <Form.Field>
+                                    <label>Probability of individual to be produced by mutation</label>
+                                    <Form.Input
+                                        type="number"
+                                        name="mutpb"
+                                        value={parameters.mutpb}
+                                        placeholder="mutpb ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        style={styles.input}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Probability of individual to be produced by cross-over</label>
+                                    <Form.Input
+                                        type="number"
+                                        name="cxpb"
+                                        value={parameters.cxpb}
+                                        placeholder="cxpb ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        style={styles.input}
+                                    />
+                                </Form.Field>
+                            </Form.Group>
                             <Form.Field>
-                                <label>Boundary value of the Q diversity index.</label>
+                                <label>ETA crowding factor</label>
                                 <Form.Input
                                     type="number"
-                                    name="qbound"
-                                    value={parameters.qbound}
-                                    placeholder="qbound ="
+                                    name="eta"
+                                    value={parameters.eta}
+                                    placeholder="eta ="
                                     onChange={this.handleChange}
                                     onBlur={this.handleSubmit}
                                     style={styles.input}
-                                    disabled={(parameters.diversity_flg === false)}
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Number of classes to be used in the clustering module.</label>
+                                <label>Probability of mutation of a single value of an individual</label>
                                 <Form.Input
+                                    name="indpb"
                                     type="number"
-                                    name="ncls"
-                                    value={parameters.ncls}
-                                    placeholder="ncls ="
+                                    value={parameters.indpb}
+                                    placeholder="indpb ="
                                     onChange={this.handleChange}
                                     onBlur={this.handleSubmit}
                                     style={styles.input}
-                                    disabled={(parameters.diversity_flg === false)}
                                 />
                             </Form.Field>
-                        </Form.Group>
-                    </Segment>
-                    <Segment>
-                        <Form.Field>
-                            <label>Flag defining whether or not Local search module will be included</label>
-                            <Form.Select
-                                name="local_opt_flg"
-                                value={parameters.local_opt_flg}
-                                placeholder="local_opt_flg ="
-                                onChange={this.handleChange}
-                                onBlur={this.handleSubmit}
-                                options={boolOptions}
-                            />
-                        </Form.Field>
-                        <Form.Group widths="equal">
-                            <Form.Field>
-                                <label>Number of individuals to be selected for local optimization from every
-                                    generation.</label>
-                                <Form.Input
-                                    type="number"
-                                    name="nlocal"
-                                    value={parameters.nlocal}
-                                    placeholder="nlocal ="
-                                    onChange={this.handleChange}
-                                    onBlur={this.handleSubmit}
-                                    style={styles.input}
-                                    disabled={(parameters.local_opt_flg === false)}
-                                />
-                            </Form.Field>
+                            <Segment>
+                                <Form.Field>
+                                    <label>Flag defining whether or not Diversity preserving module will be
+                                        included</label>
+                                    <Form.Select
+                                        name="diversity_flg"
+                                        value={parameters.diversity_flg}
+                                        placeholder="diversity_flg ="
+                                        onChange={this.handleChange}
+                                        onBlur={this.handleSubmit}
+                                        options={boolOptions}
+                                    />
+                                </Form.Field>
+                                <Form.Group widths="equal">
+                                    <Form.Field>
+                                        <label>Boundary value of the Q diversity index.</label>
+                                        <Form.Input
+                                            type="number"
+                                            name="qbound"
+                                            value={parameters.qbound}
+                                            placeholder="qbound ="
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleSubmit}
+                                            style={styles.input}
+                                            disabled={(parameters.diversity_flg === false)}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <label>Number of classes to be used in the clustering module.</label>
+                                        <Form.Input
+                                            type="number"
+                                            name="ncls"
+                                            value={parameters.ncls}
+                                            placeholder="ncls ="
+                                            onChange={this.handleChange}
+                                            onBlur={this.handleSubmit}
+                                            style={styles.input}
+                                            disabled={(parameters.diversity_flg === false)}
+                                        />
+                                    </Form.Field>
+                                </Form.Group>
+                            </Segment>
+                        </div>
+                    )}
+                    {(parameters.method === 'simplex' &&
+                        <div>
                             <Form.Field>
                                 <label>Maximum number of function evaluations during the local optimization.</label>
                                 <Form.Input
@@ -236,31 +236,11 @@ class OptimizationParametersComponent extends React.Component {
                                     onChange={this.handleChange}
                                     onBlur={this.handleSubmit}
                                     style={styles.input}
-                                    disabled={(parameters.local_opt_flg === false)}
+                                    disabled={(parameters.method !== 'simplex')}
                                 />
                             </Form.Field>
-                        </Form.Group>
-                        {
-                            objectives.map((o, i) => {
-                                return (
-                                    <Form.Field key={i}>
-                                        {(i === 0 ?
-                                            <label>Reference point for the local optimization aka ideal objective
-                                                vector.</label> : '')}
-                                        <Form.Input
-                                            type="number"
-                                            name="refpoint_x"
-                                            placeholder={`refpoint_${i} =`}
-                                            onChange={this.handleChange}
-                                            onBlur={this.handleSubmit}
-                                            style={styles.input}
-                                            disabled={(parameters.local_opt_flg === false)}
-                                        />
-                                    </Form.Field>
-                                );
-                            })
-                        }
-                    </Segment>
+                        </div>
+                    )}
                 </Form>
             </LayoutComponents.Column>
         </div>);
@@ -269,7 +249,6 @@ class OptimizationParametersComponent extends React.Component {
 
 OptimizationParametersComponent.propTypes = {
     parameters: PropTypes.instanceOf(OptimizationParameters),
-    objectives: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired
 };
 

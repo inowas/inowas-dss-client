@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import ConfiguredRadium from 'ConfiguredRadium';
 import {Form} from 'semantic-ui-react';
-import OptimizationParameters from '../../core/optimization/OptimizationParameters';
 
 class InputRange extends React.Component {
 

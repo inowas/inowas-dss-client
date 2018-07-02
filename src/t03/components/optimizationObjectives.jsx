@@ -9,9 +9,11 @@ import InputRange from './inputRange';
 
 class OptimizationObjectivesComponent extends React.Component {
 
+    // TODO: Get objects from above
     constructor(props) {
         super(props);
         this.state = {
+            objects: [],
             objectives: props.objectives.map((objective, key) => {
                 const obj = objective.toObject;
                 obj.id = key + 1;
@@ -281,7 +283,11 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                     name="type"
                                                                     value={this.state.selectedObjective.type}
                                                                     placeholder="type ="
-                                                                    options={typeOptions}
+                                                                    options={
+                                                                        this.state.objects.map((value, index) => {
+                                                                            return value.type;
+                                                                        })
+                                                                    }
                                                                     onChange={this.handleChange}
                                                                 />
                                                             </Form.Field>
@@ -292,6 +298,30 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 from={this.state.selectedObjective.location.ts.from}
                                                                 to={this.state.selectedObjective.location.ts.to}
                                                                 label="Time steps"
+                                                                disabled={this.state.selectedObjective.location.type !== 'bbox'}
+                                                                onChange={this.handleChangeLocationRange}
+                                                            />
+                                                            <InputRange
+                                                                name="lay"
+                                                                from={this.state.selectedObjective.location.lay.from}
+                                                                to={this.state.selectedObjective.location.lay.to}
+                                                                label="Layer"
+                                                                disabled={this.state.selectedObjective.location.type !== 'bbox'}
+                                                                onChange={this.handleChangeLocationRange}
+                                                            />
+                                                            <InputRange
+                                                                name="row"
+                                                                from={this.state.selectedObjective.location.row.from}
+                                                                to={this.state.selectedObjective.location.row.to}
+                                                                label="Row"
+                                                                disabled={this.state.selectedObjective.location.type !== 'bbox'}
+                                                                onChange={this.handleChangeLocationRange}
+                                                            />
+                                                            <InputRange
+                                                                name="col"
+                                                                from={this.state.selectedObjective.location.col.from}
+                                                                to={this.state.selectedObjective.location.col.to}
+                                                                label="Column"
                                                                 disabled={this.state.selectedObjective.location.type !== 'bbox'}
                                                                 onChange={this.handleChangeLocationRange}
                                                             />

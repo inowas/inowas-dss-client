@@ -1,5 +1,6 @@
 class OptimizationParameters {
 
+    _method = {value: 'ga'};
     _ngen = {value: 100, parse: (x) => parseInt(x, 10), min: 1, max: 100};
     _ncls = {value: 1, parse: (x) => parseInt(x, 10), min: 1, max: 10};
     _popSize = {value: 100, parse: (x) => parseInt(x, 10), min: 2, max: 100};
@@ -7,12 +8,9 @@ class OptimizationParameters {
     _cxpb = {value: 0.9, parse: (x) => parseFloat(x), min: 0, max: 1};
     _eta = {value: 20, parse: (x) => parseFloat(x), min: 1, max: 30};
     _indpb = {value: 0.1, parse: (x) => parseFloat(x), min: 0, max: 1};
-    _nlocal = {value: 0, parse: (x) => parseInt(x, 10), min: 0, max: 100};
     _maxf = {value: 50, parse: (x) => parseInt(x, 10), min: 1, max: 200};
     _qbound = {value: 0.25, parse: (x) => parseFloat(x), min: 0, max: 1};
     _diversityFlg = {value: false};
-    _localOptFlg = {value: false};
-    _refpoint = {value: [0, 0]};
 
     static fromDefaults() {
         return new OptimizationParameters();
@@ -20,6 +18,7 @@ class OptimizationParameters {
 
     static fromObject(obj) {
         const parameters = new OptimizationParameters();
+        parameters.method = obj.method;
         parameters.ngen = obj.ngen;
         parameters.popSize = obj.pop_size;
         parameters.mutpb = obj.mutpb;
@@ -27,16 +26,28 @@ class OptimizationParameters {
         parameters.eta = obj.eta;
         parameters.indpb = obj.indpb;
         parameters.ncls = obj.ncls;
-        parameters.nlocal = obj.nlocal;
         parameters.maxf = obj.maxf;
         parameters.qbound = obj.qbound;
         parameters.diversityFlg = obj.diversity_flg;
-        parameters.localOptFlg = obj.local_opt_flg;
-        parameters.refpoint = obj.refpoint;
         return parameters;
     }
 
     constructor() {}
+
+    get method() {
+        return this._method.value;
+    }
+
+    set method(value) {
+        switch(value) {
+            case 'ga':
+                this._method.value = 'ga';
+                break;
+            default:
+                this._method.value = 'simplex';
+                break;
+        }
+    }
 
     get ngen() {
         return this._ngen.value;
@@ -52,7 +63,6 @@ class OptimizationParameters {
 
     set popSize(value) {
         this._popSize.value = this.applyMinMax(this._popSize.parse(value), (this._ncls.value < 2 ? 2 : this._ncls.value), this._popSize.max);
-        this._nlocal.value = this.applyMinMax(this._nlocal.value, this._nlocal.min, this._popSize.value);
     }
 
     get mutpb() {
@@ -96,14 +106,6 @@ class OptimizationParameters {
         this._popSize.value = this.applyMinMax(this._popSize.value, (this._ncls.value < 2 ? 2 : this._ncls.value), this._popSize.max);
     }
 
-    get nlocal() {
-        return this._nlocal.value;
-    }
-
-    set nlocal(value) {
-        this._nlocal.value = this.applyMinMax(this._nlocal.parse(value), this._nlocal.min, this._popSize.value);
-    }
-
     get maxf() {
         return this._maxf.value;
     }
@@ -128,22 +130,6 @@ class OptimizationParameters {
         this._diversityFlg.value = value;
     }
 
-    get localOptFlg() {
-        return this._localOptFlg.value;
-    }
-
-    set localOptFlg(value) {
-        this._localOptFlg.value = value;
-    }
-
-    get refpoint() {
-        return this._refpoint.value;
-    }
-
-    set refpoint(value) {
-        this._refpoint.value = value;
-    }
-
     applyMinMax = (value, min, max) => {
         if (value < min) {
             return min;
@@ -159,6 +145,7 @@ class OptimizationParameters {
 
     get toObject() {
         return ({
+            'method': this.method,
             'ngen': this.ngen,
             'pop_size': this.popSize,
             'mutpb': this.mutpb,
@@ -166,12 +153,9 @@ class OptimizationParameters {
             'eta': this.eta,
             'indpb': this.indpb,
             'ncls': this.ncls,
-            'nlocal': this.nlocal,
             'maxf': this.maxf,
             'qbound': this.qbound,
             'diversity_flg': this.diversityFlg,
-            'local_opt_flg': this.localOptFlg,
-            'refpoint': this.refpoint
         });
     }
 }

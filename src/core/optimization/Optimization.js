@@ -40,9 +40,18 @@ class Optimization {
                         'from': 0,
                         'to': 0
                     },
-                    'lay': [0, 0],
-                    'row': [90, 90],
-                    'col': [90, 90]
+                    'lay': {
+                        'from': 0,
+                        'to': 0
+                    },
+                    'row': {
+                        'from': 90,
+                        'to': 90
+                    },
+                    'col': {
+                        'from': 90,
+                        'to': 90
+                    }
                 })
             })
         ];

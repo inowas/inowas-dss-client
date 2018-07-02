@@ -1,9 +1,9 @@
 class Location {
     _type;
     _ts = {from: 0, to: 0};
-    _lay;
-    _row;
-    _col;
+    _lay = {from: 0, to: 0};
+    _row = {from: 0, to: 0};
+    _col = {from: 0, to: 0};
     _objects;
 
     static fromObject(obj) {
@@ -42,7 +42,9 @@ class Location {
     }
 
     set lay(value) {
-        this._lay = value;
+        if(value) {
+            this._lay = value;
+        }
     }
 
     get row() {
@@ -50,7 +52,9 @@ class Location {
     }
 
     set row(value) {
-        this._row = value;
+        if(value) {
+            this._row = value;
+        }
     }
 
     get col() {
@@ -58,7 +62,9 @@ class Location {
     }
 
     set col(value) {
-        this._col = value;
+        if(value) {
+            this._col = value;
+        }
     }
 
     get objects() {
