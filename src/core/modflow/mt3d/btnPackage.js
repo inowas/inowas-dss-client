@@ -1,6 +1,5 @@
 import AbstractMt3dPackage from './AbstractMt3dPackage';
 
-// TODO casting setters
 class BtnPackage extends AbstractMt3dPackage {
 
     _MFStyleArr = false;

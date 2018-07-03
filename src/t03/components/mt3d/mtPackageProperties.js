@@ -22,26 +22,24 @@ class MtPackageProperties extends React.Component {
         const {mt} = this.state;
 
         return (
-            <div>
-                <Form>
-                    <Form.Field>
-                        <label>Enabled</label>
-                        <Checkbox checked={enabled} onChange={toggleEnabled} disabled={readonly}/>
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Version</label>
-                        <input value={mt.version} readOnly/>
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Ftl filename</label>
-                        <input value={mt.ftlfilename} readOnly/>
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Verbose</label>
-                        <input value={mt.verbose} readOnly/>
-                    </Form.Field>
-                </Form>
-            </div>
+            <Form>
+                <Form.Field>
+                    <label>Enabled</label>
+                    <Checkbox checked={enabled} onChange={toggleEnabled} disabled={readonly}/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Version</label>
+                    <input value={mt.version} readOnly/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Ftl filename</label>
+                    <input value={mt.ftlfilename} readOnly/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Verbose</label>
+                    <input value={mt.verbose} readOnly/>
+                </Form.Field>
+            </Form>
         );
     }
 }

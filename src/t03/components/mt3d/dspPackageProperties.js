@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import BtnPackage from '../../../core/modflow/mt3d/btnPackage';
+import DspPackage from '../../../core/modflow/mt3d/dspPackage';
 import {Form} from 'semantic-ui-react';
 
-class BtnPackageProperties extends React.Component {
+class DspPackageProperties extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            btn: props.btn.toObject
+            dsp: props.dsp.toObject
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            btn: nextProps.btn.toObject
+            dsp: nextProps.dsp.toObject
         });
     }
 
@@ -24,58 +24,58 @@ class BtnPackageProperties extends React.Component {
         (typeof cast === 'function') ? value = cast(e.target.value) : value = e.target.value;
 
         return this.setState({
-            btn: {
-                ...this.state.btn,
+            dsp: {
+                ...this.state.dsp,
                 [name]: cast(value)
             }
         });
     };
 
     handleOnBlur = () => {
-        this.props.onChange(BtnPackage.fromObject(this.state.btn));
+        this.props.onChange(DspPackage.fromObject(this.state.dsp));
     };
 
     render() {
         const {readonly} = this.props;
-        const {btn} = this.state;
+        const {dsp} = this.state;
 
         return (
             <Form>
                 <Form.Field>
-                    <label>NComp</label>
+                    <label>Al</label>
                     <input
-                        name={'ncomp'}
-                        value={btn.ncomp}
-                        disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <label>MComp</label>
-                    <input
-                        name={'mcomp'}
-                        value={btn.mcomp}
-                        disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <label>Prsity</label>
-                    <input
-                        name={'prsity'}
-                        value={btn.prsity}
+                        name={'al'}
+                        value={dsp.al}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
                     />
                 </Form.Field>
                 <Form.Field>
-                    <label>Icbund</label>
+                    <label>Trpt</label>
                     <input
-                        name={'icbund'}
-                        value={btn.icbund}
+                        name={'trpt'}
+                        value={dsp.trpt}
+                        disabled={readonly}
+                        onBlur={this.handleOnBlur}
+                        onChange={this.handleOnChange(parseFloat)}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <label>Trpv</label>
+                    <input
+                        name={'trpv'}
+                        value={dsp.trpv}
+                        disabled={readonly}
+                        onBlur={this.handleOnBlur}
+                        onChange={this.handleOnChange(parseFloat)}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <label>Dmcoef</label>
+                    <input
+                        name={'dmcoef'}
+                        value={dsp.dmcoef}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
@@ -86,11 +86,11 @@ class BtnPackageProperties extends React.Component {
     }
 }
 
-BtnPackageProperties.propTypes = {
-    btn: PropTypes.instanceOf(BtnPackage),
+DspPackageProperties.propTypes = {
+    dsp: PropTypes.instanceOf(DspPackage),
     onChange: PropTypes.func.isRequired,
     readonly: PropTypes.bool.isRequired,
 };
 
 
-export default BtnPackageProperties;
+export default DspPackageProperties;
