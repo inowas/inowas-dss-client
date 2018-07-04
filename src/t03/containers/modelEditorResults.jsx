@@ -41,8 +41,7 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
-class ModelEditorResultsHead extends Component {
+class ModelEditorResults extends Component {
     static propTypes = {
         tool: PropTypes.string.isRequired,
         model: PropTypes.object,
@@ -347,4 +346,4 @@ const actions = {
     createScenarioAnalysis: T07.Command.createScenarioAnalysis,
 };
 
-export default connect(mapStateToProps, actions)(ModelEditorResultsHead);
+export default connect(mapStateToProps, actions)(ConfiguredRadium(ModelEditorResults));

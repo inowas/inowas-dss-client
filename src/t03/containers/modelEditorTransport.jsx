@@ -7,18 +7,17 @@ import {withRouter} from 'react-router';
 import * as lodash from 'lodash';
 import {Command, Query} from '../../t03/actions';
 import {Selector} from '../../t03/index';
-import {StressPeriodProperties, CalculationStatus, RunModelOverview, PackageProperties} from '../components';
 import {WebData} from '../../core';
-import RunModelProperties from '../components/runModelProperties';
-import ListFileProperties from '../components/ListFileProperties';
 import {Routing} from '../actions/index';
-import Calibration from '../components/Calibration';
 import VerticalMenu from '../../components/primitive/VerticalMenu';
-import {Button, Segment} from 'semantic-ui-react';
 import MtPackageProperties from '../components/mt3d/mtPackageProperties';
 import Mt3dms from '../../core/modflow/mt3d/mt3dms';
 import AbstractMt3dPackage from '../../core/modflow/mt3d/AbstractMt3dPackage';
-import BtnPackageProperties from "../components/mt3d/btnPackageProperties";
+import BtnPackageProperties from '../components/mt3d/btnPackageProperties';
+import AdvPackageProperties from '../components/mt3d/advPackageProperties';
+import DspPackageProperties from '../components/mt3d/dspPackageProperties';
+import GcgPackageProperties from '../components/mt3d/gcgPackageProperties';
+import SsmPackageProperties from '../components/mt3d/ssmPackageProperties';
 
 const styles = {
     container: {
@@ -133,10 +132,42 @@ class ModelEditorTransport extends React.Component {
         const {type} = this.props.params;
 
         switch (type) {
+            case 'adv':
+                return (
+                    <AdvPackageProperties
+                        adv={mt3d.getPackage(type)}
+                        onChange={this.handleChangePackage}
+                        readonly={readOnly}
+                    />
+                );
             case 'btn':
                 return (
                     <BtnPackageProperties
-                        btn={mt3d.getPackage('btn')}
+                        btn={mt3d.getPackage(type)}
+                        onChange={this.handleChangePackage}
+                        readonly={readOnly}
+                    />
+                );
+            case 'dsp':
+                return (
+                    <DspPackageProperties
+                        dsp={mt3d.getPackage(type)}
+                        onChange={this.handleChangePackage}
+                        readonly={readOnly}
+                    />
+                );
+            case 'gcg':
+                return (
+                    <GcgPackageProperties
+                        gcg={mt3d.getPackage(type)}
+                        onChange={this.handleChangePackage}
+                        readonly={readOnly}
+                    />
+                );
+            case 'ssm':
+                return (
+                    <SsmPackageProperties
+                        ssm={mt3d.getPackage(type)}
                         onChange={this.handleChangePackage}
                         readonly={readOnly}
                     />

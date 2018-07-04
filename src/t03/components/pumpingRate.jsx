@@ -1,10 +1,11 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as edit from 'react-edit';
-import { DataTable, Formatter } from '../../core';
+import {DataTable, Formatter} from '../../core';
 import Icon from '../../components/primitive/Icon';
 
-import { cloneDeep, sortBy, last } from 'lodash';
+import {cloneDeep, sortBy, last} from 'lodash';
 import uuid from 'uuid';
 
 class PumpingRate extends DataTable.Component.DataTable {
@@ -33,20 +34,19 @@ class PumpingRate extends DataTable.Component.DataTable {
                     },
                     header: {
                         label: '',
-                        formatters: [
-                            (value, { rowData }) =>
-                                !this.props.readOnly && <Icon
-                                    name={'unchecked'}
-                                    onClick={DataTable.Action.Callback.onSelectAll(
-                                        this
-                                    )}
-                                />
+                        formatters: [() => !this.props.readOnly &&
+                            <Icon
+                                name={'unchecked'}
+                                onClick={DataTable.Action.Callback.onSelectAll(this)}
+                            />
                         ]
                     },
                     cell: {
-                        formatters: [
-                            (value, { rowData }) =>
-                                !this.props.readOnly && <Icon name={rowData.selected ? 'checked' : 'unchecked'} onClick={() => DataTable.Action.Callback.onSelect( this )(rowData)}/>
+                        formatters: [(value, {rowData}) => !this.props.readOnly &&
+                            <Icon
+                                name={rowData.selected ? 'checked' : 'unchecked'}
+                                onClick={() => DataTable.Action.Callback.onSelect(this)(rowData)}
+                            />
                         ]
                     }
                 },
@@ -60,14 +60,11 @@ class PumpingRate extends DataTable.Component.DataTable {
                     cell: {
                         transforms: !this.props.readOnly ? [
                             DataTable.Helper.editableDate(this)(
-                                edit.input({ props: { type: 'date' } })
+                                edit.input({props: {type: 'date'}})
                             )
                         ] : [],
                         formatters: [
-                            (value, { rowData }) =>
-                                <span>
-                                    {Formatter.toDate(value)}
-                                </span>
+                            (value) => <span>{Formatter.toDate(value)}</span>
                         ]
                     }
                 },
@@ -79,14 +76,11 @@ class PumpingRate extends DataTable.Component.DataTable {
                     cell: {
                         transforms: !this.props.readOnly ? [
                             DataTable.Helper.editable(this)(
-                                edit.input({ props: { type: 'number' } })
+                                edit.input({props: {type: 'number'}})
                             )
                         ] : [],
                         formatters: [
-                            (value, { rowData }) =>
-                                <span>
-                                    {Formatter.toNumber(value)}
-                                </span>
+                            (value) => <span>{Formatter.toNumber(value)}</span>
                         ]
                     }
                 }
@@ -122,8 +116,8 @@ class PumpingRate extends DataTable.Component.DataTable {
             values: [value]
         });
 
-        this.setState((prevState, props) => {
-            return { ...prevState, rows };
+        this.setState((prevState) => {
+            return {...prevState, rows};
         });
     };
 }

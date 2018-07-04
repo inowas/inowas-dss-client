@@ -10,9 +10,7 @@ import GeneralHeadObservationPoint from './generalHeadObservationPoint';
 import GeneralMap from './generalMap';
 import HeadResultsChart from './HeadResultsChart';
 import HeadObservationData from './headObservationData';
-import ModelEditorResults from './ModelEditorResults';
 import PackageProperties from './packageProperties';
-import Properties from './properties';
 import PumpingRate from './pumpingRate';
 import RechargeRate from './rechargeRate';
 import RiverObservationPoint from './riverObservationPointData';
@@ -40,9 +38,7 @@ export {
     GeneralMap,
     HeadObservationData,
     HeadResultsChart,
-    ModelEditorResults,
     PackageProperties,
-    Properties,
     PumpingRate,
     RechargeRate,
     RiverObservationPoint,

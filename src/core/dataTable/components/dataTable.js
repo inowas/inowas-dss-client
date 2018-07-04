@@ -11,8 +11,6 @@ import { Paginator } from '../../../core';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
 
-// TODO use HOC
-@ConfiguredRadium
 class DataTable extends Component {
     constructor(props) {
         super(props);
@@ -118,4 +116,4 @@ DataTable.propTypes = {
     perPage: PropTypes.number
 };
 
-export default DataTable;
+export default ConfiguredRadium(DataTable);
