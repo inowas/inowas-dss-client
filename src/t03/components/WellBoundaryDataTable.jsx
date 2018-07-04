@@ -8,7 +8,7 @@ import Icon from '../../components/primitive/Icon';
 import {cloneDeep, sortBy, last} from 'lodash';
 import uuid from 'uuid';
 
-class PumpingRate extends DataTable.Component.DataTable {
+class WellBoundaryDataTable extends DataTable.Component.DataTable {
     constructor(props) {
         super(props);
         this.state = {
@@ -108,9 +108,9 @@ class PumpingRate extends DataTable.Component.DataTable {
     };
 }
 
-PumpingRate.propTypes = {
+WellBoundaryDataTable.propTypes = {
     perPage: PropTypes.number,
     readOnly: PropTypes.bool,
 };
 
-export default PumpingRate;
+export default WellBoundaryDataTable;

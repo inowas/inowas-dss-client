@@ -5,7 +5,7 @@ import {
     HeadObservationData,
     RechargeRate,
     RiverObservationPoint,
-    PumpingRate
+    WellBoundaryDataTable
 } from '../../t03/components';
 import {LayoutComponents} from '../../core';
 import React from 'react';
@@ -360,7 +360,7 @@ class BoundaryProperties extends React.Component {
                 return (
                     <LayoutComponents.Column heading="Data">
                         {!readOnly && <DataTableAction component={this.observationPoint}/>}
-                        <PumpingRate
+                        <WellBoundaryDataTable
                             readOnly={readOnly}
                             ref={op => {
                                 this.observationPoint = op;

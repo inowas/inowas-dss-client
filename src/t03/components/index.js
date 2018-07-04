@@ -11,7 +11,7 @@ import GeneralMap from './generalMap';
 import HeadResultsChart from './HeadResultsChart';
 import HeadObservationData from './headObservationData';
 import PackageProperties from './packageProperties';
-import PumpingRate from './pumpingRate';
+import WellBoundaryDataTable from './WellBoundaryDataTable';
 import RechargeRate from './rechargeRate';
 import RiverObservationPoint from './riverObservationPointData';
 import RunModelOverview from './runModelOverview';
@@ -39,7 +39,7 @@ export {
     HeadObservationData,
     HeadResultsChart,
     PackageProperties,
-    PumpingRate,
+    WellBoundaryDataTable,
     RechargeRate,
     RiverObservationPoint,
     RunModelOverview,
