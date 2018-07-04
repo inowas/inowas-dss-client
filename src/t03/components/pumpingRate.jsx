@@ -25,66 +25,52 @@ class PumpingRate extends DataTable.Component.DataTable {
                     position: 0
                 }
             },
-            columns: [
-                {
-                    props: {
-                        style: {
-                            width: 30
-                        }
-                    },
-                    header: {
-                        label: '',
-                        formatters: [() => !this.props.readOnly &&
-                            <Icon
-                                name={'unchecked'}
-                                onClick={DataTable.Action.Callback.onSelectAll(this)}
-                            />
-                        ]
-                    },
-                    cell: {
-                        formatters: [(value, {rowData}) => !this.props.readOnly &&
-                            <Icon
-                                name={rowData.selected ? 'checked' : 'unchecked'}
-                                onClick={() => DataTable.Action.Callback.onSelect(this)(rowData)}
-                            />
-                        ]
+            columns: [{
+                props: {
+                    style: {
+                        width: 30
                     }
                 },
-                {
-                    property: 'date_time',
-                    header: {
-                        label: 'Start Time',
-                        transforms: [DataTable.Helper.resetable(this)],
-                        formatters: [DataTable.Helper.header(this)]
-                    },
-                    cell: {
-                        transforms: !this.props.readOnly ? [
-                            DataTable.Helper.editableDate(this)(
-                                edit.input({props: {type: 'date'}})
-                            )
-                        ] : [],
-                        formatters: [
-                            (value) => <span>{Formatter.toDate(value)}</span>
-                        ]
-                    }
+                header: {
+                    label: '',
+                    formatters: [() => this.props.readOnly ||
+                        <Icon
+                            name={'unchecked'}
+                            onClick={DataTable.Action.Callback.onSelectAll(this)}
+                        />
+                    ]
                 },
-                {
-                    property: 'values',
-                    header: {
-                        label: 'Pumping Rate'
-                    },
-                    cell: {
-                        transforms: !this.props.readOnly ? [
-                            DataTable.Helper.editable(this)(
-                                edit.input({props: {type: 'number'}})
-                            )
-                        ] : [],
-                        formatters: [
-                            (value) => <span>{Formatter.toNumber(value)}</span>
-                        ]
-                    }
+                cell: {
+                    formatters: [(value, {rowData}) => this.props.readOnly ||
+                        <Icon
+                            name={rowData.selected ? 'checked' : 'unchecked'}
+                            onClick={() => DataTable.Action.Callback.onSelect(this)(rowData)}
+                        />
+                    ]
                 }
-            ],
+            }, {
+                property: 'date_time',
+                header: {
+                    label: 'Start Time',
+                    transforms: [DataTable.Helper.resetable(this)],
+                    formatters: [DataTable.Helper.header(this)]
+                },
+                cell: {
+                    transforms: this.props.readOnly ?
+                        [] : [DataTable.Helper.editableDate(this)(edit.input({props: {type: 'date'}}))],
+                    formatters: [(value) => <span>{Formatter.toDate(value)}</span>]
+                }
+            }, {
+                property: 'values',
+                header: {
+                    label: 'Pumping Rate'
+                },
+                cell: {
+                    transforms: this.props.readOnly ?
+                        [] : [DataTable.Helper.editable(this)(edit.input({props: {type: 'number'}}))],
+                    formatters: [(value) => <span>{Formatter.toNumber(value)}</span>]
+                }
+            }],
             rows: this.props.rows || []
         };
     }
