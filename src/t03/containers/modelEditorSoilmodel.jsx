@@ -214,11 +214,6 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     return wrappedActions;
 };
 
-// eslint-disable-next-line no-class-assign
-ModelEditorSoilmodel = withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(ModelEditorSoilmodel)
-);
-
 ModelEditorSoilmodel.propTypes = {
     addLayerStatus: PropTypes.object,
     createLayer: PropTypes.func,
@@ -234,4 +229,4 @@ ModelEditorSoilmodel.propTypes = {
     updateLayerStatus: PropTypes.object
 };
 
-export default ConfiguredRadium(ModelEditorSoilmodel);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorSoilmodel)));

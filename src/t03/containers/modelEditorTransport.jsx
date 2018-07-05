@@ -10,14 +10,14 @@ import {Selector} from '../../t03/index';
 import {WebData} from '../../core';
 import {Routing} from '../actions/index';
 import VerticalMenu from '../../components/primitive/VerticalMenu';
-import MtPackageProperties from '../components/mt3d/mtPackageProperties';
 import Mt3dms from '../../core/modflow/mt3d/mt3dms';
+import MtPackageProperties from '../components/packages/mt/mtPackageProperties';
 import AbstractMt3dPackage from '../../core/modflow/mt3d/AbstractMt3dPackage';
-import BtnPackageProperties from '../components/mt3d/btnPackageProperties';
-import AdvPackageProperties from '../components/mt3d/advPackageProperties';
-import DspPackageProperties from '../components/mt3d/dspPackageProperties';
-import GcgPackageProperties from '../components/mt3d/gcgPackageProperties';
-import SsmPackageProperties from '../components/mt3d/ssmPackageProperties';
+import BtnPackageProperties from '../components/packages/mt/btnPackageProperties';
+import AdvPackageProperties from '../components/packages/mt/advPackageProperties';
+import DspPackageProperties from '../components/packages/mt/dspPackageProperties';
+import GcgPackageProperties from '../components/packages/mt/gcgPackageProperties';
+import SsmPackageProperties from '../components/packages/mt/ssmPackageProperties';
 
 const styles = {
     container: {

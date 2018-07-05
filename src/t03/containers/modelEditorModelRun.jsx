@@ -7,12 +7,12 @@ import {withRouter} from 'react-router';
 import * as lodash from 'lodash';
 import {Command, Query} from '../../t03/actions';
 import {Selector} from '../../t03/index';
-import {StressPeriodProperties, CalculationStatus, RunModelOverview, PackageProperties} from '../components';
+import {StressPeriodProperties, CalculationStatus, RunModelOverview, MfPackageProperties} from '../components';
 import {WebData} from '../../core';
-import RunModelProperties from '../components/runModelProperties';
-import ListFileProperties from '../components/ListFileProperties';
+import RunModelProperties from '../components/runModel/CalculationLogs';
+import ListFileProperties from '../components/runModel/ListFileProperties';
 import {Routing} from '../actions/index';
-import Calibration from '../components/Calibration';
+import Calibration from '../components/runModel/Calibration';
 import VerticalMenu from '../../components/primitive/VerticalMenu';
 import {Button, Segment} from 'semantic-ui-react';
 
@@ -158,7 +158,7 @@ class ModelEditorModelRun extends React.Component {
             case 'solver':
             case 'flow':
                 return (
-                    <PackageProperties
+                    <MfPackageProperties
                         onSave={this.updateModflowPackage}
                         loadingStatus={this.props.getModflowPackageStatus}
                         getModflowPackagesStatus={this.props.getModflowPackagesStatus}
@@ -181,12 +181,13 @@ class ModelEditorModelRun extends React.Component {
                 );
             case 'times':
                 return (
-                    <StressPeriodProperties stressPeriods={stressPeriods}
-                                            onSave={this.updateStressPeriods}
-                                            onCalculate={this.calculateStressPeriods}
-                                            calculateStressPeriodsStatus={calculateStressPeriodsStatus}
-                                            updateStressPeriodsStatus={updateStressPeriodsStatus}
-                                            readOnly={readOnly || readOnlyScenario}
+                    <StressPeriodProperties
+                        stressPeriods={stressPeriods}
+                        onSave={this.updateStressPeriods}
+                        onCalculate={this.calculateStressPeriods}
+                        calculateStressPeriodsStatus={calculateStressPeriodsStatus}
+                        updateStressPeriodsStatus={updateStressPeriodsStatus}
+                        readOnly={readOnly || readOnlyScenario}
                     />);
             case 'calibration':
                 return (
@@ -199,8 +200,11 @@ class ModelEditorModelRun extends React.Component {
 
             default:
                 return (
-                    <RunModelOverview model={model} route={Routing.goToProperty(routes, params)}
-                                      routeType={Routing.goToPropertyType(routes, params)}/>
+                    <RunModelOverview
+                        model={model}
+                        route={Routing.goToProperty(routes, params)}
+                        routeType={Routing.goToPropertyType(routes, params)}
+                    />
                 );
         }
     }
@@ -240,12 +244,7 @@ class ModelEditorModelRun extends React.Component {
                     }
 
                     {canCancel &&
-                    <Button
-                        size="big"
-                        negative
-                        fluid
-                        onClick={stopPolling}
-                    >
+                    <Button size="big" negative fluid onClick={stopPolling}>
                         Cancel calculation
                     </Button>
                     }

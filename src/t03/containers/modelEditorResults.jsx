@@ -1,23 +1,23 @@
-import React, { Component, PropTypes } from 'react';
-import { model, results } from '../selectors';
+import React, {Component, PropTypes} from 'react';
+import {model, results} from '../selectors';
 
 import ArraySlider from '../../components/primitive/ArraySlider';
 import Button from '../../components/primitive/Button';
 import BoundingBox from '../../model/BoundingBox';
 import ConfiguredRadium from 'ConfiguredRadium';
 import Coordinate from '../../model/Coordinate';
-import { Formatter, WebData } from '../../core';
+import {Formatter, WebData} from '../../core';
 import Grid from '../../model/Grid';
-import { Query } from '../actions/index';
-import { Modifier as T07 } from '../../t07';
+import {Query} from '../actions/index';
+import {Modifier as T07} from '../../t07';
 import ScenarioAnalysisMap from '../../t07/components/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
 import Select from '../../components/primitive/Select';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { HeadResultsChart } from '../components';
+import {HeadResultsChart} from '../components';
 import uuid from 'uuid';
-import { includes, max, min } from 'lodash';
+import {includes} from 'lodash';
 
 const styles = {
     selectWrapper: {
@@ -31,8 +31,8 @@ const styles = {
 
     sliderWrapper: {
         width:
-            4 * styleGlobals.dimensions.gridColumn +
-            3 * styleGlobals.dimensions.gridGutter,
+        4 * styleGlobals.dimensions.gridColumn +
+        3 * styleGlobals.dimensions.gridGutter,
         padding: styleGlobals.dimensions.spacing.medium
     },
 
@@ -109,8 +109,8 @@ class ModelEditorResults extends Component {
 
     fetchCalculation = props => {
         // eslint-disable-next-line no-shadow
-        const { sendQuery, calculationId, times } = props;
-        const { selectedLayerAndType, selectedTotalTimeIndex } = this.state;
+        const {sendQuery, calculationId, times} = props;
+        const {selectedLayerAndType, selectedTotalTimeIndex} = this.state;
 
         if (
             !calculationId ||
@@ -146,7 +146,7 @@ class ModelEditorResults extends Component {
 
     onTimeSliderChange = nextSelectedTotalTimeIndex => {
         this.setState(
-            { selectedTotalTimeIndex: nextSelectedTotalTimeIndex },
+            {selectedTotalTimeIndex: nextSelectedTotalTimeIndex},
             () => this.fetchCalculation(this.props)
         );
     };
@@ -164,7 +164,7 @@ class ModelEditorResults extends Component {
     };
 
     createScenarioAnalysis = () => {
-        const { model } = this.props;
+        const {model} = this.props;
 
         this.props.createScenarioAnalysis(uuid.v4(), {
             basemodel_id: model.id,
@@ -323,7 +323,7 @@ class ModelEditorResults extends Component {
     }
 }
 
-const mapStateToProps = (state, { tool }) => {
+const mapStateToProps = (state, {tool}) => {
     return {
         tool,
         model: model.getModflowModel(state[tool]),
