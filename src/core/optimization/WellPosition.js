@@ -1,7 +1,19 @@
 class WellPosition {
-    _lay = [0, 0];
-    _row = [10, 20];
-    _col = [10, 20];
+    _lay = {
+        min: 0,
+        max: 0,
+        result: null
+    };
+    _row = {
+        min: 0,
+        max: 0,
+        result: null
+    };
+    _col = {
+        min: 30,
+        max: 150,
+        result: null
+    };
 
     static fromObject(obj) {
         const wellPosition = new WellPosition();
@@ -11,7 +23,8 @@ class WellPosition {
         return wellPosition;
     }
 
-    constructor() {}
+    constructor() {
+    }
 
 
     get lay() {
@@ -19,7 +32,7 @@ class WellPosition {
     }
 
     set lay(value) {
-        this._lay = value;
+        this._lay = value ? value : {min: 0, max: 0, result: null};
     }
 
     get row() {
@@ -27,7 +40,7 @@ class WellPosition {
     }
 
     set row(value) {
-        this._row = value;
+        this._row = value ? value : {min: 0, max: 0, result: null};
     }
 
     get col() {
@@ -35,7 +48,7 @@ class WellPosition {
     }
 
     set col(value) {
-        this._col = value;
+        this._col = value ? value : {min: 0, max: 0, result: null};
     }
 
     get toObject() {

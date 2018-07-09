@@ -1,15 +1,17 @@
+import WellPosition from './WellPosition';
+
 class OptimizationObject {
+    _name = 'New Optimization Object';
     _type = 'well';
-    _id;
-    _position; // WellPosition
+    _position = new WellPosition();
     _flux; // WellFlux
     _concentration; // WellConcentration
 
     static fromObject(obj) {
         const object = new OptimizationObject;
+        object.name = obj.name;
         object.type = obj.type;
-        object.id = obj.id;
-        object.position = obj.position;
+        object.position = WellPosition.fromObject(obj.position);
         object.flux = obj.flux;
         object.concentration = obj.concentration;
         return object;
@@ -17,21 +19,20 @@ class OptimizationObject {
 
     constructor() {}
 
+    get name() {
+        return this._name;
+    }
+
+    set name(value) {
+        this._name = !value ? 'New Optimization Object' : value;
+    }
 
     get type() {
         return this._type;
     }
 
     set type(value) {
-        this._type = value;
-    }
-
-    get id() {
-        return this._id;
-    }
-
-    set id(value) {
-        this._id = value;
+        this._type = !value ? 'well' : value;
     }
 
     get position() {
@@ -60,9 +61,9 @@ class OptimizationObject {
 
     get toObject() {
         return ({
+            'name': this.name,
             'type': this.type,
-            'id': this.id,
-            'position': this.position,
+            'position': this.position.toObject,
             'flux': this.flux,
             'concentration': this.concentration
         });

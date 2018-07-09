@@ -54,7 +54,10 @@ class OptimizationParametersComponent extends React.Component {
     }
 
     handleSubmit = () => {
-        return this.props.onChange(OptimizationParameters.fromObject(this.state.parameters));
+        return this.props.onChange({
+            key: 'parameters',
+            value: OptimizationParameters.fromObject(this.state.parameters)
+        });
     };
 
     handleChange = (e, {name, value}) => this.setState({

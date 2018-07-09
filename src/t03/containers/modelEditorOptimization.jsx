@@ -4,7 +4,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
-import OptimizationObjects from '../components/optimizationObjects';
+import OptimizationObjectsComponent from '../components/optimizationObjects';
 import OptimizationObjectivesComponent from '../components/optimizationObjectives';
 import OptimizationParametersComponent from '../components/optimizationParameters';
 import FilterableList from '../../components/primitive/FilterableList';
@@ -46,7 +46,7 @@ const styles = {
 
 const menu = [
     {
-        id: '',
+        id: 'parameters',
         name: 'Parameters'
     },
     {
@@ -58,8 +58,8 @@ const menu = [
         name: 'Objectives'
     },
     {
-        id: 'constrains',
-        name: 'Constrains'
+        id: 'constraints',
+        name: 'Constraints'
     }
 ];
 
@@ -89,17 +89,9 @@ class ModelEditorOptimization extends React.Component {
         Routing.modelOptimizationType(routes, params)(type);
     };
 
-    onChangeParameters = (parameters) => {
+    onChange = (obj) => {
         const opt = Optimization.fromObject(this.state.optimization);
-        opt.parameters = parameters;
-        return this.setState({
-            optimization: opt.toObject
-        });
-    };
-
-    onChangeObjectives = (objectives) => {
-        const opt = Optimization.fromObject(this.state.optimization);
-        opt.objectives = objectives;
+        opt[obj.key] = obj.value;
         return this.setState({
             optimization: opt.toObject
         });
@@ -112,19 +104,19 @@ class ModelEditorOptimization extends React.Component {
         switch (type) {
             case 'objects':
                 return (
-                    <p>Objectives</p>
+                    <OptimizationObjectsComponent objects={optimization.objects} onChange={this.onChange}/>
                 );
             case 'objectives':
                 return (
-                    <OptimizationObjectivesComponent objectives={optimization.objectives} onChange={this.onChangeObjectives}/>
+                    <OptimizationObjectivesComponent objectives={optimization.objectives} objects={optimization.objects} onChange={this.onChange}/>
                 );
-            case 'constrains':
+            case 'constraints':
                 return (
-                    <p>Constrains</p>
+                    <p>Constraints</p>
                 );
             default:
                 return (
-                    <OptimizationParametersComponent parameters={optimization.parameters} objectives={optimization.objectives} onChange={this.onChangeParameters}/>
+                    <OptimizationParametersComponent parameters={optimization.parameters} objectives={optimization.objectives} onChange={this.onChange}/>
                 );
         }
     }

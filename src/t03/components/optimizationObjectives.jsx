@@ -13,7 +13,6 @@ class OptimizationObjectivesComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            objects: [],
             objectives: props.objectives.map((objective, key) => {
                 const obj = objective.toObject;
                 obj.id = key + 1;
@@ -57,21 +56,21 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     };
 
-    onBackButtonClick = () => {
+    onClickBack = () => {
         return this.setState({
             selectedObjective: null
         });
     };
 
-    onChangeNewObjective = (e, {name, value}) => {
+    onClickNew = (e, {name, value}) => {
         const newObjective = new OptimizationObjective();
         newObjective.type = value;
         return this.setState({
-            selectedObjective: newObjective
+            selectedObjective: newObjective.toObject
         });
     };
 
-    onClickObjectiveList = (objective) => {
+    onClickObjective = (objective) => {
         return this.setState({
             selectedObjective: objective
         });
@@ -79,13 +78,14 @@ class OptimizationObjectivesComponent extends React.Component {
 
     onClickDelete = (objective) => {
         const objectives = this.state.objectives;
-        this.props.onChange(
-            objectives
+        this.props.onChange({
+            key: 'objectives',
+            value: objectives
                 .filter(obj => obj.id !== objective.id)
                 .map(obj => {
                     return OptimizationObjective.fromObject(obj);
                 })
-        );
+        });
     };
 
     onClickSave = () => {
@@ -99,15 +99,16 @@ class OptimizationObjectivesComponent extends React.Component {
             objectives.push(selectedObjective);
         }
 
-        this.props.onChange(
-            objectives.map((obj) => {
+        this.props.onChange({
+            key: 'objectives',
+            value: objectives.map((obj) => {
                 if (selectedObjective.id && obj.id === selectedObjective.id) {
                     return OptimizationObjective.fromObject(selectedObjective);
                 }
 
                 return OptimizationObjective.fromObject(obj);
             })
-        );
+        });
     };
 
     render() {
@@ -143,7 +144,7 @@ class OptimizationObjectivesComponent extends React.Component {
                             {this.state.selectedObjective &&
                             <Button icon
                                     style={styles.iconfix}
-                                    onClick={this.onBackButtonClick}
+                                    onClick={this.onClickBack}
                                     labelPosition="left">
                                 <Icon name="left arrow"/>
                                 Back to List
@@ -169,7 +170,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                           text="Add New"
                                           icon="plus"
                                           options={typeOptions}
-                                          onChange={this.onChangeNewObjective}
+                                          onChange={this.onClickNew}
                                 /> :
                                 <Button icon positive
                                         style={styles.iconfix}
@@ -284,8 +285,12 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                     value={this.state.selectedObjective.type}
                                                                     placeholder="type ="
                                                                     options={
-                                                                        this.state.objects.map((value, index) => {
-                                                                            return value.type;
+                                                                        this.props.objects.map((value, index) => {
+                                                                            /*TODO: return {
+                                                                                key: index,
+                                                                                text: value.name,
+                                                                                value: value
+                                                                            };*/
                                                                         })
                                                                     }
                                                                     onChange={this.handleChange}
@@ -347,7 +352,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                             <Table.Cell textAlign="center">{objective.id}</Table.Cell>
                                                             <Table.Cell>
                                                                 <a style={styles.link}
-                                                                   onClick={() => this.onClickObjectiveList(objective)}>
+                                                                   onClick={() => this.onClickObjective(objective)}>
                                                                     {objective.type}
                                                                 </a>
                                                             </Table.Cell>
@@ -378,6 +383,7 @@ class OptimizationObjectivesComponent extends React.Component {
 
 OptimizationObjectivesComponent.propTypes = {
     objectives: PropTypes.array.isRequired,
+    objects: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
 };
 

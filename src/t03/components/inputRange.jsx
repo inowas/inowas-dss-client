@@ -75,12 +75,12 @@ class InputRange extends React.Component {
         return (
             <Form.Group widths="equal">
                 <Form.Field>
-                    <label>{this.props.label} from</label>
+                    <label>{this.props.label ? this.props.label : 'Input'} {this.props.label_from ? this.props.label_from : 'from'}</label>
                     <Form.Input
                         disabled={this.props.disabled}
                         type="number"
                         name="from"
-                        value={this.state.from.toFixed(this.props.decimals)}
+                        value={this.state.from.toFixed(this.props.decimals ? this.props.decimals : 0)}
                         placeholder="from ="
                         style={styles.inputFix}
                         onChange={this.handleChange}
@@ -88,12 +88,12 @@ class InputRange extends React.Component {
                     />
                 </Form.Field>
                 <Form.Field>
-                    <label>to</label>
+                    <label>{this.props.label_to ? this.props.label_to : 'to'}</label>
                     <Form.Input
                         disabled={this.props.disabled}
                         type="number"
                         name="to"
-                        value={this.state.to.toFixed(this.props.decimals)}
+                        value={this.state.to.toFixed(this.props.decimals ? this.props.decimals : 0)}
                         placeholder="to ="
                         style={styles.inputFix}
                         onChange={this.handleChange}
@@ -113,6 +113,8 @@ InputRange.propTypes = {
     max: PropTypes.number,
     decimals: PropTypes.number,
     label: PropTypes.string,
+    label_from: PropTypes.string,
+    label_to: PropTypes.string,
     disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired
 };
