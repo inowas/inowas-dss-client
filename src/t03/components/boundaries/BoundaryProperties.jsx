@@ -1,12 +1,3 @@
-import {
-    ConstantHeadBoundaryDataTable,
-    DataTableActions,
-    GeneralHeadBoundaryDataTable,
-    HeadObservationDataTable,
-    RechargeBoundaryDataTable,
-    RiverBoundaryDataTable,
-    WellBoundaryDataTable
-} from '../index';
 import {LayoutComponents} from '../../../core/index';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -22,6 +13,7 @@ import BoundaryFactory from '../../../core/boundaries/BoundaryFactory';
 import BoundaryGeometryEditor from '../../../core/boundaryEditor/boundaryGeometryEditor';
 import ObservationPointEditor from '../../../core/boundaryEditor/observationPointEditor';
 import {first} from 'lodash';
+import BoundaryData from './BoundaryData';
 
 const styles = {
     columns: {
@@ -211,6 +203,12 @@ class BoundaryProperties extends React.Component {
         });
     };
 
+    handleChangeData = boundary => {
+        this.setState({
+            boundary: boundary.toObject
+        });
+    };
+
     isLoaded = boundary => {
         if (!boundary) {
             return false;
@@ -219,37 +217,8 @@ class BoundaryProperties extends React.Component {
         return (boundary.hasOwnProperty('date_time_values') || boundary.hasOwnProperty('observation_points'));
     };
 
-    save = boundary => {
-        if (boundary.hasOwnProperty('date_time_values')) {
-            this.props.onSave({
-                ...boundary,
-                date_time_values: this.observationPoint.getRows()
-            });
-
-            return;
-        }
-
-        if (boundary.hasOwnProperty('observation_points')) {
-            const observationPoints = boundary.observation_points;
-
-            observationPoints.map(op => {
-                if (op.id === this.state.selectedObservationPointId) {
-                    op.date_time_values = this.observationPoint.getRows();
-                    return op;
-                }
-
-                return op;
-            });
-
-            this.props.onSave({
-                ...boundary,
-                observation_points: observationPoints
-            });
-
-            return;
-        }
-
-        this.props.onSave(boundary);
+    save = (boundary) => {
+        this.props.onSave(BoundaryFactory.fromObjectData(boundary).toObject);
     };
 
     renderObservationPointsSelection = boundary => {
@@ -303,74 +272,14 @@ class BoundaryProperties extends React.Component {
         const {selectedObservationPointId} = this.state;
         const boundary = BoundaryFactory.fromObjectData(this.state.boundary);
 
-        switch (boundary.type) {
-            case 'chd':
-                return (
-                    <LayoutComponents.Column heading="Data">
-                        {!readOnly && <DataTableActions component={this.observationPoint}/>}
-                        <ConstantHeadBoundaryDataTable
-                            readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
-                            rows={boundary.getDateTimeValues(selectedObservationPointId)}
-                        />
-                    </LayoutComponents.Column>
-                );
-            case 'ghb':
-                return (
-                    <LayoutComponents.Column heading="Data">
-                        {!readOnly && <DataTableActions component={this.observationPoint}/>}
-                        <GeneralHeadBoundaryDataTable
-                            readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
-                            rows={boundary.getDateTimeValues(selectedObservationPointId)}
-                        />
-                    </LayoutComponents.Column>
-                );
-            case 'rch':
-                return (
-                    <LayoutComponents.Column heading="Data">
-                        {!readOnly && <DataTableActions component={this.observationPoint}/>}
-                        <RechargeBoundaryDataTable
-                            readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
-                            rows={boundary.dateTimeValues}
-                        />
-                    </LayoutComponents.Column>
-                );
-            case 'riv':
-                return (
-                    <LayoutComponents.Column heading="Data">
-                        {!readOnly && <DataTableActions component={this.observationPoint}/>}
-                        <RiverBoundaryDataTable
-                            readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
-                            rows={boundary.getDateTimeValues(selectedObservationPointId)}
-                        />
-                    </LayoutComponents.Column>
-                );
-            case 'wel':
-                return (
-                    <LayoutComponents.Column heading="Data">
-                        {!readOnly && <DataTableActions component={this.observationPoint}/>}
-                        <WellBoundaryDataTable
-                            readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
-                            rows={boundary.indexedDateTimeValues}/>
-                    </LayoutComponents.Column>
-                );
-            case 'hob':
-                return (
-                    <LayoutComponents.Column heading="Data">
-                        {!readOnly && <DataTableActions component={this.observationPoint}/>}
-                        <HeadObservationDataTable
-                            readOnly={readOnly}
-                            ref={op => {this.observationPoint = op;}}
-                            rows={boundary.indexedDateTimeValues}/>
-                    </LayoutComponents.Column>
-                );
-            default:
-                return null;
-        }
+        return (
+            <BoundaryData
+                onChange={this.handleChangeData}
+                readOnly={readOnly}
+                boundary={boundary}
+                opId={selectedObservationPointId}
+            />
+        );
     };
 
     renderSaveButton = () => {
@@ -382,8 +291,13 @@ class BoundaryProperties extends React.Component {
 
         return (
             <div style={styles.saveButtonWrapper}>
-                <Btn secondary onClick={() => this.save(this.state.boundary)}
-                     loading={updateStatus.status === 'loading'}>Save</Btn>
+                <Btn
+                    secondary
+                    onClick={() => this.save(this.state.boundary)}
+                    loading={updateStatus.status === 'loading'}
+                >
+                    Save
+                </Btn>
             </div>
         );
     };

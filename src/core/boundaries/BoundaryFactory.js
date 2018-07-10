@@ -5,7 +5,7 @@ import GeneralHeadBoundary from './GeneralHeadBoundary';
 import RechargeBoundary from './RechargeBoundary';
 import RiverBoundary from './RiverBoundary';
 import WellBoundary from './WellBoundary';
-import HeadObservation from "./HeadObservation";
+import HeadObservation from './HeadObservation';
 
 export default class BoundaryFactory {
     static fromType = (type) => {
@@ -47,11 +47,11 @@ export default class BoundaryFactory {
         boundary.metadata = metadata;
         boundary.activeCells = active_cells;
 
-        if (date_time_values !== null) {
-            boundary.dateTimeValues = date_time_values;
+        if (date_time_values) {
+            boundary.setDateTimeValues(date_time_values);
         }
 
-        if (observation_points !== null) {
+        if (observation_points) {
             boundary.observationPoints = observation_points;
         }
 
