@@ -75,7 +75,13 @@ class InputRange extends React.Component {
         return (
             <Form.Group widths="equal">
                 <Form.Field>
-                    <label>{this.props.label ? this.props.label : 'Input'} {this.props.label_from ? this.props.label_from : 'from'}</label>
+                    { this.props.label || this.props.label_from ?
+                        <label>
+                            {this.props.label ? this.props.label : ''} {this.props.label_from ? this.props.label_from : ''}
+                        </label>
+                        :
+                        ''
+                    }
                     <Form.Input
                         disabled={this.props.disabled}
                         type="number"
@@ -88,7 +94,7 @@ class InputRange extends React.Component {
                     />
                 </Form.Field>
                 <Form.Field>
-                    <label>{this.props.label_to ? this.props.label_to : 'to'}</label>
+                    {this.props.label_to ? <label>{ this.props.label_to }</label> : ''}
                     <Form.Input
                         disabled={this.props.disabled}
                         type="number"

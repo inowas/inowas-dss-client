@@ -4,7 +4,18 @@ class OptimizationObject {
     _name = 'New Optimization Object';
     _type = 'well';
     _position = new WellPosition();
-    _flux; // WellFlux
+    _flux = {
+        0: {
+            min: -200,
+            max: -100,
+            result: null
+        },
+        1: {
+            min: -150,
+            max: -50,
+            result: null
+        }
+    };
     _concentration; // WellConcentration
 
     static fromObject(obj) {

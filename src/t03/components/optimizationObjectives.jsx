@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import OptimizationObjective from '../../core/optimization/OptimizationObjective';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../core';
-import {Button, Dropdown, Form, Grid, Icon, Segment, Table} from 'semantic-ui-react';
+import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import InputRange from './inputRange';
 
 class OptimizationObjectivesComponent extends React.Component {
@@ -257,6 +257,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                 <Grid celled="internally">
                                                     <Grid.Row textAlign="center">
                                                         <Grid.Column width={6}>
+                                                            {this.props.objects && this.props.objects.length > 0 &&
                                                             <Form.Checkbox
                                                                 name="type"
                                                                 label="At optimization object"
@@ -264,13 +265,14 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 checked={this.state.selectedObjective.location.type === 'object'}
                                                                 onChange={this.handleChangeLocation}
                                                             />
+                                                            }
                                                         </Grid.Column>
                                                         <Grid.Column width={10}>
                                                             <Form.Checkbox
                                                                 name="type"
                                                                 label="At bounding box"
                                                                 value="bbox"
-                                                                checked={this.state.selectedObjective.location.type === 'bbox'}
+                                                                checked={this.state.selectedObjective.location.type === 'bbox' || !this.props.objects || this.props.objects.length < 0}
                                                                 onChange={this.handleChangeLocation}
                                                             />
                                                         </Grid.Column>
@@ -279,22 +281,26 @@ class OptimizationObjectivesComponent extends React.Component {
                                                         <Grid.Column width={6}>
                                                             <Form.Field>
                                                                 <label>Optimization object</label>
-                                                                <Form.Select
-                                                                    disabled={this.state.selectedObjective.location.type !== 'object'}
-                                                                    name="type"
-                                                                    value={this.state.selectedObjective.type}
-                                                                    placeholder="type ="
-                                                                    options={
-                                                                        this.props.objects.map((value, index) => {
-                                                                            /*TODO: return {
-                                                                                key: index,
-                                                                                text: value.name,
-                                                                                value: value
-                                                                            };*/
-                                                                        })
-                                                                    }
-                                                                    onChange={this.handleChange}
-                                                                />
+                                                                {this.props.objects && this.props.objects.length > 0 ?
+                                                                    <Form.Select
+                                                                        disabled={this.state.selectedObjective.location.type !== 'object'}
+                                                                        name="objects"
+                                                                        value={this.state.selectedObjective.type}
+                                                                        placeholder="type ="
+                                                                        options={
+                                                                            this.props.objects.map((value, index) => {
+                                                                                return {
+                                                                                    key: index,
+                                                                                    text: value.name,
+                                                                                    value: index
+                                                                                };
+                                                                            })
+                                                                        }
+                                                                        onChange={this.handleChange}
+                                                                    />
+                                                                    :
+                                                                    <p>No optimization objects</p>
+                                                                }
                                                             </Form.Field>
                                                         </Grid.Column>
                                                         <Grid.Column width={10}>
@@ -303,6 +309,8 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 from={this.state.selectedObjective.location.ts.from}
                                                                 to={this.state.selectedObjective.location.ts.to}
                                                                 label="Time steps"
+                                                                label_from="from"
+                                                                label_to="to"
                                                                 disabled={this.state.selectedObjective.location.type !== 'bbox'}
                                                                 onChange={this.handleChangeLocationRange}
                                                             />
@@ -311,6 +319,8 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 from={this.state.selectedObjective.location.lay.from}
                                                                 to={this.state.selectedObjective.location.lay.to}
                                                                 label="Layer"
+                                                                label_from="from"
+                                                                label_to="to"
                                                                 disabled={this.state.selectedObjective.location.type !== 'bbox'}
                                                                 onChange={this.handleChangeLocationRange}
                                                             />
@@ -319,6 +329,8 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 from={this.state.selectedObjective.location.row.from}
                                                                 to={this.state.selectedObjective.location.row.to}
                                                                 label="Row"
+                                                                label_from="from"
+                                                                label_to="to"
                                                                 disabled={this.state.selectedObjective.location.type !== 'bbox'}
                                                                 onChange={this.handleChangeLocationRange}
                                                             />
@@ -327,6 +339,8 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 from={this.state.selectedObjective.location.col.from}
                                                                 to={this.state.selectedObjective.location.col.to}
                                                                 label="Column"
+                                                                label_from="from"
+                                                                label_to="to"
                                                                 disabled={this.state.selectedObjective.location.type !== 'bbox'}
                                                                 onChange={this.handleChangeLocationRange}
                                                             />

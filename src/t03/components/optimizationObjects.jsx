@@ -48,6 +48,16 @@ class OptimizationObjectsComponent extends React.Component {
         }
     });
 
+    handleChangeFlux = ({name, from, to}) => this.setState({
+        selectedObject: {
+            ...this.state.selectedObject,
+            flux: {
+                ...this.state.selectedObject.flux,
+                [name]: {min: from, max: to}
+            }
+        }
+    });
+
     onClickNew = (e, {name, value}) => {
         const newObject = new OptimizationObject();
         newObject.type = value;
@@ -71,6 +81,31 @@ class OptimizationObjectsComponent extends React.Component {
     onClickObject = (object) => {
         return this.setState({
             selectedObject: object
+        });
+    };
+
+    onClickAddFlux = () => {
+        const name = Object.keys(this.state.selectedObject.flux).length;
+        return this.setState({
+            selectedObject: {
+                ...this.state.selectedObject,
+                flux: {
+                    ...this.state.selectedObject.flux,
+                    [name]: {min: 0, max: 0}
+                }
+            }
+        });
+    };
+
+    onClickDeleteFlux = (index) => {
+        const newFlux = Object.keys(this.state.selectedObject.flux).filter(item => item !== index).map(item => {
+            return this.state.selectedObject.flux[item];
+        });
+        return this.setState({
+            selectedObject: {
+                ...this.state.selectedObject,
+                flux: newFlux
+            }
         });
     };
 
@@ -175,7 +210,7 @@ class OptimizationObjectsComponent extends React.Component {
                         <Grid.Column>
                             {(!this.state.selectedObject && (!this.state.objects || this.state.objects.length < 1)) ?
                                 <Message>
-                                    <p>There are no optimization objects so far.</p>
+                                    <p>No optimization objects</p>
                                 </Message>
                                 : ''
                             }
@@ -244,7 +279,7 @@ class OptimizationObjectsComponent extends React.Component {
                                         </Form.Field>
                                     </Form.Group>
                                     <Segment>
-                                        <p>Position</p>
+                                        <h4>Position</h4>
                                         <InputRange
                                             name="lay"
                                             from={this.state.selectedObject.position.lay.min}
@@ -272,6 +307,59 @@ class OptimizationObjectsComponent extends React.Component {
                                             label_to="max"
                                             onChange={this.handleChangePosition}
                                         />
+                                    </Segment>
+                                    <Segment>
+                                        <h4>Pumping Rates</h4>
+                                        {this.state.selectedObject.flux ?
+                                            <Table celled striped>
+                                                <Table.Header>
+                                                    <Table.Row>
+                                                        <Table.HeaderCell width={2}>#</Table.HeaderCell>
+                                                        <Table.HeaderCell width={10}>Min / Max</Table.HeaderCell>
+                                                        <Table.HeaderCell width={4}/>
+                                                    </Table.Row>
+                                                </Table.Header>
+                                                <Table.Body>
+                                                    {Object.keys(this.state.selectedObject.flux).map((item, i) =>
+                                                        <Table.Row key={i}>
+                                                            <Table.Cell width={2}>
+                                                                {item}
+                                                            </Table.Cell>
+                                                            <Table.Cell width={10}>
+                                                                <InputRange
+                                                                    name={item}
+                                                                    from={this.state.selectedObject.flux[item].min}
+                                                                    to={this.state.selectedObject.flux[item].max}
+                                                                    onChange={this.handleChangeFlux}
+                                                                />
+                                                            </Table.Cell>
+                                                            <Table.Cell width={4}>
+                                                                <Button icon color="orange"
+                                                                        labelPosition="left"
+                                                                        style={styles.iconfix}
+                                                                        onClick={() => this.onClickDeleteFlux(item)}
+                                                                >
+                                                                    <Icon name="trash"/>
+                                                                    Delete
+                                                                </Button>
+                                                            </Table.Cell>
+                                                        </Table.Row>
+                                                    )}
+                                                </Table.Body>
+                                            </Table>
+                                            :
+                                            <Message>
+                                                <p>No Flux Data</p>
+                                            </Message>
+                                        }
+                                        <Button icon
+                                                style={styles.iconfix}
+                                                labelPosition="left"
+                                                onClick={this.onClickAddFlux}
+                                        >
+                                            <Icon name="plus"/>
+                                            Add
+                                        </Button>
                                     </Segment>
                                 </Form>
                                 : ''

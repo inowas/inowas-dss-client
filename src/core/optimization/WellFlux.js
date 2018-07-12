@@ -1,28 +1,38 @@
 class WellFlux {
-    _stressPeriodIndex = {
-        '0': [-200, -100]
+    _flux = {
+        0: {
+            min: -200,
+            max: -100,
+            result: null
+        },
+        1: {
+            min: -150,
+            max: -50,
+            result: null
+        }
     };
 
     static fromObject(obj) {
         const wellFlux = new WellFlux();
-        wellFlux.stressPeriodIndex = obj.stress_period_index;
+        wellFlux.flux = obj.flux;
         return wellFlux;
     }
 
-    constructor() {}
-
-
-    get stressPeriodIndex() {
-        return this._stressPeriodIndex;
+    constructor() {
     }
 
-    set stressPeriodIndex(value) {
-        this._stressPeriodIndex = value;
+
+    get flux() {
+        return this._flux;
+    }
+
+    set flux(value) {
+        this._flux = value;
     }
 
     get toObject() {
         return {
-            'stress_period_index': this.stressPeriodIndex
+            'flux': this.flux
         };
     }
 }
