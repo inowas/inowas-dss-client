@@ -9,9 +9,12 @@ export const optimizationObjects = [
             'col': [30, 150],
             'lay': [0, 0]
         },
-        'flux': {
-            '0': [720, 720]
-        },
+        'flux': [
+            {
+                min: 720,
+                max: 860
+            }
+        ],
         'concentration': {
             '0': [[0, 0]]
         }
@@ -24,9 +27,12 @@ export const optimizationObjects = [
             'col': [30, 150],
             'lay': [0, 0]
         },
-        'flux': {
-            '0': [720, 720]
-        },
+        'flux': [
+            {
+                min: 720,
+                max: 720
+            }
+        ],
         'concentration': {
             '0': [[0, 0]]
         }
@@ -39,9 +45,12 @@ export const optimizationObjects = [
             'col': [30, 150],
             'lay': [0, 0]
         },
-        'flux': {
-            '0': [720, 720]
-        },
+        'flux': [
+            {
+                min: 720,
+                max: 860
+            }
+        ],
         'concentration': {
             '0': [[0, 0]]
         }
@@ -54,9 +63,12 @@ export const optimizationObjects = [
             'col': [109, 110],
             'lay': [0, 0]
         },
-        'flux': {
-            '0': [-2160, -2160]
-        }
+        'flux': [
+            {
+                min: -2160,
+                max: -2160
+            }
+        ]
     }
 ];
 

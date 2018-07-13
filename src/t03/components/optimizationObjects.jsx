@@ -12,10 +12,8 @@ class OptimizationObjectsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            objects: props.objects.map((object, key) => {
-                const obj = object.toObject;
-                obj.id = key + 1;
-                return obj;
+            objects: props.objects.map((object) => {
+                return object.toObject;
             }),
             selectedObject: null
         };
@@ -23,10 +21,8 @@ class OptimizationObjectsComponent extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            objects: nextProps.objects.map((object, key) => {
-                const obj = object.toObject;
-                obj.id = key + 1;
-                return obj;
+            objects: nextProps.objects.map((object) => {
+                return object.toObject;
             })
         });
     }
@@ -43,16 +39,6 @@ class OptimizationObjectsComponent extends React.Component {
             ...this.state.selectedObject,
             position: {
                 ...this.state.selectedObject.position,
-                [name]: {min: from, max: to}
-            }
-        }
-    });
-
-    handleChangeFlux = ({name, from, to}) => this.setState({
-        selectedObject: {
-            ...this.state.selectedObject,
-            flux: {
-                ...this.state.selectedObject.flux,
                 [name]: {min: from, max: to}
             }
         }
@@ -85,28 +71,21 @@ class OptimizationObjectsComponent extends React.Component {
     };
 
     onClickAddFlux = () => {
-        const name = Object.keys(this.state.selectedObject.flux).length;
-        return this.setState({
-            selectedObject: {
-                ...this.state.selectedObject,
-                flux: {
-                    ...this.state.selectedObject.flux,
-                    [name]: {min: 0, max: 0}
-                }
-            }
-        });
+        return this.setState((prevState) => ({
+            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).addFlux().toObject
+        }));
+    };
+
+    handleChangeFlux = ({name, from, to}) => {
+        return this.setState((prevState) => ({
+            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(name, from, to).toObject
+        }));
     };
 
     onClickDeleteFlux = (index) => {
-        const newFlux = Object.keys(this.state.selectedObject.flux).filter(item => item !== index).map(item => {
-            return this.state.selectedObject.flux[item];
-        });
-        return this.setState({
-            selectedObject: {
-                ...this.state.selectedObject,
-                flux: newFlux
-            }
-        });
+        return this.setState((prevState) => ({
+            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).removeFlux(index).toObject
+        }));
     };
 
     onClickBack = () => {
@@ -118,14 +97,18 @@ class OptimizationObjectsComponent extends React.Component {
     onClickSave = () => {
         const {objects, selectedObject} = this.state;
 
-        if (!selectedObject.id) {
+        if (objects.length < 1) {
+            objects.push(selectedObject);
+        }
+
+        if (objects.filter(item => item.id === selectedObject.id).length === 0) {
             objects.push(selectedObject);
         }
 
         this.props.onChange({
             key: 'objects',
             value: objects.map((obj) => {
-                if (selectedObject.id && obj.id === selectedObject.id) {
+                if (obj.id === selectedObject.id) {
                     return OptimizationObject.fromObject(selectedObject);
                 }
 
@@ -310,7 +293,7 @@ class OptimizationObjectsComponent extends React.Component {
                                     </Segment>
                                     <Segment>
                                         <h4>Pumping Rates</h4>
-                                        {this.state.selectedObject.flux ?
+                                        {this.state.selectedObject.flux && this.state.selectedObject.flux.length > 0 ?
                                             <Table celled striped>
                                                 <Table.Header>
                                                     <Table.Row>
@@ -320,16 +303,16 @@ class OptimizationObjectsComponent extends React.Component {
                                                     </Table.Row>
                                                 </Table.Header>
                                                 <Table.Body>
-                                                    {Object.keys(this.state.selectedObject.flux).map((item, i) =>
-                                                        <Table.Row key={i}>
+                                                    {this.state.selectedObject.flux.map((item, i) =>
+                                                        <Table.Row key={item.id}>
                                                             <Table.Cell width={2}>
-                                                                {item}
+                                                                {i}
                                                             </Table.Cell>
                                                             <Table.Cell width={10}>
                                                                 <InputRange
-                                                                    name={item}
-                                                                    from={this.state.selectedObject.flux[item].min}
-                                                                    to={this.state.selectedObject.flux[item].max}
+                                                                    name={item.id}
+                                                                    from={item.min}
+                                                                    to={item.max}
                                                                     onChange={this.handleChangeFlux}
                                                                 />
                                                             </Table.Cell>
@@ -337,7 +320,7 @@ class OptimizationObjectsComponent extends React.Component {
                                                                 <Button icon color="orange"
                                                                         labelPosition="left"
                                                                         style={styles.iconfix}
-                                                                        onClick={() => this.onClickDeleteFlux(item)}
+                                                                        onClick={() => this.onClickDeleteFlux(i)}
                                                                 >
                                                                     <Icon name="trash"/>
                                                                     Delete
