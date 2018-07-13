@@ -16,6 +16,7 @@ test('Get DspPackage from Default', () => {
 
 test('Get DspPackage from Object', () => {
     const dspObj = {
+        _meta: {package_name: 'dsp'},
         al: 0.01,
         trpt: 0.1,
         trpv: 0.01,

@@ -20,6 +20,7 @@ class SsmPackage extends AbstractMt3dPackage {
 
     static fromObject(obj) {
         const ssm = new SsmPackage();
+        ssm.metaDataFromObject(obj);
         ssm.crch = obj.crch;
         ssm.cevt = obj.cevt;
         ssm.mxss = obj.mxss;
@@ -99,8 +100,14 @@ class SsmPackage extends AbstractMt3dPackage {
         this._filenames = value;
     }
 
+    addSubstance(name) {
+        const availableSubstances = this.getMetaDataItem('substances') || [];
+        availableSubstances.push({name, values: []});
+        this.setMetaDataItem('substances', availableSubstances);
+    }
+
     get toObject() {
-        return {
+        const obj = {
             crch: this.crch,
             cevt: this.cevt,
             mxss: this.mxss,
@@ -108,7 +115,12 @@ class SsmPackage extends AbstractMt3dPackage {
             dtype: this.dtype,
             extension: this.extension,
             unitnumber: this.unitnumber,
-            filenames: this.filenames,
+            filenames: this.filenames
+        };
+
+        return {
+            ...super.toObject,
+            ...obj
         };
     }
 }

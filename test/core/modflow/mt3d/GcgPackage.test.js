@@ -18,6 +18,7 @@ test('Get GcgPackage from Default', () => {
 
 test('Get GcgPackage from Object', () => {
     const gcgObj = {
+        _meta: {package_name: 'gcg'},
         mxiter: 1,
         iter1: 50,
         isolve: 3,

@@ -1,12 +1,13 @@
+
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as edit from 'react-edit';
-import {DataTable, Formatter} from '../../../core/index';
-import Icon from '../../../components/primitive/Icon';
+import {DataTable, Formatter} from '../../../../core/index';
+import Icon from '../../../../components/primitive/Icon';
 
-class BoundaryDataTable extends DataTable.Component.DataTable {
+class SsmPackageDataTable extends DataTable.Component.DataTable {
     constructor(props) {
         super(props);
 
@@ -49,8 +50,7 @@ class BoundaryDataTable extends DataTable.Component.DataTable {
                     formatters: [this.header]
                 },
                 cell: {
-                    transforms: this.props.readOnly ?
-                        [] : [this.editableDate(edit.input({props: {type: 'date'}}))],
+                    transforms: [],
                     formatters: [(value) => (<span>{Formatter.toDate(value)}</span>)]
                 }
             }],
@@ -75,11 +75,11 @@ class BoundaryDataTable extends DataTable.Component.DataTable {
     };
 }
 
-BoundaryDataTable.propTypes = {
+SsmPackageDataTable.propTypes = {
     config: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
     readOnly: PropTypes.bool.isRequired,
     rows: PropTypes.array.isRequired,
 };
 
-export default BoundaryDataTable;
+export default SsmPackageDataTable;

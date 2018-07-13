@@ -58,6 +58,7 @@ class BtnPackage extends AbstractMt3dPackage {
 
     static fromObject(obj) {
         const btn = new BtnPackage();
+        btn.metaDataFromObject(obj);
         btn.MFStyleArr = obj.MFStyleArr;
         btn.DRYCell = obj.DRYCell;
         btn.Legacy99Stor = obj.Legacy99Stor;
@@ -507,57 +508,57 @@ class BtnPackage extends AbstractMt3dPackage {
     }
 
     get toObject() {
-        return {
-            MFStyleArr: this.MFStyleArr,
-            DRYCell: this.DRYCell,
-            Legacy99Stor: this.Legacy99Stor,
-            FTLPrint: this.FTLPrint,
-            NoWetDryPrint: this.NoWetDryPrint,
-            OmitDryBud: this.OmitDryBud,
-            AltWTSorb: this.AltWTSorb,
-            nlay: this.nlay,
-            nrow: this.nrow,
-            ncol: this.ncol,
-            nper: this.nper,
-            ncomp: this.ncomp,
-            mcomp: this.mcomp,
-            tunit: this.tunit,
-            lunit: this.lunit,
-            munit: this.munit,
-            laycon: this.laycon,
-            delr: this.delr,
-            delc: this.delc,
-            htop: this.htop,
-            dz: this.dz,
-            prsity: this.prsity,
-            icbund: this.icbund,
-            sconc: this.sconc,
-            cinact: this.cinact,
-            thkmin: this.thkmin,
-            ifmtcn: this.ifmtcn,
-            ifmtnp: this.ifmtnp,
-            ifmtrf: this.ifmtrf,
-            ifmtdp: this.ifmtdp,
-            savucn: this.savucn,
-            nprs: this.nprs,
-            timprs: this.timprs,
-            obs: this.obs,
-            nprobs: this.nprobs,
-            chkmas: this.chkmas,
-            nprmas: this.nprmas,
-            perlen: this.perlen,
-            nstp: this.nstp,
-            tsmult: this.tsmult,
-            ssflag: this.ssflag,
-            dt0: this.dt0,
-            mxstrn: this.mxstrn,
-            ttsmult: this.ttsmult,
-            ttsmax: this.ttsmax,
-            species_names: this.speciesNames,
-            extension: this.extension,
-            unitnumber: this.unitnumber,
-            filenames: this.filenames
-        };
+        const obj = super.toObject;
+        obj.MFStyleArr = this.MFStyleArr;
+        obj.DRYCell = this.DRYCell;
+        obj.Legacy99Stor = this.Legacy99Stor;
+        obj.FTLPrint = this.FTLPrint;
+        obj.NoWetDryPrint = this.NoWetDryPrint;
+        obj.OmitDryBud = this.OmitDryBud;
+        obj.AltWTSorb = this.AltWTSorb;
+        obj.nlay = this.nlay;
+        obj.nrow = this.nrow;
+        obj.ncol = this.ncol;
+        obj.nper = this.nper;
+        obj.ncomp = this.ncomp;
+        obj.mcomp = this.mcomp;
+        obj.tunit = this.tunit;
+        obj.lunit = this.lunit;
+        obj.munit = this.munit;
+        obj.laycon = this.laycon;
+        obj.delr = this.delr;
+        obj.delc = this.delc;
+        obj.htop = this.htop;
+        obj.dz = this.dz;
+        obj.prsity = this.prsity;
+        obj.icbund = this.icbund;
+        obj.sconc = this.sconc;
+        obj.cinact = this.cinact;
+        obj.thkmin = this.thkmin;
+        obj.ifmtcn = this.ifmtcn;
+        obj.ifmtnp = this.ifmtnp;
+        obj.ifmtrf = this.ifmtrf;
+        obj.ifmtdp = this.ifmtdp;
+        obj.savucn = this.savucn;
+        obj.nprs = this.nprs;
+        obj.timprs = this.timprs;
+        obj.obs = this.obs;
+        obj.nprobs = this.nprobs;
+        obj.chkmas = this.chkmas;
+        obj.nprmas = this.nprmas;
+        obj.perlen = this.perlen;
+        obj.nstp = this.nstp;
+        obj.tsmult = this.tsmult;
+        obj.ssflag = this.ssflag;
+        obj.dt0 = this.dt0;
+        obj.mxstrn = this.mxstrn;
+        obj.ttsmult = this.ttsmult;
+        obj.ttsmax = this.ttsmax;
+        obj.species_names = this.speciesNames;
+        obj.extension = this.extension;
+        obj.unitnumber = this.unitnumber;
+        obj.filenames = this.filenames;
+        return obj;
     }
 }
 

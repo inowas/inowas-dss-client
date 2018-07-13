@@ -16,6 +16,7 @@ test('Get SsmPackage from Default', () => {
 
 test('Get SsmPackage from Object', () => {
     const ssmObj = {
+        _meta: {package_name: 'ssm'},
         crch: null,
         cevt: null,
         mxss: null,

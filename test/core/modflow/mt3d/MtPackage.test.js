@@ -15,6 +15,7 @@ test('Get MtPackage from Default', () => {
 
 test('Get MtPackage from Object', () => {
     const mtObj = {
+        _meta: {package_name: 'mt'},
         modelname: 'mt1',
         namefile_ext: 'nam2',
         exe_name: 'mt3dm',
@@ -40,6 +41,7 @@ test('Get MtPackage toObjectFromObject', () => {
     const mt = MtPackage.fromDefault();
     expect(mt).toBeInstanceOf(MtPackage);
     expect(mt.toObject).toEqual({
+        _meta: {package_name: 'mt'},
         modelname: 'mt',
         namefile_ext: 'nam',
         exe_name: 'mt3dms',

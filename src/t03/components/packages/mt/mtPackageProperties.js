@@ -1,25 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import MtPackage from '../../../../core/modflow/mt3d/mtPackage';
 import {Checkbox, Form} from 'semantic-ui-react';
 
-class MtPackageProperties extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            mt: props.mt.toObject
-        };
-    }
+import AbstractPackageProperties from './AbstractPackageProperties';
+import MtPackage from '../../../../core/modflow/mt3d/mtPackage';
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            mt: nextProps.mt.toObject
-        });
-    }
-
+class MtPackageProperties extends AbstractPackageProperties {
     render() {
+        if (!this.state.mtPackage) {
+            return null;
+        }
+
         const {enabled, readonly, toggleEnabled} = this.props;
-        const {mt} = this.state;
+        const {mtPackage} = this.state;
 
         return (
             <Form>
@@ -29,15 +22,15 @@ class MtPackageProperties extends React.Component {
                 </Form.Field>
                 <Form.Field>
                     <label>Version</label>
-                    <input value={mt.version} readOnly/>
+                    <input value={mtPackage.version} readOnly/>
                 </Form.Field>
                 <Form.Field>
                     <label>Ftl filename</label>
-                    <input value={mt.ftlfilename} readOnly/>
+                    <input value={mtPackage.ftlfilename} readOnly/>
                 </Form.Field>
                 <Form.Field>
                     <label>Verbose</label>
-                    <input value={mt.verbose} readOnly/>
+                    <input value={mtPackage.verbose} readOnly/>
                 </Form.Field>
             </Form>
         );
@@ -45,7 +38,7 @@ class MtPackageProperties extends React.Component {
 }
 
 MtPackageProperties.propTypes = {
-    mt: PropTypes.instanceOf(MtPackage),
+    mtPackage: PropTypes.instanceOf(MtPackage),
     onChange: PropTypes.func.isRequired,
     enabled: PropTypes.bool.isRequired,
     readonly: PropTypes.bool.isRequired,

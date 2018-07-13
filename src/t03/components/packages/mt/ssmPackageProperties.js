@@ -1,55 +1,62 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SsmPackage from '../../../../core/modflow/mt3d/ssmPackage';
-import {Button, Form} from 'semantic-ui-react';
+import {LayoutComponents} from '../../../../core/index';
+import AbstractPackageProperties from './AbstractPackageProperties';
+import SsmPackageDataTable from './SsmPackageDataTable';
+import Stressperiods from '../../../../core/modflow/Stressperiods';
 
-class SsmPackageProperties extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ssm: props.ssm.toObject
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            ssm: nextProps.ssm.toObject
-        });
-    }
-
-    handleOnChange = (cast) => (e) => {
-        const {name} = e.target;
-        let value;
-
-        (typeof cast === 'function') ? value = cast(e.target.value) : value = e.target.value;
-
-        return this.setState({
-            ssm: {
-                ...this.state.ssm,
-                [name]: cast(value)
-            }
-        });
-    };
+class SsmPackageProperties extends AbstractPackageProperties {
 
     handleOnSave = () => {
-        this.props.onChange(SsmPackage.fromObject(this.state.ssm));
+        this.props.onChange(SsmPackage.fromObject(this.state.mtPackage));
+    };
+
+    handleAddSubstance = (name) => {
+        const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
+        ssmPackage.addSubstance(name);
+        this.setState({mtPackage: ssmPackage.toObject});
+    };
+
+    getData = (stressPeriods) => {
+        const dateTimeValues = [];
+        stressPeriods.stress_periods.forEach( sp => dateTimeValues.push());
     };
 
     render() {
-        const {readonly} = this.props;
-        const {ssm} = this.state;
+        const {readonly, stressPeriods} = this.props;
+        const {mtPackage} = this.state;
+
+        if (!stressPeriods) {
+            return null;
+        }
+
+        const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
+
+
+        const config = [];
+        config.push({property: 'values.0', label: 'sHead'});
+        config.push({property: 'values.1', label: 'eHead'});
+
+        return null;
 
         return (
-            <Form>
-                // DataTable
-                <Button onClick={this.handleOnSave}/>
-            </Form>
+            <LayoutComponents.Column heading="Data">
+                <SsmPackageDataTable
+                    config={config}
+                    readOnly={this.props.readOnly}
+                    rows={boundary.getIndexedDateTimeValues(this.props.opId)}
+                    onChange={this.onRowsChange}
+                />
+            </LayoutComponents.Column>
+
         );
     }
 }
 
 SsmPackageProperties.propTypes = {
-    ssm: PropTypes.instanceOf(SsmPackage),
+    mtPackage: PropTypes.instanceOf(SsmPackage),
+    stressPeriods: PropTypes.instanceOf(Stressperiods),
     onChange: PropTypes.func.isRequired,
     readonly: PropTypes.bool.isRequired,
 };

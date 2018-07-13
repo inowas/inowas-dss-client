@@ -1,43 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+
+import AbstractPackageProperties from './AbstractPackageProperties';
 import AdvPackage from '../../../../core/modflow/mt3d/advPackage';
 import {Form} from 'semantic-ui-react';
 
-class AdvPackageProperties extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            adv: props.adv.toObject
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            adv: nextProps.adv.toObject
-        });
-    }
-
-    handleOnChange = (cast) => (e) => {
-        const {name} = e.target;
-        let value;
-
-        (typeof cast === 'function') ? value = cast(e.target.value) : value = e.target.value;
-
-        return this.setState({
-            adv: {
-                ...this.state.adv,
-                [name]: cast(value)
-            }
-        });
-    };
-
-    handleOnBlur = () => {
-        this.props.onChange(AdvPackage.fromObject(this.state.adv));
-    };
-
+class AdvPackageProperties extends AbstractPackageProperties {
     render() {
+
+        if (!this.state.mtPackage) {
+            return null;
+        }
+
         const {readonly} = this.props;
-        const {adv} = this.state;
+        const {mtPackage} = this.state;
 
         return (
             <Form>
@@ -45,7 +21,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Mixelm</label>
                     <input
                         name={'mixelm'}
-                        value={adv.mixelm}
+                        value={mtPackage.mixelm}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -55,7 +31,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Percel</label>
                     <input
                         name={'percel'}
-                        value={adv.percel}
+                        value={mtPackage.percel}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
@@ -65,7 +41,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Mxpart</label>
                     <input
                         name={'mxpart'}
-                        value={adv.mxpart}
+                        value={mtPackage.mxpart}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -75,7 +51,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Nadvfd</label>
                     <input
                         name={'nadvfd'}
-                        value={adv.nadvfd}
+                        value={mtPackage.nadvfd}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -85,7 +61,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Itrack</label>
                     <input
                         name={'itrack'}
-                        value={adv.itrack}
+                        value={mtPackage.itrack}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -95,7 +71,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Wd</label>
                     <input
                         name={'wd'}
-                        value={adv.wd}
+                        value={mtPackage.wd}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
@@ -105,7 +81,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Dceps</label>
                     <input
                         name={'dceps'}
-                        value={adv.dceps}
+                        value={mtPackage.dceps}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
@@ -115,7 +91,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Nplane</label>
                     <input
                         name={'nplane'}
-                        value={adv.nplane}
+                        value={mtPackage.nplane}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -125,7 +101,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Npl</label>
                     <input
                         name={'npl'}
-                        value={adv.npl}
+                        value={mtPackage.npl}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -135,7 +111,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Nph</label>
                     <input
                         name={'nph'}
-                        value={adv.nph}
+                        value={mtPackage.nph}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -145,7 +121,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Npmin</label>
                     <input
                         name={'npmin'}
-                        value={adv.npmin}
+                        value={mtPackage.npmin}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -155,7 +131,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Npmax</label>
                     <input
                         name={'npmax'}
-                        value={adv.npmax}
+                        value={mtPackage.npmax}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -165,7 +141,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Nlsink</label>
                     <input
                         name={'nlsink'}
-                        value={adv.nlsink}
+                        value={mtPackage.nlsink}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -175,7 +151,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Npsink</label>
                     <input
                         name={'npsink'}
-                        value={adv.npsink}
+                        value={mtPackage.npsink}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -185,7 +161,7 @@ class AdvPackageProperties extends React.Component {
                     <label>Dchmoc</label>
                     <input
                         name={'dchmoc'}
-                        value={adv.dchmoc}
+                        value={mtPackage.dchmoc}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
@@ -197,7 +173,7 @@ class AdvPackageProperties extends React.Component {
 }
 
 AdvPackageProperties.propTypes = {
-    adv: PropTypes.instanceOf(AdvPackage),
+    mtPackage: PropTypes.instanceOf(AdvPackage),
     onChange: PropTypes.func.isRequired,
     readonly: PropTypes.bool.isRequired,
 };

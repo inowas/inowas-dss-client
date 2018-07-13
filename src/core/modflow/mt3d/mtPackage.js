@@ -16,6 +16,7 @@ class MtPackage extends AbstractMt3dPackage {
 
     static fromObject(obj) {
         const mt = new MtPackage();
+        mt.metaDataFromObject(obj);
         mt.modelname = obj.modelname;
         mt.namefileExt = obj.namefile_ext;
         mt.exeName = obj.exe_name;
@@ -87,15 +88,15 @@ class MtPackage extends AbstractMt3dPackage {
     }
 
     get toObject() {
-        return {
-            modelname: this._modelname,
-            namefile_ext: this._namefileExt,
-            exe_name: this._exeName,
-            model_ws: this._modelWs,
-            ftlfilename: this._ftlfilename,
-            version: this._version,
-            verbose: this._verbose
-        };
+        const obj = super.toObject;
+        obj.modelname = this._modelname;
+        obj.namefile_ext = this._namefileExt;
+        obj.exe_name = this._exeName;
+        obj.model_ws = this._modelWs;
+        obj.ftlfilename = this._ftlfilename;
+        obj.version = this._version;
+        obj.verbose = this._verbose;
+        return obj;
     }
 }
 

@@ -26,6 +26,7 @@ test('Get AdvPackage from Default', () => {
 
 test('Get AdvPackage from Object', () => {
     const advObj = {
+        _meta: {package_name: 'adv'},
         mixelm: 4,
         percel: 0.7,
         mxpart: 700000,

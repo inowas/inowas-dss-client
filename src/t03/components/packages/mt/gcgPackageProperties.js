@@ -1,43 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import GcgPackage from '../../../../core/modflow/mt3d/gcgPackage';
 import {Form} from 'semantic-ui-react';
 
-class GcgPackageProperties extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            gcg: props.gcg.toObject
-        };
-    }
+import AbstractPackageProperties from './AbstractPackageProperties';
+import GcgPackage from '../../../../core/modflow/mt3d/gcgPackage';
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            gcg: nextProps.gcg.toObject
-        });
-    }
-
-    handleOnChange = (cast) => (e) => {
-        const {name} = e.target;
-        let value;
-
-        (typeof cast === 'function') ? value = cast(e.target.value) : value = e.target.value;
-
-        return this.setState({
-            gcg: {
-                ...this.state.gcg,
-                [name]: cast(value)
-            }
-        });
-    };
-
-    handleOnBlur = () => {
-        this.props.onChange(GcgPackage.fromObject(this.state.gcg));
-    };
-
+class GcgPackageProperties extends AbstractPackageProperties {
     render() {
+
+        if (!this.state.mtPackage) {
+            return null;
+        }
+
         const {readonly} = this.props;
-        const {gcg} = this.state;
+        const {mtPackage} = this.state;
 
         return (
             <Form>
@@ -45,7 +21,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Mxiter</label>
                     <input
                         name={'mxiter'}
-                        value={gcg.mxiter}
+                        value={mtPackage.mxiter}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -55,7 +31,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Iter1</label>
                     <input
                         name={'iter1'}
-                        value={gcg.iter1}
+                        value={mtPackage.iter1}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -65,7 +41,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Isolve</label>
                     <input
                         name={'isolve'}
-                        value={gcg.isolve}
+                        value={mtPackage.isolve}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -75,7 +51,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Ncrs</label>
                     <input
                         name={'ncrs'}
-                        value={gcg.ncrs}
+                        value={mtPackage.ncrs}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -85,7 +61,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Accl</label>
                     <input
                         name={'accl'}
-                        value={gcg.accl}
+                        value={mtPackage.accl}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -95,7 +71,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Cclose</label>
                     <input
                         name={'cclose'}
-                        value={gcg.cclose}
+                        value={mtPackage.cclose}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseFloat)}
@@ -105,7 +81,7 @@ class GcgPackageProperties extends React.Component {
                     <label>Iprgcg</label>
                     <input
                         name={'iprgcg'}
-                        value={gcg.iprgcg}
+                        value={mtPackage.iprgcg}
                         disabled={readonly}
                         onBlur={this.handleOnBlur}
                         onChange={this.handleOnChange(parseInt)}
@@ -117,10 +93,9 @@ class GcgPackageProperties extends React.Component {
 }
 
 GcgPackageProperties.propTypes = {
-    gcg: PropTypes.instanceOf(GcgPackage),
+    mtPackage: PropTypes.instanceOf(GcgPackage),
     onChange: PropTypes.func.isRequired,
     readonly: PropTypes.bool.isRequired,
 };
-
 
 export default GcgPackageProperties;

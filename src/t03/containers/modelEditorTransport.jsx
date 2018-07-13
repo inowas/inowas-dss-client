@@ -83,7 +83,7 @@ class ModelEditorTransport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mt3dms: null
+            mt3dms: props.mt3dms.toObject
         };
     }
 
@@ -127,15 +127,15 @@ class ModelEditorTransport extends React.Component {
 
         const mt3d = Mt3dms.fromObject(this.state.mt3dms);
         const {model} = this.props;
+        const stressPeriods = model.stress_periods;
         const readOnly = !lodash.includes(model.permissions, 'w');
-
         const {type} = this.props.params;
 
         switch (type) {
             case 'adv':
                 return (
                     <AdvPackageProperties
-                        adv={mt3d.getPackage(type)}
+                        mtPackage={mt3d.getPackage(type)}
                         onChange={this.handleChangePackage}
                         readonly={readOnly}
                     />
@@ -143,7 +143,7 @@ class ModelEditorTransport extends React.Component {
             case 'btn':
                 return (
                     <BtnPackageProperties
-                        btn={mt3d.getPackage(type)}
+                        mtPackage={mt3d.getPackage(type)}
                         onChange={this.handleChangePackage}
                         readonly={readOnly}
                     />
@@ -151,7 +151,7 @@ class ModelEditorTransport extends React.Component {
             case 'dsp':
                 return (
                     <DspPackageProperties
-                        dsp={mt3d.getPackage(type)}
+                        mtPackage={mt3d.getPackage(type)}
                         onChange={this.handleChangePackage}
                         readonly={readOnly}
                     />
@@ -159,7 +159,7 @@ class ModelEditorTransport extends React.Component {
             case 'gcg':
                 return (
                     <GcgPackageProperties
-                        gcg={mt3d.getPackage(type)}
+                        mtPackage={mt3d.getPackage(type)}
                         onChange={this.handleChangePackage}
                         readonly={readOnly}
                     />
@@ -167,7 +167,8 @@ class ModelEditorTransport extends React.Component {
             case 'ssm':
                 return (
                     <SsmPackageProperties
-                        ssm={mt3d.getPackage(type)}
+                        mtPackage={mt3d.getPackage(type)}
+                        stressPeriods={stressPeriods}
                         onChange={this.handleChangePackage}
                         readonly={readOnly}
                     />
@@ -175,7 +176,7 @@ class ModelEditorTransport extends React.Component {
             default:
                 return (
                     <MtPackageProperties
-                        mt={mt3d.getPackage('mt')}
+                        mtPackage={mt3d.getPackage('mt')}
                         onChange={this.handleChangePackage}
                         enabled={mt3d.enabled}
                         toggleEnabled={this.handleToggleEnabled}

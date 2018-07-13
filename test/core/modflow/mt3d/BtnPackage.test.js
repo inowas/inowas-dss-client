@@ -57,6 +57,7 @@ test('Get BtnPackage from Default', () => {
 
 test('Get BtnPackage from Object', () => {
     const btnObj = {
+        _meta: {package_name: 'btn'},
         MFStyleArr: true,
         DRYCell: true,
         Legacy99Stor: true,

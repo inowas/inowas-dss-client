@@ -27,6 +27,7 @@ class AdvPackage extends AbstractMt3dPackage {
 
     static fromObject(obj) {
         const adv = new AdvPackage();
+        adv.metaDataFromObject(obj);
         adv.mixelm = obj.mixelm;
         adv.percel = obj.percel;
         adv.mxpart = obj.mxpart;
@@ -197,26 +198,26 @@ class AdvPackage extends AbstractMt3dPackage {
     }
 
     get toObject() {
-        return {
-            mixelm: this.mixelm,
-            percel: this.percel,
-            mxpart: this.mxpart,
-            nadvfd: this.nadvfd,
-            itrack: this.itrack,
-            wd: this.wd,
-            dceps: this.dceps,
-            nplane: this.nplane,
-            npl: this.npl,
-            nph: this.nph,
-            npmin: this.npmin,
-            npmax: this.npmax,
-            nlsink: this.nlsink,
-            npsink: this.npsink,
-            dchmoc: this.dchmoc,
-            extension: this.extension,
-            unitnumber: this.unitnumber,
-            filenames: this.filenames
-        };
+        const obj = super.toObject;
+        obj.mixelm = this.mixelm;
+        obj.percel = this.percel;
+        obj.mxpart = this.mxpart;
+        obj.nadvfd = this.nadvfd;
+        obj.itrack = this.itrack;
+        obj.wd = this.wd;
+        obj.dceps = this.dceps;
+        obj.nplane = this.nplane;
+        obj.npl = this.npl;
+        obj.nph = this.nph;
+        obj.npmin = this.npmin;
+        obj.npmax = this.npmax;
+        obj.nlsink = this.nlsink;
+        obj.npsink = this.npsink;
+        obj.dchmoc = this.dchmoc;
+        obj.extension = this.extension;
+        obj.unitnumber = this.unitnumber;
+        obj.filenames = this.filenames;
+        return obj;
     }
 }
 

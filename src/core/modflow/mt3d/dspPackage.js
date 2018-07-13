@@ -17,6 +17,7 @@ class DspPackage extends AbstractMt3dPackage {
 
     static fromObject(obj) {
         const dsp = new DspPackage();
+        dsp.metaDataFromObject(obj);
         dsp.al = obj.al;
         dsp.trpt = obj.trpt;
         dsp.trpv = obj.trpv;
@@ -97,16 +98,16 @@ class DspPackage extends AbstractMt3dPackage {
     }
 
     get toObject() {
-        return {
-            al: this.al,
-            trpt: this.trpt,
-            trpv: this.trpv,
-            dmcoef: this.dmcoef,
-            extension: this.extension,
-            multiDiff: this.multiDiff,
-            unitnumber: this.unitnumber,
-            filenames: this.filenames
-        };
+        const obj = super.toObject;
+        obj.al = this.al;
+        obj.trpt = this.trpt;
+        obj.trpv = this.trpv;
+        obj.dmcoef = this.dmcoef;
+        obj.extension = this.extension;
+        obj.multiDiff = this.multiDiff;
+        obj.unitnumber = this.unitnumber;
+        obj.filenames = this.filenames;
+        return obj;
     }
 }
 

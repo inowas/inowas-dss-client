@@ -31,7 +31,7 @@ class mt3dms {
         const mt = new mt3dms();
         mt.enabled = obj.enabled;
         obj.packages.forEach(packageName => {
-            const mt3dPackage = Mt3dPackageFactory.fromData(packageName, obj[packageName]);
+            const mt3dPackage = Mt3dPackageFactory.fromData(obj[packageName]);
             if (mt3dPackage) {
                 mt.addPackage(mt3dPackage);
             }

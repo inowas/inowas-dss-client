@@ -19,6 +19,7 @@ class GcgPackage extends AbstractMt3dPackage {
 
     static fromObject(obj) {
         const gcg = new GcgPackage();
+        gcg.metaDataFromObject(obj);
         gcg.mxiter = obj.mxiter;
         gcg.iter1 = obj.iter1;
         gcg.isolve = obj.isolve;
@@ -117,18 +118,18 @@ class GcgPackage extends AbstractMt3dPackage {
     }
 
     get toObject() {
-        return {
-            mxiter: this.mxiter,
-            iter1: this.iter1,
-            isolve: this.isolve,
-            ncrs: this.ncrs,
-            accl: this.accl,
-            cclose: this.cclose,
-            iprgcg: this.iprgcg,
-            extension: this.extension,
-            unitnumber: this.unitnumber,
-            filenames: this.filenames,
-        };
+        const obj = super.toObject;
+        obj.mxiter = this.mxiter;
+        obj.iter1 = this.iter1;
+        obj.isolve = this.isolve;
+        obj.ncrs = this.ncrs;
+        obj.accl = this.accl;
+        obj.cclose = this.cclose;
+        obj.iprgcg = this.iprgcg;
+        obj.extension = this.extension;
+        obj.unitnumber = this.unitnumber;
+        obj.filenames = this.filenames;
+        return obj;
     }
 }
 
