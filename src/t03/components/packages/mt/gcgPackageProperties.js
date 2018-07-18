@@ -7,7 +7,6 @@ import GcgPackage from '../../../../core/modflow/mt3d/gcgPackage';
 
 class GcgPackageProperties extends AbstractPackageProperties {
     render() {
-
         if (!this.state.mtPackage) {
             return null;
         }
@@ -23,8 +22,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'mxiter'}
                         value={mtPackage.mxiter}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -33,8 +32,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'iter1'}
                         value={mtPackage.iter1}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -43,8 +42,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'isolve'}
                         value={mtPackage.isolve}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -53,8 +52,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'ncrs'}
                         value={mtPackage.ncrs}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -63,8 +62,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'accl'}
                         value={mtPackage.accl}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -73,8 +72,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'cclose'}
                         value={mtPackage.cclose}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseFloat)}
+                        onBlur={this.handleOnBlur(parseFloat)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -83,8 +82,8 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         name={'iprgcg'}
                         value={mtPackage.iprgcg}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
             </Form>

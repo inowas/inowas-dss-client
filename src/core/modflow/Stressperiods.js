@@ -43,6 +43,10 @@ class Stressperiods {
         return this._stressperiods;
     }
 
+    get count() {
+        return this._stressperiods.length;
+    }
+
     addStressPeriod(stressPeriod) {
         this._stressperiods.push(stressPeriod);
     }

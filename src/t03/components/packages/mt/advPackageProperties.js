@@ -7,7 +7,6 @@ import {Form} from 'semantic-ui-react';
 
 class AdvPackageProperties extends AbstractPackageProperties {
     render() {
-
         if (!this.state.mtPackage) {
             return null;
         }
@@ -23,8 +22,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'mixelm'}
                         value={mtPackage.mixelm}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -33,8 +32,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'percel'}
                         value={mtPackage.percel}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseFloat)}
+                        onBlur={this.handleOnBlur(parseFloat)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -43,8 +42,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'mxpart'}
                         value={mtPackage.mxpart}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -53,8 +52,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'nadvfd'}
                         value={mtPackage.nadvfd}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -63,8 +62,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'itrack'}
                         value={mtPackage.itrack}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -73,8 +72,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'wd'}
                         value={mtPackage.wd}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseFloat)}
+                        onBlur={this.handleOnBlur(parseFloat)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -83,8 +82,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'dceps'}
                         value={mtPackage.dceps}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseFloat)}
+                        onBlur={this.handleOnBlur(parseFloat)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -93,8 +92,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'nplane'}
                         value={mtPackage.nplane}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -103,8 +102,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'npl'}
                         value={mtPackage.npl}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -113,8 +112,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'nph'}
                         value={mtPackage.nph}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -123,8 +122,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'npmin'}
                         value={mtPackage.npmin}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -133,8 +132,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'npmax'}
                         value={mtPackage.npmax}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -143,8 +142,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'nlsink'}
                         value={mtPackage.nlsink}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -153,8 +152,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'npsink'}
                         value={mtPackage.npsink}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseInt)}
+                        onBlur={this.handleOnBlur(parseInt)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -163,8 +162,8 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         name={'dchmoc'}
                         value={mtPackage.dchmoc}
                         disabled={readonly}
-                        onBlur={this.handleOnBlur}
-                        onChange={this.handleOnChange(parseFloat)}
+                        onBlur={this.handleOnBlur(parseFloat)}
+                        onChange={this.handleOnChange}
                     />
                 </Form.Field>
             </Form>

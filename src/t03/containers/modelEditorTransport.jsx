@@ -18,6 +18,7 @@ import AdvPackageProperties from '../components/packages/mt/advPackageProperties
 import DspPackageProperties from '../components/packages/mt/dspPackageProperties';
 import GcgPackageProperties from '../components/packages/mt/gcgPackageProperties';
 import SsmPackageProperties from '../components/packages/mt/ssmPackageProperties';
+import Stressperiods from '../../core/modflow/Stressperiods';
 
 const styles = {
     container: {
@@ -107,6 +108,11 @@ class ModelEditorTransport extends React.Component {
         throw new Error('Package hat to be instance of AbstractMt3dPackage');
     };
 
+    loadBoundaryDetails = (boundaryId) => {
+        const {model, getBoundary} = this.props;
+        return getBoundary(model.id, boundaryId);
+    };
+
     handleToggleEnabled = () => {
         const changedMt3dms = Mt3dms.fromObject(this.state.mt3dms);
         changedMt3dms.toggleEnabled();
@@ -121,13 +127,24 @@ class ModelEditorTransport extends React.Component {
     };
 
     renderProperties() {
-        if (!this.state.mt3dms) {
+        if (!this.state.mt3dms || !this.props.model) {
             return null;
         }
 
         const mt3d = Mt3dms.fromObject(this.state.mt3dms);
+
         const {model} = this.props;
-        const stressPeriods = model.stress_periods;
+        if (!model.stress_periods) {
+            return null;
+        }
+
+        const stressPeriods = Stressperiods.fromObject(model.stress_periods);
+
+        if (!model.boundaries) {
+            return null;
+        }
+
+        const boundaries = model.boundaries;
         const readOnly = !lodash.includes(model.permissions, 'w');
         const {type} = this.props.params;
 
@@ -168,8 +185,10 @@ class ModelEditorTransport extends React.Component {
                 return (
                     <SsmPackageProperties
                         mtPackage={mt3d.getPackage(type)}
+                        boundaries={boundaries}
                         stressPeriods={stressPeriods}
                         onChange={this.handleChangePackage}
+                        onSelectBoundary={this.loadBoundaryDetails}
                         readonly={readOnly}
                     />
                 );
@@ -217,12 +236,13 @@ class ModelEditorTransport extends React.Component {
 const mapStateToProps = (state, {tool}) => {
     return {
         model: state[tool].model,
-        mt3dms: Selector.model.getModflowMt3dms(state[tool]),
-        stressPeriods: Selector.stressPeriods.getState(state[tool].model)
+        mt3dms: Selector.model.getModflowMt3dms(state[tool])
     };
 };
 
-const actions = {};
+const actions = {
+    getBoundary: Query.getBoundary
+};
 
 const mapDispatchToProps = (dispatch, {tool}) => {
     const wrappedActions = {};
@@ -244,7 +264,8 @@ ModelEditorTransport.propTypes = {
     model: PropTypes.object,
     mt3dms: PropTypes.instanceOf(Mt3dms),
     params: PropTypes.object.isRequired,
-    routes: PropTypes.array
+    routes: PropTypes.array,
+    getBoundary: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorTransport)));

@@ -6,7 +6,6 @@ import Mt3dPackageFactory from '../../../../core/modflow/mt3d/Mt3dPackageFactory
 
 class AbstractPackageProperties extends React.Component {
     constructor(props) {
-        console.log(props);
         super(props);
         this.state = {
             mtPackage: props.mtPackage.toObject

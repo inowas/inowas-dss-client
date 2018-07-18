@@ -1,4 +1,5 @@
 import SsmPackage from '../../../../src/core/modflow/mt3d/ssmPackage';
+import SsmSubstance from '../../../../src/core/modflow/mt3d/SsmSubstance';
 
 test('Get SsmPackage from Default', () => {
     const ssm = SsmPackage.fromDefault();
@@ -28,4 +29,32 @@ test('Get SsmPackage from Object', () => {
     };
     const ssm = SsmPackage.fromObject(ssmObj);
     expect(ssm.toObject).toEqual(ssmObj);
+});
+
+test('Can add and remove substances', () => {
+    const ssm = SsmPackage.fromDefault();
+    ssm.addSubstance('bId123', SsmSubstance.create('testSubstance_1', 5));
+    ssm.addSubstance('bId123', SsmSubstance.create('testSubstance_2', 5));
+    expect(ssm.substances).toEqual([
+        {boundaryId: 'bId123', substance: {name: 'testSubstance_1', values: [0, 0, 0, 0, 0]}},
+        {boundaryId: 'bId123', substance: {name: 'testSubstance_2', values: [0, 0, 0, 0, 0]}},
+    ]);
+    ssm.removeSubstance('bId123', 'testSubstance_1');
+    expect(ssm.substances).toEqual([{
+        boundaryId: 'bId123',
+        substance: {name: 'testSubstance_2', values: [0, 0, 0, 0, 0]}
+    }]);
+
+    ssm.removeSubstance('bId123', 'testSubstance_5');
+    expect(ssm.substances).toEqual([{
+        boundaryId: 'bId123',
+        substance: {name: 'testSubstance_2', values: [0, 0, 0, 0, 0]}
+    }]);
+});
+
+test('Add substance not from type SsmSubstance throws error', () => {
+    const ssm = SsmPackage.fromDefault();
+    expect(() => {
+        ssm.addSubstance('bId123', 'testSubstance_1', 5);
+    }).toThrow();
 });
