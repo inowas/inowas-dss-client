@@ -4,7 +4,7 @@ class Location {
     _lay = {from: 0, to: 0};
     _row = {from: 0, to: 0};
     _col = {from: 0, to: 0};
-    _objects;
+    _objects = [];
 
     static fromObject(obj) {
         const location = new Location();
@@ -72,7 +72,19 @@ class Location {
     }
 
     set objects(value) {
-        this._objects = value;
+        if(value) {
+            this._objects = value;
+        }
+    }
+
+    addObject(value) {
+        this._objects.push(value);
+        return this;
+    }
+
+    removeObject(value) {
+        this._objects = this._objects.filter(i => value !== i);
+        return this;
     }
 
     get toObject() {

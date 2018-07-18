@@ -3,6 +3,7 @@ import OptimizationObject from './OptimizationObject';
 import OptimizationObjective from './OptimizationObjective';
 import OptimizationConstraint from './OptimizationConstraint';
 import Location from './Location';
+import WellPosition from "./WellPosition";
 
 class Optimization {
     _constraints = [];
@@ -55,7 +56,24 @@ class Optimization {
                 })
             })
         ];
-        optimization.objects = [];
+        optimization.objects = [
+            OptimizationObject.fromObject({
+                'id': '123-abc-456',
+                'name': 'Brunnen 1',
+                'type': 'well',
+                'position': {},
+                'flux': [],
+                'concentration': []
+            }),
+            OptimizationObject.fromObject({
+                'id': '789-xyz-012',
+                'name': 'Brunnen 2',
+                'type': 'well',
+                'position': {},
+                'flux': [],
+                'concentration': []
+            })
+        ];
         return optimization;
     }
 

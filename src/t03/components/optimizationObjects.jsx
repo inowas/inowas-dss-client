@@ -101,7 +101,7 @@ class OptimizationObjectsComponent extends React.Component {
             objects.push(selectedObject);
         }
 
-        if (objects.filter(item => item.id === selectedObject.id).length === 0) {
+        if (objects.length >= 1 && objects.filter(item => item.id === selectedObject.id).length === 0) {
             objects.push(selectedObject);
         }
 
@@ -219,14 +219,12 @@ class OptimizationObjectsComponent extends React.Component {
                                                     </Table.Cell>
                                                     <Table.Cell>{object.type}</Table.Cell>
                                                     <Table.Cell textAlign="center">
-                                                        <Button icon color="orange"
-                                                                labelPosition="left"
-                                                                size="mini"
+                                                        <Button icon color="red"
+                                                                size="small"
                                                                 style={styles.iconfix}
                                                                 onClick={() => this.onClickDelete(object)}
                                                         >
                                                             <Icon name="trash"/>
-                                                            Delete
                                                         </Button>
                                                     </Table.Cell>
                                                 </Table.Row>
@@ -316,14 +314,13 @@ class OptimizationObjectsComponent extends React.Component {
                                                                     onChange={this.handleChangeFlux}
                                                                 />
                                                             </Table.Cell>
-                                                            <Table.Cell width={4}>
-                                                                <Button icon color="orange"
-                                                                        labelPosition="left"
+                                                            <Table.Cell width={4} textAlign="center">
+                                                                <Button icon color="red"
                                                                         style={styles.iconfix}
+                                                                        size="small"
                                                                         onClick={() => this.onClickDeleteFlux(i)}
                                                                 >
                                                                     <Icon name="trash"/>
-                                                                    Delete
                                                                 </Button>
                                                             </Table.Cell>
                                                         </Table.Row>

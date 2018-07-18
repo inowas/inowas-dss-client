@@ -7,7 +7,7 @@ class OptimizationObjective {
     _summaryMethod ='';
     _weight = -1;
     _penaltyValue = 999;
-    _location = new Location(); // Location
+    _location = new Location();
     _location1; // Location
     _location2; // Location
 

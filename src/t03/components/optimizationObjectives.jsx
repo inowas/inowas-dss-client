@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import OptimizationObjective from '../../core/optimization/OptimizationObjective';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../core';
-import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
+import {Button, Dropdown, Form, Grid, Icon, Segment, Table} from 'semantic-ui-react';
 import InputRange from './inputRange';
+import Location from '../../core/optimization/Location';
 
 class OptimizationObjectivesComponent extends React.Component {
 
-    // TODO: Get objects from above
     constructor(props) {
         super(props);
         this.state = {
@@ -54,6 +54,24 @@ class OptimizationObjectivesComponent extends React.Component {
                 location: {...this.state.selectedObjective.location, [name]: {from: from, to: to}}
             }
         });
+    };
+
+    handleChangeLocationObjects = (e, {name, value}) => {
+        return this.setState((prevState) => ({
+            selectedObjective: {
+                ...this.state.selectedObjective,
+                location: Location.fromObject(prevState.selectedObjective.location).addObject(value).toObject
+            }
+        }));
+    };
+
+    onClickDeleteLocationObjects = (id) => {
+        return this.setState((prevState) => ({
+            selectedObjective: {
+                ...this.state.selectedObjective,
+                location: Location.fromObject(prevState.selectedObjective.location).removeObject(id).toObject
+            }
+        }));
     };
 
     onClickBack = () => {
@@ -283,25 +301,45 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                 <label>Optimization object</label>
                                                                 {this.props.objects && this.props.objects.length > 0 ?
                                                                     <Form.Select
-                                                                        disabled={this.state.selectedObjective.location.type !== 'object'}
+                                                                        disabled={this.state.selectedObjective.location.type !== 'object' || this.state.selectedObjective.location.objects.length >= this.props.objects.length}
                                                                         name="objects"
-                                                                        value={this.state.selectedObjective.type}
-                                                                        placeholder="type ="
+                                                                        placeholder="object ="
                                                                         options={
-                                                                            this.props.objects.map((value, index) => {
-                                                                                return {
-                                                                                    key: index,
-                                                                                    text: value.name,
-                                                                                    value: index
-                                                                                };
-                                                                            })
+                                                                            this.props.objects
+                                                                                .filter(value =>
+                                                                                    this.state.selectedObjective.location.objects.indexOf(value.id) === -1)
+                                                                                .map((value, index) => {
+                                                                                    return {
+                                                                                        key: index,
+                                                                                        text: value.name,
+                                                                                        value: value.id
+                                                                                    };
+                                                                                })
                                                                         }
-                                                                        onChange={this.handleChange}
+                                                                        onChange={this.handleChangeLocationObjects}
                                                                     />
                                                                     :
                                                                     <p>No optimization objects</p>
                                                                 }
                                                             </Form.Field>
+                                                            {this.state.selectedObjective.location.objects && this.state.selectedObjective.location.objects.length > 0 ?
+                                                                <ul>
+                                                                    {this.state.selectedObjective.location.objects.map(object =>
+                                                                        <li key={object}>
+                                                                            {object}
+                                                                            <Button icon color="red"
+                                                                                    style={styles.iconfix}
+                                                                                    size="small"
+                                                                                    onClick={() => this.onClickDeleteLocationObjects(object)}>
+                                                                                <Icon name="trash"/>
+                                                                            </Button>
+                                                                        </li>
+                                                                    )
+                                                                    }
+                                                                </ul>
+                                                                :
+                                                                ''
+                                                            }
                                                         </Grid.Column>
                                                         <Grid.Column width={10}>
                                                             <InputRange
@@ -372,12 +410,11 @@ class OptimizationObjectivesComponent extends React.Component {
                                                             </Table.Cell>
                                                             <Table.Cell>{objective.summary_method}</Table.Cell>
                                                             <Table.Cell textAlign="center">
-                                                                <Button icon color="orange"
-                                                                        labelPosition="left"
+                                                                <Button icon color="red"
                                                                         style={styles.iconfix}
+                                                                        size="small"
                                                                         onClick={() => this.onClickDelete(objective)}>
                                                                     <Icon name="trash"/>
-                                                                    Delete
                                                                 </Button>
                                                             </Table.Cell>
                                                         </Table.Row>
