@@ -6,6 +6,7 @@ import {pure} from 'recompose';
 import {LayoutComponents} from '../../core';
 import {Button, Dropdown, Form, Grid, Icon, Segment, Table} from 'semantic-ui-react';
 import InputRange from './inputRange';
+import InputObjectList from './InputObjectList';
 import Location from '../../core/optimization/Location';
 
 class OptimizationObjectivesComponent extends React.Component {
@@ -56,20 +57,11 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     };
 
-    handleChangeLocationObjects = (e, {name, value}) => {
+    handleChangeLocationObjects = objectIds => {
         return this.setState((prevState) => ({
             selectedObjective: {
                 ...this.state.selectedObjective,
-                location: Location.fromObject(prevState.selectedObjective.location).addObject(value).toObject
-            }
-        }));
-    };
-
-    onClickDeleteLocationObjects = (id) => {
-        return this.setState((prevState) => ({
-            selectedObjective: {
-                ...this.state.selectedObjective,
-                location: Location.fromObject(prevState.selectedObjective.location).removeObject(id).toObject
+                location: Location.fromObject(prevState.selectedObjective.location).updateObjects(objectIds).toObject
             }
         }));
     };
@@ -297,49 +289,23 @@ class OptimizationObjectivesComponent extends React.Component {
                                                     </Grid.Row>
                                                     <Grid.Row>
                                                         <Grid.Column width={6}>
-                                                            <Form.Field>
-                                                                <label>Optimization object</label>
-                                                                {this.props.objects && this.props.objects.length > 0 ?
-                                                                    <Form.Select
-                                                                        disabled={this.state.selectedObjective.location.type !== 'object' || this.state.selectedObjective.location.objects.length >= this.props.objects.length}
-                                                                        name="objects"
-                                                                        placeholder="object ="
-                                                                        options={
-                                                                            this.props.objects
-                                                                                .filter(value =>
-                                                                                    this.state.selectedObjective.location.objects.indexOf(value.id) === -1)
-                                                                                .map((value, index) => {
-                                                                                    return {
-                                                                                        key: index,
-                                                                                        text: value.name,
-                                                                                        value: value.id
-                                                                                    };
-                                                                                })
-                                                                        }
-                                                                        onChange={this.handleChangeLocationObjects}
-                                                                    />
-                                                                    :
-                                                                    <p>No optimization objects</p>
+                                                            <InputObjectList
+                                                                name="objects"
+                                                                label="Optimization Objects"
+                                                                placeholder="object ="
+                                                                disabled={this.state.selectedObjective.location.type !== 'object' || this.state.selectedObjective.location.objects.length >= this.props.objects.length}
+                                                                addableObjects={
+                                                                    this.props.objects && this.props.objects.length > 0
+                                                                        ? this.props.objects
+                                                                        : []
                                                                 }
-                                                            </Form.Field>
-                                                            {this.state.selectedObjective.location.objects && this.state.selectedObjective.location.objects.length > 0 ?
-                                                                <ul>
-                                                                    {this.state.selectedObjective.location.objects.map(object =>
-                                                                        <li key={object}>
-                                                                            {object}
-                                                                            <Button icon color="red"
-                                                                                    style={styles.iconfix}
-                                                                                    size="small"
-                                                                                    onClick={() => this.onClickDeleteLocationObjects(object)}>
-                                                                                <Icon name="trash"/>
-                                                                            </Button>
-                                                                        </li>
-                                                                    )
-                                                                    }
-                                                                </ul>
-                                                                :
-                                                                ''
-                                                            }
+                                                                objectsInList={
+                                                                    this.state.selectedObjective.location.objects && this.state.selectedObjective.location.objects.length > 0
+                                                                        ? this.state.selectedObjective.location.objects
+                                                                        : []
+                                                                }
+                                                                onChange={this.handleChangeLocationObjects}
+                                                            />
                                                         </Grid.Column>
                                                         <Grid.Column width={10}>
                                                             <InputRange

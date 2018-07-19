@@ -87,6 +87,11 @@ class Location {
         return this;
     }
 
+    updateObjects(value) {
+        this._objects = value;
+        return this;
+    }
+
     get toObject() {
         return ({
             'type': this.type,

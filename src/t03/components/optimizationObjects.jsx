@@ -2,7 +2,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import React from 'react';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../core';
-import {Button, Dropdown, Message, Form, Grid, Icon, Segment, Table} from 'semantic-ui-react';
+import {Button, Dropdown, Message, Form, List, Grid, Icon, Segment, Table} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import OptimizationObject from '../../core/optimization/OptimizationObject';
 import InputRange from './inputRange';
