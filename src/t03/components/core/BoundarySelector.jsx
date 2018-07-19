@@ -6,17 +6,26 @@ import BoundaryFactory from '../../../core/boundaries/BoundaryFactory';
 import Boundary from '../../../core/boundaries/Boundary';
 
 class BoundarySelector extends React.Component {
+
+    componentWillMount() {
+        if (!this.selectedBoundary) {
+            this.props.onChange(this.props.boundaries[0].id);
+        }
+    }
+
     handleSelectBoundary = (e, {value}) => {
         return this.props.onChange(value);
     };
 
-    boundaryOptions = () => this.props.boundaries.map(b => ({
-        key: b.id,
-        value: b.id,
-        text: b.name
-    }));
+    get boundaryOptions() {
+        return this.props.boundaries.map(b => ({
+            key: b.id,
+            value: b.id,
+            text: b.name
+        }));
+    }
 
-    selectedBoundary = () => {
+    get selectedBoundary() {
         if (this.props.selected) {
             const boundaryObj = this.props.boundaries.filter(b => b.id === this.props.selected)[0];
             if (boundaryObj.hasOwnProperty('active_cells')) {
@@ -25,11 +34,11 @@ class BoundarySelector extends React.Component {
         }
 
         return null;
-    };
+    }
 
-    layerOptions = () => {
-        if (this.selectedBoundary() instanceof Boundary) {
-            return this.selectedBoundary().affectedLayers.map(l => ({
+    get layerOptions() {
+        if (this.selectedBoundary instanceof Boundary) {
+            return this.selectedBoundary.affectedLayers.map(l => ({
                 key: l,
                 value: l,
                 text: l
@@ -37,11 +46,9 @@ class BoundarySelector extends React.Component {
         }
 
         return null;
-    };
+    }
 
     render() {
-        const selectedBoundary = this.selectedBoundary();
-
         return (
             <div>
                 <Dropdown
@@ -49,20 +56,20 @@ class BoundarySelector extends React.Component {
                     fluid
                     search
                     selection
-                    options={this.boundaryOptions()}
+                    options={this.boundaryOptions}
                     onChange={this.handleSelectBoundary}
                     value={this.props.selected}
                 />
 
-                {selectedBoundary &&
+                {this.selectedBoundary &&
                 <Dropdown
                     disabled
                     fluid
                     multiple
-                    options={this.layerOptions()}
+                    options={this.layerOptions}
                     placeholder={'Layers'}
                     selection
-                    value={this.selectedBoundary().affectedLayers}
+                    value={this.selectedBoundary.affectedLayers}
                 />
                 }
 

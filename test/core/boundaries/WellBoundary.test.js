@@ -96,6 +96,13 @@ test('Get WellBoundary from Object', () => {
     expect(wellBoundary.toObject).toEqual(wellObject);
 });
 
+test('WellBoundary ActiveCells', () => {
+    const wellObject = boundaryObjects.wellBoundary();
+    const wellBoundary = WellBoundary.createFromObject(wellObject);
+    expect(wellBoundary.affectedCells).toEqual([[4, 5, 0]]);
+    expect(wellBoundary.toObject).toEqual(wellObject);
+});
+
 test('Get BoundaryDefaults equals fromStartDate', () => {
     const id = Uuid.v4();
     const name = 'NameOfWell';

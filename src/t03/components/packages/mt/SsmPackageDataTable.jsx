@@ -1,11 +1,9 @@
-
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as edit from 'react-edit';
 import {DataTable, Formatter} from '../../../../core/index';
-import Icon from '../../../../components/primitive/Icon';
 
 class SsmPackageDataTable extends DataTable.Component.DataTable {
     constructor(props) {
@@ -26,23 +24,6 @@ class SsmPackageDataTable extends DataTable.Component.DataTable {
                 },
             },
             columns: [{
-                props: {style: {width: 30}},
-                header: {
-                    label: '', formatters: [() => (!this.props.readOnly &&
-                        <Icon name={'unchecked'} onClick={this.onSelectAll}/>
-                    )
-                    ],
-                },
-                cell: {
-                    formatters: [
-                        (value, {rowData}) => !this.props.readOnly &&
-                            <Icon
-                                name={rowData.selected ? 'checked' : 'unchecked'}
-                                onClick={() => this.onSelect(rowData)}
-                            />
-                    ]
-                }
-            }, {
                 property: 'date_time',
                 header: {
                     label: 'Start Time',

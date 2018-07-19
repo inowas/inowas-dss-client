@@ -722,8 +722,12 @@ class BackgroundMap extends React.Component {
             }
 
             return (
-                <ActiveCellsLayer key={uniqueId()} activeCells={e.activeCells} boundingBox={boundingBox}
-                                  gridSize={gridSize}/>
+                <ActiveCellsLayer
+                    key={uniqueId()}
+                    activeCells={e.activeCells}
+                    boundingBox={boundingBox}
+                    gridSize={gridSize}
+                />
             );
         });
 

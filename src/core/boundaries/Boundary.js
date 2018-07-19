@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 
 import Uuid from 'uuid';
+import AffectedCells from './AffectedCells';
 
 export default class Boundary {
     _id;
@@ -65,6 +66,10 @@ export default class Boundary {
 
     get type() {
         return this._type;
+    }
+
+    get affectedCells() {
+        return AffectedCells.fromLayersAndCells(this.affectedLayers, this.activeCells).toObject;
     }
 
     get isValid() {

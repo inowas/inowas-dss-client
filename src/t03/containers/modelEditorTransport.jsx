@@ -7,7 +7,6 @@ import {withRouter} from 'react-router';
 import * as lodash from 'lodash';
 import {Command, Query} from '../../t03/actions';
 import {Selector} from '../../t03/index';
-import {WebData} from '../../core';
 import {Routing} from '../actions/index';
 import VerticalMenu from '../../components/primitive/VerticalMenu';
 import Mt3dms from '../../core/modflow/mt3d/mt3dms';
@@ -19,6 +18,7 @@ import DspPackageProperties from '../components/packages/mt/dspPackageProperties
 import GcgPackageProperties from '../components/packages/mt/gcgPackageProperties';
 import SsmPackageProperties from '../components/packages/mt/ssmPackageProperties';
 import Stressperiods from '../../core/modflow/Stressperiods';
+import {Button} from 'semantic-ui-react';
 
 const styles = {
     container: {
@@ -49,7 +49,12 @@ const styles = {
         textAlign: 'left',
         paddingBottom: 10,
         marginTop: 30
-    }
+    },
+
+    buttonFix: {
+        width: 'auto',
+        height: 'auto'
+    },
 };
 
 const sideBar = [
@@ -95,6 +100,13 @@ class ModelEditorTransport extends React.Component {
             };
         }
     }
+
+    handleOnSave = () => {
+        return this.props.updateMt3dms(
+            this.props.model.id,
+            Mt3dms.fromObject(this.state.mt3dms)
+        );
+    };
 
     handleChangePackage = (p) => {
         if (p instanceof AbstractMt3dPackage) {
@@ -220,12 +232,22 @@ class ModelEditorTransport extends React.Component {
     };
 
     render() {
+        const readonly = !lodash.includes(this.props.model.permissions, 'w');
         return (
             <div style={[styles.container]}>
                 {this.renderSidebar()}
                 <div style={styles.properties}>
                     <div style={[styles.columnFlex2]}>
                         {this.renderProperties()}
+                        <Button
+                            floated={'right'}
+                            style={styles.buttonFix}
+                            icon
+                            onClick={this.handleOnSave}
+                            disabled={readonly}
+                        >
+                            Save
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -241,7 +263,8 @@ const mapStateToProps = (state, {tool}) => {
 };
 
 const actions = {
-    getBoundary: Query.getBoundary
+    getBoundary: Query.getBoundary,
+    updateMt3dms: Command.updateMt3dms
 };
 
 const mapDispatchToProps = (dispatch, {tool}) => {
@@ -265,7 +288,8 @@ ModelEditorTransport.propTypes = {
     mt3dms: PropTypes.instanceOf(Mt3dms),
     params: PropTypes.object.isRequired,
     routes: PropTypes.array,
-    getBoundary: PropTypes.func.isRequired
+    getBoundary: PropTypes.func.isRequired,
+    updateMt3dms: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorTransport)));
