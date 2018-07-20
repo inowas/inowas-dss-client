@@ -1,4 +1,5 @@
 import styleGlobals from 'styleGlobals';
+import mt3dms from "../../core/modflow/mt3d/mt3dms";
 
 export const CALCULATION_STATE_NEW = 0;
 export const CALCULATION_STATE_PREPROCESSING = 1;
@@ -36,6 +37,13 @@ export const getInitialStyles = () => {
             color: styleGlobals.colors.accent,
             opacity: 1,
             fill: false
+        },
+        hob: {
+            radius: 3,
+            color: 'green',
+            weight: 1,
+            fillColor: 'yellow',
+            fillOpacity: 1
         },
         rch: {
             weight: 2,
@@ -222,3 +230,5 @@ export const getPermissions = state => state.model.permissions;
 export const getModflowModel = state => state.model;
 
 export const getModflowPackages = state => state.model.packages;
+
+export const getModflowMt3dms = state => state.model.mt3dms || mt3dms.fromDefaults();

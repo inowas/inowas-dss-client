@@ -17,7 +17,7 @@ export const onSelectAll = (component = {}) => () => {
 
 export const onSelect = (component = {}) => (rowData) => {
     component.setState(function (prevState, props) {
-        const index = findIndex(component.state.rows, {id: rowData.id});;
+        const index = findIndex(component.state.rows, {id: rowData.id});
         const selectedRowId = prevState.rows[index].id;
         const selectedRows = cloneDeep(prevState.selectedRows);
 

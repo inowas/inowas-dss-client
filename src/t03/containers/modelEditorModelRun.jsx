@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConfiguredRadium from 'ConfiguredRadium';
-import Button from '../../components/primitive/Button';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
 import * as lodash from 'lodash';
-import { Command, Query } from '../../t03/actions';
-import { Selector } from '../../t03/index';
-import { StressPeriodProperties, CalculationStatus, RunModelOverview, PackageProperties } from '../components';
-import { WebData } from '../../core';
-import RunModelProperties from '../components/runModelProperties';
-import ListfileProperties from '../components/ListfileProperties';
-import FilterableList from '../../components/primitive/FilterableList';
-import { Routing } from '../actions/index';
+import {Command, Query} from '../../t03/actions';
+import {Selector} from '../../t03/index';
+import {StressPeriodProperties, CalculationStatus, RunModelOverview, MfPackageProperties} from '../components';
+import {WebData} from '../../core';
+import RunModelProperties from '../components/runModel/CalculationLogs';
+import ListFileProperties from '../components/runModel/ListFileProperties';
+import {Routing} from '../actions/index';
+import Calibration from '../components/runModel/Calibration';
+import VerticalMenu from '../../components/primitive/VerticalMenu';
+import {Button, Segment} from 'semantic-ui-react';
 
 const styles = {
     container: {
@@ -48,9 +49,9 @@ const styles = {
 };
 
 
-const menu = [
+const sideBarTopMenu = [
     {
-        id: '',
+        id: undefined,
         name: 'Overview'
     },
     {
@@ -63,19 +64,27 @@ const menu = [
     },
     {
         id: 'flow',
-        name: 'flow'
-    },
-    {
-        id: 'calculation',
-        name: 'Show logs'
-    },
-    {
-        id: 'files',
-        name: 'Show files'
+        name: 'Flow Package'
     }
 ];
 
-@ConfiguredRadium
+
+const sideBarBottomMenu = [
+    {
+        id: 'calculation',
+        name: 'Calculation logs'
+    },
+    {
+        id: 'files',
+        name: 'Modflow files'
+    },
+    {
+        id: 'calibration',
+        name: 'Calibration data'
+    }
+];
+
+
 class ModelEditorModelRun extends React.Component {
 
     updateStressPeriods = (data) => {
@@ -104,23 +113,23 @@ class ModelEditorModelRun extends React.Component {
     };
 
     onMenuClick = (type) => {
-        const { routes, params } = this.props;
+        const {routes, params} = this.props;
 
         Routing.modelRunType(routes, params)(type);
     };
 
     loadFile = (file) => {
-        const { model, getFile } = this.props;
+        const {model, getFile} = this.props;
         const calculationId = model.calculation.calculation_id;
 
         if (!file || !calculationId) {
             return;
         }
 
-        getFile( calculationId, lodash.last(lodash.split(file, '.')) );
+        getFile(calculationId, lodash.last(lodash.split(file, '.')));
     };
 
-    renderProperties( ) {
+    renderProperties() {
         const {
             stressPeriods,
             calculateStressPeriodsStatus,
@@ -137,7 +146,7 @@ class ModelEditorModelRun extends React.Component {
 
         const {type, id} = this.props.params;
 
-        switch ( type ) {
+        switch (type) {
             case 'calculation':
                 return (
                     <RunModelProperties
@@ -149,7 +158,7 @@ class ModelEditorModelRun extends React.Component {
             case 'solver':
             case 'flow':
                 return (
-                    <PackageProperties
+                    <MfPackageProperties
                         onSave={this.updateModflowPackage}
                         loadingStatus={this.props.getModflowPackageStatus}
                         getModflowPackagesStatus={this.props.getModflowPackagesStatus}
@@ -164,7 +173,7 @@ class ModelEditorModelRun extends React.Component {
                 );
             case 'files':
                 return (
-                    <ListfileProperties
+                    <ListFileProperties
                         getFileStatus={getFileStatus}
                         loadFile={this.loadFile}
                         files={model.calculation.files || []}
@@ -172,46 +181,93 @@ class ModelEditorModelRun extends React.Component {
                 );
             case 'times':
                 return (
-                    <StressPeriodProperties stressPeriods={stressPeriods}
-                                    onSave={this.updateStressPeriods}
-                                    onCalculate={this.calculateStressPeriods}
-                                    calculateStressPeriodsStatus={calculateStressPeriodsStatus}
-                                    updateStressPeriodsStatus={updateStressPeriodsStatus}
-                                    readOnly={readOnly || readOnlyScenario}
-                    /> );
+                    <StressPeriodProperties
+                        stressPeriods={stressPeriods}
+                        onSave={this.updateStressPeriods}
+                        onCalculate={this.calculateStressPeriods}
+                        calculateStressPeriodsStatus={calculateStressPeriodsStatus}
+                        updateStressPeriodsStatus={updateStressPeriodsStatus}
+                        readOnly={readOnly || readOnlyScenario}
+                    />);
+            case 'calibration':
+                return (
+                    <Calibration
+                        getFileStatus={getFileStatus}
+                        loadFile={this.loadFile}
+                        files={model.calculation.files || []}
+                    />
+                );
+
             default:
-                return <RunModelOverview model={model} route={Routing.goToProperty(routes, params)} routeType={Routing.goToPropertyType(routes, params)}/>;
+                return (
+                    <RunModelOverview
+                        model={model}
+                        route={Routing.goToProperty(routes, params)}
+                        routeType={Routing.goToPropertyType(routes, params)}
+                    />
+                );
         }
     }
 
-    render() {
+    renderSidebar = () => {
         const {calculateModflowModel, calculateModflowModelStatus, model, stopPolling} = this.props;
-        const {id} = this.props.params;
+        const {id, type} = this.props.params;
         const readOnly = !lodash.includes(model.permissions, 'w');
 
         const canCancel = WebData.Selector.isStatusLoading(calculateModflowModelStatus)
             && model.calculation.state !== Selector.model.CALCULATION_STATE_NEW;
 
         return (
-            <div style={[ styles.container ]}>
-                <div style={styles.left}>
-                    <FilterableList
-                        itemClickAction={this.onMenuClick}
-                        list={menu}
-                    />
-                    {!readOnly && !canCancel &&
-                    <WebData.Component.Loading status={calculateModflowModelStatus}>
-                        <Button type="full" onClick={() => calculateModflowModel(id)}>Calculate</Button>
-                    </WebData.Component.Loading>}
-                    {canCancel &&
-                    <Button type="full" onClick={stopPolling}>Cancel calculation</Button>}
-                    <h3 style={[styles.heading]}>
-                        Calculation Status
+            <div style={styles.left}>
+                <VerticalMenu
+                    activeItem={type}
+                    items={sideBarTopMenu}
+                    onClick={this.onMenuClick}
+                    style={{marginBottom: 20}}
+                />
+
+                <Segment style={{marginRight: 15}}>
+
+                    <h3 style={{...styles.heading, marginTop: 10}}>
+                        Calculation
                     </h3>
-                    <CalculationStatus calculation={model.calculation} />
-                </div>
+
+                    {!readOnly && !canCancel &&
+                    <Button
+                        size="big"
+                        positive
+                        fluid
+                        onClick={() => calculateModflowModel(id)}
+                    >
+                        Calculate
+                    </Button>
+                    }
+
+                    {canCancel &&
+                    <Button size="big" negative fluid onClick={stopPolling}>
+                        Cancel calculation
+                    </Button>
+                    }
+
+                    <h3 style={[styles.heading]}>
+                        Progress
+                    </h3>
+
+                    <CalculationStatus calculation={model.calculation}/>
+                </Segment>
+
+                <VerticalMenu activeItem={type} items={sideBarBottomMenu} onClick={this.onMenuClick}/>
+            </div>
+        );
+    };
+
+
+    render() {
+        return (
+            <div style={[styles.container]}>
+                {this.renderSidebar()}
                 <div style={styles.properties}>
-                    <div style={[ styles.columnFlex2 ]}>
+                    <div style={[styles.columnFlex2]}>
                         {this.renderProperties()}
                     </div>
                 </div>
@@ -219,6 +275,21 @@ class ModelEditorModelRun extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state, {tool}) => {
+    return {
+        stressPeriods: Selector.stressPeriods.getState(state[tool].model),
+        model: state[tool].model,
+        modflowPackages: Selector.model.getModflowPackages(state[tool]),
+        calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
+        updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
+        updateModflowPackageStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_MODFLOW_PACKAGE),
+        getModflowPackageStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGE),
+        getModflowPackagesStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGES),
+        calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
+        getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
+    };
+};
 
 const actions = {
     updateStressPeriods: Command.updateStressPeriods,
@@ -231,29 +302,14 @@ const actions = {
     stopPolling: Query.stopGetModflowModelCalculation,
 };
 
-const mapStateToProps = (state, { tool, params }) => {
-    return {
-        stressPeriods: Selector.stressPeriods.getState(state[ tool ].model),
-        model: state[ tool ].model,
-        modflowPackages: Selector.model.getModflowPackages(state[ tool ]),
-        calculateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_STRESS_PERIODS),
-        updateStressPeriodsStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_STRESS_PERIODS),
-        updateModflowPackageStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_MODFLOW_PACKAGE),
-        getModflowPackageStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGE),
-        getModflowPackagesStatus: WebData.Selector.getStatusObject(state, Query.GET_MODFLOW_PACKAGES),
-        calculateModflowModelStatus: WebData.Selector.getStatusObject(state, Command.CALCULATE_MODFLOW_MODEL),
-        getFileStatus: WebData.Selector.getStatusObject(state, Query.GET_FILE),
-    };
-};
-
-const mapDispatchToProps = (dispatch, { tool }) => {
+const mapDispatchToProps = (dispatch, {tool}) => {
     const wrappedActions = {};
-    for ( const key in actions ) {
-        if (actions.hasOwnProperty( key )) {
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function( ) {
-                const args = Array.prototype.slice.call( arguments );
-                dispatch(actions[key]( tool, ...args ));
+            wrappedActions[key] = function() {
+                const args = Array.prototype.slice.call(arguments);
+                dispatch(actions[key](tool, ...args));
             };
         }
     }
@@ -261,26 +317,29 @@ const mapDispatchToProps = (dispatch, { tool }) => {
     return wrappedActions;
 };
 
-// eslint-disable-next-line no-class-assign
-ModelEditorModelRun = withRouter(connect(mapStateToProps, mapDispatchToProps)(ModelEditorModelRun));
-
 ModelEditorModelRun.propTypes = {
     tool: PropTypes.string,
     getFile: PropTypes.func,
     calculateStressPeriods: PropTypes.func,
-    calculateStressPeriodsStatus: PropTypes.func,
+    calculateStressPeriodsStatus: PropTypes.object,
     calculateModflowModel: PropTypes.func,
-    calculateModflowModelStatus: PropTypes.func,
+    calculateModflowModelStatus: PropTypes.object,
     calculation: PropTypes.object,
-    getFileStatus: PropTypes.func,
+    getFileStatus: PropTypes.object,
+    getModflowPackage: PropTypes.func,
+    getModflowPackageStatus: PropTypes.object,
+    getModflowPackagesStatus: PropTypes.object,
+    getModflowPackages: PropTypes.func,
     model: PropTypes.object,
+    modflowPackages: PropTypes.object,
     params: PropTypes.object,
-    routes: PropTypes.object,
+    routes: PropTypes.array,
     stopPolling: PropTypes.func,
     stressPeriods: PropTypes.object,
+    updateModflowPackage: PropTypes.func,
+    updateModflowPackageStatus: PropTypes.object,
     updateStressPeriods: PropTypes.func,
-    updateStressPeriodsStatus: PropTypes.func
+    updateStressPeriodsStatus: PropTypes.object
 };
 
-
-export default ModelEditorModelRun;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorModelRun)));

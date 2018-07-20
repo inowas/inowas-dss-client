@@ -1,6 +1,6 @@
-import { Callback } from './actions';
-import { getSortingColumns, getRows } from './selectors';
-import { Formatter } from '../../core';
+import {Callback} from './actions';
+import {getSortingColumns, getRows} from './selectors';
+import {Formatter} from '../../core';
 import * as edit from 'react-edit';
 import * as sort from 'sortabular';
 import {compose} from 'redux';
@@ -29,26 +29,20 @@ export const editableDate = (component = {}) => edit.edit({
 export const resetable = (component = {}) => sort.reset({
     event: 'onDoubleClick',
     getSortingColumns: getSortingColumns(component),
-    onReset: ({sortingColumns}) => component.setState(function (prevState, props) {
-        return {sortingColumns};
-    }),
+    onReset: ({sortingColumns}) => component.setState(() => ({sortingColumns})),
     strategy: sort.strategies.byProperty
 });
 
 export const sortable = (component = {}) => sort.sort({
     getSortingColumns: getSortingColumns(component),
-
     onSort: selectedColumn => {
-        component.setState((prevState, props) => {
-            return {
-                sortingColumns: sort.byColumn({
-                    sortingColumns: component.state.sortingColumns,
-                    selectedColumn
-                })
-            };
-        });
+        component.setState(() => ({
+            sortingColumns: sort.byColumn({
+                sortingColumns: component.state.sortingColumns,
+                selectedColumn
+            })
+        }));
     },
-
     strategy: sort.strategies.byProperty
 });
 
@@ -66,16 +60,16 @@ export const header = (component = {}) => sort.header({
  * @param page
  * @param perPage
  */
-export const sortedRows  = (rows, sortingColumns, resolvedColumns, page, perPage = {}) => compose(
-    getRows( page, perPage ),
-    sort.sorter( {
+export const sortedRows = (rows, sortingColumns, resolvedColumns, page, perPage = {}) => compose(
+    getRows(page, perPage),
+    sort.sorter({
         columns: resolvedColumns,
         sortingColumns,
         sort: orderBy,
         strategy: sort.strategies.byProperty
-    } ),
-    resolve.resolve( {
+    }),
+    resolve.resolve({
         columns: resolvedColumns,
         method: resolve.nested
-    } )
-)( rows );
+    })
+)(rows);

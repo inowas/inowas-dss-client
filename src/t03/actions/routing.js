@@ -83,3 +83,7 @@ export const modelOptimizationType = (routes, params) => (type) => {
 export const editOptimization = (routes, params) => (property, type, pid) => {
     Routing.goToUrl( routes, { ...filterParamsPropertyTypePid( params ), property: 'optimization', type, pid } );
 };
+
+export const transportType = (routes, params) => (type) => {
+    Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property: 'transport', type } );
+};
