@@ -10,6 +10,7 @@ import BoundarySelector from '../../core/BoundarySelector';
 import SsmSubstanceEditor from './SsmSubstanceEditor';
 import SsmSubstance from '../../../../core/modflow/mt3d/SsmSubstance';
 import BoundaryFactory from "../../../../core/boundaries/BoundaryFactory";
+import Boundary from "../../../../core/boundaries/Boundary";
 
 
 const styles = {
@@ -80,49 +81,44 @@ class SsmPackageProperties extends AbstractPackageProperties {
 
     handleSelectBoundary = boundaryId => {
         this.props.onSelectBoundary(boundaryId);
-        return this.setState((prevState) => ({
-            selectedBoundary: boundaryId,
-            substances: SsmPackage.fromObject(prevState.mtPackage).getSubstancesByBoundaryId(boundaryId)
-        }));
+        return this.setState({
+            selectedBoundary: boundaryId
+        });
     };
 
     handleSelectSubstance = (e, {value}) => {
         this.setState({selectedSubstance: value});
     };
 
-    get substanceOptions() {
-        const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
-        return ssmPackage.getSubstancesByBoundaryId(this.state.selectedBoundary).map((b, key) => ({
+    static substanceOptions(substances) {
+        return substances.map((s, key) => ({
             key: key,
-            value: key,
-            text: b.name
+            value: s.id,
+            text: s.name
         }));
     }
 
     addSubstance = (name) => {
         const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
-        const boundary = this.props.boundaries.filter(b => b.id === this.state.selectedBoundary)[0];
-        ssmPackage.addSubstance(
-            this.state.selectedBoundary,
-            SsmSubstance.create(name, BoundaryFactory.fromObjectData(boundary), this.props.stressPeriods.count)
-        );
+        const substance = SsmSubstance.create(name);
+        ssmPackage.addSubstance(substance);
         this.props.onChange(ssmPackage);
         this.setState({
             mtPackage: ssmPackage.toObject,
-            selectedSubstance: ssmPackage.getNumberOfSubstancesByBoundaryId(this.state.selectedBoundary) - 1
+            selectedSubstance: substance.id
         });
     };
 
     handleChangeSubstance = substance => {
         const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
-        ssmPackage.updateSubstance(this.state.selectedBoundary, this.state.selectedSubstance, substance);
+        ssmPackage.updateSubstance(substance);
         this.props.onChange(ssmPackage);
         return this.setState({mtPackage: ssmPackage.toObject});
     };
 
     removeSubstance = () => {
         const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
-        ssmPackage.removeSubstance(this.state.selectedBoundary, this.state.selectedSubstance);
+        ssmPackage.removeSubstance(this.state.selectedSubstance);
         this.props.onChange(ssmPackage);
         return this.setState({
             mtPackage: ssmPackage.toObject,
@@ -138,7 +134,13 @@ class SsmPackageProperties extends AbstractPackageProperties {
         }
 
         const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
-        const substance = ssmPackage.getSubstanceByBoundaryIdAndKey(this.state.selectedBoundary, this.state.selectedSubstance);
+        const substances = ssmPackage.substances;
+        const selectedSubstance = substances.filter(s => s.id === this.state.selectedSubstance)[0];
+
+        let selectedBoundary;
+        if (this.state.selectedBoundary) {
+            selectedBoundary = BoundaryFactory.fromObjectData(boundaries.filter(b => b.id === this.state.selectedBoundary)[0]);
+        }
 
         return (
             <div style={styles.columns}>
@@ -160,7 +162,7 @@ class SsmPackageProperties extends AbstractPackageProperties {
                                 fluid
                                 search
                                 selection
-                                options={this.substanceOptions}
+                                options={SsmPackageProperties.substanceOptions(substances)}
                                 onChange={this.handleSelectSubstance}
                                 value={this.state.selectedSubstance}
                             />
@@ -186,11 +188,13 @@ class SsmPackageProperties extends AbstractPackageProperties {
                         </Form.Group>
                     </Form>
 
-                    {(substance instanceof SsmSubstance) && <SsmSubstanceEditor
+                    {(selectedSubstance instanceof SsmSubstance) && (selectedBoundary instanceof Boundary) &&
+                    <SsmSubstanceEditor
+                        boundary={selectedBoundary}
                         onChange={this.handleChangeSubstance}
                         readOnly={readonly}
-                        substance={substance}
                         stressPeriods={stressPeriods}
+                        substance={selectedSubstance}
                     />}
                 </LayoutComponents.Column>
             </div>

@@ -37,39 +37,9 @@ test('Get SsmPackage from Object', () => {
 
 test('Can add and remove and update substances', () => {
     const ssm = SsmPackage.fromDefault();
-
-    ssm.addSubstance('bId123', SsmSubstance.create('testSubstance_1', createBoundary(), 5));
-    ssm.addSubstance('bId123', SsmSubstance.create('testSubstance_2', createBoundary(), 5));
-    expect(ssm.substances).toEqual({
-        'bId123': [
-            {'affectedCells': [[4, 5, 0]], name: 'testSubstance_1', values: [0, 0, 0, 0, 0]},
-            {'affectedCells': [[4, 5, 0]], name: 'testSubstance_2', values: [0, 0, 0, 0, 0]},
-        ]
-    });
-
-    ssm.removeSubstance('bId123', 0);
-    expect(ssm.substances).toEqual({
-        'bId123': [
-            {'affectedCells': [[4, 5, 0]], name: 'testSubstance_2', values: [0, 0, 0, 0, 0]},
-        ]
-    });
-
-    ssm.removeSubstance('bId123', 5);
-    expect(ssm.substances).toEqual({
-        'bId123': [
-            {'affectedCells': [[4, 5, 0]], name: 'testSubstance_2', values: [0, 0, 0, 0, 0]},
-        ]
-    });
-
-    ssm.updateSubstance('bId123', 0, SsmSubstance.create('testSubstance_1', createBoundary(), 4));
-    expect(ssm.substances).toEqual({
-        'bId123': [
-            {'affectedCells': [[4, 5, 0]], name: 'testSubstance_1', values: [0, 0, 0, 0]},
-        ]
-    });
-
-    expect(ssm.getNumberOfSubstancesByBoundaryId('bId123')).toEqual(1);
-    expect(ssm.getSubstanceByBoundaryIdAndKey('bId123', 0)).toEqual(SsmSubstance.create('testSubstance_1', createBoundary(), 4));
+    ssm.addSubstance(SsmSubstance.create('testSubstance_1'));
+    ssm.addSubstance(SsmSubstance.create('testSubstance_2'));
+    expect(ssm.substances.length).toBe(2);
 });
 
 test('Add substance not from type SsmSubstance throws error', () => {
@@ -91,9 +61,4 @@ test('Update substance from unknown BoundaryId throws error', () => {
     expect(() => {
         ssm.updateSubstance('bId123', 0, SsmSubstance.create('testSubstance_1', createBoundary(), 4));
     }).toThrow();
-});
-
-test('Get substance from unknown BoundaryId returns empty array', () => {
-    const ssm = SsmPackage.fromDefault();
-    expect(ssm.getSubstancesByBoundaryId('bId123')).toEqual([]);
 });

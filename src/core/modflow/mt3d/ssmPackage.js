@@ -36,7 +36,7 @@ class SsmPackage extends AbstractMt3dPackage {
 
     constructor() {
         super('ssm');
-        this.substances = {};
+        this.substances = [];
     }
 
     get crch() {
@@ -104,76 +104,42 @@ class SsmPackage extends AbstractMt3dPackage {
     }
 
     set substances(substances) {
-        this.setMetaDataItem('substances', substances);
+        if (Array.isArray(substances)) {
+            this.setMetaDataItem('substances', substances.map(s => s.toObject));
+        }
     }
 
     get substances() {
-        return this.getMetaDataItem('substances');
+        return this.getMetaDataItem('substances').map(s => SsmSubstance.fromObject(s));
     }
 
-    addSubstance(boundaryId, substance) {
+    addSubstance(substance) {
         if (!(substance instanceof SsmSubstance)) {
             throw new Error('Substance has too be instance of SsmSubstance');
         }
 
-        const substances = this.getMetaDataItem('substances');
+        const substances = this.substances;
+        substances.push(substance);
 
-        if (!substances.hasOwnProperty(boundaryId)) {
-            substances[boundaryId] = [];
-        }
-
-        substances[boundaryId].push(substance.toObject);
-
-        this.setMetaDataItem('substances', substances);
+        this.substances = substances;
     }
 
-    updateSubstance(boundaryId, key, substance) {
+    updateSubstance(substance) {
         if (!(substance instanceof SsmSubstance)) {
             throw new Error('Substance has too be instance of SsmSubstance');
         }
 
-        const substances = this.getMetaDataItem('substances');
+        this.substances = this.substances.map(s => {
+            if (s.id === substance.id) {
+                return substance;
+            }
 
-        if (!substances.hasOwnProperty(boundaryId)) {
-            throw new Error('Substance not found');
-        }
-
-        substances[boundaryId][key] = substance.toObject;
-        this.setMetaDataItem('substances', substances);
+            return s;
+        });
     }
 
-    removeSubstance(boundaryId, key) {
-        const substances = this.getMetaDataItem('substances');
-
-        if (substances.hasOwnProperty(boundaryId)) {
-            substances[boundaryId] = substances[boundaryId].map((s, k) => {
-                if (k !== key) {
-                    return s;
-                }
-
-                return null;
-            }).filter(e => e !== null);
-
-            this.setMetaDataItem('substances', substances);
-        }
-    }
-
-    getSubstancesByBoundaryId(boundaryId) {
-        const substances = this.getMetaDataItem('substances');
-
-        if (!substances.hasOwnProperty(boundaryId)) {
-            return [];
-        }
-
-        return substances[boundaryId].map(s => SsmSubstance.fromObject(s));
-    }
-
-    getSubstanceByBoundaryIdAndKey(boundaryId, key) {
-        return this.getSubstancesByBoundaryId(boundaryId)[key];
-    }
-
-    getNumberOfSubstancesByBoundaryId(boundaryId) {
-        return this.getSubstancesByBoundaryId(boundaryId).length;
+    removeSubstance(id) {
+        this.substances = this.substances.filter(s => s.id !== id);
     }
 
     get toObject() {
