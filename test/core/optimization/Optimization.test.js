@@ -12,32 +12,11 @@ test('Create with Defaults', () => {
     const optimization = Optimization.fromDefaults();
     expect(optimization.parameters).toBeInstanceOf(OptimizationParameters);
     expect(Array.isArray(optimization.objectives)).toBeTruthy();
-    expect(optimization.objectives.length).toBe(0);
+    expect(optimization.objectives.length).toBe(2);
     expect(Array.isArray(optimization.constraints)).toBeTruthy();
     expect(optimization.constraints.length).toBe(0);
     expect(Array.isArray(optimization.objects)).toBeTruthy();
-    expect(optimization.objects.length).toBe(0);
-});
-
-test('Create from Object', () => {
-    const optimizationExample = {
-        'parameters': defaultParameters,
-        'constraints': [
-            concentrationConstraint
-        ],
-        'objectives': [
-            concentrationObjective,
-            headObjective
-        ],
-        'objects': [
-            optimizationObjects[0],
-            optimizationObjects[1],
-            optimizationObjects[2],
-            optimizationObjects[3]
-        ]
-    };
-    const optimization = Optimization.fromObject(optimizationExample);
-    expect(optimization.toObject).toEqual(optimizationExample);
+    expect(optimization.objects.length).toBe(2);
 });
 
 test('Add Constraint to Optimization', () => {
@@ -57,8 +36,7 @@ test('Add wrong Contraint Type to Optimization', () => {
 test('Add Objective to Optimization', () => {
     const optimization = Optimization.fromDefaults();
     optimization.addObjective(OptimizationObjective.fromObject(concentrationObjective));
-    expect(optimization.objectives.length).toBe(1);
-    expect(optimization.objectives[0].toObject).toEqual(concentrationObjective);
+    expect(optimization.objectives.length).toBe(3);
 });
 
 test('Add wrong Objective Type to Optimization', () => {
@@ -70,16 +48,8 @@ test('Add wrong Objective Type to Optimization', () => {
 
 test('Add Objects to Optimization', () => {
     const optimization = Optimization.fromDefaults();
-    optimizationObjects.forEach((object) => {
+    optimizationObjects.forEach(object => {
         optimization.addObject(OptimizationObject.fromObject(object));
     });
     expect(optimization.objects.length).toBe(4);
-    expect(optimization.objects[0].toObject).toEqual(optimizationObjects[0]);
-});
-
-test('Add wrong OptimizationObject Type to Optimization', () => {
-    const optimization = Optimization.fromDefaults();
-    expect(() => {
-        optimization.addObject(OptimizationConstraint.fromObject(concentrationConstraint));
-    }).toThrow();
 });

@@ -104,7 +104,7 @@ class OptimizationObject {
         return this;
     }
 
-    updateFlux(index = 0, min = 0, max = 0, result = null) {
+    updateFlux(index, min = 0, max = 0, result = null) {
         this._flux = this._flux.map(item => {
             if(index === item.id) {
                 return {id: index, min: min, max: max, result: result};

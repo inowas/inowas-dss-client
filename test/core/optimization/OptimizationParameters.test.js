@@ -1,19 +1,19 @@
 import OptimizationParameters from '../../../src/core/optimization/OptimizationParameters';
 
 export const defaultParameters = {
-    'ngen': 100,
-    'pop_size': 100,
-    'mutpb': 0.1,
-    'cxpb': 0.9,
-    'eta': 20,
-    'indpb': 0.1,
-    'ncls': 1,
-    'nlocal': 0,
-    'maxf': 50,
-    'qbound': 0.25,
-    'diversity_flg': false,
-    'local_opt_flg': false,
-    'refpoint': [0, 0]
+    method: 'ga',
+    ngen: 100,
+    pop_size: 100,
+    mutpb: 0.1,
+    cxpb: 0.9,
+    eta: 20,
+    indpb: 0.1,
+    ncls: 1,
+    maxf: 50,
+    qbound: 0.25,
+    diversity_flg: false,
+    xtol: 0.0001,
+    ftol: 0.0001
 };
 
 test('Create with Defaults', () => {
@@ -24,19 +24,19 @@ test('Create with Defaults', () => {
 
 test('Create from Object', () => {
     const obj = {
-        'ngen': 4,
-        'pop_size': 11,
-        'mutpb': 0.2,
-        'cxpb': 0.8,
-        'eta': 21,
-        'indpb': 0.15,
-        'ncls': 2,
-        'nlocal': 2,
-        'maxf': 11,
-        'qbound': 0.3,
-        'diversity_flg': false,
-        'local_opt_flg': false,
-        'refpoint': [1, 1]
+        method: 'ga',
+        ngen: 4,
+        pop_size: 11,
+        mutpb: 0.2,
+        cxpb: 0.8,
+        eta: 21,
+        indpb: 0.15,
+        ncls: 2,
+        maxf: 11,
+        qbound: 0.3,
+        diversity_flg: false,
+        xtol: 0.0001,
+        ftol: 0.0001
     };
     const parameters = OptimizationParameters.fromObject(obj);
     expect(parameters).toBeInstanceOf(OptimizationParameters);

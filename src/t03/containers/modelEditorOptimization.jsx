@@ -104,13 +104,14 @@ class ModelEditorOptimization extends React.Component {
         switch (type) {
             case 'objects':
                 return (
-                    <OptimizationObjectsComponent objects={optimization.objects} onChange={this.onChange}/>
+                    <OptimizationObjectsComponent objects={optimization.objects} stressPeriods={this.props.model.stress_periods ? this.props.model.stress_periods.stress_periods : [0, 1, 2, 3]} onChange={this.onChange}/>
                 );
             case 'objectives':
                 return (
                     <OptimizationObjectivesComponent objectives={optimization.objectives} objects={optimization.objects} onChange={this.onChange}/>
                 );
             case 'constraints':
+                console.log('Props', this.props);
                 return (
                     <p>Constraints</p>
                 );

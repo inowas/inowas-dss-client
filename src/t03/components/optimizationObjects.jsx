@@ -71,6 +71,7 @@ class OptimizationObjectsComponent extends React.Component {
     };
 
     onClickAddFlux = () => {
+        console.log(this.props);
         return this.setState((prevState) => ({
             selectedObject: OptimizationObject.fromObject(prevState.selectedObject).addFlux().toObject
         }));
@@ -291,45 +292,40 @@ class OptimizationObjectsComponent extends React.Component {
                                     </Segment>
                                     <Segment>
                                         <h4>Pumping Rates</h4>
-                                        {this.state.selectedObject.flux && this.state.selectedObject.flux.length > 0 ?
+                                        {this.props.stressPeriods && this.props.stressPeriods.length > 0 ?
                                             <Table celled striped>
                                                 <Table.Header>
                                                     <Table.Row>
-                                                        <Table.HeaderCell width={2}>#</Table.HeaderCell>
-                                                        <Table.HeaderCell width={10}>Min / Max</Table.HeaderCell>
-                                                        <Table.HeaderCell width={4}/>
+                                                        <Table.HeaderCell width={4}>Stress Period Index</Table.HeaderCell>
+                                                        <Table.HeaderCell width={12}>Min / Max</Table.HeaderCell>
                                                     </Table.Row>
                                                 </Table.Header>
                                                 <Table.Body>
-                                                    {this.state.selectedObject.flux.map((item, i) =>
-                                                        <Table.Row key={item.id}>
-                                                            <Table.Cell width={2}>
-                                                                {i}
-                                                            </Table.Cell>
-                                                            <Table.Cell width={10}>
-                                                                <InputRange
-                                                                    name={item.id}
-                                                                    from={item.min}
-                                                                    to={item.max}
-                                                                    onChange={this.handleChangeFlux}
-                                                                />
-                                                            </Table.Cell>
-                                                            <Table.Cell width={4} textAlign="center">
-                                                                <Button icon color="red"
-                                                                        style={styles.iconfix}
-                                                                        size="small"
-                                                                        onClick={() => this.onClickDeleteFlux(i)}
-                                                                >
-                                                                    <Icon name="trash"/>
-                                                                </Button>
-                                                            </Table.Cell>
-                                                        </Table.Row>
-                                                    )}
+                                                    {
+                                                        this.props.stressPeriods.map((item, i) => {
+                                                            const flux = this.state.selectedObject.flux.filter(f => f.id === i)[0];
+
+                                                            return (
+                                                                <Table.Row key={i}>
+                                                                    <Table.Cell width={4}>
+                                                                        {i}
+                                                                    </Table.Cell>
+                                                                    <Table.Cell width={12}>
+                                                                        <InputRange
+                                                                            name={flux ? flux.id : String(i)}
+                                                                            from={flux ? flux.min : 0}
+                                                                            to={flux ? flux.max : 0}
+                                                                            onChange={this.handleChangeFlux}
+                                                                        />
+                                                                    </Table.Cell>
+                                                                </Table.Row>);
+                                                        })
+                                                    }
                                                 </Table.Body>
                                             </Table>
                                             :
                                             <Message>
-                                                <p>No Flux Data</p>
+                                                <p>No stress periods defined in model</p>
                                             </Message>
                                         }
                                         <Button icon
@@ -354,6 +350,7 @@ class OptimizationObjectsComponent extends React.Component {
 
 OptimizationObjectsComponent.propTypes = {
     objects: PropTypes.array.isRequired,
+    stressPeriods: PropTypes.array,
     onChange: PropTypes.func.isRequired,
 };
 
