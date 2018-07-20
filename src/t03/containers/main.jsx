@@ -15,6 +15,7 @@ import {
     ModelEditorBoundary,
     ModelEditorGeneral,
     ModelEditorModelRun,
+    ModelEditorOptimization,
     ModelEditorResults,
     ModelEditorSoilmodel,
     ModelEditorTransport,
@@ -133,6 +134,12 @@ class T03 extends React.Component {
             ]
         },
         {
+            title: 'Optimization',
+            name: 'optimization',
+            icon: <Icon name="success"/>,
+            disabled: createModel
+        },
+        {
             title: 'Transport',
             name: 'transport',
             icon: <Icon name="target"/>,
@@ -191,6 +198,17 @@ class T03 extends React.Component {
                     </LayoutComponents.CloseableWindow>
                 );
 
+            case 'optimization':
+                return (
+                    <LayoutComponents.CloseableWindow
+                        heading="Optimization"
+                        style={styles.window}
+                        close={close}
+                        closeable
+                    >
+                        <ModelEditorOptimization type={type} tool={tool}/>
+                    </LayoutComponents.CloseableWindow>
+                );
             case 'transport':
                 return (
                     <LayoutComponents.CloseableWindow

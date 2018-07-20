@@ -1,0 +1,63 @@
+class WellPosition {
+    _lay = {
+        min: 0,
+        max: 0,
+        result: null
+    };
+    _row = {
+        min: 0,
+        max: 0,
+        result: null
+    };
+    _col = {
+        min: 30,
+        max: 150,
+        result: null
+    };
+
+    static fromObject(obj) {
+        const wellPosition = new WellPosition();
+        wellPosition.lay = obj.lay;
+        wellPosition.row = obj.row;
+        wellPosition.col = obj.col;
+        return wellPosition;
+    }
+
+    constructor() {
+    }
+
+
+    get lay() {
+        return this._lay;
+    }
+
+    set lay(value) {
+        this._lay = value ? value : {min: 0, max: 0, result: null};
+    }
+
+    get row() {
+        return this._row;
+    }
+
+    set row(value) {
+        this._row = value ? value : {min: 0, max: 0, result: null};
+    }
+
+    get col() {
+        return this._col;
+    }
+
+    set col(value) {
+        this._col = value ? value : {min: 0, max: 0, result: null};
+    }
+
+    get toObject() {
+        return ({
+            'lay': this.lay,
+            'row': this.row,
+            'col': this.col
+        });
+    }
+}
+
+export default WellPosition;
