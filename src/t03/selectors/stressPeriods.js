@@ -1,4 +1,4 @@
-import { Formatter } from '../../core';
+import {Formatter} from '../../core';
 
 export const getInitialState = () => {
     return {

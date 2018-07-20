@@ -30,9 +30,9 @@ const VerticalMenu = ({items, activeItem, onClick, style}) => {
 
 VerticalMenu.propTypes = {
     activeItem: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
     items: PropTypes.array.isRequired,
-    style: PropTypes.array,
+    onClick: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 export default pure(VerticalMenu);

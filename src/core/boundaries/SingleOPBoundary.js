@@ -14,18 +14,8 @@ export default class SingleOPBoundary extends Boundary {
         return this.getDateTimeValues();
     }
 
-    set dateTimeValues(dateTimeValues) {
-        return this.setDateTimeValues(dateTimeValues);
-    }
-
     getDateTimeValues() {
         return this._dateTimeValues;
-    }
-
-    get indexedDateTimeValues() {
-        return this.getIndexedDateTimeValues().map((value, index) => {
-            return {...value, id: index};
-        });
     }
 
     setDateTimeValues(dateTimeValues) {

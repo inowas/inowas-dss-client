@@ -4,7 +4,7 @@ import calculateModflowModelFlow from './calculateModflowModel';
 import calculateStressPeriodsFlow from './calculateSressPeriods';
 import cloneModflowModelFlow from './cloneModflowModel';
 import createModelFlow from './createModel';
-import deleteModlfowModelFlow from './deleteModlfowModel';
+import deleteModflowModelFlow from './deleteModlfowModel';
 import getModflowModelDetailsFlow from './getModflowModelDetails';
 import loadBoundaryFlow from './loadBoundary';
 import loadListfileFlow from './loadListfile';
@@ -30,7 +30,7 @@ export {
     calculateStressPeriodsFlow,
     cloneModflowModelFlow,
     createModelFlow,
-    deleteModlfowModelFlow,
+    deleteModflowModelFlow,
     getModflowModelDetailsFlow,
     loadBoundaryFlow,
     loadListfileFlow,

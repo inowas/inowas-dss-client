@@ -31,7 +31,7 @@ import L from 'leaflet';
 import {connect} from 'react-redux';
 import md5 from 'js-md5';
 import {uniqueId, has} from 'lodash';
-import ActiveCellsLayer from '../components/activeCellsLayer';
+import ActiveCellsLayer from '../components/core/ActiveCellsLayer';
 import {calculateActiveCells} from '../../core/geospatial';
 import BoundaryFactory from '../../core/boundaries/BoundaryFactory';
 
@@ -722,8 +722,12 @@ class BackgroundMap extends React.Component {
             }
 
             return (
-                <ActiveCellsLayer key={uniqueId()} activeCells={e.activeCells} boundingBox={boundingBox}
-                                  gridSize={gridSize}/>
+                <ActiveCellsLayer
+                    key={uniqueId()}
+                    activeCells={e.activeCells}
+                    boundingBox={boundingBox}
+                    gridSize={gridSize}
+                />
             );
         });
 

@@ -1,10 +1,10 @@
-import { takeEvery, call } from 'redux-saga/effects';
-import { WebData } from './core';
-import { Saga as Dashboard } from './dashboard/index';
-import { Saga as RasterData } from './core/rasterData/index';
-import { Saga as T03 } from './t03/index';
-import { Saga as T07 } from './t07/index';
-import { Saga as User } from './user/index';
+import {takeEvery, call} from 'redux-saga/effects';
+import {WebData} from './core';
+import {Saga as Dashboard} from './dashboard/index';
+import {Saga as RasterData} from './core/rasterData/index';
+import {Saga as T03} from './t03/index';
+import {Saga as T07} from './t07/index';
+import {Saga as User} from './user/index';
 
 export default function* rootSaga() {
     yield [
@@ -24,7 +24,7 @@ export default function* rootSaga() {
         call(T03.calculateStressPeriodsFlow),
         call(T03.cloneModflowModelFlow),
         call(T03.createModelFlow),
-        call(T03.deleteModlfowModelFlow),
+        call(T03.deleteModflowModelFlow),
         call(T03.getModflowModelDetailsFlow),
         call(T03.loadBoundaryFlow),
         call(T03.loadListfileFlow),

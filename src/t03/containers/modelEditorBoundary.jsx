@@ -1,12 +1,11 @@
 import * as lodash from 'lodash';
 
-import {BoundaryProperties} from '../components';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router';
 
 import {Action} from '../actions/index';
-import {BoundaryOverview} from '../../t03/containers/index';
+import {BoundariesOverview, BoundaryProperties} from '../../t03/components/index';
 import {Routing} from '../../t03/actions';
 import {boundary as BoundarySelector} from '../selectors/index';
 import Button from '../../components/primitive/Button';
@@ -98,7 +97,7 @@ class ModelEditorBoundary extends React.Component {
         }
 
         return (
-            <BoundaryOverview
+            <BoundariesOverview
                 property={property}
                 id={id}
                 type={type}
