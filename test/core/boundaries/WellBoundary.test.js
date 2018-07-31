@@ -99,7 +99,7 @@ test('Get WellBoundary from Object', () => {
 test('WellBoundary ActiveCells', () => {
     const wellObject = boundaryObjects.wellBoundary();
     const wellBoundary = WellBoundary.createFromObject(wellObject);
-    expect(wellBoundary.affectedCells).toEqual([[4, 5, 0]]);
+    expect(wellBoundary.affectedCells.cells).toEqual([[4, 5, 0]]);
     expect(wellBoundary.toObject).toEqual(wellObject);
 });
 

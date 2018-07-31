@@ -122,6 +122,7 @@ class SsmPackage extends AbstractMt3dPackage {
         substances.push(substance);
 
         this.substances = substances;
+        this.updateStressPeriodData();
     }
 
     updateSubstance(substance) {
@@ -136,10 +137,66 @@ class SsmPackage extends AbstractMt3dPackage {
 
             return s;
         });
+        this.updateStressPeriodData();
     }
 
     removeSubstance(id) {
         this.substances = this.substances.filter(s => s.id !== id);
+        this.updateStressPeriodData();
+    }
+
+    updateStressPeriodData() {
+        const substances = this.substances;
+
+        let spData = [];
+        substances.forEach((s, substanceIdx) => {
+            if (substanceIdx === 0) {
+                spData = s.toSsmPackageValues;
+            }
+
+            if (substanceIdx === 1) {
+                // copy first substance concentration to the end of sp-value
+                // add concentration of 0 for the new substance
+                spData.map(sp => (
+                    sp.map(data => (data.push(data[3])))
+                ));
+            }
+
+            if (substanceIdx > 0) {
+                s.toSsmPackageValues.forEach((sp, idx) => {
+                    sp.forEach(value => {
+                        let push = true;
+                        spData[idx] = spData[idx].map((data) => {
+                            if (data[0] === value[0] &&
+                                data[1] === value[1] &&
+                                data[2] === value[2] &&
+                                data[4] === value[4]) {
+                                data.push(value[3]);
+                                push = false;
+                            } else {
+                                data.push(0);
+                            }
+
+                            return data;
+                        });
+
+                        if (push) {
+                            spData[idx].push([
+                                value[0],
+                                value[1],
+                                value[2],
+                                0,
+                                value[4],
+                                ...(new Array(substanceIdx).fill(0)),
+                                value[3]
+                            ]);
+                        }
+                    });
+                });
+            }
+        });
+
+        this._stressPeriodData = spData;
     }
 
     get toObject() {
