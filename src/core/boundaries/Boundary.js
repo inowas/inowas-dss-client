@@ -69,7 +69,7 @@ export default class Boundary {
     }
 
     get affectedCells() {
-        return AffectedCells.fromLayersAndCells(this.affectedLayers, this.activeCells).toObject;
+        return AffectedCells.fromLayersAndCells(this.affectedLayers, this.activeCells);
     }
 
     get isValid() {

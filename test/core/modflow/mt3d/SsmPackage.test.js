@@ -1,9 +1,6 @@
 import SsmPackage from '../../../../src/core/modflow/mt3d/ssmPackage';
 import SsmSubstance from '../../../../src/core/modflow/mt3d/SsmSubstance';
-import * as boundaryObjects from '../../../fixtures/obj/boundaryObjects';
-import {WellBoundary} from '../../../../src/core/boundaries';
-
-const createBoundary = () => WellBoundary.createFromObject(boundaryObjects.wellBoundary());
+import {getSsmGhbBoundaryValues, getSsmWelBoundaryValues} from '../../../fixtures/mt3dms/boundaryValues';
 
 test('Get SsmPackage from Default', () => {
     const ssm = SsmPackage.fromDefault();
@@ -35,17 +32,138 @@ test('Get SsmPackage from Object', () => {
     expect(ssm.toObject).toEqual(ssmObj);
 });
 
-test('Can add and remove and update substances', () => {
+test('Set/Get Unitnumber', () => {
     const ssm = SsmPackage.fromDefault();
-    ssm.addSubstance(SsmSubstance.create('testSubstance_1'));
-    ssm.addSubstance(SsmSubstance.create('testSubstance_2'));
-    expect(ssm.substances.length).toBe(2);
+    ssm.unitnumber = 123;
+    expect(ssm.unitnumber).toEqual(123);
 });
 
-test('Add substance not from type SsmSubstance throws error', () => {
+test('Can add, update and remove substances', () => {
+    const ssm = SsmPackage.fromDefault();
+    const substanceA = SsmSubstance.create('testSubstance_1');
+    const substanceB = SsmSubstance.create('testSubstance_2');
+    ssm.addSubstance(substanceA);
+    ssm.addSubstance(substanceB);
+    expect(ssm.substances.length).toBe(2);
+
+    substanceA.name = 'newTestSubstance_1';
+    ssm.updateSubstance(substanceA);
+    expect(ssm.substances[0].name).toEqual('newTestSubstance_1');
+
+    ssm.removeSubstance(substanceA.id);
+    expect(ssm.substances.length).toBe(1);
+    ssm.removeSubstance(substanceB.id);
+    expect(ssm.substances.length).toBe(0);
+});
+
+test('It can add substances with boundaryValues', () => {
+    const ssm = SsmPackage.fromDefault();
+    const cadmium = SsmSubstance.create('cadmium');
+    cadmium.updateBoundaryValues(getSsmGhbBoundaryValues());
+    ssm.addSubstance(cadmium);
+
+    const arsenic = SsmSubstance.create('arsenic');
+    arsenic.updateBoundaryValues(getSsmWelBoundaryValues());
+    ssm.addSubstance(arsenic);
+
+    const chromium = SsmSubstance.create('chromium');
+    const welBoundaryValues = getSsmWelBoundaryValues();
+    welBoundaryValues.stressPeriodValues = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+    chromium.updateBoundaryValues(welBoundaryValues);
+    ssm.addSubstance(chromium);
+
+    expect(ssm.stressPeriodData).toEqual([
+        [
+            [0, 4, 3, 1, "itype['GHB']", 1, 0, 0],
+            [0, 5, 3, 1, "itype['GHB']", 1, 0, 0],
+            [0, 6, 3, 1, "itype['GHB']", 1, 0, 0],
+            [2, 4, 3, 1, "itype['GHB']", 1, 0, 0],
+            [2, 5, 3, 1, "itype['GHB']", 1, 0, 0],
+            [2, 6, 3, 1, "itype['GHB']", 1, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 10]
+        ], [
+            [0, 4, 3, 2, "itype['GHB']", 2, 0, 0],
+            [0, 5, 3, 2, "itype['GHB']", 2, 0, 0],
+            [0, 6, 3, 2, "itype['GHB']", 2, 0, 0],
+            [2, 4, 3, 2, "itype['GHB']", 2, 0, 0],
+            [2, 5, 3, 2, "itype['GHB']", 2, 0, 0],
+            [2, 6, 3, 2, "itype['GHB']", 2, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 11]
+        ], [
+            [0, 4, 3, 3, "itype['GHB']", 3, 0, 0],
+            [0, 5, 3, 3, "itype['GHB']", 3, 0, 0],
+            [0, 6, 3, 3, "itype['GHB']", 3, 0, 0],
+            [2, 4, 3, 3, "itype['GHB']", 3, 0, 0],
+            [2, 5, 3, 3, "itype['GHB']", 3, 0, 0],
+            [2, 6, 3, 3, "itype['GHB']", 3, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 12]
+        ], [
+            [0, 4, 3, 4, "itype['GHB']", 4, 0, 0],
+            [0, 5, 3, 4, "itype['GHB']", 4, 0, 0],
+            [0, 6, 3, 4, "itype['GHB']", 4, 0, 0],
+            [2, 4, 3, 4, "itype['GHB']", 4, 0, 0],
+            [2, 5, 3, 4, "itype['GHB']", 4, 0, 0],
+            [2, 6, 3, 4, "itype['GHB']", 4, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 13]
+        ], [
+            [0, 4, 3, 5, "itype['GHB']", 5, 0, 0],
+            [0, 5, 3, 5, "itype['GHB']", 5, 0, 0],
+            [0, 6, 3, 5, "itype['GHB']", 5, 0, 0],
+            [2, 4, 3, 5, "itype['GHB']", 5, 0, 0],
+            [2, 5, 3, 5, "itype['GHB']", 5, 0, 0],
+            [2, 6, 3, 5, "itype['GHB']", 5, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 14]
+        ], [
+            [0, 4, 3, 6, "itype['GHB']", 6, 0, 0],
+            [0, 5, 3, 6, "itype['GHB']", 6, 0, 0],
+            [0, 6, 3, 6, "itype['GHB']", 6, 0, 0],
+            [2, 4, 3, 6, "itype['GHB']", 6, 0, 0],
+            [2, 5, 3, 6, "itype['GHB']", 6, 0, 0],
+            [2, 6, 3, 6, "itype['GHB']", 6, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 15]
+        ], [
+            [0, 4, 3, 7, "itype['GHB']", 7, 0, 0],
+            [0, 5, 3, 7, "itype['GHB']", 7, 0, 0],
+            [0, 6, 3, 7, "itype['GHB']", 7, 0, 0],
+            [2, 4, 3, 7, "itype['GHB']", 7, 0, 0],
+            [2, 5, 3, 7, "itype['GHB']", 7, 0, 0],
+            [2, 6, 3, 7, "itype['GHB']", 7, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 16]
+        ], [
+            [0, 4, 3, 8, "itype['GHB']", 8, 0, 0],
+            [0, 5, 3, 8, "itype['GHB']", 8, 0, 0],
+            [0, 6, 3, 8, "itype['GHB']", 8, 0, 0],
+            [2, 4, 3, 8, "itype['GHB']", 8, 0, 0],
+            [2, 5, 3, 8, "itype['GHB']", 8, 0, 0],
+            [2, 6, 3, 8, "itype['GHB']", 8, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 17]
+        ], [
+            [0, 4, 3, 9, "itype['GHB']", 9, 0, 0],
+            [0, 5, 3, 9, "itype['GHB']", 9, 0, 0],
+            [0, 6, 3, 9, "itype['GHB']", 9, 0, 0],
+            [2, 4, 3, 9, "itype['GHB']", 9, 0, 0],
+            [2, 5, 3, 9, "itype['GHB']", 9, 0, 0],
+            [2, 6, 3, 9, "itype['GHB']", 9, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 18]
+        ], [
+            [0, 4, 3, 0, "itype['GHB']", 0, 0, 0],
+            [0, 5, 3, 0, "itype['GHB']", 0, 0, 0],
+            [0, 6, 3, 0, "itype['GHB']", 0, 0, 0],
+            [2, 4, 3, 0, "itype['GHB']", 0, 0, 0],
+            [2, 5, 3, 0, "itype['GHB']", 0, 0, 0],
+            [2, 6, 3, 0, "itype['GHB']", 0, 0, 0],
+            [2, 4, 3, 0, "itype['WEL']", 0, 1, 19]
+        ]
+    ]);
+});
+
+test('Add/Update substance not from type SsmSubstance throws error', () => {
     const ssm = SsmPackage.fromDefault();
     expect(() => {
-        ssm.addSubstance('bId123', 'testSubstance_1', 5);
+        ssm.addSubstance('notASubstance');
+    }).toThrow();
+    expect(() => {
+        ssm.updateSubstance('notASubstance');
     }).toThrow();
 });
 
@@ -53,12 +171,5 @@ test('Update substance with unknown type throws Error', () => {
     const ssm = SsmPackage.fromDefault();
     expect(() => {
         ssm.updateSubstance('bId123', 0, 'testSubstance_1');
-    }).toThrow();
-});
-
-test('Update substance from unknown BoundaryId throws error', () => {
-    const ssm = SsmPackage.fromDefault();
-    expect(() => {
-        ssm.updateSubstance('bId123', 0, SsmSubstance.create('testSubstance_1', createBoundary(), 4));
     }).toThrow();
 });

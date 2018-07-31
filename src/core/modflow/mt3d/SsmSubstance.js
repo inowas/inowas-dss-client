@@ -5,7 +5,7 @@ class SsmSubstance {
 
     _id = '';
     _name = '';
-    _boundaryValues = [];
+    _boundaryValuesList = [];
 
     static create(name) {
         const substance = new SsmSubstance();
@@ -18,7 +18,7 @@ class SsmSubstance {
         const substance = new SsmSubstance();
         substance._id = obj.id;
         substance._name = obj.name;
-        substance._boundaryValues = obj.boundaryValues;
+        substance._boundaryValuesList = obj.boundaryValues;
         return substance;
     }
 
@@ -38,16 +38,16 @@ class SsmSubstance {
         this._name = value;
     }
 
-    get boundaryValues() {
-        return this._boundaryValues.map(bv => SsmBoundaryValues.fromObject(bv));
+    get boundaryValuesList() {
+        return this._boundaryValuesList.map(bv => SsmBoundaryValues.fromObject(bv));
     }
 
-    set boundaryValues(values) {
-        this._boundaryValues = values.map(v => v.toObject);
+    set boundaryValuesList(values) {
+        this._boundaryValuesList = values.map(v => v.toObject);
     }
 
     getBoundaryValuesByBoundaryId(boundaryId) {
-        const boundaryValues = this.boundaryValues.filter(bv => bv.boundaryId === boundaryId)[0];
+        const boundaryValues = this.boundaryValuesList.filter(bv => bv.boundaryId === boundaryId)[0];
         if (boundaryValues instanceof SsmBoundaryValues) {
             return boundaryValues;
         }
@@ -59,15 +59,15 @@ class SsmSubstance {
             throw new Error('SsmBoundaryValues must be instanceof SsmBoundaryValues');
         }
 
-        const boundaryValues = this.boundaryValues;
+        const boundaryValues = this.boundaryValuesList;
 
         if (boundaryValues.filter(bv => bv.boundaryId === ssmBoundaryValues.boundaryId).length === 0) {
             boundaryValues.push(ssmBoundaryValues);
-            this.boundaryValues = boundaryValues;
+            this.boundaryValuesList = boundaryValues;
             return;
         }
 
-        this.boundaryValues = this.boundaryValues.map(bv => {
+        this.boundaryValuesList = this.boundaryValuesList.map(bv => {
             if (bv.boundaryId === ssmBoundaryValues.boundaryId) {
                 return ssmBoundaryValues;
             }
@@ -76,14 +76,29 @@ class SsmSubstance {
     }
 
     removeBoundaryValues(boundaryId) {
-        this.boundaryValues = this.boundaryValues.filter(bv => bv._boundaryId !== boundaryId);
+        this.boundaryValuesList = this.boundaryValuesList.filter(bv => bv._boundaryId !== boundaryId);
+    }
+
+    get toSsmPackageValues() {
+        let ssmPackageValues = [];
+        this.boundaryValuesList.forEach((bv, idx) => {
+            if (idx === 0) {
+                ssmPackageValues = bv.toSsmPackageValues;
+            }
+
+            if (idx > 0) {
+                ssmPackageValues.push(...bv.toSsmPackageValues);
+            }
+        });
+
+        return ssmPackageValues;
     }
 
     get toObject() {
         return {
             id: this.id,
             name: this._name,
-            boundaryValues: this._boundaryValues
+            boundaryValues: this._boundaryValuesList
         };
     }
 }

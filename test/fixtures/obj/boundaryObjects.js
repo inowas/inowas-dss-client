@@ -21,7 +21,8 @@ export const chdBoundary = () => {
                 date_time_values: [{date_time: new Date('2015-01-02').toISOString(), values: [9, 9]}],
             }
         ],
-        active_cells: [[5, 6], [5, 7], [5, 8]]
+        active_cells: [[5, 6], [5, 7], [5, 8]],
+        affected_layers: [0]
     };
 };
 
@@ -46,7 +47,8 @@ export const ghbBoundary = () => {
                 date_time_values: [{date_time: new Date('2015-01-02').toISOString(), values: [9, 1000]}],
             }
         ],
-        active_cells: [[5, 6], [5, 7], [5, 8]]
+        active_cells: [[5, 6], [5, 7], [5, 8]],
+        affected_layers: [0]
     };
 };
 
@@ -58,7 +60,8 @@ export const rchBoundary = () => {
         type: 'rch',
         metadata: {},
         date_time_values: [{date_time: new Date('2015-01-02').toISOString(), values: [0]}],
-        active_cells: [[5, 6], [5, 7], [5, 8]]
+        active_cells: [[5, 6], [5, 7], [5, 8]],
+        affected_layers: [0]
     };
 };
 
@@ -83,7 +86,8 @@ export const rivBoundary = () => {
                 date_time_values: [{date_time: new Date('2015-01-02').toISOString(), values: [9, 1000, 8]}],
             }
         ],
-        active_cells: [[5, 6], [5, 7], [5, 8]]
+        active_cells: [[5, 6], [5, 7], [5, 8]],
+        affected_layers: [0]
     };
 };
 
@@ -106,9 +110,9 @@ export const headObservation = () => {
         name: 'ANewRandomHeadObservation' + Math.random(),
         geometry: {type: 'Point', coordinates: [[3, 4]]},
         type: 'hob',
-        affected_layers: [0],
         metadata: {},
         date_time_values: [{date_time: new Date('2015-01-02').toISOString(), values: [0]}],
-        active_cells: [[4, 5]]
+        active_cells: [[4, 5]],
+        affected_layers: [0]
     };
 };

@@ -1,22 +1,5 @@
-class Cell {
-    _z;
-    _y;
-    _x;
-
-    static fromTuple(tuple) {
-        const cell = new Cell();
-        cell._x = tuple[0];
-        cell._y = tuple[1];
-        cell._z = tuple[2];
-        return cell;
-    }
-
-    toTuple() {
-        return [this._x, this._y, this._z];
-    }
-}
-
 class AffectedCells {
+    // [[int:x, int:y, int:z]]
     _cells = [];
 
     static fromObject(obj) {
@@ -41,17 +24,16 @@ class AffectedCells {
     }
 
     addCell(cell) {
-        if (cell instanceof Cell) {
-            this._cells.push(cell.toTuple());
-            return;
-        }
-
         if (Array.isArray(cell) && cell.length === 3) {
             this._cells.push(cell);
             return;
         }
 
         throw new Error('Unexpected value for Cell.');
+    }
+
+    get cells() {
+        return this._cells;
     }
 
     get toObject() {
