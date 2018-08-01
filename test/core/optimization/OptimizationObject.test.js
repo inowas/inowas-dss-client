@@ -6,7 +6,7 @@ export const optimizationObjects = [
     {
         id: uuidv4(),
         name: 'Well 1',
-        type: 'well',
+        type: 'wel',
         position: new WellPosition().toObject,
         flux: [
             {
@@ -46,7 +46,7 @@ export const optimizationObjects = [
     {
         id: uuidv4(),
         name: 'Well 2',
-        type: 'well',
+        type: 'wel',
         position: new WellPosition().toObject,
         flux: [
             {
@@ -85,17 +85,17 @@ export const optimizationObjects = [
     },
 ];
 
+test('Create OptimizationObject', () => {
+    const object = OptimizationObject.createFromTypeAndStressperiods('wel', 5);
+    expect(object).toBeInstanceOf(OptimizationObject);
+    expect(object.type).toEqual('wel');
+    expect(object.numberOfStressperiods).toEqual(5);
+});
+
 test('Get OptimizationsObject from Object.', () => {
     const object = OptimizationObject.fromObject(optimizationObjects[0]);
     expect(object).toBeInstanceOf(OptimizationObject);
     expect(object.toObject).toEqual(optimizationObjects[0]);
-});
-
-test('Updating flux data.', () => {
-    const object = OptimizationObject.fromObject(optimizationObjects[1]);
-    expect(object.addFlux(10, 30).flux.length).toBe(3);
-    expect(object.removeFlux(1).flux.length).toBe(2);
-    expect(object.updateFlux(object.flux[1].id, 900, 1000).flux[1].min).toBe(900);
 });
 
 test('Setter: name and type', () => {
@@ -104,8 +104,9 @@ test('Setter: name and type', () => {
     expect(object.name).toBe('New Optimization Object');
     object.name = 'Well 3';
     expect(object.name).toBe('Well 3');
-    object.type = null;
-    expect(object.type).toBe('well');
-    object.type = 'another type';
-    expect(object.type).toBe('another type');
+    object.type = 'wel';
+    expect(object.type).toBe('wel');
+    expect(() => {
+        object.type = 'another type';
+    }).toThrow();
 });

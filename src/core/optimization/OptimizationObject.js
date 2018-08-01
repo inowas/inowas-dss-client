@@ -4,60 +4,36 @@ import uuidv4 from 'uuid/v4';
 class OptimizationObject {
     _id = uuidv4();
     _name = 'New Optimization Object';
-    _type = 'well';
+    _type = 'wel';
     _position = new WellPosition();
     _flux = [];
-    _concentration = [
-        {
-            'component1': {
-                id: uuidv4(),
-                min: 0,
-                max: 10,
-                result: null
-            },
-            'component2': {
-                id: uuidv4(),
-                min: 5,
-                max: 10,
-                result: null
-            }
-        },
-        {
-            'component1': {
-                id: uuidv4(),
-                min: 0,
-                max: 50,
-                result: null
-            }
-        },
-        {
-            'component1': {
-                id: uuidv4(),
-                min: 50,
-                max: 100,
-                result: null
-            },
-            'component2': {
-                id: uuidv4(),
-                min: 20,
-                max: 80,
-                result: null
-            }
-        },
-    ];
+    _concentration = [];
+    _substances = [];
+    _numberOfStressperiods;
+
+    static createFromTypeAndStressperiods(type, numberOfStressperiods) {
+        const object = new OptimizationObject();
+        object.type = type;
+        object.numberOfStressperiods = numberOfStressperiods;
+        object.flux = (new Array(numberOfStressperiods)).map(() => (
+            {id: uuidv4(), min: 0, max: 0, result: 0}
+        ));
+        return object;
+    }
 
     static fromObject(obj) {
-        const object = new OptimizationObject;
+        const object = new OptimizationObject();
         object.id = obj.id;
         object.name = obj.name;
         object.type = obj.type;
         object.position = WellPosition.fromObject(obj.position);
         object.flux = obj.flux;
-        object.concentration = obj.concentration;
+        object.concentrations = obj.concentrations;
         return object;
     }
 
-    constructor() {}
+    constructor() {
+    }
 
     get id() {
         return this._id;
@@ -80,7 +56,10 @@ class OptimizationObject {
     }
 
     set type(value) {
-        this._type = !value ? 'well' : value;
+        if (value !== 'wel') {
+            throw new Error('Type must be one of type: wel');
+        }
+        this._type = value;
     }
 
     get position() {
@@ -99,24 +78,20 @@ class OptimizationObject {
         this._flux = value;
     }
 
-    addFlux(min = 0, max = 0, result = null) {
-        this._flux.push({id: uuidv4(), min: min, max: max, result: result});
-        return this;
+    get concentrations() {
+        return this._concentrations;
     }
 
-    updateFlux(index, min = 0, max = 0, result = null) {
-        this._flux = this._flux.map(item => {
-            if(index === item.id) {
-                return {id: index, min: min, max: max, result: result};
-            }
-            return {id: item.id, min: item.min, max: item.max, result: item.result};
-        });
-        return this;
+    set concentrations(value) {
+        this._concentrations = value;
     }
 
-    removeFlux(index) {
-        this._flux = this._flux.filter((_, i) => index !== i);
-        return this;
+    get numberOfStressperiods() {
+        return this._numberOfStressperiods;
+    }
+
+    set numberOfStressperiods(value) {
+        this._numberOfStressperiods = value;
     }
 
     get concentration() {
@@ -125,6 +100,74 @@ class OptimizationObject {
 
     set concentration(value) {
         this._concentration = value;
+    }
+
+    get substances() {
+        return this._substances;
+    }
+
+    set substances(value) {
+        this._substances = value;
+    }
+
+    addSubstance(name) {
+        const substances = this.substances;
+        substances.push({
+            id: uuidv4(),
+            name: name,
+            data: (new Array(this.numberOfStressperiods)).map(() => (
+                {id: uuidv4(), min: 0, max: 0, result: 0}
+            ))
+        });
+
+        this.substances = substances;
+        this.calculateConcentration();
+    }
+
+    updateSubstance(substance) {
+        const substances = this.substances;
+        substances.map(s => {
+            if (s.id === substance.id) {
+                return substance;
+            }
+            return s;
+        });
+
+        this.substances = substances;
+        this.calculateConcentration();
+    }
+
+    removeSubstance(id) {
+        const substances = this.substances;
+        substances.filter(s => s.id !== id);
+        this.substances = substances;
+        this.calculateConcentration();
+    }
+
+    calculateConcentration() {
+        // ToDo !!!
+        this.concentration = [
+            {
+                component1: {
+                    min: 2,
+                    max: 12
+                },
+                component2: {
+                    min: 12,
+                    max: 22
+                }
+            },
+            {
+                component3: {
+                    min: 22,
+                    max: 32
+                },
+                component4: {
+                    min: 32,
+                    max: 42
+                }
+            }
+        ];
     }
 
     get toObject() {
