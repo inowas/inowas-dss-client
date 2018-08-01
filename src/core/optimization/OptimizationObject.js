@@ -7,7 +7,7 @@ class OptimizationObject {
     _type = 'wel';
     _position = new WellPosition();
     _flux = [];
-    _concentration = [];
+    _concentrations = [];
     _substances = [];
     _numberOfStressperiods;
 
@@ -15,9 +15,13 @@ class OptimizationObject {
         const object = new OptimizationObject();
         object.type = type;
         object.numberOfStressperiods = numberOfStressperiods;
-        object.flux = (new Array(numberOfStressperiods)).map(() => (
-            {id: uuidv4(), min: 0, max: 0, result: 0}
-        ));
+        object.flux = (new Array(numberOfStressperiods)).fill(0).map(() => {
+            return {
+                min: 0,
+                max: 0,
+                result: 0
+            };
+        });
         return object;
     }
 
@@ -29,6 +33,8 @@ class OptimizationObject {
         object.position = WellPosition.fromObject(obj.position);
         object.flux = obj.flux;
         object.concentrations = obj.concentrations;
+        object.substances = obj.substances;
+        object.numberOfStressperiods = obj.numberOfStressperiods;
         return object;
     }
 
@@ -94,14 +100,6 @@ class OptimizationObject {
         this._numberOfStressperiods = value;
     }
 
-    get concentration() {
-        return this._concentration;
-    }
-
-    set concentration(value) {
-        this._concentration = value;
-    }
-
     get substances() {
         return this._substances;
     }
@@ -115,9 +113,13 @@ class OptimizationObject {
         substances.push({
             id: uuidv4(),
             name: name,
-            data: (new Array(this.numberOfStressperiods)).map(() => (
-                {id: uuidv4(), min: 0, max: 0, result: 0}
-            ))
+            data: (new Array(this.numberOfStressperiods)).fill(0).map(() => {
+                return {
+                    min: 0,
+                    max: 0,
+                    result: 0
+                };
+            })
         });
 
         this.substances = substances;
@@ -125,49 +127,32 @@ class OptimizationObject {
     }
 
     updateSubstance(substance) {
-        const substances = this.substances;
-        substances.map(s => {
+        this.substances = this.substances.map(s => {
             if (s.id === substance.id) {
                 return substance;
             }
             return s;
         });
-
-        this.substances = substances;
         this.calculateConcentration();
     }
 
     removeSubstance(id) {
-        const substances = this.substances;
-        substances.filter(s => s.id !== id);
-        this.substances = substances;
+        this.substances = this.substances.filter(s => s.id !== id);
         this.calculateConcentration();
     }
 
     calculateConcentration() {
-        // ToDo !!!
-        this.concentration = [
-            {
-                component1: {
-                    min: 2,
-                    max: 12
-                },
-                component2: {
-                    min: 12,
-                    max: 22
-                }
-            },
-            {
-                component3: {
-                    min: 22,
-                    max: 32
-                },
-                component4: {
-                    min: 32,
-                    max: 42
-                }
-            }
-        ];
+        this.concentrations = this.substances.map(s => {
+            return {
+                [s.name]: s.data.map(d => {
+                    return {
+                        min: d.min,
+                        max: d.max,
+                        result: d.result
+                    };
+                })
+            };
+        });
     }
 
     get toObject() {
@@ -177,7 +162,9 @@ class OptimizationObject {
             'type': this.type,
             'position': this.position.toObject,
             'flux': this.flux,
-            'concentration': this.concentration
+            'concentrations': this.concentrations,
+            'substances': this.substances,
+            'numberOfStressperiods': this.numberOfStressperiods
         });
     }
 }
