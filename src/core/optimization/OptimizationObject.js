@@ -9,13 +9,13 @@ class OptimizationObject {
     _flux = [];
     _concentrations = [];
     _substances = [];
-    _numberOfStressperiods;
+    _numberOfStressPeriods;
 
-    static createFromTypeAndStressperiods(type, numberOfStressperiods) {
+    static createFromTypeAndStressPeriods(type, numberOfStressPeriods) {
         const object = new OptimizationObject();
         object.type = type;
-        object.numberOfStressperiods = numberOfStressperiods;
-        object.flux = (new Array(numberOfStressperiods)).fill(0).map(() => {
+        object.numberOfStressPeriods = numberOfStressPeriods;
+        object.flux = (new Array(numberOfStressPeriods)).fill(0).map(() => {
             return {
                 min: 0,
                 max: 0,
@@ -34,7 +34,7 @@ class OptimizationObject {
         object.flux = obj.flux;
         object.concentrations = obj.concentrations;
         object.substances = obj.substances;
-        object.numberOfStressperiods = obj.numberOfStressperiods;
+        object.numberOfStressPeriods = obj.numberOfStressPeriods;
         return object;
     }
 
@@ -92,12 +92,12 @@ class OptimizationObject {
         this._concentrations = value;
     }
 
-    get numberOfStressperiods() {
-        return this._numberOfStressperiods;
+    get numberOfStressPeriods() {
+        return this._numberOfStressPeriods;
     }
 
-    set numberOfStressperiods(value) {
-        this._numberOfStressperiods = value;
+    set numberOfStressPeriods(value) {
+        this._numberOfStressPeriods = value;
     }
 
     get substances() {
@@ -113,7 +113,7 @@ class OptimizationObject {
         substances.push({
             id: uuidv4(),
             name: name,
-            data: (new Array(this.numberOfStressperiods)).fill(0).map(() => {
+            data: (new Array(this.numberOfStressPeriods)).fill(0).map(() => {
                 return {
                     min: 0,
                     max: 0,
@@ -164,7 +164,7 @@ class OptimizationObject {
             'flux': this.flux,
             'concentrations': this.concentrations,
             'substances': this.substances,
-            'numberOfStressperiods': this.numberOfStressperiods
+            'numberOfStressPeriods': this.numberOfStressPeriods
         });
     }
 }

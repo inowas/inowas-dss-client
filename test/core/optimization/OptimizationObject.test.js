@@ -86,10 +86,10 @@ export const optimizationObjects = [
 ];
 
 test('Create OptimizationObject', () => {
-    const object = OptimizationObject.createFromTypeAndStressperiods('wel', 5);
+    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 5);
     expect(object).toBeInstanceOf(OptimizationObject);
     expect(object.type).toEqual('wel');
-    expect(object.numberOfStressperiods).toEqual(5);
+    expect(object.numberOfStressPeriods).toEqual(5);
     expect(object.flux).toEqual([
         {'max': 0, 'min': 0, 'result': 0},
         {'max': 0, 'min': 0, 'result': 0},
@@ -127,7 +127,7 @@ test('Getter and Setter', () => {
 });
 
 test('Adding, updating and removing substances', () => {
-    const object = OptimizationObject.createFromTypeAndStressperiods('wel', 5);
+    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 5);
     object.addSubstance('NaCl');
     object.addSubstance('Pb');
     expect(object.substances).toHaveLength(2);
