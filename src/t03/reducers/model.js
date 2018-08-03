@@ -4,9 +4,9 @@ import {
     handleAddBoundaryPumpingRate, handleUpdateBoundary, handleUpdateBoundaryGeometry, handleUpdateAreaGeometry,
     handleUpdateBoundingBox, handleUpdateLayer, handleRemoveLayer, handleAddLayer
 } from './boundary';
-import { Action, Event } from '../actions/index';
-import { calcBoundsOfPolygon } from '../../core/geospatial';
-import { model } from '../selectors/index';
+import {Action, Event} from '../actions/index';
+import {calcBoundsOfPolygon} from '../../core/geospatial';
+import {model} from '../selectors/index';
 
 const createModelReducer = tool => {
     return (state = model.getInitialState(), action) => {
@@ -50,7 +50,7 @@ const createModelReducer = tool => {
                 return {...state, boundaries: action.payload};
 
             case Action.ADD_BOUNDARY:
-            // case Event.BOUNDARY_ADDED:
+                // case Event.BOUNDARY_ADDED:
                 return {...state, boundaries: [...state.boundaries, action.payload]};
 
             case Action.SET_BOUNDARY_GEOMETRY:
@@ -85,7 +85,7 @@ const createModelReducer = tool => {
                     ...state,
                     soilmodel: {
                         ...state.soilmodel,
-                        layers: handleRemoveLayer( state.soilmodel.layers, action )
+                        layers: handleRemoveLayer(state.soilmodel.layers, action)
                     }
                 };
 
@@ -131,9 +131,9 @@ const createModelReducer = tool => {
                     ...state,
                     packages: {
                         ...state.packages,
-                        [ action.packageType ]: {
-                            ...state.packages[ action.packageType ],
-                            [ action.packageId ]: action.payload.data
+                        [action.packageType]: {
+                            ...state.packages[action.packageType],
+                            [action.packageId]: action.payload.data
                         }
                     }
                 };
@@ -142,9 +142,9 @@ const createModelReducer = tool => {
                     ...state,
                     packages: {
                         ...state.packages,
-                        [ action.packageType ]: {
-                            ...state.packages[ action.packageType ],
-                            [ action.packageId ]: action.payload
+                        [action.packageType]: {
+                            ...state.packages[action.packageType],
+                            [action.packageId]: action.payload
                         }
                     }
                 };
@@ -152,6 +152,11 @@ const createModelReducer = tool => {
             case Action.SET_MODFLOW_PACKAGES:
                 return {...state, packages: action.payload};
 
+            case Event.MT3DMS_UPDATED:
+                return {
+                    ...state,
+                    mt3dms: action.payload
+                };
             default:
                 return state;
         }

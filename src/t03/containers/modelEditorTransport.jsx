@@ -6,7 +6,6 @@ import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
 import * as lodash from 'lodash';
 import {Command, Query} from '../../t03/actions';
-import {Selector} from '../../t03/index';
 import {Routing} from '../actions/index';
 import VerticalMenu from '../../components/primitive/VerticalMenu';
 import Mt3dms from '../../core/modflow/mt3d/mt3dms';
@@ -89,16 +88,14 @@ class ModelEditorTransport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mt3dms: props.mt3dms.toObject
+            mt3dms: null
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.state.mt3dms) {
-            this.state = {
-                mt3dms: nextProps.mt3dms.toObject
-            };
-        }
+        this.state = {
+            mt3dms: nextProps.model.mt3dms || Mt3dms.fromDefaults().toObject
+        };
     }
 
     handleOnSave = () => {
@@ -257,8 +254,7 @@ class ModelEditorTransport extends React.Component {
 
 const mapStateToProps = (state, {tool}) => {
     return {
-        model: state[tool].model,
-        mt3dms: Selector.model.getModflowMt3dms(state[tool])
+        model: state[tool].model
     };
 };
 
@@ -285,7 +281,6 @@ const mapDispatchToProps = (dispatch, {tool}) => {
 ModelEditorTransport.propTypes = {
     tool: PropTypes.string,
     model: PropTypes.object,
-    mt3dms: PropTypes.instanceOf(Mt3dms),
     params: PropTypes.object.isRequired,
     routes: PropTypes.array,
     getBoundary: PropTypes.func.isRequired,

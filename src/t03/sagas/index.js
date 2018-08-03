@@ -21,6 +21,7 @@ import updateBoundaryFlow from './updateBoundary';
 import updateLayerFlow from './updateLayer';
 import updateModelFlow from './updateModel';
 import updateModflowPackageFlow from './updateModflowPackage';
+import updateMt3dmsFlow from './updateMt3dms';
 import updateStressPeriodsFlow from './updateStressPeriods';
 
 export {
@@ -47,5 +48,6 @@ export {
     updateLayerFlow,
     updateModelFlow,
     updateModflowPackageFlow,
+    updateMt3dmsFlow,
     updateStressPeriodsFlow,
 };
