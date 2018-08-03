@@ -64,7 +64,8 @@ class Optimization {
                 'type': 'wel',
                 'position': {},
                 'flux': [],
-                'concentration': []
+                'concentrations': [],
+                'substances': []
             }),
             OptimizationObject.fromObject({
                 'id': '789-xyz-012',
@@ -72,7 +73,8 @@ class Optimization {
                 'type': 'wel',
                 'position': {},
                 'flux': [],
-                'concentration': []
+                'concentrations': [],
+                'substances': []
             })
         ];
         return optimization;

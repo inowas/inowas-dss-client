@@ -2,7 +2,16 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import React from 'react';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Button, Dropdown, Message, Form, List, Grid, Icon, Segment, Table, Accordion} from 'semantic-ui-react';
+import {
+    Button,
+    Dropdown,
+    Message,
+    Form,
+    Grid,
+    Icon,
+    Table,
+    Accordion
+} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import InputRange from './inputRange';
@@ -87,6 +96,26 @@ class OptimizationObjectsComponent extends React.Component {
         }));
     };
 
+    handleSelectSubstance = (e, {value}) => {
+        return this.setState({
+            selectedSubstance: this.state.selectedObject.substances.filter(s => s.id === value)[0]
+        });
+    };
+
+    addSubstance = name => {
+        return this.setState({
+            selectedObject: OptimizationObject.fromObject(this.state.selectedObject).addSubstance(name).toObject,
+            selectedSubstance: this.state.selectedObject.substances[this.state.selectedObject.substances.length - 1]
+        });
+    };
+
+    removeSubstance = s => {
+        return this.setState({
+            selectedSubstance: null,
+            selectedObject: OptimizationObject.fromObject(this.state.selectedObject).removeSubstance(s).toObject,
+        });
+    };
+
     onClickBack = () => {
         return this.setState({
             selectedObject: null
@@ -134,7 +163,15 @@ class OptimizationObjectsComponent extends React.Component {
             },
             tablewidth: {
                 width: '99%'
-            }
+            },
+            buttonFix: {
+                width: 'auto',
+                height: 'auto'
+            },
+            dropDownWithButtons: {
+                marginRight: 0,
+                marginLeft: 0,
+            },
         };
 
         const typeOptions = [
@@ -159,9 +196,7 @@ class OptimizationObjectsComponent extends React.Component {
             });
         }
 
-        const substancesConfig = [];
-
-        const substancesRows = null;
+        console.log(this.state.selectedSubstance);
 
         return (
             <LayoutComponents.Column heading="Objects">
@@ -178,9 +213,7 @@ class OptimizationObjectsComponent extends React.Component {
                                 </Button>
                             )}
                         </Grid.Column>
-                        <Grid.Column>
-                            <h3>List</h3>
-                        </Grid.Column>
+                        <Grid.Column/>
                         <Grid.Column textAlign="right">
                             {!this.state.selectedObject ?
                                 <Dropdown button floating labeled
@@ -334,7 +367,60 @@ class OptimizationObjectsComponent extends React.Component {
                                             Substances
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 2}>
-                                            TEST
+                                            <Form.Group style={styles.dropDownWithButtons}>
+                                                <Dropdown
+                                                    placeholder="Select Substance"
+                                                    fluid
+                                                    search
+                                                    selection
+                                                    options={
+                                                        this.state.selectedObject.substances.map(s => {
+                                                            return {key: s.id, text: s.name, value: s.id};
+                                                        })
+                                                    }
+                                                    onChange={this.handleSelectSubstance}
+                                                    value={this.state.selectedSubstance ? this.state.selectedSubstance.id : null}
+                                                />
+                                                <Button.Group>
+                                                    <Button
+                                                        style={styles.buttonFix}
+                                                        icon
+                                                        onClick={() => this.addSubstance('new substance')}
+                                                    >
+                                                        <Icon name="add circle"/>
+                                                    </Button>
+
+                                                    <Button
+                                                        style={styles.buttonFix}
+                                                        icon
+                                                        onClick={() => this.removeSubstance(this.state.selectedSubstance.id)}
+                                                    >
+                                                        <Icon name="trash"/>
+                                                    </Button>
+                                                </Button.Group>
+                                            </Form.Group>
+                                            {this.state.selectedSubstance ?
+                                                <div>
+                                                    <p>{ this.state.selectedSubstance.name }</p>
+                                                    <FluxDataTable
+                                                        config={fluxConfig}
+                                                        readOnly={false}
+                                                        rows={
+                                                            this.props.stressPeriods.dateTimes.map((dt, key) => {
+                                                                return {
+                                                                    id: key,
+                                                                    date_time: dt,
+                                                                    min: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].min : 9999,
+                                                                    max: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].max : 9999
+                                                                };
+                                                            })
+                                                        }
+                                                        onChange={this.handleChangeFlux}
+                                                    />
+                                                </div>
+                                                :
+                                                <p>No substance selected.</p>
+                                            }
                                         </Accordion.Content>
                                     </Accordion>
                                 </Form>
