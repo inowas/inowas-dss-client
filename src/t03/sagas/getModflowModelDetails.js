@@ -16,6 +16,7 @@ export default function* getModflowDetailsFlow() {
         try {
             yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'loading'}));
 
+            console.log('skfuhhf', storedModel.id !== action.id);
             if (storedModel.id !== action.id) {
                 yield put(Action.stopGetModflowModelCalculation(action.tool, storedModel.id));
 

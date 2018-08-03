@@ -129,3 +129,14 @@ export function modflowPackageUpdated(tool, packageId, packageType, data) {
         payload: data
     };
 }
+
+export const MT3DMS_UPDATED = 'mt3dmsUpdated';
+
+export function mt3dmsUpdated(tool, data) {
+    console.log('mt3dmsUpdated', tool, data);
+    return {
+        type: MT3DMS_UPDATED,
+        tool,
+        payload: data
+    };
+}

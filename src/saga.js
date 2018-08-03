@@ -41,6 +41,7 @@ export default function* rootSaga() {
         call(T03.updateLayerFlow),
         call(T03.updateModelFlow),
         call(T03.updateModflowPackageFlow),
+        call(T03.updateMt3dmsFlow),
         call(T03.updateStressPeriodsFlow),
         call(T07.cloneScenarioAnalysisFlow),
         call(T07.createScenarioAnalysisFlow),

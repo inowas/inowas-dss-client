@@ -201,6 +201,7 @@ export const getInitialState = () => {
         boundaries: null,
         results: null,
         soilmodel: null,
+        mt3dms: null,
         permissions: 'rwx',
         calculation: {state: 0, calculation_id: '', message: ''},
         public: true
@@ -231,4 +232,10 @@ export const getModflowModel = state => state.model;
 
 export const getModflowPackages = state => state.model.packages;
 
-export const getModflowMt3dms = state => state.model.mt3dms || mt3dms.fromDefaults();
+export const getModflowMt3dms = state => {
+    if (state.model && state.model.mt3dms) {
+        return state.model.mt3dms;
+    }
+
+    return mt3dms.fromDefaults().toObject;
+};

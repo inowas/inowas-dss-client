@@ -207,3 +207,13 @@ export function setModflowPackages(tool, data) {
         payload: data
     };
 }
+
+export const SET_MT3DMS = 'SET_MT3DMS';
+
+export function setMt3dms(tool, payload) {
+    return {
+        type: SET_MT3DMS,
+        tool,
+        payload: payload
+    };
+}
