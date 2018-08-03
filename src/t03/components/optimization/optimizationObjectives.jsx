@@ -1,13 +1,13 @@
 import ConfiguredRadium from 'ConfiguredRadium';
 import React from 'react';
 import PropTypes from 'prop-types';
-import OptimizationObjective from '../../core/optimization/OptimizationObjective';
+import OptimizationObjective from '../../../core/optimization/OptimizationObjective';
 import {pure} from 'recompose';
-import {LayoutComponents} from '../../core';
+import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Segment, Table} from 'semantic-ui-react';
 import InputRange from './inputRange';
 import InputObjectList from './InputObjectList';
-import Location from '../../core/optimization/Location';
+import Location from '../../../core/optimization/Location';
 
 class OptimizationObjectivesComponent extends React.Component {
 

@@ -1,11 +1,13 @@
 import ConfiguredRadium from 'ConfiguredRadium';
 import React from 'react';
 import {pure} from 'recompose';
-import {LayoutComponents} from '../../core';
-import {Button, Dropdown, Message, Form, List, Grid, Icon, Segment, Table} from 'semantic-ui-react';
+import {LayoutComponents} from '../../../core/index';
+import {Button, Dropdown, Message, Form, List, Grid, Icon, Segment, Table, Accordion} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import OptimizationObject from '../../core/optimization/OptimizationObject';
+import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import InputRange from './inputRange';
+import FluxDataTable from './FluxDataTable';
+import Stressperiods from '../../../core/modflow/Stressperiods';
 
 class OptimizationObjectsComponent extends React.Component {
 
@@ -15,7 +17,8 @@ class OptimizationObjectsComponent extends React.Component {
             objects: props.objects.map((object) => {
                 return object.toObject;
             }),
-            selectedObject: null
+            selectedObject: null,
+            activeIndex: 0
         };
     }
 
@@ -70,22 +73,17 @@ class OptimizationObjectsComponent extends React.Component {
         });
     };
 
-    onClickAddFlux = () => {
-        console.log(this.props);
-        return this.setState((prevState) => ({
-            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).addFlux().toObject
-        }));
+    handleClickAccordion = (e, titleProps) => {
+        const {index} = titleProps;
+        const {activeIndex} = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({activeIndex: newIndex});
     };
 
-    handleChangeFlux = ({name, from, to}) => {
+    handleChangeFlux = (rows) => {
         return this.setState((prevState) => ({
-            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(name, from, to).toObject
-        }));
-    };
-
-    onClickDeleteFlux = (index) => {
-        return this.setState((prevState) => ({
-            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).removeFlux(index).toObject
+            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(rows).toObject
         }));
     };
 
@@ -140,8 +138,30 @@ class OptimizationObjectsComponent extends React.Component {
         };
 
         const typeOptions = [
-            {key: 'type1', text: 'Well', value: 'well'},
+            {key: 'type1', text: 'Well', value: 'wel'},
         ];
+
+        const fluxConfig = [
+            {property: 'min', label: 'Min'},
+            {property: 'max', label: 'Max'}
+        ];
+
+        let fluxRows = null;
+
+        if (this.state.selectedObject) {
+            fluxRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
+                return {
+                    id: key,
+                    date_time: dt,
+                    min: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].min : 0,
+                    max: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].max : 0
+                };
+            });
+        }
+
+        const substancesConfig = [];
+
+        const substancesRows = null;
 
         return (
             <LayoutComponents.Column heading="Objects">
@@ -172,8 +192,8 @@ class OptimizationObjectsComponent extends React.Component {
                                           icon="plus"
                                           options={[
                                               {
-                                                  key: 'well',
-                                                  value: 'well',
+                                                  key: 'wel',
+                                                  value: 'wel',
                                                   text: 'Well'
                                               },
                                           ]}
@@ -260,83 +280,63 @@ class OptimizationObjectsComponent extends React.Component {
                                             />
                                         </Form.Field>
                                     </Form.Group>
-                                    <Segment>
-                                        <h4>Position</h4>
-                                        <InputRange
-                                            name="lay"
-                                            from={this.state.selectedObject.position.lay.min}
-                                            to={this.state.selectedObject.position.lay.max}
-                                            label="Layer"
-                                            label_from="min"
-                                            label_to="max"
-                                            onChange={this.handleChangePosition}
-                                        />
-                                        <InputRange
-                                            name="row"
-                                            from={this.state.selectedObject.position.row.min}
-                                            to={this.state.selectedObject.position.row.max}
-                                            label="Row"
-                                            label_from="min"
-                                            label_to="max"
-                                            onChange={this.handleChangePosition}
-                                        />
-                                        <InputRange
-                                            name="col"
-                                            from={this.state.selectedObject.position.col.min}
-                                            to={this.state.selectedObject.position.col.max}
-                                            label="Column"
-                                            label_from="min"
-                                            label_to="max"
-                                            onChange={this.handleChangePosition}
-                                        />
-                                    </Segment>
-                                    <Segment>
-                                        <h4>Pumping Rates</h4>
-                                        {this.props.stressPeriods && this.props.stressPeriods.length > 0 ?
-                                            <Table celled striped>
-                                                <Table.Header>
-                                                    <Table.Row>
-                                                        <Table.HeaderCell width={4}>Stress Period Index</Table.HeaderCell>
-                                                        <Table.HeaderCell width={12}>Min / Max</Table.HeaderCell>
-                                                    </Table.Row>
-                                                </Table.Header>
-                                                <Table.Body>
-                                                    {
-                                                        this.props.stressPeriods.map((item, i) => {
-                                                            const flux = this.state.selectedObject.flux.filter(f => f.id === i)[0];
-
-                                                            return (
-                                                                <Table.Row key={i}>
-                                                                    <Table.Cell width={4}>
-                                                                        {i}
-                                                                    </Table.Cell>
-                                                                    <Table.Cell width={12}>
-                                                                        <InputRange
-                                                                            name={flux ? flux.id : String(i)}
-                                                                            from={flux ? flux.min : 0}
-                                                                            to={flux ? flux.max : 0}
-                                                                            onChange={this.handleChangeFlux}
-                                                                        />
-                                                                    </Table.Cell>
-                                                                </Table.Row>);
-                                                        })
-                                                    }
-                                                </Table.Body>
-                                            </Table>
-                                            :
-                                            <Message>
-                                                <p>No stress periods defined in model</p>
-                                            </Message>
-                                        }
-                                        <Button icon
-                                                style={styles.iconfix}
-                                                labelPosition="left"
-                                                onClick={this.onClickAddFlux}
-                                        >
-                                            <Icon name="plus"/>
-                                            Add
-                                        </Button>
-                                    </Segment>
+                                    <Accordion fluid styled>
+                                        <Accordion.Title active={this.state.activeIndex === 0} index={0}
+                                                         onClick={this.handleClickAccordion}>
+                                            <Icon name="dropdown"/>
+                                            Position
+                                        </Accordion.Title>
+                                        <Accordion.Content active={this.state.activeIndex === 0}>
+                                            <InputRange
+                                                name="lay"
+                                                from={this.state.selectedObject.position.lay.min}
+                                                to={this.state.selectedObject.position.lay.max}
+                                                label="Layer"
+                                                label_from="min"
+                                                label_to="max"
+                                                onChange={this.handleChangePosition}
+                                            />
+                                            <InputRange
+                                                name="row"
+                                                from={this.state.selectedObject.position.row.min}
+                                                to={this.state.selectedObject.position.row.max}
+                                                label="Row"
+                                                label_from="min"
+                                                label_to="max"
+                                                onChange={this.handleChangePosition}
+                                            />
+                                            <InputRange
+                                                name="col"
+                                                from={this.state.selectedObject.position.col.min}
+                                                to={this.state.selectedObject.position.col.max}
+                                                label="Column"
+                                                label_from="min"
+                                                label_to="max"
+                                                onChange={this.handleChangePosition}
+                                            />
+                                        </Accordion.Content>
+                                        <Accordion.Title active={this.state.activeIndex === 1} index={1}
+                                                         onClick={this.handleClickAccordion}>
+                                            <Icon name="dropdown"/>
+                                            Pumping Rates
+                                        </Accordion.Title>
+                                        <Accordion.Content active={this.state.activeIndex === 1}>
+                                            <FluxDataTable
+                                                config={fluxConfig}
+                                                readOnly={false}
+                                                rows={fluxRows}
+                                                onChange={this.handleChangeFlux}
+                                            />
+                                        </Accordion.Content>
+                                        <Accordion.Title active={this.state.activeIndex === 2} index={2}
+                                                         onClick={this.handleClickAccordion}>
+                                            <Icon name="dropdown"/>
+                                            Substances
+                                        </Accordion.Title>
+                                        <Accordion.Content active={this.state.activeIndex === 2}>
+                                            TEST
+                                        </Accordion.Content>
+                                    </Accordion>
                                 </Form>
                                 : ''
                             }
@@ -350,7 +350,7 @@ class OptimizationObjectsComponent extends React.Component {
 
 OptimizationObjectsComponent.propTypes = {
     objects: PropTypes.array.isRequired,
-    stressPeriods: PropTypes.array,
+    stressPeriods: PropTypes.instanceOf(Stressperiods),
     onChange: PropTypes.func.isRequired,
 };
 

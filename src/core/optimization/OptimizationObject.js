@@ -84,6 +84,17 @@ class OptimizationObject {
         this._flux = value;
     }
 
+    updateFlux(rows) {
+        this.flux = rows.map((row, key) => {
+            return {
+                id: key,
+                min: parseFloat(row.min),
+                max: parseFloat(row.max)
+            };
+        });
+        return this;
+    }
+
     get concentrations() {
         return this._concentrations;
     }
@@ -124,6 +135,7 @@ class OptimizationObject {
 
         this.substances = substances;
         this.calculateConcentration();
+        return this;
     }
 
     updateSubstance(substance) {
@@ -134,11 +146,13 @@ class OptimizationObject {
             return s;
         });
         this.calculateConcentration();
+        return this;
     }
 
     removeSubstance(id) {
         this.substances = this.substances.filter(s => s.id !== id);
         this.calculateConcentration();
+        return this;
     }
 
     calculateConcentration() {
@@ -153,6 +167,7 @@ class OptimizationObject {
                 })
             };
         });
+        return this;
     }
 
     get toObject() {

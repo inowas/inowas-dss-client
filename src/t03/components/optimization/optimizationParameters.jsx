@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import styleGlobals from 'styleGlobals';
-import {LayoutComponents} from '../../core';
-import OptimizationParameters from '../../core/optimization/OptimizationParameters';
+import {LayoutComponents} from '../../../core/index';
+import OptimizationParameters from '../../../core/optimization/OptimizationParameters';
 import {Segment, Form} from 'semantic-ui-react';
 
 const styles = {

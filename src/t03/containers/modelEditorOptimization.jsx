@@ -4,12 +4,13 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
-import OptimizationObjectsComponent from '../components/optimizationObjects';
-import OptimizationObjectivesComponent from '../components/optimizationObjectives';
-import OptimizationParametersComponent from '../components/optimizationParameters';
+import OptimizationObjectsComponent from '../components/optimization/optimizationObjects';
+import OptimizationObjectivesComponent from '../components/optimization/optimizationObjectives';
+import OptimizationParametersComponent from '../components/optimization/optimizationParameters';
 import FilterableList from '../../components/primitive/FilterableList';
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
+import Stressperiods from '../../core/modflow/Stressperiods';
 
 const styles = {
     container: {
@@ -98,13 +99,23 @@ class ModelEditorOptimization extends React.Component {
     };
 
     renderProperties() {
+        if (!this.props.model) {
+            return null;
+        }
+
+        const {model} = this.props;
+        if (!model.stress_periods) {
+            return null;
+        }
+
         const {type} = this.props.params;
         const optimization = Optimization.fromObject(this.state.optimization);
+        const stressPeriods = Stressperiods.fromObject(model.stress_periods);
 
         switch (type) {
             case 'objects':
                 return (
-                    <OptimizationObjectsComponent objects={optimization.objects} stressPeriods={this.props.model.stress_periods ? this.props.model.stress_periods.stress_periods : [0, 1, 2, 3]} onChange={this.onChange}/>
+                    <OptimizationObjectsComponent objects={optimization.objects} stressPeriods={stressPeriods} onChange={this.onChange}/>
                 );
             case 'objectives':
                 return (
