@@ -162,13 +162,6 @@ class OptimizationObjectivesComponent extends React.Component {
                             }
                         </Grid.Column>
                         <Grid.Column>
-                            {
-                                (this.state.selectedObjective
-                                        ?
-                                        <h3>Details</h3>
-                                        :
-                                        <h3>List</h3>
-                                )}
                         </Grid.Column>
                         <Grid.Column textAlign="right">
                             {!this.state.selectedObjective ?
@@ -357,7 +350,6 @@ class OptimizationObjectivesComponent extends React.Component {
                                         <Table celled striped>
                                             <Table.Header>
                                                 <Table.Row>
-                                                    <Table.HeaderCell textAlign="center">#</Table.HeaderCell>
                                                     <Table.HeaderCell>Type</Table.HeaderCell>
                                                     <Table.HeaderCell>Summary Method</Table.HeaderCell>
                                                     <Table.HeaderCell/>
@@ -367,7 +359,6 @@ class OptimizationObjectivesComponent extends React.Component {
                                                 {
                                                     this.state.objectives.map((objective) =>
                                                         <Table.Row key={objective.id}>
-                                                            <Table.Cell textAlign="center">{objective.id}</Table.Cell>
                                                             <Table.Cell>
                                                                 <a style={styles.link}
                                                                    onClick={() => this.onClickObjective(objective)}>

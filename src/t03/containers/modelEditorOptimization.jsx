@@ -10,7 +10,7 @@ import OptimizationParametersComponent from '../components/optimization/optimiza
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
-import {Menu} from 'semantic-ui-react';
+import {Button, Menu} from 'semantic-ui-react';
 
 const styles = {
     container: {
@@ -97,7 +97,7 @@ class ModelEditorOptimization extends React.Component {
         switch (type) {
             case 'objects':
                 return (
-                    <OptimizationObjectsComponent objects={optimization.objects} stressPeriods={stressPeriods} onChange={this.onChange}/>
+                    <OptimizationObjectsComponent objects={optimization.objects} model={this.props.model} stressPeriods={stressPeriods} onChange={this.onChange}/>
                 );
             case 'objectives':
                 return (
@@ -136,6 +136,15 @@ class ModelEditorOptimization extends React.Component {
                             name="constraints"
                             active={this.state.activeItem === 'constraints'}
                             onClick={this.onMenuClick}
+                        />
+                        <Menu.Item>
+                            <Button fluid primary>Run Optimization</Button>
+                        </Menu.Item>
+                        <Menu.Item
+                            name="results"
+                            active={this.state.activeItem === 'results'}
+                            onClick={this.onMenuClick}
+                            disabled={true}
                         />
                     </Menu>
                 </div>
