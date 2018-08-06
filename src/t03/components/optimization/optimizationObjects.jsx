@@ -24,9 +24,11 @@ class OptimizationObjectsComponent extends React.Component {
         super(props);
         this.state = {
             objects: props.objects.map((object) => {
+                object.numberOfStressPeriods = this.props.stressPeriods.dateTimes.length;
                 return object.toObject;
             }),
             selectedObject: null,
+            selectedSubstance: null,
             activeIndex: 0
         };
     }
@@ -34,6 +36,7 @@ class OptimizationObjectsComponent extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             objects: nextProps.objects.map((object) => {
+                object.numberOfStressPeriods = this.props.stressPeriods.dateTimes.length;
                 return object.toObject;
             })
         });
@@ -90,10 +93,36 @@ class OptimizationObjectsComponent extends React.Component {
         this.setState({activeIndex: newIndex});
     };
 
-    handleChangeFlux = (rows) => {
+    handleChangeFlux = rows => {
         return this.setState((prevState) => ({
             selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(rows).toObject
         }));
+    };
+
+    handleChangeSubstanceData = rows => {
+        const substance = this.state.selectedSubstance;
+        substance.data = rows.map((row, key) => {
+            return {
+                id: key,
+                min: parseFloat(row.min),
+                max: parseFloat(row.max)
+            };
+        });
+
+        return this.setState(prevState => ({
+            selectedSubstance: substance,
+            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstance(substance).toObject
+        }));
+    };
+
+    handleChangeSubstance = (e, {name, value}) => {
+        const substance = this.state.selectedSubstance;
+        substance[name] = value;
+
+        return this.setState({
+            selectedSubstance: substance,
+            selectedObject: OptimizationObject.fromObject(this.state.selectedObject).updateSubstance(substance).toObject,
+        });
     };
 
     handleSelectSubstance = (e, {value}) => {
@@ -184,6 +213,7 @@ class OptimizationObjectsComponent extends React.Component {
         ];
 
         let fluxRows = null;
+        let substanceRows = null;
 
         if (this.state.selectedObject) {
             fluxRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
@@ -196,7 +226,16 @@ class OptimizationObjectsComponent extends React.Component {
             });
         }
 
-        console.log(this.state.selectedSubstance);
+        if(this.state.selectedSubstance) {
+            substanceRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
+                return {
+                    id: key,
+                    date_time: dt,
+                    min: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].min : 0,
+                    max: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].max : 0
+                };
+            });
+        }
 
         return (
             <LayoutComponents.Column heading="Objects">
@@ -394,6 +433,7 @@ class OptimizationObjectsComponent extends React.Component {
                                                         style={styles.buttonFix}
                                                         icon
                                                         onClick={() => this.removeSubstance(this.state.selectedSubstance.id)}
+                                                        disabled={this.state.selectedSubstance === null}
                                                     >
                                                         <Icon name="trash"/>
                                                     </Button>
@@ -401,21 +441,20 @@ class OptimizationObjectsComponent extends React.Component {
                                             </Form.Group>
                                             {this.state.selectedSubstance ?
                                                 <div>
-                                                    <p>{ this.state.selectedSubstance.name }</p>
+                                                    <label>Name</label>
+                                                    <Form.Input
+                                                        type="text"
+                                                        name="name"
+                                                        value={this.state.selectedSubstance.name}
+                                                        placeholder="name ="
+                                                        style={styles.inputfix}
+                                                        onChange={this.handleChangeSubstance}
+                                                    />
                                                     <FluxDataTable
                                                         config={fluxConfig}
                                                         readOnly={false}
-                                                        rows={
-                                                            this.props.stressPeriods.dateTimes.map((dt, key) => {
-                                                                return {
-                                                                    id: key,
-                                                                    date_time: dt,
-                                                                    min: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].min : 9999,
-                                                                    max: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].max : 9999
-                                                                };
-                                                            })
-                                                        }
-                                                        onChange={this.handleChangeFlux}
+                                                        rows={substanceRows}
+                                                        onChange={this.handleChangeSubstanceData}
                                                     />
                                                 </div>
                                                 :
