@@ -16,6 +16,7 @@ import PropTypes from 'prop-types';
 import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import InputRange from './inputRange';
 import FluxDataTable from './FluxDataTable';
+import OptimizationMap from './OptimizationMap';
 import Stressperiods from '../../../core/modflow/Stressperiods';
 
 class OptimizationObjectsComponent extends React.Component {
@@ -58,6 +59,16 @@ class OptimizationObjectsComponent extends React.Component {
             }
         }
     });
+
+    handleChangePositionOnMap = response => {
+        const object = this.state.selectedObject;
+        object.position.col = response.col;
+        object.position.row = response.row;
+
+        return this.setState({
+            selectedObject: object
+        });
+    };
 
     onClickNew = (e, {name, value}) => {
         const newObject = new OptimizationObject();
@@ -226,7 +237,7 @@ class OptimizationObjectsComponent extends React.Component {
             });
         }
 
-        if(this.state.selectedSubstance) {
+        if (this.state.selectedSubstance) {
             substanceRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
                 return {
                     id: key,
@@ -359,6 +370,18 @@ class OptimizationObjectsComponent extends React.Component {
                                             Position
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 0}>
+                                            <Button
+                                                onClick={this.handleChangePositionOnMap}
+                                            >
+                                                Draw on map
+                                            </Button>
+                                            <OptimizationMap
+                                                area={this.props.model.geometry}
+                                                bbox={this.props.model.bounding_box}
+                                                object={this.state.selectedObject}
+                                                gridSize={this.props.model.grid_size}
+                                                onChange={this.handleChangePositionOnMap}
+                                            />
                                             <InputRange
                                                 name="lay"
                                                 from={this.state.selectedObject.position.lay.min}
@@ -475,6 +498,7 @@ class OptimizationObjectsComponent extends React.Component {
 
 OptimizationObjectsComponent.propTypes = {
     objects: PropTypes.array.isRequired,
+    model: PropTypes.object,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
     onChange: PropTypes.func.isRequired,
 };

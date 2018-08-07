@@ -161,8 +161,7 @@ class OptimizationObjectivesComponent extends React.Component {
                             </Button>
                             }
                         </Grid.Column>
-                        <Grid.Column>
-                        </Grid.Column>
+                        <Grid.Column />
                         <Grid.Column textAlign="right">
                             {!this.state.selectedObjective ?
                                 <Dropdown button floating labeled

@@ -14,6 +14,13 @@ class InputRange extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            from: nextProps.from,
+            to: nextProps.to
+        });
+    }
+
     handleChange = (e, {name, value}) => {
         if (name === 'from') {
             if (value > this.state.to) {
