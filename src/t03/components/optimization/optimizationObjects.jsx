@@ -10,11 +10,10 @@ import {
     Grid,
     Icon,
     Table,
-    Accordion, Modal, Segment, Menu, Header
+    Accordion
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import OptimizationObject from '../../../core/optimization/OptimizationObject';
-import InputRange from './inputRange';
 import FluxDataTable from './FluxDataTable';
 import OptimizationMap from './OptimizationMap';
 import Stressperiods from '../../../core/modflow/Stressperiods';
@@ -51,24 +50,10 @@ class OptimizationObjectsComponent extends React.Component {
         }
     });
 
-    handleChangePosition = ({name, from, to}) => this.setState({
+    handleChangePosition = response => this.setState({
         selectedObject: {
             ...this.state.selectedObject,
-            position: {
-                ...this.state.selectedObject.position,
-                [name]: {min: from, max: to}
-            }
-        }
-    });
-
-    handleChangePositionOnMap = response => this.setState({
-        selectedObject: {
-            ...this.state.selectedObject,
-            position: {
-                ...this.state.selectedObject.position,
-                col: response.col,
-                row: response.row
-            }
+            position: response
         }
     });
 
@@ -104,24 +89,6 @@ class OptimizationObjectsComponent extends React.Component {
         const newIndex = activeIndex === index ? -1 : index;
 
         this.setState({activeIndex: newIndex});
-    };
-
-    onCancelModal = () => {
-        this.setState({
-            showOverlay: false
-        });
-    };
-
-    onSaveModal = () => {
-        this.setState({
-            showOverlay: false
-        });
-    };
-
-    onClickToggleMap = () => {
-        this.setState({
-            showOverlay: true
-        });
     };
 
     handleChangeFlux = rows => {
@@ -390,17 +357,13 @@ class OptimizationObjectsComponent extends React.Component {
                                             Position
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 0}>
-                                            <Button fluid
-                                                    onClick={this.onClickToggleMap}
-                                            >
-                                                Draw on map
-                                            </Button>
                                             <OptimizationMap
                                                 area={this.props.model.geometry}
                                                 bbox={this.props.model.bounding_box}
-                                                object={this.state.selectedObject}
+                                                position={this.state.selectedObject.position}
                                                 gridSize={this.props.model.grid_size}
-                                                onChange={this.handleChangePositionOnMap}
+                                                onChange={this.handleChangePosition}
+                                                objects={this.props.objects.filter(o => o.id !== this.state.selectedObject.id)}
                                                 readOnly
                                             />
                                         </Accordion.Content>
@@ -485,66 +448,6 @@ class OptimizationObjectsComponent extends React.Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                {this.state.showOverlay &&
-                <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
-                    <Modal.Header>Edit object position</Modal.Header>
-                    <Modal.Content>
-                        <Grid divided={'vertically'}>
-                            <Grid.Row columns={2}>
-                                <Grid.Column width={6}>
-                                    <Segment color="blue">
-                                        <Form>
-                                            <Header as="h3" dividing>Position</Header>
-                                            <InputRange
-                                                name="lay"
-                                                from={this.state.selectedObject.position.lay.min}
-                                                to={this.state.selectedObject.position.lay.max}
-                                                label="Layer"
-                                                label_from="min"
-                                                label_to="max"
-                                                onChange={this.handleChangePosition}
-                                            />
-                                            <InputRange
-                                                name="row"
-                                                from={this.state.selectedObject.position.row.min}
-                                                to={this.state.selectedObject.position.row.max}
-                                                label="Row"
-                                                label_from="min"
-                                                label_to="max"
-                                                onChange={this.handleChangePosition}
-                                            />
-                                            <InputRange
-                                                name="col"
-                                                from={this.state.selectedObject.position.col.min}
-                                                to={this.state.selectedObject.position.col.max}
-                                                label="Column"
-                                                label_from="min"
-                                                label_to="max"
-                                                onChange={this.handleChangePosition}
-                                            />
-                                        </Form>
-                                    </Segment>
-                                </Grid.Column>
-                                <Grid.Column width={10}>
-                                    <Segment attached="bottom">
-                                        <OptimizationMap
-                                            area={this.props.model.geometry}
-                                            bbox={this.props.model.bounding_box}
-                                            object={this.state.selectedObject}
-                                            gridSize={this.props.model.grid_size}
-                                            onChange={this.handleChangePositionOnMap}
-                                        />
-                                    </Segment>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button negative onClick={this.onCancelModal}>Cancel</Button>
-                        <Button positive onClick={this.onSaveModal}>Save</Button>
-                    </Modal.Actions>
-                </Modal>
-                }
             </LayoutComponents.Column>
         );
     }

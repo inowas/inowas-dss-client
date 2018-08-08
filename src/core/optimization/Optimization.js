@@ -62,7 +62,23 @@ class Optimization {
                 'id': '123-abc-456',
                 'name': 'Brunnen 1',
                 'type': 'wel',
-                'position': {},
+                'position': {
+                    col: {
+                        min: 10,
+                        max: 20,
+                        result: 15
+                    },
+                    row: {
+                        min: 10,
+                        max: 20,
+                        result: 15
+                    },
+                    lay: {
+                        min: 0,
+                        max: 1,
+                        result: 1
+                    }
+                },
                 'flux': [],
                 'concentrations': [],
                 'substances': []

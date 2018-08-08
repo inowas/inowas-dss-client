@@ -10,7 +10,9 @@ class InputRange extends React.Component {
         super(props);
         this.state = {
             from: props.from,
-            to: props.to
+            to: props.to,
+            errorFrom: false,
+            errorTo: false
         };
     }
 
@@ -22,45 +24,32 @@ class InputRange extends React.Component {
     }
 
     handleChange = (e, {name, value}) => {
+        let from = this.state.from;
+        let to = this.state.to;
+        let errorFrom = false;
+        let errorTo = false;
+
         if (name === 'from') {
-            if (value > this.state.to) {
-                return this.setState({
-                    from: this.state.to,
-                    to: this.state.to
-                });
-            }
+            errorFrom = value > this.state.to;
+            from = parseFloat(value);
+
             if (this.props.min && value < this.props.min) {
-                return this.setState({
-                    from: this.props.min,
-                    to: this.state.to
-                });
+                from = this.props.min;
             }
-            return this.setState({
-                from: parseFloat(value),
-                to: this.state.to
-            });
-        }
-        if (name === 'to') {
-            if (value < this.state.from) {
-                return this.setState({
-                    from: this.state.from,
-                    to: this.state.from
-                });
-            }
+        } else if (name === 'to') {
+            errorTo = value < this.state.from;
+            to = parseFloat(value);
+
             if (this.props.max && value > this.props.max) {
-                return this.setState({
-                    from: this.state.from,
-                    to: this.props.max
-                });
+                to = this.props.max;
             }
-            return this.setState({
-                from: this.state.from,
-                to: parseFloat(value)
-            });
         }
+
         return this.setState({
-            from: this.state.from,
-            to: this.state.to
+            from: from,
+            to: to,
+            errorFrom: errorFrom,
+            errorTo: errorTo
         });
     };
 
@@ -82,7 +71,7 @@ class InputRange extends React.Component {
         return (
             <Form.Group widths="equal">
                 <Form.Field>
-                    { this.props.label || this.props.label_from ?
+                    {this.props.label || this.props.label_from ?
                         <label>
                             {this.props.label ? this.props.label : ''} {this.props.label_from ? this.props.label_from : ''}
                         </label>
@@ -98,10 +87,11 @@ class InputRange extends React.Component {
                         style={styles.inputFix}
                         onChange={this.handleChange}
                         onBlur={this.handleSubmit}
+                        error={this.state.errorFrom}
                     />
                 </Form.Field>
                 <Form.Field>
-                    {this.props.label_to ? <label>{ this.props.label_to }</label> : ''}
+                    {this.props.label_to ? <label>{this.props.label_to}</label> : ''}
                     <Form.Input
                         disabled={this.props.disabled}
                         type="number"
@@ -111,6 +101,7 @@ class InputRange extends React.Component {
                         style={styles.inputFix}
                         onChange={this.handleChange}
                         onBlur={this.handleSubmit}
+                        error={this.state.errorTo}
                     />
                 </Form.Field>
             </Form.Group>
