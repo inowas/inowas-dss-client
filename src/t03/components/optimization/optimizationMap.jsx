@@ -4,8 +4,6 @@ import {pure} from 'recompose';
 import PropTypes from 'prop-types';
 import {GeoJSON, Map, Rectangle, TileLayer, FeatureGroup} from 'react-leaflet';
 import FullscreenControl from 'react-leaflet-fullscreen';
-import Control from '../../../core/map/Control';
-import {Button, Icon} from 'semantic-ui-react';
 import {geoJSON as leafletGeoJSON} from 'leaflet';
 import md5 from 'js-md5';
 import {uniqueId} from 'lodash';
@@ -43,7 +41,7 @@ class OptimizationMap extends React.Component {
 
         const styles = {
             line: {
-                color: 'grey',
+                color: 'red',
                 weight: 0.3
             }
         };
@@ -84,16 +82,16 @@ class OptimizationMap extends React.Component {
             let xmax = -180;
 
             geometry.coordinates[0].map(c => {
-                if(c[0] <= xmin) {
+                if (c[0] <= xmin) {
                     xmin = c[0];
                 }
-                if(c[0] >= xmax) {
+                if (c[0] >= xmax) {
                     xmax = c[0];
                 }
-                if(c[1] <= ymin) {
+                if (c[1] <= ymin) {
                     ymin = c[1];
                 }
-                if(c[1] >= ymax) {
+                if (c[1] >= ymax) {
                     ymax = c[1];
                 }
             });
@@ -117,30 +115,6 @@ class OptimizationMap extends React.Component {
     };
 
     render() {
-        const styles = {
-            iconfix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            inputfix: {
-                padding: '0'
-            },
-            link: {
-                cursor: 'pointer'
-            },
-            tablewidth: {
-                width: '99%'
-            },
-            buttonFix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            dropDownWithButtons: {
-                marginRight: 0,
-                marginLeft: 0,
-            },
-        };
-
         const options = {
             edit: {
                 remove: false
@@ -172,25 +146,24 @@ class OptimizationMap extends React.Component {
                         key={this.generateKeyFunction(area)}
                         data={area}
                     />
-                    <FullscreenControl position="topright"/>
-                    <Control position="topright">
-                        <Button
-                            title="reset view"
-                            onClick={() => {
-                                return 1;
-                            }}
-                            icon={<Icon name="marker"/>}
-                            style={styles.buttonFix}
-                        />
-                    </Control>
-                    <FeatureGroup>
-                        <EditControl
-                            position="bottomright"
-                            onEdited={this.onEditPath}
-                            {...options}
-                        />{' '}
-                        {this.selectedAreaLayer(this.props.bbox, this.props.gridSize, this.state.object.position)}
-                    </FeatureGroup>
+                    {!this.props.readOnly
+                        ?
+                        <div>
+                            <FullscreenControl position="topright"/>
+                            <FeatureGroup>
+                                <EditControl
+                                    position="bottomright"
+                                    onEdited={this.onEditPath}
+                                    {...options}
+                                />{' '}
+                                {this.selectedAreaLayer(this.props.bbox, this.props.gridSize, this.state.object.position)}
+                            </FeatureGroup>
+                        </div>
+                        :
+                        <FeatureGroup>
+                            {this.selectedAreaLayer(this.props.bbox, this.props.gridSize, this.state.object.position)}
+                        </FeatureGroup>
+                    }
                 </Map>
             </div>
         );
@@ -202,6 +175,7 @@ OptimizationMap.propTypes = {
     bbox: PropTypes.array.isRequired,
     object: PropTypes.object.isRequired,
     onChange: PropTypes.func,
+    readOnly: PropTypes.bool,
     gridSize: PropTypes.object.isRequired,
 };
 
