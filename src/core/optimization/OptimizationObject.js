@@ -1,11 +1,11 @@
-import WellPosition from './WellPosition';
+import Location from './Location';
 import uuidv4 from 'uuid/v4';
 
 class OptimizationObject {
     _id = uuidv4();
     _name = 'New Optimization Object';
     _type = 'wel';
-    _position = new WellPosition();
+    _position = new Location();
     _flux = [];
     _concentrations = [];
     _substances = [];
@@ -30,7 +30,7 @@ class OptimizationObject {
         object.id = obj.id;
         object.name = obj.name;
         object.type = obj.type;
-        object.position = WellPosition.fromObject(obj.position);
+        object.position = Location.fromObject(obj.position);
         object.flux = obj.flux;
         object.concentrations = obj.concentrations;
         object.substances = obj.substances;

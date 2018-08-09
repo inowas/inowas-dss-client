@@ -101,7 +101,7 @@ class ModelEditorOptimization extends React.Component {
                 );
             case 'objectives':
                 return (
-                    <OptimizationObjectivesComponent objectives={optimization.objectives} objects={optimization.objects} onChange={this.onChange}/>
+                    <OptimizationObjectivesComponent objectives={optimization.objectives} model={this.props.model} objects={optimization.objects} onChange={this.onChange}/>
                 );
             case 'constraints':
                 return (

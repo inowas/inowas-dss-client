@@ -50,7 +50,7 @@ class OptimizationObjectsComponent extends React.Component {
         }
     });
 
-    handleChangePosition = response => this.setState({
+    handleChangeLocation = response => this.setState({
         selectedObject: {
             ...this.state.selectedObject,
             position: response
@@ -354,16 +354,15 @@ class OptimizationObjectsComponent extends React.Component {
                                         <Accordion.Title active={this.state.activeIndex === 0} index={0}
                                                          onClick={this.handleClickAccordion}>
                                             <Icon name="dropdown"/>
-                                            Position
+                                            Location
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 0}>
                                             <OptimizationMap
                                                 area={this.props.model.geometry}
                                                 bbox={this.props.model.bounding_box}
-                                                position={this.state.selectedObject.position}
+                                                location={this.state.selectedObject.position}
                                                 gridSize={this.props.model.grid_size}
-                                                onChange={this.handleChangePosition}
-                                                objects={this.props.objects.filter(o => o.id !== this.state.selectedObject.id)}
+                                                onChange={this.handleChangeLocation}
                                                 readOnly
                                             />
                                         </Accordion.Content>

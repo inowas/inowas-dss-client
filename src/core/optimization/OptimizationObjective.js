@@ -1,7 +1,10 @@
 import Location from './Location';
+import uuidv4 from 'uuid/v4';
 
 class OptimizationObjective {
 
+    _id = uuidv4();
+    _name = 'New Optimization Objective';
     _type = '';
     _concFileName = 'MT3D001.UCN';
     _summaryMethod ='';
@@ -13,6 +16,8 @@ class OptimizationObjective {
 
     static fromObject(obj) {
         const objective = new OptimizationObjective();
+        objective.id = obj.id;
+        objective.name = obj.name;
         objective.type = obj.type;
         objective.concFileName = obj.conc_file_name;
         objective.summaryMethod = obj.summary_method;
@@ -25,6 +30,22 @@ class OptimizationObjective {
     }
 
     constructor() {}
+
+    get id() {
+        return this._id;
+    }
+
+    set id(value) {
+        this._id = value;
+    }
+
+    get name() {
+        return this._name;
+    }
+
+    set name(value) {
+        this._name = !value ? 'New Optimization Objective' : value;
+    }
 
     get type() {
         return this._type;
@@ -90,13 +111,10 @@ class OptimizationObjective {
         this._location2 = value;
     }
 
-    get isValid() {
-        // TODO: Validierung
-        return true;
-    }
-
     get toObject() {
         return ({
+            'id': this.id,
+            'name': this.name,
             'type': this.type,
             'conc_file_name': this.concFileName,
             'summary_method': this.summaryMethod,

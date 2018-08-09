@@ -1,5 +1,5 @@
 import OptimizationObject from '../../../src/core/optimization/OptimizationObject';
-import WellPosition from '../../../src/core/optimization/WellPosition';
+import Location from '../../../src/core/optimization/Location';
 import uuidv4 from 'uuid/v4';
 
 export const optimizationObjects = [
@@ -7,7 +7,7 @@ export const optimizationObjects = [
         id: '1234-abcd-5678',
         name: 'Well 1',
         type: 'wel',
-        position: new WellPosition().toObject,
+        position: new Location().toObject,
         flux: [
             {
                 id: uuidv4(),
@@ -47,7 +47,7 @@ export const optimizationObjects = [
         id: uuidv4(),
         name: 'Well 2',
         type: 'wel',
-        position: new WellPosition().toObject,
+        position: new Location().toObject,
         flux: [
             {
                 id: uuidv4(),
