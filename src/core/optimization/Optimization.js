@@ -3,9 +3,10 @@ import OptimizationObject from './OptimizationObject';
 import OptimizationObjective from './OptimizationObjective';
 import OptimizationConstraint from './OptimizationConstraint';
 import Location from './Location';
-import WellPosition from "./WellPosition";
+import uuidv4 from 'uuid/v4';
 
 class Optimization {
+    _id = uuidv4();
     _constraints = [];
     _objectives = [];
     _objects = [];
@@ -13,12 +14,14 @@ class Optimization {
     _enabled = false;
 
     static fromDefaults() {
-        const optimization = new Optimization;
+        const optimization = new Optimization();
         optimization.parameters = OptimizationParameters.fromDefaults();
         optimization.constraints = [];
         optimization.objectives = [
             // TODO: Examples only for testing
             OptimizationObjective.fromObject({
+                'id': uuidv4(),
+                'name': 'Objective 1',
                 'type': 'head',
                 'conc_file_name': 'MT3D001.UCN',
                 'summary_method': 'max',
@@ -26,10 +29,12 @@ class Optimization {
                 'penalty_value': 999,
                 'location': Location.fromObject({
                     'type': 'object',
-                    'objects': [0, 1]
+                    'objects': ['123-abc-456', '789-xyz-012']
                 })
             }),
             OptimizationObjective.fromObject({
+                'id': uuidv4(),
+                'name': 'Objective 2',
                 'type': 'concentration',
                 'conc_file_name': 'MT3D001.UCN',
                 'summary_method': 'max',
@@ -38,21 +43,22 @@ class Optimization {
                 'location': Location.fromObject({
                     'type': 'bbox',
                     'ts': {
-                        'from': 0,
-                        'to': 0
+                        'min': 0,
+                        'max': 0
                     },
                     'lay': {
-                        'from': 0,
-                        'to': 0
+                        'min': 0,
+                        'max': 0
                     },
                     'row': {
-                        'from': 90,
-                        'to': 90
+                        'min': 90,
+                        'max': 90
                     },
                     'col': {
-                        'from': 90,
-                        'to': 90
-                    }
+                        'min': 90,
+                        'max': 90
+                    },
+                    'objects': []
                 })
             })
         ];
@@ -60,18 +66,54 @@ class Optimization {
             OptimizationObject.fromObject({
                 'id': '123-abc-456',
                 'name': 'Brunnen 1',
-                'type': 'well',
-                'position': {},
+                'type': 'wel',
+                'position': Location.fromObject({
+                    type: 'bbox',
+                    col: {
+                        min: 10,
+                        max: 20,
+                        result: 15
+                    },
+                    row: {
+                        min: 10,
+                        max: 20,
+                        result: 15
+                    },
+                    lay: {
+                        min: 0,
+                        max: 1,
+                        result: 1
+                    }
+                }),
                 'flux': [],
-                'concentration': []
+                'concentrations': [],
+                'substances': []
             }),
             OptimizationObject.fromObject({
                 'id': '789-xyz-012',
                 'name': 'Brunnen 2',
-                'type': 'well',
-                'position': {},
+                'type': 'wel',
+                'position': Location.fromObject({
+                    type: 'bbox',
+                    col: {
+                        min: 20,
+                        max: 30,
+                        result: 22
+                    },
+                    row: {
+                        min: 20,
+                        max: 30,
+                        result: 22
+                    },
+                    lay: {
+                        min: 0,
+                        max: 1,
+                        result: 1
+                    }
+                }),
                 'flux': [],
-                'concentration': []
+                'concentrations': [],
+                'substances': []
             })
         ];
         return optimization;
@@ -79,6 +121,7 @@ class Optimization {
 
     static fromObject(obj) {
         const optimization = new Optimization;
+        optimization.id = obj.id;
         optimization.parameters = OptimizationParameters.fromObject(obj.parameters);
 
         obj.constraints.forEach((constraint) => {
@@ -98,6 +141,14 @@ class Optimization {
     }
 
     constructor() {
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    set id(value) {
+        this._id = value;
     }
 
     get parameters() {
@@ -142,6 +193,7 @@ class Optimization {
 
     get toObject() {
         return {
+            'id': this.id,
             'parameters': this.parameters.toObject,
             'constraints': this.constraints.map(c => c.toObject),
             'objectives': this.objectives.map(c => c.toObject),

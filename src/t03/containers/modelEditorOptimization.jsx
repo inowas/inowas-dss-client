@@ -4,12 +4,13 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
-import OptimizationObjectsComponent from '../components/optimizationObjects';
-import OptimizationObjectivesComponent from '../components/optimizationObjectives';
-import OptimizationParametersComponent from '../components/optimizationParameters';
-import FilterableList from '../../components/primitive/FilterableList';
+import OptimizationObjectsComponent from '../components/optimization/optimizationObjects';
+import OptimizationObjectivesComponent from '../components/optimization/optimizationObjectives';
+import OptimizationParametersComponent from '../components/optimization/optimizationParameters';
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
+import Stressperiods from '../../core/modflow/Stressperiods';
+import {Button, Menu} from 'semantic-ui-react';
 
 const styles = {
     container: {
@@ -43,32 +44,13 @@ const styles = {
     }
 };
 
-
-const menu = [
-    {
-        id: 'parameters',
-        name: 'Parameters'
-    },
-    {
-        id: 'objects',
-        name: 'Objects'
-    },
-    {
-        id: 'objectives',
-        name: 'Objectives'
-    },
-    {
-        id: 'constraints',
-        name: 'Constraints'
-    }
-];
-
 class ModelEditorOptimization extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            optimization: null
+            optimization: null,
+            activeItem: this.props.params.type ? this.props.params.type : 'parameters'
         };
     }
 
@@ -83,10 +65,11 @@ class ModelEditorOptimization extends React.Component {
         });
     }
 
-    onMenuClick = (type) => {
+    onMenuClick = (e, {name}) => {
         const {routes, params} = this.props;
+        this.setState({ activeItem: name });
 
-        Routing.modelOptimizationType(routes, params)(type);
+        Routing.modelOptimizationType(routes, params)(name);
     };
 
     onChange = (obj) => {
@@ -98,20 +81,29 @@ class ModelEditorOptimization extends React.Component {
     };
 
     renderProperties() {
+        if (!this.props.model) {
+            return null;
+        }
+
+        const {model} = this.props;
+        if (!model.stress_periods) {
+            return null;
+        }
+
         const {type} = this.props.params;
         const optimization = Optimization.fromObject(this.state.optimization);
+        const stressPeriods = Stressperiods.fromObject(model.stress_periods);
 
         switch (type) {
             case 'objects':
                 return (
-                    <OptimizationObjectsComponent objects={optimization.objects} stressPeriods={this.props.model.stress_periods ? this.props.model.stress_periods.stress_periods : [0, 1, 2, 3]} onChange={this.onChange}/>
+                    <OptimizationObjectsComponent objects={optimization.objects} model={this.props.model} stressPeriods={stressPeriods} onChange={this.onChange}/>
                 );
             case 'objectives':
                 return (
-                    <OptimizationObjectivesComponent objectives={optimization.objectives} objects={optimization.objects} onChange={this.onChange}/>
+                    <OptimizationObjectivesComponent objectives={optimization.objectives} model={this.props.model} objects={optimization.objects} onChange={this.onChange}/>
                 );
             case 'constraints':
-                console.log('Props', this.props);
                 return (
                     <p>Constraints</p>
                 );
@@ -126,10 +118,35 @@ class ModelEditorOptimization extends React.Component {
         return (
             <div style={[styles.container]}>
                 <div style={styles.left}>
-                    <FilterableList
-                        itemClickAction={this.onMenuClick}
-                        list={menu}
-                    />
+                    <Menu fluid vertical tabular>
+                        <Menu.Item
+                            name="parameters"
+                            active={this.state.activeItem === 'parameters'}
+                            onClick={this.onMenuClick} />
+                        <Menu.Item
+                            name="objects"
+                            active={this.state.activeItem === 'objects'}
+                            onClick={this.onMenuClick} />
+                        <Menu.Item
+                            name="objectives"
+                            active={this.state.activeItem === 'objectives'}
+                            onClick={this.onMenuClick}
+                        />
+                        <Menu.Item
+                            name="constraints"
+                            active={this.state.activeItem === 'constraints'}
+                            onClick={this.onMenuClick}
+                        />
+                        <Menu.Item>
+                            <Button fluid primary>Run Optimization</Button>
+                        </Menu.Item>
+                        <Menu.Item
+                            name="results"
+                            active={this.state.activeItem === 'results'}
+                            onClick={this.onMenuClick}
+                            disabled={true}
+                        />
+                    </Menu>
                 </div>
                 <div style={styles.properties}>
                     <div style={[styles.columnFlex2]}>
@@ -181,6 +198,5 @@ ModelEditorOptimization.propTypes = {
     updateStressPeriods: PropTypes.func,
     updateStressPeriodsStatus: PropTypes.func
 };
-
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));

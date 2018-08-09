@@ -1,30 +1,47 @@
 import Location from './Location';
+import uuidv4 from 'uuid/v4';
 
 class OptimizationObjective {
 
+    _id = uuidv4();
+    _name = 'New Optimization Objective';
     _type = '';
     _concFileName = 'MT3D001.UCN';
     _summaryMethod ='';
     _weight = -1;
     _penaltyValue = 999;
     _location = new Location();
-    _location1; // Location
-    _location2; // Location
 
     static fromObject(obj) {
         const objective = new OptimizationObjective();
+        objective.id = obj.id;
+        objective.name = obj.name;
         objective.type = obj.type;
         objective.concFileName = obj.conc_file_name;
         objective.summaryMethod = obj.summary_method;
         objective.weight = obj.weight;
         objective.penaltyValue = obj.penalty_value;
         objective.location = Location.fromObject(obj.location);
-        objective.location1 = obj.location_1;
-        objective.location2 = obj.location_2;
         return objective;
     }
 
     constructor() {}
+
+    get id() {
+        return this._id;
+    }
+
+    set id(value) {
+        this._id = value;
+    }
+
+    get name() {
+        return this._name;
+    }
+
+    set name(value) {
+        this._name = !value ? 'New Optimization Objective' : value;
+    }
 
     get type() {
         return this._type;
@@ -74,37 +91,16 @@ class OptimizationObjective {
         this._location = value;
     }
 
-    get location1() {
-        return this._location1;
-    }
-
-    set location1(value) {
-        this._location1 = value;
-    }
-
-    get location2() {
-        return this._location2;
-    }
-
-    set location2(value) {
-        this._location2 = value;
-    }
-
-    get isValid() {
-        // TODO: Validierung
-        return true;
-    }
-
     get toObject() {
         return ({
+            'id': this.id,
+            'name': this.name,
             'type': this.type,
             'conc_file_name': this.concFileName,
             'summary_method': this.summaryMethod,
             'weight': this.weight,
             'penalty_value': this.penaltyValue,
-            'location': this.location.toObject,
-            'location_1': this.location1,
-            'location_2': this.location2
+            'location': this.location.toObject
         });
     }
 }

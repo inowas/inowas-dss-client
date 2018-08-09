@@ -1,9 +1,21 @@
 class Location {
-    _type;
-    _ts = {from: 0, to: 0};
-    _lay = {from: 0, to: 0};
-    _row = {from: 0, to: 0};
-    _col = {from: 0, to: 0};
+    _type = 'bbox';
+    _ts = {
+        min: 0,
+        max: 0
+    };
+    _lay = {
+        min: 0,
+        max: 0
+    };
+    _row = {
+        min: 0,
+        max: 0
+    };
+    _col = {
+        min: 0,
+        max: 0
+    };
     _objects = [];
 
     static fromObject(obj) {
@@ -32,9 +44,7 @@ class Location {
     }
 
     set ts(value) {
-        if(value) {
-            this._ts = value;
-        }
+        this._ts = value ? value : {min: 0, max: 0, result: null};
     }
 
     get lay() {
@@ -42,9 +52,7 @@ class Location {
     }
 
     set lay(value) {
-        if(value) {
-            this._lay = value;
-        }
+        this._lay = value ? value : {min: 0, max: 0, result: null};
     }
 
     get row() {
@@ -52,9 +60,7 @@ class Location {
     }
 
     set row(value) {
-        if(value) {
-            this._row = value;
-        }
+        this._row = value ? value : {min: 0, max: 0, result: null};
     }
 
     get col() {
@@ -62,9 +68,7 @@ class Location {
     }
 
     set col(value) {
-        if(value) {
-            this._col = value;
-        }
+        this._col = value ? value : {min: 0, max: 0, result: null};
     }
 
     get objects() {
@@ -75,21 +79,6 @@ class Location {
         if(value) {
             this._objects = value;
         }
-    }
-
-    addObject(value) {
-        this._objects.push(value);
-        return this;
-    }
-
-    removeObject(value) {
-        this._objects = this._objects.filter(i => value !== i);
-        return this;
-    }
-
-    updateObjects(value) {
-        this._objects = value;
-        return this;
     }
 
     get toObject() {

@@ -1,13 +1,13 @@
 import OptimizationObject from '../../../src/core/optimization/OptimizationObject';
-import WellPosition from '../../../src/core/optimization/WellPosition';
+import Location from '../../../src/core/optimization/Location';
 import uuidv4 from 'uuid/v4';
 
 export const optimizationObjects = [
     {
-        id: uuidv4(),
+        id: '1234-abcd-5678',
         name: 'Well 1',
-        type: 'well',
-        position: new WellPosition().toObject,
+        type: 'wel',
+        position: new Location().toObject,
         flux: [
             {
                 id: uuidv4(),
@@ -20,7 +20,7 @@ export const optimizationObjects = [
                 max: 500
             }
         ],
-        concentration: [
+        concentrations: [
             {
                 component1: {
                     min: 0,
@@ -46,8 +46,8 @@ export const optimizationObjects = [
     {
         id: uuidv4(),
         name: 'Well 2',
-        type: 'well',
-        position: new WellPosition().toObject,
+        type: 'wel',
+        position: new Location().toObject,
         flux: [
             {
                 id: uuidv4(),
@@ -60,7 +60,7 @@ export const optimizationObjects = [
                 max: 600
             }
         ],
-        concentration: [
+        concentrations: [
             {
                 component1: {
                     min: 2,
@@ -85,27 +85,117 @@ export const optimizationObjects = [
     },
 ];
 
-test('Get OptimizationsObject from Object.', () => {
-    const object = OptimizationObject.fromObject(optimizationObjects[0]);
+test('Create OptimizationObject', () => {
+    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 5);
     expect(object).toBeInstanceOf(OptimizationObject);
-    expect(object.toObject).toEqual(optimizationObjects[0]);
+    expect(object.type).toEqual('wel');
+    expect(object.numberOfStressPeriods).toEqual(5);
+    expect(object.flux).toEqual([
+        {'max': 0, 'min': 0, 'result': 0},
+        {'max': 0, 'min': 0, 'result': 0},
+        {'max': 0, 'min': 0, 'result': 0},
+        {'max': 0, 'min': 0, 'result': 0},
+        {'max': 0, 'min': 0, 'result': 0}
+    ]);
+    expect(OptimizationObject.fromObject(object.toObject)).toEqual(object);
 });
 
-test('Updating flux data.', () => {
-    const object = OptimizationObject.fromObject(optimizationObjects[1]);
-    expect(object.addFlux(10, 30).flux.length).toBe(3);
-    expect(object.removeFlux(1).flux.length).toBe(2);
-    expect(object.updateFlux(object.flux[1].id, 900, 1000).flux[1].min).toBe(900);
-});
-
-test('Setter: name and type', () => {
+test('Getter and Setter', () => {
     const object = OptimizationObject.fromObject(optimizationObjects[0]);
+    expect(object.id).toBe('1234-abcd-5678');
+    expect(object.position).toEqual({
+        '_col': {
+            'max': 0,
+            'min': 0
+        },
+        '_lay': {
+            'max': 0,
+            'min': 0
+        },
+        '_objects': [],
+        '_row': {
+            'max': 0,
+            'min': 0
+        },
+        '_ts': {
+            'max': 0,
+            'min': 0},
+        '_type': 'bbox'
+    }
+);
+    expect(object.concentrations).toEqual([{
+        'component1': {'max': 10, 'min': 0},
+        'component2': {'max': 20, 'min': 10}
+    }, {
+        'component3': {'max': 30, 'min': 20},
+        'component4': {'max': 40, 'min': 30}
+    }]);
     object.name = null;
     expect(object.name).toBe('New Optimization Object');
     object.name = 'Well 3';
     expect(object.name).toBe('Well 3');
-    object.type = null;
-    expect(object.type).toBe('well');
-    object.type = 'another type';
-    expect(object.type).toBe('another type');
+    object.type = 'wel';
+    expect(object.type).toBe('wel');
+    expect(() => {
+        object.type = 'another type';
+    }).toThrow();
+});
+
+test('Adding, updating and removing substances', () => {
+    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 5);
+    object.addSubstance('NaCl');
+    object.addSubstance('Pb');
+    expect(object.substances).toHaveLength(2);
+    expect(object.concentrations).toHaveLength(2);
+    expect(object.concentrations).toEqual([
+        {
+            'NaCl': [
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0}
+            ]
+        }, {
+            'Pb': [
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0}
+            ]
+        }
+    ]);
+    object.updateSubstance({
+        id: object.substances.filter(s => s.name === 'NaCl')[0].id,
+        name: 'NaCl',
+        data: [
+            {'max': 100, 'min': 50, 'result': 0},
+            {'max': 200, 'min': 50, 'result': 0},
+            {'max': 300, 'min': 50, 'result': 0},
+            {'max': 200, 'min': 50, 'result': 0},
+            {'max': 100, 'min': 50, 'result': 0}
+        ]
+    });
+    expect(object.concentrations).toEqual([
+        {
+            'NaCl': [
+                {'max': 100, 'min': 50, 'result': 0},
+                {'max': 200, 'min': 50, 'result': 0},
+                {'max': 300, 'min': 50, 'result': 0},
+                {'max': 200, 'min': 50, 'result': 0},
+                {'max': 100, 'min': 50, 'result': 0}
+            ]
+        }, {
+            'Pb': [
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0},
+                {'max': 0, 'min': 0, 'result': 0}
+            ]
+        }
+    ]);
+    object.removeSubstance(object.substances.filter(s => s.name === 'NaCl')[0].id);
+    expect(object.concentrations).toHaveLength(1);
 });

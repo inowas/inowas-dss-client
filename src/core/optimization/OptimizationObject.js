@@ -1,63 +1,45 @@
-import WellPosition from './WellPosition';
+import Location from './Location';
 import uuidv4 from 'uuid/v4';
 
 class OptimizationObject {
     _id = uuidv4();
     _name = 'New Optimization Object';
-    _type = 'well';
-    _position = new WellPosition();
+    _type = 'wel';
+    _position = new Location();
     _flux = [];
-    _concentration = [
-        {
-            'component1': {
-                id: uuidv4(),
-                min: 0,
-                max: 10,
-                result: null
-            },
-            'component2': {
-                id: uuidv4(),
-                min: 5,
-                max: 10,
-                result: null
-            }
-        },
-        {
-            'component1': {
-                id: uuidv4(),
-                min: 0,
-                max: 50,
-                result: null
-            }
-        },
-        {
-            'component1': {
-                id: uuidv4(),
-                min: 50,
-                max: 100,
-                result: null
-            },
-            'component2': {
-                id: uuidv4(),
-                min: 20,
-                max: 80,
-                result: null
-            }
-        },
-    ];
+    _concentrations = [];
+    _substances = [];
+    _numberOfStressPeriods;
 
-    static fromObject(obj) {
-        const object = new OptimizationObject;
-        object.id = obj.id;
-        object.name = obj.name;
-        object.type = obj.type;
-        object.position = WellPosition.fromObject(obj.position);
-        object.flux = obj.flux;
-        object.concentration = obj.concentration;
+    static createFromTypeAndStressPeriods(type, numberOfStressPeriods) {
+        const object = new OptimizationObject();
+        object.type = type;
+        object.numberOfStressPeriods = numberOfStressPeriods;
+        object.flux = (new Array(numberOfStressPeriods)).fill(0).map(() => {
+            return {
+                min: 0,
+                max: 0,
+                result: 0
+            };
+        });
         return object;
     }
 
-    constructor() {}
+    static fromObject(obj) {
+        const object = new OptimizationObject();
+        object.id = obj.id;
+        object.name = obj.name;
+        object.type = obj.type;
+        object.position = Location.fromObject(obj.position);
+        object.flux = obj.flux;
+        object.concentrations = obj.concentrations;
+        object.substances = obj.substances;
+        object.numberOfStressPeriods = obj.numberOfStressPeriods;
+        return object;
+    }
+
+    constructor() {
+    }
 
     get id() {
         return this._id;
@@ -80,7 +62,10 @@ class OptimizationObject {
     }
 
     set type(value) {
-        this._type = !value ? 'well' : value;
+        if (value !== 'wel') {
+            throw new Error('Type must be one of type: wel');
+        }
+        this._type = value;
     }
 
     get position() {
@@ -99,32 +84,90 @@ class OptimizationObject {
         this._flux = value;
     }
 
-    addFlux(min = 0, max = 0, result = null) {
-        this._flux.push({id: uuidv4(), min: min, max: max, result: result});
-        return this;
-    }
-
-    updateFlux(index, min = 0, max = 0, result = null) {
-        this._flux = this._flux.map(item => {
-            if(index === item.id) {
-                return {id: index, min: min, max: max, result: result};
-            }
-            return {id: item.id, min: item.min, max: item.max, result: item.result};
+    updateFlux(rows) {
+        this.flux = rows.map((row, key) => {
+            return {
+                id: key,
+                min: parseFloat(row.min),
+                max: parseFloat(row.max)
+            };
         });
         return this;
     }
 
-    removeFlux(index) {
-        this._flux = this._flux.filter((_, i) => index !== i);
+    get concentrations() {
+        return this._concentrations;
+    }
+
+    set concentrations(value) {
+        this._concentrations = value;
+    }
+
+    get numberOfStressPeriods() {
+        return this._numberOfStressPeriods;
+    }
+
+    set numberOfStressPeriods(value) {
+        this._numberOfStressPeriods = value;
+    }
+
+    get substances() {
+        return this._substances;
+    }
+
+    set substances(value) {
+        this._substances = value;
+    }
+
+    addSubstance(name) {
+        const substances = this.substances;
+        substances.push({
+            id: uuidv4(),
+            name: name,
+            data: (new Array(this.numberOfStressPeriods)).fill(0).map(() => {
+                return {
+                    min: 0,
+                    max: 0,
+                    result: 0
+                };
+            })
+        });
+
+        this.substances = substances;
+        this.calculateConcentration();
         return this;
     }
 
-    get concentration() {
-        return this._concentration;
+    updateSubstance(substance) {
+        this.substances = this.substances.map(s => {
+            if (s.id === substance.id) {
+                return substance;
+            }
+            return s;
+        });
+        this.calculateConcentration();
+        return this;
     }
 
-    set concentration(value) {
-        this._concentration = value;
+    removeSubstance(id) {
+        this.substances = this.substances.filter(s => s.id !== id);
+        this.calculateConcentration();
+        return this;
+    }
+
+    calculateConcentration() {
+        this.concentrations = this.substances.map(s => {
+            return {
+                [s.name]: s.data.map(d => {
+                    return {
+                        min: d.min,
+                        max: d.max,
+                        result: d.result
+                    };
+                })
+            };
+        });
+        return this;
     }
 
     get toObject() {
@@ -134,7 +177,9 @@ class OptimizationObject {
             'type': this.type,
             'position': this.position.toObject,
             'flux': this.flux,
-            'concentration': this.concentration
+            'concentrations': this.concentrations,
+            'substances': this.substances,
+            'numberOfStressPeriods': this.numberOfStressPeriods
         });
     }
 }
