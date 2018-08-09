@@ -3,13 +3,13 @@ import OptimizationParameters from '../../../src/core/optimization/OptimizationP
 import OptimizationObjective from '../../../src/core/optimization/OptimizationObjective';
 import OptimizationConstraint from '../../../src/core/optimization/OptimizationConstraint';
 import OptimizationObject from '../../../src/core/optimization/OptimizationObject';
-import {defaultParameters} from './OptimizationParameters.test';
-import {concentrationObjective, headObjective} from './OptimizationObjective.test';
+import {concentrationObjective} from './OptimizationObjective.test';
 import {optimizationObjects} from './OptimizationObject.test';
 import {concentrationConstraint} from './OptimizationConstraint.test';
 
-test('Create with Defaults', () => {
+test('Create with Defaults and toObject', () => {
     const optimization = Optimization.fromDefaults();
+    expect(Optimization.fromObject(optimization.toObject)).toBeInstanceOf(Optimization);
     expect(optimization.parameters).toBeInstanceOf(OptimizationParameters);
     expect(Array.isArray(optimization.objectives)).toBeTruthy();
     expect(optimization.objectives.length).toBe(2);
@@ -52,4 +52,11 @@ test('Add Objects to Optimization', () => {
         optimization.addObject(OptimizationObject.fromObject(object));
     });
     expect(optimization.objects.length).toBe(4);
+});
+
+test('Add wrong Object to Optimization', () => {
+    const optimization = Optimization.fromDefaults();
+    expect(() => {
+        optimization.addObject(OptimizationConstraint.fromObject(concentrationConstraint));
+    }).toThrow();
 });

@@ -81,21 +81,6 @@ class Location {
         }
     }
 
-    addObject(value) {
-        this._objects.push(value);
-        return this;
-    }
-
-    removeObject(value) {
-        this._objects = this._objects.filter(i => value !== i);
-        return this;
-    }
-
-    updateObjects(value) {
-        this._objects = value;
-        return this;
-    }
-
     get toObject() {
         return ({
             'type': this.type,

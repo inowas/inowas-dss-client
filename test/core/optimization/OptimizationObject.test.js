@@ -104,10 +104,25 @@ test('Getter and Setter', () => {
     const object = OptimizationObject.fromObject(optimizationObjects[0]);
     expect(object.id).toBe('1234-abcd-5678');
     expect(object.position).toEqual({
-        '_col': {'max': 150, 'min': 30, 'result': null},
-        '_lay': {'max': 0, 'min': 0, 'result': null},
-        '_row': {'max': 0, 'min': 0, 'result': null}
-    });
+        '_col': {
+            'max': 0,
+            'min': 0
+        },
+        '_lay': {
+            'max': 0,
+            'min': 0
+        },
+        '_objects': [],
+        '_row': {
+            'max': 0,
+            'min': 0
+        },
+        '_ts': {
+            'max': 0,
+            'min': 0},
+        '_type': 'bbox'
+    }
+);
     expect(object.concentrations).toEqual([{
         'component1': {'max': 10, 'min': 0},
         'component2': {'max': 20, 'min': 10}
