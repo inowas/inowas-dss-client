@@ -30,7 +30,9 @@ class Optimization {
                 'location': Location.fromObject({
                     'type': 'object',
                     'objects': ['123-abc-456', '789-xyz-012']
-                })
+                }),
+                'location_1': Location.fromObject({}),
+                'location_2': Location.fromObject({})
             }),
             OptimizationObjective.fromObject({
                 'id': uuidv4(),
@@ -59,7 +61,9 @@ class Optimization {
                         'max': 90
                     },
                     'objects': []
-                })
+                }),
+                'location_1': Location.fromObject({}),
+                'location_2': Location.fromObject({})
             })
         ];
         optimization.objects = [

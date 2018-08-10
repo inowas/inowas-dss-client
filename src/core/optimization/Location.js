@@ -36,7 +36,7 @@ class Location {
     }
 
     set type(value) {
-        this._type = value;
+        this._type = value ? value : 'bbox';
     }
 
     get ts() {
@@ -76,9 +76,7 @@ class Location {
     }
 
     set objects(value) {
-        if(value) {
-            this._objects = value;
-        }
+        this._objects = value ? value : [];
     }
 
     get toObject() {

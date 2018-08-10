@@ -29,7 +29,10 @@ class OptimizationObjectivesComponent extends React.Component {
 
     handleChange = (e, {name, value}) => {
         return this.setState({
-            selectedObjective: {...this.state.selectedObjective, [name]: value}
+            selectedObjective: {
+                ...this.state.selectedObjective,
+                [name]: value
+            }
         });
     };
 
@@ -141,7 +144,7 @@ class OptimizationObjectivesComponent extends React.Component {
                             </Button>
                             }
                         </Grid.Column>
-                        <Grid.Column />
+                        <Grid.Column/>
                         <Grid.Column textAlign="right">
                             {!this.state.selectedObjective ?
                                 <Dropdown button floating labeled
@@ -248,15 +251,51 @@ class OptimizationObjectivesComponent extends React.Component {
                                             <Segment>
                                                 <h4>Location</h4>
                                                 <OptimizationMap
+                                                    name="location"
                                                     area={this.props.model.geometry}
                                                     bbox={this.props.model.bounding_box}
                                                     location={this.state.selectedObjective.location}
                                                     objects={this.props.objects}
                                                     gridSize={this.props.model.grid_size}
-                                                    onChange={this.handleChangeLocation}
+                                                    onChange={this.handleChange}
                                                     readOnly
                                                 />
                                             </Segment>
+                                            {this.state.selectedObjective.type === 'distance' &&
+                                            <Segment>
+                                                <h4>Distance</h4>
+                                                <Grid divided={'vertically'}>
+                                                    <Grid.Row columns={2}>
+                                                        <Grid.Column width={8}>
+                                                            <OptimizationMap
+                                                                name="location_1"
+                                                                label="Edit Location 1"
+                                                                area={this.props.model.geometry}
+                                                                bbox={this.props.model.bounding_box}
+                                                                location={this.state.selectedObjective.location_1}
+                                                                objects={this.props.objects}
+                                                                gridSize={this.props.model.grid_size}
+                                                                onChange={this.handleChange}
+                                                                readOnly
+                                                            />
+                                                        </Grid.Column>
+                                                        <Grid.Column width={8}>
+                                                            <OptimizationMap
+                                                                name="location_2"
+                                                                label="Edit Location 2"
+                                                                area={this.props.model.geometry}
+                                                                bbox={this.props.model.bounding_box}
+                                                                location={this.state.selectedObjective.location_2}
+                                                                objects={this.props.objects}
+                                                                gridSize={this.props.model.grid_size}
+                                                                onChange={this.handleChange}
+                                                                readOnly
+                                                            />
+                                                        </Grid.Column>
+                                                    </Grid.Row>
+                                                </Grid>
+                                            </Segment>
+                                            }
                                         </Form>
                                         :
                                         <Table celled striped>
@@ -286,7 +325,6 @@ class OptimizationObjectivesComponent extends React.Component {
                                                                     <Icon name="trash"/>
                                                                 </Button>
                                                             </Table.Cell>
-                                                            { console.log(objective) }
                                                         </Table.Row>
                                                     )
                                                 }

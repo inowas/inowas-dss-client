@@ -11,6 +11,8 @@ class OptimizationObjective {
     _weight = -1;
     _penaltyValue = 999;
     _location = new Location();
+    _location1 = new Location();
+    _location2 = new Location();
 
     static fromObject(obj) {
         const objective = new OptimizationObjective();
@@ -21,7 +23,9 @@ class OptimizationObjective {
         objective.summaryMethod = obj.summary_method;
         objective.weight = obj.weight;
         objective.penaltyValue = obj.penalty_value;
-        objective.location = Location.fromObject(obj.location);
+        objective.location = obj.location;
+        objective.location1 = obj.location_1;
+        objective.location2 = obj.location_2;
         return objective;
     }
 
@@ -88,7 +92,23 @@ class OptimizationObjective {
     }
 
     set location(value) {
-        this._location = value;
+        this._location = Location.fromObject(value);
+    }
+
+    get location1() {
+        return this._location1;
+    }
+
+    set location1(value) {
+        this._location1 = value ? Location.fromObject(value) : null;
+    }
+
+    get location2() {
+        return this._location2;
+    }
+
+    set location2(value) {
+        this._location2 = value ? Location.fromObject(value) : null;
     }
 
     get toObject() {
@@ -100,7 +120,9 @@ class OptimizationObjective {
             'summary_method': this.summaryMethod,
             'weight': this.weight,
             'penalty_value': this.penaltyValue,
-            'location': this.location.toObject
+            'location': this.location.toObject,
+            'location_1': this.location1.toObject,
+            'location_2': this.location2.toObject
         });
     }
 }
