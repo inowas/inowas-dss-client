@@ -43,6 +43,12 @@ test('Create from Object', () => {
     expect(parameters.toObject).toEqual(obj);
 });
 
+test('Create from empty object.', () => {
+    const parameters = OptimizationParameters.fromObject({});
+    expect(parameters).toBeInstanceOf(OptimizationParameters);
+    expect(parameters.method).toBe('simplex');
+});
+
 test('ApplyMinMax', () => {
     const parameters = OptimizationParameters.fromDefaults();
     expect(parameters.applyMinMax(50, parameters._ngen.min, parameters._ngen.max)).toBe(50);

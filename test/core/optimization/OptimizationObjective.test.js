@@ -11,7 +11,9 @@ export const concentrationObjective = {
     summary_method: 'max',
     weight: -1,
     penalty_value: 999,
-    location: Location.fromObject(exampleLocation).toObject
+    location: Location.fromObject(exampleLocation).toObject,
+    location_1: Location.fromObject({}).toObject,
+    location_2: Location.fromObject({}).toObject
 };
 
 export const headObjective = {
@@ -24,17 +26,26 @@ export const headObjective = {
     location: Location.fromObject({
         'type': 'object',
         'objects': [0, 1]
-    }).toObject
+    }).toObject,
+    location_1: Location.fromObject({}).toObject,
+    location_2: Location.fromObject({}).toObject
 };
 
-test('Get concentration Objective from Object.', () => {
+test('Get concentration objective from object.', () => {
     const objective = OptimizationObjective.fromObject(concentrationObjective);
     expect(objective).toBeInstanceOf(OptimizationObjective);
     expect(objective.toObject).toEqual(concentrationObjective);
 });
 
-test('Get head Objective from Object.', () => {
+test('Get head objective from object.', () => {
     const objective = OptimizationObjective.fromObject(headObjective);
     expect(objective).toBeInstanceOf(OptimizationObjective);
     expect(objective.toObject).toEqual(headObjective);
+});
+
+test('Create objective from empty object.', () => {
+    const objective = OptimizationObjective.fromObject({});
+    expect(objective).toBeInstanceOf(OptimizationObjective);
+    expect(objective.name).toBe('New Optimization Objective');
+    expect(objective.location).toEqual(new Location());
 });

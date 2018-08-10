@@ -16,7 +16,24 @@ class Optimization {
     static fromDefaults() {
         const optimization = new Optimization();
         optimization.parameters = OptimizationParameters.fromDefaults();
-        optimization.constraints = [];
+        optimization.constraints = [
+            // TODO: Examples only for testing
+            OptimizationConstraint.fromObject({
+                'id': uuidv4(),
+                'name': 'Constraint 1',
+                'type': 'distance',
+                'conc_file_name': 'MT3D001.UCN',
+                'summary_method': 'max',
+                'value': 0.01,
+                'operator': 'more',
+                'location': Location.fromObject({
+                    'type': 'object',
+                    'objects': ['123-abc-456', '789-xyz-012']
+                }),
+                'location_1': new Location(),
+                'location_2': new Location()
+            })
+        ];
         optimization.objectives = [
             // TODO: Examples only for testing
             OptimizationObjective.fromObject({

@@ -7,6 +7,7 @@ import {withRouter} from 'react-router';
 import OptimizationObjectsComponent from '../components/optimization/optimizationObjects';
 import OptimizationObjectivesComponent from '../components/optimization/optimizationObjectives';
 import OptimizationParametersComponent from '../components/optimization/optimizationParameters';
+import OptimizationConstraintsComponent from '../components/optimization/optimizationConstraints';
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
@@ -105,7 +106,7 @@ class ModelEditorOptimization extends React.Component {
                 );
             case 'constraints':
                 return (
-                    <p>Constraints</p>
+                    <OptimizationConstraintsComponent constraints={optimization.constraints} model={this.props.model} objects={optimization.objects} onChange={this.onChange}/>
                 );
             default:
                 return (

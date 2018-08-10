@@ -199,3 +199,18 @@ test('Adding, updating and removing substances', () => {
     object.removeSubstance(object.substances.filter(s => s.name === 'NaCl')[0].id);
     expect(object.concentrations).toHaveLength(1);
 });
+
+test('Updating flux', () => {
+    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 3);
+    expect(object.flux).toHaveLength(3);
+    const rows = [
+        {min: 0, max: 10},
+        {min: 1, max: 11},
+        {min: 2, max: 12}
+    ];
+    expect(object.updateFlux(rows).flux).toEqual([
+        {id: 0, min: 0, max: 10},
+        {id: 1, min: 1, max: 11},
+        {id: 2, min: 2, max: 12}
+    ]);
+});

@@ -7,7 +7,7 @@ class OptimizationObjective {
     _name = 'New Optimization Objective';
     _type = '';
     _concFileName = 'MT3D001.UCN';
-    _summaryMethod ='';
+    _summaryMethod = '';
     _weight = -1;
     _penaltyValue = 999;
     _location = new Location();
@@ -36,7 +36,7 @@ class OptimizationObjective {
     }
 
     set id(value) {
-        this._id = value;
+        this._id = value ? value : uuidv4();
     }
 
     get name() {
@@ -44,7 +44,7 @@ class OptimizationObjective {
     }
 
     set name(value) {
-        this._name = !value ? 'New Optimization Objective' : value;
+        this._name = value ? value : 'New Optimization Objective';
     }
 
     get type() {
@@ -52,7 +52,7 @@ class OptimizationObjective {
     }
 
     set type(value) {
-        this._type = value;
+        this._type = value ? value : '';
     }
 
     get concFileName() {
@@ -92,7 +92,7 @@ class OptimizationObjective {
     }
 
     set location(value) {
-        this._location = Location.fromObject(value);
+        this._location = value ? Location.fromObject(value) : new Location();
     }
 
     get location1() {

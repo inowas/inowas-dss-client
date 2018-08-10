@@ -14,7 +14,7 @@ test('Create with Defaults and toObject', () => {
     expect(Array.isArray(optimization.objectives)).toBeTruthy();
     expect(optimization.objectives.length).toBe(2);
     expect(Array.isArray(optimization.constraints)).toBeTruthy();
-    expect(optimization.constraints.length).toBe(0);
+    expect(optimization.constraints.length).toBe(1);
     expect(Array.isArray(optimization.objects)).toBeTruthy();
     expect(optimization.objects.length).toBe(2);
 });
@@ -22,8 +22,8 @@ test('Create with Defaults and toObject', () => {
 test('Add Constraint to Optimization', () => {
     const optimization = Optimization.fromDefaults();
     optimization.addConstraint(OptimizationConstraint.fromObject(concentrationConstraint));
-    expect(optimization.constraints.length).toBe(1);
-    expect(optimization.constraints[0].toObject).toEqual(concentrationConstraint);
+    expect(optimization.constraints.length).toBe(2);
+    expect(optimization.constraints[1].toObject).toEqual(concentrationConstraint);
 });
 
 test('Add wrong Contraint Type to Optimization', () => {
