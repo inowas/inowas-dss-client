@@ -12,7 +12,6 @@ import * as geoTools from '../../../core/geospatial';
 import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
 import InputRange from './inputRange';
 import InputObjectList from './InputObjectList';
-import Location from '../../../core/optimization/Location';
 import uuidv4 from 'uuid/v4';
 
 class OptimizationMap extends React.Component {
@@ -202,8 +201,11 @@ class OptimizationMap extends React.Component {
         });
     };
 
-    onSaveModal = () => {
-        this.props.onChange(this.state.location);
+    onSaveModal = (e) => {
+        this.props.onChange(e, {
+            'name': this.props.name,
+            'value': this.state.location
+        });
         return this.setState({
             showOverlay: false
         });
@@ -241,12 +243,15 @@ class OptimizationMap extends React.Component {
             return null;
         }
 
-        console.log(this.state.location);
-
         return (
             <Map
                 className="boundaryGeometryMap"
                 zoomControl={false}
+                dragging={this.state.showOverlay}
+                boxZoom={this.state.showOverlay}
+                touchZoom={this.state.showOverlay}
+                doubleClickZoom={this.state.showOverlay}
+                scrollWheelZoom={this.state.showOverlay}
                 bounds={this.getBounds(this.props.area)}
             >
                 <TileLayer url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"/>
@@ -280,7 +285,6 @@ class OptimizationMap extends React.Component {
                         {
                             this.state.location.objects.map(id => {
                                 const object = this.props.objects.filter(obj => obj.id === id)[0];
-                                console.log('OBJECT', object);
                                 return this.drawObject(this.props.bbox, this.props.gridSize, object.position, 'red');
                             })
                         }
@@ -296,12 +300,12 @@ class OptimizationMap extends React.Component {
                 <Button fluid
                         onClick={this.onClickToggleMap}
                 >
-                    Edit Location
+                    { this.props.label ? this.props.label : 'Edit Location' }
                 </Button>
                 {this.printMap(true)}
                 {this.state.showOverlay &&
                 <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
-                    <Modal.Header>Edit Location</Modal.Header>
+                    <Modal.Header>{ this.props.label ? this.props.label : 'Edit Location' }</Modal.Header>
                     <Modal.Content>
                         <Grid divided={'vertically'}>
                             <Grid.Row columns={2}>
@@ -412,6 +416,8 @@ class OptimizationMap extends React.Component {
 }
 
 OptimizationMap.propTypes = {
+    name: PropTypes.string.isRequired,
+    label: PropTypes.string,
     area: PropTypes.object.isRequired,
     bbox: PropTypes.array.isRequired,
     location: PropTypes.object.isRequired,
