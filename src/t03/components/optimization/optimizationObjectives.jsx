@@ -36,15 +36,6 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     };
 
-    handleChangeLocation = response => {
-        return this.setState({
-            selectedObjective: {
-                ...this.state.selectedObjective,
-                location: response
-            }
-        });
-    };
-
     onClickBack = () => {
         return this.setState({
             selectedObjective: null
