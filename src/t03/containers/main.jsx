@@ -206,7 +206,7 @@ class T03 extends React.Component {
                         close={close}
                         closeable
                     >
-                        <ModelEditorOptimization type={type} tool={tool}/>
+                        <ModelEditorOptimization tool={tool}/>
                     </LayoutComponents.CloseableWindow>
                 );
             case 'transport':

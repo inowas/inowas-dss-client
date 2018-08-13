@@ -1,62 +1,58 @@
 import Optimization from '../../../src/core/optimization/Optimization';
-import OptimizationParameters from '../../../src/core/optimization/OptimizationParameters';
-import OptimizationObjective from '../../../src/core/optimization/OptimizationObjective';
-import OptimizationConstraint from '../../../src/core/optimization/OptimizationConstraint';
-import OptimizationObject from '../../../src/core/optimization/OptimizationObject';
-import {concentrationObjective} from './OptimizationObjective.test';
-import {optimizationObjects} from './OptimizationObject.test';
-import {concentrationConstraint} from './OptimizationConstraint.test';
+import OptimizationResult from '../../../src/core/optimization/OptimizationResult';
+import OptimizationInput from '../../../src/core/optimization/OptimizationInput';
 
 test('Create with Defaults and toObject', () => {
     const optimization = Optimization.fromDefaults();
-    expect(Optimization.fromObject(optimization.toObject)).toBeInstanceOf(Optimization);
-    expect(optimization.parameters).toBeInstanceOf(OptimizationParameters);
-    expect(Array.isArray(optimization.objectives)).toBeTruthy();
-    expect(optimization.objectives.length).toBe(2);
-    expect(Array.isArray(optimization.constraints)).toBeTruthy();
-    expect(optimization.constraints.length).toBe(1);
-    expect(Array.isArray(optimization.objects)).toBeTruthy();
-    expect(optimization.objects.length).toBe(2);
-});
-
-test('Add Constraint to Optimization', () => {
-    const optimization = Optimization.fromDefaults();
-    optimization.addConstraint(OptimizationConstraint.fromObject(concentrationConstraint));
-    expect(optimization.constraints.length).toBe(2);
-    expect(optimization.constraints[1].toObject).toEqual(concentrationConstraint);
-});
-
-test('Add wrong Contraint Type to Optimization', () => {
-    const optimization = Optimization.fromDefaults();
-    expect(() => {
-        optimization.addConstraint(OptimizationObjective.fromObject(concentrationObjective));
-    }).toThrow();
-});
-
-test('Add Objective to Optimization', () => {
-    const optimization = Optimization.fromDefaults();
-    optimization.addObjective(OptimizationObjective.fromObject(concentrationObjective));
-    expect(optimization.objectives.length).toBe(3);
-});
-
-test('Add wrong Objective Type to Optimization', () => {
-    const optimization = Optimization.fromDefaults();
-    expect(() => {
-        optimization.addObjective(OptimizationConstraint.fromObject(concentrationConstraint));
-    }).toThrow();
-});
-
-test('Add Objects to Optimization', () => {
-    const optimization = Optimization.fromDefaults();
-    optimizationObjects.forEach(object => {
-        optimization.addObject(OptimizationObject.fromObject(object));
+    optimization.id = '123-abc-456';
+    optimization.input.id = '345-def-987';
+    expect(optimization).toBeInstanceOf(Optimization);
+    expect(optimization.toObject).toEqual({
+        'id': '123-abc-456',
+        'input': {
+            'constraints': [],
+            'id': '345-def-987',
+            'objectives': [],
+            'objects': [],
+            'parameters': {
+                'cxpb': 0.9,
+                'diversity_flg': false,
+                'eta': 20,
+                'ftol': 0.0001,
+                'indpb': 0.1,
+                'maxf': 50,
+                'method': 'ga',
+                'mutpb': 0.1,
+                'ncls': 1,
+                'ngen': 100,
+                'pop_size': 100,
+                'qbound': 0.25,
+                'xtol': 0.0001
+            }
+        },
+        'progress': [],
+        'results': [],
+        'state': 0
     });
-    expect(optimization.objects.length).toBe(4);
 });
 
-test('Add wrong Object to Optimization', () => {
+test('Adding results', () => {
     const optimization = Optimization.fromDefaults();
+    optimization.addResult(new OptimizationResult());
+    expect(optimization.results).toHaveLength(1);
     expect(() => {
-        optimization.addObject(OptimizationConstraint.fromObject(concentrationConstraint));
+        optimization.addResult({});
     }).toThrow();
+});
+
+test('From object', () => {
+    const opt = {
+        input: OptimizationInput.fromDefaults().toObject,
+        state: 2,
+        progress: [1, 2, 3],
+        results: [(new OptimizationResult).toObject, (new OptimizationResult).toObject]
+    };
+    const optimization = Optimization.fromObject(opt);
+    expect(optimization).toBeInstanceOf(Optimization);
+    expect(optimization.toObject.results).toHaveLength(2);
 });
