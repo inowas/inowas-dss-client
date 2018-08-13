@@ -21,8 +21,15 @@ export const exampleLocation = {
     objects: []
 };
 
-test('Create from Object', () => {
+test('Create from object', () => {
     const location = Location.fromObject(exampleLocation);
     expect(location).toBeInstanceOf(Location);
     expect(location.toObject).toEqual(exampleLocation);
+});
+
+test('Create from empty object', () => {
+    const location = Location.fromObject({});
+    expect(location).toBeInstanceOf(Location);
+    expect(location.type).toEqual('bbox');
+    expect(location.objects).toHaveLength(0);
 });

@@ -1,16 +1,23 @@
+import uuidv4 from 'uuid/v4';
+import Location from './Location';
+
 class OptimizationConstraint {
 
-    _type;
+    _id = uuidv4();
+    _name = 'New Optimization Constraint';
+    _type = '';
     _concFileName = 'MT3D001.UCN';
-    _summaryMethod;
-    _value;
-    _operator;
-    _location; // Location
-    _location1; // Location
-    _location2; // Location
+    _summaryMethod = '';
+    _value = 0;
+    _operator = '';
+    _location = new Location();
+    _location1 = new Location();
+    _location2 = new Location();
 
     static fromObject(obj) {
         const constraint = new OptimizationConstraint();
+        constraint.id = obj.id;
+        constraint.name = obj.name;
         constraint.type = obj.type;
         constraint.concFileName = obj.conc_file_name;
         constraint.summaryMethod = obj.summary_method;
@@ -24,12 +31,28 @@ class OptimizationConstraint {
 
     constructor() {}
 
+    get id() {
+        return this._id;
+    }
+
+    set id(value) {
+        this._id = value ? value : uuidv4();
+    }
+
+    get name() {
+        return this._name;
+    }
+
+    set name(value) {
+        this._name = value ? value : 'New Optimization Constraint';
+    }
+
     get type() {
         return this._type;
     }
 
     set type(value) {
-        this._type = value;
+        this._type = value ? value : '';
     }
 
     get concFileName() {
@@ -69,7 +92,7 @@ class OptimizationConstraint {
     }
 
     set location(value) {
-        this._location = value;
+        this._location = value ? Location.fromObject(value) : new Location();
     }
 
     get location1() {
@@ -77,7 +100,7 @@ class OptimizationConstraint {
     }
 
     set location1(value) {
-        this._location1 = value;
+        this._location1 = value ? Location.fromObject(value) : null;
     }
 
     get location2() {
@@ -85,19 +108,21 @@ class OptimizationConstraint {
     }
 
     set location2(value) {
-        this._location2 = value;
+        this._location2 = value ? Location.fromObject(value) : null;
     }
 
     get toObject() {
         return ({
+            'id': this.id,
+            'name': this.name,
             'type': this.type,
             'conc_file_name': this.concFileName,
             'summary_method': this.summaryMethod,
             'value': this.value,
             'operator': this.operator,
-            'location': this.location,
-            'location_1': this.location1,
-            'location_2': this.location2
+            'location': this.location.toObject,
+            'location_1': this.location1.toObject,
+            'location_2': this.location2.toObject
         });
     }
 }

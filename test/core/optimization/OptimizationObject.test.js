@@ -146,24 +146,23 @@ test('Adding, updating and removing substances', () => {
     object.addSubstance('NaCl');
     object.addSubstance('Pb');
     expect(object.substances).toHaveLength(2);
-    expect(object.concentrations).toHaveLength(2);
+    expect(object.concentrations).toHaveLength(5);
     expect(object.concentrations).toEqual([
         {
-            'NaCl': [
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0}
-            ]
+            'NaCl': {'max': 0, 'min': 0, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
         }, {
-            'Pb': [
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0}
-            ]
+            'NaCl': {'max': 0, 'min': 0, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        }, {
+            'NaCl': {'max': 0, 'min': 0, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        }, {
+            'NaCl': {'max': 0, 'min': 0, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        }, {
+            'NaCl': {'max': 0, 'min': 0, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
         }
     ]);
     object.updateSubstance({
@@ -179,23 +178,36 @@ test('Adding, updating and removing substances', () => {
     });
     expect(object.concentrations).toEqual([
         {
-            'NaCl': [
-                {'max': 100, 'min': 50, 'result': 0},
-                {'max': 200, 'min': 50, 'result': 0},
-                {'max': 300, 'min': 50, 'result': 0},
-                {'max': 200, 'min': 50, 'result': 0},
-                {'max': 100, 'min': 50, 'result': 0}
-            ]
+            'NaCl': {'max': 100, 'min': 50, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
         }, {
-            'Pb': [
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0},
-                {'max': 0, 'min': 0, 'result': 0}
-            ]
+            'NaCl': {'max': 200, 'min': 50, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        }, {
+            'NaCl': {'max': 300, 'min': 50, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        }, {
+            'NaCl': {'max': 200, 'min': 50, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        }, {
+            'NaCl': {'max': 100, 'min': 50, 'result': 0},
+            'Pb': {'max': 0, 'min': 0, 'result': 0}
         }
     ]);
     object.removeSubstance(object.substances.filter(s => s.name === 'NaCl')[0].id);
-    expect(object.concentrations).toHaveLength(1);
+});
+
+test('Updating flux', () => {
+    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 3);
+    expect(object.flux).toHaveLength(3);
+    const rows = [
+        {min: 0, max: 10},
+        {min: 1, max: 11},
+        {min: 2, max: 12}
+    ];
+    expect(object.updateFlux(rows).flux).toEqual([
+        {id: 0, min: 0, max: 10},
+        {id: 1, min: 1, max: 11},
+        {id: 2, min: 2, max: 12}
+    ]);
 });

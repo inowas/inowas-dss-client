@@ -7,10 +7,13 @@ import {withRouter} from 'react-router';
 import OptimizationObjectsComponent from '../components/optimization/optimizationObjects';
 import OptimizationObjectivesComponent from '../components/optimization/optimizationObjectives';
 import OptimizationParametersComponent from '../components/optimization/optimizationParameters';
+import OptimizationConstraintsComponent from '../components/optimization/optimizationConstraints';
+import OptimizationResultsComponent from '../components/optimization/optimizationResults';
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
-import {Button, Menu} from 'semantic-ui-react';
+import {Button, Menu, Progress} from 'semantic-ui-react';
+import {Command} from '../actions';
 
 const styles = {
     container: {
@@ -67,17 +70,42 @@ class ModelEditorOptimization extends React.Component {
 
     onMenuClick = (e, {name}) => {
         const {routes, params} = this.props;
-        this.setState({ activeItem: name });
+        this.setState({activeItem: name});
 
         Routing.modelOptimizationType(routes, params)(name);
     };
 
+    onCancelCalculationClick = () => {
+        this.onMenuClick(null, {name: 'parameters'});
+
+        return this.setState({
+            optimization: {
+                ...this.state.optimization,
+                isRunning: false
+            }
+        });
+    };
+
+    onCalculationClick = () => {
+        return this.setState({
+            optimization: {
+                ...this.state.optimization,
+                isRunning: true
+            }
+        });
+    };
+
     onChange = (obj) => {
         const opt = Optimization.fromObject(this.state.optimization);
-        opt[obj.key] = obj.value;
+        opt.input[obj.key] = obj.value;
         return this.setState({
             optimization: opt.toObject
         });
+        // TODO:
+        /* return this.props.updateOptimization(
+            this.props.model.id,
+            Optimization.fromObject(this.state.optimization)
+        );*/
     };
 
     renderProperties() {
@@ -97,19 +125,27 @@ class ModelEditorOptimization extends React.Component {
         switch (type) {
             case 'objects':
                 return (
-                    <OptimizationObjectsComponent objects={optimization.objects} model={this.props.model} stressPeriods={stressPeriods} onChange={this.onChange}/>
+                    <OptimizationObjectsComponent objects={optimization.input.objects} model={this.props.model}
+                                                  stressPeriods={stressPeriods} onChange={this.onChange}/>
                 );
             case 'objectives':
                 return (
-                    <OptimizationObjectivesComponent objectives={optimization.objectives} model={this.props.model} objects={optimization.objects} onChange={this.onChange}/>
+                    <OptimizationObjectivesComponent objectives={optimization.input.objectives} model={this.props.model}
+                                                     objects={optimization.input.objects} onChange={this.onChange}/>
                 );
             case 'constraints':
                 return (
-                    <p>Constraints</p>
+                    <OptimizationConstraintsComponent constraints={optimization.input.constraints} model={this.props.model}
+                                                      objects={optimization.input.objects} onChange={this.onChange}/>
+                );
+            case 'results':
+                return (
+                    <OptimizationResultsComponent optimization={optimization} model={this.props.model}/>
                 );
             default:
                 return (
-                    <OptimizationParametersComponent parameters={optimization.parameters} objectives={optimization.objectives} onChange={this.onChange}/>
+                    <OptimizationParametersComponent parameters={optimization.input.parameters}
+                                                     objectives={optimization.input.objectives} onChange={this.onChange}/>
                 );
         }
     }
@@ -122,11 +158,11 @@ class ModelEditorOptimization extends React.Component {
                         <Menu.Item
                             name="parameters"
                             active={this.state.activeItem === 'parameters'}
-                            onClick={this.onMenuClick} />
+                            onClick={this.onMenuClick}/>
                         <Menu.Item
                             name="objects"
                             active={this.state.activeItem === 'objects'}
-                            onClick={this.onMenuClick} />
+                            onClick={this.onMenuClick}/>
                         <Menu.Item
                             name="objectives"
                             active={this.state.activeItem === 'objectives'}
@@ -138,13 +174,34 @@ class ModelEditorOptimization extends React.Component {
                             onClick={this.onMenuClick}
                         />
                         <Menu.Item>
-                            <Button fluid primary>Run Optimization</Button>
+                            {!this.state.optimization.isRunning
+                                ?
+                                <Button fluid primary
+                                        onClick={this.onCalculationClick}
+                                >
+                                    Run Optimization
+                                </Button>
+                                :
+                                <Button fluid
+                                        color="red"
+                                        onClick={this.onCancelCalculationClick}
+                                >
+                                    Cancel Calculation
+                                </Button>
+                            }
                         </Menu.Item>
+                        {this.state.optimization.isRunning &&
+                            <Menu.Item>
+                                <Progress percent={40} indicating>
+                                    Calculating
+                                </Progress>
+                            </Menu.Item>
+                        }
                         <Menu.Item
                             name="results"
                             active={this.state.activeItem === 'results'}
                             onClick={this.onMenuClick}
-                            disabled={true}
+                            disabled={!this.state.optimization.isRunning}
                         />
                     </Menu>
                 </div>
@@ -158,7 +215,9 @@ class ModelEditorOptimization extends React.Component {
     }
 }
 
-const actions = {};
+const actions = {
+    updateOptimization: Command.updateOptimization
+};
 
 const mapStateToProps = (state, {tool}) => {
     return {
@@ -183,20 +242,10 @@ const mapDispatchToProps = (dispatch, {tool}) => {
 
 ModelEditorOptimization.propTypes = {
     tool: PropTypes.string,
-    getFile: PropTypes.func,
-    calculateStressPeriods: PropTypes.func,
-    calculateStressPeriodsStatus: PropTypes.func,
-    calculateModflowModel: PropTypes.func,
-    calculateModflowModelStatus: PropTypes.func,
-    calculation: PropTypes.object,
-    getFileStatus: PropTypes.func,
     model: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
-    stopPolling: PropTypes.func,
-    stressPeriods: PropTypes.object,
-    updateStressPeriods: PropTypes.func,
-    updateStressPeriodsStatus: PropTypes.func
+    updateOptimization: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));

@@ -50,10 +50,10 @@ class OptimizationObjectsComponent extends React.Component {
         }
     });
 
-    handleChangeLocation = response => this.setState({
+    handleChangeLocation = (e, {name, value}) => this.setState({
         selectedObject: {
             ...this.state.selectedObject,
-            position: response
+            position: value
         }
     });
 
@@ -145,7 +145,8 @@ class OptimizationObjectsComponent extends React.Component {
 
     onClickBack = () => {
         return this.setState({
-            selectedObject: null
+            selectedObject: null,
+            selectedSubstance: null
         });
     };
 
@@ -172,7 +173,8 @@ class OptimizationObjectsComponent extends React.Component {
         });
 
         return this.setState({
-            selectedObject: null
+            selectedObject: null,
+            selectedSubstance: null
         });
     };
 
@@ -358,6 +360,7 @@ class OptimizationObjectsComponent extends React.Component {
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 0}>
                                             <OptimizationMap
+                                                name="location"
                                                 area={this.props.model.geometry}
                                                 bbox={this.props.model.bounding_box}
                                                 location={this.state.selectedObject.position}
