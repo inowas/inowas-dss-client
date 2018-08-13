@@ -156,18 +156,19 @@ class OptimizationObject {
     }
 
     calculateConcentration() {
-        this.concentrations = this.substances.map(s => {
-            return {
-                [s.name]: s.data.map(d => {
-                    return {
-                        min: d.min,
-                        max: d.max,
-                        result: d.result
-                    };
-                })
-            };
+        const substances = this.substances;
+
+        this.concentrations = (new Array(this.numberOfStressPeriods)).fill(0).map((sp, key) => {
+            const obj = {};
+            substances.forEach(s => {
+                obj[s.name] = {
+                    min: s.data[key].min,
+                    max: s.data[key].max,
+                    result: s.data[key].result
+                };
+            });
+            return obj;
         });
-        return this;
     }
 
     get toObject() {
