@@ -194,3 +194,40 @@ export function updateMt3dms(tool, modelId, mt3dms) {
         }
     };
 }
+
+export const UPDATE_OPTIMIZATION_INPUT = 'updateOptimizationInput';
+export const CALCULATE_OPTIMIZATION = 'calculateOptimization';
+export const CANCEL_OPTIMIZATION_CALCULATION = 'cancelOptimizationCalculation';
+
+export function updateOptimizationInput(tool, modelId, optimization) {
+    return {
+        type: UPDATE_OPTIMIZATION_INPUT,
+        tool,
+        payload: {
+            id: modelId,
+            input: optimization.input.toObject
+        }
+    };
+}
+
+export function calculateOptimization(tool, modelId, optimization) {
+    return {
+        type: CALCULATE_OPTIMIZATION,
+        tool,
+        payload: {
+            id: modelId,
+            optimization_id: optimization.id
+        }
+    };
+}
+
+export function cancelOptimizationCalculation(tool, modelId, optimization) {
+    return {
+        type: CANCEL_OPTIMIZATION_CALCULATION,
+        tool,
+        payload: {
+            id: modelId,
+            optimization_id: optimization.id
+        }
+    };
+}

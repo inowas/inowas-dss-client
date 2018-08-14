@@ -78,34 +78,44 @@ class ModelEditorOptimization extends React.Component {
     onCancelCalculationClick = () => {
         this.onMenuClick(null, {name: 'parameters'});
 
-        return this.setState({
+        this.setState({
             optimization: {
                 ...this.state.optimization,
                 isRunning: false
             }
         });
+
+        return this.props.cancelOptimizationCalculation(
+            this.props.model.id,
+            Optimization.fromObject(this.state.optimization)
+        );
     };
 
     onCalculationClick = () => {
-        return this.setState({
+        this.setState({
             optimization: {
                 ...this.state.optimization,
                 isRunning: true
             }
         });
+
+        return this.props.calculateOptimization(
+            this.props.model.id,
+            Optimization.fromObject(this.state.optimization)
+        );
     };
 
     onChange = (obj) => {
         const opt = Optimization.fromObject(this.state.optimization);
         opt.input[obj.key] = obj.value;
-        return this.setState({
+        this.setState({
             optimization: opt.toObject
         });
-        // TODO:
-        /* return this.props.updateOptimization(
+
+        return this.props.updateOptimizationInput(
             this.props.model.id,
             Optimization.fromObject(this.state.optimization)
-        );*/
+        );
     };
 
     renderProperties() {
@@ -216,7 +226,9 @@ class ModelEditorOptimization extends React.Component {
 }
 
 const actions = {
-    updateOptimization: Command.updateOptimization
+    updateOptimizationInput: Command.updateOptimizationInput,
+    calculateOptimization: Command.calculateOptimization,
+    cancelOptimizationCalculation: Command.cancelOptimizationCalculation
 };
 
 const mapStateToProps = (state, {tool}) => {
@@ -245,7 +257,9 @@ ModelEditorOptimization.propTypes = {
     model: PropTypes.object,
     params: PropTypes.object,
     routes: PropTypes.array,
-    updateOptimization: PropTypes.func.isRequired
+    updateOptimizationInput: PropTypes.func.isRequired,
+    calculateOptimization: PropTypes.func.isRequired,
+    cancelOptimizationCalculation: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));
