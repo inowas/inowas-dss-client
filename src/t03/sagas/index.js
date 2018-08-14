@@ -1,7 +1,9 @@
 import addBoundaryFlow from './addBoundary';
 import addLayerFlow from './addLayer';
 import calculateModflowModelFlow from './calculateModflowModel';
+import calculateOptimizationFlow from './calculateOptimization';
 import calculateStressPeriodsFlow from './calculateSressPeriods';
+import cancelOptimizationCalculationFlow from './cancelOptimizationCalculation';
 import cloneModflowModelFlow from './cloneModflowModel';
 import createModelFlow from './createModel';
 import deleteModflowModelFlow from './deleteModlfowModel';
@@ -22,6 +24,7 @@ import updateLayerFlow from './updateLayer';
 import updateModelFlow from './updateModel';
 import updateModflowPackageFlow from './updateModflowPackage';
 import updateMt3dmsFlow from './updateMt3dms';
+import updateOptimizationInputFlow from './updateOptimizationInput';
 import updateStressPeriodsFlow from './updateStressPeriods';
 
 export {
@@ -29,6 +32,8 @@ export {
     addLayerFlow,
     calculateModflowModelFlow,
     calculateStressPeriodsFlow,
+    calculateOptimizationFlow,
+    cancelOptimizationCalculationFlow,
     cloneModflowModelFlow,
     createModelFlow,
     deleteModflowModelFlow,
@@ -49,5 +54,6 @@ export {
     updateModelFlow,
     updateModflowPackageFlow,
     updateMt3dmsFlow,
+    updateOptimizationInputFlow,
     updateStressPeriodsFlow,
 };

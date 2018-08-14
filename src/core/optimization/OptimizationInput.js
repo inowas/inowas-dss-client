@@ -21,7 +21,7 @@ class OptimizationInput {
     }
 
     static fromObject(obj) {
-        const input = new OptimizationInput;
+        const input = new OptimizationInput();
         input.id = obj.id;
         input.parameters = OptimizationParameters.fromObject(obj.parameters);
 
@@ -48,7 +48,7 @@ class OptimizationInput {
     }
 
     set id(value) {
-        this._id = value;
+        this._id = value ? value : uuidv4();
     }
 
     get parameters() {
