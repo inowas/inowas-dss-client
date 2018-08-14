@@ -201,6 +201,7 @@ export const getInitialState = () => {
         boundaries: null,
         results: null,
         soilmodel: null,
+        optimization: null,
         mt3dms: null,
         permissions: 'rwx',
         calculation: {state: 0, calculation_id: '', message: ''},

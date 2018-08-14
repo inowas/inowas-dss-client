@@ -13,6 +13,7 @@ import loadListfileFlow from './loadListfile';
 import loadModelFlow from './loadModel';
 import loadModflowPackageFlow from './loadModflowPackage';
 import loadModflowPackagesFlow from './loadModflowPackages';
+import loadOptimizationFlow from './loadOptimization';
 import loadResultsFlow from './loadResults';
 import loadSoilmodelLayerFlow from './loadSoilmodelLayer';
 import loadStressPeriodsFlow from './loadStressPeriods';
@@ -43,6 +44,7 @@ export {
     loadModelFlow,
     loadModflowPackageFlow,
     loadModflowPackagesFlow,
+    loadOptimizationFlow,
     loadResultsFlow,
     loadSoilmodelLayerFlow,
     loadStressPeriodsFlow,

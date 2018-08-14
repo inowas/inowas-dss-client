@@ -33,6 +33,7 @@ export default function* rootSaga() {
         call(T03.loadModelFlow),
         call(T03.loadModflowPackagesFlow),
         call(T03.loadModflowPackageFlow),
+        call(T03.loadOptimizationFlow),
         call(T03.loadResultsFlow),
         call(T03.loadSoilmodelLayerFlow),
         call(T03.loadStressPeriodsFlow),

@@ -1,5 +1,5 @@
 import {put, take} from 'redux-saga/effects';
-import {Command} from '../../t03/actions/index';
+import {Command, Event} from '../../t03/actions/index';
 import {WebData} from '../../core';
 
 export default function* updateOptimization() {
@@ -8,6 +8,7 @@ export default function* updateOptimization() {
         // eslint-disable-next-line no-shadow
         const action = yield take(action => action.type === Command.UPDATE_OPTIMIZATION_INPUT);
 
+        yield put(Event.optimizationInputUpdated(action.tool, action.payload.input));
         yield put(WebData.Modifier.Action.sendCommand(action.type, action.payload));
 
         // eslint-disable-next-line no-constant-condition

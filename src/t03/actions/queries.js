@@ -117,3 +117,13 @@ export function getModflowPackages(tool, id) {
         id,
     };
 }
+
+export const GET_OPTIMIZATION = 'GET_OPTIMIZATION';
+
+export function getOptimization(tool, id) {
+    return {
+        type: GET_OPTIMIZATION,
+        tool,
+        id,
+    };
+}

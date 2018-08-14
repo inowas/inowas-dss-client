@@ -196,19 +196,19 @@ export function updateMt3dms(tool, modelId, mt3dms) {
 }
 
 export const UPDATE_OPTIMIZATION_INPUT = 'updateOptimizationInput';
-export const CALCULATE_OPTIMIZATION = 'calculateOptimization';
-export const CANCEL_OPTIMIZATION_CALCULATION = 'cancelOptimizationCalculation';
 
-export function updateOptimizationInput(tool, modelId, optimization) {
+export function updateOptimizationInput(tool, modelId, input) {
     return {
         type: UPDATE_OPTIMIZATION_INPUT,
         tool,
         payload: {
             id: modelId,
-            input: optimization.input.toObject
+            input: input
         }
     };
 }
+
+export const CALCULATE_OPTIMIZATION = 'calculateOptimization';
 
 export function calculateOptimization(tool, modelId, optimization) {
     return {
@@ -220,6 +220,8 @@ export function calculateOptimization(tool, modelId, optimization) {
         }
     };
 }
+
+export const CANCEL_OPTIMIZATION_CALCULATION = 'cancelOptimizationCalculation';
 
 export function cancelOptimizationCalculation(tool, modelId, optimization) {
     return {
