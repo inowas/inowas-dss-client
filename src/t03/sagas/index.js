@@ -13,11 +13,11 @@ import loadListfileFlow from './loadListfile';
 import loadModelFlow from './loadModel';
 import loadModflowPackageFlow from './loadModflowPackage';
 import loadModflowPackagesFlow from './loadModflowPackages';
-import loadOptimizationFlow from './loadOptimization';
 import loadResultsFlow from './loadResults';
 import loadSoilmodelLayerFlow from './loadSoilmodelLayer';
 import loadStressPeriodsFlow from './loadStressPeriods';
 import pollModflowModelCalculationStatusFlow from './pollModflowModelCalculationStatus';
+import pollOptimizationCalculationStatusFlow from './pollOptimizationCalculationStatus';
 import removeBoundaryFlow from './removeBoundary';
 import removeLayerFlow from './removeLayer';
 import updateBoundaryFlow from './updateBoundary';
@@ -44,11 +44,11 @@ export {
     loadModelFlow,
     loadModflowPackageFlow,
     loadModflowPackagesFlow,
-    loadOptimizationFlow,
     loadResultsFlow,
     loadSoilmodelLayerFlow,
     loadStressPeriodsFlow,
     pollModflowModelCalculationStatusFlow,
+    pollOptimizationCalculationStatusFlow,
     removeBoundaryFlow,
     removeLayerFlow,
     updateBoundaryFlow,

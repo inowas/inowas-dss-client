@@ -120,10 +120,10 @@ export function getModflowPackages(tool, id) {
 
 export const GET_OPTIMIZATION = 'GET_OPTIMIZATION';
 
-export function getOptimization(tool, id) {
+export function getOptimization(tool, payload) {
     return {
         type: GET_OPTIMIZATION,
         tool,
-        id,
+        payload: payload,
     };
 }

@@ -13,7 +13,7 @@ import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
 import {Button, Menu, Progress} from 'semantic-ui-react';
-import {Action, Command} from '../actions';
+import {Action, Command, Query} from '../actions';
 
 const styles = {
     container: {
@@ -53,20 +53,22 @@ class ModelEditorOptimization extends React.Component {
         super(props);
         this.state = {
             optimization: this.props.optimization,
-            activeItem: this.props.params.type ? this.props.params.type : 'parameters'
+            activeItem: this.props.params.type ? this.props.params.type : 'parameters',
+            isRunning: false
         };
     }
 
     componentWillReceiveProps() {
-        this.setState((prevState, props) => (
-                {optimization: props.optimization}
-            )
-        );
+        this.setState((prevState, props) => ({
+            optimization: props.optimization
+        }));
     }
 
     onMenuClick = (e, {name}) => {
         const {routes, params} = this.props;
-        this.setState({activeItem: name});
+        this.setState({
+            activeItem: name
+        });
 
         Routing.modelOptimizationType(routes, params)(name);
     };
@@ -76,9 +78,10 @@ class ModelEditorOptimization extends React.Component {
 
         this.setState({
             optimization: {
-                ...this.state.optimization,
-                isRunning: false
-            }
+                ...this.state.optimization
+            },
+            isRunning: false,
+            activeItem: 'parameters'
         });
 
         return this.props.cancelOptimizationCalculation(
@@ -88,14 +91,22 @@ class ModelEditorOptimization extends React.Component {
     };
 
     onCalculationClick = () => {
+        this.onMenuClick(null, {name: 'results'});
+
         this.setState({
             optimization: {
-                ...this.state.optimization,
-                isRunning: true
-            }
+                ...this.state.optimization
+            },
+            isRunning: true,
+            activeItem: 'results'
         });
 
-        return this.props.calculateOptimization(
+        this.props.calculateOptimization(
+            this.props.model.id,
+            Optimization.fromObject(this.state.optimization)
+        );
+
+        this.props.calculateOptimization(
             this.props.model.id,
             Optimization.fromObject(this.state.optimization)
         );
@@ -162,7 +173,7 @@ class ModelEditorOptimization extends React.Component {
         if (!this.state.optimization) {
             return null;
         }
-        console.log(this.state.optimization);
+        console.log(this.state);
         return (
             <div style={[styles.container]}>
                 <div style={styles.left}>
@@ -186,7 +197,7 @@ class ModelEditorOptimization extends React.Component {
                             onClick={this.onMenuClick}
                         />
                         <Menu.Item>
-                            {!this.state.optimization.isRunning
+                            {!this.state.isRunning
                                 ?
                                 <Button fluid primary
                                         onClick={this.onCalculationClick}
@@ -202,7 +213,7 @@ class ModelEditorOptimization extends React.Component {
                                 </Button>
                             }
                         </Menu.Item>
-                        {this.state.optimization.isRunning &&
+                        {this.state.isRunning &&
                         <Menu.Item>
                             <Progress percent={40} indicating>
                                 Calculating
@@ -213,7 +224,7 @@ class ModelEditorOptimization extends React.Component {
                             name="results"
                             active={this.state.activeItem === 'results'}
                             onClick={this.onMenuClick}
-                            disabled={!this.state.optimization.isRunning}
+                            disabled={!this.state.isRunning}
                         />
                     </Menu>
                 </div>
@@ -239,7 +250,7 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function () {
+            wrappedActions[key] = function() {
                 const args = Array.prototype.slice.call(arguments);
                 dispatch(actions[key](tool, ...args));
             };
