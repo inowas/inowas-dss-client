@@ -30,7 +30,6 @@ const createModelReducer = tool => {
                 };
 
             case Action.SET_OPTIMIZATION:
-                console.log('Action.SET_OPTIMIZATION', action.payload);
                 return {
                     ...state,
                     optimization: action.payload

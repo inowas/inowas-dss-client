@@ -13,7 +13,15 @@ import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
 import {Button, Menu, Progress} from 'semantic-ui-react';
-import {Action, Command, Query} from '../actions';
+import {Action, Command} from '../actions';
+import {
+    OPTIMIZATION_STATE_NEW,
+    OPTIMIZATION_STATE_CALCULATING,
+    OPTIMIZATION_STATE_CANCELLED,
+    OPTIMIZATION_STATE_CANCELLING,
+    OPTIMIZATION_STATE_FINISHED,
+    OPTIMIZATION_STATE_STARTED
+} from '../selectors/optimization';
 
 const styles = {
     container: {
@@ -53,8 +61,7 @@ class ModelEditorOptimization extends React.Component {
         super(props);
         this.state = {
             optimization: this.props.optimization,
-            activeItem: this.props.params.type ? this.props.params.type : 'parameters',
-            isRunning: false
+            activeItem: this.props.params.type ? this.props.params.type : 'parameters'
         };
     }
 
@@ -74,17 +81,14 @@ class ModelEditorOptimization extends React.Component {
     };
 
     onCancelCalculationClick = () => {
-        this.onMenuClick(null, {name: 'parameters'});
-
         this.setState({
             optimization: {
-                ...this.state.optimization
-            },
-            isRunning: false,
-            activeItem: 'parameters'
+                ...this.state.optimization,
+                state: 11
+            }
         });
 
-        return this.props.cancelOptimizationCalculation(
+        this.props.cancelOptimizationCalculation(
             this.props.model.id,
             Optimization.fromObject(this.state.optimization)
         );
@@ -97,14 +101,8 @@ class ModelEditorOptimization extends React.Component {
             optimization: {
                 ...this.state.optimization
             },
-            isRunning: true,
             activeItem: 'results'
         });
-
-        this.props.calculateOptimization(
-            this.props.model.id,
-            Optimization.fromObject(this.state.optimization)
-        );
 
         this.props.calculateOptimization(
             this.props.model.id,
@@ -123,6 +121,14 @@ class ModelEditorOptimization extends React.Component {
             this.props.model.id,
             opt.input.toObject
         );
+    };
+
+    onChangeResult = (obj) => {
+        const opt = Optimization.fromObject(this.state.optimization);
+        opt[obj.key] = obj.value;
+        this.setState({
+            optimization: opt.toObject
+        });
     };
 
     renderProperties() {
@@ -158,7 +164,7 @@ class ModelEditorOptimization extends React.Component {
                 );
             case 'results':
                 return (
-                    <OptimizationResultsComponent optimization={optimization} model={this.props.model}/>
+                    <OptimizationResultsComponent optimization={optimization} onChange={this.onChangeResult}/>
                 );
             default:
                 return (
@@ -173,7 +179,6 @@ class ModelEditorOptimization extends React.Component {
         if (!this.state.optimization) {
             return null;
         }
-        console.log(this.state);
         return (
             <div style={[styles.container]}>
                 <div style={styles.left}>
@@ -197,7 +202,9 @@ class ModelEditorOptimization extends React.Component {
                             onClick={this.onMenuClick}
                         />
                         <Menu.Item>
-                            {!this.state.isRunning
+                            {this.state.optimization.state === OPTIMIZATION_STATE_NEW ||
+                             this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED ||
+                             this.state.optimization.state === OPTIMIZATION_STATE_FINISHED
                                 ?
                                 <Button fluid primary
                                         onClick={this.onCalculationClick}
@@ -213,10 +220,38 @@ class ModelEditorOptimization extends React.Component {
                                 </Button>
                             }
                         </Menu.Item>
-                        {this.state.isRunning &&
+                        {this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED &&
                         <Menu.Item>
-                            <Progress percent={40} indicating>
+                            <Progress percent={0}>
+                                Cancelled
+                            </Progress>
+                        </Menu.Item>
+                        }
+                        {this.state.optimization.state === OPTIMIZATION_STATE_STARTED &&
+                        <Menu.Item>
+                            <Progress percent={25} indicating>
+                                Starting
+                            </Progress>
+                        </Menu.Item>
+                        }
+                        {this.state.optimization.state === OPTIMIZATION_STATE_CALCULATING &&
+                        <Menu.Item>
+                            <Progress percent={50} indicating>
                                 Calculating
+                            </Progress>
+                        </Menu.Item>
+                        }
+                        {this.state.optimization.state === OPTIMIZATION_STATE_CANCELLING &&
+                        <Menu.Item>
+                            <Progress percent={75} indicating>
+                                Cancelling
+                            </Progress>
+                        </Menu.Item>
+                        }
+                        {this.state.optimization.state === OPTIMIZATION_STATE_FINISHED &&
+                        <Menu.Item>
+                            <Progress percent={100}>
+                                Finished
                             </Progress>
                         </Menu.Item>
                         }
@@ -224,7 +259,6 @@ class ModelEditorOptimization extends React.Component {
                             name="results"
                             active={this.state.activeItem === 'results'}
                             onClick={this.onMenuClick}
-                            disabled={!this.state.isRunning}
                         />
                     </Menu>
                 </div>

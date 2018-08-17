@@ -3,15 +3,21 @@ import OptimizationInput from './OptimizationInput';
 import OptimizationResult from './OptimizationResult';
 
 class Optimization {
-    _id = uuidv4();
-    _input = new OptimizationInput();
+    _id;
+    _input;
     _state = 0;
-    _progress = [];
-    _results = [];
+    _progress = {
+        _log: [],
+        _generation: 0,
+        _final: false
+    };
+    _results = [
+        new OptimizationResult()
+    ];
 
     static fromDefaults() {
         const optimization = new Optimization();
-        optimization.input = OptimizationInput.fromDefaults();
+        optimization.input = OptimizationInput.fromDefaults(optimization.id);
         return optimization;
     }
 
@@ -30,6 +36,8 @@ class Optimization {
     }
 
     constructor() {
+        this.id = uuidv4();
+        this.input = new OptimizationInput(this.id);
     }
 
     get id() {
@@ -61,7 +69,9 @@ class Optimization {
     }
 
     set progress(value) {
-        this._progress = value ? value : [];
+        this._progress._log = value.log ? value.log : [];
+        this._progress._generation = value.generation ? value.generation : 0;
+        this._progress._final = value.final ? value.final : false;
     }
 
     get results() {
@@ -77,7 +87,11 @@ class Optimization {
             'id': this.id,
             'input': this.input.toObject,
             'state': this.state,
-            'progress': this.progress,
+            'progress': {
+                log: this._progress._log,
+                generation: this._progress._generation,
+                final: this._progress._final
+            },
             'results': this.results.map(r => r.toObject)
         };
     }

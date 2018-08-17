@@ -4,14 +4,15 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import OptimizationParameters from '../../../core/optimization/OptimizationParameters';
-import {Segment, Form, Grid, Button, Icon} from 'semantic-ui-react';
+import {Segment, Form, Grid, Button, Icon, Message} from 'semantic-ui-react';
 
 class OptimizationParametersComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            parameters: props.parameters.toObject
+            parameters: props.parameters.toObject,
+            editState: 0
         };
     }
 
@@ -22,6 +23,10 @@ class OptimizationParametersComponent extends React.Component {
     }
 
     handleSubmit = () => {
+        this.setState({
+            editState: 2
+        });
+
         return this.props.onChange({
             key: 'parameters',
             value: OptimizationParameters.fromObject(this.state.parameters)
@@ -29,7 +34,8 @@ class OptimizationParametersComponent extends React.Component {
     };
 
     handleChange = (e, {name, value}) => this.setState({
-        parameters: {...this.state.parameters, [name]: value}
+        parameters: {...this.state.parameters, [name]: value},
+        editState: 1
     });
 
     render() {
@@ -74,7 +80,14 @@ class OptimizationParametersComponent extends React.Component {
                 <Grid style={styles.tablewidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column/>
-                        <Grid.Column/>
+                        <Grid.Column>
+                            {this.state.editState === 1 &&
+                                <Message warning>Changes not saved!</Message>
+                            }
+                            {this.state.editState === 2 &&
+                                <Message positive>Changes saved!</Message>
+                            }
+                        </Grid.Column>
                         <Grid.Column textAlign="right">
                             <Button icon positive
                                     style={styles.iconfix}
