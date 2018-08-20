@@ -3,5 +3,312 @@
   "title": "Optimization Object",
   "type": "object",
   "description": "This object represents all properties optimization of modflow models.",
-  "properties": {}
+  "additionalProperties": true,
+  "required": ["id", "input"],
+  "properties": {
+    "id": {"$ref": "#/definitions/uuidv4"},
+    "input": {
+      "$ref": "#/definitions/input"
+    },
+    "state": {
+      "title": "Optimization State",
+      "description": "0: new, 1: started, 2: calculating, 3: finished, 10: cancelling, 11: cancelled",
+      "type": "integer",
+      "enum": [0, 1, 2, 3, 10, 11]
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "allOf": [{"$ref": "#/definitions/result"}]
+      }
+    }
+  },
+  "definitions": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["method"],
+              "properties": {
+                "method": {
+                  "title": "Optimization Method",
+                  "description": "Method of optimization",
+                  "enum": ["simplex"]
+                },
+                "maxf": {
+                  "title": "Maximum Function Evaluations Number",
+                  "description": "Maximum number of function evaluations during the local optimization",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                },
+                "xtol": {
+                  "title": "TODO",
+                  "description": "TODO",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "ftol": {
+                  "title": "TODO",
+                  "description": "TODO",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": ["method", "ngen", "pop_size", "mutpb", "cxpb", "eta", "indpb", "diversity_flg"],
+              "properties": {
+                "method": {
+                  "title": "Optimization Method",
+                  "description": "Method of optimization",
+                  "enum": ["ga"]
+                },
+                "ngen": {
+                  "title": "Number of Generations",
+                  "description": "Number of generations of Genetic algorithm",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "ncls": {
+                  "title": "Number of Classes",
+                  "description": "Number of classes to be used in the clustering module",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10
+                },
+                "pop_size": {
+                  "title": "Population Size",
+                  "description": "Population size of Genetic algorithm",
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 100
+                },
+                "mutpb": {
+                  "title": "Mutation Probability",
+                  "description": "Probability of individual to be produced by mutation",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "cxpb": {
+                  "title": "Cross-over Probability",
+                  "description": "Probability of individual to be produced by cross-over",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "eta": {
+                  "title": "ETA crowding factor",
+                  "description": "TODO",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "indpb": {
+                  "title": "Individual Probability",
+                  "description": "Probability of mutation of a single value of an individual.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "qbound": {
+                  "title": "TODO",
+                  "description": "Boundary value of the Q diversity index",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "diversity_flg": {
+                  "title": "Mutation Probability",
+                  "description": "Probability of individual to be produced by mutation",
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/object"}]
+          }
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/objective"}]
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/constraint"}]
+          }
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "id": {"$ref": "#/definitions/uuidv4"},
+        "solutions": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/solution"}]
+          }
+        },
+        "progress_log": {
+          "type": "array",
+          "items": {
+            "allOf": [{"type": "number"}]
+          }
+        },
+        "generation": {
+          "type": "integer"
+        },
+        "final": {
+          "type": "boolean"
+        }
+      }
+    },
+    "solution": {
+      "type": "object",
+      "properties": {
+        "id": {"$ref": "#/definitions/uuidv4"},
+        "fitness": {
+          "type": "array",
+          "items": {
+            "allOf": [{"type": "number"}]
+          }
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "allOf": [{"type": "number"}]
+          }
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/object"}]
+          }
+        }
+      }
+    },
+    "object": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["wel"]
+        },
+        "id": {"$ref": "#/definitions/uuidv4"},
+        "position": {"$ref": "#/definitions/location"},
+        "flux": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/minMaxResultObj"}]
+          }
+        },
+        "concentration": {
+          "type": "array",
+          "items": {
+            "allOf": [{
+              "type": "object",
+              "patternProperties": {
+                "^.*$": {"$ref": "#/definitions/minMaxResultObj"}
+              }
+            }]
+          }
+        }
+      }
+    },
+    "objective": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["concentration", "head", "distance", "flux", "input_concentration"]
+        },
+        "conc_file_name": {
+          "type": "string"
+        },
+        "summary_method": {
+          "enum:": ["min", "max", "mean"]
+        },
+        "weight": {
+          "type": "number"
+        },
+        "penalty_value": {
+          "type": "number"
+        },
+        "location": {"$ref": "#/definitions/location"},
+        "location_1": {"$ref": "#/definitions/location"},
+        "location_2": {"$ref": "#/definitions/location"}
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["concentration", "head", "distance", "flux", "input_concentration"]
+        },
+        "conc_file_name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "operator": {
+          "enum": ["more", "less"]
+        },
+        "location": {"$ref": "#/definitions/location"},
+        "location_1": {"$ref": "#/definitions/location"},
+        "location_2": {"$ref": "#/definitions/location"}
+      }
+    },
+    "location": {
+      "type": "object",
+      "required": ["lay", "row", "col"],
+      "properties": {
+        "type": {
+          "enum": ["bbox", "object"]
+        },
+        "lay": {"$ref": "#/definitions/minMaxResultObj"},
+        "row": {"$ref": "#/definitions/minMaxResultObj"},
+        "col": {"$ref": "#/definitions/minMaxResultObj"},
+        "objects": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "#/definitions/uuidv4"}]
+          }
+        }
+      }
+    },
+    "uuidv4": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "minMaxResultObj": {
+      "type": "object",
+      "require": ["min", "max"],
+      "properties": {
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        },
+        "result": {
+          "type": "integer"
+        }
+      }
+    }
+  }
 }

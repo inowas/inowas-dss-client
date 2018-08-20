@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import OptimizationParameters from '../../../core/optimization/OptimizationParameters';
-import {Segment, Form, Grid, Button, Icon, Message} from 'semantic-ui-react';
+import {Segment, Form, Grid, Button, Icon, Message, Transition} from 'semantic-ui-react';
+
+const EDITSTATE_NOCHANGES = 0;
+const EDITSTATE_UNSAVED = 1;
+const EDITSTATE_SAVED = 2;
 
 class OptimizationParametersComponent extends React.Component {
 
@@ -12,7 +16,7 @@ class OptimizationParametersComponent extends React.Component {
         super(props);
         this.state = {
             parameters: props.parameters.toObject,
-            editState: 0
+            editState: EDITSTATE_NOCHANGES
         };
     }
 
@@ -24,7 +28,7 @@ class OptimizationParametersComponent extends React.Component {
 
     handleSubmit = () => {
         this.setState({
-            editState: 2
+            editState: EDITSTATE_SAVED
         });
 
         return this.props.onChange({
@@ -35,7 +39,7 @@ class OptimizationParametersComponent extends React.Component {
 
     handleChange = (e, {name, value}) => this.setState({
         parameters: {...this.state.parameters, [name]: value},
-        editState: 1
+        editState: EDITSTATE_UNSAVED
     });
 
     render() {
@@ -58,6 +62,12 @@ class OptimizationParametersComponent extends React.Component {
                 marginRight: '15px',
                 marginLeft: '15px',
                 width: '100%'
+            },
+            msgfix: {
+                paddingTop: '6.929px',
+                paddingBottom: '6.929px',
+                fontSize: '1rem',
+                textAlign: 'center'
             }
         };
 
@@ -81,12 +91,12 @@ class OptimizationParametersComponent extends React.Component {
                     <Grid.Row columns={3}>
                         <Grid.Column/>
                         <Grid.Column>
-                            {this.state.editState === 1 &&
-                                <Message warning>Changes not saved!</Message>
+                            {this.state.editState === EDITSTATE_UNSAVED &&
+                            <Message warning style={styles.msgfix}>Changes not saved!</Message>
                             }
-                            {this.state.editState === 2 &&
-                                <Message positive>Changes saved!</Message>
-                            }
+                            <Transition visible={this.state.editState === EDITSTATE_SAVED} animation="drop" duration={500}>
+                                <Message positive style={styles.msgfix}>Changes saved!</Message>
+                            </Transition>
                         </Grid.Column>
                         <Grid.Column textAlign="right">
                             <Button icon positive
@@ -127,7 +137,7 @@ class OptimizationParametersComponent extends React.Component {
                                         <Form.Field>
                                             <label>Number of generations of genetic algorithm</label>
                                             <Form.Input
-                                                type="text"
+                                                type="number"
                                                 name="ngen"
                                                 value={parameters.ngen}
                                                 placeholder="ngen ="
