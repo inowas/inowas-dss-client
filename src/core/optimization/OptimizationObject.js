@@ -46,7 +46,7 @@ class OptimizationObject {
     }
 
     set id(value) {
-        this._id = value;
+        this._id = value ? value : uuidv4();
     }
 
     get name() {

@@ -21,7 +21,8 @@ class OptimizationMap extends React.Component {
         this.state = {
             location: this.props.location,
             showOverlay: false,
-            hasError: false
+            hasError: false,
+            isEditing: false
         };
     }
 
@@ -30,6 +31,12 @@ class OptimizationMap extends React.Component {
             location: nextProps.location
         });
     }
+
+    toggleEditingState = () => {
+        this.setState({
+            isEditing: !this.state.isEditing
+        });
+    };
 
     getBounds = geometry => {
         return leafletGeoJSON(geometry).getBounds();
@@ -96,6 +103,18 @@ class OptimizationMap extends React.Component {
         const cYmin = bbYmax - location.row.min * dY;
         const cYmax = bbYmax - location.row.max * dY;
 
+        if (cXmin === cXmax && cYmin === cYmax && !this.state.isEditing) {
+            return (
+                <CircleMarker
+                    key={uniqueId()}
+                    center={[
+                        cYmin,
+                        cXmin
+                    ]}
+                    {...styles.line}
+                />
+            );
+        }
         return (
             <Rectangle
                 key={uniqueId()}
@@ -143,6 +162,7 @@ class OptimizationMap extends React.Component {
 
     onEditPath = e => {
         const layers = e.layers;
+
         layers.eachLayer(layer => {
             const geoJson = layer.toGeoJSON();
             const geometry = geoJson.geometry;
@@ -269,6 +289,8 @@ class OptimizationMap extends React.Component {
                             <EditControl
                                 position="bottomright"
                                 onEdited={this.onEditPath}
+                                onEditStart={this.toggleEditingState}
+                                onEditStop={this.toggleEditingState}
                                 {...options}
                             />
                             {this.drawObject(this.props.bbox, this.props.gridSize, this.state.location)}

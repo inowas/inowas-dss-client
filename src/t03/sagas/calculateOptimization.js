@@ -1,5 +1,5 @@
 import {put, take} from 'redux-saga/effects';
-import {Command} from '../../t03/actions/index';
+import {Command, Query} from '../../t03/actions/index';
 import {WebData} from '../../core';
 
 export default function* calculateOptimization() {
@@ -7,6 +7,11 @@ export default function* calculateOptimization() {
     while (true) {
         // eslint-disable-next-line no-shadow
         const action = yield take(action => action.type === Command.CALCULATE_OPTIMIZATION);
+
+        yield put(WebData.Modifier.Action.responseAction(Command.CALCULATE_OPTIMIZATION, {
+            type: 'loading',
+            data: null
+        }));
 
         yield put(WebData.Modifier.Action.sendCommand(action.type, action.payload));
 
@@ -20,6 +25,7 @@ export default function* calculateOptimization() {
             }
 
             if (response.webData.type === 'success') {
+                yield put(Query.getOptimization(action.tool, action.payload));
                 break;
             }
         }

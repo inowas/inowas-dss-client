@@ -11,8 +11,9 @@ class OptimizationInput {
     _objects = [];
     _parameters;
 
-    static fromDefaults() {
+    static fromDefaults(id) {
         const input = new OptimizationInput();
+        input.id = id;
         input.parameters = OptimizationParameters.fromDefaults();
         input.constraints = [];
         input.objectives = [];
@@ -40,7 +41,8 @@ class OptimizationInput {
         return input;
     }
 
-    constructor() {
+    constructor(id) {
+        this._id = id;
     }
 
     get id() {

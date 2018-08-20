@@ -37,6 +37,7 @@ export default function* rootSaga() {
         call(T03.loadSoilmodelLayerFlow),
         call(T03.loadStressPeriodsFlow),
         call(T03.pollModflowModelCalculationStatusFlow),
+        call(T03.pollOptimizationCalculationStatusFlow),
         call(T03.removeBoundaryFlow),
         call(T03.removeLayerFlow),
         call(T03.updateBoundaryFlow),

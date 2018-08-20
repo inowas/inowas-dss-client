@@ -29,6 +29,18 @@ const createModelReducer = tool => {
                     active_cells: action.payload
                 };
 
+            case Action.SET_OPTIMIZATION:
+                return {
+                    ...state,
+                    optimization: action.payload
+                };
+
+            case Event.OPTIMIZATION_INPUT_UPDATED:
+                return {
+                    ...state,
+                    optimization: { ...state.optimization, input: action.payload}
+                };
+
             case Action.UPDATE_GEOMETRY:
                 return {
                     ...state,

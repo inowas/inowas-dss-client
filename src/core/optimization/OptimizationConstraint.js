@@ -76,7 +76,7 @@ class OptimizationConstraint {
     }
 
     set value(value) {
-        this._value = value;
+        this._value = parseInt(value, 10);
     }
 
     get operator() {

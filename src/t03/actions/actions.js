@@ -175,6 +175,15 @@ export function setCalculation(tool, calculation) {
     };
 }
 
+export const SET_OPTIMIZATION = 'MODEL_EDITOR_MODEL_SET_OPTIMIZATION';
+
+export function setOptimization(tool, optimization) {
+    return {
+        type: SET_OPTIMIZATION,
+        tool,
+        payload: optimization
+    };
+}
 
 export const STOP_GET_MODFLOW_MODEL_CALCULATION = 'STOP_GET_MODFLOW_MODEL_CALCULATION';
 
