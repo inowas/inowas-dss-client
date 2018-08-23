@@ -1,5 +1,8 @@
 {
-    "roots": ["test"],
-    "bail": true,
-    "verbose": true
+  "roots": ["test"],
+  "bail": true,
+  "verbose": true,
+  "moduleNameMapper": {
+    "^ConfiguredRadium$": "<rootDir>/src/styles/ConfiguredRadium.js"
+  }
 }

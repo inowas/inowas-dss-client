@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders as expected Renders correctly 1`] = `
+<div
+  className="equal width fields"
+>
+  <div
+    className="field"
+  >
+    <label
+      data-radium={true}
+    >
+      Test
+       
+      min
+    </label>
+    <div
+      className="field"
+    >
+      <div
+        className="ui input"
+        style={
+          Object {
+            "padding": "0",
+          }
+        }
+      >
+        <input
+          name="from"
+          onBlur={[Function]}
+          onChange={[Function]}
+          placeholder="from ="
+          type="number"
+          value="0"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="field"
+  >
+    <label>
+      max
+    </label>
+    <div
+      className="field"
+    >
+      <div
+        className="ui input"
+        style={
+          Object {
+            "padding": "0",
+          }
+        }
+      >
+        <input
+          name="to"
+          onBlur={[Function]}
+          onChange={[Function]}
+          placeholder="to ="
+          type="number"
+          value="100"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
