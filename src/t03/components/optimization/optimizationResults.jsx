@@ -59,7 +59,6 @@ class OptimizationResultsComponent extends React.Component {
             });
         }
 
-        console.log(`Could not find result with id ${resultId} and/or solution with id ${solutionId}`);
         return false;
     };
 
@@ -98,9 +97,9 @@ class OptimizationResultsComponent extends React.Component {
             }
         }
 
-        // TODO: Select from multiple results
-        const result = this.state.optimization.results && this.state.optimization.results.length >= 1
-            ? this.state.optimization.results[0] : null;
+        // TODO: Select from multiple solutions
+        const result = this.state.optimization.solutions && this.state.optimization.solutions.length >= 1
+            ? this.state.optimization.solutions[0] : null;
         const progress = this.state.optimization.progress
             ? this.state.optimization.progress : null;
 

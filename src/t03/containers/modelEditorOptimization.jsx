@@ -60,14 +60,14 @@ class ModelEditorOptimization extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            optimization: this.props.optimization,
+            optimization: Optimization.fromObject(this.props.optimization).toObject,
             activeItem: this.props.params.type ? this.props.params.type : 'parameters'
         };
     }
 
     componentWillReceiveProps() {
         this.setState((prevState, props) => ({
-            optimization: props.optimization
+            optimization: Optimization.fromObject(props.optimization).toObject
         }));
     }
 

@@ -36,12 +36,12 @@ test('Create with Defaults and toObject', () => {
     });
 });
 
-test('Adding results', () => {
+test('Adding solutions', () => {
     const optimization = Optimization.fromDefaults();
-    optimization.addResult(new OptimizationResult());
-    expect(optimization.results).toHaveLength(1);
+    optimization.addSolution(new OptimizationResult());
+    expect(optimization.solutions).toHaveLength(1);
     expect(() => {
-        optimization.addResult({});
+        optimization.addSolution({});
     }).toThrow();
 });
 

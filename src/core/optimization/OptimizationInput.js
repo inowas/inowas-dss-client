@@ -22,6 +22,9 @@ class OptimizationInput {
     }
 
     static fromObject(obj) {
+        if (!obj) {
+            return OptimizationInput.fromDefaults();
+        }
         const input = new OptimizationInput();
         input.id = obj.id;
         input.parameters = OptimizationParameters.fromObject(obj.parameters);

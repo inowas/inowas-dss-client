@@ -36,14 +36,15 @@ class OptimizationParameters {
         return parameters;
     }
 
-    constructor() {}
+    constructor() {
+    }
 
     get method() {
         return this._method.value;
     }
 
     set method(value) {
-        switch(value) {
+        switch (value) {
             case 'ga':
                 this._method.value = 'ga';
                 break;

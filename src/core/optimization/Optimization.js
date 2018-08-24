@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid/v4';
 import OptimizationInput from './OptimizationInput';
-import OptimizationResult from './OptimizationResult';
+import OptimizationSolution from './OptimizationSolution';
 
 class Optimization {
     _id;
@@ -11,9 +11,7 @@ class Optimization {
         _generation: 0,
         _final: false
     };
-    _results = [
-        new OptimizationResult()
-    ];
+    _solutions = [];
 
     static fromDefaults() {
         const optimization = new Optimization();
@@ -28,8 +26,8 @@ class Optimization {
         optimization.state = obj.state;
         optimization.progress = obj.progress;
 
-        obj.results.forEach((result) => {
-            optimization.addResult(OptimizationResult.fromObject(result));
+        obj.solutions && obj.solutions.forEach((solution) => {
+            optimization.addSolution(OptimizationSolution.fromObject(solution));
         });
 
         return optimization;
@@ -69,17 +67,17 @@ class Optimization {
     }
 
     set progress(value) {
-        this._progress._log = value.log ? value.log : [];
-        this._progress._generation = value.generation ? value.generation : 0;
-        this._progress._final = value.final ? value.final : false;
+        this._progress._log = value && value.log ? value.log : [];
+        this._progress._generation = value && value.generation ? value.generation : 0;
+        this._progress._final = value && value.final ? value.final : false;
     }
 
-    get results() {
-        return this._results;
+    get solutions() {
+        return this._solutions;
     }
 
-    set results(value) {
-        this._results = value ? value : [];
+    set solutions(value) {
+        this._solutions = value ? value : [];
     }
 
     get toObject() {
@@ -92,15 +90,15 @@ class Optimization {
                 generation: this._progress._generation,
                 final: this._progress._final
             },
-            'results': this.results.map(r => r.toObject)
+            'results': this.solutions.map(r => r.toObject)
         };
     }
 
-    addResult(result) {
-        if (!(result instanceof OptimizationResult)) {
-            throw new Error('The result object is not of type OptimizationResult.');
+    addSolution(result) {
+        if (!(result instanceof OptimizationSolution)) {
+            throw new Error('The result object is not of type OptimizationSolution.');
         }
-        this._results.push(result);
+        this._solutions.push(result);
     }
 }
 
