@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import FluxDataTable from './FluxDataTable';
-import OptimizationMap from './OptimizationMap';
+import OptimizationMap from './optimizationMap';
 import Stressperiods from '../../../core/modflow/Stressperiods';
 
 class OptimizationObjectsComponent extends React.Component {
