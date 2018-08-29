@@ -138,8 +138,6 @@ class ModelEditorSoilmodel extends React.Component {
         const {searchTerm, soilmodel} = this.state;
         let list = soilmodel.layers || [];
 
-        console.log(this.state);
-
         if (searchTerm) {
             const regex = new RegExp(searchTerm, 'i');
             list = list.filter(i => {

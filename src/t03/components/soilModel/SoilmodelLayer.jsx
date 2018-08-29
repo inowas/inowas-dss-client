@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styleGlobals from 'styleGlobals';
 import RasterData from '../../../core/rasterData/components/rasterData';
-import ZonesMap from './SoilmodelZonesMap';
-import {SoilmodelLayer, SoilmodelZone} from "../../../core/soilmodel";
+import ZonesEditor from './SoilmodelZonesEditor';
+import {SoilmodelLayer} from "../../../core/soilmodel";
 
 const styles = {
     saveButtonWrapper: {
@@ -25,7 +25,7 @@ const styles = {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     buttonFix: {
@@ -39,10 +39,7 @@ class SoilmodelLayerComponent extends React.Component {
         super(props);
 
         this.state = {
-            layer: (new SoilmodelLayer()).toObject,
-            zones: [],
-            selectedZone: null,
-            activeIndex: 0
+            layer: (new SoilmodelLayer()).toObject
         };
     }
 
@@ -76,35 +73,17 @@ class SoilmodelLayerComponent extends React.Component {
         };
     };
 
+    handleZonesChange = layer => {
+        this.setState(() => {
+            return {
+                layer: layer
+            }
+        })
+    };
+
     handleSelectChange = name => {
         return (e, data) =>
             this.handleInputChange(name)(e, data ? data.value : undefined);
-    };
-
-    onAddZone = () => {
-        const zone = new SoilmodelZone();
-
-        this.setState({
-            selectedZone: zone
-        });
-    };
-
-    onSaveZone = () => {
-        const layer = SoilmodelLayer.fromObject(this.state.layer).updateZone(this.state.selectedZone)
-
-        this.setState({
-            layer: layer.toObject,
-            selectedZone: null
-        });
-    };
-
-    onRemoveZone = () => {
-        const layer = SoilmodelLayer.fromObject(this.state.layer).removeZone(this.state.selectedZone)
-
-        this.setState({
-            layer: layer.toObject,
-            selectedZone: null
-        });
     };
 
     save = () => {
@@ -224,45 +203,12 @@ class SoilmodelLayerComponent extends React.Component {
             {
                 menuItem: 'Soil Parameters', render: () =>
                     <Tab.Pane attached={false}>
-                        <Form.Group style={styles.dropDownWithButtons}>
-                            <Dropdown
-                                placeholder="Select Zone"
-                                fluid
-                                search
-                                selection
-                                options={
-                                    this.state.zones.map((z) => {
-                                        return {key: z.id, text: z.name, value: z.id};
-                                    })
-                                }
-                            />
-                            <Button.Group>
-                                <Button
-                                    style={styles.buttonFix}
-                                    icon
-                                    onClick={this.onAddZone}
-                                >
-                                    <Icon name="add circle"/>
-                                </Button>
-
-                                <Button
-                                    style={styles.buttonFix}
-                                    icon
-                                    onClick={this.onRemoveZone}
-                                    disabled={!this.state.selectedZone}
-                                >
-                                    <Icon name="trash"/>
-                                </Button>
-                            </Button.Group>
-                        </Form.Group>
-                        <ZonesMap
+                        <ZonesEditor
                             area={this.props.area}
                             bbox={this.props.boundingBox}
                             gridSize={this.props.gridSize}
-                            onChange={this.handleInputChange('test')}
-                            layer={this.state.layer}
-                            zone={this.state.selectedZone}
-                            readOnly
+                            onChange={this.handleZonesChange}
+                            layer={SoilmodelLayer.fromObject(this.state.layer)}
                         />
                     </Tab.Pane>
             },

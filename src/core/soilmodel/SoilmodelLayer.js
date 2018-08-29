@@ -56,7 +56,9 @@ class SoilmodelLayer {
 
     get meta() {
         return {
-            zones: this._meta._zones
+            zones: this._meta._zones.map(z => {
+               return z.toObject;
+            })
         };
     }
 
@@ -174,6 +176,7 @@ class SoilmodelLayer {
         return {
             'id': this.id,
             'name': this.name,
+            '_meta': this.meta,
             'description': this.description,
             'number': this.number,
             'laytyp': this.laytyp,
@@ -215,11 +218,14 @@ class SoilmodelLayer {
     updateZone(zone) {
         let zoneExists = false;
 
+        console.log('UpdateZone', zone);
+
         this.meta = {
             ...this.meta,
             zones: this.meta.zones.map(z => {
                 if (z.id === zone.id) {
                     zoneExists = true;
+                    console.log('Update zone in Layer', z.id);
                     return zone;
                 }
                 return z;
@@ -227,6 +233,7 @@ class SoilmodelLayer {
         };
 
         if(!zoneExists) {
+            console.log('Add Zone to Layer');
             this.addZone(zone);
         }
 

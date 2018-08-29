@@ -23,10 +23,10 @@ import RunModelValidation from './runModel/RunModelValidation';
 import StressPeriodDataTable from './runModel/StressPeriodDataTable';
 import StressPeriodProperties from './runModel/StressPeriodProperties';
 
-import SoilmodelGeneral from './soilmodel/SoilmodelGeneral';
-import SoilmodelLayerComponent from './soilmodel/SoilmodelLayer';
-import SoilModelLayerDataTable from './soilmodel/SoilmodelLayerDataTable';
-import SoilModelLayerOverview from './soilmodel/SoilmodelLayerOverview';
+import SoilmodelGeneral from './soilModel/SoilmodelGeneral';
+import SoilmodelLayerComponent from './soilModel/SoilmodelLayer';
+import SoilModelLayerDataTable from './soilModel/SoilmodelLayerDataTable';
+import SoilModelLayerOverview from './soilModel/SoilmodelLayerOverview';
 
 export {
     ActiveCellsLayer,

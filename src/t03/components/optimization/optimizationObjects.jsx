@@ -184,7 +184,7 @@ class OptimizationObjectsComponent extends React.Component {
                 width: 'auto',
                 height: 'auto'
             },
-            inputfix: {
+            inputFix: {
                 padding: '0'
             },
             link: {

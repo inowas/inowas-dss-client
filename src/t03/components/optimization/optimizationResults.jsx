@@ -14,7 +14,7 @@ const styles = {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {

@@ -2,7 +2,7 @@ import uuidv4 from 'uuid/v4';
 
 class SoilmodelZone {
     _id = uuidv4();
-    _name = '';
+    _name = 'New Zone';
     _cells = [];
     _hk = 0;
     _hani = 0;
