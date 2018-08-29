@@ -11,13 +11,12 @@ import {Command} from '../../t03/actions/index';
 import {
     SoilmodelGeneral,
     SoilModelLayerOverview,
-    SoilmodelLayer
+    SoilmodelLayerComponent
 } from '../components';
 import Input from '../../components/primitive/Input';
-import {getInitialLayerState} from '../selectors/model';
-import uuid from 'uuid';
 import {WebData} from '../../core';
 import * as Query from '../actions/queries';
+import {SoilmodelLayer, Soilmodel} from "../../core/soilmodel";
 
 const styles = {
     container: {
@@ -46,8 +45,15 @@ class ModelEditorSoilmodel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchTerm: ''
+            searchTerm: '',
+            soilmodel: (new Soilmodel()).toObject
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(() => ({
+            soilmodel: Soilmodel.fromObject(nextProps.soilmodel).toObject
+        }));
     }
 
     onLayerClick = pid => {
@@ -66,12 +72,11 @@ class ModelEditorSoilmodel extends React.Component {
         const {id} = this.props.params;
         const {routes, params} = this.props;
 
+        const layer = new SoilmodelLayer();
+
         this.props.createLayer(
             id,
-            {
-                id: uuid.v4(),
-                ...getInitialLayerState()
-            },
+            layer.toObject,
             routes,
             params
         );
@@ -86,17 +91,17 @@ class ModelEditorSoilmodel extends React.Component {
         });
     };
 
-    renderProperties(soilmodel) {
+    renderProperties() {
         const readOnly = !lodash.includes(this.props.permissions, 'w');
         const {addLayerStatus, removeLayer, updateLayerStatus} = this.props;
         const {pid, property, id} = this.props.params;
         const {area, boundingBox, gridSize, isLoading, params, routes} = this.props;
 
         if (pid) {
-            const layer = soilmodel.layers.filter(b => b.id === pid)[0];
+            const layer = this.state.soilmodel.layers.filter(b => b.id === pid)[0];
             if (layer) {
                 return (
-                    <SoilmodelLayer
+                    <SoilmodelLayerComponent
                         area={area}
                         onSave={this.onSave}
                         boundingBox={boundingBox}
@@ -114,7 +119,7 @@ class ModelEditorSoilmodel extends React.Component {
 
         return (
             <div>
-                <SoilmodelGeneral soilmodel={soilmodel} readOnly={readOnly}/>
+                <SoilmodelGeneral soilmodel={this.state.soilmodel} readOnly={readOnly}/>
                 <SoilModelLayerOverview
                     id={id}
                     property={property}
@@ -122,7 +127,7 @@ class ModelEditorSoilmodel extends React.Component {
                     removeLayer={removeLayer}
                     createLayer={this.onCreateLayer}
                     editLayer={Routing.editLayer(routes, params)}
-                    layers={soilmodel.layers}
+                    layers={this.state.soilmodel.layers}
                     addLayerStatus={addLayerStatus}
                 />
             </div>
@@ -130,14 +135,10 @@ class ModelEditorSoilmodel extends React.Component {
     }
 
     render() {
-        const {soilmodel} = this.props;
-
-        if (!soilmodel) {
-            return null;
-        }
-
-        const {searchTerm} = this.state;
+        const {searchTerm, soilmodel} = this.state;
         let list = soilmodel.layers || [];
+
+        console.log(this.state);
 
         if (searchTerm) {
             const regex = new RegExp(searchTerm, 'i');
@@ -164,7 +165,7 @@ class ModelEditorSoilmodel extends React.Component {
                     />
                 </div>
                 <div style={styles.properties}>
-                    {this.renderProperties(soilmodel)}
+                    {this.renderProperties()}
                 </div>
             </div>
         );

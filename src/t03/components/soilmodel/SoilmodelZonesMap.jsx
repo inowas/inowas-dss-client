@@ -9,7 +9,7 @@ import md5 from 'js-md5';
 import {uniqueId} from 'lodash';
 import EditControl from '../../../core/map/EditControl';
 import * as geoTools from '../../../core/geospatial';
-import {Button, Grid, Modal, Segment} from 'semantic-ui-react';
+import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
 
 class ZonesMap extends React.Component {
 
@@ -18,7 +18,8 @@ class ZonesMap extends React.Component {
         this.state = {
             showOverlay: false,
             hasError: false,
-            isEditing: false
+            isEditing: false,
+            zone: this.props.zone
         };
     }
 
@@ -197,7 +198,64 @@ class ZonesMap extends React.Component {
                         <Grid divided={'vertically'}>
                             <Grid.Row columns={2}>
                                 <Grid.Column width={6}>
-                                    TEst
+                                    <Form>
+                                        <Header as="h3" dividing>Parameters</Header>
+                                        <Form.Field>
+                                            <label>hk</label>
+                                            <Form.Input
+                                                type="number"
+                                                name="hk"
+                                                value={this.state.zone.hk}
+                                                placeholder="hk ="
+                                                style={styles.inputfix}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>hani</label>
+                                            <Form.Input
+                                                type="number"
+                                                name="hani"
+                                                value={this.state.zone.hani}
+                                                placeholder="hani ="
+                                                style={styles.inputfix}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>vka</label>
+                                            <Form.Input
+                                                type="number"
+                                                name="vka"
+                                                value={this.state.zone.vka}
+                                                placeholder="vka ="
+                                                style={styles.inputfix}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>ss</label>
+                                            <Form.Input
+                                                type="number"
+                                                name="ss"
+                                                value={this.state.zone.ss}
+                                                placeholder="ss ="
+                                                style={styles.inputfix}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>sy</label>
+                                            <Form.Input
+                                                type="number"
+                                                name="sy"
+                                                value={this.state.zone.sy}
+                                                placeholder="sy ="
+                                                style={styles.inputfix}
+                                                onChange={this.handleChange}
+                                            />
+                                        </Form.Field>
+                                    </Form>
                                 </Grid.Column>
                                 <Grid.Column width={10}>
                                     <Segment attached="bottom">
@@ -224,15 +282,13 @@ class ZonesMap extends React.Component {
 }
 
 ZonesMap.propTypes = {
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string,
     area: PropTypes.object.isRequired,
     bbox: PropTypes.array.isRequired,
-    location: PropTypes.object,
-    objects: PropTypes.array,
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
     gridSize: PropTypes.object.isRequired,
+    zone: PropTypes.object.isRequired,
+    layer: PropTypes.object.isRequired
 };
 
 export default pure(ConfiguredRadium(ZonesMap));

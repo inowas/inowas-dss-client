@@ -9,16 +9,16 @@ class SoilmodelLayer {
     _name = 'New Layer';
     _description = '';
     _number = 0;
-    _laytyp = 1;
-    _top = 0;
+    _laytyp = 0;
+    _top = 1;
     _botm = 0;
-    _hk = 0;
-    _hani = 0;
-    _vka = 0;
+    _hk = 10;
+    _hani = 1;
+    _vka = 1;
     _layavg = 0;
     _laywet = 0;
-    _ss = 0;
-    _sy = 0;
+    _ss = 0.00002;
+    _sy = 0.15;
 
     static fromObject(obj) {
         const layer = new SoilmodelLayer();
@@ -173,7 +173,6 @@ class SoilmodelLayer {
     get toObject() {
         return {
             'id': this.id,
-            'meta': this.meta,
             'name': this.name,
             'description': this.description,
             'number': this.number,
@@ -214,15 +213,22 @@ class SoilmodelLayer {
     }
 
     updateZone(zone) {
+        let zoneExists = false;
+
         this.meta = {
             ...this.meta,
             zones: this.meta.zones.map(z => {
                 if (z.id === zone.id) {
+                    zoneExists = true;
                     return zone;
                 }
                 return z;
             })
         };
+
+        if(!zoneExists) {
+            this.addZone(zone);
+        }
 
         return this;
     }

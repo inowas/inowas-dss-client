@@ -3,11 +3,10 @@ import {WebData} from '../../../core/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {getInitialLayerState} from '../../selectors/model';
 import styleGlobals from 'styleGlobals';
 import RasterData from '../../../core/rasterData/components/rasterData';
 import ZonesMap from './SoilmodelZonesMap';
-import uuidv4 from 'uuid/v4';
+import {SoilmodelLayer, SoilmodelZone} from "../../../core/soilmodel";
 
 const styles = {
     saveButtonWrapper: {
@@ -35,12 +34,12 @@ const styles = {
     },
 };
 
-class SoilmodelLayer extends React.Component {
+class SoilmodelLayerComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            layer: getInitialLayerState(),
+            layer: (new SoilmodelLayer()).toObject,
             zones: [],
             selectedZone: null,
             activeIndex: 0
@@ -50,9 +49,9 @@ class SoilmodelLayer extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return {
-                layer: nextProps.layer
+                layer: SoilmodelLayer.fromObject(nextProps.layer
                     ? {...prevState.layer, ...nextProps.layer}
-                    : prevState.layer
+                    : prevState.layer).toObject
             };
         });
     }
@@ -83,26 +82,29 @@ class SoilmodelLayer extends React.Component {
     };
 
     onAddZone = () => {
-        const zone = {
-            id: uuidv4(),
-            name: 'New Zone',
-            location: []
-        };
-
-        console.log('ADD ZONE', this.state);
-
-        const zones = this.state.zones;
+        const zone = new SoilmodelZone();
 
         this.setState({
-            selectedZone: zone,
-            zones: zones.push(zone)
+            selectedZone: zone
         });
+    };
 
-        console.log(this.state);
+    onSaveZone = () => {
+        const layer = SoilmodelLayer.fromObject(this.state.layer).updateZone(this.state.selectedZone)
+
+        this.setState({
+            layer: layer.toObject,
+            selectedZone: null
+        });
     };
 
     onRemoveZone = () => {
-      console.log(`REMOVE ZONE ${this.state.selectedZone}`);
+        const layer = SoilmodelLayer.fromObject(this.state.layer).removeZone(this.state.selectedZone)
+
+        this.setState({
+            layer: layer.toObject,
+            selectedZone: null
+        });
     };
 
     save = () => {
@@ -247,17 +249,19 @@ class SoilmodelLayer extends React.Component {
                                     style={styles.buttonFix}
                                     icon
                                     onClick={this.onRemoveZone}
+                                    disabled={!this.state.selectedZone}
                                 >
                                     <Icon name="trash"/>
                                 </Button>
                             </Button.Group>
                         </Form.Group>
                         <ZonesMap
-                            name="location"
                             area={this.props.area}
                             bbox={this.props.boundingBox}
                             gridSize={this.props.gridSize}
                             onChange={this.handleInputChange('test')}
+                            layer={this.state.layer}
+                            zone={this.state.selectedZone}
                             readOnly
                         />
                     </Tab.Pane>
@@ -281,7 +285,7 @@ class SoilmodelLayer extends React.Component {
     }
 }
 
-SoilmodelLayer.propTypes = {
+SoilmodelLayerComponent.propTypes = {
     area: PropTypes.object.isRequired,
     boundingBox: PropTypes.array.isRequired,
     gridSize: PropTypes.object.isRequired,
@@ -292,4 +296,4 @@ SoilmodelLayer.propTypes = {
     updateLayerStatus: PropTypes.object
 };
 
-export default ConfiguredRadium(SoilmodelLayer);
+export default ConfiguredRadium(SoilmodelLayerComponent);

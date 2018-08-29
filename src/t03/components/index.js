@@ -24,7 +24,7 @@ import StressPeriodDataTable from './runModel/StressPeriodDataTable';
 import StressPeriodProperties from './runModel/StressPeriodProperties';
 
 import SoilmodelGeneral from './soilmodel/SoilmodelGeneral';
-import SoilmodelLayer from './soilmodel/SoilmodelLayer';
+import SoilmodelLayerComponent from './soilmodel/SoilmodelLayer';
 import SoilModelLayerDataTable from './soilmodel/SoilmodelLayerDataTable';
 import SoilModelLayerOverview from './soilmodel/SoilmodelLayerOverview';
 
@@ -45,7 +45,7 @@ export {
     RunModelOverviewMap,
     RunModelValidation,
     SoilmodelGeneral,
-    SoilmodelLayer,
+    SoilmodelLayerComponent,
     SoilModelLayerDataTable,
     SoilModelLayerOverview,
     NwtPackageProperties,
