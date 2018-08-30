@@ -55,12 +55,9 @@ class ZonesEditor extends React.Component {
         });
     };
 
-    onSaveZone = () => {
-        const layer = SoilmodelLayer.fromObject(this.state.layer).updateZone(this.state.selectedZone);
-
+    onEditZone = () => {
         this.setState({
-            layer: layer.toObject,
-            showOverlay: false
+            showOverlay: true
         });
     };
 
@@ -126,69 +123,8 @@ class ZonesEditor extends React.Component {
         return md5(JSON.stringify(geometry));
     };
 
-    snapping = test => {
-        console.log('TEST', test);
-    };
-
     onEditPath = e => {
-        const layers = e.layers;
-
-        layers.eachLayer(layer => {
-            const geoJson = layer.toGeoJSON();
-            const geometry = geoJson.geometry;
-
-            // Latitude (S/N)
-            let ymin = 90;
-            let ymax = -90;
-            // Longitude (E/W)
-            let xmin = 180;
-            let xmax = -180;
-
-            geometry.coordinates[0].map(c => {
-                if (c[0] <= xmin) {
-                    xmin = c[0];
-                }
-                if (c[0] >= xmax) {
-                    xmax = c[0];
-                }
-                if (c[1] <= ymin) {
-                    ymin = c[1];
-                }
-                if (c[1] >= ymax) {
-                    ymax = c[1];
-                }
-            });
-
-            const cmin = geoTools.getActiveCellFromCoordinate([xmin, ymax], this.props.bbox, this.props.gridSize);
-            const cmax = geoTools.getActiveCellFromCoordinate([xmax, ymin], this.props.bbox, this.props.gridSize);
-
-            const p = {
-                row: {
-                    min: cmin[1],
-                    max: cmax[1]
-                },
-                col: {
-                    min: cmin[0],
-                    max: cmax[0]
-                }
-            };
-
-            /*return this.setState({
-                location: {
-                    ...this.state.location,
-                    row: {
-                        ...this.state.location.row,
-                        min: p.row.min,
-                        max: p.row.max
-                    },
-                    col: {
-                        ...this.state.location.col,
-                        min: p.col.min,
-                        max: p.col.max
-                    }
-                }
-            });*/
-        });
+        console.log(e);
     };
 
     printMap(readOnly = false) {
@@ -208,13 +144,6 @@ class ZonesEditor extends React.Component {
                 }
             }
         };
-
-        if(!readOnly) {
-            options.draw.polygon = {
-                guideLayers: [this.getBounds(this.props.area)],
-                snapDistance: 5
-            };
-        }
 
         const {area} = this.props;
         if (!this.props.bbox || !area) {
@@ -245,11 +174,6 @@ class ZonesEditor extends React.Component {
                         <EditControl
                             position="bottomright"
                             onEdited={this.onEditPath}
-                            onEditStart={this.toggleEditingState}
-                            onEditStop={this.toggleEditingState}
-                            onEditVertex={this.snapping}
-                            onDrawVertex={this.snapping}
-                            onEditMove={this.snapping}
                             {...options}
                         />
                     </FeatureGroup>
@@ -260,8 +184,6 @@ class ZonesEditor extends React.Component {
     }
 
     render() {
-
-        console.log('state', this.state);
 
         return (
             <div>
@@ -326,7 +248,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.name}
                                                 placeholder="name ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -337,7 +259,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.color}
                                                 placeholder="color ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -348,7 +270,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.hk}
                                                 placeholder="hk ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -359,7 +281,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.hk}
                                                 placeholder="hk ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -370,7 +292,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.hani}
                                                 placeholder="hani ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -381,7 +303,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.vka}
                                                 placeholder="vka ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -392,7 +314,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.ss}
                                                 placeholder="ss ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -403,7 +325,7 @@ class ZonesEditor extends React.Component {
                                                 value={this.state.selectedZone.sy}
                                                 placeholder="sy ="
                                                 style={styles.inputFix}
-                                                onBlur={this.handleChange}
+                                                onChange={this.handleChange}
                                             />
                                         </Form.Field>
                                     </Form>

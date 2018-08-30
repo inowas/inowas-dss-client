@@ -1,12 +1,12 @@
-import {Button, Icon, Form, Tab, Dropdown} from 'semantic-ui-react';
+import {Button, Form, Tab} from 'semantic-ui-react';
 import {WebData} from '../../../core/index';
 import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styleGlobals from 'styleGlobals';
 import RasterData from '../../../core/rasterData/components/rasterData';
-import ZonesEditor from './SoilmodelZonesEditor';
 import {SoilmodelLayer} from "../../../core/soilmodel";
+import SoilmodelLayerParameter from "./SoilmodelLayerParameter";
 
 const styles = {
     saveButtonWrapper: {
@@ -201,13 +201,14 @@ class SoilmodelLayerComponent extends React.Component {
                     </Tab.Pane>
             },
             {
-                menuItem: 'Soil Parameters', render: () =>
+                menuItem: 'hk', render: () =>
                     <Tab.Pane attached={false}>
-                        <ZonesEditor
+                        <SoilmodelLayerParameter
                             area={this.props.area}
                             bbox={this.props.boundingBox}
                             gridSize={this.props.gridSize}
                             onChange={this.handleZonesChange}
+                            name="hk"
                             layer={SoilmodelLayer.fromObject(this.state.layer)}
                         />
                     </Tab.Pane>

@@ -3,6 +3,7 @@ import uuidv4 from 'uuid/v4';
 class SoilmodelZone {
     _id = uuidv4();
     _name = 'New Zone';
+    _color = 'grey';
     _cells = [];
     _hk = 0;
     _hani = 0;
@@ -16,6 +17,7 @@ class SoilmodelZone {
         if (obj) {
             zone.id = obj.id;
             zone.name = obj.name;
+            zone.color = obj.color;
             zone.cells = obj.cells;
             zone.hk = obj.hk;
             zone.hani = obj.hani;
@@ -44,6 +46,14 @@ class SoilmodelZone {
 
     set name(value) {
         this._name = value ? value : '';
+    }
+
+    get color() {
+        return this._color;
+    }
+
+    set color(value) {
+        this._color = value ? value : 'grey';
     }
 
     get cells() {
@@ -98,6 +108,7 @@ class SoilmodelZone {
         return {
             'id': this.id,
             'name': this.name,
+            'color': this.color,
             'cells': this.cells,
             'hk': this.hk,
             'hani': this.hani,
