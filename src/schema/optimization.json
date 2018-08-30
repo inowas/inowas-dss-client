@@ -212,20 +212,24 @@
         "id": {"$ref": "#/definitions/uuidv4"},
         "position": {"$ref": "#/definitions/location"},
         "flux": {
-          "type": "array",
-          "items": {
-            "allOf": [{"$ref": "#/definitions/minMaxResultObj"}]
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/definitions/minMaxResultObj"
+            }
           }
         },
         "concentration": {
-          "type": "array",
-          "items": {
-            "allOf": [{
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
               "type": "object",
               "patternProperties": {
-                "^.*$": {"$ref": "#/definitions/minMaxResultObj"}
+                "^.*$": {
+                  "$ref": "#/definitions/minMaxResultObj"
+                }
               }
-            }]
+            }
           }
         }
       }
@@ -300,13 +304,16 @@
       "require": ["min", "max"],
       "properties": {
         "min": {
-          "type": "integer"
+          "type": "number"
         },
         "max": {
-          "type": "integer"
+          "type": "number"
         },
         "result": {
-          "type": "integer"
+          "anyOf": [
+            { "type": "number"},
+            { "type": "null" }
+          ]
         }
       }
     }

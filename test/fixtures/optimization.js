@@ -191,8 +191,14 @@ export const optimization = {
                 'col': {'min': 10, 'max': 10},
                 'objects': []
             },
-            'flux': [],
-            'concentrations': [],
+            'flux': {
+                '0': {'min': 0, 'max': 0, 'result': null}
+            },
+            'concentration': {
+                '0': {
+                    'NaCl': {'min': 0, 'max': 0, 'result': null}
+                }
+            },
             'substances': [],
             'numberOfStressPeriods': 13
         }, {
@@ -207,8 +213,14 @@ export const optimization = {
                 'col': {'min': 7, 'max': 7},
                 'objects': []
             },
-            'flux': [],
-            'concentrations': [],
+            'flux': {
+                '0': {'min': 0, 'max': 0, 'result': null}
+            },
+            'concentration': {
+                '0': {
+                    'NaCl': {'min': 0, 'max': 0, 'result': null}
+                }
+            },
             'substances': [],
             'numberOfStressPeriods': 13
         }, {
@@ -223,8 +235,14 @@ export const optimization = {
                 'col': {'min': 20, 'max': 20},
                 'objects': []
             },
-            'flux': [],
-            'concentrations': [],
+            'flux': {
+                '0': {'min': 0, 'max': 0, 'result': null}
+            },
+            'concentration': {
+                '0': {
+                    'NaCl': {'min': 0, 'max': 0, 'result': null}
+                }
+            },
             'substances': [],
             'numberOfStressPeriods': 13
         }, {
@@ -239,8 +257,14 @@ export const optimization = {
                 'col': {'min': 19, 'max': 19},
                 'objects': []
             },
-            'flux': [],
-            'concentrations': [],
+            'flux': {
+                '0': {'min': 0, 'max': 0, 'result': null}
+            },
+            'concentration': {
+                '0': {
+                    'NaCl': {'min': 0, 'max': 0, 'result': null}
+                }
+            },
             'substances': []
         }]
     },

@@ -1,12 +1,12 @@
-import Location from './Location';
+import WellPosition from './WellPosition';
 import uuidv4 from 'uuid/v4';
 
 class OptimizationObject {
     _id = uuidv4();
     _name = 'New Optimization Object';
     _type = 'wel';
-    _position = new Location();
-    _flux = [];
+    _position = new WellPosition();
+    _flux = {};
     _substances = [];
     _numberOfStressPeriods;
 
@@ -29,7 +29,7 @@ class OptimizationObject {
         object.id = obj.id;
         object.name = obj.name;
         object.type = obj.type;
-        object.position = Location.fromObject(obj.position);
+        object.position = WellPosition.fromObject(obj.position);
         object.flux = obj.flux;
         object.substances = obj.substances;
         object.numberOfStressPeriods = obj.numberOfStressPeriods;
@@ -63,7 +63,7 @@ class OptimizationObject {
         if (value !== 'wel') {
             throw new Error('Type must be one of type: wel');
         }
-        this._type = value;
+        this._type = value ? value : 'wel';
     }
 
     get position() {
@@ -71,7 +71,7 @@ class OptimizationObject {
     }
 
     set position(value) {
-        this._position = value;
+        this._position = value ? value : new WellPosition();
     }
 
     get flux() {
@@ -79,17 +79,19 @@ class OptimizationObject {
     }
 
     set flux(value) {
-        this._flux = value;
+        this._flux = value ? value : {};
     }
 
     updateFlux(rows) {
-        this.flux = rows.map((row, key) => {
-            return {
-                id: key,
-                min: parseFloat(row.min),
-                max: parseFloat(row.max)
-            };
-        });
+        let flux = {};
+        for (let i = 0; i < this.numberOfStressPeriods; i++) {
+            flux[i] = {
+                min: rows[i] && rows[i].min ? parseFloat(rows[i].min) : 0,
+                max: rows[i] && rows[i].max ? parseFloat(rows[i].max) : 0,
+                result: rows[i] && rows[i].result ? parseFloat(rows[i].result) : null
+            }
+        }
+        this.flux = flux;
         return this;
     }
 
@@ -102,7 +104,7 @@ class OptimizationObject {
     }
 
     set numberOfStressPeriods(value) {
-        this._numberOfStressPeriods = value;
+        this._numberOfStressPeriods = value ? value : 0;
     }
 
     get substances() {
@@ -110,7 +112,7 @@ class OptimizationObject {
     }
 
     set substances(value) {
-        this._substances = value;
+        this._substances = value ? value : [];
     }
 
     addSubstance(name) {
@@ -174,11 +176,7 @@ class OptimizationObject {
             'id': this.id,
             'name': this.name,
             'type': this.type,
-            'position': {
-                lay: this.position.lay,
-                row: this.position.row,
-                col: this.position.col,
-            },
+            'position': this.position.toObject,
             'flux': this.flux,
             'concentration': this.concentration,
             'substances': this.substances,
