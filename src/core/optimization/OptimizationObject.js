@@ -7,7 +7,6 @@ class OptimizationObject {
     _type = 'wel';
     _position = new Location();
     _flux = [];
-    _concentrations = [];
     _substances = [];
     _numberOfStressPeriods;
 
@@ -32,7 +31,6 @@ class OptimizationObject {
         object.type = obj.type;
         object.position = Location.fromObject(obj.position);
         object.flux = obj.flux;
-        object.concentrations = obj.concentrations;
         object.substances = obj.substances;
         object.numberOfStressPeriods = obj.numberOfStressPeriods;
         return object;
@@ -95,12 +93,8 @@ class OptimizationObject {
         return this;
     }
 
-    get concentrations() {
-        return this._concentrations;
-    }
-
-    set concentrations(value) {
-        this._concentrations = value;
+    get concentration() {
+        return this.calculateConcentration();
     }
 
     get numberOfStressPeriods() {
@@ -134,7 +128,6 @@ class OptimizationObject {
         });
 
         this.substances = substances;
-        this.calculateConcentration();
         return this;
     }
 
@@ -145,30 +138,35 @@ class OptimizationObject {
             }
             return s;
         });
-        this.calculateConcentration();
         return this;
     }
 
     removeSubstance(id) {
         this.substances = this.substances.filter(s => s.id !== id);
-        this.calculateConcentration();
         return this;
     }
 
     calculateConcentration() {
         const substances = this.substances;
+        const concentration = {};
 
-        this.concentrations = (new Array(this.numberOfStressPeriods)).fill(0).map((sp, key) => {
+        if (substances.length === 0) {
+            return {};
+        }
+
+        for (let i = 0; i < this.numberOfStressPeriods; i++) {
             const obj = {};
             substances.forEach(s => {
                 obj[s.name] = {
-                    min: s.data[key].min,
-                    max: s.data[key].max,
-                    result: s.data[key].result
+                    min: s.data[i].min,
+                    max: s.data[i].max,
+                    result: s.data[i].result
                 };
             });
-            return obj;
-        });
+            concentration[i.toString()] = obj;
+        }
+
+        return concentration;
     }
 
     get toObject() {
@@ -176,9 +174,13 @@ class OptimizationObject {
             'id': this.id,
             'name': this.name,
             'type': this.type,
-            'position': this.position.toObject,
+            'position': {
+                lay: this.position.lay,
+                row: this.position.row,
+                col: this.position.col,
+            },
             'flux': this.flux,
-            'concentrations': this.concentrations,
+            'concentration': this.concentration,
             'substances': this.substances,
             'numberOfStressPeriods': this.numberOfStressPeriods
         });

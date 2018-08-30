@@ -120,18 +120,18 @@ class OptimizationParametersComponent extends React.Component {
                                     options={[
                                         {
                                             key: 'ga',
-                                            value: 'ga',
+                                            value: 'GA',
                                             text: 'GA'
                                         },
                                         {
                                             key: 'simplex',
-                                            value: 'simplex',
+                                            value: 'Simplex',
                                             text: 'Simplex'
                                         }
                                     ]}
                                 />
                             </Form.Field>
-                            {(parameters.method === 'ga' &&
+                            {(parameters.method === 'GA' &&
                                 <div>
                                     <Form.Group widths="equal">
                                         <Form.Field>
@@ -143,7 +143,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 placeholder="ngen ="
                                                 onChange={this.handleChange}
                                                 style={styles.inputfix}
-                                                disabled={(parameters.method !== 'ga')}
+                                                disabled={(parameters.method !== 'GA')}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -245,7 +245,7 @@ class OptimizationParametersComponent extends React.Component {
                                     </Segment>
                                 </div>
                             )}
-                            {(parameters.method === 'simplex' &&
+                            {(parameters.method === 'Simplex' &&
                                 <div>
                                     <Form.Field>
                                         <label>Maximum number of function evaluations during the local
@@ -257,7 +257,7 @@ class OptimizationParametersComponent extends React.Component {
                                             placeholder="maxf ="
                                             onChange={this.handleChange}
                                             style={styles.inputfix}
-                                            disabled={(parameters.method !== 'simplex')}
+                                            disabled={(parameters.method !== 'Simplex')}
                                         />
                                     </Form.Field>
                                     <Form.Group widths="equal">
@@ -270,7 +270,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 placeholder="xtol ="
                                                 onChange={this.handleChange}
                                                 style={styles.inputfix}
-                                                disabled={(parameters.method !== 'simplex')}
+                                                disabled={(parameters.method !== 'Simplex')}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -282,7 +282,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 placeholder="ftol ="
                                                 onChange={this.handleChange}
                                                 style={styles.inputfix}
-                                                disabled={(parameters.method !== 'simplex')}
+                                                disabled={(parameters.method !== 'Simplex')}
                                             />
                                         </Form.Field>
                                     </Form.Group>

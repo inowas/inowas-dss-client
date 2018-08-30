@@ -7,7 +7,7 @@ class OptimizationObjective {
     _name = 'New Optimization Objective';
     _type = '';
     _concFileName = 'MT3D001.UCN';
-    _summaryMethod = '';
+    _summaryMethod = 'mean';
     _weight = -1;
     _penaltyValue = 999;
     _location = new Location();
@@ -68,7 +68,7 @@ class OptimizationObjective {
     }
 
     set summaryMethod(value) {
-        this._summaryMethod = value;
+        this._summaryMethod = value ? value : 'mean';
     }
 
     get weight() {
