@@ -1,11 +1,13 @@
+import mt3dms from '../../core/modflow/mt3d/mt3dms';
 import styleGlobals from 'styleGlobals';
-import mt3dms from "../../core/modflow/mt3d/mt3dms";
 
 export const CALCULATION_STATE_NEW = 0;
-export const CALCULATION_STATE_PREPROCESSING = 1;
-export const CALCULATION_STATE_QUEUED = 2;
-export const CALCULATION_STATE_STARTED = 3;
-export const CALCULATION_STATE_FINISHED = 4;
+export const CALCULATION_STATE_STARTED = 1;
+export const CALCULATION_STATE_PREPROCESSING = 2;
+export const CALCULATION_STATE_PREPROCESSING_FINISHED = 3;
+export const CALCULATION_STATE_QUEUED = 4;
+export const CALCULATION_STATE_CALCULATING = 5;
+export const CALCULATION_STATE_FINISHED = 6;
 
 export const getInitialStyles = () => {
     return {

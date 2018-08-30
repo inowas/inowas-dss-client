@@ -1,6 +1,6 @@
 class OptimizationParameters {
 
-    _method = {value: 'ga'};
+    _method = {value: 'GA'};
     _ngen = {value: 100, parse: (x) => parseInt(x, 10), min: 1, max: 100};
     _ncls = {value: 1, parse: (x) => parseInt(x, 10), min: 1, max: 10};
     _popSize = {value: 100, parse: (x) => parseInt(x, 10), min: 2, max: 100};
@@ -45,11 +45,11 @@ class OptimizationParameters {
 
     set method(value) {
         switch (value) {
-            case 'ga':
-                this._method.value = 'ga';
+            case 'GA':
+                this._method.value = 'GA';
                 break;
             default:
-                this._method.value = 'simplex';
+                this._method.value = 'Simplex';
                 break;
         }
     }

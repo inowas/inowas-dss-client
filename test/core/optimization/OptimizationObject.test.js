@@ -20,7 +20,7 @@ export const optimizationObjects = [
                 max: 500
             }
         ],
-        concentrations: [
+        concentration: [
             {
                 component1: {
                     min: 0,
@@ -60,7 +60,7 @@ export const optimizationObjects = [
                 max: 600
             }
         ],
-        concentrations: [
+        concentration: [
             {
                 component1: {
                     min: 2,
@@ -123,7 +123,7 @@ test('Getter and Setter', () => {
         '_type': 'bbox'
     }
 );
-    expect(object.concentrations).toEqual([{
+    expect(object.concentration).toEqual([{
         'component1': {'max': 10, 'min': 0},
         'component2': {'max': 20, 'min': 10}
     }, {
@@ -146,8 +146,8 @@ test('Adding, updating and removing substances', () => {
     object.addSubstance('NaCl');
     object.addSubstance('Pb');
     expect(object.substances).toHaveLength(2);
-    expect(object.concentrations).toHaveLength(5);
-    expect(object.concentrations).toEqual([
+    expect(object.concentration).toHaveLength(5);
+    expect(object.concentration).toEqual([
         {
             'NaCl': {'max': 0, 'min': 0, 'result': 0},
             'Pb': {'max': 0, 'min': 0, 'result': 0}
@@ -176,7 +176,7 @@ test('Adding, updating and removing substances', () => {
             {'max': 100, 'min': 50, 'result': 0}
         ]
     });
-    expect(object.concentrations).toEqual([
+    expect(object.concentration).toEqual([
         {
             'NaCl': {'max': 100, 'min': 50, 'result': 0},
             'Pb': {'max': 0, 'min': 0, 'result': 0}

@@ -7,7 +7,7 @@ class OptimizationConstraint {
     _name = 'New Optimization Constraint';
     _type = '';
     _concFileName = 'MT3D001.UCN';
-    _summaryMethod = '';
+    _summaryMethod = 'mean';
     _value = 0;
     _operator = '';
     _location = new Location();
@@ -68,7 +68,7 @@ class OptimizationConstraint {
     }
 
     set summaryMethod(value) {
-        this._summaryMethod = value;
+        this._summaryMethod = value ? value : 'mean';
     }
 
     get value() {
