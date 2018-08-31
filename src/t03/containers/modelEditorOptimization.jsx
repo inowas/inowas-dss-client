@@ -20,7 +20,8 @@ import {
     OPTIMIZATION_STATE_CANCELLED,
     OPTIMIZATION_STATE_CANCELLING,
     OPTIMIZATION_STATE_FINISHED,
-    OPTIMIZATION_STATE_STARTED
+    OPTIMIZATION_STATE_STARTED,
+    OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL
 } from '../selectors/optimization';
 
 const styles = {
@@ -204,7 +205,8 @@ class ModelEditorOptimization extends React.Component {
                         <Menu.Item>
                             {this.state.optimization.state === OPTIMIZATION_STATE_NEW ||
                              this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED ||
-                             this.state.optimization.state === OPTIMIZATION_STATE_FINISHED
+                             this.state.optimization.state === OPTIMIZATION_STATE_FINISHED ||
+                             this.state.optimization.state >= OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL
                                 ?
                                 <Button fluid primary
                                         onClick={this.onCalculationClick}
