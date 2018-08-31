@@ -19,7 +19,10 @@ class OptimizationMap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            location: this.props.location,
+            location: {
+                ...this.props.location,
+                type: this.props.location.type ? this.props.location.type : 'bbox'
+            },
             showOverlay: false,
             hasError: false,
             isEditing: false
@@ -28,7 +31,10 @@ class OptimizationMap extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            location: nextProps.location
+            location: {
+                ...nextProps.location,
+                type: nextProps.location.type ? nextProps.location.type : 'bbox'
+            }
         });
     }
 
@@ -59,8 +65,7 @@ class OptimizationMap extends React.Component {
             hasError: from > to ||
             (name !== 'col' && this.state.location.col.min > this.state.location.col.max) ||
             (name !== 'row' && this.state.location.row.min > this.state.location.row.max) ||
-            (name !== 'lay' && this.state.location.lay.min > this.state.location.lay.max) ||
-            (name !== 'ts' && this.state.location.ts.min > this.state.location.ts.max)
+            (name !== 'lay' && this.state.location.lay.min > this.state.location.lay.max)
         });
     };
 
@@ -317,6 +322,7 @@ class OptimizationMap extends React.Component {
     }
 
     render() {
+
         return (
             <div>
                 <Button fluid
