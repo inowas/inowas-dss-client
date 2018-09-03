@@ -20,7 +20,8 @@ import {
     OPTIMIZATION_STATE_CANCELLED,
     OPTIMIZATION_STATE_CANCELLING,
     OPTIMIZATION_STATE_FINISHED,
-    OPTIMIZATION_STATE_STARTED
+    OPTIMIZATION_STATE_STARTED,
+    OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL
 } from '../selectors/optimization';
 
 const styles = {
@@ -59,8 +60,12 @@ class ModelEditorOptimization extends React.Component {
 
     constructor(props) {
         super(props);
+        const optimization = (props.optimization && props.optimization.input) ?
+            Optimization.fromObject(props.optimization).toObject :
+            Optimization.fromDefaults().toObject;
+
         this.state = {
-            optimization: null,
+            optimization: optimization,
             activeItem: this.props.params.type ? this.props.params.type : 'parameters'
         };
     }
@@ -204,7 +209,8 @@ class ModelEditorOptimization extends React.Component {
                         <Menu.Item>
                             {this.state.optimization.state === OPTIMIZATION_STATE_NEW ||
                              this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED ||
-                             this.state.optimization.state === OPTIMIZATION_STATE_FINISHED
+                             this.state.optimization.state === OPTIMIZATION_STATE_FINISHED ||
+                             this.state.optimization.state >= OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL
                                 ?
                                 <Button fluid primary
                                         onClick={this.onCalculationClick}
@@ -284,7 +290,7 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
+            wrappedActions[key] = function () {
                 const args = Array.prototype.slice.call(arguments);
                 dispatch(actions[key](tool, ...args));
             };

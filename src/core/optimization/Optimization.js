@@ -90,7 +90,7 @@ class Optimization {
                 generation: this._progress._generation,
                 final: this._progress._final
             },
-            'results': this.solutions.map(r => r.toObject)
+            'solutions': this.solutions.map(r => r.toObject)
         };
     }
 
