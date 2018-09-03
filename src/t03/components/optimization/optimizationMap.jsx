@@ -291,6 +291,7 @@ class OptimizationMap extends React.Component {
     }
 
     render() {
+
         return (
             <div>
                 <Button fluid
