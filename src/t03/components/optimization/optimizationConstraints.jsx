@@ -6,6 +6,7 @@ import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './optimizationMap';
+import InputRange from './inputRange';
 
 class OptimizationConstraintsComponent extends React.Component {
 
@@ -32,6 +33,22 @@ class OptimizationConstraintsComponent extends React.Component {
             selectedConstraint: {
                 ...this.state.selectedConstraint,
                 [name]: value
+            }
+        });
+    };
+
+    handleChangeLocation = ({name, from, to}) => {
+        return this.setState({
+            selectedConstraint: {
+                ...this.state.selectedConstraint,
+                location: {
+                    ...this.state.selectedConstraint.location,
+                    [name]: {
+                        ...this.state.selectedConstraint.location[name],
+                        min: from,
+                        max: to
+                    }
+                }
             }
         });
     };
@@ -275,6 +292,17 @@ class OptimizationConstraintsComponent extends React.Component {
                                             {key: 'less', text: 'Less', value: 'less'}
                                         ]}
                                         onChange={this.handleChange}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <InputRange
+                                        name="ts"
+                                        from={this.state.selectedConstraint.location.ts.min}
+                                        to={this.state.selectedConstraint.location.ts.max}
+                                        label="Stress Period"
+                                        label_from="min"
+                                        label_to="max"
+                                        onChange={this.handleChangeLocation}
                                     />
                                 </Form.Field>
                                 <Segment>

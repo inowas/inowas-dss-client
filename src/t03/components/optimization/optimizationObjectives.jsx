@@ -6,6 +6,7 @@ import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './optimizationMap';
+import InputRange from './inputRange';
 
 class OptimizationObjectivesComponent extends React.Component {
 
@@ -32,6 +33,22 @@ class OptimizationObjectivesComponent extends React.Component {
             selectedObjective: {
                 ...this.state.selectedObjective,
                 [name]: value
+            }
+        });
+    };
+
+    handleChangeLocation = ({name, from, to}) => {
+        return this.setState({
+            selectedObjective: {
+                ...this.state.selectedObjective,
+                location: {
+                    ...this.state.selectedObjective.location,
+                    [name]: {
+                        ...this.state.selectedObjective.location[name],
+                        min: from,
+                        max: to
+                    }
+                }
             }
         });
     };
@@ -276,6 +293,17 @@ class OptimizationObjectivesComponent extends React.Component {
                                         />
                                     </Form.Field>
                                 </Form.Group>
+                                <Form.Field>
+                                    <InputRange
+                                        name="ts"
+                                        from={this.state.selectedObjective.location.ts.min}
+                                        to={this.state.selectedObjective.location.ts.max}
+                                        label="Stress Period"
+                                        label_from="min"
+                                        label_to="max"
+                                        onChange={this.handleChangeLocation}
+                                    />
+                                </Form.Field>
                                 <Segment>
                                     <h4>Location</h4>
                                     <OptimizationMap

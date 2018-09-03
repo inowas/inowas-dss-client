@@ -19,7 +19,11 @@ class OptimizationMap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            location: this.props.location,
+            location: {
+                ...this.props.location,
+                type: this.props.location.type ? this.props.location.type : 'bbox',
+                objects: this.props.location.objects ? this.props.location.objects : []
+            },
             showOverlay: false,
             hasError: false,
             isEditing: false
@@ -28,7 +32,11 @@ class OptimizationMap extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            location: nextProps.location
+            location: {
+                ...nextProps.location,
+                type: nextProps.location.type ? nextProps.location.type : 'bbox',
+                objects: this.props.location.objects ? this.props.location.objects : []
+            }
         });
     }
 
@@ -55,12 +63,7 @@ class OptimizationMap extends React.Component {
                     min: from,
                     max: to
                 }
-            },
-            hasError: from > to ||
-            (name !== 'col' && this.state.location.col.min > this.state.location.col.max) ||
-            (name !== 'row' && this.state.location.row.min > this.state.location.row.max) ||
-            (name !== 'lay' && this.state.location.lay.min > this.state.location.lay.max) ||
-            (name !== 'ts' && this.state.location.ts.min > this.state.location.ts.max)
+            }
         });
     };
 
@@ -123,37 +126,6 @@ class OptimizationMap extends React.Component {
                     {lng: cXmin, lat: cYmax},
                     {lng: cXmax, lat: cYmax},
                     {lng: cXmax, lat: cYmin},
-                ]}
-                {...styles.line}
-            />
-        );
-    };
-
-    drawPoint = (boundingBox, gridSize, location, color = 'blue') => {
-        const bbXmin = boundingBox[0][0];
-        const bbYmin = boundingBox[0][1];
-        const bbXmax = boundingBox[1][0];
-        const bbYmax = boundingBox[1][1];
-
-        const styles = {
-            line: {
-                color: color,
-                weight: 0.3
-            }
-        };
-
-        const dX = (bbXmax - bbXmin) / gridSize.n_x;
-        const dY = (bbYmax - bbYmin) / gridSize.n_y;
-
-        const cX = bbXmin + location.col.result * dX;
-        const cY = bbYmax - location.row.result * dY;
-
-        return (
-            <CircleMarker
-                key={uuidv4()}
-                center={[
-                    cY,
-                    cX
                 ]}
                 {...styles.line}
             />
@@ -280,7 +252,7 @@ class OptimizationMap extends React.Component {
                     data={area}
                 />
                 {this.state.location.col.result &&
-                    this.drawPoint(this.props.bbox, this.props.gridSize, this.state.location)
+                    this.drawObject(this.props.bbox, this.props.gridSize, this.state.location, 'blue')
                 }
                 {this.state.location.type === 'bbox' && !readOnly &&
                     <div>
@@ -307,7 +279,9 @@ class OptimizationMap extends React.Component {
                         {
                             this.state.location.objects.map(id => {
                                 const object = this.props.objects.filter(obj => obj.id === id)[0];
-                                return this.drawObject(this.props.bbox, this.props.gridSize, object.position, 'red');
+                                if(object) {
+                                    return this.drawObject(this.props.bbox, this.props.gridSize, object.position, 'red');
+                                }
                             })
                         }
                     </div>

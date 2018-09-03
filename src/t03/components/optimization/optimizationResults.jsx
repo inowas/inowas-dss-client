@@ -8,6 +8,20 @@ import Chart from './fitnessChart';
 import OptimizationResult from '../../../core/optimization/OptimizationResult';
 import OptimizationSolution from '../../../core/optimization/OptimizationSolution';
 import OptimizationInput from '../../../core/optimization/OptimizationInput';
+import {
+    OPTIMIZATION_STATE_CALCULATING,
+    OPTIMIZATION_STATE_CANCELLED,
+    OPTIMIZATION_STATE_CANCELLING,
+    OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE,
+    OPTIMIZATION_STATE_ERROR_PUBLISHING,
+    OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL,
+    OPTIMIZATION_STATE_FINISHED,
+    OPTIMIZATION_STATE_NEW,
+    OPTIMIZATION_STATE_PREPROCESSING,
+    OPTIMIZATION_STATE_PREPROCESSING_FINISHED,
+    OPTIMIZATION_STATE_QUEUED,
+    OPTIMIZATION_STATE_STARTED
+} from "../../selectors/optimization";
 
 const styles = {
     iconfix: {
@@ -30,13 +44,25 @@ class OptimizationResultsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            optimization: this.props.optimization.toObject
+            optimization: this.props.optimization.toObject,
+            data: this.props.optimization.solutions.map((solution, index) => {
+                return {
+                    name: index.toString(),
+                    fitness: solution.fitness
+                }
+            })
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            optimization: nextProps.optimization.toObject
+            optimization: nextProps.optimization.toObject,
+            data: nextProps.optimization.solutions.map((solution, index) => {
+                return {
+                    name: index.toString(),
+                    fitness: solution.fitness
+                }
+            })
         });
     }
 
@@ -74,23 +100,41 @@ class OptimizationResultsComponent extends React.Component {
 
         if (this.state.optimization) {
             switch (this.state.optimization.state) {
-                case 0:
+                case OPTIMIZATION_STATE_NEW:
                     state = 'New';
                     break;
-                case 1:
+                case OPTIMIZATION_STATE_STARTED:
                     state = 'Started';
                     break;
-                case 2:
+                case OPTIMIZATION_STATE_PREPROCESSING:
+                    state = 'Preprocessing';
+                    break;
+                case OPTIMIZATION_STATE_PREPROCESSING_FINISHED:
+                    state = 'Preprocessing finished';
+                    break;
+                case OPTIMIZATION_STATE_QUEUED:
+                    state = 'Queued';
+                    break;
+                case OPTIMIZATION_STATE_CALCULATING:
                     state = 'Calculating';
                     break;
-                case 3:
+                case OPTIMIZATION_STATE_FINISHED:
                     state = 'Finished';
                     break;
-                case 10:
+                case OPTIMIZATION_STATE_CANCELLING:
                     state = 'Cancelling';
                     break;
-                case 11:
+                case OPTIMIZATION_STATE_CANCELLED:
                     state = 'Cancelled';
+                    break;
+                case OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL:
+                    state = 'Error Recalculating Model';
+                    break;
+                case OPTIMIZATION_STATE_ERROR_PUBLISHING:
+                    state = 'Error Publishing';
+                    break;
+                case OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE:
+                    state = 'Error Optimization Core';
                     break;
                 default:
                     state = 'Undefined';
@@ -98,26 +142,17 @@ class OptimizationResultsComponent extends React.Component {
         }
 
         // TODO: Select from multiple solutions
-        const result = this.state.optimization.solutions && this.state.optimization.solutions.length >= 1
-            ? this.state.optimization.solutions[0] : null;
         const progress = this.state.optimization.progress
             ? this.state.optimization.progress : null;
 
-        const data = [
-            {name: '1', fitness: 0},
-            {name: '2', fitness: 9},
-            {name: '3', fitness: 15},
-            {name: '4', fitness: 18},
-            {name: '5', fitness: 20},
-        ];
+        console.log(this.state);
 
-        // TODO: Chart is not rendered correctly after switching the page
         return (
             <LayoutComponents.Column heading="Objectives">
                 <Grid style={styles.tablewidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column>
-                            {this.state.optimization.state !== 0 &&
+                            {this.state.optimization.state !== OPTIMIZATION_STATE_NEW &&
                             <Button icon
                                     style={styles.iconfix}
                                     onClick={this.onClickReset}
@@ -145,11 +180,13 @@ class OptimizationResultsComponent extends React.Component {
                     }
                     <Grid.Row columns={1}>
                         <section className="stretch">
-                            <Chart data={data}/>
+                            {this.state.data.length > 0 &&
+                                <Chart data={this.state.data}/>
+                            }
                         </section>
                     </Grid.Row>
                 </Grid>
-                {result && result.solutions.length >= 1
+                {this.state.optimization.solutions.length > 0
                     ?
                     <Segment>
                         <Grid divided="vertically">
@@ -169,7 +206,7 @@ class OptimizationResultsComponent extends React.Component {
                                 </Grid.Column>
                             </Grid.Row>
                             {
-                                result.solutions.map((solution, key) => (
+                                this.state.optimization.solutions.map((solution, key) => (
                                     <Grid.Row columns={5} key={key}>
                                         <Grid.Column textAlign="center">
                                             {key}
@@ -215,7 +252,7 @@ class OptimizationResultsComponent extends React.Component {
                         </Grid>
                     </Segment>
                     :
-                    <p>No results.</p>
+                    <p>No solutions.</p>
                 }
             </LayoutComponents.Column>
         );

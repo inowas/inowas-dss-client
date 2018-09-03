@@ -32,17 +32,9 @@ class InputRange extends React.Component {
         if (name === 'from') {
             errorFrom = value > this.state.to;
             from = parseFloat(value);
-
-            if (this.props.min && value < this.props.min) {
-                from = this.props.min;
-            }
         } else if (name === 'to') {
             errorTo = value < this.state.from;
             to = parseFloat(value);
-
-            if (this.props.max && value > this.props.max) {
-                to = this.props.max;
-            }
         }
 
         return this.setState({

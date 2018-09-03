@@ -60,8 +60,12 @@ class ModelEditorOptimization extends React.Component {
 
     constructor(props) {
         super(props);
+        const optimization = (props.optimization && props.optimization.input) ?
+            Optimization.fromObject(props.optimization).toObject :
+            Optimization.fromDefaults().toObject;
+
         this.state = {
-            optimization: null,
+            optimization: optimization,
             activeItem: this.props.params.type ? this.props.params.type : 'parameters'
         };
     }
@@ -286,7 +290,7 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
+            wrappedActions[key] = function () {
                 const args = Array.prototype.slice.call(arguments);
                 dispatch(actions[key](tool, ...args));
             };

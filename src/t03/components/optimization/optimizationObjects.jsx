@@ -360,7 +360,7 @@ class OptimizationObjectsComponent extends React.Component {
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 0}>
                                             <OptimizationMap
-                                                name="location"
+                                                name="position"
                                                 area={this.props.model.geometry}
                                                 bbox={this.props.model.bounding_box}
                                                 location={this.state.selectedObject.position}
