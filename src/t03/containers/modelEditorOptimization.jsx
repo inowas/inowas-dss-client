@@ -86,13 +86,6 @@ class ModelEditorOptimization extends React.Component {
     };
 
     onCancelCalculationClick = () => {
-        this.setState({
-            optimization: {
-                ...this.state.optimization,
-                state: 11
-            }
-        });
-
         this.props.cancelOptimizationCalculation(
             this.props.model.id,
             Optimization.fromObject(this.state.optimization)

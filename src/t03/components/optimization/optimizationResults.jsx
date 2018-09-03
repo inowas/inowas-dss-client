@@ -11,7 +11,7 @@ import OptimizationInput from '../../../core/optimization/OptimizationInput';
 import {
     OPTIMIZATION_STATE_CALCULATING,
     OPTIMIZATION_STATE_CANCELLED,
-    OPTIMIZATION_STATE_CANCELLING,
+    OPTIMIZATION_STATE_CANCELLING, OPTIMIZATION_STATE_ERROR_CANCELLING,
     OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE,
     OPTIMIZATION_STATE_ERROR_PUBLISHING,
     OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL,
@@ -133,11 +133,14 @@ class OptimizationResultsComponent extends React.Component {
                 case OPTIMIZATION_STATE_ERROR_PUBLISHING:
                     state = 'Error Publishing';
                     break;
+                case OPTIMIZATION_STATE_ERROR_CANCELLING:
+                    state = 'Error Cancelling';
+                    break;
                 case OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE:
                     state = 'Error Optimization Core';
                     break;
                 default:
-                    state = 'Undefined';
+                    state = `Undefined State with code: ${this.state.optimization.state}`;
             }
         }
 

@@ -11,9 +11,9 @@ class OptimizationInput {
     _objects = [];
     _parameters;
 
-    static fromDefaults(id) {
+    static fromDefaults() {
         const input = new OptimizationInput();
-        input.id = id;
+        input.id = uuidv4();
         input.parameters = OptimizationParameters.fromDefaults();
         input.constraints = [];
         input.objectives = [];

@@ -3,7 +3,6 @@ import OptimizationInput from './OptimizationInput';
 import OptimizationSolution from './OptimizationSolution';
 
 class Optimization {
-    _id;
     _input;
     _state = 0;
     _progress = {
@@ -15,13 +14,14 @@ class Optimization {
 
     static fromDefaults() {
         const optimization = new Optimization();
-        optimization.input = OptimizationInput.fromDefaults(optimization.id);
+        optimization.input = OptimizationInput.fromDefaults();
         return optimization;
     }
 
     static fromObject(obj) {
         const optimization = new Optimization();
-        optimization.id = obj.id;
+        // TODO
+
         optimization.input = OptimizationInput.fromObject(obj.input);
         optimization.state = obj.state;
         optimization.progress = obj.progress;
@@ -34,16 +34,11 @@ class Optimization {
     }
 
     constructor() {
-        this.id = uuidv4();
-        this.input = new OptimizationInput(this.id);
     }
 
     get id() {
-        return this._id;
-    }
-
-    set id(value) {
-        this._id = value ? value : uuidv4();
+        // TODO:
+        return this.input.id;
     }
 
     get input() {
