@@ -1,12 +1,12 @@
 class OptimizationParameters {
 
     _method = {value: 'GA'};
-    _ngen = {value: 100, parse: (x) => parseInt(x, 10), min: 1, max: 100};
-    _ncls = {value: 1, parse: (x) => parseInt(x, 10), min: 1, max: 10};
-    _popSize = {value: 100, parse: (x) => parseInt(x, 10), min: 2, max: 100};
+    _ngen = {value: 100, parse: (x) => parseInt(x, 10), min: 0, max: 500};
+    _ncls = {value: 1, parse: (x) => parseInt(x, 10), min: 1, max: 100};
+    _popSize = {value: 100, parse: (x) => parseInt(x, 10), min: 0, max: 500};
     _mutpb = {value: 0.1, parse: (x) => parseFloat(x), min: 0, max: 1};
     _cxpb = {value: 0.9, parse: (x) => parseFloat(x), min: 0, max: 1};
-    _eta = {value: 20, parse: (x) => parseFloat(x), min: 1, max: 30};
+    _eta = {value: 20, parse: (x) => parseFloat(x), min: 0, max: null};
     _indpb = {value: 0.1, parse: (x) => parseFloat(x), min: 0, max: 1};
     _maxf = {value: 50, parse: (x) => parseInt(x, 10), min: 1, max: 200};
     _qbound = {value: 0.25, parse: (x) => parseFloat(x), min: 0, max: 1};
@@ -151,14 +151,14 @@ class OptimizationParameters {
         this._diversityFlg.value = value;
     }
 
-    applyMinMax = (value, min, max) => {
-        if (value < min) {
+    applyMinMax = (value, min = null, max = null) => {
+        if (min && value < min) {
             return min;
         }
-        if (value > max) {
+        if (max && value > max) {
             return max;
         }
-        if (isNaN(value)) {
+        if (min && isNaN(value)) {
             return min;
         }
         return value;
