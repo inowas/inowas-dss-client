@@ -1,10 +1,25 @@
-import {put, take, call, cancelled, race} from 'redux-saga/effects';
+import {put, take, call, cancelled} from 'redux-saga/effects';
 import {delay} from 'redux-saga';
 import {Selector} from '../../t03';
 import {Query, Command, Action} from '../actions/index';
 import {WebData} from '../../core/index';
 
 const MAX_TRY = 20;
+
+const continuePolling = state => {
+    if (state > Selector.optimization.OPTIMIZATION_STATE_STARTED
+        && state < Selector.optimization.OPTIMIZATION_STATE_FINISHED) {
+        return true;
+    }
+
+    // noinspection RedundantIfStatementJS
+    if (state === Selector.optimization.OPTIMIZATION_STATE_CANCELLING) {
+        return true;
+    }
+
+    return false;
+};
+
 
 function* pollOptimizationCalculationStatus(tool, payload) {
     const {id} = payload;
@@ -22,44 +37,40 @@ function* pollOptimizationCalculationStatus(tool, payload) {
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
-            const responseCalculation = yield take(action => WebData.Helpers.waitForResponse(action, Query.GET_OPTIMIZATION));
+            const optimizationResponse = yield take(action => WebData.Helpers.waitForResponse(action, Query.GET_OPTIMIZATION));
 
             if (i === MAX_TRY) {
                 break;
             }
 
-            if (WebData.Helpers.isError(responseCalculation)) {
+            if (WebData.Helpers.isError(optimizationResponse)) {
                 yield put(WebData.Modifier.Action.responseAction(Command.CALCULATE_OPTIMIZATION, {
                     type: 'success',
                     data: null
                 }));
                 break;
             }
-            if (WebData.Helpers.isSuccess(responseCalculation)
-                && responseCalculation.webData.data.state !== undefined
-                && responseCalculation.webData.data.state !== Selector.optimization.OPTIMIZATION_STATE_NEW
-                && responseCalculation.webData.data.state !== Selector.optimization.OPTIMIZATION_STATE_FINISHED
-                && responseCalculation.webData.data.state !== Selector.optimization.OPTIMIZATION_STATE_CANCELLED
-            ) {
-                yield put(Action.setOptimization(tool, responseCalculation.webData.data));
-                i++;
-                yield delay(3000 * multi);
 
-                if (i % 5 === 0) {
-                    multi++;
+            if (WebData.Helpers.isSuccess(optimizationResponse)) {
+                const state = optimizationResponse.webData.data.state;
+
+                if (continuePolling(state)) {
+                    yield put(Action.setOptimization(tool, optimizationResponse.webData.data));
+                    i++;
+                    yield delay(3000 * multi);
+
+                    if (i % 5 === 0) {
+                        multi++;
+                    }
+                    yield put(WebData.Modifier.Action.sendQuery(
+                        `modflowmodels/${id}/optimization`,
+                        Query.GET_OPTIMIZATION)
+                    );
+                    continue;
                 }
-                yield put(WebData.Modifier.Action.sendQuery(
-                    `modflowmodels/${id}/optimization`,
-                    Query.GET_OPTIMIZATION)
-                );
-                continue;
-            }
-            if (WebData.Helpers.isSuccess(responseCalculation)
-                && (responseCalculation.webData.data.state === Selector.optimization.OPTIMIZATION_STATE_FINISHED
-                    || responseCalculation.webData.data.state === Selector.optimization.OPTIMIZATION_STATE_NEW)
-            ) {
-                yield put(Action.setOptimization(tool, responseCalculation.webData.data));
 
+
+                yield put(Action.setOptimization(tool, optimizationResponse.webData.data));
                 yield put(WebData.Modifier.Action.responseAction(Command.CALCULATE_OPTIMIZATION, {
                     type: 'success',
                     data: null
@@ -79,9 +90,6 @@ export default function* pollOptimizationCalculationStatusFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
         const action = yield take(action => WebData.Helpers.waitForAction(action, Query.GET_OPTIMIZATION));
-        yield race({
-            task: call(pollOptimizationCalculationStatus, action.tool, action.payload),
-            cancel: take(action => action.type === Command.CANCEL_OPTIMIZATION_CALCULATION)
-        });
+        yield call(pollOptimizationCalculationStatus, action.tool, action.payload);
     }
 }
