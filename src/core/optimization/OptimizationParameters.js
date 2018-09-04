@@ -152,13 +152,13 @@ class OptimizationParameters {
     }
 
     applyMinMax = (value, min = null, max = null) => {
-        if (min && value < min) {
+        if (min !== null && value < min) {
             return min;
         }
-        if (max && value > max) {
+        if (max !== null && value > max) {
             return max;
         }
-        if (min && isNaN(value)) {
+        if (min !== null && isNaN(value)) {
             return min;
         }
         return value;

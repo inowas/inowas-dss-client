@@ -37,7 +37,6 @@ class Optimization {
     }
 
     get id() {
-        // TODO:
         return this.input.id;
     }
 

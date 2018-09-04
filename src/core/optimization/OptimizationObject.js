@@ -8,7 +8,7 @@ class OptimizationObject {
     _position = new WellPosition();
     _flux = {};
     _substances = [];
-    _numberOfStressPeriods;
+    _numberOfStressPeriods = 0;
 
     static createFromTypeAndStressPeriods(type, numberOfStressPeriods) {
         const object = new OptimizationObject();
