@@ -1,3 +1,4 @@
+import Ajv from 'ajv';
 import AbstractMt3dPackage from './AbstractMt3dPackage';
 import AdvPackage from './advPackage';
 import BtnPackage from './btnPackage';
@@ -86,8 +87,6 @@ class mt3dms {
     get toObject() {
         const obj = {
             enabled: this.enabled,
-            run_model: true,
-            write_input: true,
             packages: Object.keys(this.packages)
         };
 
@@ -99,6 +98,14 @@ class mt3dms {
         }
 
         return obj;
+    }
+
+    validate() {
+        const schema = require('./mt3dms.schema.json');
+        const ajv = new Ajv({schemaId: 'id'});
+        ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+        const validate = ajv.compile(schema);
+        return [validate(this.toObject), validate.errors];
     }
 }
 
