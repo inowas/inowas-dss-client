@@ -21,45 +21,45 @@ test('Create SsmBoundaryValues with boundary and numberOfStressPeriods', () => {
     expect(SsmBoundaryValues.fromObject(boundaryValues.toObject)).toEqual(boundaryValues);
     expect(boundaryValues.toSsmPackageValues).toEqual(
         [[
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ], [
-            [0, 6, 5, 0, "itype['GHB']"],
-            [0, 7, 5, 0, "itype['GHB']"],
-            [0, 8, 5, 0, "itype['GHB']"]
+            [0, 6, 5, 0, 5],
+            [0, 7, 5, 0, 5],
+            [0, 8, 5, 0, 5]
         ]]
     );
 });

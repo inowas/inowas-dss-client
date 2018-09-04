@@ -5,6 +5,7 @@ class SsmPackage extends AbstractMt3dPackage {
 
     // SET stress_period_data
     // ssm_data[0] = [
+    //      [#lay, #row, #col, #value1, #itype, #value1, #value2)]
     //      [4, 4, 4, 1.0, itype['GHB'], 1.0, 100.0)]
     // ]
     _crch = null;
@@ -32,6 +33,20 @@ class SsmPackage extends AbstractMt3dPackage {
         ssm.unitnumber = obj.unitnumber;
         ssm.filenames = obj.filenames;
         return ssm;
+    }
+
+    static get itype() {
+        return {
+            'CHD': 1,
+            'BAS6': 1,
+            'PBC': 1,
+            'WEL': 2,
+            'DRN': 3,
+            'RIV': 4,
+            'GHB': 5,
+            'MAS': 15,
+            'CC': -1
+        };
     }
 
     constructor() {

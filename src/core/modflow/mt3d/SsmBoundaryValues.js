@@ -1,5 +1,6 @@
-import Boundary from '../../boundaries/Boundary';
 import AffectedCells from '../../boundaries/AffectedCells';
+import Boundary from '../../boundaries/Boundary';
+import SsmPackage from './ssmPackage';
 
 class SsmBoundaryValues {
 
@@ -64,7 +65,7 @@ class SsmBoundaryValues {
             this.stressPeriodValues.map(sp => {
                 const spData = [];
                 this.affectedCells.cells.forEach(c => {
-                    spData.push([c[2], c[1], c[0], sp, 'itype[\'' + this.boundaryType.toUpperCase() + '\']']);
+                    spData.push([c[2], c[1], c[0], sp, SsmPackage.itype[this.boundaryType.toUpperCase()]]);
                 });
                 return spData;
             })
