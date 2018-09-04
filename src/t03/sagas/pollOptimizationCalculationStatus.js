@@ -7,7 +7,7 @@ import {WebData} from '../../core/index';
 const MAX_TRY = 20;
 
 const continuePolling = state => {
-    if (state > Selector.optimization.OPTIMIZATION_STATE_STARTED
+    if (state >= Selector.optimization.OPTIMIZATION_STATE_STARTED
         && state < Selector.optimization.OPTIMIZATION_STATE_FINISHED) {
         return true;
     }
