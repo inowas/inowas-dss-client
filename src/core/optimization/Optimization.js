@@ -1,6 +1,6 @@
-import uuidv4 from 'uuid/v4';
 import OptimizationInput from './OptimizationInput';
 import OptimizationSolution from './OptimizationSolution';
+import Ajv from 'ajv';
 
 class Optimization {
     _input;
@@ -37,7 +37,6 @@ class Optimization {
     }
 
     get id() {
-        // TODO:
         return this.input.id;
     }
 
@@ -94,6 +93,14 @@ class Optimization {
             throw new Error('The result object is not of type OptimizationSolution.');
         }
         this._solutions.push(result);
+    }
+
+    validate() {
+        const schema = require("./optimization.schema.json");
+        const ajv = new Ajv({schemaId: "id"});
+        ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"));
+        const validate = ajv.compile(schema);
+        return [validate(this.toObject), validate.errors];
     }
 }
 

@@ -8,19 +8,23 @@ class OptimizationObject {
     _position = new WellPosition();
     _flux = {};
     _substances = [];
-    _numberOfStressPeriods;
+    _numberOfStressPeriods = 0;
 
     static createFromTypeAndStressPeriods(type, numberOfStressPeriods) {
         const object = new OptimizationObject();
         object.type = type;
         object.numberOfStressPeriods = numberOfStressPeriods;
-        object.flux = (new Array(numberOfStressPeriods)).fill(0).map(() => {
-            return {
+
+        let flux = {};
+        for (let i = 0; i < numberOfStressPeriods; i++) {
+            flux[i.toString()] = {
                 min: 0,
                 max: 0,
-                result: 0
-            };
-        });
+                result: null
+            }
+        }
+        object.flux = flux;
+
         return object;
     }
 
@@ -30,9 +34,10 @@ class OptimizationObject {
         object.name = obj.name;
         object.type = obj.type;
         object.position = WellPosition.fromObject(obj.position);
-        object.flux = obj.flux;
         object.substances = obj.substances;
         object.numberOfStressPeriods = obj.numberOfStressPeriods;
+        object.updateFlux(obj.flux);
+
         return object;
     }
 
@@ -85,13 +90,14 @@ class OptimizationObject {
     updateFlux(rows) {
         let flux = {};
         for (let i = 0; i < this.numberOfStressPeriods; i++) {
-            flux[i] = {
+            flux[i.toString()] = {
                 min: rows[i] && rows[i].min ? parseFloat(rows[i].min) : 0,
                 max: rows[i] && rows[i].max ? parseFloat(rows[i].max) : 0,
                 result: rows[i] && rows[i].result ? parseFloat(rows[i].result) : null
             }
         }
         this.flux = flux;
+
         return this;
     }
 

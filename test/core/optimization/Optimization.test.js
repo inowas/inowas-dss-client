@@ -1,14 +1,13 @@
 import Optimization from '../../../src/core/optimization/Optimization';
-import OptimizationResult from '../../../src/core/optimization/OptimizationResult';
 import OptimizationInput from '../../../src/core/optimization/OptimizationInput';
+import OptimizationSolution from "../../../src/core/optimization/OptimizationSolution";
 
 test('Create with Defaults and toObject', () => {
     const optimization = Optimization.fromDefaults();
-    optimization.id = '123-abc-456';
     optimization.input.id = '345-def-987';
     expect(optimization).toBeInstanceOf(Optimization);
     expect(optimization.toObject).toEqual({
-        'id': '123-abc-456',
+        'id': '345-def-987',
         'input': {
             'constraints': [],
             'id': '345-def-987',
@@ -21,7 +20,7 @@ test('Create with Defaults and toObject', () => {
                 'ftol': 0.0001,
                 'indpb': 0.1,
                 'maxf': 50,
-                'method': 'ga',
+                'method': 'GA',
                 'mutpb': 0.1,
                 'ncls': 1,
                 'ngen': 100,
@@ -30,15 +29,19 @@ test('Create with Defaults and toObject', () => {
                 'xtol': 0.0001
             }
         },
-        'progress': [],
-        'results': [],
+        'progress': {
+            'final': false,
+            'generation': 0,
+            'log': []
+        },
+        'solutions': [],
         'state': 0
     });
 });
 
 test('Adding solutions', () => {
     const optimization = Optimization.fromDefaults();
-    optimization.addSolution(new OptimizationResult());
+    optimization.addSolution(new OptimizationSolution());
     expect(optimization.solutions).toHaveLength(1);
     expect(() => {
         optimization.addSolution({});
@@ -50,9 +53,9 @@ test('From object', () => {
         input: OptimizationInput.fromDefaults().toObject,
         state: 2,
         progress: [1, 2, 3],
-        results: [(new OptimizationResult).toObject, (new OptimizationResult).toObject]
+        solutions: [(new OptimizationSolution).toObject, (new OptimizationSolution).toObject]
     };
     const optimization = Optimization.fromObject(opt);
     expect(optimization).toBeInstanceOf(Optimization);
-    expect(optimization.toObject.results).toHaveLength(2);
+    expect(optimization.toObject.solutions).toHaveLength(2);
 });

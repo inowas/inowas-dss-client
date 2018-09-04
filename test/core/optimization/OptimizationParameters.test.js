@@ -1,7 +1,7 @@
 import OptimizationParameters from '../../../src/core/optimization/OptimizationParameters';
 
 export const defaultParameters = {
-    method: 'ga',
+    method: 'GA',
     ngen: 100,
     pop_size: 100,
     mutpb: 0.1,
@@ -24,7 +24,7 @@ test('Create with Defaults', () => {
 
 test('Create from Object', () => {
     const obj = {
-        method: 'ga',
+        method: 'GA',
         ngen: 4,
         pop_size: 11,
         mutpb: 0.2,
@@ -46,15 +46,15 @@ test('Create from Object', () => {
 test('Create from empty object.', () => {
     const parameters = OptimizationParameters.fromObject({});
     expect(parameters).toBeInstanceOf(OptimizationParameters);
-    expect(parameters.method).toBe('simplex');
+    expect(parameters.method).toBe('Simplex');
 });
 
 test('ApplyMinMax', () => {
     const parameters = OptimizationParameters.fromDefaults();
     expect(parameters.applyMinMax(50, parameters._ngen.min, parameters._ngen.max)).toBe(50);
-    expect(parameters.applyMinMax(150, parameters._ngen.min, parameters._ngen.max)).toBe(100);
-    expect(parameters.applyMinMax(NaN, parameters._ngen.min, parameters._ngen.max)).toBe(1);
-    expect(parameters.applyMinMax(-100, parameters._ngen.min, parameters._ngen.max)).toBe(1);
+    expect(parameters.applyMinMax(150, parameters._ngen.min, parameters._ngen.max)).toBe(150);
+    expect(parameters.applyMinMax(NaN, parameters._ngen.min, parameters._ngen.max)).toBe(0);
+    expect(parameters.applyMinMax(-100, parameters._ngen.min, parameters._ngen.max)).toBe(0);
     parameters.ncls = 5;
     parameters.popSize = 1;
     expect(parameters.popSize).toBe(5);
