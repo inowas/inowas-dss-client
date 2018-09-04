@@ -11,7 +11,7 @@ import OptimizationInput from '../../../core/optimization/OptimizationInput';
 import {
     OPTIMIZATION_STATE_CALCULATING,
     OPTIMIZATION_STATE_CANCELLED,
-    OPTIMIZATION_STATE_CANCELLING, OPTIMIZATION_STATE_ERROR_CANCELLING,
+    OPTIMIZATION_STATE_CANCELLING, OPTIMIZATION_STATE_ERROR, OPTIMIZATION_STATE_ERROR_CANCELLING,
     OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE,
     OPTIMIZATION_STATE_ERROR_PUBLISHING,
     OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL,
@@ -127,6 +127,9 @@ class OptimizationResultsComponent extends React.Component {
                 case OPTIMIZATION_STATE_CANCELLED:
                     state = 'Cancelled';
                     break;
+                case OPTIMIZATION_STATE_ERROR:
+                    state = 'Error';
+                    break;
                 case OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL:
                     state = 'Error Recalculating Model';
                     break;
@@ -184,7 +187,7 @@ class OptimizationResultsComponent extends React.Component {
                     <Grid.Row columns={1}>
                         <section className="stretch">
                             {this.state.data.length > 0 &&
-                                <Chart data={this.state.data}/>
+                            <Chart data={this.state.data}/>
                             }
                         </section>
                     </Grid.Row>
