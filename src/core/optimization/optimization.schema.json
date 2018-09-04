@@ -12,14 +12,30 @@
     },
     "state": {
       "title": "Optimization State",
-      "description": "0: new, 1: started, 2: calculating, 3: finished, 10: cancelling, 11: cancelled",
       "type": "integer",
-      "enum": [0, 1, 2, 3, 10, 11]
+      "enum": [0, 1, 2, 3, 4, 5, 6, 11, 12, 40, 41, 42, 43, 50]
     },
-    "results": {
+    "progress": {
+      "type": "object",
+      "properties": {
+        "log": {
+          "type": "array",
+          "items": {
+            "allOf": [{"type": "number"}]
+          }
+        },
+        "generation": {
+          "type": "integer"
+        },
+        "final": {
+          "type": "boolean"
+        }
+      }
+    },
+    "solutions": {
       "type": "array",
       "items": {
-        "allOf": [{"$ref": "#/definitions/result"}]
+        "allOf": [{"$ref": "#/definitions/solution"}]
       }
     }
   },
@@ -244,30 +260,6 @@
         }
       }
     },
-    "result": {
-      "type": "object",
-      "properties": {
-        "id": {"$ref": "#/definitions/uuidv4"},
-        "solutions": {
-          "type": "array",
-          "items": {
-            "allOf": [{"$ref": "#/definitions/solution"}]
-          }
-        },
-        "progress_log": {
-          "type": "array",
-          "items": {
-            "allOf": [{"type": "number"}]
-          }
-        },
-        "generation": {
-          "type": "integer"
-        },
-        "final": {
-          "type": "boolean"
-        }
-      }
-    },
     "solution": {
       "type": "object",
       "properties": {
@@ -287,7 +279,7 @@
         "objects": {
           "type": "array",
           "items": {
-            "allOf": [{"$ref": "#/definitions/object"}]
+            "allOf": [{"$ref": "#/definitions/objectSimplex"}]
           }
         }
       }
@@ -324,7 +316,7 @@
               "type": "object",
               "patternProperties": {
                 "^.*$": {
-                  "$ref": "#/definitions/minMaxResultObj"
+                  "$ref": "#/definitions/minMaxResultObjGA"
                 }
               }
             }

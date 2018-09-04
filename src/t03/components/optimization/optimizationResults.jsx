@@ -151,8 +151,6 @@ class OptimizationResultsComponent extends React.Component {
         const progress = this.state.optimization.progress
             ? this.state.optimization.progress : null;
 
-        console.log(this.state);
-
         return (
             <LayoutComponents.Column heading="Objectives">
                 <Grid style={styles.tablewidth}>
@@ -267,7 +265,8 @@ class OptimizationResultsComponent extends React.Component {
 
 OptimizationResultsComponent.propTypes = {
     optimization: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    errors: PropTypes.array
 };
 
 export default pure(ConfiguredRadium(OptimizationResultsComponent));

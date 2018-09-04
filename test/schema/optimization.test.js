@@ -1,7 +1,7 @@
 import { optimization } from '../fixtures/optimization';
 import Ajv from 'ajv';
 
-const schema = require('../../src/schema/optimization');
+const schema = require('../../src/core/optimization/optimization');
 
 const validateOptimization = (opt) => {
     const ajv = new Ajv({schemaId: 'id'});

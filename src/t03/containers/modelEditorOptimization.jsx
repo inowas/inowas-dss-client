@@ -12,7 +12,7 @@ import OptimizationResultsComponent from '../components/optimization/optimizatio
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
-import {Button, Menu, Progress} from 'semantic-ui-react';
+import {Button, Icon, List, Menu, Popup, Progress} from 'semantic-ui-react';
 import {Action, Command} from '../actions';
 import {
     OPTIMIZATION_STATE_NEW,
@@ -29,7 +29,6 @@ const styles = {
         display: 'flex',
         maxHeight: '100%'
     },
-
     left: {
         width: styleGlobals.dimensions.gridColumn,
         marginRight: styleGlobals.dimensions.gridGutter,
@@ -37,15 +36,12 @@ const styles = {
         flexDirection: 'column',
         maxHeight: '100%'
     },
-
     properties: {
         flex: 1
     },
-
     searchWrapper: {
         marginBottom: 6
     },
-
     heading: {
         borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
         fontWeight: 300,
@@ -53,6 +49,19 @@ const styles = {
         textAlign: 'left',
         paddingBottom: 10,
         marginTop: 30
+    },
+    iconfix: {
+        width: 'auto',
+        height: 'auto'
+    },
+    inputfix: {
+        padding: '0'
+    },
+    link: {
+        cursor: 'pointer'
+    },
+    tablewidth: {
+        width: '99%'
     }
 };
 
@@ -66,7 +75,8 @@ class ModelEditorOptimization extends React.Component {
 
         this.state = {
             optimization: optimization,
-            activeItem: this.props.params.type ? this.props.params.type : 'parameters'
+            activeItem: this.props.params.type ? this.props.params.type : 'parameters',
+            errors: []
         };
     }
 
@@ -86,6 +96,13 @@ class ModelEditorOptimization extends React.Component {
     };
 
     onCancelCalculationClick = () => {
+        this.setState({
+            optimization: {
+                ...this.state.optimization,
+                state: OPTIMIZATION_STATE_CANCELLING
+            }
+        });
+
         this.props.cancelOptimizationCalculation(
             this.props.model.id,
             Optimization.fromObject(this.state.optimization)
@@ -97,12 +114,13 @@ class ModelEditorOptimization extends React.Component {
 
         this.setState({
             optimization: {
-                ...this.state.optimization
+                ...this.state.optimization,
+                state: OPTIMIZATION_STATE_STARTED
             },
             activeItem: 'results'
         });
 
-        this.props.calculateOptimization(
+        return this.props.calculateOptimization(
             this.props.model.id,
             Optimization.fromObject(this.state.optimization)
         );
@@ -162,7 +180,8 @@ class ModelEditorOptimization extends React.Component {
                 );
             case 'results':
                 return (
-                    <OptimizationResultsComponent optimization={optimization} onChange={this.onChangeResult}/>
+                    <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
+                                                  onChange={this.onChangeResult}/>
                 );
             default:
                 return (
@@ -171,6 +190,64 @@ class ModelEditorOptimization extends React.Component {
                                                      onChange={this.onChange}/>
                 );
         }
+    }
+
+    renderButton() {
+        const optimization = Optimization.fromObject(this.state.optimization);
+        const [result, errors] = optimization.validate();
+
+        if (!result && errors) {
+            return (
+                <Menu.Item>
+                    <Button.Group fluid>
+                        <Button primary disabled={true}>
+                            Run Optimization
+                        </Button>
+                        <Popup
+                            trigger={
+                                <Button primary style={styles.iconfix} icon>
+                                    <Icon name="exclamation"/>
+                                </Button>
+                            }
+                            header='Validation Failed'
+                            content={
+                                <List>
+                                    { errors.map((error, key) => (
+                                    <List.Item key={key}>
+                                        <List.Content>
+                                            {error.dataPath} {error.type} {error.message}
+                                        </List.Content>
+                                    </List.Item>
+                                    ))}
+                                </List>
+                            }
+                            on={['hover', 'click']}
+                        />
+                    </Button.Group>
+                </Menu.Item>
+            );
+        }
+
+        if (this.state.optimization.state === OPTIMIZATION_STATE_NEW ||
+            this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED ||
+            this.state.optimization.state === OPTIMIZATION_STATE_FINISHED ||
+            this.state.optimization.state >= OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL) {
+
+            return (
+                <Menu.Item>
+                        <Button fluid primary onClick={this.onCalculationClick}>
+                            Run Optimization
+                        </Button>
+                </Menu.Item>
+            );
+        }
+        return (
+            <Menu.Item>
+                    <Button fluid color="red" onClick={this.onCancelCalculationClick}>
+                        Cancel Calculation
+                    </Button>
+            </Menu.Item>
+        );
     }
 
     render() {
@@ -199,26 +276,9 @@ class ModelEditorOptimization extends React.Component {
                             active={this.state.activeItem === 'constraints'}
                             onClick={this.onMenuClick}
                         />
-                        <Menu.Item>
-                            {this.state.optimization.state === OPTIMIZATION_STATE_NEW ||
-                             this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED ||
-                             this.state.optimization.state === OPTIMIZATION_STATE_FINISHED ||
-                             this.state.optimization.state >= OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL
-                                ?
-                                <Button fluid primary
-                                        onClick={this.onCalculationClick}
-                                >
-                                    Run Optimization
-                                </Button>
-                                :
-                                <Button fluid
-                                        color="red"
-                                        onClick={this.onCancelCalculationClick}
-                                >
-                                    Cancel Calculation
-                                </Button>
-                            }
-                        </Menu.Item>
+                        {
+                            this.renderButton()
+                        }
                         {this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED &&
                         <Menu.Item>
                             <Progress percent={0}>
