@@ -1,11 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Checkbox, Form} from 'semantic-ui-react';
+import {Checkbox, Form, Select} from 'semantic-ui-react';
 
 import AbstractPackageProperties from './AbstractPackageProperties';
 import MtPackage from '../../../../core/modflow/mt3d/mtPackage';
 
+
 class MtPackageProperties extends AbstractPackageProperties {
+
+    handleSelectExecutable = (e, {value}) => {
+        const mtPackage = MtPackage.fromObject(this.state.mtPackage);
+        mtPackage.exeName = value;
+        this.props.onChange(mtPackage);
+        this.setState({
+            mtPackage: mtPackage.toObject
+        });
+    };
+
     render() {
         if (!this.state.mtPackage) {
             return null;
@@ -19,6 +30,18 @@ class MtPackageProperties extends AbstractPackageProperties {
                 <Form.Field>
                     <label>Enabled</label>
                     <Checkbox checked={enabled} onChange={toggleEnabled} disabled={readonly}/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Executable name</label>
+                    <Select
+                        options={[
+                            {key: 0, value: 'mt3dms', text: 'MT3DMS'},
+                            {key: 1, value: 'mt3usgs', text: 'MT3USGS'},
+                        ]}
+                        onChange={this.handleSelectExecutable}
+                        value={mtPackage.exe_name}
+                        disabled={readonly}
+                    />
                 </Form.Field>
                 <Form.Field>
                     <label>Version</label>
