@@ -165,6 +165,9 @@ class OptimizationParameters {
     };
 
     get toObject() {
+
+        console.log(this);
+
         return ({
             'method': this.method,
             'ngen': this.ngen,

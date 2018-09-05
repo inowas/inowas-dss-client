@@ -80,10 +80,14 @@ class ModelEditorOptimization extends React.Component {
         };
     }
 
-    componentWillReceiveProps() {
-        this.setState((prevState, props) => ({
-            optimization: Optimization.fromObject(props.optimization).toObject
-        }));
+    componentWillReceiveProps(nextProps) {
+        const optimization = (nextProps.optimization && nextProps.optimization.input) ?
+            Optimization.fromObject(nextProps.optimization).toObject :
+            Optimization.fromDefaults().toObject;
+
+        this.setState({
+            optimization: optimization
+        });
     }
 
     onMenuClick = (e, {name}) => {

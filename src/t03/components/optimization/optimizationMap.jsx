@@ -12,7 +12,6 @@ import * as geoTools from '../../../core/geospatial';
 import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
 import InputRange from './inputRange';
 import InputObjectList from './InputObjectList';
-import uuidv4 from 'uuid/v4';
 
 class OptimizationMap extends React.Component {
 
@@ -35,7 +34,7 @@ class OptimizationMap extends React.Component {
             location: {
                 ...nextProps.location,
                 type: nextProps.location.type ? nextProps.location.type : 'bbox',
-                objects: this.props.location.objects ? this.props.location.objects : []
+                objects: nextProps.location.objects ? nextProps.location.objects : []
             }
         });
     }
