@@ -3,12 +3,14 @@ import uuidv4 from 'uuid/v4';
 
 class OptimizationObject {
     _id = uuidv4();
-    _name = 'New Optimization Object';
     _type = 'wel';
     _position = new WellPosition();
     _flux = {};
-    _substances = [];
-    _numberOfStressPeriods = 0;
+    _meta = {
+        _name: 'New Optimization Object',
+        _numberOfStressPeriods: 0,
+        _substances: []
+    };
 
     static createFromTypeAndStressPeriods(type, numberOfStressPeriods) {
         const object = new OptimizationObject();
@@ -53,11 +55,11 @@ class OptimizationObject {
     }
 
     get name() {
-        return this._name;
+        return this._meta._name;
     }
 
     set name(value) {
-        this._name = !value ? 'New Optimization Object' : value;
+        this._meta._name = !value ? 'New Optimization Object' : value;
     }
 
     get type() {
@@ -97,7 +99,6 @@ class OptimizationObject {
             }
         }
         this.flux = flux;
-
         return this;
     }
 
@@ -106,19 +107,19 @@ class OptimizationObject {
     }
 
     get numberOfStressPeriods() {
-        return this._numberOfStressPeriods;
+        return this._meta._numberOfStressPeriods;
     }
 
     set numberOfStressPeriods(value) {
-        this._numberOfStressPeriods = value ? value : 0;
+        this._meta._numberOfStressPeriods = value ? value : 0;
     }
 
     get substances() {
-        return this._substances;
+        return this._meta._substances;
     }
 
     set substances(value) {
-        this._substances = value ? value : [];
+        this._meta._substances = value ? value : [];
     }
 
     addSubstance(name) {

@@ -20,8 +20,6 @@ class Optimization {
 
     static fromObject(obj) {
         const optimization = new Optimization();
-        // TODO
-
         optimization.input = OptimizationInput.fromObject(obj.input);
         optimization.state = obj.state;
         optimization.progress = obj.progress;

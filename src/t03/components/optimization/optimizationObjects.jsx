@@ -60,6 +60,7 @@ class OptimizationObjectsComponent extends React.Component {
     onClickNew = (e, {name, value}) => {
         const newObject = new OptimizationObject();
         newObject.type = value;
+        newObject.numberOfStressPeriods = this.props.stressPeriods.dateTimes.length;
         return this.setState({
             selectedObject: newObject.toObject
         });
