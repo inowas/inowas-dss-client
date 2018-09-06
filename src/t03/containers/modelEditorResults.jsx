@@ -1,5 +1,6 @@
-import React, {Component, PropTypes} from 'react';
-import {model, results} from '../selectors';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {model as modelSelector, results} from '../selectors';
 
 import ArraySlider from '../../components/primitive/ArraySlider';
 import Button from '../../components/primitive/Button';
@@ -10,9 +11,9 @@ import {Formatter, WebData} from '../../core';
 import Grid from '../../model/Grid';
 import {Query} from '../actions/index';
 import {Modifier as T07} from '../../t07';
+import LayerSelect from '../../t07/components/LayerSelect';
 import ScenarioAnalysisMap from '../../t07/components/ScenarioAnalysisMap';
 import ScenarioAnalysisMapData from '../../model/ScenarioAnalysisMapData';
-import Select from '../../components/primitive/Select';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {HeadResultsChart} from '../components';
@@ -31,8 +32,8 @@ const styles = {
 
     sliderWrapper: {
         width:
-        4 * styleGlobals.dimensions.gridColumn +
-        3 * styleGlobals.dimensions.gridGutter,
+            4 * styleGlobals.dimensions.gridColumn +
+            3 * styleGlobals.dimensions.gridGutter,
         padding: styleGlobals.dimensions.spacing.medium
     },
 
@@ -41,24 +42,12 @@ const styles = {
     }
 };
 
-class ModelEditorResults extends Component {
-    static propTypes = {
-        tool: PropTypes.string.isRequired,
-        model: PropTypes.object,
-        times: PropTypes.object,
-        layerValues: PropTypes.array,
-        calculationId: PropTypes.string,
-        sendQuery: PropTypes.func.isRequired,
-        getCalculationStatus: PropTypes.object
-    };
-
+class ModelEditorResults extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            selectedLayerAndType: props.layerValues
-                ? `0_${props.layerValues[0][0]}`
-                : null,
+            selectedLayer: 0,
+            selectedResultType: 'head',
             selectedTotalTimeIndex: 0,
             mapPosition: {
                 bounds: [
@@ -107,40 +96,29 @@ class ModelEditorResults extends Component {
         }
     }
 
-    fetchCalculation = props => {
-        // eslint-disable-next-line no-shadow
-        const {sendQuery, calculationId, times} = props;
-        const {selectedLayerAndType, selectedTotalTimeIndex} = this.state;
+    fetchCalculation = () => {
+        const {selectedLayer, selectedResultType, selectedTotalTimeIndex} = this.state;
+        const {calculationId, times} = this.props;
 
-        if (
-            !calculationId ||
-            !times ||
-            !selectedLayerAndType ||
-            selectedTotalTimeIndex === null
-        ) {
+        if (!calculationId || !times || selectedTotalTimeIndex === null) {
             return;
         }
 
-        const splittedSelectedLayerAndType = selectedLayerAndType.split('_');
-        const layer = splittedSelectedLayerAndType[0];
-        const type = splittedSelectedLayerAndType[1];
+        const time = this.props.times.total_times[selectedTotalTimeIndex];
 
-        const time = times.total_times[selectedTotalTimeIndex];
-
-        sendQuery(
-            `calculations/${calculationId}/results/types/${type}/layers/${layer}/totims/${time}`,
+        this.props.sendQuery(
+            `calculations/${this.props.calculationId}/results/types/${selectedResultType}/layers/${selectedLayer}/totims/${time}`,
             Query.GET_MODFLOW_MODEL_CALCULATION
         );
     };
 
-    onLayerSelectChange = nextSelectedLayerAndType => {
+    onLayerSelectChange = (selectedLayer, selectedType) => {
         this.setState(
             {
-                selectedLayerAndType: nextSelectedLayerAndType
-                    ? nextSelectedLayerAndType.value
-                    : null
+                selectedLayer: selectedLayer,
+                selectedResultType: selectedType
             },
-            () => this.fetchCalculation(this.props)
+            () => this.fetchCalculation()
         );
     };
 
@@ -164,11 +142,9 @@ class ModelEditorResults extends Component {
     };
 
     createScenarioAnalysis = () => {
-        const {model} = this.props;
-
         this.props.createScenarioAnalysis(uuid.v4(), {
-            basemodel_id: model.id,
-            name: 'Scenario Analysis of ' + model.name,
+            basemodel_id: this.props.model.id,
+            name: 'Scenario Analysis of ' + this.props.model.name,
             description: '',
             public: true
         });
@@ -176,51 +152,29 @@ class ModelEditorResults extends Component {
 
     render() {
         const {
-            model, // eslint-disable-line no-shadow
+            model,
             times,
             layerValues,
             getCalculationStatus,
-            calculationId,
             createScenarioAnalysisStatus
         } = this.props;
 
         const {
-            selectedLayerAndType,
+            selectedLayer,
+            selectedResultType,
             selectedTotalTimeIndex,
             mapPosition,
             activeCoordinate
         } = this.state;
 
-        const readOnly = !includes(model.permissions, 'w');
-
         if (!model || !times || !layerValues) {
             return <div>Loading!</div>;
         }
 
-        const options = layerValues.map((l, index) => ({
-            label: `Layer ${index}`,
-            options: l
-                ? l.map(v => ({
-                    label: `Layer ${index} ${v}`,
-                    value: `${index}_${v}`
-                }))
-                : []
-        }));
-
-        const splitSelectedLayerAndType = selectedLayerAndType
-            ? selectedLayerAndType.split('_')
-            : null;
-        const selectedLayer = splitSelectedLayerAndType
-            ? splitSelectedLayerAndType[0]
-            : null;
-        const selectedType = splitSelectedLayerAndType
-            ? splitSelectedLayerAndType[1]
-            : null;
-
+        const readOnly = !includes(model.permissions, 'w');
+        const selectedType = selectedResultType;
         const startDate = new Date(times.start_date_time);
-        const totalTimes = times.total_times.map(t => {
-            return startDate.addDays(t);
-        });
+        const totalTimes = times.total_times.map(t => startDate.addDays(t));
 
         const grid = new Grid(
             new BoundingBox(
@@ -261,16 +215,17 @@ class ModelEditorResults extends Component {
             heatMapData: data
         });
 
-        // TODO use TotalTimesSlider and LayerSelect Compoennts from t07
+        // TODO use TotalTimesSlider and LayerSelect Components from t07
 
         return (
             <div>
                 <div style={[styles.selectWrapper]}>
                     <div style={[styles.layerSelectWrapper]}>
-                        <Select
-                            options={options}
-                            value={selectedLayerAndType}
+                        <LayerSelect
+                            layerScheme={layerValues}
                             onChange={this.onLayerSelectChange}
+                            selectedLayer={selectedLayer}
+                            selectedResultType={selectedType}
                         />
                     </div>
                     <div style={[styles.sliderWrapper]}>
@@ -326,24 +281,30 @@ class ModelEditorResults extends Component {
 const mapStateToProps = (state, {tool}) => {
     return {
         tool,
-        model: model.getModflowModel(state[tool]),
+        model: modelSelector.getModflowModel(state[tool]),
         calculationId: results.getCalculationID(state[tool].model.results),
         layerValues: results.getLayerValues(state[tool].model.results),
         times: results.getTimes(state[tool].model.results),
-        getCalculationStatus: WebData.Selector.getRequestStatusByType(
-            state,
-            Query.GET_MODFLOW_MODEL_CALCULATION
-        ),
-        createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(
-            state,
-            T07.Command.CREATE_SCENARIO_ANALYSIS
-        )
+        getCalculationStatus: WebData.Selector.getRequestStatusByType(state, Query.GET_MODFLOW_MODEL_CALCULATION),
+        createScenarioAnalysisStatus: WebData.Selector.getRequestStatusByType(state, T07.Command.CREATE_SCENARIO_ANALYSIS)
     };
 };
 
 const actions = {
     sendQuery: WebData.Modifier.Action.sendQuery,
     createScenarioAnalysis: T07.Command.createScenarioAnalysis,
+};
+
+ModelEditorResults.propTypes = {
+    tool: PropTypes.string.isRequired,
+    model: PropTypes.object,
+    times: PropTypes.object,
+    layerValues: PropTypes.array,
+    calculationId: PropTypes.string,
+    sendQuery: PropTypes.func.isRequired,
+    getCalculationStatus: PropTypes.object,
+    createScenarioAnalysis: PropTypes.func.isRequired,
+    createScenarioAnalysisStatus: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, actions)(ConfiguredRadium(ModelEditorResults));
