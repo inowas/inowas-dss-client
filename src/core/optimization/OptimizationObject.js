@@ -141,7 +141,7 @@ class OptimizationObject {
                 obj[s.name] = {
                     min: s.data[i].min,
                     max: s.data[i].max,
-                    result: s.data[i].result
+                    result: s.data[i].result ? s.data[i].result : null
                 };
             });
             concentration[i.toString()] = obj;
