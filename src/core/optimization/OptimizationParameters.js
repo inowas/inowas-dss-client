@@ -13,6 +13,7 @@ class OptimizationParameters {
     _xtol = {value: 0.0001, parse: (x) => parseFloat(x), min: 0, max: 1};
     _ftol = {value: 0.0001, parse: (x) => parseFloat(x), min: 0, max: 1};
     _diversityFlg = {value: false};
+    _reportFrequency = {value: 50, parse: (x) => parseInt(x, 10), min: 0, max: 100};
 
     static fromDefaults() {
         return new OptimizationParameters();
@@ -33,6 +34,7 @@ class OptimizationParameters {
         parameters.xtol = obj.xtol;
         parameters.ftol = obj.ftol;
         parameters.diversityFlg = obj.diversity_flg;
+        parameters.reportFrequency = obj.report_frequency;
         return parameters;
     }
 
@@ -151,6 +153,14 @@ class OptimizationParameters {
         this._diversityFlg.value = value;
     }
 
+    get reportFrequency() {
+        return this._reportFrequency.value;
+    }
+
+    set reportFrequency(value) {
+        this._reportFrequency.value = this.applyMinMax(this._reportFrequency.parse(value), this._reportFrequency.min, this._reportFrequency.max);
+    }
+
     applyMinMax = (value, min = null, max = null) => {
         if (min !== null && value < min) {
             return min;
@@ -179,6 +189,7 @@ class OptimizationParameters {
             'xtol': this.xtol,
             'ftol': this.ftol,
             'diversity_flg': this.diversityFlg,
+            'report_frequency': this.reportFrequency
         });
     }
 }
