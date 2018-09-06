@@ -122,36 +122,8 @@ class OptimizationObject {
         this._meta._substances = value ? value : [];
     }
 
-    addSubstance(name) {
-        const substances = this.substances;
-        substances.push({
-            id: uuidv4(),
-            name: name,
-            data: (new Array(this.numberOfStressPeriods)).fill(0).map(() => {
-                return {
-                    min: 0,
-                    max: 0,
-                    result: 0
-                };
-            })
-        });
-
+    updateSubstances(substances) {
         this.substances = substances;
-        return this;
-    }
-
-    updateSubstance(substance) {
-        this.substances = this.substances.map(s => {
-            if (s.id === substance.id) {
-                return substance;
-            }
-            return s;
-        });
-        return this;
-    }
-
-    removeSubstance(id) {
-        this.substances = this.substances.filter(s => s.id !== id);
         return this;
     }
 
