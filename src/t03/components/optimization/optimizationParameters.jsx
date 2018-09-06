@@ -289,7 +289,7 @@ class OptimizationParametersComponent extends React.Component {
                                 </div>
                             )}
                             <Form.Field>
-                                <label>report frequency</label>
+                                <label>Report frequency</label>
                                 <Form.Input
                                     type="number"
                                     name="report_frequency"
