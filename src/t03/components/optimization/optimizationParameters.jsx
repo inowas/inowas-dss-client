@@ -288,6 +288,17 @@ class OptimizationParametersComponent extends React.Component {
                                     </Form.Group>
                                 </div>
                             )}
+                            <Form.Field>
+                                <label>Report frequency</label>
+                                <Form.Input
+                                    type="number"
+                                    name="report_frequency"
+                                    value={parameters.report_frequency}
+                                    placeholder="report frequency ="
+                                    onChange={this.handleChange}
+                                    style={styles.inputfix}
+                                />
+                            </Form.Field>
                         </Form>
                     </Grid.Row>
                 </Grid>

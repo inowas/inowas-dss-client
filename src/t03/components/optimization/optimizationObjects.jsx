@@ -17,6 +17,7 @@ import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import FluxDataTable from './FluxDataTable';
 import OptimizationMap from './optimizationMap';
 import Stressperiods from '../../../core/modflow/Stressperiods';
+import SubstanceEditor from './SubstanceEditor';
 
 class OptimizationObjectsComponent extends React.Component {
 
@@ -98,50 +99,10 @@ class OptimizationObjectsComponent extends React.Component {
         }));
     };
 
-    handleChangeSubstanceData = rows => {
-        const substance = this.state.selectedSubstance;
-        substance.data = rows.map((row, key) => {
-            return {
-                id: key,
-                min: parseFloat(row.min),
-                max: parseFloat(row.max)
-            };
-        });
-
-        return this.setState(prevState => ({
-            selectedSubstance: substance,
-            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstance(substance).toObject
+    handleChangeSubstances = (substances) => {
+        return this.setState((prevState) => ({
+            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstances(substances).toObject
         }));
-    };
-
-    handleChangeSubstance = (e, {name, value}) => {
-        const substance = this.state.selectedSubstance;
-        substance[name] = value;
-
-        return this.setState({
-            selectedSubstance: substance,
-            selectedObject: OptimizationObject.fromObject(this.state.selectedObject).updateSubstance(substance).toObject,
-        });
-    };
-
-    handleSelectSubstance = (e, {value}) => {
-        return this.setState({
-            selectedSubstance: this.state.selectedObject.substances.filter(s => s.id === value)[0]
-        });
-    };
-
-    addSubstance = name => {
-        return this.setState({
-            selectedObject: OptimizationObject.fromObject(this.state.selectedObject).addSubstance(name).toObject,
-            selectedSubstance: this.state.selectedObject.substances[this.state.selectedObject.substances.length - 1]
-        });
-    };
-
-    removeSubstance = s => {
-        return this.setState({
-            selectedSubstance: null,
-            selectedObject: OptimizationObject.fromObject(this.state.selectedObject).removeSubstance(s).toObject,
-        });
     };
 
     onClickBack = () => {
@@ -214,7 +175,6 @@ class OptimizationObjectsComponent extends React.Component {
         ];
 
         let fluxRows = null;
-        let substanceRows = null;
 
         if (this.state.selectedObject) {
             fluxRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
@@ -223,17 +183,6 @@ class OptimizationObjectsComponent extends React.Component {
                     date_time: dt,
                     min: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].min : 0,
                     max: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].max : 0
-                };
-            });
-        }
-
-        if (this.state.selectedSubstance) {
-            substanceRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
-                return {
-                    id: key,
-                    date_time: dt,
-                    min: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].min : 0,
-                    max: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].max : 0
                 };
             });
         }
@@ -389,60 +338,12 @@ class OptimizationObjectsComponent extends React.Component {
                                             Substances
                                         </Accordion.Title>
                                         <Accordion.Content active={this.state.activeIndex === 2}>
-                                            <Form.Group style={styles.dropDownWithButtons}>
-                                                <Dropdown
-                                                    placeholder="Select Substance"
-                                                    fluid
-                                                    search
-                                                    selection
-                                                    options={
-                                                        this.state.selectedObject.substances.map(s => {
-                                                            return {key: s.id, text: s.name, value: s.id};
-                                                        })
-                                                    }
-                                                    onChange={this.handleSelectSubstance}
-                                                    value={this.state.selectedSubstance ? this.state.selectedSubstance.id : null}
-                                                />
-                                                <Button.Group>
-                                                    <Button
-                                                        style={styles.buttonFix}
-                                                        icon
-                                                        onClick={() => this.addSubstance('new substance')}
-                                                    >
-                                                        <Icon name="add circle"/>
-                                                    </Button>
-
-                                                    <Button
-                                                        style={styles.buttonFix}
-                                                        icon
-                                                        onClick={() => this.removeSubstance(this.state.selectedSubstance.id)}
-                                                        disabled={this.state.selectedSubstance === null}
-                                                    >
-                                                        <Icon name="trash"/>
-                                                    </Button>
-                                                </Button.Group>
-                                            </Form.Group>
-                                            {this.state.selectedSubstance ?
-                                                <div>
-                                                    <label>Name</label>
-                                                    <Form.Input
-                                                        type="text"
-                                                        name="name"
-                                                        value={this.state.selectedSubstance.name}
-                                                        placeholder="name ="
-                                                        style={styles.inputfix}
-                                                        onChange={this.handleChangeSubstance}
-                                                    />
-                                                    <FluxDataTable
-                                                        config={fluxConfig}
-                                                        readOnly={false}
-                                                        rows={substanceRows}
-                                                        onChange={this.handleChangeSubstanceData}
-                                                    />
-                                                </div>
-                                                :
-                                                <p>No substance selected.</p>
-                                            }
+                                            <SubstanceEditor
+                                                object={this.state.selectedObject}
+                                                stressPeriods={this.props.stressPeriods}
+                                                substances={this.props.model.mt3dms.ssm._meta.substances}
+                                                onChange={this.handleChangeSubstances}
+                                            />
                                         </Accordion.Content>
                                     </Accordion>
                                 </Form>
@@ -459,6 +360,7 @@ class OptimizationObjectsComponent extends React.Component {
 OptimizationObjectsComponent.propTypes = {
     objects: PropTypes.array.isRequired,
     model: PropTypes.object,
+    substances: PropTypes.array,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
     onChange: PropTypes.func.isRequired,
 };

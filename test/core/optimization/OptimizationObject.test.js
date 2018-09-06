@@ -1,6 +1,7 @@
 import OptimizationObject from '../../../src/core/optimization/OptimizationObject';
 import Location from '../../../src/core/optimization/Location';
 import uuidv4 from 'uuid/v4';
+import WellPosition from "../../../src/core/optimization/WellPosition";
 
 export const optimizationObjects = [
     {
@@ -106,99 +107,70 @@ test('Getter and Setter', () => {
     });
     expect(object.concentration).toEqual({
         '0': {
-            'component1': {'max': 10, 'min': 0},
-            'component2': {'max': 10, 'min': 0}
+            'component1': {'max': 10, 'min': 0, 'result': null},
+            'component2': {'max': 10, 'min': 0, 'result': null}
         },
         '1': {
-            'component1': {'max': 20, 'min': 10},
-            'component2': {'max': 20, 'min': 10}
+            'component1': {'max': 20, 'min': 10, 'result': null},
+            'component2': {'max': 20, 'min': 10, 'result': null}
         }
     });
+    object.substances = null;
+    expect(object.substances).toHaveLength(0);
+    object.position = null;
+    expect(object.position).toBeInstanceOf(WellPosition);
     object.name = null;
     expect(object.name).toBe('New Optimization Object');
     object.name = 'Well 3';
     expect(object.name).toBe('Well 3');
-    object.type = 'wel';
-    expect(object.type).toBe('wel');
     expect(() => {
         object.type = 'another type';
     }).toThrow();
 });
 
-/*test('Adding, updating and removing substances', () => {
-    const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 5);
-    object.addSubstance('NaCl');
-    object.addSubstance('Pb');
-    expect(object.substances).toHaveLength(2);
+test('Updating substances', () => {
+    const object = new OptimizationObject();
+    object.numberOfStressPeriods = 2;
+    const substances = [
+        {
+            id: '123-456-789',
+            name: 'NaCl',
+            data: [
+                {min: 10, max: 20},
+                {min: 20, max: 30}
+            ]
+        },
+        {
+            id: 'abc-def-ghi',
+            name: 'HCl',
+            data: [
+                {min: 30, max: 40, result: 35},
+                {min: 40, max: 50, result: 35}
+            ]
+        }
+    ];
+    object.updateSubstances(substances);
     expect(object.concentration).toEqual({
-        '0': {
-            'NaCl': {'max': 0, 'min': 0, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '1': {
-            'NaCl': {'max': 0, 'min': 0, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '2': {
-            'NaCl': {'max': 0, 'min': 0, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '3': {
-            'NaCl': {'max': 0, 'min': 0, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '4': {
-            'NaCl': {'max': 0, 'min': 0, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
+        "0": {
+            "HCl": {"max": 40, "min": 30, "result": 35},
+            "NaCl": {"max": 20, "min": 10, "result": null}},
+        "1": {
+            "HCl": {"max": 50, "min": 40, "result": 35},
+            "NaCl": {"max": 30, "min": 20, "result": null}
         }
     });
-    object.updateSubstance({
-        id: object.substances.filter(s => s.name === 'NaCl')[0].id,
-        name: 'NaCl',
-        data: [
-            {'max': 100, 'min': 50, 'result': 0},
-            {'max': 200, 'min': 50, 'result': 0},
-            {'max': 300, 'min': 50, 'result': 0},
-            {'max': 200, 'min': 50, 'result': 0},
-            {'max': 100, 'min': 50, 'result': 0}
-        ]
-    });
-    expect(object.concentration).toEqual({
-        '0': {
-            'NaCl': {'max': 100, 'min': 50, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '1': {
-            'NaCl': {'max': 200, 'min': 50, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '2': {
-            'NaCl': {'max': 300, 'min': 50, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '3': {
-            'NaCl': {'max': 200, 'min': 50, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        },
-        '4': {
-            'NaCl': {'max': 100, 'min': 50, 'result': 0},
-            'Pb': {'max': 0, 'min': 0, 'result': 0}
-        }
-    });
-    object.removeSubstance(object.substances.filter(s => s.name === 'NaCl')[0].id);
 });
 
 test('Updating flux', () => {
     const object = OptimizationObject.createFromTypeAndStressPeriods('wel', 3);
     const rows = {
-        '0': {min: 0, max: 10},
-        '1': {min: 1, max: 11},
-        '2': {min: 2, max: 12}
+        '0': {min: 0, max: 10, result: null},
+        '1': {min: 1, max: 11, result: null},
+        '2': {min: 2, max: 12, result: 8}
     };
     expect(object.updateFlux(rows).flux).toEqual({
         '0': {min: 0, max: 10, result: null},
         '1': {min: 1, max: 11, result: null},
-        '2': {min: 2, max: 12, result: null}
+        '2': {min: 2, max: 12, result: 8}
     });
 });
-*/

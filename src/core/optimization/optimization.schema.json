@@ -16,7 +16,7 @@
             "id": {"$ref": "#/definitions/uuidv4"},
             "parameters": {
               "type": "object",
-              "required": ["method", "maxf", "xtol", "ftol"],
+              "required": ["method", "maxf", "xtol", "ftol", "report_frequency"],
               "properties": {
                 "method": {
                   "title": "Optimization Method",
@@ -103,6 +103,13 @@
                   "title": "Mutation Probability",
                   "description": "Probability of individual to be produced by mutation",
                   "type": "boolean"
+                },
+                "report_frequency": {
+                  "title": "Report Frequency",
+                  "description": "Amount of reports per iteration",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
                 }
               }
             },
@@ -199,6 +206,13 @@
                   "title": "Mutation Probability",
                   "description": "Probability of individual to be produced by mutation",
                   "type": "boolean"
+                },
+                "report_frequency": {
+                  "title": "Report Frequency",
+                  "description": "Amount of reports per iteration",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
                 }
               }
             },

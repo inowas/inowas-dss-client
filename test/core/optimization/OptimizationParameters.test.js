@@ -13,7 +13,8 @@ export const defaultParameters = {
     qbound: 0.25,
     diversity_flg: false,
     xtol: 0.0001,
-    ftol: 0.0001
+    ftol: 0.0001,
+    report_frequency: 50
 };
 
 test('Create with Defaults', () => {
@@ -36,7 +37,8 @@ test('Create from Object', () => {
         qbound: 0.3,
         diversity_flg: false,
         xtol: 0.0001,
-        ftol: 0.0001
+        ftol: 0.0001,
+        report_frequency: 10
     };
     const parameters = OptimizationParameters.fromObject(obj);
     expect(parameters).toBeInstanceOf(OptimizationParameters);

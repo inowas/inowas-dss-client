@@ -26,7 +26,6 @@ function* pollOptimizationCalculationStatus(tool, payload) {
     // eslint-disable-next-line no-constant-condition
     try {
         let i = 0;
-        let multi = 1;
 
         yield put(WebData.Modifier.Action.responseAction(Command.CALCULATE_OPTIMIZATION, {
             type: 'loading',
@@ -38,10 +37,6 @@ function* pollOptimizationCalculationStatus(tool, payload) {
         // eslint-disable-next-line no-constant-condition
         while (true) {
             const optimizationResponse = yield take(action => WebData.Helpers.waitForResponse(action, Query.GET_OPTIMIZATION));
-
-            if (i === MAX_TRY) {
-                break;
-            }
 
             if (WebData.Helpers.isError(optimizationResponse)) {
                 yield put(WebData.Modifier.Action.responseAction(Command.CALCULATE_OPTIMIZATION, {
@@ -57,11 +52,8 @@ function* pollOptimizationCalculationStatus(tool, payload) {
                 if (continuePolling(state)) {
                     yield put(Action.setOptimization(tool, optimizationResponse.webData.data));
                     i++;
-                    yield delay(3000 * multi);
+                    yield delay(10000);
 
-                    if (i % 5 === 0) {
-                        multi++;
-                    }
                     yield put(WebData.Modifier.Action.sendQuery(
                         `modflowmodels/${id}/optimization`,
                         Query.GET_OPTIMIZATION)

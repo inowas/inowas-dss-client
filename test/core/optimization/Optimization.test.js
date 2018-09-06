@@ -26,7 +26,8 @@ test('Create with Defaults and toObject', () => {
                 'ngen': 100,
                 'pop_size': 100,
                 'qbound': 0.25,
-                'xtol': 0.0001
+                'xtol': 0.0001,
+                'report_frequency': 50
             }
         },
         'progress': {
