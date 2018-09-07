@@ -77,7 +77,6 @@ class SubstanceEditor extends React.Component {
                     result: 0
                 };
             });
-            this.state.addedSubstances.push(substance);
             return this.setState({
                 selectedSubstance: substance
             });
@@ -104,12 +103,19 @@ class SubstanceEditor extends React.Component {
 
     onSaveModal = () => {
         const substance = this.state.selectedSubstance;
+        let substanceHasBeenAdded = false;
+
         const addedSubstances = this.state.addedSubstances.map(s => {
             if(s.id === substance.id) {
+                substanceHasBeenAdded = true;
                 return substance;
             }
             return s;
         });
+
+        if(!substanceHasBeenAdded) {
+            addedSubstances.push(substance);
+        }
 
         this.setState({
             selectedSubstance: null
