@@ -60,4 +60,7 @@ test('ApplyMinMax', () => {
     parameters.ncls = 5;
     parameters.popSize = 1;
     expect(parameters.popSize).toBe(5);
+    parameters.reportFrequency = 1000;
+    expect(parameters.reportFrequency).toEqual(parameters.popSize);
+    expect(parameters.applyMinMax(10)).toEqual(10);
 });

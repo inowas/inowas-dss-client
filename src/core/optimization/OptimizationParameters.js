@@ -13,7 +13,7 @@ class OptimizationParameters {
     _xtol = {value: 0.0001, parse: (x) => parseFloat(x), min: 0, max: 1};
     _ftol = {value: 0.0001, parse: (x) => parseFloat(x), min: 0, max: 1};
     _diversityFlg = {value: false};
-    _reportFrequency = {value: 50, parse: (x) => parseInt(x, 10), min: 0, max: 100};
+    _reportFrequency = {value: 50, parse: (x) => parseInt(x, 10), min: 0, max: null};
 
     static fromDefaults() {
         return new OptimizationParameters();
@@ -158,7 +158,7 @@ class OptimizationParameters {
     }
 
     set reportFrequency(value) {
-        this._reportFrequency.value = this.applyMinMax(this._reportFrequency.parse(value), this._reportFrequency.min, this._reportFrequency.max);
+        this._reportFrequency.value = this.applyMinMax(this._reportFrequency.parse(value), this._reportFrequency.min, this.popSize);
     }
 
     applyMinMax = (value, min = null, max = null) => {
