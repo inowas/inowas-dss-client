@@ -1,10 +1,9 @@
 'use strict';
 
-import {DefinePlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin, optimize} from 'webpack';
+import {DefinePlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin} from 'webpack';
 
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
-// import ImageminPlugin from 'imagemin-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
@@ -47,30 +46,26 @@ export default {
                 test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, include: __dirname
             },
             {
-                test: /\.less$/, use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: [
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            importLoaders: 2
-                        }
-                    }, {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }, {
-                        loader: 'less-loader',
-                        options: {
-                            sourceMap: true
-                        }
+                test: /\.less$/, use: [{
+                    loader: 'style-loader'
+                }, {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true,
+                        importLoaders: 2
                     }
-                ]
-            })
-            },
-            {
+                }, {
+                    loader: 'postcss-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: 'less-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }]
+            }, {
                 test: /\.(png|jpe?g|gif|svg)$/,
                 exclude: /icons/,
                 use: [{
@@ -104,11 +99,8 @@ export default {
                     }
                 }]
             },
-            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]'},
-            { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]&mimetype=application/font-woff'},
-            { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,loader: 'file-loader?name=fonts/[name].[hash:4].[ext]&mimetype=application/font-woff'},
-            { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=fonts/[name].[hash:4].[ext]&mimetype=application/octet-stream'},
-            { test: /\.csv$/, loader: 'raw-loader'}
+            {test: /.(woff|woff2|eot|ttf|otf)$/, use: ['file-loader']},
+            {test: /\.csv$/, loader: 'raw-loader'}
         ]
     },
     resolve: {

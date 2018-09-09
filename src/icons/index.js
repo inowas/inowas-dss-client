@@ -36,6 +36,7 @@ import Settings from './settings.svg';
 import Share from './share.svg';
 import Success from './success.svg';
 import Target from './target.svg';
+import Text from './text.svg';
 import Tools from './tools.svg';
 import Trash from './trash.svg';
 import Unchecked from './unchecked.svg';
@@ -78,6 +79,7 @@ const icons = {
     share: <Share />,
     success: <Success />,
     target: <Target />,
+    text: <Text />,
     tools: <Tools />,
     trash: <Trash />,
     unchecked: <Unchecked />,

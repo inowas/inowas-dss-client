@@ -175,6 +175,15 @@ export function setCalculation(tool, calculation) {
     };
 }
 
+export const SET_OPTIMIZATION = 'MODEL_EDITOR_MODEL_SET_OPTIMIZATION';
+
+export function setOptimization(tool, optimization) {
+    return {
+        type: SET_OPTIMIZATION,
+        tool,
+        payload: optimization
+    };
+}
 
 export const STOP_GET_MODFLOW_MODEL_CALCULATION = 'STOP_GET_MODFLOW_MODEL_CALCULATION';
 
@@ -205,5 +214,15 @@ export function setModflowPackages(tool, data) {
         type: SET_MODFLOW_PACKAGES,
         tool,
         payload: data
+    };
+}
+
+export const SET_MT3DMS = 'SET_MT3DMS';
+
+export function setMt3dms(tool, payload) {
+    return {
+        type: SET_MT3DMS,
+        tool,
+        payload: payload
     };
 }

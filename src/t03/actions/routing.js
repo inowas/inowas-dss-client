@@ -75,3 +75,11 @@ export const editLayerUrl = (routes, params) => (pid) => {
 export const modelRunType = (routes, params) => (type) => {
     Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property: 'model-run', type } );
 };
+
+export const modelOptimizationType = (routes, params) => (type) => {
+    Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property: 'optimization', type } );
+};
+
+export const transportType = (routes, params) => (type) => {
+    Routing.goToUrl( routes, { ...filterParamsPropertyType( params ), property: 'transport', type } );
+};

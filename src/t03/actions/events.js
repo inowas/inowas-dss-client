@@ -98,7 +98,6 @@ export function layerRemoved(tool, id) {
     };
 }
 
-
 export const STRESS_PERIODS_UPDATED = 'stressPeriodsUpdated';
 export const STRESS_PERIODS_CALCULATED = 'stressPeriodsCalculated';
 
@@ -127,5 +126,25 @@ export function modflowPackageUpdated(tool, packageId, packageType, data) {
         packageId,
         packageType,
         payload: data
+    };
+}
+
+export const MT3DMS_UPDATED = 'mt3dmsUpdated';
+
+export function mt3dmsUpdated(tool, data) {
+    return {
+        type: MT3DMS_UPDATED,
+        tool,
+        payload: data
+    };
+}
+
+export const OPTIMIZATION_INPUT_UPDATED = 'optimizationInputUpdated';
+
+export function optimizationInputUpdated(tool, optimizationInput) {
+    return {
+        type: OPTIMIZATION_INPUT_UPDATED,
+        tool,
+        payload: optimizationInput
     };
 }

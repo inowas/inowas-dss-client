@@ -154,7 +154,7 @@ export function updateStressPeriods(tool, modelId, data) {
     };
 }
 
-export function calculateStressPeriods(tool, modelId, start, end, time_unit) {
+export function calculateStressPeriods(tool, modelId, start, end, timeUnit) {
     return {
         type: CALCULATE_STRESS_PERIODS,
         tool,
@@ -162,7 +162,7 @@ export function calculateStressPeriods(tool, modelId, start, end, time_unit) {
             id: modelId,
             start,
             end,
-            time_unit
+            time_unit: timeUnit
         }
     };
 }
@@ -178,6 +178,58 @@ export function updateModflowPackage(tool, modelId, packageName, packageType, da
             id: modelId,
             data,
             package_name: packageName,
+        }
+    };
+}
+
+export const UPDATE_MT3DMS = 'updateMt3dms';
+
+export function updateMt3dms(tool, modelId, mt3dms) {
+    return {
+        type: UPDATE_MT3DMS,
+        tool,
+        payload: {
+            id: modelId,
+            mt3dms: mt3dms.toObject
+        }
+    };
+}
+
+export const UPDATE_OPTIMIZATION_INPUT = 'updateOptimizationInput';
+
+export function updateOptimizationInput(tool, modelId, input) {
+    return {
+        type: UPDATE_OPTIMIZATION_INPUT,
+        tool,
+        payload: {
+            id: modelId,
+            input: input
+        }
+    };
+}
+
+export const CALCULATE_OPTIMIZATION = 'calculateOptimization';
+
+export function calculateOptimization(tool, modelId, optimization) {
+    return {
+        type: CALCULATE_OPTIMIZATION,
+        tool,
+        payload: {
+            id: modelId,
+            optimization_id: optimization.id
+        }
+    };
+}
+
+export const CANCEL_OPTIMIZATION_CALCULATION = 'cancelOptimizationCalculation';
+
+export function cancelOptimizationCalculation(tool, modelId, optimization) {
+    return {
+        type: CANCEL_OPTIMIZATION_CALCULATION,
+        tool,
+        payload: {
+            id: modelId,
+            optimization_id: optimization.id
         }
     };
 }

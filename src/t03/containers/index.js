@@ -1,17 +1,19 @@
-import BoundaryOverview from './boundary';
 import Main from './main';
 import ModelEditorBoundary from './modelEditorBoundary';
 import ModelEditorGeneral from './modelEditorGeneral';
-import ModelEditorResultsHead from './modelEditorResultsHead';
-import ModelEditorSoilmodel from './modelEditorSoilmodel';
 import ModelEditorModelRun from './modelEditorModelRun';
+import ModelEditorOptimization from './modelEditorOptimization';
+import ModelEditorResults from './modelEditorResults';
+import ModelEditorSoilmodel from './modelEditorSoilmodel';
+import ModelEditorTransport from './modelEditorTransport';
 
 export {
-    BoundaryOverview,
     Main,
     ModelEditorBoundary,
     ModelEditorGeneral,
-    ModelEditorResultsHead,
-    ModelEditorSoilmodel,
     ModelEditorModelRun,
+    ModelEditorOptimization,
+    ModelEditorResults,
+    ModelEditorSoilmodel,
+    ModelEditorTransport
 };

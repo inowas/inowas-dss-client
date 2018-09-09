@@ -83,7 +83,7 @@ t03
 │   └── ...
 ├── index.js
 ├── reducers
-│   ├── boundary.js
+│   ├── BoundariesOverview.js
 │   ├── index.js
 │   └── model.js
 ├── sagas

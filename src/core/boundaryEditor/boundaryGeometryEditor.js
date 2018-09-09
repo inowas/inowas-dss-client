@@ -63,14 +63,20 @@ class BoundaryGeometryEditor extends React.Component {
                                 <Grid.Column width={10}>
 
                                     <Menu attached="top" tabular>
-                                        <Menu.Item name="geometry" active={activeItem === 'geometry'}
-                                                   onClick={this.handleItemClick}>
+                                        <Menu.Item
+                                            name="geometry"
+                                            active={activeItem === 'geometry'}
+                                            onClick={this.handleItemClick}
+                                        >
                                             <Icon name="location arrow"/>
                                             Geometry
                                         </Menu.Item>
 
-                                        <Menu.Item name="affected cells" active={activeItem === 'affected cells'}
-                                                   onClick={this.handleItemClick}>
+                                        <Menu.Item
+                                            name="affected cells"
+                                            active={activeItem === 'affected cells'}
+                                            onClick={this.handleItemClick}
+                                        >
                                             <Icon name="table"/>
                                             Affected cells
                                         </Menu.Item>

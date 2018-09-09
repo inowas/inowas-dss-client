@@ -10,8 +10,6 @@ export default function* loadBoundaryFlow() {
         const action = yield take(action => action.type === Query.GET_BOUNDARY);
 
         yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'loading'}));
-
-        yield put(Action.destroyModflowModel(action.tool));
         const state = yield select();
         const apiKey = getApiKey(state.session);
 
@@ -22,7 +20,7 @@ export default function* loadBoundaryFlow() {
                 apiKey
             );
 
-            yield put(Action.setBoundary(action.tool, action.bid, boundary));
+            yield put(Action.setBoundary(action.tool, boundary));
             yield put(WebData.Modifier.Action.responseAction(action.type, {type: 'success', data: null}));
         } catch (err) {
             let msg = 'Unknown Error';

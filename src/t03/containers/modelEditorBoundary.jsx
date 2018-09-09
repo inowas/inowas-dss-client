@@ -1,12 +1,11 @@
 import * as lodash from 'lodash';
 
-import {BoundaryProperties} from '../components';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router';
 
 import {Action} from '../actions/index';
-import {BoundaryOverview} from '../../t03/containers/index';
+import {BoundariesOverview, BoundaryProperties} from '../../t03/components/index';
 import {Routing} from '../../t03/actions';
 import {boundary as BoundarySelector} from '../selectors/index';
 import Button from '../../components/primitive/Button';
@@ -48,7 +47,6 @@ const styles = {
     }
 };
 
-@ConfiguredRadium
 class ModelEditorBoundary extends React.Component {
     constructor(props) {
         super(props);
@@ -79,9 +77,9 @@ class ModelEditorBoundary extends React.Component {
         const {type, id, pid, property} = this.props.params;
         const {params, routes} = this.props;
 
-        const viewBoundary = pid && type;
+        const showDetails = pid && type;
 
-        if (viewBoundary) {
+        if (showDetails) {
             const boundary = boundaries.filter(b => b.type === type && b.id === pid)[0];
             if (boundary) {
                 return (
@@ -99,7 +97,7 @@ class ModelEditorBoundary extends React.Component {
         }
 
         return (
-            <BoundaryOverview
+            <BoundariesOverview
                 property={property}
                 id={id}
                 type={type}
@@ -235,6 +233,6 @@ ModelEditorBoundary.propTypes = {
 
 export default withRouter(
     connect(makeMapStateToPropsBoundaries, mapDispatchToProps)(
-        ModelEditorBoundary
+        ConfiguredRadium(ModelEditorBoundary)
     )
 );

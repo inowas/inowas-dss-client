@@ -1,10 +1,13 @@
+import mt3dms from '../../core/modflow/mt3d/mt3dms';
 import styleGlobals from 'styleGlobals';
 
 export const CALCULATION_STATE_NEW = 0;
-export const CALCULATION_STATE_PREPROCESSING = 1;
-export const CALCULATION_STATE_QUEUED = 2;
-export const CALCULATION_STATE_STARTED = 3;
-export const CALCULATION_STATE_FINISHED = 4;
+export const CALCULATION_STATE_STARTED = 1;
+export const CALCULATION_STATE_PREPROCESSING = 2;
+export const CALCULATION_STATE_PREPROCESSING_FINISHED = 3;
+export const CALCULATION_STATE_QUEUED = 4;
+export const CALCULATION_STATE_CALCULATING = 5;
+export const CALCULATION_STATE_FINISHED = 6;
 
 export const getInitialStyles = () => {
     return {
@@ -36,6 +39,13 @@ export const getInitialStyles = () => {
             color: styleGlobals.colors.accent,
             opacity: 1,
             fill: false
+        },
+        hob: {
+            radius: 3,
+            color: 'green',
+            weight: 1,
+            fillColor: 'yellow',
+            fillOpacity: 1
         },
         rch: {
             weight: 2,
@@ -193,6 +203,8 @@ export const getInitialState = () => {
         boundaries: null,
         results: null,
         soilmodel: null,
+        optimization: null,
+        mt3dms: null,
         permissions: 'rwx',
         calculation: {state: 0, calculation_id: '', message: ''},
         public: true
@@ -222,3 +234,11 @@ export const getPermissions = state => state.model.permissions;
 export const getModflowModel = state => state.model;
 
 export const getModflowPackages = state => state.model.packages;
+
+export const getModflowMt3dms = state => {
+    if (state.model && state.model.mt3dms) {
+        return state.model.mt3dms;
+    }
+
+    return mt3dms.fromDefaults().toObject;
+};

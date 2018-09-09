@@ -5,7 +5,7 @@ import React from 'react';
 import {GeoJSON, Map, TileLayer, Polygon, Polyline, Circle, FeatureGroup, CircleMarker} from 'react-leaflet';
 import {geoJSON as leafletGeoJSON, LatLng} from 'leaflet';
 import {cloneDeep, uniqueId} from 'lodash';
-import {EditControl} from 'react-leaflet-draw';
+
 import FullscreenControl from 'react-leaflet-fullscreen';
 
 import * as geoTools from '../geospatial';
@@ -13,6 +13,7 @@ import Control from '../map/Control';
 
 import Button from '../../components/primitive/Button';
 import Icon from '../../components/primitive/Icon';
+import EditControl from '../map/EditControl';
 
 class BoundaryGeometryEditorMap extends React.Component {
 
@@ -66,7 +67,7 @@ class BoundaryGeometryEditorMap extends React.Component {
     renderBoundaries(boundaries) {
         return (
             boundaries.map(b => {
-                if (b.type === 'wel') {
+                if (b.type === 'wel' || b.type === 'hob') {
                     return (
                         <CircleMarker
                             key={b.id}
@@ -179,6 +180,7 @@ class BoundaryGeometryEditorMap extends React.Component {
                 polygon: false,
                 rectangle: false,
                 circle: false,
+                circlemarker: false,
                 marker: false
             }
         };
