@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-    CircleMarker,
+    CircleMarker, FeatureGroup,
     GeoJSON,
     LayerGroup,
     LayersControl,
@@ -297,12 +297,15 @@ class ScenarioAnalysisMap extends React.Component {
                     />
                 );
             }
+
             return null;
-        });
+        }).filter(e => e !== null);
 
         return (
             <LayersControl.Overlay name="Wells">
-                <LayerGroup>{wells}</LayerGroup>
+                <LayerGroup>
+                    <div>{wells}</div>
+                </LayerGroup>
             </LayersControl.Overlay>
         );
     }

@@ -304,7 +304,7 @@ ModelEditorResults.propTypes = {
     sendQuery: PropTypes.func.isRequired,
     getCalculationStatus: PropTypes.object,
     createScenarioAnalysis: PropTypes.func.isRequired,
-    createScenarioAnalysisStatus: PropTypes.func.isRequired,
+    createScenarioAnalysisStatus: PropTypes.func,
 };
 
 export default connect(mapStateToProps, actions)(ConfiguredRadium(ModelEditorResults));
