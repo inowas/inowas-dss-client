@@ -86,7 +86,7 @@ class OptimizationParametersComponent extends React.Component {
         const {parameters} = this.state;
 
         return (
-            <LayoutComponents.Column heading="Objectives">
+            <LayoutComponents.Column>
                 <Grid style={styles.tablewidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column/>
