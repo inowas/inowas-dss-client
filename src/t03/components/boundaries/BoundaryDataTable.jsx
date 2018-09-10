@@ -71,6 +71,10 @@ class BoundaryDataTable extends DataTable.Component.DataTable {
     }
 
     onRowsChange = rows => {
+        rows.map(r => {
+            r.date_time = Formatter.dateToAtomFormat(r.date_time);
+            return r;
+        });
         this.props.onChange(rows);
     };
 }
