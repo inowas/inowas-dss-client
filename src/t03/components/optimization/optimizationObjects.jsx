@@ -341,7 +341,7 @@ class OptimizationObjectsComponent extends React.Component {
                                             <SubstanceEditor
                                                 object={this.state.selectedObject}
                                                 stressPeriods={this.props.stressPeriods}
-                                                substances={this.props.model.mt3dms.ssm._meta.substances}
+                                                substances={this.props.model.mt3dms && this.props.model.mt3dms.ssm ? this.props.model.mt3dms.ssm._meta.substances : []}
                                                 onChange={this.handleChangeSubstances}
                                             />
                                         </Accordion.Content>
