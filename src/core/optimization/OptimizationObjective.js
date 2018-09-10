@@ -76,7 +76,7 @@ class OptimizationObjective {
     }
 
     set weight(value) {
-        this._weight = value;
+        this._weight = value ? parseFloat(value) : -1;
     }
 
     get penaltyValue() {
@@ -84,7 +84,7 @@ class OptimizationObjective {
     }
 
     set penaltyValue(value) {
-        this._penaltyValue = value;
+        this._penaltyValue = value ? parseFloat(value) : 999;
     }
 
     get location() {
