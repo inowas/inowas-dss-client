@@ -1,7 +1,7 @@
 import Grid from './Grid';
 import BoundingBox from './BoundingBox';
 
-import { min, max } from 'lodash';
+import {min, max} from 'lodash';
 
 /**
  * CrossSectionMapDataObject Base Class
@@ -18,17 +18,16 @@ export default class ScenarioAnalysisMapData {
     _globalMax;
 
     constructor({
-        area,
-        grid,
-        type = 'head',
-        boundaries = null,
-        xCrossSection = null,
-        timeSeriesGridCells = null,
-        heatMapData = null,
-        globalMin = null,
-        globalMax = null
-    }) {
-
+                    area,
+                    grid,
+                    type = 'head',
+                    boundaries = null,
+                    xCrossSection = null,
+                    timeSeriesGridCells = null,
+                    heatMapData = null,
+                    globalMin = null,
+                    globalMax = null
+                }) {
         this._area = area;
 
         if (!(grid instanceof Grid)) {
@@ -44,7 +43,7 @@ export default class ScenarioAnalysisMapData {
         if (!(boundaries instanceof Array) && boundaries !== null) {
             throw new Error(
                 'Expected third parameter to be an array, but got ' +
-                    typeof boundaries
+                typeof boundaries
             );
         }
         this._boundaries = boundaries;
@@ -53,7 +52,7 @@ export default class ScenarioAnalysisMapData {
         if (!(xCrossSection instanceof BoundingBox) && xCrossSection !== null) {
             throw new Error(
                 'Expected fourth parameter to be a BoundingBox, but got ' +
-                    typeof xCrossSection
+                typeof xCrossSection
             );
         }
         this._xCrossSection = xCrossSection;
@@ -65,7 +64,7 @@ export default class ScenarioAnalysisMapData {
         ) {
             throw new Error(
                 'Expected fifth parameter to be an array, but got ' +
-                    typeof timeSeriesGridCells
+                typeof timeSeriesGridCells
             );
         }
         this._timeSeriesGridCells = timeSeriesGridCells;
@@ -74,17 +73,17 @@ export default class ScenarioAnalysisMapData {
         if (!(heatMapData instanceof Array) && heatMapData !== null) {
             throw new Error(
                 'Expected sixth parameter to be a string, but got ' +
-                    typeof heatMapData
+                typeof heatMapData
             );
         }
 
         if (heatMapData) {
-            this._heatMapData = heatMapData;
+            this.heatMapData = heatMapData;
         }
 
         if (this._type === 'drawdown' && this._heatMapData) {
-            this._heatMapData = heatMapData.map( row => {
-                return row.map( col => {
+            this._heatMapData = heatMapData.map(row => {
+                return row.map(col => {
                     if (col) {
                         return -col;
                     }
@@ -99,23 +98,23 @@ export default class ScenarioAnalysisMapData {
 
         if (this._type === 'drawdown' && this._heatMapData) {
             if (!this._globalMin) {
-                this._globalMin = min(this._heatMapData.map( row => {
+                this._globalMin = min(this._heatMapData.map(row => {
                     return min(row);
                 }));
             }
 
             if (!this._globalMax) {
-                this._globalMax = max(this._heatMapData.map( row => {
+                this._globalMax = max(this._heatMapData.map(row => {
                     return max(row);
                 }));
             }
 
-            if (- this._globalMin > this._globalMax) {
-                this._globalMax = - this._globalMin;
+            if (-this._globalMin > this._globalMax) {
+                this._globalMax = -this._globalMin;
             }
 
-            if (- this._globalMax < this._globalMin) {
-                this._globalMin = - this._globalMax;
+            if (-this._globalMax < this._globalMin) {
+                this._globalMin = -this._globalMax;
             }
         }
     }
@@ -142,6 +141,23 @@ export default class ScenarioAnalysisMapData {
 
     get timeSeriesGridCells() {
         return this._timeSeriesGridCells;
+    }
+
+    set heatMapData(heatMapData) {
+        if (Array.isArray(heatMapData)) {
+            this._heatMapData = heatMapData.map(row => {
+                if (Array.isArray(row)) {
+                    return row.map(value => {
+                        if (value > parseFloat(1.0e+20)) {
+                            return null;
+                        }
+                        return value;
+                    });
+                }
+
+                return row;
+            });
+        }
     }
 
     get heatMapData() {

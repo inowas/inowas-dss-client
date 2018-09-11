@@ -181,12 +181,12 @@ class ScenarioAnalysisMap extends React.Component {
     restructureHeatMapData = heatMapData => {
         const newHeatMapData = [];
         heatMapData.forEach((y, yIndex) => {
-            y.forEach((x, xIndex) => {
-                if (x !== null) {
+            y.forEach((v, xIndex) => {
+                if (v !== null) {
                     newHeatMapData.push({
                         x: xIndex,
                         y: yIndex,
-                        value: parseFloat(x)
+                        value: parseFloat(v)
                     });
                 }
             });
