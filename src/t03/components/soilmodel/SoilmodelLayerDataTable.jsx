@@ -16,18 +16,10 @@ class SoilModelLayerDataTable extends DataTable.Component.DataTable {
             // Sort the first column in a descending way by default.
             // "asc" would work too and you can set multiple if you want.
             sortingColumns: {
-                'name': {
+                'number': {
                     direction: 'asc',
                     position: 0
-                },
-                'description': {
-                    direction: 'none',
-                    position: 1
-                },
-                'laytyp': {
-                    direction: 'none',
-                    position: 2
-                },
+                }
             },
             columns: [
                 {

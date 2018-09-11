@@ -72,7 +72,7 @@ class Calibration extends React.Component {
         const data = simulated.map((s, i) => ({y: s, x: observed[i]}));
 
         const min = Math.floor(Math.min(...observed, ...simulated) / 10) * 10;
-        const max = Math.ceil(Math.min(...observed, ...simulated) / 10) * 10;
+        const max = Math.ceil(Math.max(...observed, ...simulated) / 10) * 10;
         const line = [{x: min, y: min}, {x: max, y: max}];
         const linePlusDelta = [{x: min, y: min + deltaStd}, {x: max, y: max + deltaStd}];
         const lineMinusDelta = [{x: min, y: min - deltaStd}, {x: max, y: max - deltaStd}];
@@ -99,8 +99,8 @@ class Calibration extends React.Component {
         const data = simulated.map((s, i) => ({x: s, y: weightedResiduals[i]}));
         const xMin = Math.floor(Math.min(...simulated) / 10) * 10;
         const xMax = Math.ceil(Math.max(...simulated) / 10) * 10;
-        const yMin = xMin * linRegressSW[0] + linRegressSW[1];
-        const yMax = xMax * linRegressSW[0] + linRegressSW[1];
+        const yMin = Math.floor(Math.min(...weightedResiduals) / 10) * 10;
+        const yMax = Math.ceil(Math.max(...weightedResiduals) / 10) * 10;
 
         // noinspection JSSuspiciousNameCombination
         const domainY = Math.ceil(Math.max(yMax, yMin));
@@ -129,16 +129,22 @@ class Calibration extends React.Component {
     };
 
     chartRankedResidualsAgainstNormalProbability = ({npf, rankedResiduals, linRegressRN}) => {
-        const data = npf.map((n, i) => ({x: n, y: rankedResiduals[i]}));
-        const max = Math.max(
-            Math.abs(Math.floor(Math.min(...rankedResiduals, ...npf))),
-            Math.ceil(Math.max(...rankedResiduals, ...npf))
-        );
-        const xDomain = [-max, max];
-        const yMin = -max * linRegressRN[0] + linRegressRN[1];
-        const yMax = max * linRegressRN[0] + linRegressRN[1];
-        const line = [{x: -max, y: yMin}, {x: max, y: yMax}];
-        const yDomain = [Math.floor(yMin), Math.ceil(yMax)];
+        const data = npf.map((n, i) => ({y: n, x: rankedResiduals[i]}));
+        const xMin = Math.floor(Math.min(...rankedResiduals) / 5) * 5;
+        const xMax = Math.ceil(Math.max(...rankedResiduals) / 5) * 5;
+        const yMin = Math.floor(Math.min(...npf) / 5) * 5;
+        const yMax = Math.ceil(Math.max(...npf) / 5) * 5;
+
+        const line = [{
+            x: xMin,
+            y: linRegressRN[0] * xMin + linRegressRN[1]
+        }, {
+            x: xMax,
+            y: linRegressRN[0] * xMax + linRegressRN[1]
+        }];
+
+        const yDomain = [yMin, yMax];
+        const xDomain = [xMin, xMax];
 
         return (
             <Segment raised>
