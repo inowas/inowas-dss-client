@@ -36,7 +36,7 @@ class MtPackageProperties extends AbstractPackageProperties {
                     <Select
                         options={[
                             {key: 0, value: 'mt3dms', text: 'MT3DMS'},
-                            {key: 1, value: 'mt3usgs', text: 'MT3USGS'},
+                            {key: 1, value: 'mt3dusgs', text: 'MT3USGS'},
                         ]}
                         onChange={this.handleSelectExecutable}
                         value={mtPackage.exe_name}
