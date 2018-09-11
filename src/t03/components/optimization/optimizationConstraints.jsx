@@ -138,7 +138,7 @@ class OptimizationConstraintsComponent extends React.Component {
         ];
 
         return (
-            <LayoutComponents.Column heading="Constraints">
+            <LayoutComponents.Column>
                 <Grid style={styles.tablewidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column>

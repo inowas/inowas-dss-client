@@ -152,7 +152,7 @@ class OptimizationResultsComponent extends React.Component {
             ? this.state.optimization.progress : null;
 
         return (
-            <LayoutComponents.Column heading="Objectives">
+            <LayoutComponents.Column>
                 <Grid style={styles.tablewidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column>

@@ -7,7 +7,6 @@ import {withRouter} from 'react-router';
 import * as lodash from 'lodash';
 import {Command, Query} from '../../t03/actions';
 import {Routing} from '../actions/index';
-import VerticalMenu from '../../components/primitive/VerticalMenu';
 import Mt3dms from '../../core/modflow/mt3d/mt3dms';
 import MtPackageProperties from '../components/packages/mt/mtPackageProperties';
 import AbstractMt3dPackage from '../../core/modflow/mt3d/AbstractMt3dPackage';
@@ -17,7 +16,7 @@ import DspPackageProperties from '../components/packages/mt/dspPackageProperties
 import GcgPackageProperties from '../components/packages/mt/gcgPackageProperties';
 import SsmPackageProperties from '../components/packages/mt/ssmPackageProperties';
 import Stressperiods from '../../core/modflow/Stressperiods';
-import {Button} from 'semantic-ui-react';
+import {Button, Grid, Icon, Menu, Message, Transition} from 'semantic-ui-react';
 
 const styles = {
     container: {
@@ -54,6 +53,17 @@ const styles = {
         width: 'auto',
         height: 'auto'
     },
+
+    gridFix: {
+        width: '99%'
+    },
+
+    msgFix: {
+        paddingTop: '6.929px',
+        paddingBottom: '6.929px',
+        fontSize: '1rem',
+        textAlign: 'center'
+    }
 };
 
 const sideBar = [
@@ -83,12 +93,17 @@ const sideBar = [
     }
 ];
 
+const EDITSTATE_NOCHANGES = 0;
+const EDITSTATE_UNSAVED = 1;
+const EDITSTATE_SAVED = 2;
+
 class ModelEditorTransport extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            mt3dms: null
+            mt3dms: this.props.model.mt3dms,
+            editState: EDITSTATE_NOCHANGES
         };
     }
 
@@ -99,6 +114,9 @@ class ModelEditorTransport extends React.Component {
     }
 
     handleOnSave = () => {
+        this.setState({
+            editState: EDITSTATE_SAVED
+        });
         return this.props.updateMt3dms(
             this.props.model.id,
             Mt3dms.fromObject(this.state.mt3dms)
@@ -110,7 +128,8 @@ class ModelEditorTransport extends React.Component {
             const newMt3dms = Mt3dms.fromObject(this.state.mt3dms);
             newMt3dms.addPackage(p);
             return this.setState({
-                mt3dms: newMt3dms.toObject
+                mt3dms: newMt3dms.toObject,
+                editState: EDITSTATE_UNSAVED
             });
         }
 
@@ -126,7 +145,8 @@ class ModelEditorTransport extends React.Component {
         const changedMt3dms = Mt3dms.fromObject(this.state.mt3dms);
         changedMt3dms.toggleEnabled();
         return this.setState({
-            mt3dms: changedMt3dms.toObject
+            mt3dms: changedMt3dms.toObject,
+            editState: EDITSTATE_UNSAVED
         });
     };
 
@@ -136,6 +156,11 @@ class ModelEditorTransport extends React.Component {
     };
 
     renderProperties() {
+        console.log({
+            mt3dms: this.state.mt3dms,
+            model: this.props.model
+        });
+
         if (!this.state.mt3dms || !this.props.model) {
             return null;
         }
@@ -219,11 +244,16 @@ class ModelEditorTransport extends React.Component {
 
         return (
             <div style={styles.left}>
-                <VerticalMenu
-                    activeItem={type}
-                    items={sideBar}
-                    onClick={this.onMenuClick}
-                />
+                <Menu fluid vertical tabular>
+                    { sideBar.map((item, key) => (
+                        <Menu.Item
+                            key={key}
+                            name={item.name}
+                            active={type === item.id}
+                            onClick={() => this.onMenuClick(item.id)}
+                        />
+                    ))}
+                </Menu>
             </div>
         );
     };
@@ -235,16 +265,35 @@ class ModelEditorTransport extends React.Component {
                 {this.renderSidebar()}
                 <div style={styles.properties}>
                     <div style={[styles.columnFlex2]}>
-                        {this.renderProperties()}
-                        <Button
-                            floated={'right'}
-                            style={styles.buttonFix}
-                            icon
-                            onClick={this.handleOnSave}
-                            disabled={readonly}
-                        >
-                            Save
-                        </Button>
+                        <Grid style={styles.gridFix}>
+                            <Grid.Row columns={3}>
+                                <Grid.Column/>
+                                <Grid.Column>
+                                    {this.state.editState === EDITSTATE_UNSAVED &&
+                                    <Message warning style={styles.msgFix}>Changes not saved!</Message>
+                                    }
+                                    <Transition visible={this.state.editState === EDITSTATE_SAVED} animation="drop" duration={500}>
+                                        <Message positive style={styles.msgFix}>Changes saved!</Message>
+                                    </Transition>
+                                </Grid.Column>
+                                <Grid.Column textAlign="right">
+                                    <Button icon positive
+                                        style={styles.buttonFix}
+                                        labelPosition="left"
+                                        onClick={this.handleOnSave}
+                                        disabled={readonly}
+                                    >
+                                        <Icon name="save"/>
+                                        Save
+                                    </Button>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row columns={1}>
+                                <Grid.Column>
+                                    {this.renderProperties()}
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </div>
                 </div>
             </div>
