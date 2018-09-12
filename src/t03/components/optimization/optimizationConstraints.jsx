@@ -6,7 +6,7 @@ import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './optimizationMap';
-import InputRange from './inputRange';
+import Slider from 'rc-slider';
 
 class OptimizationConstraintsComponent extends React.Component {
 
@@ -29,24 +29,22 @@ class OptimizationConstraintsComponent extends React.Component {
     }
 
     handleChange = (e, {name, value}) => {
+        const constraint = OptimizationConstraint.fromObject(this.state.selectedConstraint);
+        constraint[name] = value;
         return this.setState({
-            selectedConstraint: {
-                ...this.state.selectedConstraint,
-                [name]: value
-            }
+            selectedConstraint: constraint.toObject
         });
     };
 
-    handleChangeLocation = ({name, from, to}) => {
+    handleChangeStressPeriods = (e) => {
         return this.setState({
             selectedConstraint: {
                 ...this.state.selectedConstraint,
                 location: {
                     ...this.state.selectedConstraint.location,
-                    [name]: {
-                        ...this.state.selectedConstraint.location[name],
-                        min: from,
-                        max: to
+                    ts: {
+                        min: e[0],
+                        max: e[1]
                     }
                 }
             }
@@ -126,6 +124,9 @@ class OptimizationConstraintsComponent extends React.Component {
             },
             tablewidth: {
                 width: '99%'
+            },
+            sliderDiv: {
+                paddingBottom: 30
             }
         };
 
@@ -136,6 +137,12 @@ class OptimizationConstraintsComponent extends React.Component {
             {key: 'type4', text: 'Distance', value: 'distance'},
             {key: 'type5', text: 'Input Concentration', value: 'inputConc'}
         ];
+
+        let marks = {};
+
+        this.props.stressPeriods.dateTimes.forEach((dt, key) => {
+            marks[key] = key;
+        });
 
         return (
             <LayoutComponents.Column>
@@ -294,64 +301,75 @@ class OptimizationConstraintsComponent extends React.Component {
                                         onChange={this.handleChange}
                                     />
                                 </Form.Field>
-                                <Form.Field>
-                                    <InputRange
-                                        name="ts"
-                                        from={this.state.selectedConstraint.location.ts.min}
-                                        to={this.state.selectedConstraint.location.ts.max}
-                                        label="Stress Period"
-                                        label_from="min"
-                                        label_to="max"
-                                        onChange={this.handleChangeLocation}
-                                    />
-                                </Form.Field>
-                                <Segment>
-                                    <h4>Location</h4>
-                                    <OptimizationMap
-                                        name="location"
-                                        area={this.props.model.geometry}
-                                        bbox={this.props.model.bounding_box}
-                                        location={this.state.selectedConstraint.location}
-                                        objects={this.props.objects}
-                                        gridSize={this.props.model.grid_size}
-                                        onChange={this.handleChange}
-                                        readOnly
-                                    />
-                                </Segment>
+                                {this.state.selectedConstraint.type !== 'distance' &&
+                                <div>
+                                    <Form.Field>
+                                        <label>Stress Periods</label>
+                                        <Segment style={styles.sliderDiv}>
+                                            <Slider.Range
+                                                min={0}
+                                                max={this.props.stressPeriods.dateTimes.length - 1}
+                                                step={1}
+                                                marks={marks}
+                                                onChange={this.handleChangeStressPeriods}
+                                                defaultValue={[this.state.selectedConstraint.location.ts.min, this.state.selectedConstraint.location.ts.max]}
+                                            />
+                                        </Segment>
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <label>Location</label>
+                                        <Segment>
+                                            <OptimizationMap
+                                                name="location"
+                                                area={this.props.model.geometry}
+                                                bbox={this.props.model.bounding_box}
+                                                location={this.state.selectedConstraint.location}
+                                                objects={this.props.objects}
+                                                onlyObjects={this.state.selectedConstraint.type === 'flux' || this.state.selectedConstraint.type === 'inputConc'}
+                                                gridSize={this.props.model.grid_size}
+                                                onChange={this.handleChange}
+                                                readOnly
+                                            />
+                                        </Segment>
+                                    </Form.Field>
+                                </div>
+                                }
                                 {this.state.selectedConstraint.type === 'distance' &&
-                                <Segment>
-                                    <h4>Distance</h4>
-                                    <Grid divided={'vertically'}>
-                                        <Grid.Row columns={2}>
-                                            <Grid.Column width={8}>
-                                                <OptimizationMap
-                                                    name="location_1"
-                                                    label="Edit Location 1"
-                                                    area={this.props.model.geometry}
-                                                    bbox={this.props.model.bounding_box}
-                                                    location={this.state.selectedConstraint.location_1}
-                                                    objects={this.props.objects}
-                                                    gridSize={this.props.model.grid_size}
-                                                    onChange={this.handleChange}
-                                                    readOnly
-                                                />
-                                            </Grid.Column>
-                                            <Grid.Column width={8}>
-                                                <OptimizationMap
-                                                    name="location_2"
-                                                    label="Edit Location 2"
-                                                    area={this.props.model.geometry}
-                                                    bbox={this.props.model.bounding_box}
-                                                    location={this.state.selectedConstraint.location_2}
-                                                    objects={this.props.objects}
-                                                    gridSize={this.props.model.grid_size}
-                                                    onChange={this.handleChange}
-                                                    readOnly
-                                                />
-                                            </Grid.Column>
-                                        </Grid.Row>
-                                    </Grid>
-                                </Segment>
+                                <Form.Field>
+                                    <label>Distance</label>
+                                    <Segment>
+                                        <Grid divided={'vertically'}>
+                                            <Grid.Row columns={2}>
+                                                <Grid.Column width={8}>
+                                                    <OptimizationMap
+                                                        name="location_1"
+                                                        label="Edit Location 1"
+                                                        area={this.props.model.geometry}
+                                                        bbox={this.props.model.bounding_box}
+                                                        location={this.state.selectedConstraint.location_1}
+                                                        objects={this.props.objects}
+                                                        gridSize={this.props.model.grid_size}
+                                                        onChange={this.handleChange}
+                                                        readOnly
+                                                    />
+                                                </Grid.Column>
+                                                <Grid.Column width={8}>
+                                                    <OptimizationMap
+                                                        name="location_2"
+                                                        label="Edit Location 2"
+                                                        area={this.props.model.geometry}
+                                                        bbox={this.props.model.bounding_box}
+                                                        location={this.state.selectedConstraint.location_2}
+                                                        objects={this.props.objects}
+                                                        gridSize={this.props.model.grid_size}
+                                                        onChange={this.handleChange}
+                                                        readOnly
+                                                    />
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                    </Segment>
+                                </Form.Field>
                                 }
                             </Form>
 

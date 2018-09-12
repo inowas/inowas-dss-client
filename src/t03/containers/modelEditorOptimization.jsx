@@ -173,14 +173,19 @@ class ModelEditorOptimization extends React.Component {
                 );
             case 'objectives':
                 return (
-                    <OptimizationObjectivesComponent objectives={optimization.input.objectives} model={this.props.model}
-                                                     objects={optimization.input.objects} onChange={this.onChange}/>
+                    <OptimizationObjectivesComponent objectives={optimization.input.objectives}
+                                                     model={this.props.model}
+                                                     objects={optimization.input.objects}
+                                                     stressPeriods={stressPeriods}
+                                                     onChange={this.onChange}/>
                 );
             case 'constraints':
                 return (
                     <OptimizationConstraintsComponent constraints={optimization.input.constraints}
                                                       model={this.props.model}
-                                                      objects={optimization.input.objects} onChange={this.onChange}/>
+                                                      objects={optimization.input.objects}
+                                                      stressPeriods={stressPeriods}
+                                                      onChange={this.onChange}/>
                 );
             case 'results':
                 return (
@@ -269,7 +274,8 @@ class ModelEditorOptimization extends React.Component {
                         <Menu.Item
                             name="objects"
                             active={this.state.activeItem === 'objects'}
-                            onClick={this.onMenuClick}/>
+                            onClick={this.onMenuClick}
+                            content="Decision Variables"/>
                         <Menu.Item
                             name="objectives"
                             active={this.state.activeItem === 'objectives'}

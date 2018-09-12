@@ -33,7 +33,7 @@ const Chart = ({data}) => {
                             </LineChart>
                         </ResponsiveContainer>
                         <div className="diagram-ylabels">
-                            Fitness
+                            Hypervolume
                         </div>
                         <span className="center-vertical center-horizontal">Iteration</span>
                     </div>

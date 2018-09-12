@@ -53,6 +53,13 @@ class OptimizationObjective {
 
     set type(value) {
         this._type = value ? value : '';
+
+        if (value === 'flux' || value === 'inputConc') {
+            this.location = {
+                ...this.location,
+                type: 'object'
+            }
+        }
     }
 
     get concFileName() {
