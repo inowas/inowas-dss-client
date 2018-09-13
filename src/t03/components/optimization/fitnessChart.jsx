@@ -14,18 +14,6 @@ import {
 } from 'recharts';
 
 const Chart = ({data}) => {
-
-    const lines = Object.getOwnPropertyNames(data[0]).filter(p => p !== 'name').map((p, key) => {
-        return (
-            <Line
-                key={key}
-                isAnimationActive={false}
-                type="monotone"
-                dataKey={p}
-                stroke={'#' + Math.floor(Math.random() * 16777215).toString(16)}/>
-        );
-    });
-
     return (
         <div>
             <div className="grid-container">
@@ -38,7 +26,12 @@ const Chart = ({data}) => {
                                 <XAxis dataKey="name"/>
                                 <YAxis/>
                                 <Legend/>
-                                {lines}
+                                <Line
+                                    isAnimationActive={false}
+                                    type="monotone"
+                                    dataKey={log}
+                                    stroke="#82ca9d"
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>

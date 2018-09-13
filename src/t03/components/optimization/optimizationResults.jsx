@@ -44,45 +44,6 @@ class OptimizationResultsComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        /* TODO: just for testing
-        const solution1 = new OptimizationSolution();
-        const solution2 = new OptimizationSolution();
-
-        const object1 = new OptimizationObject();
-        const object2 = new OptimizationObject();
-        const object3 = new OptimizationObject();
-
-        object1.position.row.min = 1;
-        object1.position.row.max = 10;
-        object1.position.row.result = 5;
-        object1.position.col.min = 1;
-        object1.position.col.max = 10;
-        object1.position.col.result = 5;
-
-        object2.position.row.min = 2;
-        object2.position.row.max = 12;
-        object2.position.row.result = 6;
-        object2.position.col.min = 2;
-        object2.position.col.max = 12;
-        object2.position.col.result = 6;
-
-        object3.position.row.min = 15;
-        object3.position.row.max = 25;
-        object3.position.row.result = 19;
-        object3.position.col.min = 5;
-        object3.position.col.max = 15;
-        object3.position.col.result = 10;
-
-        solution1.fitness = [0.2, 0.6, 0.8, 0.85];
-        solution1.variables = [1, 2, 3, 1];
-        solution1.objects = [object1];
-
-        solution2.fitness = [0.1, 0.7, 0.9, 0.95];
-        solution2.variables = [3, 1, 2, 3];
-        solution2.objects = [object2, object3];
-
-        const solutions = [solution1.toObject, solution2.toObject];*/
-
         this.state = {
             optimization: this.props.optimization.toObject,
             selectedSolution: null,
@@ -109,18 +70,13 @@ class OptimizationResultsComponent extends React.Component {
     }
 
     setData = (props) => {
-        let data = [];
-
-        for (let i = 0; i <= (props.optimization.input.objectives.length - 1); i++) {
-            data[i] = {
-                name: i
+        const optimization = props.optimization.toObject;
+        return optimization.progress.progress_log.map((p, key) => {
+            return {
+                name: key,
+                log: parseFloat(p)
             };
-            props.optimization.solutions.forEach((s, k) => {
-                data[i][`solution${k + 1}`] = s.fitness[i];
-            });
-        }
-
-        return data;
+        });
     };
 
     onClickApply = (id) => {
@@ -202,9 +158,6 @@ class OptimizationResultsComponent extends React.Component {
             }
         }
 
-        const progress = this.state.optimization.progress
-            ? this.state.optimization.progress : null;
-
         return (
             <LayoutComponents.Column>
                 <Grid style={styles.tablewidth}>
@@ -225,18 +178,29 @@ class OptimizationResultsComponent extends React.Component {
                         </Grid.Column>
                         <Grid.Column/>
                     </Grid.Row>
-                    {progress &&
+                    {this.state.optimization.progress.iteration && this.state.optimization.progress.iteration_total && this.state.optimization.progress.iteration_total !== 0 &&
                     <Grid.Row columns={1}>
                         <Grid.Column>
                             <Progress
-                                percent={100 * progress.generation / this.state.optimization.input.parameters.ngen}
+                                percent={100 * this.state.optimization.progress.iteration / this.state.optimization.progress.iteration_total}
                                 progress indicating>
-                                Iteration {progress.generation} of {this.state.optimization.input.parameters.ngen}
+                                Iteration {this.state.optimization.progress.iteration} of {this.state.optimization.progress.iteration_total}
                             </Progress>
                         </Grid.Column>
                     </Grid.Row>
                     }
-                    {this.state.optimization.solutions.length > 0 && this.state.data.length > 0 &&
+                    {this.state.optimization.progress.simulation && this.state.optimization.progress.simulation_total && this.state.optimization.progress.simulation_total !== 0 &&
+                    <Grid.Row columns={1}>
+                        <Grid.Column>
+                            <Progress
+                                percent={100 * this.state.optimization.progress.simulation / this.state.optimization.progress.simulation_total}
+                                progress indicating>
+                                Iteration {this.state.optimization.progress.simulation} of {this.state.optimization.progress.simulation_total}
+                            </Progress>
+                        </Grid.Column>
+                    </Grid.Row>
+                    }
+                    {this.state.data && this.state.data.length > 0 &&
                     <Grid.Row columns={1}>
                         <section className="stretch">
                             <Chart data={this.state.data}/>
