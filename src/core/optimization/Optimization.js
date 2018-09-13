@@ -6,8 +6,11 @@ class Optimization {
     _input;
     _state = 0;
     _progress = {
-        _log: [],
-        _generation: 0,
+        _progress_log: [],
+        _simulation: 0,
+        _simulation_total: 0,
+        _iteration: 0,
+        _iteration_total: 0,
         _final: false
     };
     _solutions = [];
@@ -59,8 +62,11 @@ class Optimization {
     }
 
     set progress(value) {
-        this._progress._log = value && value.log ? value.log : [];
-        this._progress._generation = value && value.generation ? value.generation : 0;
+        this._progress._progress_log = value && value.progress_log ? value.progress_log : [];
+        this._progress._simulation = value && value.simulation ? value.simulation : 0;
+        this._progress._simulation_total = value && value.simulation_total ? value.simulation_total : 0;
+        this._progress._iteration = value && value.iteration ? value.iteration : 0;
+        this._progress._iteration_total = value && value.iteration_total ? value.iteration_total : 0;
         this._progress._final = value && value.final ? value.final : false;
     }
 
@@ -78,9 +84,12 @@ class Optimization {
             'input': this.input.toObject,
             'state': this.state,
             'progress': {
-                log: this._progress._log,
-                generation: this._progress._generation,
-                final: this._progress._final
+                'progress_log': this._progress._progress_log,
+                'simulation': this._progress._simulation,
+                'simulation_total': this._progress._simulation_total,
+                'iteration': this._progress._iteration,
+                'iteration_total': this._progress._iteration_total,
+                'final': this._progress._final
             },
             'solutions': this.solutions.map(r => r.toObject)
         };
