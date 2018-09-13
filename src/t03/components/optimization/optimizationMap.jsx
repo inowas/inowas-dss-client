@@ -250,9 +250,6 @@ class OptimizationMap extends React.Component {
                     key={this.generateKeyFunction(area)}
                     data={area}
                 />
-                {this.state.location.col.result &&
-                    this.drawObject(this.props.bbox, this.props.gridSize, this.state.location, 'blue')
-                }
                 {this.state.location.type === 'bbox' && !readOnly &&
                     <div>
                         <FullscreenControl position="topright"/>
@@ -290,7 +287,6 @@ class OptimizationMap extends React.Component {
     }
 
     render() {
-
         return (
             <div>
                 <Button fluid
@@ -306,7 +302,6 @@ class OptimizationMap extends React.Component {
                         <Grid divided={'vertically'}>
                             <Grid.Row columns={2}>
                                 <Grid.Column width={6}>
-                                    {this.props.objects && this.props.objects.length > 0 &&
                                     <Grid celled="internally">
                                         <Grid.Row textAlign="center">
                                             <Grid.Column width={8}>
@@ -318,18 +313,19 @@ class OptimizationMap extends React.Component {
                                                     onChange={this.handleChangeLocationType}
                                                 />
                                             </Grid.Column>
+                                            {!this.props.onlyObjects &&
                                             <Grid.Column width={8}>
                                                 <Form.Checkbox
                                                     name="type"
                                                     label="At bounding box"
                                                     value="bbox"
-                                                    checked={this.state.location.type === 'bbox' }
+                                                    checked={this.state.location.type === 'bbox'}
                                                     onChange={this.handleChangeLocationType}
                                                 />
                                             </Grid.Column>
+                                            }
                                         </Grid.Row>
                                     </Grid>
-                                    }
                                     {this.state.location.type === 'bbox' &&
                                     <Segment color="blue">
                                         <Form>
@@ -418,6 +414,7 @@ OptimizationMap.propTypes = {
     bbox: PropTypes.array.isRequired,
     location: PropTypes.object.isRequired,
     objects: PropTypes.array,
+    onlyObjects: PropTypes.bool,
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
     gridSize: PropTypes.object.isRequired,

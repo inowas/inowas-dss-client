@@ -44,6 +44,7 @@
         "radium": "^0.18.1",
         "rainbowvis.js": "https://github.com/inowas/RainbowVis-JS.git#master",
         "raw-loader": "^0.5.1",
+        "rc-slider": "^8.6.2",
         "react": "^15.4.2",
         "react-c3js": "<=0.1.13",
         "react-dom": "^15.4.2",
