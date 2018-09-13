@@ -195,7 +195,7 @@ class OptimizationResultsComponent extends React.Component {
                             <Progress
                                 percent={100 * this.state.optimization.progress.simulation / this.state.optimization.progress.simulation_total}
                                 progress indicating>
-                                Iteration {this.state.optimization.progress.simulation} of {this.state.optimization.progress.simulation_total}
+                                Simulation {this.state.optimization.progress.simulation} of {this.state.optimization.progress.simulation_total}
                             </Progress>
                         </Grid.Column>
                     </Grid.Row>

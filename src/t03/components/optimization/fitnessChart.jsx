@@ -29,7 +29,7 @@ const Chart = ({data}) => {
                                 <Line
                                     isAnimationActive={false}
                                     type="monotone"
-                                    dataKey={log}
+                                    dataKey="log"
                                     stroke="#82ca9d"
                                 />
                             </LineChart>
