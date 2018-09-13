@@ -30,7 +30,6 @@ class OptimizationObjectivesComponent extends React.Component {
     }
 
     handleChange = (e, {name, value}) => {
-        console.log({name, value});
         const objective = OptimizationObjective.fromObject(this.state.selectedObjective);
         objective[name] = value;
         return this.setState({
@@ -255,7 +254,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                         <Form.Input
                                             disabled={this.state.selectedObjective.type !== 'concentration'}
                                             type="text"
-                                            name="conc_file_name"
+                                            name="concFileName"
                                             value={this.state.selectedObjective.conc_file_name}
                                             placeholder="conc_file_name ="
                                             style={styles.inputfix}
@@ -266,7 +265,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                 <Form.Field>
                                     <label>Method how each objective scalar will be calculated.</label>
                                     <Form.Select
-                                        name="summary_method"
+                                        name="summaryMethod"
                                         value={this.state.selectedObjective.summary_method}
                                         placeholder="summary_method ="
                                         options={[
@@ -294,7 +293,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                         <label>Objective penalty value</label>
                                         <Form.Input
                                             type="number"
-                                            name="penalty_value"
+                                            name="penaltyValue"
                                             value={this.state.selectedObjective.penalty_value}
                                             placeholder="penalty_value ="
                                             style={styles.inputfix}
@@ -343,7 +342,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                             <Grid.Row columns={2}>
                                                 <Grid.Column width={8}>
                                                     <OptimizationMap
-                                                        name="location_1"
+                                                        name="location1"
                                                         label="Edit Location 1"
                                                         area={this.props.model.geometry}
                                                         bbox={this.props.model.bounding_box}
@@ -356,7 +355,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                 </Grid.Column>
                                                 <Grid.Column width={8}>
                                                     <OptimizationMap
-                                                        name="location_2"
+                                                        name="location2"
                                                         label="Edit Location 2"
                                                         area={this.props.model.geometry}
                                                         bbox={this.props.model.bounding_box}
