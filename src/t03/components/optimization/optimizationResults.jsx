@@ -52,17 +52,6 @@ class OptimizationResultsComponent extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let data = [];
-
-        for (let i = 0; i <= (nextProps.optimization.input.objectives.length - 1); i++) {
-            data[i] = {
-                name: i
-            };
-            nextProps.optimization.solutions.forEach((s, k) => {
-                data[i][`solution${k + 1}`] = s.fitness[i];
-            });
-        }
-
         this.setState({
             optimization: nextProps.optimization.toObject,
             data: this.setData(nextProps)
@@ -157,6 +146,8 @@ class OptimizationResultsComponent extends React.Component {
                     state = `Undefined State with code: ${this.state.optimization.state}`;
             }
         }
+
+        console.log(this.state);
 
         return (
             <LayoutComponents.Column>

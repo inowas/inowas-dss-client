@@ -253,7 +253,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                         <Form.Input
                                             disabled={this.state.selectedConstraint.type !== 'concentration'}
                                             type="text"
-                                            name="conc_file_name"
+                                            name="concFileName"
                                             value={this.state.selectedConstraint.conc_file_name}
                                             placeholder="conc_file_name ="
                                             style={styles.inputfix}
@@ -264,7 +264,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                 <Form.Field>
                                     <label>Method how each constraint scalar will be calculated.</label>
                                     <Form.Select
-                                        name="summary_method"
+                                        name="summaryMethod"
                                         value={this.state.selectedConstraint.summary_method}
                                         placeholder="summary_method ="
                                         options={[
@@ -342,7 +342,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                             <Grid.Row columns={2}>
                                                 <Grid.Column width={8}>
                                                     <OptimizationMap
-                                                        name="location_1"
+                                                        name="location1"
                                                         label="Edit Location 1"
                                                         area={this.props.model.geometry}
                                                         bbox={this.props.model.bounding_box}
@@ -355,7 +355,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                                 </Grid.Column>
                                                 <Grid.Column width={8}>
                                                     <OptimizationMap
-                                                        name="location_2"
+                                                        name="location2"
                                                         label="Edit Location 2"
                                                         area={this.props.model.geometry}
                                                         bbox={this.props.model.bounding_box}

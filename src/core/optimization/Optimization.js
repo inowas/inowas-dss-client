@@ -62,7 +62,12 @@ class Optimization {
     }
 
     set progress(value) {
-        this._progress._progress_log = value && value.progress_log ? value.progress_log : [];
+        // FIXME
+        if(value && value.progess_log) {
+            this._progress._progress_log = value.progess_log;
+        } else {
+            this._progress._progress_log = value && value.progress_log ? value.progress_log : [];
+        }
         this._progress._simulation = value && value.simulation ? value.simulation : 0;
         this._progress._simulation_total = value && value.simulation_total ? value.simulation_total : 0;
         this._progress._iteration = value && value.iteration ? value.iteration : 0;
