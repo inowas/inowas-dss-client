@@ -190,6 +190,7 @@ class ModelEditorOptimization extends React.Component {
             case 'results':
                 return (
                     <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
+                                                  model={this.props.model}
                                                   onChange={this.onChangeResult}/>
                 );
             default:
