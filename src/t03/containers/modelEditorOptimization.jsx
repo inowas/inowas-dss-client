@@ -191,6 +191,7 @@ class ModelEditorOptimization extends React.Component {
                 return (
                     <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
                                                   model={this.props.model}
+                                                  stressPeriods={stressPeriods}
                                                   onChange={this.onChangeResult}/>
                 );
             default:
