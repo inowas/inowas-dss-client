@@ -2,7 +2,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import React from 'react';
 import {pure} from 'recompose';
 import PropTypes from 'prop-types';
-import {GeoJSON, Map, Rectangle, TileLayer, FeatureGroup, CircleMarker} from 'react-leaflet';
+import {GeoJSON, Map, TileLayer, CircleMarker, Tooltip} from 'react-leaflet';
 import {geoJSON as leafletGeoJSON} from 'leaflet';
 import md5 from 'js-md5';
 import {uniqueId} from 'lodash';
@@ -21,7 +21,7 @@ class OptimizationResultsMap extends React.Component {
         return md5(JSON.stringify(geometry));
     };
 
-    drawObject = (boundingBox, gridSize, location, color = 'red') => {
+    drawObject = (boundingBox, gridSize, location, label = null, color = 'red') => {
         const bbXmin = boundingBox[0][0];
         const bbYmin = boundingBox[0][1];
         const bbXmax = boundingBox[1][0];
@@ -35,6 +35,9 @@ class OptimizationResultsMap extends React.Component {
             polygon: {
                 color: 'grey',
                 weight: 0.3
+            },
+            mapFix: {
+                zIndex: -1
             }
         };
 
@@ -57,16 +60,17 @@ class OptimizationResultsMap extends React.Component {
                         cXres
                     ]}
                     {...styles.point}
-                />
-                <Rectangle
-                    bounds={[
-                        {lng: cXmin, lat: cYmin},
-                        {lng: cXmin, lat: cYmax},
-                        {lng: cXmax, lat: cYmax},
-                        {lng: cXmax, lat: cYmin},
-                    ]}
-                    {...styles.polygon}
-                />
+                >
+                    {label &&
+                    <Tooltip permanent
+                             direction="right"
+                             offset={[10, 0]}
+                             opacity={0.5}
+                    >
+                        <span>{label}</span>
+                    </Tooltip>
+                    }
+                </CircleMarker>
             </div>
         );
     };
@@ -91,7 +95,10 @@ class OptimizationResultsMap extends React.Component {
                 <div>
                     {
                         this.props.objects.map(object => {
-                            return this.drawObject(this.props.bbox, this.props.gridSize, object.position, 'red');
+                            if (this.props.selectedObject && object.id === this.props.selectedObject.id) {
+                                return this.drawObject(this.props.bbox, this.props.gridSize, object.position, object.name, 'red');
+                            }
+                            return this.drawObject(this.props.bbox, this.props.gridSize, object.position, object.name, 'blue');
                         })
                     }
                 </div>
@@ -105,6 +112,7 @@ OptimizationResultsMap.propTypes = {
     area: PropTypes.object.isRequired,
     bbox: PropTypes.array.isRequired,
     objects: PropTypes.array.isRequired,
+    selectedObject: PropTypes.object,
     readOnly: PropTypes.bool,
     gridSize: PropTypes.object.isRequired,
 };

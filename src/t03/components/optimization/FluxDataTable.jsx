@@ -58,7 +58,7 @@ class FluxDataTable extends DataTable.Component.DataTable {
 
 FluxDataTable.propTypes = {
     config: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     readOnly: PropTypes.bool.isRequired,
     rows: PropTypes.array.isRequired,
 };

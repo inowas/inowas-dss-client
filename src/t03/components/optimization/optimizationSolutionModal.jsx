@@ -1,0 +1,219 @@
+import ConfiguredRadium from 'ConfiguredRadium';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {pure} from 'recompose';
+import {
+    Grid,
+    Button,
+    Icon,
+    Modal,
+    Accordion,
+    Form,
+    List
+} from 'semantic-ui-react';
+import OptimizationResultsMap from "./optimizationResultsMap";
+import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
+import FluxDataTable from "./FluxDataTable";
+import Stressperiods from "../../../core/modflow/Stressperiods";
+import SubstanceEditor from "./SubstanceEditor";
+
+const styles = {
+    iconfix: {
+        width: 'auto',
+        height: 'auto'
+    },
+    inputfix: {
+        padding: '0'
+    },
+    link: {
+        cursor: 'pointer'
+    },
+    tablewidth: {
+        width: '99%'
+    },
+    formfix: {
+        width: '100%'
+    },
+};
+
+class OptimizationSolutionModal extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeIndex: 0,
+            selectedObject: this.props.solution.objects[0]
+        }
+    }
+
+    onCancelModal = () => {
+        return this.props.onCancel();
+    };
+
+    onClickAccordion = (e, titleProps) => {
+        const {index} = titleProps;
+        const {activeIndex} = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({activeIndex: newIndex});
+    };
+
+    onSelectObject = (e, {name, value}) => {
+        this.setState({
+            selectedObject: this.props.solution.objects.filter(o => o.id === value)[0]
+        })
+    };
+
+    render() {
+
+        const fluxConfig = [
+            {property: 'min', label: 'Min'},
+            {property: 'max', label: 'Max'},
+            {property: 'result', label: 'Result'}
+        ];
+
+        let fluxRows = null;
+
+        if (this.state.selectedObject) {
+            fluxRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
+                return {
+                    id: key,
+                    date_time: dt,
+                    min: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].min : 0,
+                    max: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].max : 0,
+                    result: this.state.selectedObject.flux[key] ? this.state.selectedObject.flux[key].result : 0
+                };
+            });
+        }
+
+        return (
+            <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
+                <Modal.Header>Solution Details</Modal.Header>
+                <Modal.Content>
+                    <Form style={styles.formfix}>
+                        <Form.Field>
+                            <label>Fitness</label>
+                            <Form.Select
+                                fluid
+                                placeholder="Fitness"
+                                value={this.props.solution.fitness[0]}
+                                options={this.props.solution.fitness.map(f => {
+                                    return {
+                                        key: f,
+                                        value: f,
+                                        text: f
+                                    }
+                                })}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Variables</label>
+                            <Form.Select
+                                fluid
+                                placeholder="Variables"
+                                value={this.props.solution.variables[0]}
+                                options={this.props.solution.variables.map(f => {
+                                    return {
+                                        key: f,
+                                        value: f,
+                                        text: f
+                                    }
+                                })}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Objects</label>
+                            <Form.Select
+                                placeholder="Select Object"
+                                fluid
+                                options={this.props.solution.objects.map(s => {
+                                    return {
+                                        key: s.id,
+                                        value: s.id,
+                                        text: s.name
+                                    };
+                                })}
+                                onChange={this.onSelectObject}
+                                value={this.state.selectedObject ? this.state.selectedObject.id : null}
+                            />
+                        </Form.Field>
+                        {this.state.selectedObject &&
+                        <Form.Field>
+                            <Accordion fluid styled>
+                                <Accordion.Title active={this.state.activeIndex === 0} index={0}
+                                                 onClick={this.onClickAccordion}>
+                                    <Icon name="dropdown"/>
+                                    Location
+                                </Accordion.Title>
+                                <Accordion.Content active={this.state.activeIndex === 0}>
+                                    <Grid divided={'vertically'}>
+                                        <Grid.Row columns={2}>
+                                            <Grid.Column width={12}>
+                                                <OptimizationResultsMap
+                                                    area={this.props.model.geometry}
+                                                    bbox={this.props.model.bounding_box}
+                                                    objects={this.props.solution.objects}
+                                                    selectedObject={this.state.selectedObject}
+                                                    readOnly={true}
+                                                    gridSize={this.props.model.grid_size}
+                                                />
+                                            </Grid.Column>
+                                            <Grid.Column width={2}>
+                                                <h4>Position of {this.state.selectedObject.name}</h4>
+                                                <List>
+                                                    <List.Item>Layer: {this.state.selectedObject.position.lay.result}</List.Item>
+                                                    <List.Item>Row: {this.state.selectedObject.position.row.result}</List.Item>
+                                                    <List.Item>Column: {this.state.selectedObject.position.col.result}</List.Item>
+                                                </List>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                    </Grid>
+                                </Accordion.Content>
+                                <Accordion.Title active={this.state.activeIndex === 1} index={1}
+                                                 onClick={this.onClickAccordion}>
+                                    <Icon name="dropdown"/>
+                                    Pumping Rates
+                                </Accordion.Title>
+                                <Accordion.Content active={this.state.activeIndex === 1}>
+                                    <FluxDataTable
+                                        config={fluxConfig}
+                                        readOnly={true}
+                                        rows={fluxRows}
+                                    />
+                                </Accordion.Content>
+                                <Accordion.Title active={this.state.activeIndex === 2} index={2}
+                                                 onClick={this.onClickAccordion}>
+                                    <Icon name="dropdown"/>
+                                    Substances
+                                </Accordion.Title>
+                                <Accordion.Content active={this.state.activeIndex === 2}>
+                                    <SubstanceEditor
+                                        object={this.state.selectedObject}
+                                        substances={this.props.model.mt3dms && this.props.model.mt3dms.ssm ? this.props.model.mt3dms.ssm._meta.substances : []}
+                                        stressPeriods={this.props.stressPeriods}
+                                        showResults={true}
+                                        readOnly={true}
+                                    />
+                                </Accordion.Content>
+                            </Accordion>
+                        </Form.Field>
+                        }
+                    </Form>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button negative onClick={this.onCancelModal}>Cancel</Button>
+                </Modal.Actions>
+            </Modal>
+        );
+    }
+}
+
+OptimizationSolutionModal.propTypes = {
+    model: PropTypes.object.isRequired,
+    stressPeriods: PropTypes.instanceOf(Stressperiods),
+    onCancel: PropTypes.func.isRequired,
+    solution: PropTypes.instanceOf(OptimizationSolution)
+};
+
+export default pure(ConfiguredRadium(OptimizationSolutionModal));

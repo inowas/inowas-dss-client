@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Grid, Button, Icon, Progress, Segment, Modal} from 'semantic-ui-react';
+import {Grid, Button, Icon, Progress, Segment, List, Popup} from 'semantic-ui-react';
 import Chart from './fitnessChart';
 import {
     OPTIMIZATION_STATE_CALCULATING,
@@ -19,9 +19,9 @@ import {
     OPTIMIZATION_STATE_QUEUED,
     OPTIMIZATION_STATE_STARTED
 } from "../../selectors/optimization";
-import OptimizationResultsMap from "./optimizationResultsMap";
+import OptimizationSolutionModal from "./OptimizationSolutionModal";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
-import OptimizationObject from "../../../core/optimization/OptimizationObject";
+import Stressperiods from "../../../core/modflow/Stressperiods";
 
 const styles = {
     iconfix: {
@@ -36,6 +36,9 @@ const styles = {
     },
     tablewidth: {
         width: '99%'
+    },
+    popupFix: {
+        width: '10px'
     }
 };
 
@@ -83,9 +86,9 @@ class OptimizationResultsComponent extends React.Component {
         });
     };
 
-    onClickDetails = (id) => {
+    onClickDetails = (key) => {
         return this.setState({
-            selectedSolution: this.state.optimization.solutions.filter(s => s.id === id)[0]
+            selectedSolution: this.state.optimization.solutions[key]
         });
     };
 
@@ -147,8 +150,6 @@ class OptimizationResultsComponent extends React.Component {
             }
         }
 
-        console.log(this.state);
-
         return (
             <LayoutComponents.Column>
                 <Grid style={styles.tablewidth}>
@@ -169,27 +170,35 @@ class OptimizationResultsComponent extends React.Component {
                         </Grid.Column>
                         <Grid.Column/>
                     </Grid.Row>
-                    {this.state.optimization.progress.iteration && this.state.optimization.progress.iteration_total && this.state.optimization.progress.iteration_total !== 0 &&
-                    <Grid.Row columns={1}>
-                        <Grid.Column>
-                            <Progress
-                                percent={100 * this.state.optimization.progress.iteration / this.state.optimization.progress.iteration_total}
-                                progress indicating>
-                                Iteration {this.state.optimization.progress.iteration} of {this.state.optimization.progress.iteration_total}
-                            </Progress>
-                        </Grid.Column>
-                    </Grid.Row>
+                    {this.state.optimization.progress.iteration && this.state.optimization.progress.iteration_total && this.state.optimization.progress.iteration_total !== 0
+                        ?
+                        <Grid.Row columns={1}>
+                            <Grid.Column>
+                                <Progress
+                                    percent={100 * this.state.optimization.progress.iteration / this.state.optimization.progress.iteration_total}
+                                    progress indicating>
+                                    Iteration {this.state.optimization.progress.iteration} of {this.state.optimization.progress.iteration_total}
+                                </Progress>
+                            </Grid.Column>
+                        </Grid.Row>
+                        :
+                        <Grid.Row columns={1}>
+                        </Grid.Row>
                     }
-                    {this.state.optimization.progress.simulation && this.state.optimization.progress.simulation_total && this.state.optimization.progress.simulation_total !== 0 &&
-                    <Grid.Row columns={1}>
-                        <Grid.Column>
-                            <Progress
-                                percent={100 * this.state.optimization.progress.simulation / this.state.optimization.progress.simulation_total}
-                                progress indicating>
-                                Simulation {this.state.optimization.progress.simulation} of {this.state.optimization.progress.simulation_total}
-                            </Progress>
-                        </Grid.Column>
-                    </Grid.Row>
+                    {this.state.optimization.progress.simulation && this.state.optimization.progress.simulation_total && this.state.optimization.progress.simulation_total !== 0
+                        ?
+                        <Grid.Row columns={1}>
+                            <Grid.Column>
+                                <Progress
+                                    percent={100 * this.state.optimization.progress.simulation / this.state.optimization.progress.simulation_total}
+                                    progress indicating>
+                                    Simulation {this.state.optimization.progress.simulation} of {this.state.optimization.progress.simulation_total}
+                                </Progress>
+                            </Grid.Column>
+                        </Grid.Row>
+                        :
+                        <Grid.Row columns={1}>
+                        </Grid.Row>
                     }
                     {this.state.data && this.state.data.length > 0 &&
                     <Grid.Row columns={1}>
@@ -201,27 +210,37 @@ class OptimizationResultsComponent extends React.Component {
                 </Grid>
                 {this.state.optimization.solutions.length > 0
                     ?
-                    <Segment>
+                    <Segment style={styles.tablewidth}>
                         <Grid divided="vertically">
                             <Grid.Row columns={3}>
                                 <Grid.Column textAlign="center">
                                     <b>Solution</b>
                                 </Grid.Column>
-                                <Grid.Column textAlign="center"/>
+                                <Grid.Column textAlign="center">
+                                    <b>Fitness</b>
+                                </Grid.Column>
                                 <Grid.Column textAlign="center"/>
                             </Grid.Row>
                             {
                                 this.state.optimization.solutions.map((solution, key) => (
                                     <Grid.Row columns={3} key={key}>
                                         <Grid.Column textAlign="center">
-                                            {key + 1}
-                                        </Grid.Column>
-                                        <Grid.Column textAlign="center">
                                             <Button
-                                                onClick={() => this.onClickDetails(solution.id)}
+                                                onClick={() => this.onClickDetails(key)}
                                             >
-                                                Details
+                                                Solution {key + 1}
                                             </Button>
+                                        </Grid.Column>
+                                        <Grid.Column>
+                                            <List>
+                                            {
+                                                this.state.optimization.input.objectives.map((o, key) =>
+                                                    <List.Item key={key}>
+                                                        <Popup wide style={styles.popupFix} trigger={<span>Objective {key+1}</span>} content={o.name} />: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
+                                                    </List.Item>
+                                                )
+                                            }
+                                            </List>
                                         </Grid.Column>
                                         <Grid.Column textAlign="center">
                                             <Button.Group>
@@ -250,21 +269,12 @@ class OptimizationResultsComponent extends React.Component {
                     <p>No solutions.</p>
                 }
                 {this.state.selectedSolution &&
-                <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
-                    <Modal.Header>Solution Details</Modal.Header>
-                    <Modal.Content>
-                        <OptimizationResultsMap
-                            area={this.props.model.geometry}
-                            bbox={this.props.model.bounding_box}
-                            objects={this.state.selectedSolution.objects}
-                            readOnly={true}
-                            gridSize={this.props.model.grid_size}
-                        />
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button negative onClick={this.onCancelModal}>Cancel</Button>
-                    </Modal.Actions>
-                </Modal>
+                    <OptimizationSolutionModal
+                        model={this.props.model}
+                        onCancel={this.onCancelModal}
+                        stressPeriods={this.props.stressPeriods}
+                        solution={OptimizationSolution.fromObject(this.state.selectedSolution)}
+                    />
                 }
             </LayoutComponents.Column>
         );
@@ -274,6 +284,8 @@ class OptimizationResultsComponent extends React.Component {
 OptimizationResultsComponent.propTypes = {
     optimization: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
+    model: PropTypes.object.isRequired,
+    stressPeriods: PropTypes.instanceOf(Stressperiods),
     errors: PropTypes.array
 };
 

@@ -83,7 +83,7 @@ class OptimizationConstraint {
     }
 
     set value(value) {
-        this._value = value ? parseInt(value, 10) : 0;
+        this._value = value ? parseFloat(value) : 0;
     }
 
     get operator() {

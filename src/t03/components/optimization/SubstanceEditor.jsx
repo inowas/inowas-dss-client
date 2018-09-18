@@ -106,14 +106,14 @@ class SubstanceEditor extends React.Component {
         let substanceHasBeenAdded = false;
 
         const addedSubstances = this.state.addedSubstances.map(s => {
-            if(s.id === substance.id) {
+            if (s.id === substance.id) {
                 substanceHasBeenAdded = true;
                 return substance;
             }
             return s;
         });
 
-        if(!substanceHasBeenAdded) {
+        if (!substanceHasBeenAdded) {
             addedSubstances.push(substance);
         }
 
@@ -154,6 +154,12 @@ class SubstanceEditor extends React.Component {
             {property: 'max', label: 'Max'}
         ];
 
+        if (this.props.showResults) {
+            tableConfig.push(
+                {property: 'result', label: 'result'}
+            );
+        }
+
         // Only show substances in dropdown, which hasn't already been added.
         let addableSubstances = [];
         this.props.substances.forEach((value) => {
@@ -169,13 +175,14 @@ class SubstanceEditor extends React.Component {
         });
 
         let substanceRows = [];
-        if(this.state.selectedSubstance) {
+        if (this.state.selectedSubstance) {
             substanceRows = this.props.stressPeriods.dateTimes.map((dt, key) => {
                 return {
                     id: key,
                     date_time: dt,
                     min: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].min : 0,
-                    max: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].max : 0
+                    max: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].max : 0,
+                    result: this.state.selectedSubstance.data[key] ? this.state.selectedSubstance.data[key].result : 0
                 };
             });
         }
@@ -194,35 +201,46 @@ class SubstanceEditor extends React.Component {
                         value={this.state.selectedSubstance ? this.state.selectedSubstance.id : null}
                     />
                 </Form.Group>
-                {this.state.addedSubstances && this.state.addedSubstances.length > 0
-                    ?
-                    <List divided verticalAlign='middle'>
-                        {this.state.addedSubstances.map((s) => (
-                            <List.Item key={s.id}>
-                                <List.Content floated='right'>
-                                    <Button.Group>
-                                        <Button icon color="blue"
-                                                style={styles.iconfix}
-                                                size="small"
-                                                onClick={() => this.editSubstance(s.id)}>
-                                            <Icon name="pencil"/>
-                                        </Button>
-                                    <Button icon color="red"
-                                            style={styles.iconfix}
-                                            size="small"
-                                            onClick={() => this.removeSubstance(s.id)}>
-                                        <Icon name="trash"/>
-                                    </Button>
-                                    </Button.Group>
-                                </List.Content>
-                                <List.Content>{s.name}</List.Content>
-                            </List.Item>
-                        ))}
-                    </List>
-                    :
-                    <p>No substance in object.</p>
+                {!this.props.readOnly &&
+                <div>
+                    {this.state.addedSubstances && this.state.addedSubstances.length > 0
+                        ?
+                        <List divided verticalAlign='middle'>
+                            {this.state.addedSubstances.map((s) => (
+                                <List.Item key={s.id}>
+                                    <List.Content floated='right'>
+                                        <Button.Group>
+                                            <Button icon color="blue"
+                                                    style={styles.iconfix}
+                                                    size="small"
+                                                    onClick={() => this.editSubstance(s.id)}>
+                                                <Icon name="pencil"/>
+                                            </Button>
+                                            <Button icon color="red"
+                                                    style={styles.iconfix}
+                                                    size="small"
+                                                    onClick={() => this.removeSubstance(s.id)}>
+                                                <Icon name="trash"/>
+                                            </Button>
+                                        </Button.Group>
+                                    </List.Content>
+                                    <List.Content>{s.name}</List.Content>
+                                </List.Item>
+                            ))}
+                        </List>
+                        :
+                        <p>No substance in object.</p>
+                    }
+                </div>
                 }
-                {this.state.selectedSubstance &&
+                {this.state.selectedSubstance && this.props.readOnly &&
+                <FluxDataTable
+                    config={tableConfig}
+                    readOnly={true}
+                    rows={substanceRows}
+                />
+                }
+                {this.state.selectedSubstance && !this.props.readOnly &&
                 <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
                     <Modal.Header>{this.state.selectedSubstance.name}</Modal.Header>
                     <Modal.Content>
@@ -253,7 +271,9 @@ SubstanceEditor.propTypes = {
     object: PropTypes.object.isRequired,
     substances: PropTypes.array.isRequired,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    readOnly: PropTypes.bool,
+    showResults: PropTypes.bool
 };
 
 export default pure(ConfiguredRadium(SubstanceEditor));
