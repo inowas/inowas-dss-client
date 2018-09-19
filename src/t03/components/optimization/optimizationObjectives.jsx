@@ -7,7 +7,9 @@ import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './optimizationMap';
 import Slider from 'rc-slider';
+import {createSliderWithTooltip} from 'rc-slider';
 import Stressperiods from "../../../core/modflow/Stressperiods";
+import {Formatter} from "../../../core";
 
 class OptimizationObjectivesComponent extends React.Component {
 
@@ -61,6 +63,7 @@ class OptimizationObjectivesComponent extends React.Component {
     onClickNew = (e, {name, value}) => {
         const newObjective = new OptimizationObjective();
         newObjective.type = value;
+        newObjective.location.ts.max = this.props.stressPeriods.dateTimes.length - 1;
         return this.setState({
             selectedObjective: newObjective.toObject
         });
@@ -111,6 +114,16 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     };
 
+    formatTimestamp = (key) => Formatter.toDate(this.props.stressPeriods.dateTimes[key]);
+
+    sliderMarks = () => {
+        let marks = {};
+        this.props.stressPeriods.dateTimes.forEach((dt, key) => {
+            marks[key] = key;
+        });
+        return marks;
+    };
+
     render() {
         const styles = {
             iconfix: {
@@ -139,11 +152,7 @@ class OptimizationObjectivesComponent extends React.Component {
             {key: 'type5', text: 'Input Concentration', value: 'inputConc'}
         ];
 
-        let marks = {};
-
-        this.props.stressPeriods.dateTimes.forEach((dt, key) => {
-            marks[key] = key;
-        });
+        const Range = createSliderWithTooltip(Slider.Range);
 
         return (
             <LayoutComponents.Column>
@@ -249,33 +258,20 @@ class OptimizationObjectivesComponent extends React.Component {
                                         />
                                     </Form.Field>
                                     <Form.Field>
-                                        <label>Name of the concentration output file produced by
-                                            mt3d.</label>
-                                        <Form.Input
-                                            disabled={this.state.selectedObjective.type !== 'concentration'}
-                                            type="text"
-                                            name="concFileName"
-                                            value={this.state.selectedObjective.conc_file_name}
-                                            placeholder="conc_file_name ="
-                                            style={styles.inputfix}
+                                        <label>Method how each objective scalar will be calculated.</label>
+                                        <Form.Select
+                                            name="summaryMethod"
+                                            value={this.state.selectedObjective.summary_method}
+                                            placeholder="summary_method ="
+                                            options={[
+                                                {key: 'min', text: 'Min', value: 'min'},
+                                                {key: 'max', text: 'Max', value: 'max'},
+                                                {key: 'mean', text: 'Mean', value: 'mean'},
+                                            ]}
                                             onChange={this.handleChange}
                                         />
                                     </Form.Field>
                                 </Form.Group>
-                                <Form.Field>
-                                    <label>Method how each objective scalar will be calculated.</label>
-                                    <Form.Select
-                                        name="summaryMethod"
-                                        value={this.state.selectedObjective.summary_method}
-                                        placeholder="summary_method ="
-                                        options={[
-                                            {key: 'min', text: 'Min', value: 'min'},
-                                            {key: 'max', text: 'Max', value: 'max'},
-                                            {key: 'mean', text: 'Mean', value: 'mean'},
-                                        ]}
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Field>
                                 <Form.Group widths="equal">
                                     <Form.Field>
                                         <label>Objective weight factor</label>
@@ -306,13 +302,14 @@ class OptimizationObjectivesComponent extends React.Component {
                                     <Form.Field>
                                         <label>Stress Periods</label>
                                         <Segment style={styles.sliderDiv}>
-                                            <Slider.Range
+                                            <Range
                                                 min={0}
                                                 max={this.props.stressPeriods.dateTimes.length - 1}
                                                 step={1}
-                                                marks={marks}
+                                                marks={this.sliderMarks()}
                                                 onChange={this.handleChangeStressPeriods}
                                                 defaultValue={[this.state.selectedObjective.location.ts.min, this.state.selectedObjective.location.ts.max]}
+                                                tipFormatter={value => `${this.formatTimestamp(value)}`}
                                             />
                                         </Segment>
                                     </Form.Field>

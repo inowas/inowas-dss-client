@@ -251,137 +251,148 @@ class OptimizationMap extends React.Component {
                     data={area}
                 />
                 {this.state.location.type === 'bbox' && !readOnly &&
-                    <div>
-                        <FullscreenControl position="topright"/>
-                        <FeatureGroup>
-                            <EditControl
-                                position="bottomright"
-                                onEdited={this.onEditPath}
-                                onEditStart={this.toggleEditingState}
-                                onEditStop={this.toggleEditingState}
-                                {...options}
-                            />
-                            {this.drawObject(this.props.bbox, this.props.gridSize, this.state.location)}
-                        </FeatureGroup>
-                    </div>
-                }
-                {this.state.location.type === 'bbox' && readOnly &&
+                <div>
+                    <FullscreenControl position="topright"/>
                     <FeatureGroup>
+                        <EditControl
+                            position="bottomright"
+                            onEdited={this.onEditPath}
+                            onEditStart={this.toggleEditingState}
+                            onEditStop={this.toggleEditingState}
+                            {...options}
+                        />
                         {this.drawObject(this.props.bbox, this.props.gridSize, this.state.location)}
                     </FeatureGroup>
+                </div>
+                }
+                {this.state.location.type === 'bbox' && readOnly &&
+                <FeatureGroup>
+                    {this.drawObject(this.props.bbox, this.props.gridSize, this.state.location)}
+                </FeatureGroup>
                 }
                 {this.state.location.type === 'object' &&
-                    <div>
-                        {
-                            this.state.location.objects.map(id => {
-                                const object = this.props.objects.filter(obj => obj.id === id)[0];
-                                if(object) {
-                                    return this.drawObject(this.props.bbox, this.props.gridSize, object.position, 'red');
-                                }
-                            })
-                        }
-                    </div>
+                <div>
+                    {
+                        this.state.location.objects.map(id => {
+                            const object = this.props.objects.filter(obj => obj.id === id)[0];
+                            if (object) {
+                                return this.drawObject(this.props.bbox, this.props.gridSize, object.position, 'red');
+                            }
+                        })
+                    }
+                </div>
                 }
             </Map>
         );
     }
 
     render() {
+
+        if(this.props.onlyBbox && this.props.onlyObjects) {
+            throw new Error('The optimizationMap component can receive prop onlyBbox or onlyObjects but not both.');
+        }
+
         return (
             <div>
                 <Button fluid
                         onClick={this.onClickToggleMap}
                 >
-                    { this.props.label ? this.props.label : 'Edit Location' }
+                    {this.props.label ? this.props.label : 'Edit Location'}
                 </Button>
                 {this.printMap(true)}
                 {this.state.showOverlay &&
                 <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
-                    <Modal.Header>{ this.props.label ? this.props.label : 'Edit Location' }</Modal.Header>
+                    <Modal.Header>{this.props.label ? this.props.label : 'Edit Location'}</Modal.Header>
                     <Modal.Content>
                         <Grid divided={'vertically'}>
                             <Grid.Row columns={2}>
                                 <Grid.Column width={6}>
-                                    <Grid celled="internally">
-                                        <Grid.Row textAlign="center">
-                                            <Grid.Column width={8}>
-                                                <Form.Checkbox
-                                                    name="type"
-                                                    label="At optimization object"
-                                                    value="object"
-                                                    checked={this.state.location.type === 'object'}
-                                                    onChange={this.handleChangeLocationType}
+                                    <div>
+                                        {this.props.onlyBbox || this.props.onlyObjects &&
+                                        <Grid celled="internally">
+                                            <Grid.Row textAlign="center">
+                                                {!this.props.onlyBbox &&
+                                                <Grid.Column width={8}>
+                                                    <Form.Checkbox
+                                                        name="type"
+                                                        label="At optimization object"
+                                                        value="object"
+                                                        checked={this.state.location.type === 'object'}
+                                                        onChange={this.handleChangeLocationType}
+                                                    />
+                                                </Grid.Column>
+                                                }
+                                                {!this.props.onlyObjects &&
+                                                <Grid.Column width={8}>
+                                                    <Form.Checkbox
+                                                        name="type"
+                                                        label="At bounding box"
+                                                        value="bbox"
+                                                        checked={this.state.location.type === 'bbox'}
+                                                        onChange={this.handleChangeLocationType}
+                                                    />
+                                                </Grid.Column>
+                                                }
+                                            </Grid.Row>
+                                        </Grid>
+                                        }
+                                        {this.state.location.type === 'bbox' &&
+                                        <Segment color="blue">
+                                            <Form>
+                                                <Header as="h3" dividing>Location</Header>
+                                                <InputRange
+                                                    name="lay"
+                                                    from={this.state.location.lay.min}
+                                                    to={this.state.location.lay.max}
+                                                    label="Layer"
+                                                    label_from="min"
+                                                    label_to="max"
+                                                    onChange={this.handleChangeLocation}
                                                 />
-                                            </Grid.Column>
-                                            {!this.props.onlyObjects &&
-                                            <Grid.Column width={8}>
-                                                <Form.Checkbox
-                                                    name="type"
-                                                    label="At bounding box"
-                                                    value="bbox"
-                                                    checked={this.state.location.type === 'bbox'}
-                                                    onChange={this.handleChangeLocationType}
+                                                <InputRange
+                                                    name="row"
+                                                    from={this.state.location.row.min}
+                                                    to={this.state.location.row.max}
+                                                    label="Row"
+                                                    label_from="min"
+                                                    label_to="max"
+                                                    onChange={this.handleChangeLocation}
                                                 />
-                                            </Grid.Column>
-                                            }
-                                        </Grid.Row>
-                                    </Grid>
-                                    {this.state.location.type === 'bbox' &&
-                                    <Segment color="blue">
-                                        <Form>
-                                            <Header as="h3" dividing>Location</Header>
-                                            <InputRange
-                                                name="lay"
-                                                from={this.state.location.lay.min}
-                                                to={this.state.location.lay.max}
-                                                label="Layer"
-                                                label_from="min"
-                                                label_to="max"
-                                                onChange={this.handleChangeLocation}
+                                                <InputRange
+                                                    name="col"
+                                                    from={this.state.location.col.min}
+                                                    to={this.state.location.col.max}
+                                                    label="Column"
+                                                    label_from="min"
+                                                    label_to="max"
+                                                    onChange={this.handleChangeLocation}
+                                                />
+                                            </Form>
+                                        </Segment>
+                                        }
+                                        {this.state.location.type === 'object' &&
+                                        <Segment color="blue">
+                                            <Header as="h3" dividing>Objects</Header>
+                                            <InputObjectList
+                                                name="objects"
+                                                label="Optimization Objects"
+                                                placeholder="object ="
+                                                disabled={this.state.location.type !== 'object' || this.state.location.objects.length >= this.props.objects.length}
+                                                addableObjects={
+                                                    this.props.objects && this.props.objects.length > 0
+                                                        ? this.props.objects
+                                                        : []
+                                                }
+                                                objectsInList={
+                                                    this.state.location.objects && this.state.location.objects.length > 0
+                                                        ? this.state.location.objects
+                                                        : []
+                                                }
+                                                onChange={this.handleChangeLocationObjects}
                                             />
-                                            <InputRange
-                                                name="row"
-                                                from={this.state.location.row.min}
-                                                to={this.state.location.row.max}
-                                                label="Row"
-                                                label_from="min"
-                                                label_to="max"
-                                                onChange={this.handleChangeLocation}
-                                            />
-                                            <InputRange
-                                                name="col"
-                                                from={this.state.location.col.min}
-                                                to={this.state.location.col.max}
-                                                label="Column"
-                                                label_from="min"
-                                                label_to="max"
-                                                onChange={this.handleChangeLocation}
-                                            />
-                                        </Form>
-                                    </Segment>
-                                    }
-                                    {this.state.location.type === 'object' &&
-                                    <Segment color="blue">
-                                        <Header as="h3" dividing>Objects</Header>
-                                        <InputObjectList
-                                            name="objects"
-                                            label="Optimization Objects"
-                                            placeholder="object ="
-                                            disabled={this.state.location.type !== 'object' || this.state.location.objects.length >= this.props.objects.length}
-                                            addableObjects={
-                                                this.props.objects && this.props.objects.length > 0
-                                                    ? this.props.objects
-                                                    : []
-                                            }
-                                            objectsInList={
-                                                this.state.location.objects && this.state.location.objects.length > 0
-                                                    ? this.state.location.objects
-                                                    : []
-                                            }
-                                            onChange={this.handleChangeLocationObjects}
-                                        />
-                                    </Segment>
-                                    }
+                                        </Segment>
+                                        }
+                                    </div>
                                 </Grid.Column>
                                 <Grid.Column width={10}>
                                     <Segment attached="bottom">
@@ -415,6 +426,7 @@ OptimizationMap.propTypes = {
     location: PropTypes.object.isRequired,
     objects: PropTypes.array,
     onlyObjects: PropTypes.bool,
+    onlyBbox: PropTypes.bool,
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
     gridSize: PropTypes.object.isRequired,

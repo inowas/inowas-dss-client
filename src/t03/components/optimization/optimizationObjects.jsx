@@ -316,6 +316,7 @@ class OptimizationObjectsComponent extends React.Component {
                                                 location={this.state.selectedObject.position}
                                                 gridSize={this.props.model.grid_size}
                                                 onChange={this.handleChangeLocation}
+                                                onlyBbox={true}
                                                 readOnly
                                             />
                                         </Accordion.Content>

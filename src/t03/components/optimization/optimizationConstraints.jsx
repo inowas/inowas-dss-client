@@ -6,7 +6,8 @@ import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './optimizationMap';
-import Slider from 'rc-slider';
+import Slider, {createSliderWithTooltip} from 'rc-slider';
+import {Formatter} from "../../../core";
 
 class OptimizationConstraintsComponent extends React.Component {
 
@@ -60,6 +61,7 @@ class OptimizationConstraintsComponent extends React.Component {
     onClickNew = (e, {name, value}) => {
         const newConstraint = new OptimizationConstraint();
         newConstraint.type = value;
+        newConstraint.location.ts.max = this.props.stressPeriods.dateTimes.length - 1;
         return this.setState({
             selectedConstraint: newConstraint.toObject
         });
@@ -110,6 +112,16 @@ class OptimizationConstraintsComponent extends React.Component {
         });
     };
 
+    formatTimestamp = (key) => Formatter.toDate(this.props.stressPeriods.dateTimes[key]);
+
+    sliderMarks = () => {
+        let marks = {};
+        this.props.stressPeriods.dateTimes.forEach((dt, key) => {
+            marks[key] = key;
+        });
+        return marks;
+    };
+
     render() {
         const styles = {
             iconfix: {
@@ -138,11 +150,7 @@ class OptimizationConstraintsComponent extends React.Component {
             {key: 'type5', text: 'Input Concentration', value: 'inputConc'}
         ];
 
-        let marks = {};
-
-        this.props.stressPeriods.dateTimes.forEach((dt, key) => {
-            marks[key] = key;
-        });
+        const Range = createSliderWithTooltip(Slider.Range);
 
         return (
             <LayoutComponents.Column>
@@ -248,33 +256,20 @@ class OptimizationConstraintsComponent extends React.Component {
                                         />
                                     </Form.Field>
                                     <Form.Field>
-                                        <label>Name of the concentration output file produced by
-                                            mt3d.</label>
-                                        <Form.Input
-                                            disabled={this.state.selectedConstraint.type !== 'concentration'}
-                                            type="text"
-                                            name="concFileName"
-                                            value={this.state.selectedConstraint.conc_file_name}
-                                            placeholder="conc_file_name ="
-                                            style={styles.inputfix}
+                                        <label>Method how each constraint scalar will be calculated.</label>
+                                        <Form.Select
+                                            name="summaryMethod"
+                                            value={this.state.selectedConstraint.summary_method}
+                                            placeholder="summary_method ="
+                                            options={[
+                                                {key: 'min', text: 'Min', value: 'min'},
+                                                {key: 'max', text: 'Max', value: 'max'},
+                                                {key: 'mean', text: 'Mean', value: 'mean'},
+                                            ]}
                                             onChange={this.handleChange}
                                         />
                                     </Form.Field>
                                 </Form.Group>
-                                <Form.Field>
-                                    <label>Method how each constraint scalar will be calculated.</label>
-                                    <Form.Select
-                                        name="summaryMethod"
-                                        value={this.state.selectedConstraint.summary_method}
-                                        placeholder="summary_method ="
-                                        options={[
-                                            {key: 'min', text: 'Min', value: 'min'},
-                                            {key: 'max', text: 'Max', value: 'max'},
-                                            {key: 'mean', text: 'Mean', value: 'mean'},
-                                        ]}
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Field>
                                 <Form.Field>
                                     <label>Constraint value</label>
                                     <Form.Input
@@ -306,13 +301,14 @@ class OptimizationConstraintsComponent extends React.Component {
                                     <Form.Field>
                                         <label>Stress Periods</label>
                                         <Segment style={styles.sliderDiv}>
-                                            <Slider.Range
+                                            <Range
                                                 min={0}
                                                 max={this.props.stressPeriods.dateTimes.length - 1}
                                                 step={1}
-                                                marks={marks}
+                                                marks={this.sliderMarks()}
                                                 onChange={this.handleChangeStressPeriods}
                                                 defaultValue={[this.state.selectedConstraint.location.ts.min, this.state.selectedConstraint.location.ts.max]}
+                                                tipFormatter={value => `${this.formatTimestamp(value)}`}
                                             />
                                         </Segment>
                                     </Form.Field>

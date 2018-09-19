@@ -134,12 +134,6 @@ class T03 extends React.Component {
             ]
         },
         {
-            title: 'Optimization',
-            name: 'optimization',
-            icon: <Icon name="success"/>,
-            disabled: createModel
-        },
-        {
             title: 'Transport',
             name: 'transport',
             icon: <Icon name="target"/>,
@@ -155,6 +149,12 @@ class T03 extends React.Component {
             title: 'Results',
             name: 'results',
             icon: <Icon name="dataset"/>,
+            disabled: createModel
+        },
+        {
+            title: 'Optimization',
+            name: 'optimization',
+            icon: <Icon name="success"/>,
             disabled: createModel
         }
     ];
