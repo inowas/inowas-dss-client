@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Grid, Button, Icon, Progress, Segment, List, Popup} from 'semantic-ui-react';
-import Chart from './fitnessChart';
+import Chart from './FitnessChart';
 import {
     OPTIMIZATION_STATE_CANCELLED, OPTIMIZATION_STATE_FINISHED, OPTIMIZATION_STATE_NEW,
     getMessage, optimizationHasError, optimizationInProgress
@@ -13,6 +13,9 @@ import OptimizationSolutionModal from "./OptimizationSolutionModal";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
 import Stressperiods from "../../../core/modflow/Stressperiods";
 import Optimization from "../../../core/optimization/Optimization";
+import OptimizationLocallyModal from "./OptimizationLocallyModal";
+import OptimizationInput from "../../../core/optimization/OptimizationInput";
+import OptimizationParameters from "../../../core/optimization/OptimizationParameters";
 
 const styles = {
     iconfix: {
@@ -38,6 +41,7 @@ class OptimizationResultsComponent extends React.Component {
         this.state = {
             optimization: this.props.optimization.toObject,
             selectedSolution: null,
+            localOptimization: null,
             data: this.setData(props)
         };
     }
@@ -67,6 +71,12 @@ class OptimizationResultsComponent extends React.Component {
         return false;
     };
 
+    onClickLocalOptimization = (key) => {
+        return this.setState({
+            localOptimization: this.state.optimization.solutions[key]
+        });
+    };
+
     onClickReset = () => {
         return this.props.onChange({
             key: 'state',
@@ -82,7 +92,15 @@ class OptimizationResultsComponent extends React.Component {
 
     onCancelModal = () => {
         return this.setState({
+            localOptimization: null,
             selectedSolution: null
+        });
+    };
+
+    onChange = (parameters) => {
+        return this.props.onChangeParameters({
+            key: 'parameters',
+            value: OptimizationParameters.fromObject(parameters)
         });
     };
 
@@ -185,9 +203,10 @@ class OptimizationResultsComponent extends React.Component {
                                                     Apply
                                                 </Button>
                                                 <Button.Or/>
-                                                <Button disabled color="blue"
+                                                <Button color="blue"
                                                         size="small"
                                                         style={styles.iconfix}
+                                                        onClick={() => this.onClickLocalOptimization(key)}
                                                 >
                                                     Optimize Locally
                                                 </Button>
@@ -209,6 +228,14 @@ class OptimizationResultsComponent extends React.Component {
                         solution={OptimizationSolution.fromObject(this.state.selectedSolution)}
                     />
                 }
+                {this.state.localOptimization &&
+                <OptimizationLocallyModal
+                    onCancel={this.onCancelModal}
+                    onCalculationStart={this.onChange}
+                    optimizationInput={OptimizationInput.fromObject(this.props.optimization.input)}
+                    solution={OptimizationSolution.fromObject(this.state.localOptimization)}
+                />
+                }
             </LayoutComponents.Column>
         );
     }
@@ -217,6 +244,7 @@ class OptimizationResultsComponent extends React.Component {
 OptimizationResultsComponent.propTypes = {
     optimization: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
+    onChangeParameters: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
     errors: PropTypes.array

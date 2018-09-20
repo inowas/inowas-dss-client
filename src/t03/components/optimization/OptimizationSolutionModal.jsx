@@ -11,7 +11,7 @@ import {
     Form,
     List
 } from 'semantic-ui-react';
-import OptimizationResultsMap from "./optimizationResultsMap";
+import OptimizationResultsMap from "./OptimizationResultsMap";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
 import FluxDataTable from "./FluxDataTable";
 import Stressperiods from "../../../core/modflow/Stressperiods";

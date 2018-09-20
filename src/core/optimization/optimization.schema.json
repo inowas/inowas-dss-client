@@ -501,7 +501,7 @@
     },
     "minMaxResultObjSimplex": {
       "type": "object",
-      "required": ["min", "max", "result"],
+      "required": ["min", "max"],
       "properties": {
         "min": {
           "type": "number"
@@ -510,7 +510,10 @@
           "type": "number"
         },
         "result": {
-          "type": "number"
+          "anyOf": [
+            {"type": "number"},
+            {"type": "null"}
+          ]
         }
       }
     }

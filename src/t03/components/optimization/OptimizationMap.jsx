@@ -10,7 +10,7 @@ import {uniqueId} from 'lodash';
 import EditControl from '../../../core/map/EditControl';
 import * as geoTools from '../../../core/geospatial';
 import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
-import InputRange from './inputRange';
+import InputRange from './InputRange';
 import InputObjectList from './InputObjectList';
 
 class OptimizationMap extends React.Component {
