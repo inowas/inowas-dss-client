@@ -114,6 +114,22 @@ class Optimization {
         const validate = ajv.compile(schema);
         return [validate(this.toObject), validate.errors];
     }
+
+    calculateProgress() {
+        const i = this._progress._iteration;
+        const iMax = this._progress._iteration_total;
+        const s = this._progress._simulation;
+        const sMax = this._progress._simulation_total;
+
+        if (iMax > 0 && sMax > 0) {
+            const progress = (((i - 1) * sMax + s) / (iMax * sMax) * 100).toFixed(1);
+            if (progress > 100) {
+                return 100;
+            }
+            return progress;
+        }
+        return 0;
+    }
 }
 
 export default Optimization;

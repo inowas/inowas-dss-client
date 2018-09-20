@@ -24,7 +24,10 @@ const Chart = ({data}) => {
                                        margin={{top: 5, right: 20, left: 20, bottom: 5}}>
                                 <CartesianGrid strokeDasharray="3 3"/>
                                 <XAxis dataKey="name"/>
-                                <YAxis/>
+                                <YAxis
+                                    type="number"
+                                    domain={['dataMin', 'dataMax']}
+                                />
                                 <Legend/>
                                 <Line
                                     isAnimationActive={false}

@@ -6,22 +6,13 @@ import {LayoutComponents} from '../../../core/index';
 import {Grid, Button, Icon, Progress, Segment, List, Popup} from 'semantic-ui-react';
 import Chart from './fitnessChart';
 import {
-    OPTIMIZATION_STATE_CALCULATING,
-    OPTIMIZATION_STATE_CANCELLED,
-    OPTIMIZATION_STATE_CANCELLING, OPTIMIZATION_STATE_ERROR, OPTIMIZATION_STATE_ERROR_CANCELLING,
-    OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE,
-    OPTIMIZATION_STATE_ERROR_PUBLISHING,
-    OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL,
-    OPTIMIZATION_STATE_FINISHED,
-    OPTIMIZATION_STATE_NEW,
-    OPTIMIZATION_STATE_PREPROCESSING,
-    OPTIMIZATION_STATE_PREPROCESSING_FINISHED,
-    OPTIMIZATION_STATE_QUEUED,
-    OPTIMIZATION_STATE_STARTED
+    OPTIMIZATION_STATE_CANCELLED, OPTIMIZATION_STATE_FINISHED, OPTIMIZATION_STATE_NEW,
+    getMessage, optimizationHasError, optimizationInProgress
 } from "../../selectors/optimization";
 import OptimizationSolutionModal from "./OptimizationSolutionModal";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
 import Stressperiods from "../../../core/modflow/Stressperiods";
+import Optimization from "../../../core/optimization/Optimization";
 
 const styles = {
     iconfix: {
@@ -36,9 +27,6 @@ const styles = {
     },
     tablewidth: {
         width: '99%'
-    },
-    popupFix: {
-        width: '10px'
     }
 };
 
@@ -66,7 +54,7 @@ class OptimizationResultsComponent extends React.Component {
         return optimization.progress.progress_log.map((p, key) => {
             return {
                 name: key,
-                log: parseFloat(p)
+                log: parseFloat(p.toFixed(2))
             };
         });
     };
@@ -98,58 +86,12 @@ class OptimizationResultsComponent extends React.Component {
         });
     };
 
+    calculateProgress = () => {
+        const opt = Optimization.fromObject(this.state.optimization);
+        return opt.calculateProgress();
+    };
+
     render() {
-        let state = 'NOT SET';
-
-        if (this.state.optimization) {
-            switch (this.state.optimization.state) {
-                case OPTIMIZATION_STATE_NEW:
-                    state = 'New';
-                    break;
-                case OPTIMIZATION_STATE_STARTED:
-                    state = 'Started';
-                    break;
-                case OPTIMIZATION_STATE_PREPROCESSING:
-                    state = 'Preprocessing';
-                    break;
-                case OPTIMIZATION_STATE_PREPROCESSING_FINISHED:
-                    state = 'Preprocessing finished';
-                    break;
-                case OPTIMIZATION_STATE_QUEUED:
-                    state = 'Queued';
-                    break;
-                case OPTIMIZATION_STATE_CALCULATING:
-                    state = 'Calculating';
-                    break;
-                case OPTIMIZATION_STATE_FINISHED:
-                    state = 'Finished';
-                    break;
-                case OPTIMIZATION_STATE_CANCELLING:
-                    state = 'Cancelling';
-                    break;
-                case OPTIMIZATION_STATE_CANCELLED:
-                    state = 'Cancelled';
-                    break;
-                case OPTIMIZATION_STATE_ERROR:
-                    state = 'Error';
-                    break;
-                case OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL:
-                    state = 'Error Recalculating Model';
-                    break;
-                case OPTIMIZATION_STATE_ERROR_PUBLISHING:
-                    state = 'Error Publishing';
-                    break;
-                case OPTIMIZATION_STATE_ERROR_CANCELLING:
-                    state = 'Error Cancelling';
-                    break;
-                case OPTIMIZATION_STATE_ERROR_OPTIMIZATION_CORE:
-                    state = 'Error Optimization Core';
-                    break;
-                default:
-                    state = `Undefined State with code: ${this.state.optimization.state}`;
-            }
-        }
-
         return (
             <LayoutComponents.Column>
                 <Grid style={styles.tablewidth}>
@@ -166,32 +108,23 @@ class OptimizationResultsComponent extends React.Component {
                             }
                         </Grid.Column>
                         <Grid.Column textAlign="center">
-                            State: {state}
+                            State: {getMessage(this.state.optimization.state)}
                         </Grid.Column>
                         <Grid.Column/>
                     </Grid.Row>
-                    {this.state.optimization.progress.iteration && this.state.optimization.progress.iteration_total && this.state.optimization.progress.iteration_total !== 0
+                    {this.state.optimization.progress && this.state.optimization.progress.simulation_total !== 0 && this.state.optimization.progress.iteration_total !== 0
                         ?
                         <Grid.Row columns={1}>
                             <Grid.Column>
                                 <Progress
-                                    percent={100 * this.state.optimization.progress.iteration / this.state.optimization.progress.iteration_total}
-                                    progress indicating>
-                                    Iteration {this.state.optimization.progress.iteration} of {this.state.optimization.progress.iteration_total}
-                                </Progress>
-                            </Grid.Column>
-                        </Grid.Row>
-                        :
-                        <Grid.Row columns={1}>
-                        </Grid.Row>
-                    }
-                    {this.state.optimization.progress.simulation && this.state.optimization.progress.simulation_total && this.state.optimization.progress.simulation_total !== 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <Grid.Column>
-                                <Progress
-                                    percent={100 * this.state.optimization.progress.simulation / this.state.optimization.progress.simulation_total}
-                                    progress indicating>
+                                    percent={this.calculateProgress()}
+                                    progress
+                                    indicating={optimizationInProgress(this.state.optimization.state)}
+                                    success={this.state.optimization.state === OPTIMIZATION_STATE_FINISHED}
+                                    error={optimizationHasError(this.state.optimization.state)}
+                                    warning={this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED}
+                                >
+                                    Iteration {this.state.optimization.progress.iteration} of {this.state.optimization.progress.iteration_total} /
                                     Simulation {this.state.optimization.progress.simulation} of {this.state.optimization.progress.simulation_total}
                                 </Progress>
                             </Grid.Column>
@@ -236,7 +169,7 @@ class OptimizationResultsComponent extends React.Component {
                                             {
                                                 this.state.optimization.input.objectives.map((o, key) =>
                                                     <List.Item key={key}>
-                                                        <Popup wide style={styles.popupFix} trigger={<span>Objective {key+1}</span>} content={o.name} />: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
+                                                        <Popup trigger={<span>Objective {key+1}</span>} content={o.name} />: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
                                                     </List.Item>
                                                 )
                                             }

@@ -15,13 +15,8 @@ import Stressperiods from '../../core/modflow/Stressperiods';
 import {Button, Icon, List, Menu, Popup, Progress} from 'semantic-ui-react';
 import {Action, Command} from '../actions';
 import {
-    OPTIMIZATION_STATE_NEW,
-    OPTIMIZATION_STATE_CALCULATING,
-    OPTIMIZATION_STATE_CANCELLED,
-    OPTIMIZATION_STATE_CANCELLING,
-    OPTIMIZATION_STATE_FINISHED,
-    OPTIMIZATION_STATE_STARTED,
-    OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL
+    OPTIMIZATION_STATE_CANCELLING, OPTIMIZATION_STATE_FINISHED, OPTIMIZATION_STATE_STARTED, OPTIMIZATION_STATE_CANCELLED,
+    getMessage, optimizationInProgress, optimizationHasError
 } from '../selectors/optimization';
 
 const styles = {
@@ -100,33 +95,37 @@ class ModelEditorOptimization extends React.Component {
     };
 
     onCancelCalculationClick = () => {
+        const optimization = {
+            ...this.state.optimization,
+            state: OPTIMIZATION_STATE_CANCELLING
+        };
+
         this.setState({
-            optimization: {
-                ...this.state.optimization,
-                state: OPTIMIZATION_STATE_CANCELLING
-            }
+            optimization: optimization
         });
 
         this.props.cancelOptimizationCalculation(
             this.props.model.id,
-            Optimization.fromObject(this.state.optimization)
+            Optimization.fromObject(optimization)
         );
     };
 
     onCalculationClick = () => {
         this.onMenuClick(null, {name: 'results'});
 
+        const optimization = {
+            ...this.state.optimization,
+            state: OPTIMIZATION_STATE_STARTED
+        };
+
         this.setState({
-            optimization: {
-                ...this.state.optimization,
-                state: OPTIMIZATION_STATE_STARTED
-            },
+            optimization: optimization,
             activeItem: 'results'
         });
 
         return this.props.calculateOptimization(
             this.props.model.id,
-            Optimization.fromObject(this.state.optimization)
+            Optimization.fromObject(optimization)
         );
     };
 
@@ -239,11 +238,7 @@ class ModelEditorOptimization extends React.Component {
             );
         }
 
-        if (this.state.optimization.state === OPTIMIZATION_STATE_NEW ||
-            this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED ||
-            this.state.optimization.state === OPTIMIZATION_STATE_FINISHED ||
-            this.state.optimization.state >= OPTIMIZATION_STATE_ERROR_RECALCULATING_MODEL) {
-
+        if (!optimizationInProgress(this.state.optimization.state)) {
             return (
                 <Menu.Item>
                         <Button fluid primary onClick={this.onCalculationClick}>
@@ -260,6 +255,11 @@ class ModelEditorOptimization extends React.Component {
             </Menu.Item>
         );
     }
+
+    calculateProgress = () => {
+        const opt = Optimization.fromObject(this.state.optimization);
+        return opt.calculateProgress();
+    };
 
     render() {
         if (!this.state.optimization) {
@@ -291,38 +291,17 @@ class ModelEditorOptimization extends React.Component {
                         {
                             this.renderButton()
                         }
-                        {this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED &&
+                        {this.state.optimization.state && this.state.optimization.progress &&
                         <Menu.Item>
-                            <Progress percent={0}>
-                                Cancelled
-                            </Progress>
-                        </Menu.Item>
-                        }
-                        {this.state.optimization.state === OPTIMIZATION_STATE_STARTED &&
-                        <Menu.Item>
-                            <Progress percent={25} indicating>
-                                Starting
-                            </Progress>
-                        </Menu.Item>
-                        }
-                        {this.state.optimization.state === OPTIMIZATION_STATE_CALCULATING &&
-                        <Menu.Item>
-                            <Progress percent={50} indicating>
-                                Calculating
-                            </Progress>
-                        </Menu.Item>
-                        }
-                        {this.state.optimization.state === OPTIMIZATION_STATE_CANCELLING &&
-                        <Menu.Item>
-                            <Progress percent={75} indicating>
-                                Cancelling
-                            </Progress>
-                        </Menu.Item>
-                        }
-                        {this.state.optimization.state === OPTIMIZATION_STATE_FINISHED &&
-                        <Menu.Item>
-                            <Progress percent={100}>
-                                Finished
+                            <Progress
+                                percent={this.calculateProgress()}
+                                progress
+                                indicating={optimizationInProgress(this.state.optimization.state)}
+                                success={this.state.optimization.state === OPTIMIZATION_STATE_FINISHED}
+                                error={optimizationHasError(this.state.optimization.state)}
+                                warning={this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED}
+                            >
+                                {getMessage(this.state.optimization.state)}
                             </Progress>
                         </Menu.Item>
                         }
