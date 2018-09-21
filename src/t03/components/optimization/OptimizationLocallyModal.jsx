@@ -44,7 +44,8 @@ class OptimizationLocallyModal extends React.Component {
     onCalculationClick = () => {
         const parameters = {
             ...this.state.optimization.parameters,
-            method: 'Simplex'
+            method: 'Simplex',
+            initial_solution_id: this.props.solution.id
         };
 
         return this.props.onCalculationStart(parameters);
@@ -71,6 +72,7 @@ class OptimizationLocallyModal extends React.Component {
             <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
                 <Modal.Header>Optimize Solution Locally</Modal.Header>
                 <Modal.Content>
+                    <b>Solution: {this.props.solution.id}</b>
                     <Form>
                         <Form.Field>
                             <label>Maximum number of function evaluations during the local

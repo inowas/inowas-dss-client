@@ -97,11 +97,13 @@ class OptimizationResultsComponent extends React.Component {
         });
     };
 
-    onChange = (parameters) => {
-        return this.props.onChangeParameters({
+    onCalculationStart = (parameters) => {
+        this.onCancelModal();
+        this.props.onChangeParameters({
             key: 'parameters',
             value: OptimizationParameters.fromObject(parameters)
         });
+        this.props.onCalculationClick();
     };
 
     calculateProgress = () => {
@@ -231,7 +233,7 @@ class OptimizationResultsComponent extends React.Component {
                 {this.state.localOptimization &&
                 <OptimizationLocallyModal
                     onCancel={this.onCancelModal}
-                    onCalculationStart={this.onChange}
+                    onCalculationStart={this.onCalculationStart}
                     optimizationInput={OptimizationInput.fromObject(this.props.optimization.input)}
                     solution={OptimizationSolution.fromObject(this.state.localOptimization)}
                 />
@@ -245,6 +247,7 @@ OptimizationResultsComponent.propTypes = {
     optimization: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onChangeParameters: PropTypes.func.isRequired,
+    onCalculationClick: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
     errors: PropTypes.array

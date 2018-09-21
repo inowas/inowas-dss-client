@@ -197,6 +197,7 @@ class ModelEditorOptimization extends React.Component {
                                                   model={this.props.model}
                                                   stressPeriods={stressPeriods}
                                                   onChangeParameters={this.onChange}
+                                                  onCalculationClick={this.onCalculationClick}
                                                   onChange={this.onChangeResult}/>
                 );
             default:
