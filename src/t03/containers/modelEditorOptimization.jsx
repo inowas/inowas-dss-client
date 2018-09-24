@@ -155,6 +155,29 @@ class ModelEditorOptimization extends React.Component {
         });
     };
 
+    getValidationMessage = (errors) => {
+        let log = [];
+        let list = [];
+
+        if (errors) {
+            errors.map(error => {
+                switch (error.schemaPath) {
+                    case '#/properties/input/oneOf/1/properties/objects/minItems':
+                        list.push('At least one decision variable is required.');
+                        break;
+                    case '#/properties/input/oneOf/1/properties/objectives/minItems':
+                        list.push('At least one objective is required.');
+                        break;
+                    default:
+                        log.push(error.dataPath + ' ' + error.message);
+                        break;
+                }
+            });
+        }
+
+        return {list: list, log: log};
+    };
+
     renderProperties() {
         if (!this.props.model) {
             return null;
@@ -213,6 +236,8 @@ class ModelEditorOptimization extends React.Component {
         const optimization = Optimization.fromObject(this.state.optimization);
         const [result, errors] = optimization.validate();
 
+        const errorMsg = this.getValidationMessage(errors);
+
         if (!result && errors) {
             return (
                 <Menu.Item>
@@ -229,13 +254,30 @@ class ModelEditorOptimization extends React.Component {
                             header='Validation Failed'
                             content={
                                 <List>
-                                    {errors.map((error, key) => (
-                                        <List.Item key={key}>
-                                            <List.Content>
-                                                {error.dataPath} {error.type} {error.message}
-                                            </List.Content>
+                                    {errorMsg.list.length > 0
+                                        ?
+                                        <List.Item><b>Mayor Errors</b>
+                                            {errorMsg.list.map((element, key) => (
+                                                <List.Item key={key}>{element}</List.Item>
+                                            ))}
                                         </List.Item>
-                                    ))}
+                                        :
+                                        <div />
+                                    }
+                                    {errorMsg.log.length > 0
+                                        ?
+                                        <div>
+                                            <List.Item><hr /></List.Item>
+                                            <List.Item><b>Minor Errors</b> (may be fixed by resolving the mayor errors)
+                                            {errorMsg.log.map((e, key) => (
+                                                <List.Item
+                                                    key={errorMsg.list.length + key - 1}>{e}</List.Item>
+                                            ))}
+                                            </List.Item>
+                                        </div>
+                                        :
+                                        <div/>
+                                    }
                                 </List>
                             }
                             on={['hover', 'click']}
@@ -298,19 +340,22 @@ class ModelEditorOptimization extends React.Component {
                         {
                             this.renderButton()
                         }
-                        {this.state.optimization.state && this.state.optimization.progress &&
-                        <Menu.Item>
-                            <Progress
-                                percent={this.calculateProgress()}
-                                progress
-                                indicating={optimizationInProgress(this.state.optimization.state)}
-                                success={this.state.optimization.state === OPTIMIZATION_STATE_FINISHED}
-                                error={optimizationHasError(this.state.optimization.state)}
-                                warning={this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED}
-                            >
-                                {getMessage(this.state.optimization.state)}
-                            </Progress>
-                        </Menu.Item>
+                        {this.state.optimization.state && this.state.optimization.progress
+                            ?
+                            <Menu.Item>
+                                <Progress
+                                    percent={this.calculateProgress()}
+                                    progress
+                                    indicating={optimizationInProgress(this.state.optimization.state)}
+                                    success={this.state.optimization.state === OPTIMIZATION_STATE_FINISHED}
+                                    error={optimizationHasError(this.state.optimization.state)}
+                                    warning={this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED}
+                                >
+                                    {getMessage(this.state.optimization.state)}
+                                </Progress>
+                            </Menu.Item>
+                            :
+                            <div/>
                         }
                         <Menu.Item
                             name="results"
