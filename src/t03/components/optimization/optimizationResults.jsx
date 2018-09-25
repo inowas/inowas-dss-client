@@ -13,6 +13,7 @@ import OptimizationSolutionModal from "./OptimizationSolutionModal";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
 import Stressperiods from "../../../core/modflow/Stressperiods";
 import Optimization from "../../../core/optimization/Optimization";
+import OptimizationObject from "../../../core/optimization/OptimizationObject";
 
 const styles = {
     iconfix: {
@@ -62,9 +63,11 @@ class OptimizationResultsComponent extends React.Component {
     onClickApply = (id) => {
         const solution = this.state.optimization.solutions.filter(s => s.id === id)[0];
 
-        console.log(solution);
+        const boundaries = solution.objects.map(o => {
+           return OptimizationObject.fromObject(o).toBoundary(this.props.model.bounding_box, this.props.model.grid_size, this.props.stressPeriods);
+        });
 
-        return false;
+        return this.props.onApplySolution(boundaries);
     };
 
     onClickReset = () => {
@@ -215,6 +218,7 @@ class OptimizationResultsComponent extends React.Component {
 }
 
 OptimizationResultsComponent.propTypes = {
+    onApplySolution: PropTypes.func.isRequired,
     optimization: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,

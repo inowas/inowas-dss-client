@@ -101,6 +101,13 @@ export const getInitialStyles = () => {
                 fillColor: 'darkgreen',
                 fillOpacity: 0.7
             },
+            opw: {
+                radius: 3,
+                color: 'red',
+                weight: 1,
+                fillColor: 'red',
+                fillOpacity: 0.7
+            },
             sniw: {
                 radius: 5,
                 color: 'red',

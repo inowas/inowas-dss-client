@@ -94,6 +94,15 @@ class ModelEditorOptimization extends React.Component {
         Routing.modelOptimizationType(routes, params)(name);
     };
 
+    onApplySolution = (boundaries) => {
+        boundaries.forEach(boundary => {
+            this.props.addBoundary(
+                this.props.model.id,
+                boundary.toObject
+            );
+        });
+    };
+
     onCancelCalculationClick = () => {
         const optimization = {
             ...this.state.optimization,
@@ -191,7 +200,9 @@ class ModelEditorOptimization extends React.Component {
                     <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
                                                   model={this.props.model}
                                                   stressPeriods={stressPeriods}
-                                                  onChange={this.onChangeResult}/>
+                                                  onChange={this.onChangeResult}
+                                                  onApplySolution={this.onApplySolution}
+                    />
                 );
             default:
                 return (
@@ -265,6 +276,7 @@ class ModelEditorOptimization extends React.Component {
         if (!this.state.optimization) {
             return null;
         }
+
         return (
             <div style={[styles.container]}>
                 <div style={styles.left}>
@@ -325,6 +337,7 @@ class ModelEditorOptimization extends React.Component {
 const actions = {
     setOptimization: Action.setOptimization,
     updateOptimizationInput: Command.updateOptimizationInput,
+    addBoundary: Command.addBoundary,
     calculateOptimization: Command.calculateOptimization,
     cancelOptimizationCalculation: Command.cancelOptimizationCalculation
 };
@@ -360,7 +373,8 @@ ModelEditorOptimization.propTypes = {
     setOptimization: PropTypes.func.isRequired,
     updateOptimizationInput: PropTypes.func.isRequired,
     calculateOptimization: PropTypes.func.isRequired,
-    cancelOptimizationCalculation: PropTypes.func.isRequired
+    cancelOptimizationCalculation: PropTypes.func.isRequired,
+    addBoundary: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));

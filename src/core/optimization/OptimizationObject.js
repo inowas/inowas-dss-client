@@ -1,5 +1,8 @@
 import WellPosition from './WellPosition';
 import uuidv4 from 'uuid/v4';
+import {calculateActiveCells} from "../geospatial";
+import BoundaryFactory from "../boundaries/BoundaryFactory";
+import moment from "moment/moment";
 
 class OptimizationObject {
     _id = uuidv4();
@@ -148,6 +151,46 @@ class OptimizationObject {
         }
 
         return concentration;
+    }
+
+    toBoundary(bbox, gridSize, stressPeriods) {
+        let flux = [];
+
+        if (this.flux) {
+            for (let i = 0; i < this.numberOfStressPeriods; i++) {
+                flux.push({
+                    'date_time': moment.utc(stressPeriods.dateTimes[i]),
+                    'values': [this.flux[i].result]
+                });
+            }
+        }
+
+        const bbXmin = bbox[0][0];
+        const bbYmin = bbox[0][1];
+        const bbXmax = bbox[1][0];
+        const bbYmax = bbox[1][1];
+        const dX = (bbXmax - bbXmin) / gridSize.n_x;
+        const dY = (bbYmax - bbYmin) / gridSize.n_y;
+        const cX = bbXmin + this.position.col.result * dX;
+        const cY = bbYmax - this.position.row.result * dY;
+
+        const args = {
+            name: this.name,
+            type: this.type,
+            geometry: {
+                'coordinates': [cX, cY],
+                'type': 'Point'
+            },
+            utcIsoStartDateTime: stressPeriods.dateTimes[0]
+        };
+
+        const boundary = BoundaryFactory.createByTypeAndStartDate(args);
+        boundary.wellType = 'opw';
+        boundary.setDateTimeValues(flux);
+        boundary.activeCells = calculateActiveCells(args.geometry, bbox, gridSize);
+        boundary.affectedLayers = [this.position.lay.result];
+
+        return boundary;
     }
 
     get toObject() {
