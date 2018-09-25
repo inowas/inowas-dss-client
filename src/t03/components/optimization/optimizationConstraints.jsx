@@ -9,6 +9,8 @@ import OptimizationMap from './optimizationMap';
 import Slider, {createSliderWithTooltip} from 'rc-slider';
 import {Formatter} from "../../../core";
 
+const Range = createSliderWithTooltip(Slider.Range);
+
 class OptimizationConstraintsComponent extends React.Component {
 
     constructor(props) {
@@ -149,8 +151,6 @@ class OptimizationConstraintsComponent extends React.Component {
             {key: 'type4', text: 'Distance', value: 'distance'},
             {key: 'type5', text: 'Input Concentration', value: 'inputConc'}
         ];
-
-        const Range = createSliderWithTooltip(Slider.Range);
 
         return (
             <LayoutComponents.Column>
