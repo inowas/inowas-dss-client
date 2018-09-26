@@ -11,6 +11,8 @@ import {createSliderWithTooltip} from 'rc-slider';
 import Stressperiods from "../../../core/modflow/Stressperiods";
 import {Formatter} from "../../../core";
 
+const Range = createSliderWithTooltip(Slider.Range);
+
 class OptimizationObjectivesComponent extends React.Component {
 
     constructor(props) {
@@ -151,8 +153,6 @@ class OptimizationObjectivesComponent extends React.Component {
             {key: 'type4', text: 'Distance', value: 'distance'},
             {key: 'type5', text: 'Input Concentration', value: 'inputConc'}
         ];
-
-        const Range = createSliderWithTooltip(Slider.Range);
 
         return (
             <LayoutComponents.Column>

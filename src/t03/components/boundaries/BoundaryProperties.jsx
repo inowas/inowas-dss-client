@@ -412,6 +412,10 @@ class BoundaryProperties extends React.Component {
                                     {
                                         label: 'Irrigation Well',
                                         value: 'irw'
+                                    },
+                                    {
+                                        label: 'Optimized Well',
+                                        value: 'opw'
                                     }
                                 ]}
                             />

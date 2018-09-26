@@ -15,8 +15,13 @@ import Stressperiods from '../../core/modflow/Stressperiods';
 import {Button, Icon, List, Menu, Popup, Progress} from 'semantic-ui-react';
 import {Action, Command} from '../actions';
 import {
-    OPTIMIZATION_STATE_CANCELLING, OPTIMIZATION_STATE_FINISHED, OPTIMIZATION_STATE_STARTED, OPTIMIZATION_STATE_CANCELLED,
-    getMessage, optimizationInProgress, optimizationHasError
+    OPTIMIZATION_STATE_CANCELLING,
+    OPTIMIZATION_STATE_FINISHED,
+    OPTIMIZATION_STATE_STARTED,
+    OPTIMIZATION_STATE_CANCELLED,
+    getMessage,
+    optimizationInProgress,
+    optimizationHasError
 } from '../selectors/optimization';
 
 const styles = {
@@ -84,6 +89,10 @@ class ModelEditorOptimization extends React.Component {
             optimization: optimization
         });
     }
+
+    onApplySolution = (boundaries) => {
+        this.props.addBoundary(this.props.model.id, boundaries.map(b => b.toObject));
+    };
 
     onMenuClick = (e, {name}) => {
         const {routes, params} = this.props;
@@ -191,7 +200,9 @@ class ModelEditorOptimization extends React.Component {
                     <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
                                                   model={this.props.model}
                                                   stressPeriods={stressPeriods}
-                                                  onChange={this.onChangeResult}/>
+                                                  onChange={this.onChangeResult}
+                                                  onApplySolution={this.onApplySolution}
+                    />
                 );
             default:
                 return (
@@ -205,6 +216,8 @@ class ModelEditorOptimization extends React.Component {
     renderButton() {
         const optimization = Optimization.fromObject(this.state.optimization);
         const [result, errors] = optimization.validate();
+
+        // TODO: check if stress periods or substances are valid?!
 
         if (!result && errors) {
             return (
@@ -222,12 +235,12 @@ class ModelEditorOptimization extends React.Component {
                             header='Validation Failed'
                             content={
                                 <List>
-                                    { errors.map((error, key) => (
-                                    <List.Item key={key}>
-                                        <List.Content>
-                                            {error.dataPath} {error.type} {error.message}
-                                        </List.Content>
-                                    </List.Item>
+                                    {errors.map((error, key) => (
+                                        <List.Item key={key}>
+                                            <List.Content>
+                                                {error.dataPath} {error.type} {error.message}
+                                            </List.Content>
+                                        </List.Item>
                                     ))}
                                 </List>
                             }
@@ -241,17 +254,17 @@ class ModelEditorOptimization extends React.Component {
         if (!optimizationInProgress(this.state.optimization.state)) {
             return (
                 <Menu.Item>
-                        <Button fluid primary onClick={this.onCalculationClick}>
-                            Run Optimization
-                        </Button>
+                    <Button fluid primary onClick={this.onCalculationClick}>
+                        Run Optimization
+                    </Button>
                 </Menu.Item>
             );
         }
         return (
             <Menu.Item>
-                    <Button fluid color="red" onClick={this.onCancelCalculationClick}>
-                        Cancel Calculation
-                    </Button>
+                <Button fluid color="red" onClick={this.onCancelCalculationClick}>
+                    Cancel Calculation
+                </Button>
             </Menu.Item>
         );
     }
@@ -265,6 +278,7 @@ class ModelEditorOptimization extends React.Component {
         if (!this.state.optimization) {
             return null;
         }
+
         return (
             <div style={[styles.container]}>
                 <div style={styles.left}>
@@ -325,6 +339,7 @@ class ModelEditorOptimization extends React.Component {
 const actions = {
     setOptimization: Action.setOptimization,
     updateOptimizationInput: Command.updateOptimizationInput,
+    addBoundary: Command.addBoundary,
     calculateOptimization: Command.calculateOptimization,
     cancelOptimizationCalculation: Command.cancelOptimizationCalculation
 };
@@ -360,7 +375,8 @@ ModelEditorOptimization.propTypes = {
     setOptimization: PropTypes.func.isRequired,
     updateOptimizationInput: PropTypes.func.isRequired,
     calculateOptimization: PropTypes.func.isRequired,
-    cancelOptimizationCalculation: PropTypes.func.isRequired
+    cancelOptimizationCalculation: PropTypes.func.isRequired,
+    addBoundary: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));
