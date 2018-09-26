@@ -119,6 +119,7 @@ class SsmPackageProperties extends AbstractPackageProperties {
     removeSubstance = () => {
         const ssmPackage = SsmPackage.fromObject(this.state.mtPackage);
         ssmPackage.removeSubstance(this.state.selectedSubstance);
+        //TODO: Remove substances from optimization?!
         this.props.onChange(ssmPackage);
         return this.setState({
             mtPackage: ssmPackage.toObject,
