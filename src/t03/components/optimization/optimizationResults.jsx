@@ -234,8 +234,6 @@ class OptimizationResultsComponent extends React.Component {
                     </Modal.Content>
                     <Modal.Actions>
                         <Button onClick={this.onCancelModal}>Close</Button>
-                        <Button
-                        >Go to Boundaries</Button>
                     </Modal.Actions>
                 </Modal>
                 }
