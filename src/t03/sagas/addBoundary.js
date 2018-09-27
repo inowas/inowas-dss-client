@@ -3,25 +3,48 @@ import {Command, Action, Event} from '../../t03/actions/index';
 import {WebData} from '../../core';
 
 export default function* addBoundaryFlow() {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
-        // eslint-disable-next-line no-shadow
         const command = yield take(action => action.type === Command.ADD_BOUNDARY);
-        yield put(Action.addBoundary(command.tool, command.payload.boundary));
-        yield put(WebData.Modifier.Action.sendCommand(command.type, command.payload));
 
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-            // eslint-disable-next-line no-shadow
-            const response = yield take(action => WebData.Helpers.waitForResponse(action, Command.ADD_BOUNDARY));
+        if (Array.isArray(command.payload.boundary)) {
+            for (let i = 0; i < command.payload.boundary.length; i++) {
+                const boundary = command.payload.boundary[i];
+                const payload = {
+                    id: command.payload.id,
+                    boundary: boundary
+                };
 
-            if (response.webData.type === 'error') {
-                break;
+                yield put(Action.addBoundary(command.tool, boundary));
+                yield put(WebData.Modifier.Action.sendCommand(command.type, payload));
+
+                while (true) {
+                    const response = yield take(action => WebData.Helpers.waitForResponse(action, Command.ADD_BOUNDARY));
+
+                    if (response.webData.type === 'error') {
+                        break;
+                    }
+
+                    if (response.webData.type === 'success') {
+                        yield put(Event.boundaryAdded(command.tool, boundary));
+                        break;
+                    }
+                }
             }
+        } else {
+            yield put(Action.addBoundary(command.tool, command.payload.boundary));
+            yield put(WebData.Modifier.Action.sendCommand(command.type, command.payload));
 
-            if (response.webData.type === 'success') {
-                yield put(Event.boundaryAdded(command.tool, command.payload.boundary));
-                break;
+            while (true) {
+                const response = yield take(action => WebData.Helpers.waitForResponse(action, Command.ADD_BOUNDARY));
+
+                if (response.webData.type === 'error') {
+                    break;
+                }
+
+                if (response.webData.type === 'success') {
+                    yield put(Event.boundaryAdded(command.tool, command.payload.boundary));
+                    break;
+                }
             }
         }
     }

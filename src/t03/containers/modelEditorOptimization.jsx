@@ -90,6 +90,10 @@ class ModelEditorOptimization extends React.Component {
         });
     }
 
+    onApplySolution = (boundaries) => {
+        this.props.addBoundary(this.props.model.id, boundaries.map(b => b.toObject));
+    };
+
     onMenuClick = (e, {name}) => {
         const {routes, params} = this.props;
         this.setState({
@@ -221,7 +225,8 @@ class ModelEditorOptimization extends React.Component {
                                                   stressPeriods={stressPeriods}
                                                   onChangeParameters={this.onChange}
                                                   onCalculationClick={this.onCalculationClick}
-                                                  onChange={this.onChangeResult}/>
+                                                  onChange={this.onChangeResult}
+                                                  onApplySolution={this.onApplySolution}/>
                 );
             default:
                 return (
@@ -237,6 +242,8 @@ class ModelEditorOptimization extends React.Component {
         const [result, errors] = optimization.validate();
 
         const errorMsg = this.getValidationMessage(errors);
+
+        // TODO: check if stress periods or substances are valid?!
 
         if (!result && errors) {
             return (
@@ -377,6 +384,7 @@ class ModelEditorOptimization extends React.Component {
 const actions = {
     setOptimization: Action.setOptimization,
     updateOptimizationInput: Command.updateOptimizationInput,
+    addBoundary: Command.addBoundary,
     calculateOptimization: Command.calculateOptimization,
     cancelOptimizationCalculation: Command.cancelOptimizationCalculation
 };
@@ -412,7 +420,8 @@ ModelEditorOptimization.propTypes = {
     setOptimization: PropTypes.func.isRequired,
     updateOptimizationInput: PropTypes.func.isRequired,
     calculateOptimization: PropTypes.func.isRequired,
-    cancelOptimizationCalculation: PropTypes.func.isRequired
+    cancelOptimizationCalculation: PropTypes.func.isRequired,
+    addBoundary: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfiguredRadium(ModelEditorOptimization)));

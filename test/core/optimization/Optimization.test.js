@@ -26,14 +26,17 @@ test('Create with Defaults and toObject', () => {
                 'ngen': 100,
                 'pop_size': 100,
                 'qbound': 0.25,
-                'xtol': 0.0001,
-                'report_frequency': 50
+                'report_frequency': 50,
+                'xtol': 0.0001
             }
-        },
+            },
         'progress': {
             'final': false,
-            'generation': 0,
-            'log': []
+            'iteration': 0,
+            'iteration_total': 0,
+            'progress_log': [],
+            'simulation': 0,
+            'simulation_total': 0
         },
         'solutions': [],
         'state': 0

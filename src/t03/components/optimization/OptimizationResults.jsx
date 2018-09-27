@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Grid, Button, Icon, Progress, Segment, List, Popup} from 'semantic-ui-react';
-import Chart from './FitnessChart';
+import {Grid, Button, Icon, Progress, Segment, List, Popup, Modal} from 'semantic-ui-react';
+import Chart from './fitnessChart';
 import {
     OPTIMIZATION_STATE_CANCELLED, OPTIMIZATION_STATE_FINISHED, OPTIMIZATION_STATE_NEW,
     getMessage, optimizationHasError, optimizationInProgress
@@ -16,6 +16,7 @@ import Optimization from "../../../core/optimization/Optimization";
 import OptimizationLocallyModal from "./OptimizationLocallyModal";
 import OptimizationInput from "../../../core/optimization/OptimizationInput";
 import OptimizationParameters from "../../../core/optimization/OptimizationParameters";
+import OptimizationObject from "../../../core/optimization/OptimizationObject";
 
 const styles = {
     iconfix: {
@@ -41,6 +42,7 @@ class OptimizationResultsComponent extends React.Component {
         this.state = {
             optimization: this.props.optimization.toObject,
             selectedSolution: null,
+            createdBoundaries: null,
             localOptimization: null,
             data: this.setData(props)
         };
@@ -66,9 +68,15 @@ class OptimizationResultsComponent extends React.Component {
     onClickApply = (id) => {
         const solution = this.state.optimization.solutions.filter(s => s.id === id)[0];
 
-        console.log(solution);
+        const boundaries = solution.objects.map(o => {
+            return OptimizationObject.fromObject(o).toBoundary(this.props.model.bounding_box, this.props.model.grid_size, this.props.stressPeriods);
+        });
 
-        return false;
+        this.setState({
+            createdBoundaries: boundaries
+        });
+
+        return this.props.onApplySolution(boundaries);
     };
 
     onClickLocalOptimization = (key) => {
@@ -93,7 +101,8 @@ class OptimizationResultsComponent extends React.Component {
     onCancelModal = () => {
         return this.setState({
             localOptimization: null,
-            selectedSolution: null
+            selectedSolution: null,
+            createdBoundaries: null
         });
     };
 
@@ -186,13 +195,14 @@ class OptimizationResultsComponent extends React.Component {
                                         </Grid.Column>
                                         <Grid.Column>
                                             <List>
-                                            {
-                                                this.state.optimization.input.objectives.map((o, key) =>
-                                                    <List.Item key={key}>
-                                                        <Popup trigger={<span>Objective {key+1}</span>} content={o.name} />: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
-                                                    </List.Item>
-                                                )
-                                            }
+                                                {
+                                                    this.state.optimization.input.objectives.map((o, key) =>
+                                                        <List.Item key={key}>
+                                                            <Popup trigger={<span>Objective {key + 1}</span>}
+                                                                   content={o.name}/>: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
+                                                        </List.Item>
+                                                    )
+                                                }
                                             </List>
                                         </Grid.Column>
                                         <Grid.Column textAlign="center">
@@ -223,12 +233,12 @@ class OptimizationResultsComponent extends React.Component {
                     <p>No solutions.</p>
                 }
                 {this.state.selectedSolution &&
-                    <OptimizationSolutionModal
-                        model={this.props.model}
-                        onCancel={this.onCancelModal}
-                        stressPeriods={this.props.stressPeriods}
-                        solution={OptimizationSolution.fromObject(this.state.selectedSolution)}
-                    />
+                <OptimizationSolutionModal
+                    model={this.props.model}
+                    onCancel={this.onCancelModal}
+                    stressPeriods={this.props.stressPeriods}
+                    solution={OptimizationSolution.fromObject(this.state.selectedSolution)}
+                />
                 }
                 {this.state.localOptimization &&
                 <OptimizationLocallyModal
@@ -238,12 +248,30 @@ class OptimizationResultsComponent extends React.Component {
                     solution={OptimizationSolution.fromObject(this.state.localOptimization)}
                 />
                 }
+                {this.state.createdBoundaries &&
+                <Modal size={'tiny'} open onClose={this.onCancelModal} dimmer={'inverted'}>
+                    <Modal.Header>Solution Applied</Modal.Header>
+                    <Modal.Content>
+                        <p>The solution has been applied successfully. Following boundaries have been created:</p>
+                        <List>
+                        {this.state.createdBoundaries.map((boundary, key) =>
+                            <List.Item key={key}>{boundary.name} of type {boundary.type}</List.Item>
+                        )}
+                        </List>
+                        <p>You can now go to boundaries, to make further changes and start a new calculation afterwards.</p>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button onClick={this.onCancelModal}>Close</Button>
+                    </Modal.Actions>
+                </Modal>
+                }
             </LayoutComponents.Column>
         );
     }
 }
 
 OptimizationResultsComponent.propTypes = {
+    onApplySolution: PropTypes.func.isRequired,
     optimization: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onChangeParameters: PropTypes.func.isRequired,
