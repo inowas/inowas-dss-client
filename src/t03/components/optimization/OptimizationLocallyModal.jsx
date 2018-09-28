@@ -67,13 +67,17 @@ class OptimizationLocallyModal extends React.Component {
 
     render() {
         const parameters = this.state.optimization.parameters;
-
         return (
             <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
                 <Modal.Header>Optimize Solution Locally</Modal.Header>
                 <Modal.Content>
-                    <b>Solution: {this.props.solution.id}</b>
                     <Form>
+                        <Form.Field>
+                            <label>Solution ID</label>
+                            <Segment>
+                                {this.props.solution.id}
+                            </Segment>
+                        </Form.Field>
                         <Form.Field>
                             <label>Maximum number of function evaluations during the local
                                 optimization.</label>
@@ -138,6 +142,7 @@ class OptimizationLocallyModal extends React.Component {
                                                     name="objective"
                                                     placeholder="target ="
                                                     style={styles.inputfix}
+                                                    value={parseFloat(this.props.solution.fitness[key]).toFixed(3)}
                                                 />
                                             </Form.Field>
                                         </Grid.Column>

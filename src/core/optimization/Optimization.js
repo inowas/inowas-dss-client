@@ -1,18 +1,12 @@
 import OptimizationInput from './OptimizationInput';
 import OptimizationSolution from './OptimizationSolution';
+import OptimizationProgress from './OptimizationProgress';
 import Ajv from 'ajv';
 
 class Optimization {
     _input;
     _state = 0;
-    _progress = {
-        _progress_log: [],
-        _simulation: 0,
-        _simulation_total: 0,
-        _iteration: 0,
-        _iteration_total: 0,
-        _final: false
-    };
+    _progress = null;
     _solutions = [];
 
     static fromDefaults() {
@@ -25,7 +19,7 @@ class Optimization {
         const optimization = new Optimization();
         optimization.input = OptimizationInput.fromObject(obj.input);
         optimization.state = obj.state;
-        optimization.progress = obj.progress;
+        optimization.progress = OptimizationProgress.fromObject(obj.progress);
 
         obj.solutions && obj.solutions.forEach((solution) => {
             optimization.addSolution(OptimizationSolution.fromObject(solution));
@@ -62,17 +56,7 @@ class Optimization {
     }
 
     set progress(value) {
-        // FIXME
-        if(value && value.progess_log) {
-            this._progress._progress_log = value.progess_log;
-        } else {
-            this._progress._progress_log = value && value.progress_log ? value.progress_log : [];
-        }
-        this._progress._simulation = value && value.simulation ? value.simulation : 0;
-        this._progress._simulation_total = value && value.simulation_total ? value.simulation_total : 0;
-        this._progress._iteration = value && value.iteration ? value.iteration : 0;
-        this._progress._iteration_total = value && value.iteration_total ? value.iteration_total : 0;
-        this._progress._final = value && value.final ? value.final : false;
+        this._progress = value ? value : {};
     }
 
     get solutions() {
@@ -88,14 +72,7 @@ class Optimization {
             'id': this.id,
             'input': this.input.toObject,
             'state': this.state,
-            'progress': {
-                'progress_log': this._progress._progress_log,
-                'simulation': this._progress._simulation,
-                'simulation_total': this._progress._simulation_total,
-                'iteration': this._progress._iteration,
-                'iteration_total': this._progress._iteration_total,
-                'final': this._progress._final
-            },
+            'progress': this.progress ? this.progress.toObject : null,
             'solutions': this.solutions.map(r => r.toObject)
         };
     }
@@ -113,22 +90,6 @@ class Optimization {
         ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"));
         const validate = ajv.compile(schema);
         return [validate(this.toObject), validate.errors];
-    }
-
-    calculateProgress() {
-        const i = this._progress._iteration;
-        const iMax = this._progress._iteration_total;
-        const s = this._progress._simulation;
-        const sMax = this._progress._simulation_total;
-
-        if (iMax > 0 && sMax > 0) {
-            const progress = (((i - 1) * sMax + s) / (iMax * sMax) * 100).toFixed(1);
-            if (progress > 100) {
-                return 100;
-            }
-            return progress;
-        }
-        return 0;
     }
 }
 

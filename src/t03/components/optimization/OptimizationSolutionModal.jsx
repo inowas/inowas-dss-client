@@ -9,7 +9,7 @@ import {
     Modal,
     Accordion,
     Form,
-    List
+    List, Segment
 } from 'semantic-ui-react';
 import OptimizationResultsMap from "./OptimizationResultsMap";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
@@ -33,7 +33,7 @@ const styles = {
     },
     formfix: {
         width: '100%'
-    },
+    }
 };
 
 class OptimizationSolutionModal extends React.Component {
@@ -93,83 +93,82 @@ class OptimizationSolutionModal extends React.Component {
                 <Modal.Content>
                     <Form style={styles.formfix}>
                         <Form.Field>
-                            <label>Fitness</label>
-                            <Form.Select
-                                fluid
-                                placeholder="Fitness"
-                                value={this.props.solution.fitness[0]}
-                                options={this.props.solution.fitness.map(f => {
-                                    return {
-                                        key: f,
-                                        value: f,
-                                        text: f
-                                    }
-                                })}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>Variables</label>
-                            <Form.Select
-                                fluid
-                                placeholder="Variables"
-                                value={this.props.solution.variables[0]}
-                                options={this.props.solution.variables.map(f => {
-                                    return {
-                                        key: f,
-                                        value: f,
-                                        text: f
-                                    }
-                                })}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>Objects</label>
-                            <Form.Select
-                                placeholder="Select Object"
-                                fluid
-                                options={this.props.solution.objects.map(s => {
-                                    return {
-                                        key: s.id,
-                                        value: s.id,
-                                        text: s.name
-                                    };
-                                })}
-                                onChange={this.onSelectObject}
-                                value={this.state.selectedObject ? this.state.selectedObject.id : null}
-                            />
-                        </Form.Field>
-                        {this.state.selectedObject &&
-                        <Form.Field>
-                            <Accordion fluid styled>
-                                <Accordion.Title active={this.state.activeIndex === 0} index={0}
-                                                 onClick={this.onClickAccordion}>
-                                    <Icon name="dropdown"/>
-                                    Location
-                                </Accordion.Title>
-                                <Accordion.Content active={this.state.activeIndex === 0}>
-                                    <Grid divided={'vertically'}>
-                                        <Grid.Row columns={2}>
-                                            <Grid.Column width={12}>
-                                                <OptimizationResultsMap
-                                                    area={this.props.model.geometry}
-                                                    bbox={this.props.model.bounding_box}
-                                                    objects={this.props.solution.objects}
-                                                    selectedObject={this.state.selectedObject}
-                                                    readOnly={true}
-                                                    gridSize={this.props.model.grid_size}
-                                                />
-                                            </Grid.Column>
-                                            <Grid.Column width={2}>
-                                                <h4>Position of {this.state.selectedObject.name}</h4>
+                            <Grid divided={'vertically'}>
+                                <Grid.Row columns={2}>
+                                    <Grid.Column width={12}>
+                                        <OptimizationResultsMap
+                                            area={this.props.model.geometry}
+                                            bbox={this.props.model.bounding_box}
+                                            objects={this.props.solution.objects}
+                                            selectedObject={this.state.selectedObject}
+                                            readOnly={true}
+                                            gridSize={this.props.model.grid_size}
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column width={4}>
+                                        <Form.Field>
+                                            <label>Objects</label>
+                                            <Form.Select
+                                                placeholder="Select Object"
+                                                fluid
+                                                options={this.props.solution.objects.map(s => {
+                                                    return {
+                                                        key: s.id,
+                                                        value: s.id,
+                                                        text: s.name
+                                                    };
+                                                })}
+                                                onChange={this.onSelectObject}
+                                                value={this.state.selectedObject ? this.state.selectedObject.id : null}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>Position of {this.state.selectedObject.name}</label>
+                                            <Segment>
                                                 <List>
                                                     <List.Item>Layer: {this.state.selectedObject.position.lay.result}</List.Item>
                                                     <List.Item>Row: {this.state.selectedObject.position.row.result}</List.Item>
                                                     <List.Item>Column: {this.state.selectedObject.position.col.result}</List.Item>
                                                 </List>
-                                            </Grid.Column>
-                                        </Grid.Row>
-                                    </Grid>
-                                </Accordion.Content>
+                                            </Segment>
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>Fitness</label>
+                                            <Form.Select
+                                                fluid
+                                                placeholder="Fitness"
+                                                value={this.props.solution.fitness[0]}
+                                                options={this.props.solution.fitness.map(f => {
+                                                    return {
+                                                        key: f,
+                                                        value: f,
+                                                        text: parseFloat(f).toFixed(2)
+                                                    }
+                                                })}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>Variables</label>
+                                            <Form.Select
+                                                fluid
+                                                placeholder="Variables"
+                                                value={this.props.solution.variables[0]}
+                                                options={this.props.solution.variables.map(f => {
+                                                    return {
+                                                        key: f,
+                                                        value: f,
+                                                        text: parseFloat(f).toFixed(2)
+                                                    }
+                                                })}
+                                            />
+                                        </Form.Field>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </Form.Field>
+                        {this.state.selectedObject &&
+                        <Form.Field>
+                            <Accordion fluid styled>
                                 <Accordion.Title active={this.state.activeIndex === 1} index={1}
                                                  onClick={this.onClickAccordion}>
                                     <Icon name="dropdown"/>

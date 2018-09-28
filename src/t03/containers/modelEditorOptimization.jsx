@@ -23,6 +23,7 @@ import {
     optimizationInProgress,
     optimizationHasError
 } from '../selectors/optimization';
+import OptimizationProgress from "../../core/optimization/OptimizationProgress";
 
 const styles = {
     container: {
@@ -312,10 +313,36 @@ class ModelEditorOptimization extends React.Component {
         );
     }
 
-    calculateProgress = () => {
-        const opt = Optimization.fromObject(this.state.optimization);
-        return opt.calculateProgress();
-    };
+    renderProgress() {
+        if (!this.state.optimization.progress || (!this.state.optimization.progress.GA && !this.state.optimization.progress.Simplex)) {
+            return false;
+        }
+
+        const state = this.state.optimization.state;
+        const method = OptimizationProgress.fromObject(this.state.optimization.progress);
+        const progress =  this.state.optimization.input.parameters.method === 'GA' ? method.GA : method.Simplex;
+
+        return (
+            <Menu.Item>
+                <Progress
+                    percent={progress.calculate()}
+                    progress
+                    indicating={!progress.final && optimizationInProgress(state)}
+                    success={progress.final && state === OPTIMIZATION_STATE_FINISHED}
+                    error={!progress.final && optimizationHasError(state)}
+                    warning={!progress.final && state === OPTIMIZATION_STATE_CANCELLED}
+                >
+                    {this.state.optimization.input.parameters.method === 'GA'
+                        ?
+                        <span>Generic Algorithm:&nbsp;</span>
+                        :
+                        <span>Simplex:&nbsp;</span>
+                    }
+                    {getMessage(state)}
+                </Progress>
+            </Menu.Item>
+        );
+    }
 
     render() {
         if (!this.state.optimization) {
@@ -347,22 +374,8 @@ class ModelEditorOptimization extends React.Component {
                         {
                             this.renderButton()
                         }
-                        {this.state.optimization.state && this.state.optimization.progress
-                            ?
-                            <Menu.Item>
-                                <Progress
-                                    percent={this.calculateProgress()}
-                                    progress
-                                    indicating={optimizationInProgress(this.state.optimization.state)}
-                                    success={this.state.optimization.state === OPTIMIZATION_STATE_FINISHED}
-                                    error={optimizationHasError(this.state.optimization.state)}
-                                    warning={this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED}
-                                >
-                                    {getMessage(this.state.optimization.state)}
-                                </Progress>
-                            </Menu.Item>
-                            :
-                            <div/>
+                        {
+                            this.renderProgress()
                         }
                         <Menu.Item
                             name="results"
