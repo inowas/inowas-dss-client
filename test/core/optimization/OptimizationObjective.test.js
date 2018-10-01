@@ -11,6 +11,7 @@ export const concentrationObjective = {
     summary_method: 'max',
     weight: -1,
     penalty_value: 999,
+    target: null,
     location: Location.fromObject(exampleLocation).toObject,
     location_1: Location.fromObject({}).toObject,
     location_2: Location.fromObject({}).toObject
@@ -23,6 +24,7 @@ export const headObjective = {
     summary_method: 'max',
     weight: -1,
     penalty_value: 999,
+    target: null,
     location: Location.fromObject({
         'type': 'object',
         'objects': [0, 1]

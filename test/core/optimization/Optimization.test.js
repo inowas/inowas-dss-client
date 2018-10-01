@@ -19,6 +19,7 @@ test('Create with Defaults and toObject', () => {
                 'eta': 20,
                 'ftol': 0.0001,
                 'indpb': 0.1,
+                'initial_solution_id': null,
                 'maxf': 50,
                 'method': 'GA',
                 'mutpb': 0.1,
@@ -30,14 +31,7 @@ test('Create with Defaults and toObject', () => {
                 'xtol': 0.0001
             }
             },
-        'progress': {
-            'final': false,
-            'iteration': 0,
-            'iteration_total': 0,
-            'progress_log': [],
-            'simulation': 0,
-            'simulation_total': 0
-        },
+        'progress': null,
         'solutions': [],
         'state': 0
     });

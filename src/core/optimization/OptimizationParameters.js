@@ -164,11 +164,11 @@ class OptimizationParameters {
     }
 
     get initialSolutionId() {
-        return this._initialSolutionId;
+        return this._initialSolutionId.value;
     }
 
     set initialSolutionId(value) {
-        this._initialSolutionId = value ? value : null;
+        this._initialSolutionId.value = value ? value : null;
     }
 
     applyMinMax = (value, min = null, max = null) => {
