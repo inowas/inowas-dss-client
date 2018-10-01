@@ -13,7 +13,7 @@ import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
 import {Button, Icon, List, Menu, Popup, Progress} from 'semantic-ui-react';
-import {Action, Command} from '../actions';
+import {Action, Command, Query} from '../actions';
 import {
     OPTIMIZATION_STATE_CANCELLING,
     OPTIMIZATION_STATE_FINISHED,
@@ -77,7 +77,8 @@ class ModelEditorOptimization extends React.Component {
         this.state = {
             optimization: optimization,
             activeItem: this.props.params.type ? this.props.params.type : 'parameters',
-            errors: []
+            errors: [],
+            isPolling: false
         };
     }
 
@@ -85,6 +86,18 @@ class ModelEditorOptimization extends React.Component {
         const optimization = (nextProps.optimization && nextProps.optimization.input) ?
             Optimization.fromObject(nextProps.optimization).toObject :
             Optimization.fromDefaults().toObject;
+
+        if (optimizationInProgress(optimization.state) && !this.state.isPolling) {
+            console.log('START POLLING');
+
+            this.setState({
+               isPolling: true
+            });
+
+            this.props.startPolling({
+                id: this.props.model.id
+            });
+        }
 
         this.setState({
             optimization: optimization
@@ -399,7 +412,8 @@ const actions = {
     updateOptimizationInput: Command.updateOptimizationInput,
     addBoundary: Command.addBoundary,
     calculateOptimization: Command.calculateOptimization,
-    cancelOptimizationCalculation: Command.cancelOptimizationCalculation
+    cancelOptimizationCalculation: Command.cancelOptimizationCalculation,
+    startPolling: Query.getOptimization
 };
 
 const mapDispatchToProps = (dispatch, {tool}) => {
@@ -434,6 +448,7 @@ ModelEditorOptimization.propTypes = {
     updateOptimizationInput: PropTypes.func.isRequired,
     calculateOptimization: PropTypes.func.isRequired,
     cancelOptimizationCalculation: PropTypes.func.isRequired,
+    startPolling: PropTypes.func.isRequired,
     addBoundary: PropTypes.func.isRequired
 };
 

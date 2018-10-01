@@ -4,8 +4,6 @@ import {Selector} from '../../t03';
 import {Query, Command, Action} from '../actions/index';
 import {WebData} from '../../core/index';
 
-const MAX_TRY = 20;
-
 const continuePolling = state => {
     if (state >= Selector.optimization.OPTIMIZATION_STATE_STARTED
         && state < Selector.optimization.OPTIMIZATION_STATE_FINISHED) {
