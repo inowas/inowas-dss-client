@@ -24,6 +24,7 @@ import {
     optimizationHasError
 } from '../selectors/optimization';
 import OptimizationProgress from "../../core/optimization/OptimizationProgress";
+import OptimizationInput from "../../core/optimization/OptimizationInput";
 
 const styles = {
     container: {
@@ -88,8 +89,6 @@ class ModelEditorOptimization extends React.Component {
             Optimization.fromDefaults().toObject;
 
         if (optimizationInProgress(optimization.state) && !this.state.isPolling) {
-            console.log('START POLLING');
-
             this.setState({
                isPolling: true
             });
@@ -154,7 +153,13 @@ class ModelEditorOptimization extends React.Component {
 
     onChange = (obj) => {
         const opt = Optimization.fromObject(this.state.optimization);
-        opt.input[obj.key] = obj.value;
+
+        if (obj.key === 'input') {
+            opt.input = OptimizationInput.fromObject(obj.value);
+        } else {
+            opt.input[obj.key] = obj.value;
+        }
+
         this.setState({
             optimization: opt.toObject
         });
@@ -237,7 +242,7 @@ class ModelEditorOptimization extends React.Component {
                     <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
                                                   model={this.props.model}
                                                   stressPeriods={stressPeriods}
-                                                  onChangeParameters={this.onChange}
+                                                  onChangeInput={this.onChange}
                                                   onCalculationClick={this.onCalculationClick}
                                                   onChange={this.onChangeResult}
                                                   onApplySolution={this.onApplySolution}/>

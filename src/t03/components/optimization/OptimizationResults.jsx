@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Grid, Button, Icon, Progress, Segment, List, Popup, Modal} from 'semantic-ui-react';
+import {Grid, Button, Progress, Segment, List, Popup, Modal} from 'semantic-ui-react';
 import Chart from './fitnessChart';
 import {
     OPTIMIZATION_STATE_CANCELLED,
@@ -15,7 +15,6 @@ import Stressperiods from "../../../core/modflow/Stressperiods";
 import Optimization from "../../../core/optimization/Optimization";
 import OptimizationLocallyModal from "./OptimizationLocallyModal";
 import OptimizationInput from "../../../core/optimization/OptimizationInput";
-import OptimizationParameters from "../../../core/optimization/OptimizationParameters";
 import OptimizationObject from "../../../core/optimization/OptimizationObject";
 
 const styles = {
@@ -87,11 +86,11 @@ class OptimizationResultsComponent extends React.Component {
         });
     };
 
-    onCalculationStart = (parameters) => {
+    onCalculationStart = (input) => {
         this.onCancelModal();
-        this.props.onChangeParameters({
-            key: 'parameters',
-            value: OptimizationParameters.fromObject(parameters)
+        this.props.onChangeInput({
+            key: 'input',
+            value: input
         });
         this.props.onCalculationClick();
     };
@@ -276,7 +275,7 @@ OptimizationResultsComponent.propTypes = {
     onApplySolution: PropTypes.func.isRequired,
     optimization: PropTypes.instanceOf(Optimization).isRequired,
     onChange: PropTypes.func.isRequired,
-    onChangeParameters: PropTypes.func.isRequired,
+    onChangeInput: PropTypes.func.isRequired,
     onCalculationClick: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
     stressPeriods: PropTypes.instanceOf(Stressperiods),

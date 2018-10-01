@@ -10,6 +10,7 @@ class OptimizationObjective {
     _summaryMethod = 'mean';
     _weight = -1;
     _penaltyValue = 999;
+    _target = null;
     _location = new Location();
     _location1 = new Location();
     _location2 = new Location();
@@ -23,6 +24,7 @@ class OptimizationObjective {
         objective.summaryMethod = obj.summary_method;
         objective.weight = obj.weight;
         objective.penaltyValue = obj.penalty_value;
+        objective.target = obj.target;
         objective.location = obj.location;
         objective.location1 = obj.location_1;
         objective.location2 = obj.location_2;
@@ -94,6 +96,14 @@ class OptimizationObjective {
         this._penaltyValue = value ? parseFloat(value) : 999;
     }
 
+    get target() {
+        return this._target;
+    }
+
+    set target(value) {
+        this._target = value ? parseFloat(value) : null;
+    }
+
     get location() {
         return this._location;
     }
@@ -127,6 +137,7 @@ class OptimizationObjective {
             'summary_method': this.summaryMethod,
             'weight': this.weight,
             'penalty_value': this.penaltyValue,
+            'target': this.target,
             'location': this.location.toObject,
             'location_1': this.location1 ? this.location1.toObject : {},
             'location_2': this.location2 ? this.location2.toObject : {}
