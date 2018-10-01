@@ -128,8 +128,8 @@ class OptimizationObjective {
             'weight': this.weight,
             'penalty_value': this.penaltyValue,
             'location': this.location.toObject,
-            'location_1': this.location1.toObject,
-            'location_2': this.location2.toObject
+            'location_1': this.location1 ? this.location1.toObject : {},
+            'location_2': this.location2 ? this.location2.toObject : {}
         });
     }
 }

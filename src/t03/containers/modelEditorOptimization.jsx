@@ -4,16 +4,16 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import {connect} from 'react-redux';
 import styleGlobals from 'styleGlobals';
 import {withRouter} from 'react-router';
-import OptimizationObjectsComponent from '../components/optimization/optimizationObjects';
-import OptimizationObjectivesComponent from '../components/optimization/optimizationObjectives';
-import OptimizationParametersComponent from '../components/optimization/optimizationParameters';
-import OptimizationConstraintsComponent from '../components/optimization/optimizationConstraints';
-import OptimizationResultsComponent from '../components/optimization/optimizationResults';
+import OptimizationObjectsComponent from '../components/optimization/OptimizationObjects';
+import OptimizationObjectivesComponent from '../components/optimization/OptimizationObjectives';
+import OptimizationParametersComponent from '../components/optimization/OptimizationParameters';
+import OptimizationConstraintsComponent from '../components/optimization/OptimizationConstraints';
+import OptimizationResultsComponent from '../components/optimization/OptimizationResults';
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
 import {Button, Icon, List, Menu, Popup, Progress} from 'semantic-ui-react';
-import {Action, Command} from '../actions';
+import {Action, Command, Query} from '../actions';
 import {
     OPTIMIZATION_STATE_CANCELLING,
     OPTIMIZATION_STATE_FINISHED,
@@ -23,6 +23,7 @@ import {
     optimizationInProgress,
     optimizationHasError
 } from '../selectors/optimization';
+import OptimizationProgress from "../../core/optimization/OptimizationProgress";
 
 const styles = {
     container: {
@@ -76,7 +77,8 @@ class ModelEditorOptimization extends React.Component {
         this.state = {
             optimization: optimization,
             activeItem: this.props.params.type ? this.props.params.type : 'parameters',
-            errors: []
+            errors: [],
+            isPolling: false
         };
     }
 
@@ -84,6 +86,18 @@ class ModelEditorOptimization extends React.Component {
         const optimization = (nextProps.optimization && nextProps.optimization.input) ?
             Optimization.fromObject(nextProps.optimization).toObject :
             Optimization.fromDefaults().toObject;
+
+        if (optimizationInProgress(optimization.state) && !this.state.isPolling) {
+            console.log('START POLLING');
+
+            this.setState({
+               isPolling: true
+            });
+
+            this.props.startPolling({
+                id: this.props.model.id
+            });
+        }
 
         this.setState({
             optimization: optimization
@@ -159,6 +173,29 @@ class ModelEditorOptimization extends React.Component {
         });
     };
 
+    getValidationMessage = (errors) => {
+        let log = [];
+        let list = [];
+
+        if (errors) {
+            errors.map(error => {
+                switch (error.schemaPath) {
+                    case '#/properties/input/oneOf/1/properties/objects/minItems':
+                        list.push('At least one decision variable is required.');
+                        break;
+                    case '#/properties/input/oneOf/1/properties/objectives/minItems':
+                        list.push('At least one objective is required.');
+                        break;
+                    default:
+                        log.push(error.dataPath + ' ' + error.message);
+                        break;
+                }
+            });
+        }
+
+        return {list: list, log: log};
+    };
+
     renderProperties() {
         if (!this.props.model) {
             return null;
@@ -200,9 +237,10 @@ class ModelEditorOptimization extends React.Component {
                     <OptimizationResultsComponent optimization={optimization} errors={this.state.errors}
                                                   model={this.props.model}
                                                   stressPeriods={stressPeriods}
+                                                  onChangeParameters={this.onChange}
+                                                  onCalculationClick={this.onCalculationClick}
                                                   onChange={this.onChangeResult}
-                                                  onApplySolution={this.onApplySolution}
-                    />
+                                                  onApplySolution={this.onApplySolution}/>
                 );
             default:
                 return (
@@ -216,6 +254,8 @@ class ModelEditorOptimization extends React.Component {
     renderButton() {
         const optimization = Optimization.fromObject(this.state.optimization);
         const [result, errors] = optimization.validate();
+
+        const errorMsg = this.getValidationMessage(errors);
 
         // TODO: check if stress periods or substances are valid?!
 
@@ -235,13 +275,30 @@ class ModelEditorOptimization extends React.Component {
                             header='Validation Failed'
                             content={
                                 <List>
-                                    {errors.map((error, key) => (
-                                        <List.Item key={key}>
-                                            <List.Content>
-                                                {error.dataPath} {error.type} {error.message}
-                                            </List.Content>
+                                    {errorMsg.list.length > 0
+                                        ?
+                                        <List.Item><b>Mayor Errors</b>
+                                            {errorMsg.list.map((element, key) => (
+                                                <List.Item key={key}>{element}</List.Item>
+                                            ))}
                                         </List.Item>
-                                    ))}
+                                        :
+                                        <div />
+                                    }
+                                    {errorMsg.log.length > 0
+                                        ?
+                                        <div>
+                                            <List.Item><hr /></List.Item>
+                                            <List.Item><b>Minor Errors</b> (may be fixed by resolving the mayor errors)
+                                            {errorMsg.log.map((e, key) => (
+                                                <List.Item
+                                                    key={errorMsg.list.length + key - 1}>{e}</List.Item>
+                                            ))}
+                                            </List.Item>
+                                        </div>
+                                        :
+                                        <div/>
+                                    }
                                 </List>
                             }
                             on={['hover', 'click']}
@@ -269,16 +326,41 @@ class ModelEditorOptimization extends React.Component {
         );
     }
 
-    calculateProgress = () => {
-        const opt = Optimization.fromObject(this.state.optimization);
-        return opt.calculateProgress();
-    };
+    renderProgress() {
+        if (!this.state.optimization.progress || (!this.state.optimization.progress.GA && !this.state.optimization.progress.Simplex)) {
+            return false;
+        }
+
+        const state = this.state.optimization.state;
+        const method = OptimizationProgress.fromObject(this.state.optimization.progress);
+        const progress =  this.state.optimization.input.parameters.method === 'GA' ? method.GA : method.Simplex;
+
+        return (
+            <Menu.Item>
+                <Progress
+                    percent={progress.calculate()}
+                    progress
+                    indicating={!progress.final && optimizationInProgress(state)}
+                    success={progress.final && state === OPTIMIZATION_STATE_FINISHED}
+                    error={!progress.final && optimizationHasError(state)}
+                    warning={!progress.final && state === OPTIMIZATION_STATE_CANCELLED}
+                >
+                    {this.state.optimization.input.parameters.method === 'GA'
+                        ?
+                        <span>Generic Algorithm:&nbsp;</span>
+                        :
+                        <span>Simplex:&nbsp;</span>
+                    }
+                    {getMessage(state)}
+                </Progress>
+            </Menu.Item>
+        );
+    }
 
     render() {
         if (!this.state.optimization) {
             return null;
         }
-
         return (
             <div style={[styles.container]}>
                 <div style={styles.left}>
@@ -305,19 +387,8 @@ class ModelEditorOptimization extends React.Component {
                         {
                             this.renderButton()
                         }
-                        {this.state.optimization.state && this.state.optimization.progress &&
-                        <Menu.Item>
-                            <Progress
-                                percent={this.calculateProgress()}
-                                progress
-                                indicating={optimizationInProgress(this.state.optimization.state)}
-                                success={this.state.optimization.state === OPTIMIZATION_STATE_FINISHED}
-                                error={optimizationHasError(this.state.optimization.state)}
-                                warning={this.state.optimization.state === OPTIMIZATION_STATE_CANCELLED}
-                            >
-                                {getMessage(this.state.optimization.state)}
-                            </Progress>
-                        </Menu.Item>
+                        {
+                            this.renderProgress()
                         }
                         <Menu.Item
                             name="results"
@@ -341,7 +412,8 @@ const actions = {
     updateOptimizationInput: Command.updateOptimizationInput,
     addBoundary: Command.addBoundary,
     calculateOptimization: Command.calculateOptimization,
-    cancelOptimizationCalculation: Command.cancelOptimizationCalculation
+    cancelOptimizationCalculation: Command.cancelOptimizationCalculation,
+    startPolling: Query.getOptimization
 };
 
 const mapDispatchToProps = (dispatch, {tool}) => {
@@ -376,6 +448,7 @@ ModelEditorOptimization.propTypes = {
     updateOptimizationInput: PropTypes.func.isRequired,
     calculateOptimization: PropTypes.func.isRequired,
     cancelOptimizationCalculation: PropTypes.func.isRequired,
+    startPolling: PropTypes.func.isRequired,
     addBoundary: PropTypes.func.isRequired
 };
 

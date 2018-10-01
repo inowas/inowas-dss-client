@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import FluxDataTable from './FluxDataTable';
-import OptimizationMap from './optimizationMap';
+import OptimizationMap from './OptimizationMap';
 import Stressperiods from '../../../core/modflow/Stressperiods';
 import SubstanceEditor from './SubstanceEditor';
 

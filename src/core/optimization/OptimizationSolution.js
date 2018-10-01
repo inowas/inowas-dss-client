@@ -28,7 +28,7 @@ class OptimizationSolution {
     }
 
     set id(value) {
-        this._id = value;
+        this._id = value ? value : uuidv4();
     }
 
     get variables() {

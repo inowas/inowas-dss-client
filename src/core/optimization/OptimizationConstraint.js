@@ -128,8 +128,8 @@ class OptimizationConstraint {
             'value': this.value,
             'operator': this.operator,
             'location': this.location.toObject,
-            'location_1': this.location1.toObject,
-            'location_2': this.location2.toObject
+            'location_1': this.location1 ? this.location1.toObject : {},
+            'location_2': this.location2 ? this.location2.toObject : {}
         });
     }
 }

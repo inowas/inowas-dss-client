@@ -5,7 +5,7 @@ import OptimizationConstraint from '../../../core/optimization/OptimizationConst
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
-import OptimizationMap from './optimizationMap';
+import OptimizationMap from './OptimizationMap';
 import Slider, {createSliderWithTooltip} from 'rc-slider';
 import {Formatter} from "../../../core";
 

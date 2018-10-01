@@ -5,7 +5,7 @@ import OptimizationObjective from '../../../core/optimization/OptimizationObject
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
-import OptimizationMap from './optimizationMap';
+import OptimizationMap from './OptimizationMap';
 import Slider from 'rc-slider';
 import {createSliderWithTooltip} from 'rc-slider';
 import Stressperiods from "../../../core/modflow/Stressperiods";
