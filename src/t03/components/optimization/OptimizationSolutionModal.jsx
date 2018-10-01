@@ -111,9 +111,9 @@ class OptimizationSolutionModal extends React.Component {
                                             <Form.Select
                                                 placeholder="Select Object"
                                                 fluid
-                                                options={this.props.solution.objects.map(s => {
+                                                options={this.props.solution.objects.map((s, key) => {
                                                     return {
-                                                        key: s.id,
+                                                        key: key,
                                                         value: s.id,
                                                         text: s.name
                                                     };
@@ -138,9 +138,9 @@ class OptimizationSolutionModal extends React.Component {
                                                 fluid
                                                 placeholder="Fitness"
                                                 value={this.props.solution.fitness[0]}
-                                                options={this.props.solution.fitness.map(f => {
+                                                options={this.props.solution.fitness.map((f, key) => {
                                                     return {
-                                                        key: f,
+                                                        key: key,
                                                         value: f,
                                                         text: parseFloat(f).toFixed(2)
                                                     }
@@ -153,9 +153,9 @@ class OptimizationSolutionModal extends React.Component {
                                                 fluid
                                                 placeholder="Variables"
                                                 value={this.props.solution.variables[0]}
-                                                options={this.props.solution.variables.map(f => {
+                                                options={this.props.solution.variables.map((f, key) => {
                                                     return {
-                                                        key: f,
+                                                        key: key,
                                                         value: f,
                                                         text: parseFloat(f).toFixed(2)
                                                     }

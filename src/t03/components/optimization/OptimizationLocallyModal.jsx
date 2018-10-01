@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {Button, Form, Grid, Modal, Segment} from "semantic-ui-react";
 import OptimizationInput from "../../../core/optimization/OptimizationInput";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
+import OptimizationObjective from "../../../core/optimization/OptimizationObjective";
 
 const styles = {
     iconfix: {
@@ -42,13 +43,32 @@ class OptimizationLocallyModal extends React.Component {
     };
 
     onCalculationClick = () => {
-        const parameters = {
-            ...this.state.optimization.parameters,
+        const input = this.state.optimization;
+
+        input.parameters = {
+            ...input.parameters,
             method: 'Simplex',
             initial_solution_id: this.props.solution.id
         };
 
-        return this.props.onCalculationStart(parameters);
+        return this.props.onCalculationStart(input);
+    };
+
+    onChangeTarget = (obj, value) => {
+        const objective = OptimizationObjective.fromObject(obj);
+        objective.target = value;
+
+        return this.setState({
+            optimization: {
+                ...this.state.optimization,
+                objectives: this.state.optimization.objectives.map(o => {
+                    if (o.id === objective.id) {
+                        return objective.toObject;
+                    }
+                    return o;
+                })
+            }
+        });
     };
 
     handleChange = (e, {name, value}) => {
@@ -142,7 +162,8 @@ class OptimizationLocallyModal extends React.Component {
                                                     name="objective"
                                                     placeholder="target ="
                                                     style={styles.inputfix}
-                                                    value={parseFloat(this.props.solution.fitness[key]).toFixed(3)}
+                                                    value={objective.target ? parseFloat(objective.target).toFixed(3) : ''}
+                                                    onChange={(e, {name, value}) => this.onChangeTarget(objective, value)}
                                                 />
                                             </Form.Field>
                                         </Grid.Column>
