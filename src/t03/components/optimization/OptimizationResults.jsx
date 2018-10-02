@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import {Grid, Button, Progress, Segment, List, Popup, Modal} from 'semantic-ui-react';
-import Chart from './fitnessChart';
+import Chart from './FitnessChart';
 import {
     OPTIMIZATION_STATE_CANCELLED,
     getMessage, optimizationHasError
