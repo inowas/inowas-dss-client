@@ -12,6 +12,7 @@ import * as geoTools from '../../../core/geospatial';
 import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
 import InputRange from './InputRange';
 import InputObjectList from './InputObjectList';
+import * as turf from "@turf/turf/turf";
 
 class OptimizationMap extends React.Component {
 
@@ -53,16 +54,40 @@ class OptimizationMap extends React.Component {
         return md5(JSON.stringify(geometry));
     };
 
+    validateLocation = p => {
+        const bbXmin = this.props.bbox[0][0];
+        const bbYmin = this.props.bbox[0][1];
+        const bbXmax = this.props.bbox[1][0];
+        const bbYmax = this.props.bbox[1][1];
+
+        const dX = (bbXmax - bbXmin) / this.props.gridSize.n_x;
+        const dY = (bbYmax - bbYmin) / this.props.gridSize.n_y;
+
+        const cXmin = bbXmin + p.col.min * dX;
+        const cXmax = bbXmin + p.col.max * dX;
+        const cYmin = bbYmax - p.row.min * dY;
+        const cYmax = bbYmax - p.row.max * dY;
+
+        const object = turf.polygon([[[cXmin, cYmin], [cXmax, cYmin], [cXmax, cYmax], [cXmin, cYmax], [cXmin, cYmin]]]);
+        const bbox = turf.polygon([[[bbXmin, bbYmin], [bbXmax, bbYmin], [bbXmax, bbYmax], [bbXmin, bbYmax], [bbXmin, bbYmin]]]);
+
+        return turf.booleanContains(bbox, object);
+    };
+
     handleChangeLocation = ({name, from, to}) => {
-        return this.setState({
-            location: {
-                ...this.state.location,
-                [name]: {
-                    ...this.state.location[name],
-                    min: from,
-                    max: to
-                }
+        const location = {
+            ...this.state.location,
+            [name]: {
+                ...this.state.location[name],
+                min: from,
+                max: to
             }
+        };
+
+        console.log(this.validateLocation(location));
+
+        return this.setState({
+            location: location
         });
     };
 
@@ -163,7 +188,7 @@ class OptimizationMap extends React.Component {
             const cmin = geoTools.getActiveCellFromCoordinate([xmin, ymax], this.props.bbox, this.props.gridSize);
             const cmax = geoTools.getActiveCellFromCoordinate([xmax, ymin], this.props.bbox, this.props.gridSize);
 
-            const p = {
+            let p = {
                 row: {
                     min: cmin[1],
                     max: cmax[1]
@@ -173,6 +198,8 @@ class OptimizationMap extends React.Component {
                     max: cmax[0]
                 }
             };
+
+            console.log(this.validateLocation(p));
 
             return this.setState({
                 location: {
