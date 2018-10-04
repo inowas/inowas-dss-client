@@ -10,6 +10,7 @@ import * as T06 from './t06/index';
 import * as T07 from './t07/index';
 import * as T08 from './t08/index';
 import * as T09 from './t09/index';
+import * as T11 from './t11/index';
 import * as T12 from './t12/index';
 import * as T13 from './t13/index';
 import * as T14 from './t14/index';
@@ -140,6 +141,8 @@ const routes = store => (
             <Route path="T09D(/:id)" component={T09.Container.T09D} tool={'T09D'}/>
             <Route path="T09E(/:id)" component={T09.Container.T09E} tool={'T09E'}/>
             <Route path="T09F(/:id)" component={T09.Container.T09F} tool={'T09F'}/>
+
+            <Route path="T11" component={T11.Container.T11} tool={'T11'}/>
 
             <Route path="T12(/:id)" component={T12.Container.Main} tool={'T12'}/>
 
