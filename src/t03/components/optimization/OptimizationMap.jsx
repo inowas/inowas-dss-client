@@ -9,7 +9,7 @@ import md5 from 'js-md5';
 import {uniqueId} from 'lodash';
 import EditControl from '../../../core/map/EditControl';
 import * as geoTools from '../../../core/geospatial';
-import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
+import {Button, Form, Grid, Header, Message, Modal, Segment} from 'semantic-ui-react';
 import InputRange from './InputRange';
 import InputObjectList from './InputObjectList';
 import * as turf from "@turf/turf/turf";
@@ -26,6 +26,7 @@ class OptimizationMap extends React.Component {
             },
             showOverlay: false,
             hasError: false,
+            validationWarning: false,
             isEditing: false
         };
     }
@@ -63,10 +64,10 @@ class OptimizationMap extends React.Component {
         const dX = (bbXmax - bbXmin) / this.props.gridSize.n_x;
         const dY = (bbYmax - bbYmin) / this.props.gridSize.n_y;
 
-        const cXmin = bbXmin + p.col.min * dX;
-        const cXmax = bbXmin + p.col.max * dX;
-        const cYmin = bbYmax - p.row.min * dY;
-        const cYmax = bbYmax - p.row.max * dY;
+        let cXmin = bbXmin + p.col.min * dX;
+        let cXmax = bbXmin + p.col.max * dX;
+        let cYmin = bbYmax - p.row.min * dY;
+        let cYmax = bbYmax - p.row.max * dY;
 
         const object = turf.polygon([[[cXmin, cYmin], [cXmax, cYmin], [cXmax, cYmax], [cXmin, cYmax], [cXmin, cYmin]]]);
         const bbox = turf.polygon([[[bbXmin, bbYmin], [bbXmax, bbYmin], [bbXmax, bbYmax], [bbXmin, bbYmax], [bbXmin, bbYmin]]]);
@@ -84,9 +85,8 @@ class OptimizationMap extends React.Component {
             }
         };
 
-        console.log(this.validateLocation(location));
-
         return this.setState({
+            validationWarning: !this.validateLocation(location),
             location: location
         });
     };
@@ -188,7 +188,7 @@ class OptimizationMap extends React.Component {
             const cmin = geoTools.getActiveCellFromCoordinate([xmin, ymax], this.props.bbox, this.props.gridSize);
             const cmax = geoTools.getActiveCellFromCoordinate([xmax, ymin], this.props.bbox, this.props.gridSize);
 
-            let p = {
+            const p = {
                 row: {
                     min: cmin[1],
                     max: cmax[1]
@@ -199,9 +199,8 @@ class OptimizationMap extends React.Component {
                 }
             };
 
-            console.log(this.validateLocation(p));
-
             return this.setState({
+                validationWarning: !this.validateLocation(p),
                 location: {
                     ...this.state.location,
                     row: {
@@ -419,6 +418,16 @@ class OptimizationMap extends React.Component {
                                             />
                                         </Segment>
                                         }
+                                        {this.state.validationWarning
+                                            ?
+                                            <Message
+                                                warning
+                                                header='Warning'
+                                                content='Coordinates have to be located inside the model boundaries.'
+                                            />
+                                            :
+                                            <div/>
+                                        }
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column width={10}>
@@ -434,7 +443,7 @@ class OptimizationMap extends React.Component {
                         <Button
                             positive
                             onClick={this.onSaveModal}
-                            disabled={this.state.hasError}>
+                            disabled={this.state.hasError || this.state.validationWarning}>
                             Save
                         </Button>
                     </Modal.Actions>
