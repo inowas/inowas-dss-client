@@ -66,3 +66,9 @@ test('ApplyMinMax', () => {
     expect(parameters.reportFrequency).toEqual(parameters.popSize);
     expect(parameters.applyMinMax(10)).toEqual(10);
 });
+
+test('Set initital solution id', () => {
+   const parameters = OptimizationParameters.fromDefaults();
+   parameters.initialSolutionId = 'abc-123-def';
+   expect(parameters.toObject.initial_solution_id).toEqual('abc-123-def');
+});

@@ -6,12 +6,10 @@ class SimplexProgress {
 
     static fromObject(obj) {
         const progress = new SimplexProgress();
-        if (obj) {
-            progress.progressLog = obj.progress_log;
-            progress.iteration = obj.iteration;
-            progress.iterationTotal = obj.iteration_total;
-            progress.final = obj.final;
-        }
+        progress.progressLog = obj.progress_log;
+        progress.iteration = obj.iteration;
+        progress.iterationTotal = obj.iteration_total;
+        progress.final = obj.final;
         return progress;
     }
 
@@ -60,7 +58,7 @@ class SimplexProgress {
     }
 
     calculate() {
-        return (this.iteration / this.iterationTotal * 100).toFixed(1);
+        return parseFloat((this.iteration / this.iterationTotal * 100).toFixed(1));
     }
 
     get toChartData() {
@@ -83,14 +81,12 @@ class GAProgress {
 
     static fromObject(obj) {
         const progress = new GAProgress();
-        if (obj) {
-            progress.progressLog = obj.progress_log;
-            progress.iteration = obj.iteration;
-            progress.iterationTotal = obj.iteration_total;
-            progress.final = obj.final;
-            progress.simulation = obj.simulation;
-            progress.simulationTotal = obj.simulation_total;
-        }
+        progress.progressLog = obj.progress_log;
+        progress.iteration = obj.iteration;
+        progress.iterationTotal = obj.iteration_total;
+        progress.final = obj.final;
+        progress.simulation = obj.simulation;
+        progress.simulationTotal = obj.simulation_total;
         return progress;
     }
 
@@ -102,7 +98,7 @@ class GAProgress {
     }
 
     set progressLog(value) {
-        this._progressLog = value;
+        this._progressLog = value ? value : [];
     }
 
     get iteration() {
@@ -110,7 +106,7 @@ class GAProgress {
     }
 
     set iteration(value) {
-        this._iteration = value;
+        this._iteration = value ? value : 0;
     }
 
     get iterationTotal() {
@@ -118,7 +114,7 @@ class GAProgress {
     }
 
     set iterationTotal(value) {
-        this._iterationTotal = value;
+        this._iterationTotal = value ? value : 0;
     }
 
     get final() {
@@ -126,7 +122,7 @@ class GAProgress {
     }
 
     set final(value) {
-        this._final = value;
+        this._final = value ? value : false;
     }
 
     get simulation() {
@@ -134,7 +130,7 @@ class GAProgress {
     }
 
     set simulation(value) {
-        this._simulation = value ? value : null;
+        this._simulation = value ? value : 0;
     }
 
     get simulationTotal() {
@@ -142,7 +138,7 @@ class GAProgress {
     }
 
     set simulationTotal(value) {
-        this._simulationTotal = value ? value : null;
+        this._simulationTotal = value ? value : 0;
     }
 
     get toObject() {
@@ -157,17 +153,14 @@ class GAProgress {
     }
 
     calculate() {
-        const i = this.iteration;
-        const iMax = this.iterationTotal;
-        const s = this.simulation;
-        const sMax = this.simulationTotal;
+        const i = parseFloat(this.iteration);
+        const iMax = parseFloat(this.iterationTotal);
+        const s = parseFloat(this.simulation);
+        const sMax = parseFloat(this.simulationTotal);
 
         if (iMax > 0 && sMax > 0) {
             const progress = (((i - 1) * sMax + s) / (iMax * sMax) * 100).toFixed(1);
-            if (progress > 100) {
-                return 100;
-            }
-            return progress;
+            return parseFloat(progress);
         }
         return 0;
     }
@@ -188,9 +181,9 @@ class OptimizationProgress {
 
     static fromObject(obj) {
         const progress = new OptimizationProgress();
-        if(obj) {
-            progress.GA = GAProgress.fromObject(obj.GA);
-            progress.Simplex = SimplexProgress.fromObject(obj.Simplex);
+        if (obj) {
+            progress.GA = obj.GA ? GAProgress.fromObject(obj.GA) : null;
+            progress.Simplex = obj.Simplex ? SimplexProgress.fromObject(obj.Simplex) : null;
         }
         return progress;
     }
@@ -200,7 +193,7 @@ class OptimizationProgress {
     }
 
     set GA(value) {
-        this._GA = value ? value : new GAProgress();
+        this._GA = value ? value : null;
     }
 
     get Simplex() {
@@ -208,7 +201,7 @@ class OptimizationProgress {
     }
 
     set Simplex(value) {
-        this._Simplex = value ? value : new SimplexProgress();
+        this._Simplex = value ? value : null;
     }
 
     get toObject() {
