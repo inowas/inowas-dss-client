@@ -1,6 +1,6 @@
 import OptimizationConstraint from '../../../src/core/optimization/OptimizationConstraint';
 import Location from '../../../src/core/optimization/Location';
-import { exampleLocation } from './Location.test';
+import {exampleLocation} from './Location.test';
 import uuidv4 from 'uuid/v4';
 
 export const concentrationConstraint = {
@@ -22,10 +22,20 @@ test('Get concentration Constraint from Object.', () => {
     expect(constraint.toObject).toEqual(concentrationConstraint);
     expect(constraint.location1).toBeInstanceOf(Location);
     expect(constraint.location2).toBeInstanceOf(Location);
+    constraint.location1 = null;
+    constraint.location2 = null;
+    expect(constraint.toObject.location1).toBeUndefined();
+    expect(constraint.toObject.location2).toBeUndefined();
 });
 
 test('Create constraint from empty object.', () => {
     const constraint = OptimizationConstraint.fromObject({});
     expect(constraint).toBeInstanceOf(OptimizationConstraint);
     expect(constraint.name).toBe('New Optimization Constraint');
+});
+
+test('Setting type of constraint.', () => {
+    const constraint = new OptimizationConstraint();
+    constraint.type = 'flux';
+    expect(constraint.location.type).toEqual('object');
 });

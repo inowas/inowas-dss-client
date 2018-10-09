@@ -2,6 +2,8 @@ import OptimizationObject from '../../../src/core/optimization/OptimizationObjec
 import Location from '../../../src/core/optimization/Location';
 import uuidv4 from 'uuid/v4';
 import WellPosition from "../../../src/core/optimization/WellPosition";
+import Stressperiods from "../../../src/core/modflow/Stressperiods";
+import WellBoundary from "../../../src/core/boundaries/WellBoundary";
 
 export const optimizationObjects = [
     {
@@ -115,8 +117,14 @@ test('Getter and Setter', () => {
             'component2': {'max': 20, 'min': 10, 'result': null}
         }
     });
+    object.id = null;
+    expect(object.id).toHaveLength(36);
     object.substances = null;
     expect(object.substances).toHaveLength(0);
+    object.flux = null;
+    expect(object.flux).toEqual({});
+    object.numberOfStressPeriods = null;
+    expect(object.numberOfStressPeriods).toEqual(0);
     object.position = null;
     expect(object.position).toBeInstanceOf(WellPosition);
     object.name = null;
@@ -173,4 +181,13 @@ test('Updating flux', () => {
         '1': {min: 1, max: 11, result: null},
         '2': {min: 2, max: 12, result: 8}
     });
+});
+
+test('Object to boundary', () => {
+   const object =  OptimizationObject.createFromTypeAndStressPeriods('wel', 5);
+   const boundary = object.toBoundary([[20,20],[40,40]], {n_x: 1, n_y: 1}, new Stressperiods());
+   expect(boundary).toBeInstanceOf(WellBoundary);
+   object.flux = null;
+   const boundaryWithoutFlux = object.toBoundary([[20,20],[40,40]], {n_x: 1, n_y: 1}, new Stressperiods());
+   expect(boundaryWithoutFlux).toBeInstanceOf(WellBoundary);
 });

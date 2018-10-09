@@ -13,6 +13,8 @@ test('Get optimization solution from object.', () => {
     const solution = OptimizationSolution.fromObject(exampleSolution);
     expect(solution).toBeInstanceOf(OptimizationSolution);
     expect(solution.toObject).toEqual(exampleSolution);
+    solution.id = null;
+    expect(solution.id).toHaveLength(36);
 });
 
 test('Add objects to solution.', () => {

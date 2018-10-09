@@ -71,4 +71,5 @@ test('From Object', () => {
     const input = OptimizationInput.fromObject(obj);
     expect(input).toBeInstanceOf(OptimizationInput);
     expect(input.toObject.objects).toHaveLength(2);
+    expect(OptimizationInput.fromObject(null)).toBeInstanceOf(OptimizationInput);
 });

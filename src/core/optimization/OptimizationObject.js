@@ -73,7 +73,7 @@ class OptimizationObject {
         if (value !== 'wel') {
             throw new Error('Type must be one of type: wel');
         }
-        this._type = value ? value : 'wel';
+        this._type = value;
     }
 
     get position() {
@@ -156,7 +156,7 @@ class OptimizationObject {
     toBoundary(bbox, gridSize, stressPeriods) {
         let flux = [];
 
-        if (this.flux) {
+        if (this.flux && this.flux[0]) {
             for (let i = 0; i < this.numberOfStressPeriods; i++) {
                 flux.push({
                     'date_time': moment.utc(stressPeriods.dateTimes[i]),
