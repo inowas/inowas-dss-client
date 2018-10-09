@@ -9,7 +9,7 @@ import * as T12 from '../t12/reducers';
 import * as T13 from '../t13/reducers';
 import * as T14 from '../t14/reducers';
 import T16 from './T16';
-import T18 from './T18';
+import * as T18 from '../t18/reducers';
 import {combineReducers} from 'redux';
 import dashboard from '../dashboard/reducers';
 import rasterfiles from './Rasterfiles';
@@ -47,7 +47,7 @@ const rootReducer = combineReducers({
     T14C: T14.createReducer('T14C'),
     T14D: T14.createReducer('T14D'),
     T16,
-    T18
+    T18: T18.createReducer('T18'),
 });
 
 export default rootReducer;

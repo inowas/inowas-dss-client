@@ -14,6 +14,7 @@ import * as T11 from './t11/index';
 import * as T12 from './t12/index';
 import * as T13 from './t13/index';
 import * as T14 from './t14/index';
+import * as T18 from './t18/index';
 import * as User from './user/index';
 import {Login, Logout, SignUp} from './user/containers';
 import Impressum from './containers/Impressum';
@@ -161,7 +162,8 @@ const routes = store => (
 
             <Route path="T16(/:id)" component={tools.T16}/>
             <Route path="T17(/:id)" component={tools.T17}/>
-            <Route path="T18(/:id)" component={tools.T18}/>
+
+            <Route path="T18(/:id)" component={T18.Container.Main} tool={'T18'}/>
         </Route>
     </Route>
 );
