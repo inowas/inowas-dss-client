@@ -102,15 +102,17 @@ class ModelEditorTransport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mt3dms: this.props.model.mt3dms,
+            mt3dms: this.props.model.mt3dms || Mt3dms.fromDefaults().toObject,
             editState: EDITSTATE_NOCHANGES
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.state = {
-            mt3dms: nextProps.model.mt3dms || Mt3dms.fromDefaults().toObject
-        };
+        if (nextProps.model.mt3dms) {
+            this.state = {
+                mt3dms: nextProps.model.mt3dms
+            };
+        }
     }
 
     handleOnSave = () => {
@@ -156,11 +158,6 @@ class ModelEditorTransport extends React.Component {
     };
 
     renderProperties() {
-        console.log({
-            mt3dms: this.state.mt3dms,
-            model: this.props.model
-        });
-
         if (!this.state.mt3dms || !this.props.model) {
             return null;
         }

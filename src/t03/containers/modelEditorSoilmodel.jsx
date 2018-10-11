@@ -11,13 +11,17 @@ import {Command} from '../../t03/actions/index';
 import {
     SoilmodelGeneral,
     SoilModelLayerOverview,
-    SoilmodelLayer
+    SoilmodelLayerComponent
 } from '../components';
 import Input from '../../components/primitive/Input';
-import {getInitialLayerState} from '../selectors/model';
-import uuid from 'uuid';
 import {WebData} from '../../core';
 import * as Query from '../actions/queries';
+import {
+    SoilmodelLayer,
+    Soilmodel
+} from "../../core/soilmodel";
+import SoilmodelZone from "../../core/soilmodel/SoilmodelZone";
+import {calculateActiveCells} from "../../core/geospatial";
 
 const styles = {
     container: {
@@ -45,9 +49,19 @@ const styles = {
 class ModelEditorSoilmodel extends React.Component {
     constructor(props) {
         super(props);
+
+        const soilmodel = props.soilmodel ? Soilmodel.fromObject(props.soilmodel) : new Soilmodel();
+
         this.state = {
-            searchTerm: ''
+            searchTerm: '',
+            soilmodel: soilmodel.toObject
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(() => ({
+            soilmodel: Soilmodel.fromObject(nextProps.soilmodel).toObject
+        }));
     }
 
     onLayerClick = pid => {
@@ -66,19 +80,23 @@ class ModelEditorSoilmodel extends React.Component {
         const {id} = this.props.params;
         const {routes, params} = this.props;
 
+        const layer = new SoilmodelLayer();
+        const zone = SoilmodelZone.fromDefault();
+        zone.geometry = this.props.area;
+        zone.activeCells = calculateActiveCells(zone.geometry, this.props.boundingBox, this.props.gridSize);
+        zone.priority = layer.zones.length;
+        layer.addZone(zone);
+
         this.props.createLayer(
             id,
-            {
-                id: uuid.v4(),
-                ...getInitialLayerState()
-            },
+            layer.toObject,
             routes,
             params
         );
     };
 
     handleSearchTerm = value => {
-        this.setState(function(prevState) {
+        this.setState(function (prevState) {
             return {
                 ...prevState,
                 searchTerm: value
@@ -86,22 +104,23 @@ class ModelEditorSoilmodel extends React.Component {
         });
     };
 
-    renderProperties(soilmodel) {
+    renderProperties() {
         const readOnly = !lodash.includes(this.props.permissions, 'w');
         const {addLayerStatus, removeLayer, updateLayerStatus} = this.props;
         const {pid, property, id} = this.props.params;
         const {area, boundingBox, gridSize, isLoading, params, routes} = this.props;
 
         if (pid) {
-            const layer = soilmodel.layers.filter(b => b.id === pid)[0];
+            const layer = this.state.soilmodel.layers.filter(b => b.id === pid)[0];
+
             if (layer) {
                 return (
-                    <SoilmodelLayer
+                    <SoilmodelLayerComponent
                         area={area}
                         onSave={this.onSave}
                         boundingBox={boundingBox}
                         gridSize={gridSize}
-                        layer={layer}
+                        layer={SoilmodelLayer.fromObject(layer)}
                         readOnly={readOnly}
                         updateLayerStatus={updateLayerStatus}
                         isLoading={isLoading}
@@ -114,7 +133,7 @@ class ModelEditorSoilmodel extends React.Component {
 
         return (
             <div>
-                <SoilmodelGeneral soilmodel={soilmodel} readOnly={readOnly}/>
+                <SoilmodelGeneral soilmodel={this.state.soilmodel} readOnly={readOnly}/>
                 <SoilModelLayerOverview
                     id={id}
                     property={property}
@@ -122,7 +141,7 @@ class ModelEditorSoilmodel extends React.Component {
                     removeLayer={removeLayer}
                     createLayer={this.onCreateLayer}
                     editLayer={Routing.editLayer(routes, params)}
-                    layers={soilmodel.layers}
+                    layers={this.state.soilmodel.layers}
                     addLayerStatus={addLayerStatus}
                 />
             </div>
@@ -130,13 +149,7 @@ class ModelEditorSoilmodel extends React.Component {
     }
 
     render() {
-        const {soilmodel} = this.props;
-
-        if (!soilmodel) {
-            return null;
-        }
-
-        const {searchTerm} = this.state;
+        const {searchTerm, soilmodel} = this.state;
         let list = soilmodel.layers || [];
 
         if (searchTerm) {
@@ -164,7 +177,7 @@ class ModelEditorSoilmodel extends React.Component {
                     />
                 </div>
                 <div style={styles.properties}>
-                    {this.renderProperties(soilmodel)}
+                    {this.renderProperties()}
                 </div>
             </div>
         );
@@ -184,18 +197,10 @@ const mapStateToProps = (state, {tool}) => {
         gridSize: state[tool].model.grid_size,
         soilmodel: state[tool].model.soilmodel,
         permissions: state[tool].model.permissions,
-        addLayerStatus: WebData.Selector.getStatusObject(
-            state,
-            Command.ADD_LAYER
-        ),
-        updateLayerStatus: WebData.Selector.getStatusObject(
-            state,
-            Command.UPDATE_LAYER
-        ),
-        isLoading: WebData.Selector.getRequestStatusByType(
-            state,
-            Query.GET_MODFLOW_MODEL_DETAILS
-        ).type !== 'success'
+        addLayerStatus: WebData.Selector.getStatusObject(state, Command.ADD_LAYER),
+        updateLayerStatus: WebData.Selector.getStatusObject(state, Command.UPDATE_LAYER),
+        isLoading: !!(WebData.Selector.getRequestStatusByType(state, Query.GET_MODFLOW_MODEL_DETAILS) &&
+            WebData.Selector.getRequestStatusByType(state, Query.GET_MODFLOW_MODEL_DETAILS).type !== 'success')
     };
 };
 
@@ -204,7 +209,7 @@ const mapDispatchToProps = (dispatch, {tool}) => {
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
+            wrappedActions[key] = function () {
                 const args = Array.prototype.slice.call(arguments);
                 dispatch(actions[key](tool, ...args));
             };
