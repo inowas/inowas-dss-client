@@ -103,6 +103,13 @@ class SoilmodelLayerParameter extends React.Component {
         this.props.onChange(layer);
     };
 
+    smoothMap = () => {
+        const layer = SoilmodelLayer.fromObject(this.state.layer);
+        layer.smoothParameter(this.props.gridSize, this.state.parameter, 10);
+
+        this.props.onChange(layer);
+    };
+
     recalculateMap = () => {
         const layer = SoilmodelLayer.fromObject(this.state.layer);
         layer.zonesToParameters(this.props.gridSize, this.state.parameter);
@@ -289,6 +296,14 @@ class SoilmodelLayerParameter extends React.Component {
                             onClick={this.recalculateMap}
                         >
                             <Icon name="redo"/> Recalculate Map
+                        </Button>
+                        <Button
+                            style={styles.buttonFix}
+                            icon
+                            fluid
+                            onClick={this.smoothMap}
+                        >
+                            <Icon name="tint"/> Smooth Map
                         </Button>
                     </Form.Group>
                     <ParameterDataTable

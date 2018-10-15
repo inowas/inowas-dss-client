@@ -65,7 +65,9 @@ class SoilmodelLayer {
     }
 
     set meta(value) {
-        this._meta = value ? value : {};
+        this._meta = value ? value : {
+            _zones: []
+        };
     }
 
     get zones() {
@@ -202,6 +204,56 @@ class SoilmodelLayer {
         };
     }
 
+    smoothParameter(gridSize, parameter, cycles = 1) {
+        for (let cyc = 1; cyc <= cycles; cyc++) {
+            for (let row = 0; row < gridSize.n_y; row++) {
+                for (let col = 0; col < gridSize.n_x; col++) {
+                    let avg = parseFloat(this[parameter][row][col]);
+                    let div = 1;
+
+                    if (row - 1 >= 0) {
+                        avg += parseFloat(this[parameter][row-1][col]);
+                        div++;
+                        if (col - 1 >= 0) {
+                            avg += parseFloat(this[parameter][row-1][col-1]);
+                            div++;
+                        }
+                        if (col + 1 < gridSize.n_x) {
+                            avg += parseFloat(this[parameter][row-1][col+1]);
+                            div++;
+                        }
+                    }
+
+                    if (row + 1 < gridSize.n_y) {
+                        avg += parseFloat(this[parameter][row+1][col]);
+                        div++;
+                        if (col - 1 >= 0) {
+                            avg += parseFloat(this[parameter][row+1][col-1]);
+                            div++;
+                        }
+                        if (col + 1 < gridSize.n_x) {
+                            avg += parseFloat(this[parameter][row+1][col+1]);
+                            div++;
+                        }
+                    }
+
+                    if (col - 1 >= 0) {
+                        avg += parseFloat(this[parameter][row][col-1]);
+                        div++;
+                    }
+
+                    if (col + 1 < gridSize.n_x) {
+                        avg += parseFloat(this[parameter][row][col+1]);
+                        div++;
+                    }
+
+                    //console.log(`set ${parameter} at ${col} ${row} with value ${avg} / ${div}`);
+                    this[parameter][row][col] = avg/div;
+                }
+            }
+        }
+    }
+
     zonesToParameters(gridSize, parameters = ['hk', 'hani', 'vka', 'ss', 'sy']) {
         if (!Array.isArray(parameters)) {
             parameters = [parameters];
@@ -226,7 +278,7 @@ class SoilmodelLayer {
 
                     // update the values for the parameter in the cells given by the zone
                     zone.activeCells.forEach(cell => {
-                        console.log(`set ${parameter} at ${cell[1]} ${cell[0]} with value ${zone[parameter]}`);
+                        //console.log(`set ${parameter} at ${cell[1]} ${cell[0]} with value ${zone[parameter]}`);
                         this[parameter][cell[1]][cell[0]] = zone[parameter];
                     });
                 }
