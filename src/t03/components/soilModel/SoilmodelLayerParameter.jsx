@@ -58,6 +58,7 @@ class SoilmodelLayerParameter extends React.Component {
 
     onAddZone = () => {
         const zone = new SoilmodelZone();
+        zone.priority = this.state.layer._meta.zones.length;
         this.setState({
             selectedZone: zone.toObject,
             showOverlay: true
@@ -101,6 +102,14 @@ class SoilmodelLayerParameter extends React.Component {
         });
 
         this.props.onChange(layer);
+    };
+
+    onOrderZones = (id, order) => {
+        const layer = SoilmodelLayer.fromObject(this.state.layer);
+        const zone = layer.zones.filter(z => z.id === id)[0];
+        if (zone) {
+            this.props.onChange(layer.changeOrder(zone, order));
+        }
     };
 
     smoothMap = () => {
@@ -245,6 +254,8 @@ class SoilmodelLayerParameter extends React.Component {
             return {
                 id: zone.id,
                 zone: zone.name,
+                priority: zone.priority,
+                zones: this.state.layer._meta.zones.length,
                 value: zone[this.state.parameter],
                 action: zone.name !== 'Default'
             }
@@ -254,7 +265,8 @@ class SoilmodelLayerParameter extends React.Component {
             <div>
                 <Header as="h4" style={styles.header}>{this.props.name}</Header>
                 <Segment>
-                    <RasterDataMap area={this.props.area} boundingBox={this.props.bbox} data={this.state.layer.hk}
+                    <RasterDataMap area={this.props.area} boundingBox={this.props.bbox}
+                                   data={this.state.layer[this.state.parameter]}
                                    gridSize={this.props.gridSize} unit={null}/>
                 </Segment>
                 <Form.Field>
@@ -295,7 +307,7 @@ class SoilmodelLayerParameter extends React.Component {
                             fluid
                             onClick={this.recalculateMap}
                         >
-                            <Icon name="redo"/> Recalculate Map
+                            <Icon name="sun"/> Recalculate Map
                         </Button>
                         <Button
                             style={styles.buttonFix}
@@ -310,6 +322,7 @@ class SoilmodelLayerParameter extends React.Component {
                         config={tableConfig}
                         edit={id => this.onEditZone(id)}
                         onChange={this.onChange}
+                        onOrderZones={(id, order) => this.onOrderZones(id, order)}
                         readOnly={false}
                         remove={id => this.onRemoveFromTable(id)}
                         rows={zonesRows}

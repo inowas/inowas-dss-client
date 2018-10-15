@@ -318,6 +318,23 @@ class SoilmodelLayer {
         }
         return this;
     }
+
+    changeOrder(zone, order) {
+        let zoneToSwitch = null;
+        switch(order) {
+            case 'up':
+                zoneToSwitch = this.zones.filter(z => z.priority === zone.priority + 1)[0];
+                zoneToSwitch.priority = zoneToSwitch.priority - 1;
+                zone.priority = zone.priority + 1;
+                break;
+            case 'down':
+                zoneToSwitch = this.zones.filter(z => z.priority === zone.priority - 1)[0];
+                zoneToSwitch.priority = zoneToSwitch.priority + 1;
+                zone.priority = zone.priority - 1;
+                break;
+        }
+        return this;
+    }
 }
 
 export default SoilmodelLayer;

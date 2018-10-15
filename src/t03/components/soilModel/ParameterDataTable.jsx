@@ -23,7 +23,7 @@ class ParameterDataTable extends DataTable.Component.DataTable {
             perPage: this.props.perPage || 20,
             selectedRows: [],
             sortingColumns: {
-                'zone': {
+                'priority': {
                     direction: 'desc',
                     position: 0
                 },
@@ -34,6 +34,12 @@ class ParameterDataTable extends DataTable.Component.DataTable {
                         label: 'Zone',
                     },
                     property: 'zone'
+                },
+                {
+                    header: {
+                        label: 'Priority',
+                    },
+                    property: 'priority'
                 }
             ],
             rows: this.props.rows
@@ -73,6 +79,24 @@ class ParameterDataTable extends DataTable.Component.DataTable {
                             >
                                 <Icon name="pencil"/>
                             </Button>
+                            { rowData.priority < rowData.zones - 1 &&
+                                <Button
+                                    style={styles.buttonFix}
+                                    icon
+                                    onClick={() => this.props.onOrderZones(rowData.id, 'up')}
+                                >
+                                    <Icon name="arrow up"/>
+                                </Button>
+                            }
+                            { rowData.priority > 1 &&
+                            <Button
+                                style={styles.buttonFix}
+                                icon
+                                onClick={() => this.props.onOrderZones(rowData.id, 'down')}
+                            >
+                                <Icon name="arrow down"/>
+                            </Button>
+                            }
                         </div>
                     )
                 ]
@@ -89,6 +113,7 @@ ParameterDataTable.propTypes = {
     config: PropTypes.array.isRequired,
     edit: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
+    onOrderZones: PropTypes.func.isRequired,
     readOnly: PropTypes.bool.isRequired,
     remove: PropTypes.func.isRequired,
     rows: PropTypes.array.isRequired,
