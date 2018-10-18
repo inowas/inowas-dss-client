@@ -206,23 +206,28 @@ class SoilmodelLayerComponent extends React.Component {
         const parameters = [
             {
                 name: 'hk',
-                unit: 'L/T'
+                description: 'Horizontal conductivity along rows',
+                unit: 'm/day'
             },
             {
                 name: 'hani',
-                unit: 'L/T'
+                description: 'Horizontal hydraulic anisotropy',
+                unit: '-'
             },
             {
                 name: 'vka',
-                unit: 'L/T'
+                description: 'Vertical hydraulic conductivity',
+                unit: 'm/day'
             },
             {
                 name: 'ss',
+                description: 'Specific storage',
                 unit: '-'
             },
             {
                 name: 'sy',
-                unit: '-'
+                description: 'Specific yield',
+                unit: '1/m'
             }
         ];
 

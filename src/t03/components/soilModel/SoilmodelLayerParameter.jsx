@@ -261,19 +261,23 @@ class SoilmodelLayerParameter extends React.Component {
                     color='grey'
                 />
                 <FullscreenControl position="topright"/>
-                {this.state.layer._meta.zones.filter(z => z.id !== this.state.selectedZone.id) > 0 ?
+                {this.state.layer._meta.zones.filter(z => z.id !== this.state.selectedZone.id).length > 0 ?
                     <FeatureGroup>
-                        {this.state.layer._meta.zones.filter(z => z.id !== this.state.selectedZone.id).map(z => (
-                            <Polygon
-                                key={z.id}
-                                id={z.id}
-                                positions={geoTools.getLatLngFromXY(
-                                    z.geometry.coordinates[0]
-                                )}
-                                color='grey'
-                                weight={0.1}
-                            />
-                        ))}
+                        {this.state.layer._meta.zones.filter(z => z.id !== this.state.selectedZone.id).map(z => {
+
+                            return (
+                                <Polygon
+                                    key={z.id}
+                                    id={z.id}
+                                    positions={geoTools.getLatLngFromXY(
+                                        z.geometry.coordinates[0]
+                                    )}
+                                    color='grey'
+                                    weight={0.1}
+                                />
+                            );
+                        })
+                        })}
                     </FeatureGroup>
                     :
                     <div/>
@@ -353,13 +357,14 @@ class SoilmodelLayerParameter extends React.Component {
                         unit={parameter.unit}
                         data={layer[parameter.name]}
                         readOnly={readOnly}
-                        onChange={() => this.props.handleInputChange(parameter.name)}
+                        onChange={this.props.handleInputChange}
                     />
                 </Segment>
                 }
                 {mode !== 'import' &&
                 <Segment>
-                    <Header as="h4" style={styles.header}>{parameter.name} [{parameter.unit}]</Header>
+                    <Header as="h4"
+                            style={styles.header}>{parameter.description}, {parameter.name} [{parameter.unit}]</Header>
                     <Grid divided>
                         <Grid.Column width={8}>
                             <RasterDataMap area={area} boundingBox={bbox}
