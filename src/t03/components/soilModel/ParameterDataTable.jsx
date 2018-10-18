@@ -39,7 +39,8 @@ class ParameterDataTable extends DataTable.Component.DataTable {
                     header: {
                         label: 'Priority',
                     },
-                    property: 'priority'
+                    property: 'priority',
+                    visible: false
                 }
             ],
             rows: this.props.rows
@@ -51,7 +52,12 @@ class ParameterDataTable extends DataTable.Component.DataTable {
                 cell: {
                     transforms: this.props.readOnly ?
                         [] : [this.editable(edit.input({props: {type: 'number'}}))],
-                    formatters: [(value) => (<span>{Formatter.toNumber(value)}</span>)]
+                    formatters: [(value) => {
+                        if (!value) {
+                            return (<span>Default</span>)
+                        }
+                        return (<span>{Formatter.toNumber(value)}</span>)
+                    }]
                 }
             });
         });
@@ -70,7 +76,7 @@ class ParameterDataTable extends DataTable.Component.DataTable {
                                 icon
                                 onClick={() => this.props.remove(rowData.id)}
                             >
-                                <Icon name={'trash'}/>
+                                <Icon name={'ban'}/>
                             </Button>
                             <Button
                                 style={styles.buttonFix}

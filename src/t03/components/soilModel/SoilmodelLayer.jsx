@@ -82,6 +82,12 @@ class SoilmodelLayerComponent extends React.Component {
         this.props.onSave(this.state.layer);
     };
 
+    recalculateMap = () => {
+        const layer = SoilmodelLayer.fromObject(this.state.layer);
+        layer.zonesToParameters(this.props.gridSize);
+        this.props.onSave(layer.toObject);
+    };
+
     render() {
         const {area, boundingBox, gridSize, isLoading, readOnly, updateLayerStatus} = this.props;
         const {layer} = this.state;
@@ -181,8 +187,7 @@ class SoilmodelLayerComponent extends React.Component {
                             unit={'m'}
                             data={layer.top}
                             readOnly={readOnly}
-                            onChange={this.handleInputChange('top')
-                            }
+                            onChange={this.handleInputChange('top')}
                         />
                         <RasterData
                             area={area}
@@ -195,21 +200,49 @@ class SoilmodelLayerComponent extends React.Component {
                             onChange={this.handleInputChange('botm')}
                         />
                     </Tab.Pane>
+            }
+        ];
+
+        const parameters = [
+            {
+                name: 'hk',
+                unit: 'L/T'
             },
             {
-                menuItem: 'hk', render: () =>
+                name: 'hani',
+                unit: 'L/T'
+            },
+            {
+                name: 'vka',
+                unit: 'L/T'
+            },
+            {
+                name: 'ss',
+                unit: '-'
+            },
+            {
+                name: 'sy',
+                unit: '-'
+            }
+        ];
+
+        parameters.forEach(p => {
+            panes.push({
+                menuItem: p.name, render: () =>
                     <Tab.Pane attached={false}>
                         <SoilmodelLayerParameter
                             area={this.props.area}
                             bbox={this.props.boundingBox}
                             gridSize={this.props.gridSize}
                             onChange={this.handleZonesChange}
-                            name="hk"
+                            handleInputChange={this.handleInputChange(p.name)}
+                            parameter={p}
+                            readOnly={readOnly}
                             layer={SoilmodelLayer.fromObject(this.state.layer)}
                         />
                     </Tab.Pane>
-            },
-        ];
+            });
+        });
 
         return (
             <div>
@@ -220,7 +253,8 @@ class SoilmodelLayerComponent extends React.Component {
                 {!readOnly &&
                 <div style={styles.saveButtonWrapper}>
                     <WebData.Component.Loading status={updateLayerStatus}>
-                        <Button onClick={this.save}>Save</Button>
+                        <Button positive onClick={this.save}>Save</Button>
+                        <Button primary onClick={this.recalculateMap}>Recalculate All Parameters</Button>
                     </WebData.Component.Loading>
                 </div>
                 }

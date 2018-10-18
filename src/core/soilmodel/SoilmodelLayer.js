@@ -204,51 +204,26 @@ class SoilmodelLayer {
         };
     }
 
-    smoothParameter(gridSize, parameter, cycles = 1) {
+    smoothParameter(gridSize, parameter, cycles = 1, distance = 1) {
+        //console.log(`Calculate with gridSize ${gridSize} for parameter ${parameter} in ${cycles} cycles and ${distance} distance.`);
+
         for (let cyc = 1; cyc <= cycles; cyc++) {
             for (let row = 0; row < gridSize.n_y; row++) {
                 for (let col = 0; col < gridSize.n_x; col++) {
                     let avg = parseFloat(this[parameter][row][col]);
                     let div = 1;
 
-                    if (row - 1 >= 0) {
-                        avg += parseFloat(this[parameter][row-1][col]);
-                        div++;
-                        if (col - 1 >= 0) {
-                            avg += parseFloat(this[parameter][row-1][col-1]);
-                            div++;
+                    this[parameter].forEach((r, rowKey) => {
+                        if (rowKey >= row - distance && rowKey <= row + distance) {
+                            this[parameter][rowKey].forEach((c, colKey) => {
+                                if (colKey >= col - distance && colKey <= col + distance) {
+                                    avg += parseFloat(this[parameter][rowKey][colKey]);
+                                    div++;
+                                }
+                            });
                         }
-                        if (col + 1 < gridSize.n_x) {
-                            avg += parseFloat(this[parameter][row-1][col+1]);
-                            div++;
-                        }
-                    }
-
-                    if (row + 1 < gridSize.n_y) {
-                        avg += parseFloat(this[parameter][row+1][col]);
-                        div++;
-                        if (col - 1 >= 0) {
-                            avg += parseFloat(this[parameter][row+1][col-1]);
-                            div++;
-                        }
-                        if (col + 1 < gridSize.n_x) {
-                            avg += parseFloat(this[parameter][row+1][col+1]);
-                            div++;
-                        }
-                    }
-
-                    if (col - 1 >= 0) {
-                        avg += parseFloat(this[parameter][row][col-1]);
-                        div++;
-                    }
-
-                    if (col + 1 < gridSize.n_x) {
-                        avg += parseFloat(this[parameter][row][col+1]);
-                        div++;
-                    }
-
-                    //console.log(`set ${parameter} at ${col} ${row} with value ${avg} / ${div}`);
-                    this[parameter][row][col] = avg/div;
+                    });
+                    this[parameter][row][col] = avg / div;
                 }
             }
         }
@@ -321,7 +296,7 @@ class SoilmodelLayer {
 
     changeOrder(zone, order) {
         let zoneToSwitch = null;
-        switch(order) {
+        switch (order) {
             case 'up':
                 zoneToSwitch = this.zones.filter(z => z.priority === zone.priority + 1)[0];
                 zoneToSwitch.priority = zoneToSwitch.priority - 1;

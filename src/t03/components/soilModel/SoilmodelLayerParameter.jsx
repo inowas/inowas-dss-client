@@ -3,7 +3,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import {SoilmodelLayer, SoilmodelZone} from "../../../core/soilmodel";
 import {pure} from "recompose";
 import React from "react";
-import {Button, Dropdown, Form, Grid, Header, Icon, Modal, Segment} from "semantic-ui-react";
+import {Accordion, Button, Dropdown, Form, Grid, Header, Icon, Modal, Segment} from "semantic-ui-react";
 import RasterDataMap from '../../../core/rasterData/components/rasterDataMap';
 import ParameterDataTable from "./ParameterDataTable";
 import {FeatureGroup, GeoJSON, Map, Polygon, TileLayer} from "react-leaflet";
@@ -14,13 +14,13 @@ import {geoJSON as leafletGeoJSON} from 'leaflet';
 import {calculateActiveCells} from "../../../core/geospatial";
 import * as geoTools from "../../../core/geospatial";
 import {uniqueId} from "lodash";
+import RasterData from "../../../core/rasterData/components/rasterData";
 
 const styles = {
     inputFix: {
         padding: '0'
     },
     buttonFix: {
-        width: 'auto',
         height: 'auto'
     },
     mapFix: {
@@ -36,19 +36,33 @@ class SoilmodelLayerParameter extends React.Component {
         super(props);
 
         this.state = {
+            activeIndex: 0,
             layer: props.layer.toObject,
             selectedZone: null,
+            smoothParams: {
+                cycles: 1,
+                distance: 1
+            },
             showOverlay: false,
             mode: 'zones',
-            parameter: props.name
+            parameter: props.parameter
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState(() => ({
-            layer: nextProps.layer.toObject
+            layer: nextProps.layer.toObject,
+            parameter: nextProps.parameter
         }));
     }
+
+    handleClickAccordion = (e, titleProps) => {
+        const {index} = titleProps;
+        const {activeIndex} = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({activeIndex: newIndex});
+    };
 
     handleSelectMode = (e, {name, value}) => {
         this.setState({
@@ -82,12 +96,22 @@ class SoilmodelLayerParameter extends React.Component {
         });
     };
 
+    onChangeSmoothParams = (e, {name, value}) => {
+        return this.setState({
+            smoothParams: {
+                ...this.state.smoothParams,
+                [name]: parseInt(value, 10)
+            }
+        })
+    };
+
     onRemoveZone = () => {
         const layer = SoilmodelLayer.fromObject(this.state.layer).removeZone(this.state.selectedZone);
         this.setState({
-            layer: layer.toObject,
-            selectedZone: null
+            selectedZone: null,
+            showOverlay: false
         });
+        this.props.onChange(layer);
     };
 
     onChange = e => {
@@ -95,8 +119,8 @@ class SoilmodelLayerParameter extends React.Component {
 
         e.map(row => {
             const zone = layer.zones.filter(z => z.id === row.id)[0];
-            if (zone && zone[this.state.parameter] !== row.value) {
-                zone[this.state.parameter] = row.value;
+            if (zone && zone[this.state.parameter.name] !== row.value) {
+                zone[this.state.parameter.name] = row.value;
                 layer.updateZone(zone);
             }
         });
@@ -114,14 +138,14 @@ class SoilmodelLayerParameter extends React.Component {
 
     smoothMap = () => {
         const layer = SoilmodelLayer.fromObject(this.state.layer);
-        layer.smoothParameter(this.props.gridSize, this.state.parameter, 10);
+        layer.smoothParameter(this.props.gridSize, this.state.parameter.name, this.state.smoothParams.cycles, this.state.smoothParams.distance);
 
-        this.props.onChange(layer);
+        return this.props.onChange(layer);
     };
 
     recalculateMap = () => {
         const layer = SoilmodelLayer.fromObject(this.state.layer);
-        layer.zonesToParameters(this.props.gridSize, this.state.parameter);
+        layer.zonesToParameters(this.props.gridSize, this.state.parameter.name);
         this.props.onChange(layer);
 
         this.setState({
@@ -129,8 +153,14 @@ class SoilmodelLayerParameter extends React.Component {
         });
     };
 
-    onRemoveFromTable = e => {
-        console.log(e);
+    onRemoveFromTable = id => {
+        const layer = SoilmodelLayer.fromObject(this.state.layer);
+        const zone = layer.zones.filter(z => z.id === id)[0];
+        zone[this.state.parameter.name] = null;
+
+        layer.updateZone(zone);
+
+        this.props.onChange(layer);
     };
 
     onSaveModal = () => {
@@ -160,6 +190,18 @@ class SoilmodelLayerParameter extends React.Component {
         return md5(JSON.stringify(geometry));
     };
 
+    onCreatePath = e => {
+        const geoJson = e.layer.toGeoJSON();
+        const zone = this.state.selectedZone;
+
+        zone.geometry = geoJson.geometry;
+        zone.activeCells = calculateActiveCells(zone.geometry, this.props.bbox, this.props.gridSize);
+
+        return this.setState({
+            selectedZone: zone
+        });
+    };
+
     onEditPath = e => {
         const layers = e.layers;
 
@@ -170,8 +212,6 @@ class SoilmodelLayerParameter extends React.Component {
             zone.geometry = geoJson.geometry;
             zone.activeCells = calculateActiveCells(zone.geometry, this.props.bbox, this.props.gridSize);
 
-            console.log('onEditPath', zone);
-
             return this.setState({
                 selectedZone: zone
             });
@@ -181,11 +221,11 @@ class SoilmodelLayerParameter extends React.Component {
     printMap() {
         let options = {
             edit: {
-                remove: true
+                remove: false
             },
             draw: {
                 polyline: false,
-                polygon: true,
+                polygon: Object.keys(this.state.selectedZone.geometry).length === 0,
                 rectangle: false,
                 circle: false,
                 circlemarker: false,
@@ -218,15 +258,31 @@ class SoilmodelLayerParameter extends React.Component {
                 <GeoJSON
                     key={this.generateKeyFunction(area)}
                     data={area}
+                    color='grey'
                 />
                 <FullscreenControl position="topright"/>
+                {this.state.layer._meta.zones.filter(z => z.id !== this.state.selectedZone.id) > 0 ?
+                    <FeatureGroup>
+                        {this.state.layer._meta.zones.filter(z => z.id !== this.state.selectedZone.id).map(z => (
+                            <Polygon
+                                key={z.id}
+                                id={z.id}
+                                positions={geoTools.getLatLngFromXY(
+                                    z.geometry.coordinates[0]
+                                )}
+                                color='grey'
+                                weight={0.1}
+                            />
+                        ))}
+                    </FeatureGroup>
+                    :
+                    <div/>
+                }
                 <FeatureGroup>
                     <EditControl
                         position="bottomright"
-                        onCreated={this.onCreated}
-                        onEditVertex={this.onEditVertex}
+                        onCreated={this.onCreatePath}
                         onEdited={this.onEditPath}
-                        onEditMove={this.onEditMove}
                         {...options}
                     />
                     {this.state.selectedZone.geometry.coordinates ?
@@ -246,34 +302,31 @@ class SoilmodelLayerParameter extends React.Component {
     }
 
     render() {
+        const {area, bbox, readOnly, gridSize} = this.props;
+        const {layer, parameter, mode, showOverlay, selectedZone} = this.state;
+
         const tableConfig = [
             {property: 'value', label: 'Value'}
         ];
 
-        const zonesRows = this.state.layer._meta.zones.map(zone => {
+        const zonesRows = layer._meta.zones.map(zone => {
             return {
                 id: zone.id,
                 zone: zone.name,
                 priority: zone.priority,
-                zones: this.state.layer._meta.zones.length,
-                value: zone[this.state.parameter],
+                zones: layer._meta.zones.length,
+                value: zone[parameter.name],
                 action: zone.name !== 'Default'
             }
         });
 
         return (
             <div>
-                <Header as="h4" style={styles.header}>{this.props.name}</Header>
-                <Segment>
-                    <RasterDataMap area={this.props.area} boundingBox={this.props.bbox}
-                                   data={this.state.layer[this.state.parameter]}
-                                   gridSize={this.props.gridSize} unit={null}/>
-                </Segment>
                 <Form.Field>
-                    <label>Method of optimization</label>
+                    <label>Method of parameter definition</label>
                     <Form.Select
                         name="mode"
-                        value={this.state.mode}
+                        value={mode}
                         placeholder="mode ="
                         onChange={this.handleSelectMode}
                         options={[
@@ -290,7 +343,90 @@ class SoilmodelLayerParameter extends React.Component {
                         ]}
                     />
                 </Form.Field>
-                {this.state.mode === 'zones' &&
+                {this.state.mode === 'import' &&
+                <Segment>
+                    <RasterData
+                        area={area}
+                        boundingBox={bbox}
+                        gridSize={gridSize}
+                        name={parameter.name}
+                        unit={parameter.unit}
+                        data={layer[parameter.name]}
+                        readOnly={readOnly}
+                        onChange={() => this.props.handleInputChange(parameter.name)}
+                    />
+                </Segment>
+                }
+                {mode !== 'import' &&
+                <Segment>
+                    <Header as="h4" style={styles.header}>{parameter.name} [{parameter.unit}]</Header>
+                    <Grid divided>
+                        <Grid.Column width={8}>
+                            <RasterDataMap area={area} boundingBox={bbox}
+                                           data={layer[parameter.name]}
+                                           gridSize={gridSize} unit={null}/>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                            <Accordion fluid>
+                                <Accordion.Title active={this.state.activeIndex === 0} index={0}
+                                                 onClick={this.handleClickAccordion}>
+                                    <Icon name="dropdown"/>
+                                    Calculation
+                                </Accordion.Title>
+                                <Accordion.Content active={this.state.activeIndex === 0}>
+                                    <Button
+                                        style={styles.buttonFix}
+                                        icon
+                                        primary
+                                        fluid
+                                        onClick={this.recalculateMap}
+                                    >
+                                        <Icon name="map"/> Recalculate Map
+                                    </Button>
+                                </Accordion.Content>
+                                <Accordion.Title active={this.state.activeIndex === 1} index={1}
+                                                 onClick={this.handleClickAccordion}>
+                                    <Icon name="dropdown"/>
+                                    Smoothing
+                                </Accordion.Title>
+                                <Accordion.Content active={this.state.activeIndex === 1}>
+                                    <Form.Field>
+                                        <label>Cycles</label>
+                                        <Form.Input
+                                            type="number"
+                                            name="cycles"
+                                            value={this.state.smoothParams.cycles}
+                                            placeholder="cycles ="
+                                            style={styles.inputFix}
+                                            onChange={this.onChangeSmoothParams}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <label>Distance</label>
+                                        <Form.Input
+                                            type="number"
+                                            name="distance"
+                                            value={this.state.smoothParams.distance}
+                                            placeholder="distance ="
+                                            style={styles.inputFix}
+                                            onChange={this.onChangeSmoothParams}
+                                        />
+                                    </Form.Field>
+                                    <Button
+                                        style={styles.buttonFix}
+                                        icon
+                                        fluid
+                                        onClick={this.smoothMap}
+                                    >
+                                        <Icon name="tint"/> Start Smoothing
+                                    </Button>
+                                </Accordion.Content>
+                            </Accordion>
+                        </Grid.Column>
+                    </Grid>
+                </Segment>
+                }
+                {mode === 'zones' &&
                 <Segment>
                     <Form.Group style={styles.dropDownWithButtons}>
                         <Button
@@ -300,22 +436,6 @@ class SoilmodelLayerParameter extends React.Component {
                             onClick={this.onAddZone}
                         >
                             <Icon name="add circle"/> Add new zone
-                        </Button>
-                        <Button
-                            style={styles.buttonFix}
-                            icon
-                            fluid
-                            onClick={this.recalculateMap}
-                        >
-                            <Icon name="sun"/> Recalculate Map
-                        </Button>
-                        <Button
-                            style={styles.buttonFix}
-                            icon
-                            fluid
-                            onClick={this.smoothMap}
-                        >
-                            <Icon name="tint"/> Smooth Map
                         </Button>
                     </Form.Group>
                     <ParameterDataTable
@@ -329,16 +449,9 @@ class SoilmodelLayerParameter extends React.Component {
                     />
                 </Segment>
                 }
-                {this.state.mode === 'import' &&
-                <Segment>
-                    <Button>
-                        Upload rasterfile
-                    </Button>
-                </Segment>
-                }
-                {this.state.showOverlay &&
+                {showOverlay &&
                 <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
-                    <Modal.Header>{this.props.label ? this.props.label : 'Edit Location'}</Modal.Header>
+                    <Modal.Header>Edit Location</Modal.Header>
                     <Modal.Content>
                         <Grid divided={'vertically'}>
                             <Grid.Row columns={2}>
@@ -353,7 +466,7 @@ class SoilmodelLayerParameter extends React.Component {
                                         <Form.Input
                                             type="text"
                                             name="name"
-                                            value={this.state.selectedZone.name}
+                                            value={selectedZone.name}
                                             placeholder="name ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
@@ -364,7 +477,7 @@ class SoilmodelLayerParameter extends React.Component {
                                         <Form.Input
                                             type="number"
                                             name="hk"
-                                            value={this.state.selectedZone.hk || ''}
+                                            value={selectedZone.hk || ''}
                                             placeholder="hk ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
@@ -375,7 +488,7 @@ class SoilmodelLayerParameter extends React.Component {
                                         <Form.Input
                                             type="number"
                                             name="hani"
-                                            value={this.state.selectedZone.hani || ''}
+                                            value={selectedZone.hani || ''}
                                             placeholder="hani ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
@@ -386,7 +499,7 @@ class SoilmodelLayerParameter extends React.Component {
                                         <Form.Input
                                             type="number"
                                             name="vka"
-                                            value={this.state.selectedZone.vka || ''}
+                                            value={selectedZone.vka || ''}
                                             placeholder="vka ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
@@ -397,7 +510,7 @@ class SoilmodelLayerParameter extends React.Component {
                                         <Form.Input
                                             type="number"
                                             name="ss"
-                                            value={this.state.selectedZone.ss || ''}
+                                            value={selectedZone.ss || ''}
                                             placeholder="ss ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
@@ -408,7 +521,7 @@ class SoilmodelLayerParameter extends React.Component {
                                         <Form.Input
                                             type="number"
                                             name="sy"
-                                            value={this.state.selectedZone.sy || ''}
+                                            value={selectedZone.sy || ''}
                                             placeholder="sy ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
@@ -419,12 +532,18 @@ class SoilmodelLayerParameter extends React.Component {
                         </Grid>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button negative onClick={this.onCancelModal}>Cancel</Button>
+                        <Button onClick={this.onCancelModal}>Cancel</Button>
                         <Button
                             positive
                             onClick={this.onSaveModal}
-                            disabled={this.state.hasError}>
+                        >
                             Save
+                        </Button>
+                        <Button
+                            negative
+                            onClick={this.onRemoveZone}
+                        >
+                            Delete Zone
                         </Button>
                     </Modal.Actions>
                 </Modal>
@@ -440,7 +559,8 @@ SoilmodelLayerParameter.propTypes = {
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
     gridSize: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
+    parameter: PropTypes.object.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
     layer: PropTypes.instanceOf(SoilmodelLayer)
 };
 
