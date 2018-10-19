@@ -334,7 +334,7 @@ class OptimizationMap extends React.Component {
                             <Grid.Row columns={2}>
                                 <Grid.Column width={6}>
                                     <div>
-                                        {this.props.onlyBbox || this.props.onlyObjects &&
+                                        {!this.props.onlyBbox && !this.props.onlyObjects &&
                                         <Grid celled="internally">
                                             <Grid.Row textAlign="center">
                                                 {!this.props.onlyBbox &&

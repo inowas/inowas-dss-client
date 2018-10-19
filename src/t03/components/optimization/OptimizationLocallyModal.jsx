@@ -54,7 +54,7 @@ class OptimizationLocallyModal extends React.Component {
         return this.props.onCalculationStart(input);
     };
 
-    onChangeTarget = (obj, value) => {
+    handleChangeTarget = (obj, value) => {
         const objective = OptimizationObjective.fromObject(obj);
         objective.target = value;
 
@@ -162,8 +162,8 @@ class OptimizationLocallyModal extends React.Component {
                                                     name="objective"
                                                     placeholder="target ="
                                                     style={styles.inputfix}
-                                                    value={objective.target ? parseFloat(objective.target).toFixed(3) : ''}
-                                                    onChange={(e, {name, value}) => this.onChangeTarget(objective, value)}
+                                                    value={objective.target || parseFloat(this.props.solution.fitness[key]).toFixed(3)}
+                                                    onChange={(e, {name, value}) => this.handleChangeTarget(objective, value)}
                                                 />
                                             </Form.Field>
                                         </Grid.Column>

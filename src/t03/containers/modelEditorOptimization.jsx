@@ -352,7 +352,7 @@ class ModelEditorOptimization extends React.Component {
                 >
                     {this.state.optimization.input.parameters.method === 'GA'
                         ?
-                        <span>Generic Algorithm:&nbsp;</span>
+                        <span>Genetic Algorithm:&nbsp;</span>
                         :
                         <span>Simplex:&nbsp;</span>
                     }
