@@ -93,4 +93,4 @@ RasterDataMap.propTypes = {
 };
 
 
-export default pure(RasterDataMap);
+export default RasterDataMap;
