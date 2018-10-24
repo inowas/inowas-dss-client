@@ -132,11 +132,15 @@ class ModelEditorOptimization extends React.Component {
         );
     };
 
-    onCalculationClick = () => {
+    onCalculationClick = (removeResults) => {
         this.onMenuClick(null, {name: 'results'});
 
         const optimization = {
             ...this.state.optimization,
+            input: {
+                ...this.state.optimization.input,
+                removeResults: removeResults
+            },
             state: OPTIMIZATION_STATE_STARTED
         };
 
@@ -243,7 +247,7 @@ class ModelEditorOptimization extends React.Component {
                                                   model={this.props.model}
                                                   stressPeriods={stressPeriods}
                                                   onChangeInput={this.onChange}
-                                                  onCalculationClick={this.onCalculationClick}
+                                                  onCalculationClick={() => this.onCalculationClick(false)}
                                                   onChange={this.onChangeResult}
                                                   onApplySolution={this.onApplySolution}/>
                 );
@@ -316,7 +320,7 @@ class ModelEditorOptimization extends React.Component {
         if (!optimizationInProgress(this.state.optimization.state)) {
             return (
                 <Menu.Item>
-                    <Button fluid primary onClick={this.onCalculationClick}>
+                    <Button fluid primary onClick={() => this.onCalculationClick(true)}>
                         Run Optimization
                     </Button>
                 </Menu.Item>

@@ -10,6 +10,7 @@ class OptimizationInput {
     _objectives = [];
     _objects = [];
     _parameters;
+    _removeResults = false;
 
     static fromDefaults() {
         const input = new OptimizationInput();
@@ -18,6 +19,7 @@ class OptimizationInput {
         input.constraints = [];
         input.objectives = [];
         input.objects = [];
+        input.removeResults = false;
         return input;
     }
 
@@ -28,6 +30,7 @@ class OptimizationInput {
         const input = new OptimizationInput();
         input.id = obj.id;
         input.parameters = OptimizationParameters.fromObject(obj.parameters);
+        input.removeResults = obj.removeResults;
 
         obj.constraints.forEach((constraint) => {
             input.addConstraint(OptimizationConstraint.fromObject(constraint));
@@ -88,13 +91,22 @@ class OptimizationInput {
         this._objects = value;
     }
 
+    get removeResults() {
+        return this._removeResults;
+    }
+
+    set removeResults(value) {
+        this._removeResults = value ? value : false;
+    }
+
     get toObject() {
         return {
             'id': this.id,
             'parameters': this.parameters.toObject,
             'constraints': this.constraints.map(c => c.toObject),
             'objectives': this.objectives.map(c => c.toObject),
-            'objects': this.objects.map(c => c.toObject)
+            'objects': this.objects.map(c => c.toObject),
+            'removeResults': this.removeResults
         };
     }
 
