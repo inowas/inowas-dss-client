@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Form} from 'semantic-ui-react';
+import {Form, Input} from 'semantic-ui-react';
 
 import AbstractPackageProperties from './AbstractPackageProperties';
 import DspPackage from '../../../../core/modflow/mt3d/dspPackage';
+
+const styles = {
+    inputFix: {
+        padding: '0',
+        height: 'auto'
+    }
+};
 
 class DspPackageProperties extends AbstractPackageProperties {
     render() {
@@ -17,47 +24,59 @@ class DspPackageProperties extends AbstractPackageProperties {
 
         return (
             <Form>
-                <Form.Group>
-                    <Form.Field>
-                        <label>Al</label>
-                        <input
-                            name={'al'}
-                            value={mtPackage.al}
-                            disabled={readonly}
-                            onBlur={this.handleOnBlur(parseFloat)}
-                            onChange={this.handleOnChange}
-                        />
-                    </Form.Field>
+                <Form.Field>
+                    <label>Longitudinal dispersivity (Al)</label>
+                    <Input
+                        type={'number'}
+                        name={'al'}
+                        value={mtPackage.al}
+                        disabled={readonly}
+                        onBlur={this.handleOnBlur(parseFloat)}
+                        onChange={this.handleOnChange}
+                        style={styles.inputFix}
+                        icon={this.renderInfoPopup('PLACEHOLDER', 'AL', 'top right')}
+                    />
+                </Form.Field>
+                <Form.Group widths='equal'>
                     <Form.Field>
                         <label>Trpt</label>
-                        <input
+                        <Input
+                            type={'number'}
                             name={'trpt'}
                             value={mtPackage.trpt}
                             disabled={readonly}
                             onBlur={this.handleOnBlur(parseFloat)}
                             onChange={this.handleOnChange}
+                            style={styles.inputFix}
+                            icon={this.renderInfoPopup('PLACEHOLDER', 'TRPT', 'top left')}
                         />
                     </Form.Field>
-                </Form.Group>
-                <Form.Group>
                     <Form.Field>
                         <label>Trpv</label>
-                        <input
+                        <Input
+                            type={'number'}
                             name={'trpv'}
                             value={mtPackage.trpv}
                             disabled={readonly}
                             onBlur={this.handleOnBlur(parseFloat)}
                             onChange={this.handleOnChange}
+                            style={styles.inputFix}
+                            icon={this.renderInfoPopup('PLACEHOLDER', 'TRPV', 'top right')}
                         />
                     </Form.Field>
+                </Form.Group>
+                <Form.Group widths='equal'>
                     <Form.Field>
-                        <label>Dmcoef</label>
-                        <input
+                        <label>Effective molecular diffusion coefficient (dmcoef)</label>
+                        <Input
+                            type={'number'}
                             name={'dmcoef'}
                             value={mtPackage.dmcoef}
                             disabled={readonly}
                             onBlur={this.handleOnBlur(parseFloat)}
                             onChange={this.handleOnChange}
+                            style={styles.inputFix}
+                            icon={this.renderInfoPopup('PLACEHOLDER', 'DMCOEF', 'top right')}
                         />
                     </Form.Field>
                 </Form.Group>

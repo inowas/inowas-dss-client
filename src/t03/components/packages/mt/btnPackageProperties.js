@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Accordion, Form, Icon, Input, Popup} from 'semantic-ui-react';
+import {Accordion, Form, Icon, Input} from 'semantic-ui-react';
 
 import AbstractPackageProperties from './AbstractPackageProperties';
 import BtnPackage from '../../../../core/modflow/mt3d/btnPackage';
 
 const styles = {
+    accordionFix: {
+        width: 'auto'
+    },
     inputFix: {
         padding: '0',
         height: 'auto'
@@ -55,7 +58,8 @@ const documentation = {
         actually printed or saved is controlled by the input values entered in the preceding record. <ul>
             <li><i>NPRS</i> {">"} 0 simulation results will be printed to the standard output text file</li>
             <li><i>NPRS</i> {"<"} 0 simulation results will be printed or saved whenever the number of transport
-                steps is an even multiple of NPRS</li>
+                steps is an even multiple of NPRS
+            </li>
             <li><i>NPRS</i> = 0 simulation results will not be printed or saved except at the end of simulation</li>
         </ul></div>,
     nprobs: <div>Integer indicating how frequently the concentration at the specified observation points should be
@@ -63,17 +67,28 @@ const documentation = {
     nprmas: <div>Integer indicating how frequently the mass budget information should be saved in the mass balance
         summary file. Mass budget information is saved every NPRMAS step.</div>,
     dt0: <div>Transport stepsize within each time step of the flow solution. DT0 is interpreted differently depending on
-        whether the solution option chosen is explicit or implicit:<ul><li>For explicit solutions (i.e., the GCG solver
-            is not used), the program will always calculate a maximum transport stepsize which meets the various
-            stability criteria. Setting DT0 to zero causes the model calculated transport stepsize to be used in the
-            simulation. However, the model-calculated DT0 may not always be optimal. In this situation, DT0 should be
-            adjusted to find a value that leads to the best results. If DT0 is given a value greater than the
-            model-calculated stepsize, the model-calculated stepsize, instead of the user-specified value, will be used
-            in the simulation.</li><li>For implicit solutions (i.e., the GCG solver is used), DT0 is the initial
-            transport stepsize. If it is specified as zero, the model-calculated value of DT0, based on the
-            user-specified Courant number in the Advection Package, will be used. The subsequent transport stepsize may
-            increase or remain constant depending on the user specified transport stepsize multiplier TTSMULT and the
-            solution scheme for the advection term.</li></ul></div>,
+        whether the solution option chosen is explicit or implicit:
+        <ul>
+            <li>For explicit solutions (i.e., the GCG solver
+                is not used), the program will always calculate a maximum transport stepsize which meets the various
+                stability criteria. Setting DT0 to zero causes the model calculated transport stepsize to be used in the
+                simulation. However, the model-calculated DT0 may not always be optimal. In this situation, DT0 should
+                be
+                adjusted to find a value that leads to the best results. If DT0 is given a value greater than the
+                model-calculated stepsize, the model-calculated stepsize, instead of the user-specified value, will be
+                used
+                in the simulation.
+            </li>
+            <li>For implicit solutions (i.e., the GCG solver is used), DT0 is the initial
+                transport stepsize. If it is specified as zero, the model-calculated value of DT0, based on the
+                user-specified Courant number in the Advection Package, will be used. The subsequent transport stepsize
+                may
+                increase or remain constant depending on the user specified transport stepsize multiplier TTSMULT and
+                the
+                solution scheme for the advection term.
+            </li>
+        </ul>
+    </div>,
     mxstrn: <div>Maximum number of transport steps allowed within one time step of the flow solution. If the number of
         transport steps within a flow time step exceeds MXSTRN, the simulation is terminated. </div>,
     ttsmult: <div>Multiplier for successive transport steps within a flow time step, if the Generalized Conjugate
@@ -97,15 +112,15 @@ class BtnPackageProperties extends AbstractPackageProperties {
 
         return (
             <Form>
-                <Accordion styled>
+                <Accordion styled style={styles.accordionFix}>
                     <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClickAccordion}>
-                        <Icon name='dropdown' />
+                        <Icon name='dropdown'/>
                         Basic Transport Parameters
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
                         <Form.Group widths="equal">
                             <Form.Field>
-                                <label>Total species</label>
+                                <label>Total species (Ncomp)</label>
                                 <Input
                                     type='number'
                                     name='ncomp'
@@ -118,7 +133,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Mobile species</label>
+                                <label>Mobile species (Mcomp)</label>
                                 <Input
                                     type={'number'}
                                     name={'mcomp'}
@@ -133,7 +148,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                         </Form.Group>
                         <Form.Group widths="equal">
                             <Form.Field>
-                                <label>Porosity</label>
+                                <label>Porosity (Prsity)</label>
                                 <Input
                                     type={'number'}
                                     name={'prsity'}
@@ -142,11 +157,11 @@ class BtnPackageProperties extends AbstractPackageProperties {
                                     onBlur={this.handleOnBlur(parseFloat)}
                                     onChange={this.handleOnChange}
                                     style={styles.inputFix}
-                                    icon={this.renderInfoPopup(documentation.prsity, 'prsity')}
+                                    icon={this.renderInfoPopup(documentation.prsity, 'PRSITY')}
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Concentration boundary indicator</label>
+                                <label>Concentration boundary indicator (Icbund)</label>
                                 <Input
                                     type={'number'}
                                     name={'icbund'}
@@ -160,7 +175,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                             </Form.Field>
                         </Form.Group>
                         <Form.Field>
-                            <label>Starting concentration</label>
+                            <label>Starting concentration (Sconc)</label>
                             <Input
                                 type={'number'}
                                 name={'sconc'}
@@ -174,13 +189,13 @@ class BtnPackageProperties extends AbstractPackageProperties {
                         </Form.Field>
                     </Accordion.Content>
                     <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClickAccordion}>
-                        <Icon name='dropdown' />
+                        <Icon name='dropdown'/>
                         Inactive Cells
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                         <Form.Group widths="equal">
                             <Form.Field>
-                                <label>Inactive concentration cells</label>
+                                <label>Inactive concentration cells (Cinact)</label>
                                 <Input
                                     type={'number'}
                                     name={'cinact'}
@@ -193,7 +208,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Minimum saturated thickness</label>
+                                <label>Minimum saturated thickness (Thkmin)</label>
                                 <Input
                                     type={'number'}
                                     name={'thkmin'}
@@ -208,7 +223,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                         </Form.Group>
                     </Accordion.Content>
                     <Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleClickAccordion}>
-                        <Icon name='dropdown' />
+                        <Icon name='dropdown'/>
                         Output Control Options
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 2}>
@@ -244,6 +259,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                             <Form.Field>
                                 <label>Ifmtrf</label>
                                 <Input
+                                    type={'number'}
                                     name={'ifmtrf'}
                                     value={mtPackage.ifmtrf}
                                     disabled={readonly}
@@ -310,13 +326,13 @@ class BtnPackageProperties extends AbstractPackageProperties {
                         </Form.Group>
                     </Accordion.Content>
                     <Accordion.Title active={activeIndex === 3} index={3} onClick={this.handleClickAccordion}>
-                        <Icon name='dropdown' />
+                        <Icon name='dropdown'/>
                         Transport steps
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 3}>
                         <Form.Group widths="equal">
                             <Form.Field>
-                                <label>Transport stepsize</label>
+                                <label>Transport stepsize (Dt0)</label>
                                 <Input
                                     type={'number'}
                                     name={'dt0'}
@@ -329,7 +345,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Maximum transport steps</label>
+                                <label>Maximum transport steps (Mxstrn)</label>
                                 <Input
                                     type={'number'}
                                     name={'mxstrn'}
@@ -344,7 +360,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                         </Form.Group>
                         <Form.Group widths="equal">
                             <Form.Field>
-                                <label>Transport step multiplier</label>
+                                <label>Transport step multiplier (Ttsmult)</label>
                                 <Input
                                     type={'number'}
                                     name={'ttsmult'}
@@ -357,7 +373,7 @@ class BtnPackageProperties extends AbstractPackageProperties {
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Maximum transport stepsize</label>
+                                <label>Maximum transport stepsize (Ttsmax)</label>
                                 <Input
                                     type={'number'}
                                     name={'ttsmax'}

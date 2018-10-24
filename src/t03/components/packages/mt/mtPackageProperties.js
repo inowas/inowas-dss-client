@@ -31,18 +31,24 @@ class MtPackageProperties extends AbstractPackageProperties {
                     <label>Enabled</label>
                     <Checkbox checked={enabled} onChange={toggleEnabled} disabled={readonly}/>
                 </Form.Field>
-                <Form.Field>
-                    <label>Executable name</label>
-                    <Select
-                        options={[
-                            {key: 0, value: 'mt3dms', text: 'MT3DMS'},
-                            {key: 1, value: 'mt3dusgs', text: 'MT3USGS'},
-                        ]}
-                        onChange={this.handleSelectExecutable}
-                        value={mtPackage.exe_name}
-                        disabled={readonly}
-                    />
-                </Form.Field>
+                <Form.Group>
+                    <Form.Field width={15}>
+                        <label>Executable name</label>
+                        <Select
+                            options={[
+                                {key: 0, value: 'mt3dms', text: 'MT3DMS'},
+                                {key: 1, value: 'mt3dusgs', text: 'MT3USGS'},
+                            ]}
+                            onChange={this.handleSelectExecutable}
+                            value={mtPackage.exe_name}
+                            disabled={readonly}
+                        />
+                    </Form.Field>
+                    <Form.Field width={1}>
+                        <label>&nbsp;</label>
+                        {this.renderInfoPopup('PLACEHOLDER', 'Method', 'top right', true)}
+                    </Form.Field>
+                </Form.Group>
                 <Form.Field>
                     <label>Version</label>
                     <input value={mtPackage.version} readOnly/>

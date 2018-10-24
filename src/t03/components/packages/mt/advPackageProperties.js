@@ -59,6 +59,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         <Form.Field>
                             <label>Courant number (Percel)</label>
                             <Input
+                                type={'number'}
                                 name={'percel'}
                                 value={mtPackage.percel}
                                 disabled={readonly}
@@ -93,6 +94,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         <Form.Field>
                             <label>Maximum moving particles (Mxpart)</label>
                             <Input
+                                type={'number'}
                                 name={'mxpart'}
                                 value={mtPackage.mxpart}
                                 disabled={readonly}
@@ -128,6 +130,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                             <Form.Field>
                                 <label>Concentration weighting factor (Wd)</label>
                                 <Input
+                                    type={'number'}
                                     name={'wd'}
                                     value={mtPackage.wd}
                                     disabled={readonly}
@@ -150,6 +153,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                             <Form.Field>
                                 <label>Dceps</label>
                                 <Input
+                                    type={'number'}
                                     name={'dceps'}
                                     value={mtPackage.dceps}
                                     disabled={readonly}
@@ -162,6 +166,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                             <Form.Field>
                                 <label>Nplane</label>
                                 <Input
+                                    type={'number'}
                                     name={'nplane'}
                                     value={mtPackage.nplane}
                                     disabled={readonly}
@@ -175,6 +180,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 <Form.Field>
                                     <label>Npl</label>
                                     <Input
+                                        type={'number'}
                                         name={'npl'}
                                         value={mtPackage.npl}
                                         disabled={readonly}
@@ -187,6 +193,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 <Form.Field>
                                     <label>Nph</label>
                                     <Input
+                                        type={'number'}
                                         name={'nph'}
                                         value={mtPackage.nph}
                                         disabled={readonly}
@@ -201,6 +208,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 <Form.Field>
                                     <label>Npmin</label>
                                     <Input
+                                        type={'number'}
                                         name={'npmin'}
                                         value={mtPackage.npmin}
                                         disabled={readonly}
@@ -213,6 +221,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 <Form.Field>
                                     <label>Npmax</label>
                                     <Input
+                                        type={'number'}
                                         name={'npmax'}
                                         value={mtPackage.npmax}
                                         disabled={readonly}
@@ -237,6 +246,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 <Form.Field>
                                     <label>Nlsink</label>
                                     <Input
+                                        type={'number'}
                                         name={'nlsink'}
                                         value={mtPackage.nlsink}
                                         disabled={readonly}
@@ -249,6 +259,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 <Form.Field>
                                     <label>Npsink</label>
                                     <Input
+                                        type={'number'}
                                         name={'npsink'}
                                         value={mtPackage.npsink}
                                         disabled={readonly}
@@ -263,6 +274,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                             <Form.Field>
                                 <label>Dchmoc</label>
                                 <Input
+                                    type={'number'}
                                     name={'dchmoc'}
                                     value={mtPackage.dchmoc}
                                     disabled={readonly}
