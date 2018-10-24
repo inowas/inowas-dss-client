@@ -42,5 +42,3 @@ ngrok
 dist
 
 src/config.js
-
-.idea
