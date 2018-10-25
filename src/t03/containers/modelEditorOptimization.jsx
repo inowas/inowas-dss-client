@@ -266,9 +266,14 @@ class ModelEditorOptimization extends React.Component {
 
         const errorMsg = this.getValidationMessage(errors);
 
-        // TODO: check if stress periods or substances are valid?!
+        let customErrors = false;
 
-        if (!result && errors) {
+        if (this.props.model.dirty || this.props.model.calculation.state === 0) {
+            customErrors = true;
+            errorMsg.list.push('The model needs to be calculated before running optimization.');
+        }
+
+        if ((!result && errors) || (customErrors && errorMsg.list.length > 0)) {
             return (
                 <Menu.Item>
                     <Button.Group fluid>
@@ -276,6 +281,7 @@ class ModelEditorOptimization extends React.Component {
                             Run Optimization
                         </Button>
                         <Popup
+                            wide='very'
                             trigger={
                                 <Button primary style={styles.iconfix} icon>
                                     <Icon name="exclamation"/>
@@ -283,12 +289,13 @@ class ModelEditorOptimization extends React.Component {
                             }
                             header='Validation Failed'
                             content={
-                                <List>
+                                <List as='ol'>
                                     {errorMsg.list.length > 0
                                         ?
-                                        <List.Item><b>Mayor Errors</b>
+                                        <List.Item>
+                                            <b>Mayor Errors</b>
                                             {errorMsg.list.map((element, key) => (
-                                                <List.Item key={key}>{element}</List.Item>
+                                                <List.Item as='li' value='*' key={key}>{element}</List.Item>
                                             ))}
                                         </List.Item>
                                         :
@@ -300,7 +307,7 @@ class ModelEditorOptimization extends React.Component {
                                             <List.Item><hr /></List.Item>
                                             <List.Item><b>Minor Errors</b> (may be fixed by resolving the mayor errors)
                                             {errorMsg.log.map((e, key) => (
-                                                <List.Item
+                                                <List.Item as='li' value='*'
                                                     key={errorMsg.list.length + key - 1}>{e}</List.Item>
                                             ))}
                                             </List.Item>
@@ -326,6 +333,7 @@ class ModelEditorOptimization extends React.Component {
                 </Menu.Item>
             );
         }
+
         return (
             <Menu.Item>
                 <Button fluid color="red" onClick={this.onCancelCalculationClick}>

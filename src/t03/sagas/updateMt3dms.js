@@ -21,6 +21,7 @@ export default function* updateMt3dms() {
             }
 
             if (response.webData.type === 'success') {
+                yield put(Action.setDirty(action.tool, true));
                 yield put(Event.mt3dmsUpdated(action.tool, action.payload.mt3dms));
                 break;
             }

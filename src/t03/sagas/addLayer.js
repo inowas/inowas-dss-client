@@ -2,6 +2,7 @@ import {put, take} from 'redux-saga/effects';
 import {Command, Event, Routing} from '../../t03/actions/index';
 import {WebData} from '../../core';
 import {push} from 'react-router-redux';
+import {Action} from "../actions";
 
 export default function* addLayerFlow() {
     // eslint-disable-next-line no-constant-condition
@@ -24,6 +25,7 @@ export default function* addLayerFlow() {
 
             if (response.webData.type === 'success') {
                 yield put(Event.layerAdded(action.tool, action.payload.layer));
+                yield put(Action.setDirty(action.tool, true));
                 yield put(
                     push(
                         Routing.editLayerUrl(action.routes, action.params)(action.payload.layer.id)

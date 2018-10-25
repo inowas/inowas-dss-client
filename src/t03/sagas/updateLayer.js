@@ -24,6 +24,7 @@ export default function* updateLayerFlow() {
             }
 
             if ( response.webData.type === 'success' ) {
+                yield put(Action.setDirty(action.tool, true));
                 yield put( Event.layerUpdated( action.tool, action.payload.layer ) );
                 break;
             }

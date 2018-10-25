@@ -46,6 +46,7 @@ export const ADD_BOUNDARY = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY';
 export const SET_BOUNDARIES = 'MODEL_EDITOR_MODEL_SET_BOUNDARIES';
 export const SET_BOUNDARY = 'MODEL_EDITOR_MODEL_SET_BOUNDARY';
 export const SET_LAYER = 'MODEL_EDITOR_MODEL_SET_LAYER';
+export const SET_DIRTY = 'MODEL_EDITOR_MODEL_SET_DIRTY';
 export const UPDATE_BOUNDARY = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY';
 export const ADD_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_ADD_BOUNDARY_CONTROL_POINT';
 export const UPDATE_BOUNDARY_CONTROL_POINT = 'MODEL_EDITOR_MODEL_UPDATE_BOUNDARY_CONTROL_POINT';
@@ -97,6 +98,14 @@ export function setLayer(tool, layer) {
         tool,
         payload: layer
     };
+}
+
+export function setDirty(tool, dirty) {
+    return {
+        type: SET_DIRTY,
+        tool,
+        payload: dirty
+    }
 }
 
 export function setStressPeriods(tool, stressperiod) {
