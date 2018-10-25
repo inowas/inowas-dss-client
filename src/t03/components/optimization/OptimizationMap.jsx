@@ -56,23 +56,7 @@ class OptimizationMap extends React.Component {
     };
 
     validateLocation = p => {
-        const bbXmin = this.props.bbox[0][0];
-        const bbYmin = this.props.bbox[0][1];
-        const bbXmax = this.props.bbox[1][0];
-        const bbYmax = this.props.bbox[1][1];
-
-        const dX = (bbXmax - bbXmin) / this.props.gridSize.n_x;
-        const dY = (bbYmax - bbYmin) / this.props.gridSize.n_y;
-
-        let cXmin = bbXmin + p.col.min * dX;
-        let cXmax = bbXmin + p.col.max * dX;
-        let cYmin = bbYmax - p.row.min * dY;
-        let cYmax = bbYmax - p.row.max * dY;
-
-        const object = turf.polygon([[[cXmin, cYmin], [cXmax, cYmin], [cXmax, cYmax], [cXmin, cYmax], [cXmin, cYmin]]]);
-        const bbox = turf.polygon([[[bbXmin, bbYmin], [bbXmax, bbYmin], [bbXmax, bbYmax], [bbXmin, bbYmax], [bbXmin, bbYmin]]]);
-
-        return turf.booleanContains(bbox, object);
+        return p.col.min >= 0 && p.row.min >= 0 && p.col.max <= this.props.gridSize.n_x && p.row.max <= this.props.gridSize.n_y;
     };
 
     handleChangeLocation = ({name, from, to}) => {

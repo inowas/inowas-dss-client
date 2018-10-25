@@ -132,14 +132,14 @@ class ModelEditorOptimization extends React.Component {
         );
     };
 
-    onCalculationClick = (removeResults) => {
+    onCalculationClick = (isInitial) => {
         this.onMenuClick(null, {name: 'results'});
 
         const optimization = {
             ...this.state.optimization,
             input: {
                 ...this.state.optimization.input,
-                removeResults: removeResults
+                isInitial: isInitial
             },
             state: OPTIMIZATION_STATE_STARTED
         };

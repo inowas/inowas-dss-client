@@ -30,7 +30,8 @@ test('Create with Defaults and toObject', () => {
                 'qbound': 0.25,
                 'report_frequency': 50,
                 'xtol': 0.0001
-            }
+            },
+            'isInitial': false
         },
         'progress': null,
         'solutions': [],
