@@ -12,7 +12,6 @@ import * as geoTools from '../../../core/geospatial';
 import {Button, Form, Grid, Header, Message, Modal, Segment} from 'semantic-ui-react';
 import InputRange from './InputRange';
 import InputObjectList from './InputObjectList';
-import * as turf from "@turf/turf/turf";
 
 class OptimizationMap extends React.Component {
 

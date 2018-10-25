@@ -97,8 +97,6 @@ class OptimizationResultsComponent extends React.Component {
 
     render() {
         const state = this.props.optimization.state;
-        const progressGA = this.props.optimization.progress.GA;
-        const progressSimplex = this.props.optimization.progress.Simplex;
 
         return (
             <LayoutComponents.Column>
@@ -110,128 +108,99 @@ class OptimizationResultsComponent extends React.Component {
                         </Grid.Column>
                         <Grid.Column/>
                     </Grid.Row>
-                    {progressGA && progressGA.simulation > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <Grid.Column>
-                                <Progress
-                                    percent={progressGA.calculate()}
-                                    progress
-                                    indicating={!progressGA.final}
-                                    success={progressGA.final}
-                                    error={!progressGA.final && optimizationHasError(state)}
-                                    warning={!progressGA.final && state === OPTIMIZATION_STATE_CANCELLED}
-                                >
-                                    Iteration {progressGA.iteration} of {progressGA.iterationTotal} /
-                                    Simulation {progressGA.simulation} of {progressGA.simulationTotal}
-                                </Progress>
-                            </Grid.Column>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                    {progressGA && progressGA.iteration > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <section className="stretch">
-                                <Chart data={progressGA.toChartData}/>
-                            </section>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                    {progressSimplex && progressSimplex.iteration > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <Grid.Column>
-                                <Progress
-                                    percent={progressSimplex.calculate()}
-                                    progress
-                                    indicating={!progressSimplex.final}
-                                    success={progressSimplex.final}
-                                    error={!progressSimplex.final && optimizationHasError(state)}
-                                    warning={!progressSimplex.final && state === OPTIMIZATION_STATE_CANCELLED}
-                                >
-                                    Iteration {progressSimplex.iteration} of {progressSimplex.iterationTotal}
-                                </Progress>
-                            </Grid.Column>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                    {progressSimplex && progressSimplex.iteration > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <section className="stretch">
-                                <Chart data={progressSimplex.toChartData}/>
-                            </section>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                </Grid>
-                {this.props.optimization.solutions.length > 0
-                    ?
-                    <Segment style={styles.tablewidth}>
-                        <Grid divided="vertically">
-                            <Grid.Row columns={3}>
-                                <Grid.Column textAlign="center">
-                                    <b>Solution</b>
-                                </Grid.Column>
-                                <Grid.Column textAlign="center">
-                                    <b>Fitness</b>
-                                </Grid.Column>
-                                <Grid.Column textAlign="center"/>
-                            </Grid.Row>
-                            {
-                                this.props.optimization.solutions.map((solution, key) => (
-                                    <Grid.Row columns={3} key={key}>
-                                        <Grid.Column textAlign="center">
-                                            <Button
-                                                onClick={() => this.onClickDetails(key)}
-                                            >
-                                                Solution {key + 1}
-                                            </Button>
-                                        </Grid.Column>
+                    {this.props.optimization.methods.map(method =>
+                        <div>
+                            {method.progress && method.progress.iteration > 0 ?
+                                <div>
+                                    <Grid.Row columns={1}>
                                         <Grid.Column>
-                                            <List>
-                                                {
-                                                    this.props.optimization.input.objectives.map((o, key) =>
-                                                        <List.Item key={key}>
-                                                            <Popup trigger={<span>Objective {key + 1}</span>}
-                                                                   content={o.name}/>: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
-                                                        </List.Item>
-                                                    )
+                                            <Progress
+                                                percent={method.progress.calculate()}
+                                                progress
+                                                indicating={!method.progress.final}
+                                                success={method.progress.final}
+                                                error={!method.progress.final && optimizationHasError(state)}
+                                                warning={!method.progress.final && state === OPTIMIZATION_STATE_CANCELLED}
+                                            >
+                                                Iteration {method.progress.iteration} of {method.progress.iterationTotal} /
+                                                {method.progress.simulationTotal > 0 ?
+                                                    <span>
+                                                    Simulation {method.progress.simulation} of {method.progress.simulationTotal}
+                                                  </span>
+                                                    :
+                                                    <span/>
                                                 }
-                                            </List>
-                                        </Grid.Column>
-                                        <Grid.Column textAlign="center">
-                                            <Button.Group>
-                                                <Button color="blue"
-                                                        size="small"
-                                                        style={styles.iconfix}
-                                                        onClick={() => this.onClickApply(solution.id)}
-                                                >
-                                                    Apply
-                                                </Button>
-                                                <Button.Or/>
-                                                <Button color="blue"
-                                                        size="small"
-                                                        style={styles.iconfix}
-                                                        onClick={() => this.onClickLocalOptimization(key)}
-                                                >
-                                                    Optimize Locally
-                                                </Button>
-                                            </Button.Group>
+                                            </Progress>
                                         </Grid.Column>
                                     </Grid.Row>
-                                ))
+                                    <Grid.Row columns={1}>
+                                        <section className="stretch">
+                                            <Chart data={method.progress.toChartData}/>
+                                        </section>
+                                    </Grid.Row>
+                                </div> : <div/>
                             }
-                        </Grid>
-                    </Segment>
-                    :
-                    <div/>
-                }
+                            {method.solutions.length > 0 ?
+                                <Segment style={styles.tablewidth}>
+                                    <Grid divided="vertically">
+                                        <Grid.Row columns={3}>
+                                            <Grid.Column textAlign="center">
+                                                <b>Solution</b>
+                                            </Grid.Column>
+                                            <Grid.Column textAlign="center">
+                                                <b>Fitness</b>
+                                            </Grid.Column>
+                                            <Grid.Column textAlign="center"/>
+                                        </Grid.Row>
+                                        {method.solutions.map((solution, key) => (
+                                            <Grid.Row columns={3} key={key}>
+                                                <Grid.Column textAlign="center">
+                                                    <Button
+                                                        onClick={() => this.onClickDetails(key)}
+                                                    >
+                                                        Solution {key + 1}
+                                                    </Button>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <List>
+                                                        {
+                                                            this.props.optimization.input.objectives.map((o, key) =>
+                                                                <List.Item key={key}>
+                                                                    <Popup trigger={<span>Objective {key + 1}</span>}
+                                                                           content={o.name}/>: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
+                                                                </List.Item>
+                                                            )
+                                                        }
+                                                    </List>
+                                                </Grid.Column>
+                                                <Grid.Column textAlign="center">
+                                                    <Button.Group>
+                                                        <Button color="blue"
+                                                                size="small"
+                                                                style={styles.iconfix}
+                                                                onClick={() => this.onClickApply(solution.id)}
+                                                        >
+                                                            Apply
+                                                        </Button>
+                                                        <Button.Or/>
+                                                        <Button color="blue"
+                                                                size="small"
+                                                                style={styles.iconfix}
+                                                                onClick={() => this.onClickLocalOptimization(key)}
+                                                        >
+                                                            Optimize Locally
+                                                        </Button>
+                                                    </Button.Group>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        ))
+                                        }
+                                    </Grid>
+                                </Segment> : <div/>
+                            }
+                        </div>
+                    )}
+                </Grid>
                 {this.state.selectedSolution &&
                 <OptimizationSolutionModal
                     model={this.props.model}

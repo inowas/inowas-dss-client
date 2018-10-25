@@ -243,92 +243,9 @@
           }
         }
       ]
-    },
-    "state": {
-      "title": "Optimization State",
-      "type": "integer",
-      "enum": [0, 1, 2, 3, 4, 5, 6, 11, 12, 40, 41, 42, 43, 50]
-    },
-    "progress": {
-      "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "log": {
-              "type": "array",
-              "items": {
-                "allOf": [{"type": "number"}]
-              }
-            },
-            "generation": {
-              "type": "integer"
-            },
-            "final": {
-              "type": "boolean"
-            }
-          }
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "progress_local": {
-      "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "log": {
-              "type": "array",
-              "items": {
-                "allOf": [{"type": "number"}]
-              }
-            },
-            "generation": {
-              "type": "integer"
-            },
-            "final": {
-              "type": "boolean"
-            }
-          }
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "solutions": {
-      "type": "array",
-      "items": {
-        "allOf": [{"$ref": "#/definitions/solution"}]
-      }
     }
   },
   "definitions": {
-    "solution": {
-      "type": "object",
-      "properties": {
-        "id": {"$ref": "#/definitions/uuidv4"},
-        "fitness": {
-          "type": "array",
-          "items": {
-            "allOf": [{"type": "number"}]
-          }
-        },
-        "variables": {
-          "type": "array",
-          "items": {
-            "allOf": [{"type": "number"}]
-          }
-        },
-        "objects": {
-          "type": "array",
-          "items": {
-            "allOf": [{"$ref": "#/definitions/objectSimplex"}]
-          }
-        }
-      }
-    },
     "objectGA": {
       "type": "object",
       "required": ["id", "type", "position", "flux"],

@@ -1,7 +1,6 @@
 import Optimization from '../../../src/core/optimization/Optimization';
 import OptimizationInput from '../../../src/core/optimization/OptimizationInput';
-import OptimizationSolution from "../../../src/core/optimization/OptimizationSolution";
-import OptimizationProgress from "../../../src/core/optimization/OptimizationProgress";
+import OptimizationMethod from "../../../src/core/optimization/OptimizationMethod";
 
 test('Create with Defaults and toObject', () => {
     const optimization = Optimization.fromDefaults();
@@ -33,34 +32,26 @@ test('Create with Defaults and toObject', () => {
             },
             'isInitial': false
         },
-        'progress': null,
-        'solutions': [],
+        'methods': [],
         'state': 0
     });
 });
 
-test('Adding solutions', () => {
+test('Adding methods', () => {
     const optimization = Optimization.fromDefaults();
-    optimization.addSolution(new OptimizationSolution());
-    expect(optimization.solutions).toHaveLength(1);
+    optimization.addMethod(new OptimizationMethod());
+    expect(optimization.methods).toHaveLength(1);
     expect(() => {
-        optimization.addSolution({});
+        optimization.addMethod({});
     }).toThrow();
 });
 
 test('Getter and Setter', () => {
     const optimization = Optimization.fromDefaults();
-    optimization.solutions = null;
-    expect(optimization.solutions).toBeInstanceOf(Array);
-    optimization.solutions = [new OptimizationSolution()];
-    expect(optimization.solutions).toHaveLength(1);
-    optimization.progress = new OptimizationProgress();
-    expect(optimization.toObject.progress).toEqual({
-        GA: null,
-        Simplex: null
-    });
-    optimization.progress = null;
-    expect(optimization.progress).toEqual({});
+    optimization.methods = null;
+    expect(optimization.methods).toBeInstanceOf(Array);
+    optimization.methods = [new OptimizationMethod()];
+    expect(optimization.methods).toHaveLength(1);
     optimization.state = null;
     expect(optimization.state).toEqual(0);
     optimization.input = null;
@@ -71,12 +62,11 @@ test('From object', () => {
     const opt = {
         input: OptimizationInput.fromDefaults().toObject,
         state: 2,
-        progress: [1, 2, 3],
-        solutions: [(new OptimizationSolution).toObject, (new OptimizationSolution).toObject]
+        methods: [(new OptimizationMethod()).toObject, (new OptimizationMethod()).toObject]
     };
     const optimization = Optimization.fromObject(opt);
     expect(optimization).toBeInstanceOf(Optimization);
-    expect(optimization.toObject.solutions).toHaveLength(2);
+    expect(optimization.toObject.methods).toHaveLength(2);
 });
 
 test('Validate optimization', () => {

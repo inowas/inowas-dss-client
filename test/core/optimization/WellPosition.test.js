@@ -1,4 +1,3 @@
-import uuidv4 from 'uuid/v4';
 import WellPosition from '../../../src/core/optimization/WellPosition';
 
 const examplePosition = {
