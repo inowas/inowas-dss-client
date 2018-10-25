@@ -56,7 +56,8 @@ class OptimizationMap extends React.Component {
     };
 
     validateLocation = p => {
-        return p.col.min >= 0 && p.row.min >= 0 && p.col.max <= this.props.gridSize.n_x && p.row.max <= this.props.gridSize.n_y;
+        return p.col.min <= p.col.max && p.row.min <= p.row.max && p.col.min >= 0 && p.row.min >= 0 &&
+            p.col.max <= this.props.gridSize.n_x && p.row.max <= this.props.gridSize.n_y;
     };
 
     handleChangeLocation = ({name, from, to}) => {
@@ -80,7 +81,8 @@ class OptimizationMap extends React.Component {
             location: {
                 ...this.state.location,
                 [name]: value
-            }
+            },
+            validationWarning: value === 'bbox' && !this.validateLocation(this.state.location)
         });
     };
 
@@ -298,7 +300,7 @@ class OptimizationMap extends React.Component {
 
     render() {
 
-        if(this.props.onlyBbox && this.props.onlyObjects) {
+        if (this.props.onlyBbox && this.props.onlyObjects) {
             throw new Error('The optimizationMap component can receive prop onlyBbox or onlyObjects but not both.');
         }
 
