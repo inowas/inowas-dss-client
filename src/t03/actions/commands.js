@@ -217,7 +217,7 @@ export function calculateOptimization(tool, modelId, optimization, isInitial) {
         payload: {
             id: modelId,
             optimization_id: optimization.id,
-            isInitial: isInitial
+            is_initial: isInitial
         }
     };
 }

@@ -108,10 +108,11 @@ class OptimizationResultsComponent extends React.Component {
                         </Grid.Column>
                         <Grid.Column/>
                     </Grid.Row>
-                    {this.props.optimization.methods.map(method =>
-                        <div>
+                </Grid>
+                    {this.props.optimization.methods.map((method, key) =>
+                        <div key={key}>
                             {method.progress && method.progress.iteration > 0 ?
-                                <div>
+                                <Grid>
                                     <Grid.Row columns={1}>
                                         <Grid.Column>
                                             <Progress
@@ -138,7 +139,7 @@ class OptimizationResultsComponent extends React.Component {
                                             <Chart data={method.progress.toChartData}/>
                                         </section>
                                     </Grid.Row>
-                                </div> : <div/>
+                                </Grid> : <div/>
                             }
                             {method.solutions.length > 0 ?
                                 <Segment style={styles.tablewidth}>
@@ -193,14 +194,12 @@ class OptimizationResultsComponent extends React.Component {
                                                     </Button.Group>
                                                 </Grid.Column>
                                             </Grid.Row>
-                                        ))
-                                        }
+                                        ))}
                                     </Grid>
                                 </Segment> : <div/>
                             }
                         </div>
                     )}
-                </Grid>
                 {this.state.selectedSolution &&
                 <OptimizationSolutionModal
                     model={this.props.model}
@@ -227,10 +226,9 @@ class OptimizationResultsComponent extends React.Component {
                                 <List.Item key={key}>{boundary.name} of type {boundary.type}</List.Item>
                             )}
                         </List>
-                        <p>You can now go to boundaries, to make further changes and start a new calculation
-                            afterwards.</p>
                     </Modal.Content>
                     <Modal.Actions>
+                        <Button positive onClick={this.props.onGoToBoundaryClick}>Go to Boundaries</Button>
                         <Button onClick={this.onCancelModal}>Close</Button>
                     </Modal.Actions>
                 </Modal>
@@ -246,6 +244,7 @@ OptimizationResultsComponent.propTypes = {
     onChange: PropTypes.func.isRequired,
     onChangeInput: PropTypes.func.isRequired,
     onCalculationClick: PropTypes.func.isRequired,
+    onGoToBoundaryClick: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
     errors: PropTypes.array

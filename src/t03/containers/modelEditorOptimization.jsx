@@ -12,6 +12,7 @@ import OptimizationResultsComponent from '../components/optimization/Optimizatio
 import {Routing} from '../actions/index';
 import Optimization from '../../core/optimization/Optimization';
 import Stressperiods from '../../core/modflow/Stressperiods';
+import OptimizationInput from "../../core/optimization/OptimizationInput";
 import {Button, Icon, List, Menu, Popup, Progress} from 'semantic-ui-react';
 import {Action, Command, Query} from '../actions';
 import {
@@ -23,8 +24,6 @@ import {
     optimizationInProgress,
     optimizationHasError
 } from '../selectors/optimization';
-import OptimizationProgress from "../../core/optimization/OptimizationProgress";
-import OptimizationInput from "../../core/optimization/OptimizationInput";
 
 const styles = {
     container: {
@@ -182,6 +181,10 @@ class ModelEditorOptimization extends React.Component {
         });
     };
 
+    onGoToBoundaryClick = () => {
+        Routing.goToPropertyType(this.props.routes, this.props.params)('boundaries', 'wel');
+    };
+
     getValidationMessage = (errors) => {
         let log = [];
         let list = [];
@@ -249,7 +252,8 @@ class ModelEditorOptimization extends React.Component {
                                                   onChangeInput={this.onChange}
                                                   onCalculationClick={() => this.onCalculationClick(false)}
                                                   onChange={this.onChangeResult}
-                                                  onApplySolution={this.onApplySolution}/>
+                                                  onApplySolution={this.onApplySolution}
+                                                  onGoToBoundaryClick={this.onGoToBoundaryClick}/>
                 );
             default:
                 return (
@@ -363,10 +367,10 @@ class ModelEditorOptimization extends React.Component {
                 <Progress
                     percent={progress.calculate()}
                     progress
-                    indicating={!progress.final && optimizationInProgress(state)}
-                    success={progress.final && state === OPTIMIZATION_STATE_FINISHED}
-                    error={!progress.final && optimizationHasError(state)}
-                    warning={!progress.final && state === OPTIMIZATION_STATE_CANCELLED}
+                    indicating={!progress.final && optimizationInProgress(optimization.state)}
+                    success={progress.final && optimization.state === OPTIMIZATION_STATE_FINISHED}
+                    error={!progress.final && optimizationHasError(optimization.state)}
+                    warning={!progress.final && optimization.state === OPTIMIZATION_STATE_CANCELLED}
                 >
                     {this.state.optimization.input.parameters.method === 'GA'
                         ?
@@ -374,7 +378,7 @@ class ModelEditorOptimization extends React.Component {
                         :
                         <span>Simplex:&nbsp;</span>
                     }
-                    {getMessage(state)}
+                    {getMessage(optimization.state)}
                 </Progress>
             </Menu.Item>
         );
