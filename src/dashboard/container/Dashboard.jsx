@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
     }
 
     onToolClick = slug => {
-        if (slug === 'T04' || slug === 'T06' || slug === 'T11') {
+        if (slug === 'T01' || slug === 'T04' || slug === 'T06' || slug === 'T11') {
             return () => this.props.router.push('/tools/' + slug);
         }
 
