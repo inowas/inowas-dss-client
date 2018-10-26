@@ -90,7 +90,7 @@ class ModelEditorOptimization extends React.Component {
 
         if (optimizationInProgress(optimization.state) && !this.state.isPolling) {
             this.setState({
-               isPolling: true
+                isPolling: true
             });
 
             this.props.startPolling({
@@ -138,8 +138,7 @@ class ModelEditorOptimization extends React.Component {
         const optimization = {
             ...this.state.optimization,
             input: {
-                ...this.state.optimization.input,
-                isInitial: isInitial
+                ...this.state.optimization.input
             },
             state: OPTIMIZATION_STATE_STARTED
         };
@@ -151,7 +150,8 @@ class ModelEditorOptimization extends React.Component {
 
         return this.props.calculateOptimization(
             this.props.model.id,
-            Optimization.fromObject(optimization)
+            Optimization.fromObject(optimization),
+            isInitial
         );
     };
 
@@ -299,17 +299,19 @@ class ModelEditorOptimization extends React.Component {
                                             ))}
                                         </List.Item>
                                         :
-                                        <div />
+                                        <div/>
                                     }
                                     {errorMsg.log.length > 0
                                         ?
                                         <div>
-                                            <List.Item><hr /></List.Item>
+                                            <List.Item>
+                                                <hr/>
+                                            </List.Item>
                                             <List.Item><b>Minor Errors</b> (may be fixed by resolving the mayor errors)
-                                            {errorMsg.log.map((e, key) => (
-                                                <List.Item as='li' value='*'
-                                                    key={errorMsg.list.length + key - 1}>{e}</List.Item>
-                                            ))}
+                                                {errorMsg.log.map((e, key) => (
+                                                    <List.Item as='li' value='*'
+                                                               key={errorMsg.list.length + key - 1}>{e}</List.Item>
+                                                ))}
                                             </List.Item>
                                         </div>
                                         :
@@ -344,13 +346,17 @@ class ModelEditorOptimization extends React.Component {
     }
 
     renderProgress() {
-        if (!this.state.optimization.progress || (!this.state.optimization.progress.GA && !this.state.optimization.progress.Simplex)) {
+        const optimization = Optimization.fromObject(this.state.optimization);
+
+        const methodGA = optimization.getMethodByName('GA');
+        const methodSimplex = optimization.getMethodByName('Simplex');
+
+        if (!methodGA && !methodSimplex) {
             return false;
         }
 
-        const state = this.state.optimization.state;
-        const method = OptimizationProgress.fromObject(this.state.optimization.progress);
-        const progress =  this.state.optimization.input.parameters.method === 'GA' ? method.GA : method.Simplex;
+        const progress = this.state.optimization.input.parameters.method === 'GA' && methodGA
+            ? methodGA.progress : methodSimplex.progress;
 
         return (
             <Menu.Item>

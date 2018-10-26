@@ -9,7 +9,7 @@
     "id": {"$ref": "#/definitions/uuidv4"},
     "input": {
       "type": "object",
-      "required": ["id", "parameters", "objects", "objectives", "isInitial"],
+      "required": ["id", "parameters", "objects", "objectives"],
       "oneOf": [
         {
           "properties": {
@@ -132,9 +132,6 @@
               "items": {
                 "allOf": [{"$ref": "#/definitions/constraint"}]
               }
-            },
-            "isInitial": {
-              "type": "boolean"
             }
           }
         },
@@ -238,8 +235,7 @@
               "items": {
                 "allOf": [{"$ref": "#/definitions/constraint"}]
               }
-            },
-            "isInitial": {"type": "boolean"}
+            }
           }
         }
       ]

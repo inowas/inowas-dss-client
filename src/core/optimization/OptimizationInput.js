@@ -10,7 +10,6 @@ class OptimizationInput {
     _objectives = [];
     _objects = [];
     _parameters;
-    _isInitial = false;
 
     static fromDefaults() {
         const input = new OptimizationInput();
@@ -19,7 +18,6 @@ class OptimizationInput {
         input.constraints = [];
         input.objectives = [];
         input.objects = [];
-        input.isInitial = false;
         return input;
     }
 
@@ -30,7 +28,6 @@ class OptimizationInput {
         const input = new OptimizationInput();
         input.id = obj.id;
         input.parameters = OptimizationParameters.fromObject(obj.parameters);
-        input.isInitial = obj.isInitial;
 
         obj.constraints.forEach((constraint) => {
             input.addConstraint(OptimizationConstraint.fromObject(constraint));
@@ -91,22 +88,13 @@ class OptimizationInput {
         this._objects = value;
     }
 
-    get isInitial() {
-        return this._isInitial;
-    }
-
-    set isInitial(value) {
-        this._isInitial = value ? value : false;
-    }
-
     get toObject() {
         return {
             'id': this.id,
             'parameters': this.parameters.toObject,
             'constraints': this.constraints.map(c => c.toObject),
             'objectives': this.objectives.map(c => c.toObject),
-            'objects': this.objects.map(c => c.toObject),
-            'isInitial': this.isInitial
+            'objects': this.objects.map(c => c.toObject)
         };
     }
 
