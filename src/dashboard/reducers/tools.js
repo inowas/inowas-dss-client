@@ -8,6 +8,14 @@ const ROLE_NM_MF = 'ROLE_NM_MF';
 
 const initialState = [
     {
+        slug: 'T01',
+        name: 'SAT basin infiltration capacity reduction database',
+        path: '/tools/',
+        subPath: '',
+        role: ROLE_USER,
+        instances: []
+    },
+    {
         slug: 'T02',
         name: 'Groundwater mounding (Hantush)',
         path: '/tools/',

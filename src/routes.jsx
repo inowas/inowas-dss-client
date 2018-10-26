@@ -3,6 +3,7 @@ import {Route, IndexRoute} from 'react-router';
 import {AppForAuthenticatedUser, AppForAdminUser, AppForAllUsers} from './user/containers';
 import tools from './containers/tools';
 import * as Dashboard from './dashboard/index';
+import * as T01 from './t01/index';
 import * as T02 from './t02/index';
 import * as T03 from './t03/index';
 import * as T04 from './t04/index';
@@ -42,23 +43,9 @@ const routes = store => (
 
         <Route path="tools" component={AppForAuthenticatedUser}>
             <IndexRoute component={Dashboard.Container.Dashboard}/>
-            <Route
-                path="T02(/:id)"
-                component={T02.Container.Main}
-                tool={'T02'}
-                onEnter={nextState => {
-                    // REVIEW Shouldn't this be in componentWillReceiveProps and componentWillMount
-                    store.dispatch(WebData.Modifier.Action.clear());
-                    if (nextState.params.id) {
-                        store.dispatch(
-                            Dashboard.Modifier.Query.getToolInstance(
-                                'T02',
-                                nextState.params.id,
-                            )
-                        );
-                    }
-                }}
-            />
+            <Route path="T01(/:id)" component={T01.Container.Main} tool={'T01'}/>
+            <Route path="T02(/:id)" component={T02.Container.Main} tool={'T02'}/>
+
             <Route
                 path="T03(/:id)(/:property)(/:type)(/:pid)"
                 component={T03.Container.Main}
@@ -85,9 +72,7 @@ const routes = store => (
             />
 
             <Route path="T04" component={T04.Container.Main} tool={'T04'}/>
-
             <Route path="T06" component={T06.Container.Main} tool={'T06'}/>
-
             <Route path="T07" component={T07.Container.Main}>
                 <IndexRoute component={T07.Component.New}/>
                 <Route path=":id">
