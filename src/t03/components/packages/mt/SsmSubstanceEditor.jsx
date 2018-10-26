@@ -2,11 +2,18 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import SsmSubstance from '../../../../core/modflow/mt3d/SsmSubstance';
-import {Form} from 'semantic-ui-react';
+import {Form, Input} from 'semantic-ui-react';
 import SsmPackageDataTable from './SsmPackageDataTable';
 import Stressperiods from '../../../../core/modflow/Stressperiods';
 import SsmBoundaryValues from "../../../../core/modflow/mt3d/SsmBoundaryValues";
 import Boundary from "../../../../core/boundaries/Boundary";
+
+const styles = {
+    inputFix: {
+        padding: '0',
+        height: 'auto'
+    }
+};
 
 class SsmSubstanceEditor extends React.Component {
 
@@ -64,18 +71,17 @@ class SsmSubstanceEditor extends React.Component {
         const config = [{property: 'value', label: 'Concentration'}];
         return (
             <Form>
-                <Form.Group>
-                    <Form.Field>
-                        <label>Substance name</label>
-                        <input
-                            placeholder={'Name'}
-                            name={'name'}
-                            value={substance.name}
-                            onChange={this.handleChangeName}
-                            onBlur={() => this.props.onChange(substance)}
-                        />
-                    </Form.Field>
-                </Form.Group>
+                <Form.Field>
+                    <label>Substance name</label>
+                    <Input
+                        placeholder={'Name'}
+                        name={'name'}
+                        value={substance.name}
+                        onChange={this.handleChangeName}
+                        onBlur={() => this.props.onChange(substance)}
+                        style={styles.inputFix}
+                    />
+                </Form.Field>
 
                 <SsmPackageDataTable
                     config={config}

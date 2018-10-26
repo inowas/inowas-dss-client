@@ -5,7 +5,7 @@ import {LayoutComponents} from '../../../../core/index';
 import AbstractPackageProperties from './AbstractPackageProperties';
 import Stressperiods from '../../../../core/modflow/Stressperiods';
 import styleGlobals from 'styleGlobals';
-import {Button, Dropdown, Form, Icon} from 'semantic-ui-react';
+import {Button, Divider, Dropdown, Form, Icon} from 'semantic-ui-react';
 import BoundarySelector from '../../core/BoundarySelector';
 import SsmSubstanceEditor from './SsmSubstanceEditor';
 import SsmSubstance from '../../../../core/modflow/mt3d/SsmSubstance';
@@ -144,60 +144,65 @@ class SsmPackageProperties extends AbstractPackageProperties {
         }
 
         return (
-            <div style={styles.columns}>
-                <LayoutComponents.Column
-                    heading="Boundary"
-                    style={[styles.columnNotLast]}
-                >
-                    <BoundarySelector
-                        boundaries={boundaries}
-                        onChange={this.handleSelectBoundary}
-                        selected={this.state.selectedBoundary}
-                    />
-                </LayoutComponents.Column>
-                <LayoutComponents.Column heading="Substances">
-                    <Form>
-                        <Form.Group style={styles.dropDownWithButtons}>
-                            <Dropdown
-                                placeholder="Select Substance"
-                                fluid
-                                search
-                                selection
-                                options={SsmPackageProperties.substanceOptions(substances)}
-                                onChange={this.handleSelectSubstance}
-                                value={this.state.selectedSubstance}
-                            />
-                            <Button.Group>
-                                <Button
-                                    style={styles.buttonFix}
-                                    icon
-                                    onClick={() => this.addSubstance('new substance')}
-                                    disabled={readonly}
-                                >
-                                    <Icon name="add circle"/>
-                                </Button>
+            <div>
+                <div style={styles.columns}>
+                    <LayoutComponents.Column
+                        heading="Boundary"
+                        style={[styles.columnNotLast]}
+                    >
+                        <BoundarySelector
+                            boundaries={boundaries}
+                            onChange={this.handleSelectBoundary}
+                            selected={this.state.selectedBoundary}
+                        />
+                    </LayoutComponents.Column>
+                    <LayoutComponents.Column heading="Substances">
+                        <Form>
+                            <Form.Group style={styles.dropDownWithButtons}>
+                                <Dropdown
+                                    placeholder="Select Substance"
+                                    fluid
+                                    search
+                                    selection
+                                    options={SsmPackageProperties.substanceOptions(substances)}
+                                    onChange={this.handleSelectSubstance}
+                                    value={this.state.selectedSubstance}
+                                />
+                                <Button.Group>
+                                    <Button
+                                        style={styles.buttonFix}
+                                        icon
+                                        onClick={() => this.addSubstance('new substance')}
+                                        disabled={readonly}
+                                    >
+                                        <Icon name="add circle"/>
+                                    </Button>
 
-                                <Button
-                                    style={styles.buttonFix}
-                                    icon
-                                    onClick={() => this.removeSubstance(this.state.selectedSubstance)}
-                                    disabled={readonly}
-                                >
-                                    <Icon name="trash"/>
-                                </Button>
-                            </Button.Group>
-                        </Form.Group>
-                    </Form>
-
-                    {(selectedSubstance instanceof SsmSubstance) && (selectedBoundary instanceof Boundary) &&
+                                    <Button
+                                        style={styles.buttonFix}
+                                        icon
+                                        onClick={() => this.removeSubstance(this.state.selectedSubstance)}
+                                        disabled={readonly}
+                                    >
+                                        <Icon name="trash"/>
+                                    </Button>
+                                </Button.Group>
+                            </Form.Group>
+                        </Form>
+                    </LayoutComponents.Column>
+                </div>
+                {(selectedSubstance instanceof SsmSubstance) && (selectedBoundary instanceof Boundary) &&
+                <div>
+                    <Divider horizontal>{selectedSubstance.name} at {selectedBoundary.name}</Divider>
                     <SsmSubstanceEditor
                         boundary={selectedBoundary}
                         onChange={this.handleChangeSubstance}
                         readOnly={readonly}
                         stressPeriods={stressPeriods}
                         substance={selectedSubstance}
-                    />}
-                </LayoutComponents.Column>
+                    />
+                </div>
+                }
             </div>
         );
     }

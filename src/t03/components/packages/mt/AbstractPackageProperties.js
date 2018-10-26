@@ -3,12 +3,34 @@ import React from 'react';
 
 import AbstractMt3dPackage from '../../../../core/modflow/mt3d/AbstractMt3dPackage';
 import Mt3dPackageFactory from '../../../../core/modflow/mt3d/Mt3dPackageFactory';
+import {Icon, Popup} from "semantic-ui-react";
+
+const styles = {
+    iconFix: {
+        width: '5px',
+        height: '5px',
+    },
+    iconOutside: {
+        marginTop: '4px',
+        marginLeft: '-4px',
+        width: '5px',
+        height: '5px'
+    },
+    popupFix: {
+        maxWidth: '350px'
+    },
+    contentFix: {
+        width: 'auto',
+        maxWidth: '350px'
+    }
+};
 
 class AbstractPackageProperties extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mtPackage: props.mtPackage.toObject
+            mtPackage: props.mtPackage.toObject,
+            activeIndex: 0
         };
     }
 
@@ -17,6 +39,16 @@ class AbstractPackageProperties extends React.Component {
             mtPackage: nextProps.mtPackage.toObject
         });
     }
+
+    handleClickAccordion = (e, titleProps) => {
+        const {index} = titleProps;
+        const {activeIndex} = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({
+            activeIndex: newIndex
+        });
+    };
 
     handleOnChange = (e) => {
         const {name, value} = e.target;
@@ -29,6 +61,11 @@ class AbstractPackageProperties extends React.Component {
         });
     };
 
+    handleOnSelect = (e, {name, value}) => {
+        const mtPackage = {...this.state.mtPackage, [name]: value};
+        this.props.onChange(Mt3dPackageFactory.fromData(mtPackage));
+    };
+
     handleOnBlur = (cast) => (e) => {
         const {name} = e.target;
         let value;
@@ -37,6 +74,30 @@ class AbstractPackageProperties extends React.Component {
         const mtPackage = {...this.state.mtPackage, [name]: value};
         this.setState({mtPackage});
         this.props.onChange(Mt3dPackageFactory.fromData(mtPackage));
+    };
+
+    renderInfoPopup = (description, title, position = 'top left', iconOutside = false) => {
+        return (
+            <Popup
+                trigger={
+                    <Icon
+                        name='question'
+                        style={ iconOutside ? styles.iconOutside : styles.iconFix }
+                        circular link
+                    />
+                }
+                style={styles.popupFix}
+                data-html="true"
+                position={position}
+            >
+                <Popup.Header>
+                    {title}
+                </Popup.Header>
+                <Popup.Content style={styles.contentFix}>
+                    {description}
+                </Popup.Content>
+            </Popup>
+        );
     };
 }
 
