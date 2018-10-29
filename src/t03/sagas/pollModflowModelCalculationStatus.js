@@ -61,6 +61,7 @@ function* pollModflowModelCalculationStatus(tool, id) {
             ) {
                 yield put(Query.getModflowModelResults(tool, id));
                 yield put(Action.setCalculation(tool, responseCalculation.webData.data));
+                yield put(Action.setDirty(tool, false));
 
                 yield put(WebData.Modifier.Action.responseAction(Command.CALCULATE_MODFLOW_MODEL, {
                     type: 'success',

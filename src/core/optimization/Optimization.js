@@ -1,13 +1,11 @@
-import OptimizationInput from './OptimizationInput';
-import OptimizationSolution from './OptimizationSolution';
-import OptimizationProgress from './OptimizationProgress';
 import Ajv from 'ajv';
+import OptimizationInput from './OptimizationInput';
+import OptimizationMethod from "./OptimizationMethod";
 
 class Optimization {
     _input;
     _state = 0;
-    _progress = null;
-    _solutions = [];
+    _methods = [];
 
     static fromDefaults() {
         const optimization = new Optimization();
@@ -19,10 +17,9 @@ class Optimization {
         const optimization = new Optimization();
         optimization.input = OptimizationInput.fromObject(obj.input);
         optimization.state = obj.state;
-        optimization.progress = OptimizationProgress.fromObject(obj.progress);
 
-        obj.solutions && obj.solutions.forEach((solution) => {
-            optimization.addSolution(OptimizationSolution.fromObject(solution));
+        obj.methods && obj.methods.forEach((method) => {
+            optimization.addMethod(OptimizationMethod.fromObject(method));
         });
 
         return optimization;
@@ -51,20 +48,12 @@ class Optimization {
         this._state = value ? value : 0;
     }
 
-    get progress() {
-        return this._progress;
+    get methods() {
+        return this._methods;
     }
 
-    set progress(value) {
-        this._progress = value ? value : {};
-    }
-
-    get solutions() {
-        return this._solutions;
-    }
-
-    set solutions(value) {
-        this._solutions = value ? value : [];
+    set methods(value) {
+        this._methods = value ? value : [];
     }
 
     get toObject() {
@@ -72,16 +61,32 @@ class Optimization {
             'id': this.id,
             'input': this.input.toObject,
             'state': this.state,
-            'progress': this.progress ? this.progress.toObject : null,
-            'solutions': this.solutions.map(r => r.toObject)
+            'methods': this.methods.map(m => m.toObject)
         };
     }
 
-    addSolution(result) {
-        if (!(result instanceof OptimizationSolution)) {
-            throw new Error('The result object is not of type OptimizationSolution.');
+    getMethodByName(name) {
+        const method = this.methods.filter(m => m.name === name);
+        if (method.length >= 1) {
+            return method[0];
         }
-        this._solutions.push(result);
+        return null;
+    }
+
+    getSolutionById(id) {
+        let solutions = [];
+        this.methods.forEach(method => {
+            solutions = solutions.concat(method.solutions);
+        });
+        return solutions.filter(s => s.id === id)[0] || null;
+    }
+
+    addMethod(method) {
+        if (!(method instanceof OptimizationMethod)) {
+            throw new Error('The method is not of type OptimizationMethod.');
+        }
+        this._methods.push(method);
+        return this;
     }
 
     validate() {

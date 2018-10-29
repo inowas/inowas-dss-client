@@ -1,98 +1,70 @@
-import uuidv4 from 'uuid/v4';
 import OptimizationProgress from "../../../src/core/optimization/OptimizationProgress";
 
-const exampleProgress = {
-    GA: {
-        progress_log: [0, 1, 2, 3, 4],
-        iteration: 1,
-        iteration_total: 10,
-        simulation: 5,
-        simulation_total: 20,
-        final: false
-    },
-    Simplex: {
-        progress_log: [0, 1, 2, 3, 4],
-        iteration: 5,
-        iteration_total: 10,
-        final: false
-    }
+const exampleProgress1 = {
+    progress_log: [0, 1, 2, 3, 4],
+    iteration: 1,
+    iteration_total: 10,
+    simulation: 5,
+    simulation_total: 20,
+    final: false
+};
+
+const exampleProgress2 = {
+    progress_log: [0, 1, 2, 3, 4],
+    iteration: 5,
+    iteration_total: 10,
+    final: false
 };
 
 test('Get progress from object.', () => {
-    const progress = OptimizationProgress.fromObject(exampleProgress);
+    const progress = OptimizationProgress.fromObject(exampleProgress2);
     expect(progress).toBeInstanceOf(OptimizationProgress);
-    expect(progress.toObject).toEqual(exampleProgress);
-
-    const nullProgress = OptimizationProgress.fromObject({
-        GA: null,
-        Simplex: null
+    expect(progress.toObject).toEqual({
+        "final": false,
+        "iteration": 5,
+        "iteration_total": 10,
+        "progress_log": [0, 1, 2, 3, 4],
+        "simulation": 0,
+        "simulation_total": 0
     });
-    expect(nullProgress.toObject).toEqual({
-        GA: null,
-        Simplex: null
-    });
-    expect(OptimizationProgress.fromObject(null).toObject).toEqual({
-        GA: null,
-        Simplex: null
-    })
 });
 
 test('Calculate progress and toChartData.', () => {
-    const progress = OptimizationProgress.fromObject(exampleProgress);
-    expect(progress.GA.calculate()).toBe(2.5);
-    expect(progress.GA.toChartData).toHaveLength(5);
-    progress.GA.iterationTotal = 0;
-    progress.GA.simulationTotal = 0;
-    expect(progress.GA.calculate()).toBe(0);
+    const progress1 = OptimizationProgress.fromObject(exampleProgress1);
+    expect(progress1.calculate()).toBe(2.5);
+    expect(progress1.toChartData).toHaveLength(5);
+    progress1.iterationTotal = 0;
+    progress1.simulationTotal = 0;
+    expect(progress1.calculate()).toBe(0);
 
-    expect(progress.Simplex.calculate()).toBe(50);
-    expect(progress.Simplex.toChartData).toHaveLength(5);
+    const progress2 = OptimizationProgress.fromObject(exampleProgress2);
+    expect(progress2.calculate()).toBe(50);
+    expect(progress2.toChartData).toHaveLength(5);
 });
 
 test('Getter and Setter', () => {
-    const progress = OptimizationProgress.fromObject(exampleProgress);
-    progress.GA.simulation = null;
-    progress.GA.simulationTotal = null;
-    progress.GA.iteration = null;
-    progress.GA.iterationTotal = null;
-    progress.GA.progressLog = null;
-    progress.GA.final = null;
-    progress.Simplex.progressLog = null;
-    progress.Simplex.iteration = null;
-    progress.Simplex.iterationTotal = null;
-    progress.Simplex.final = null;
+    const progress = OptimizationProgress.fromObject(exampleProgress1);
+    progress.simulation = null;
+    progress.simulationTotal = null;
+    progress.iteration = null;
+    progress.iterationTotal = null;
+    progress.progressLog = null;
+    progress.final = null;
     expect(progress.toObject).toEqual({
-        "GA": {
-            "final": false,
-            "iteration": 0,
-            "iteration_total": 0,
-            "progress_log": [],
-            "simulation": 0,
-            "simulation_total": 0
-        },
-        "Simplex": {
-            "final": false,
-            "iteration": 0,
-            "iteration_total": 0,
-            "progress_log": []
-        }
+        "final": false,
+        "iteration": 0,
+        "iteration_total": 0,
+        "progress_log": [],
+        "simulation": 0,
+        "simulation_total": 0
     });
-    progress.GA.final = true;
-    progress.Simplex.final = true;
+    progress.final = true;
     expect(progress.toObject).toEqual({
-        "GA": {
-            "final": true,
-            "iteration": 0,
-            "iteration_total": 0,
-            "progress_log": [],
-            "simulation": 0,
-            "simulation_total": 0
-        },
-        "Simplex": {
-            "final": true,
-            "iteration": 0,
-            "iteration_total": 0,
-            "progress_log": []
-        }
+        "final": true,
+        "iteration": 0,
+        "iteration_total": 0,
+        "progress_log": [],
+        "simulation": 0,
+        "simulation_total": 0
     });
 });

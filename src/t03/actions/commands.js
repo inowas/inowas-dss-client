@@ -210,13 +210,14 @@ export function updateOptimizationInput(tool, modelId, input) {
 
 export const CALCULATE_OPTIMIZATION = 'calculateOptimization';
 
-export function calculateOptimization(tool, modelId, optimization) {
+export function calculateOptimization(tool, modelId, optimization, isInitial) {
     return {
         type: CALCULATE_OPTIMIZATION,
         tool,
         payload: {
             id: modelId,
-            optimization_id: optimization.id
+            optimization_id: optimization.id,
+            is_initial: isInitial
         }
     };
 }

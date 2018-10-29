@@ -21,6 +21,7 @@ export default function* updateStressPeriodsFlow() {
             }
 
             if (response.webData.type === 'success') {
+                yield put(Action.setDirty(action.tool, true));
                 yield put(Event.stressPeriodsUpdated(action.tool, action.payload.stress_periods));
                 break;
             }

@@ -101,6 +101,12 @@ const createModelReducer = tool => {
                     }
                 };
 
+            case Action.SET_DIRTY:
+                return {
+                    ...state,
+                    dirty: action.payload
+                };
+
             case Action.SET_STRESS_PERIODS:
             case Event.STRESS_PERIODS_UPDATED:
                 return {

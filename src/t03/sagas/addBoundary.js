@@ -25,6 +25,7 @@ export default function* addBoundaryFlow() {
                     }
 
                     if (response.webData.type === 'success') {
+                        yield put(Action.setDirty(command.tool, true));
                         yield put(Event.boundaryAdded(command.tool, boundary));
                         break;
                     }
@@ -42,6 +43,7 @@ export default function* addBoundaryFlow() {
                 }
 
                 if (response.webData.type === 'success') {
+                    yield put(Action.setDirty(command.tool, true));
                     yield put(Event.boundaryAdded(command.tool, command.payload.boundary));
                     break;
                 }

@@ -1,11 +1,11 @@
-import { call, put, select, take } from 'redux-saga/effects';
+import {call, put, select, take} from 'redux-saga/effects';
 import {buildRequest, sendCommand, stateToCreatePayload} from '../../core/webData/actions/actions';
 
-import { Command, Action, Event } from '../../t03/actions/index';
-import { WebData } from '../../core';
-import { getApiKey } from '../../user/reducers';
+import {Command, Action, Event} from '../../t03/actions/index';
+import {WebData} from '../../core';
+import {getApiKey} from '../../user/reducers';
 
-export default function * updateModelFlow() {
+export default function* updateModelFlow() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
         // eslint-disable-next-line no-shadow
@@ -30,14 +30,14 @@ export default function * updateModelFlow() {
                 yield put(Event.modflowModelUpdated(action.tool, action.id, action.payload));
 
                 const state = yield select();
-                const apiKey = getApiKey( state.session );
+                const apiKey = getApiKey(state.session);
 
                 const activeSells = yield call(
                     WebData.Helpers.fetchStatusWrapper,
                     buildRequest('modflowmodels/' + action.id + '/activecells', 'GET'),
                     apiKey
                 );
-                yield put( Action.setActiveCells( action.tool, activeSells ) );
+                yield put(Action.setActiveCells(action.tool, activeSells));
                 break;
             }
         }

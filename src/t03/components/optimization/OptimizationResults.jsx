@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Grid, Button, Progress, Segment, List, Popup, Modal} from 'semantic-ui-react';
+import {Grid, Button, Progress, Segment, List, Popup, Modal, Tab} from 'semantic-ui-react';
 import Chart from './FitnessChart';
 import {
     OPTIMIZATION_STATE_CANCELLED,
@@ -39,6 +39,7 @@ class OptimizationResultsComponent extends React.Component {
         super(props);
 
         this.state = {
+            activeIndex: 0,
             optimization: this.props.optimization.toObject,
             selectedSolution: null,
             createdBoundaries: null,
@@ -47,13 +48,20 @@ class OptimizationResultsComponent extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        let newActiveIndex = this.state.activeIndex;
+
+        if (this.props.optimization.methods.length !== nextProps.optimization.methods.length) {
+            newActiveIndex = nextProps.optimization.methods.length - 1;
+        }
+
         this.setState({
+            activeIndex: newActiveIndex,
             optimization: nextProps.optimization.toObject
         });
     }
 
     onClickApply = (id) => {
-        const solution = this.state.optimization.solutions.filter(s => s.id === id)[0];
+        const solution = Optimization.fromObject(this.state.optimization).getSolutionById(id).toObject;
 
         const boundaries = solution.objects.map(o => {
             return OptimizationObject.fromObject(o).toBoundary(this.props.model.bounding_box, this.props.model.grid_size, this.props.stressPeriods);
@@ -66,15 +74,17 @@ class OptimizationResultsComponent extends React.Component {
         return this.props.onApplySolution(boundaries);
     };
 
-    onClickLocalOptimization = (key) => {
+    onClickLocalOptimization = (id) => {
+        const solution = Optimization.fromObject(this.state.optimization).getSolutionById(id).toObject;
         return this.setState({
-            localOptimization: this.state.optimization.solutions[key]
+            localOptimization: solution
         });
     };
 
-    onClickDetails = (key) => {
+    onClickDetails = (id) => {
+        const solution = Optimization.fromObject(this.state.optimization).getSolutionById(id).toObject;
         return this.setState({
-            selectedSolution: this.state.optimization.solutions[key]
+            selectedSolution: solution
         });
     };
 
@@ -95,10 +105,113 @@ class OptimizationResultsComponent extends React.Component {
         this.props.onCalculationClick();
     };
 
+    onTabChange = (e, {activeIndex}) => this.setState({activeIndex});
+
+    renderMethodResults(method, mKey, state) {
+        return (
+            <Tab.Pane attached={false} key={mKey}>
+                {method.progress && method.progress.iteration > 0 ?
+                    <Grid>
+                        <Grid.Row columns={1}>
+                            <Grid.Column>
+                                <Progress
+                                    percent={method.progress.final ? 100 : method.progress.calculate()}
+                                    progress
+                                    indicating={!method.progress.final}
+                                    success={method.progress.final}
+                                    error={!method.progress.final && optimizationHasError(state)}
+                                    warning={!method.progress.final && state === OPTIMIZATION_STATE_CANCELLED}
+                                >
+                                    Iteration {method.progress.iteration} of {method.progress.iterationTotal}
+                                    {method.progress.simulationTotal > 0 ?
+                                        <span>
+                                            &nbsp;/ Simulation {method.progress.simulation} of {method.progress.simulationTotal}
+                                            </span>
+                                        :
+                                        <span/>
+                                    }
+                                </Progress>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row columns={1}>
+                            <section className="stretch">
+                                <Chart data={method.progress.toChartData}/>
+                            </section>
+                        </Grid.Row>
+                    </Grid> : <div/>
+                }
+                {method.solutions.length > 0 ?
+                    <Segment style={styles.tablewidth}>
+                        <Grid divided="vertically">
+                            <Grid.Row columns={3}>
+                                <Grid.Column textAlign="center" width={4}>
+                                    <b>Solution</b>
+                                </Grid.Column>
+                                <Grid.Column textAlign="center" width={6}>
+                                    <b>Fitness</b>
+                                </Grid.Column>
+                                <Grid.Column textAlign="center" width={6}/>
+                            </Grid.Row>
+                            {method.solutions.map((solution, sKey) => (
+                                <Grid.Row columns={3} key={sKey}>
+                                    <Grid.Column textAlign="center" width={4}>
+                                        <Button
+                                            onClick={() => this.onClickDetails(solution.id)}
+                                        >
+                                            Solution {sKey + 1}
+                                        </Button>
+                                    </Grid.Column>
+                                    <Grid.Column width={6}>
+                                        <List>
+                                            {
+                                                this.props.optimization.input.objectives.map((o, oKey) =>
+                                                    <List.Item key={oKey}>
+                                                        <Popup trigger={<span>Objective {oKey + 1}</span>}
+                                                               content={o.name}/>: <b>{parseFloat(solution.fitness[oKey]).toFixed(3)}</b>
+                                                    </List.Item>
+                                                )
+                                            }
+                                        </List>
+                                    </Grid.Column>
+                                    <Grid.Column textAlign="center" width={6}>
+                                        <Button.Group>
+                                            <Button color="blue"
+                                                    size="small"
+                                                    style={styles.iconfix}
+                                                    onClick={() => this.onClickApply(solution.id)}
+                                            >
+                                                Apply
+                                            </Button>
+                                            <Button.Or/>
+                                            <Button color="blue"
+                                                    disabled={this.props.model.dirty}
+                                                    size="small"
+                                                    style={styles.iconfix}
+                                                    onClick={() => this.onClickLocalOptimization(solution.id)}
+                                            >
+                                                Optimize Locally
+                                            </Button>
+                                        </Button.Group>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            ))}
+                        </Grid>
+                    </Segment> : <div/>
+                }
+            </Tab.Pane>
+        );
+    };
+
     render() {
+        const {activeIndex} = this.state;
         const state = this.props.optimization.state;
-        const progressGA = this.props.optimization.progress.GA;
-        const progressSimplex = this.props.optimization.progress.Simplex;
+
+        const panes = this.props.optimization.methods.map((method, mKey) => {
+            return {
+                menuItem: method.name,
+                render: () => this.renderMethodResults(method, mKey, state)
+            };
+        });
 
         return (
             <LayoutComponents.Column>
@@ -110,128 +223,9 @@ class OptimizationResultsComponent extends React.Component {
                         </Grid.Column>
                         <Grid.Column/>
                     </Grid.Row>
-                    {progressGA && progressGA.simulation > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <Grid.Column>
-                                <Progress
-                                    percent={progressGA.calculate()}
-                                    progress
-                                    indicating={!progressGA.final}
-                                    success={progressGA.final}
-                                    error={!progressGA.final && optimizationHasError(state)}
-                                    warning={!progressGA.final && state === OPTIMIZATION_STATE_CANCELLED}
-                                >
-                                    Iteration {progressGA.iteration} of {progressGA.iterationTotal} /
-                                    Simulation {progressGA.simulation} of {progressGA.simulationTotal}
-                                </Progress>
-                            </Grid.Column>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                    {progressGA && progressGA.iteration > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <section className="stretch">
-                                <Chart data={progressGA.toChartData}/>
-                            </section>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                    {progressSimplex && progressSimplex.iteration > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <Grid.Column>
-                                <Progress
-                                    percent={progressSimplex.calculate()}
-                                    progress
-                                    indicating={!progressSimplex.final}
-                                    success={progressSimplex.final}
-                                    error={!progressSimplex.final && optimizationHasError(state)}
-                                    warning={!progressSimplex.final && state === OPTIMIZATION_STATE_CANCELLED}
-                                >
-                                    Iteration {progressSimplex.iteration} of {progressSimplex.iterationTotal}
-                                </Progress>
-                            </Grid.Column>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
-                    {progressSimplex && progressSimplex.iteration > 0
-                        ?
-                        <Grid.Row columns={1}>
-                            <section className="stretch">
-                                <Chart data={progressSimplex.toChartData}/>
-                            </section>
-                        </Grid.Row>
-                        :
-                        <div/>
-                    }
                 </Grid>
-                {this.props.optimization.solutions.length > 0
-                    ?
-                    <Segment style={styles.tablewidth}>
-                        <Grid divided="vertically">
-                            <Grid.Row columns={3}>
-                                <Grid.Column textAlign="center">
-                                    <b>Solution</b>
-                                </Grid.Column>
-                                <Grid.Column textAlign="center">
-                                    <b>Fitness</b>
-                                </Grid.Column>
-                                <Grid.Column textAlign="center"/>
-                            </Grid.Row>
-                            {
-                                this.props.optimization.solutions.map((solution, key) => (
-                                    <Grid.Row columns={3} key={key}>
-                                        <Grid.Column textAlign="center">
-                                            <Button
-                                                onClick={() => this.onClickDetails(key)}
-                                            >
-                                                Solution {key + 1}
-                                            </Button>
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            <List>
-                                                {
-                                                    this.props.optimization.input.objectives.map((o, key) =>
-                                                        <List.Item key={key}>
-                                                            <Popup trigger={<span>Objective {key + 1}</span>}
-                                                                   content={o.name}/>: <b>{parseFloat(solution.fitness[key]).toFixed(3)}</b>
-                                                        </List.Item>
-                                                    )
-                                                }
-                                            </List>
-                                        </Grid.Column>
-                                        <Grid.Column textAlign="center">
-                                            <Button.Group>
-                                                <Button color="blue"
-                                                        size="small"
-                                                        style={styles.iconfix}
-                                                        onClick={() => this.onClickApply(solution.id)}
-                                                >
-                                                    Apply
-                                                </Button>
-                                                <Button.Or/>
-                                                <Button color="blue"
-                                                        size="small"
-                                                        style={styles.iconfix}
-                                                        onClick={() => this.onClickLocalOptimization(key)}
-                                                >
-                                                    Optimize Locally
-                                                </Button>
-                                            </Button.Group>
-                                        </Grid.Column>
-                                    </Grid.Row>
-                                ))
-                            }
-                        </Grid>
-                    </Segment>
-                    :
-                    <div/>
-                }
+                <Tab menu={{secondary: true, pointing: true}} activeIndex={activeIndex} onTabChange={this.onTabChange}
+                     panes={panes} style={styles.tablewidth}/>
                 {this.state.selectedSolution &&
                 <OptimizationSolutionModal
                     model={this.props.model}
@@ -258,10 +252,9 @@ class OptimizationResultsComponent extends React.Component {
                                 <List.Item key={key}>{boundary.name} of type {boundary.type}</List.Item>
                             )}
                         </List>
-                        <p>You can now go to boundaries, to make further changes and start a new calculation
-                            afterwards.</p>
                     </Modal.Content>
                     <Modal.Actions>
+                        <Button positive onClick={this.props.onGoToBoundaryClick}>Go to Boundaries</Button>
                         <Button onClick={this.onCancelModal}>Close</Button>
                     </Modal.Actions>
                 </Modal>
@@ -277,6 +270,7 @@ OptimizationResultsComponent.propTypes = {
     onChange: PropTypes.func.isRequired,
     onChangeInput: PropTypes.func.isRequired,
     onCalculationClick: PropTypes.func.isRequired,
+    onGoToBoundaryClick: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
     stressPeriods: PropTypes.instanceOf(Stressperiods),
     errors: PropTypes.array

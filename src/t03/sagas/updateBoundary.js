@@ -24,6 +24,7 @@ export default function* updateBoundaryFlow() {
             }
 
             if (response.webData.type === 'success') {
+                yield put(Action.setDirty(action.tool, true));
                 yield put(Event.boundaryUpdated(action.tool, action.payload.boundary));
                 break;
             }

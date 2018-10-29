@@ -77,7 +77,7 @@ const sideBar = [
     },
     {
         id: 'adv',
-        name: 'Advaction package'
+        name: 'Advection package'
     },
     {
         id: 'dsp',

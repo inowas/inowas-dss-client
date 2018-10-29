@@ -12,7 +12,6 @@ import * as geoTools from '../../../core/geospatial';
 import {Button, Form, Grid, Header, Message, Modal, Segment} from 'semantic-ui-react';
 import InputRange from './InputRange';
 import InputObjectList from './InputObjectList';
-import * as turf from "@turf/turf/turf";
 
 class OptimizationMap extends React.Component {
 
@@ -56,23 +55,8 @@ class OptimizationMap extends React.Component {
     };
 
     validateLocation = p => {
-        const bbXmin = this.props.bbox[0][0];
-        const bbYmin = this.props.bbox[0][1];
-        const bbXmax = this.props.bbox[1][0];
-        const bbYmax = this.props.bbox[1][1];
-
-        const dX = (bbXmax - bbXmin) / this.props.gridSize.n_x;
-        const dY = (bbYmax - bbYmin) / this.props.gridSize.n_y;
-
-        let cXmin = bbXmin + p.col.min * dX;
-        let cXmax = bbXmin + p.col.max * dX;
-        let cYmin = bbYmax - p.row.min * dY;
-        let cYmax = bbYmax - p.row.max * dY;
-
-        const object = turf.polygon([[[cXmin, cYmin], [cXmax, cYmin], [cXmax, cYmax], [cXmin, cYmax], [cXmin, cYmin]]]);
-        const bbox = turf.polygon([[[bbXmin, bbYmin], [bbXmax, bbYmin], [bbXmax, bbYmax], [bbXmin, bbYmax], [bbXmin, bbYmin]]]);
-
-        return turf.booleanContains(bbox, object);
+        return p.col.min <= p.col.max && p.row.min <= p.row.max && p.col.min >= 0 && p.row.min >= 0 &&
+            p.col.max <= this.props.gridSize.n_x && p.row.max <= this.props.gridSize.n_y;
     };
 
     handleChangeLocation = ({name, from, to}) => {
@@ -96,7 +80,8 @@ class OptimizationMap extends React.Component {
             location: {
                 ...this.state.location,
                 [name]: value
-            }
+            },
+            validationWarning: value === 'bbox' && !this.validateLocation(this.state.location)
         });
     };
 
@@ -314,7 +299,7 @@ class OptimizationMap extends React.Component {
 
     render() {
 
-        if(this.props.onlyBbox && this.props.onlyObjects) {
+        if (this.props.onlyBbox && this.props.onlyObjects) {
             throw new Error('The optimizationMap component can receive prop onlyBbox or onlyObjects but not both.');
         }
 
@@ -334,7 +319,7 @@ class OptimizationMap extends React.Component {
                             <Grid.Row columns={2}>
                                 <Grid.Column width={6}>
                                     <div>
-                                        {this.props.onlyBbox || this.props.onlyObjects &&
+                                        {!this.props.onlyBbox && !this.props.onlyObjects &&
                                         <Grid celled="internally">
                                             <Grid.Row textAlign="center">
                                                 {!this.props.onlyBbox &&

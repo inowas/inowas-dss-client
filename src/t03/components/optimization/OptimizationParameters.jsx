@@ -121,7 +121,7 @@ class OptimizationParametersComponent extends React.Component {
                                         {
                                             key: 'ga',
                                             value: 'GA',
-                                            text: 'GA'
+                                            text: 'Genetic Algorithm'
                                         },
                                         {
                                             key: 'simplex',
