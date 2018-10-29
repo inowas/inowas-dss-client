@@ -58,6 +58,7 @@ class OptimizationMethod {
             throw new Error('The solution object is not of type OptimizationSolution.');
         }
         this._solutions.push(solution);
+        return this;
     }
 }
 

@@ -351,11 +351,12 @@ class ModelEditorOptimization extends React.Component {
 
     renderProgress() {
         const optimization = Optimization.fromObject(this.state.optimization);
+        const method = optimization.input.parameters.method;
 
         const methodGA = optimization.getMethodByName('GA');
         const methodSimplex = optimization.getMethodByName('Simplex');
 
-        if (!methodGA && !methodSimplex) {
+        if ((method === 'GA' && !methodGA) || (method === 'Simplex' && !methodSimplex)) {
             return false;
         }
 
@@ -365,19 +366,13 @@ class ModelEditorOptimization extends React.Component {
         return (
             <Menu.Item>
                 <Progress
-                    percent={progress.calculate()}
+                    percent={progress.final ? 100 : progress.calculate()}
                     progress
                     indicating={!progress.final && optimizationInProgress(optimization.state)}
                     success={progress.final && optimization.state === OPTIMIZATION_STATE_FINISHED}
                     error={!progress.final && optimizationHasError(optimization.state)}
                     warning={!progress.final && optimization.state === OPTIMIZATION_STATE_CANCELLED}
                 >
-                    {this.state.optimization.input.parameters.method === 'GA'
-                        ?
-                        <span>Genetic Algorithm:&nbsp;</span>
-                        :
-                        <span>Simplex:&nbsp;</span>
-                    }
                     {getMessage(optimization.state)}
                 </Progress>
             </Menu.Item>

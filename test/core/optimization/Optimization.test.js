@@ -1,6 +1,7 @@
 import Optimization from '../../../src/core/optimization/Optimization';
 import OptimizationInput from '../../../src/core/optimization/OptimizationInput';
 import OptimizationMethod from "../../../src/core/optimization/OptimizationMethod";
+import OptimizationSolution from "../../../src/core/optimization/OptimizationSolution";
 
 test('Create with Defaults and toObject', () => {
     const optimization = Optimization.fromDefaults();
@@ -71,4 +72,20 @@ test('From object', () => {
 test('Validate optimization', () => {
     const optimization = Optimization.fromDefaults();
     expect(optimization.validate()).toBeInstanceOf(Array);
+});
+
+test('Get solution by ID and get method by name', () => {
+    const optimization = Optimization.fromDefaults();
+    const method1 = new OptimizationMethod();
+    const method2 = new OptimizationMethod();
+    const solution = new OptimizationSolution();
+    method1.addSolution(new OptimizationSolution()).addSolution(new OptimizationSolution());
+    method2.addSolution(solution, new OptimizationSolution());
+    optimization.addMethod(method1).addMethod(method2);
+    expect(optimization.getSolutionById(solution.id)).toEqual(solution);
+    expect(optimization.getSolutionById('abc-123-def')).toBeNull();
+    method1.name = 'GA';
+    method2.name = 'Simplex';
+    expect(optimization.getMethodByName('Simplex')).toEqual(method2);
+    expect(optimization.getMethodByName('TEST123')).toBeNull();
 });

@@ -73,11 +73,20 @@ class Optimization {
         return null;
     }
 
+    getSolutionById(id) {
+        let solutions = [];
+        this.methods.forEach(method => {
+            solutions = solutions.concat(method.solutions);
+        });
+        return solutions.filter(s => s.id === id)[0] || null;
+    }
+
     addMethod(method) {
         if (!(method instanceof OptimizationMethod)) {
             throw new Error('The method is not of type OptimizationMethod.');
         }
         this._methods.push(method);
+        return this;
     }
 
     validate() {
