@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Icon, Menu, Table} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import {uniq} from 'lodash';
 
 const style = {
     button: {width: 'auto', height: 'auto', padding: '5px'},
@@ -11,12 +12,45 @@ class CustomDataTable extends React.Component {
 
     constructor(props) {
         super(props);
+
+        const filterItems = [];
+        if (Array.isArray(props.filter)) {
+            props.filter.forEach(property => {
+                const values = uniq(this.props.data.map(row => (row[property])));
+                values.sort();
+                values.unshift('none');
+                filterItems.push({
+                    name: property,
+                    selectedKey: 0,
+                    values: values
+                });
+            });
+        }
+
         this.state = {
             pagination: true,
             elementsPerPage: 10,
-            currentPage: 0
+            currentPage: 0,
+            filterItems: filterItems
         };
     }
+
+    handleSelectChange = (event) => {
+        const name = event.target.name;
+        const selectedKey = parseInt(event.target.value, 10);
+
+        this.setState((state) => {
+            return {
+                filterItems: state.filterItems.map(item => {
+                    if (item.name === name) {
+                        item.selectedKey = selectedKey;
+                    }
+
+                    return item;
+                })
+            };
+        });
+    };
 
     header = () => (
         <Table.Row style={style.tableRow}>
@@ -24,12 +58,48 @@ class CustomDataTable extends React.Component {
             <Table.HeaderCell>HLR [m/a]</Table.HeaderCell>
             <Table.HeaderCell>HLC</Table.HeaderCell>
             <Table.HeaderCell>Infiltration Time [h]</Table.HeaderCell>
-            <Table.HeaderCell>K<sub>s</sub> [m/s]</Table.HeaderCell>
+            <Table.HeaderCell>K [m/s]</Table.HeaderCell>
             <Table.HeaderCell>Climate</Table.HeaderCell>
             <Table.HeaderCell>Scale</Table.HeaderCell>
             <Table.HeaderCell/>
         </Table.Row>
     );
+
+    select = (data, property) => {
+        if (this.state.filterItems.filter(i => i.name === property).length === 0) {
+            return null;
+        }
+
+        const item = this.state.filterItems.filter(i => i.name === property)[0];
+        return (
+            <select key={item.name} name={item.name} value={item.selectedKey} onChange={this.handleSelectChange}>
+                {item.values.map((value, key) => (
+                    <option key={key} value={key}>
+                        {value}
+                    </option>
+                ))}
+            </select>
+        );
+    };
+
+    filter = () => {
+        if (this.props.filter && Array.isArray(this.props.filter)) {
+            return (
+                <Table.Row style={style.tableRow}>
+                    <Table.Cell>{this.select(this.props.data, 'name')}</Table.Cell>
+                    <Table.Cell>{this.select(this.props.data, 'hlr')}</Table.Cell>
+                    <Table.Cell>{this.select(this.props.data, 'hlc')}</Table.Cell>
+                    <Table.Cell>{this.select(this.props.data, 'time')}</Table.Cell>
+                    <Table.Cell>{this.select(this.props.data, 'k')}</Table.Cell>
+                    <Table.Cell>{this.select(this.props.data, 'climate')}</Table.Cell>
+                    <Table.Cell>{this.select(this.props.data, 'scale')}</Table.Cell>
+                    <Table.Cell/>
+                </Table.Row>
+            );
+        }
+
+        return null;
+    };
 
     renderRows = (param, toggleSelect) => {
         return (
@@ -71,16 +141,16 @@ class CustomDataTable extends React.Component {
         });
     }
 
-    pagination = () => {
+    pagination = (numberOfElements) => {
         if (!this.state.pagination) {
             return null;
         }
 
-        if (this.props.data.length <= this.state.elementsPerPage) {
+        if (numberOfElements <= this.state.elementsPerPage) {
             return null;
         }
 
-        const numberOfItems = Math.ceil(this.props.data.length / this.state.elementsPerPage);
+        const numberOfItems = Math.ceil(numberOfElements / this.state.elementsPerPage);
         const items = new Array(numberOfItems).fill(0).map((i, key) => {
             if (key === this.state.currentPage) {
                 return (
@@ -122,8 +192,23 @@ class CustomDataTable extends React.Component {
         );
     };
 
+    applyFilter(data) {
+        let filteredData = data;
+        this.state.filterItems.forEach(i => {
+            if (i.selectedKey === 0) {
+                return filteredData;
+            }
+
+            filteredData = filteredData.filter(row => row[i.name] === i.values[i.selectedKey]);
+            return filteredData;
+        });
+
+        return filteredData;
+    }
+
     render() {
-        const rows = this.props.data.filter((row, key) => {
+        const filteredRows = this.applyFilter(this.props.data);
+        const paginatedRows = filteredRows.filter((row, key) => {
             if (!this.state.pagination) {
                 return row;
             }
@@ -143,9 +228,10 @@ class CustomDataTable extends React.Component {
             <Table color={this.props.color} size={'small'}>
                 <Table.Header>{this.header()}</Table.Header>
                 <Table.Body style={{overflowY: 'inherit'}}>
-                    {rows}
+                    {this.filter()}
+                    {paginatedRows}
                 </Table.Body>
-                {this.pagination()}
+                {this.pagination(filteredRows.length)}
             </Table>
         );
     }
@@ -155,7 +241,8 @@ CustomDataTable.propTypes = {
     color: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
     icon: PropTypes.string.isRequired,
-    toggleSelect: PropTypes.func.isRequired
+    toggleSelect: PropTypes.func.isRequired,
+    filter: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]).isRequired
 };
 
 export default CustomDataTable;

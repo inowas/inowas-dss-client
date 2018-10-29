@@ -31,20 +31,23 @@ const Chart = ({data}) => {
 
     return (
         <div>
-            <h2>Chart</h2>
+            <h2>Infiltration capacity decline</h2>
             <div className="grid-container">
                 <div className="col stretch">
                     <div className="diagram">
                         <ResponsiveContainer width={'100%'} aspect={2}>
-                            <ScatterChart data={data} margin={{top: 20, right: 30, left: 0, bottom: 0}}>
+                            <ScatterChart data={data} margin={{top: 20, right: 30, left: 20, bottom: 0}}>
                                 <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis type="number" dataKey={'x'} name={'stature'} unit={'cm'}/>
-                                <YAxis type="number" dataKey={'y'} name={'weight'} unit={'kg'}/>
+                                <XAxis type="number" dataKey={'x'} name={'Specific volume'} unit={'L/m²'}/>
+                                <YAxis type="number" dataKey={'y'} name={'v50/v50o'}/>
                                 <Tooltip cursor={{strokeDasharray: '3 3'}}/>
-                                <Legend layout={'vertical'} align={'right'} verticalAlign={'top'} wrapperStyle={{right: 10}}/>
+                                <Legend layout={'vertical'} align={'right'} verticalAlign={'top'}
+                                        wrapperStyle={{right: 10}}/>
                                 {scatterLines}
                             </ScatterChart>
                         </ResponsiveContainer>
+                        <div className="diagram-ylabels"><strong>V<sub>50</sub>/V<sub>50o</sub></strong></div>
+                        <div className="center-vertical center-horizontal"><strong>Specific volume (L/m<sup>2</sup>)</strong></div>
                     </div>
                 </div>
             </div>

@@ -7,17 +7,13 @@ import {
     CartesianGrid,
     Legend,
     ResponsiveContainer,
-    Scatter,
-    ScatterChart,
     Tooltip,
     XAxis,
     YAxis
 } from 'recharts';
-
-const cbPalette = ['#999999', '#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7'];
+import {Header} from 'semantic-ui-react';
 
 const Info = ({data}) => {
-
     const barChartData1 = [];
     data.map(row => {
         if (row.selected) {
@@ -40,48 +36,36 @@ const Info = ({data}) => {
         }
     });
 
-    const scatterLines = data.map(row => {
-        if (row.selected) {
-            const scatterData = [];
-            const xArr = row.x;
-            const yArr = row.y;
-
-            if (xArr.length > 0 && xArr.length === yArr.length) {
-                for (let i = 0; i < xArr.length; i++) {
-                    scatterData.push({x: xArr[i], y: yArr[i]});
-                }
-            }
-            const color = cbPalette[row.id % cbPalette.length];
-            return (
-                <Scatter key={row.id} name={row.name} data={scatterData} fill={color} line/>
-            );
-        }
-
-        return null;
-    });
-
     return (
         <div>
-            <ResponsiveContainer width={'100%'} aspect={1.5}>
-                <BarChart data={barChartData1} margin={{top: 5, right: 30, left: 0, bottom: 5}}>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <XAxis dataKey="name"/>
-                    <YAxis/>
-                    <Tooltip/>
-                    <Legend/>
-                    <Bar dataKey="micr" fill="#0072B2"/>
-                    <Bar dataKey="reduction" fill="#E69F00"/>
-                </BarChart>
-            </ResponsiveContainer>
+            <div>
+                <Header as="h3">Infiltration capacity reduction</Header>
+                <ResponsiveContainer width={'100%'} aspect={1.5}>
+                    <BarChart data={barChartData1} margin={{top: 5, right: 30, left: 0, bottom: 5}}>
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <Legend/>
+                        <XAxis dataKey="name"/>
+                        <YAxis/>
+                        <Tooltip/>
+                        <Bar dataKey="micr" fill="#0072B2" name="Maximum infiltration capacity reduction"
+                             unit={'% or %/m'}
+                        />
+                        <Bar dataKey="reduction" fill="#E69F00"
+                             name="Infiltration capacity reduction/specific volume" unit={'%*m²/m³'}/>
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+
+            <Header as="h3">Proportion of infiltration capacity phases</Header>
             <ResponsiveContainer width={'100%'} aspect={1.5}>
                 <BarChart data={barChartData2} margin={{top: 5, right: 30, left: 0, bottom: 5}}>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis dataKey="name"/>
+                    <Legend/>
                     <YAxis/>
                     <Tooltip/>
-                    <Legend/>
-                    <Bar dataKey="lpsv" fill="#0072B2"/>
-                    <Bar dataKey="dpsv" fill="#E69F00"/>
+                    <Bar dataKey="lpsv" fill="#0072B2" name="Lag phase" unit={'m³/m²'}/>
+                    <Bar dataKey="dpsv" fill="#E69F00" name="Deep phase" unit={'m³/m²'}/>
                 </BarChart>
             </ResponsiveContainer>
         </div>
