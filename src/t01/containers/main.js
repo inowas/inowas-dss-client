@@ -1,24 +1,25 @@
 import React from 'react';
 
-import '../../less/4TileTool.less';
-import styleGlobals from 'styleGlobals';
 import image from '../images/T01.png';
 
 import {Background, Chart, Parameters, Info} from '../components';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
 
 import PapaParse from 'papaparse';
 import csvFile from '../data/2018-10-25-mar-in-scales.csv';
+import {Container, Divider, Grid, Header, Icon} from "semantic-ui-react";
 
 const styles = {
-    heading: {
-        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
-        fontWeight: 300,
-        fontSize: 16,
-        textAlign: 'left',
-        paddingBottom: 10
+    container: {
+        padding: '0 40px 0 40px',
+        width: '1280px'
+    },
+    columnContainer: {
+        background: '#fff',
+        boxShadow: '0 0 2px 0 rgba(76, 76, 76, 0.3)',
+        height: '100%',
+        padding: '12px'
     }
 };
 
@@ -39,7 +40,7 @@ class T01 extends React.Component {
         const parsedFile = PapaParse.parse(csvFile, {header: true, dynamicTyping: true, skipEmptyLines: true});
         return parsedFile.data.map((row, key) => {
             row.x = row.x.split(';').map(v => parseInt(v, 10));
-            row.y = row.y.split(';').map(v => parseFloat(v, 10));
+            row.y = row.y.split(';').map(v => parseFloat(v));
             key < 3 ? row.selected = true : row.selected = false;
             return row;
         });
@@ -64,31 +65,41 @@ class T01 extends React.Component {
     render() {
         const {data} = this.state;
         return (
-            <div className="app-width">
+            <Container style={styles.container}>
                 <Navbar links={navigation}/>
-                <h3 style={styles.heading}>T01. SAT basin infiltration capacity reduction database</h3>
-                <div className="grid-container">
-                    <section className="tile col col-abs-2 stacked">
-                        <Background image={image}/>
-                    </section>
-                    <section className="tile col col-abs-3 stretch">
-                        <Chart data={data}/>
-                    </section>
-                </div>
-
-                <div className="grid-container">
-                    <section className="tile col col-abs-2">
-                        <Info data={data}/>
-                    </section>
-                    <section className="tile col col-abs-3 stretch">
-                        <Parameters
-                            data={data}
-                            toggleSelect={this.toggleSelect}
-                            handleReset={this.handleReset}
-                        />
-                    </section>
-                </div>
-            </div>
+                <Header as='h3' textAlign='left'>T01. SAT basin infiltration capacity reduction database</Header>
+                <Divider color='grey'/>
+                <Grid columns={2}>
+                    <Grid.Row>
+                        <Grid.Column width={6}>
+                            <Container style={styles.columnContainer}>
+                                <Background image={image}/>
+                            </Container>
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            <Container style={styles.columnContainer}>
+                                <Chart data={data}/>
+                            </Container>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column width={6}>
+                            <Container style={styles.columnContainer}>
+                                <Info data={data}/>
+                            </Container>
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            <Container style={styles.columnContainer}>
+                                <Parameters
+                                    data={data}
+                                    toggleSelect={this.toggleSelect}
+                                    handleReset={this.handleReset}
+                                />
+                            </Container>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Container>
         );
     }
 }

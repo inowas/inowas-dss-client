@@ -1,15 +1,14 @@
-import '../../less/toolSketch.less';
-
 import React from 'react';
 import { pure } from 'recompose';
+import {Container, Header, Image} from "semantic-ui-react";
 
 export default pure( ({image}) => {
     return (
         <div>
-            <h2>Background</h2>
-            <div className="center-horizontal center-vertical">
-                <img className="sketch-image" src={image}/>
-            </div>
+            <Header as='h2' textAlign='center'>Background</Header>
+            <Container textAlign='center'>
+                <Image src={image}/>
+            </Container>
         </div>
     );
 } );

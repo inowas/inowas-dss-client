@@ -155,225 +155,223 @@ class OptimizationObjectivesComponent extends React.Component {
         ];
 
         return (
-            <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
-                    <Grid.Row columns={3}>
-                        <Grid.Column>
-                            {this.state.selectedObjective &&
-                            <Button icon
+            <Grid style={styles.tablewidth}>
+                <Grid.Row columns={3}>
+                    <Grid.Column>
+                        {this.state.selectedObjective &&
+                        <Button icon
+                                style={styles.iconfix}
+                                onClick={this.onClickBack}
+                                labelPosition="left">
+                            <Icon name="left arrow"/>
+                            Back to List
+                        </Button>
+                        }
+                    </Grid.Column>
+                    <Grid.Column/>
+                    <Grid.Column textAlign="right">
+                        {!this.state.selectedObjective ?
+                            <Dropdown button floating labeled
+                                      direction="left"
+                                      style={styles.iconfix}
+                                      name="type"
+                                      className="icon"
+                                      text="Add New"
+                                      icon="plus"
+                                      options={typeOptions}
+                                      onChange={this.onClickNew}
+                            /> :
+                            <Button icon positive
                                     style={styles.iconfix}
-                                    onClick={this.onClickBack}
+                                    onClick={this.onClickSave}
                                     labelPosition="left">
-                                <Icon name="left arrow"/>
-                                Back to List
+                                <Icon name="save"/>
+                                Save
                             </Button>
-                            }
-                        </Grid.Column>
-                        <Grid.Column/>
-                        <Grid.Column textAlign="right">
-                            {!this.state.selectedObjective ?
-                                <Dropdown button floating labeled
-                                          direction="left"
-                                          style={styles.iconfix}
-                                          name="type"
-                                          className="icon"
-                                          text="Add New"
-                                          icon="plus"
-                                          options={typeOptions}
-                                          onChange={this.onClickNew}
-                                /> :
-                                <Button icon positive
-                                        style={styles.iconfix}
-                                        onClick={this.onClickSave}
-                                        labelPosition="left">
-                                    <Icon name="save"/>
-                                    Save
-                                </Button>
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row columns={1}>
-                        <Grid.Column>
-                            {(!this.state.selectedObjective && (!this.state.objectives || this.state.objectives.length < 1)) &&
-                            <Message>
-                                <p>No optimization objectives</p>
-                            </Message>
-                            }
-                            {(!this.state.selectedObjective && this.state.objectives && this.state.objectives.length >= 1) &&
-                            <Table celled striped>
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell>Name</Table.HeaderCell>
-                                        <Table.HeaderCell>Type</Table.HeaderCell>
-                                        <Table.HeaderCell/>
-                                    </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                    {
-                                        this.state.objectives.map((objective) =>
-                                            <Table.Row key={objective.id}>
-                                                <Table.Cell>
-                                                    <a style={styles.link}
-                                                       onClick={() => this.onClickObjective(objective)}>
-                                                        {objective.name}
-                                                    </a>
-                                                </Table.Cell>
-                                                <Table.Cell>{objective.type}</Table.Cell>
-                                                <Table.Cell textAlign="center">
-                                                    <Button icon color="red"
-                                                            style={styles.iconfix}
-                                                            size="small"
-                                                            onClick={() => this.onClickDelete(objective)}>
-                                                        <Icon name="trash"/>
-                                                    </Button>
-                                                </Table.Cell>
-                                            </Table.Row>
-                                        )
-                                    }
-                                </Table.Body>
-                            </Table>
-                            }
-                            {this.state.selectedObjective &&
-                            <Form>
+                        }
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        {(!this.state.selectedObjective && (!this.state.objectives || this.state.objectives.length < 1)) &&
+                        <Message>
+                            <p>No optimization objectives</p>
+                        </Message>
+                        }
+                        {(!this.state.selectedObjective && this.state.objectives && this.state.objectives.length >= 1) &&
+                        <Table celled striped>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>Name</Table.HeaderCell>
+                                    <Table.HeaderCell>Type</Table.HeaderCell>
+                                    <Table.HeaderCell/>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {
+                                    this.state.objectives.map((objective) =>
+                                        <Table.Row key={objective.id}>
+                                            <Table.Cell>
+                                                <a style={styles.link}
+                                                   onClick={() => this.onClickObjective(objective)}>
+                                                    {objective.name}
+                                                </a>
+                                            </Table.Cell>
+                                            <Table.Cell>{objective.type}</Table.Cell>
+                                            <Table.Cell textAlign="center">
+                                                <Button icon color="red"
+                                                        style={styles.iconfix}
+                                                        size="small"
+                                                        onClick={() => this.onClickDelete(objective)}>
+                                                    <Icon name="trash"/>
+                                                </Button>
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    )
+                                }
+                            </Table.Body>
+                        </Table>
+                        }
+                        {this.state.selectedObjective &&
+                        <Form>
+                            <Form.Field>
+                                <label>Name</label>
+                                <Form.Input
+                                    type="text"
+                                    name="name"
+                                    value={this.state.selectedObjective.name}
+                                    placeholder="name ="
+                                    style={styles.inputfix}
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Field>
+                            <Form.Group widths="equal">
                                 <Form.Field>
-                                    <label>Name</label>
+                                    <label>Objective type</label>
+                                    <Form.Select
+                                        name="type"
+                                        value={this.state.selectedObjective.type}
+                                        placeholder="type ="
+                                        options={typeOptions}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Method how each objective scalar will be calculated.</label>
+                                    <Form.Select
+                                        name="summaryMethod"
+                                        value={this.state.selectedObjective.summary_method}
+                                        placeholder="summary_method ="
+                                        options={[
+                                            {key: 'min', text: 'Min', value: 'min'},
+                                            {key: 'max', text: 'Max', value: 'max'},
+                                            {key: 'mean', text: 'Mean', value: 'mean'},
+                                        ]}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Field>
+                            </Form.Group>
+                            <Form.Group widths="equal">
+                                <Form.Field>
+                                    <label>Objective weight factor</label>
                                     <Form.Input
-                                        type="text"
-                                        name="name"
-                                        value={this.state.selectedObjective.name}
-                                        placeholder="name ="
+                                        type="number"
+                                        name="weight"
+                                        value={this.state.selectedObjective.weight}
+                                        placeholder="weight ="
+                                        style={styles.inputfix}
+                                        onChange={this.handleChange}
+                                        defaultChecked
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Objective penalty value</label>
+                                    <Form.Input
+                                        type="number"
+                                        name="penaltyValue"
+                                        value={this.state.selectedObjective.penalty_value}
+                                        placeholder="penalty_value ="
                                         style={styles.inputfix}
                                         onChange={this.handleChange}
                                     />
                                 </Form.Field>
-                                <Form.Group widths="equal">
-                                    <Form.Field>
-                                        <label>Objective type</label>
-                                        <Form.Select
-                                            name="type"
-                                            value={this.state.selectedObjective.type}
-                                            placeholder="type ="
-                                            options={typeOptions}
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <label>Method how each objective scalar will be calculated.</label>
-                                        <Form.Select
-                                            name="summaryMethod"
-                                            value={this.state.selectedObjective.summary_method}
-                                            placeholder="summary_method ="
-                                            options={[
-                                                {key: 'min', text: 'Min', value: 'min'},
-                                                {key: 'max', text: 'Max', value: 'max'},
-                                                {key: 'mean', text: 'Mean', value: 'mean'},
-                                            ]}
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Field>
-                                </Form.Group>
-                                <Form.Group widths="equal">
-                                    <Form.Field>
-                                        <label>Objective weight factor</label>
-                                        <Form.Input
-                                            type="number"
-                                            name="weight"
-                                            value={this.state.selectedObjective.weight}
-                                            placeholder="weight ="
-                                            style={styles.inputfix}
-                                            onChange={this.handleChange}
-                                            defaultChecked
-                                        />
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <label>Objective penalty value</label>
-                                        <Form.Input
-                                            type="number"
-                                            name="penaltyValue"
-                                            value={this.state.selectedObjective.penalty_value}
-                                            placeholder="penalty_value ="
-                                            style={styles.inputfix}
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Field>
-                                </Form.Group>
-                                {this.state.selectedObjective.type !== 'distance' &&
-                                <div>
-                                    <Form.Field>
-                                        <label>Stress Periods</label>
-                                        <Segment style={styles.sliderDiv}>
-                                            <Range
-                                                min={0}
-                                                max={this.props.stressPeriods.dateTimes.length - 1}
-                                                step={1}
-                                                marks={this.sliderMarks()}
-                                                onChange={this.handleChangeStressPeriods}
-                                                defaultValue={[this.state.selectedObjective.location.ts.min, this.state.selectedObjective.location.ts.max]}
-                                                tipFormatter={value => `${this.formatTimestamp(value)}`}
-                                            />
-                                        </Segment>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <label>Location</label>
-                                        <Segment>
-                                            <OptimizationMap
-                                                name="location"
-                                                area={this.props.model.geometry}
-                                                bbox={this.props.model.bounding_box}
-                                                location={this.state.selectedObjective.location}
-                                                objects={this.props.objects}
-                                                onlyObjects={this.state.selectedObjective.type === 'flux' || this.state.selectedObjective.type === 'inputConc'}
-                                                gridSize={this.props.model.grid_size}
-                                                onChange={this.handleChange}
-                                                readOnly
-                                            />
-                                        </Segment>
-                                    </Form.Field>
-                                </div>
-                                }
-                                {this.state.selectedObjective.type === 'distance' &&
+                            </Form.Group>
+                            {this.state.selectedObjective.type !== 'distance' &&
+                            <div>
                                 <Form.Field>
-                                    <h4>Distance</h4>
-                                    <Segment>
-                                        <Grid divided={'vertically'}>
-                                            <Grid.Row columns={2}>
-                                                <Grid.Column width={8}>
-                                                    <OptimizationMap
-                                                        name="location1"
-                                                        label="Edit Location 1"
-                                                        area={this.props.model.geometry}
-                                                        bbox={this.props.model.bounding_box}
-                                                        location={this.state.selectedObjective.location_1}
-                                                        objects={this.props.objects}
-                                                        gridSize={this.props.model.grid_size}
-                                                        onChange={this.handleChange}
-                                                        readOnly
-                                                    />
-                                                </Grid.Column>
-                                                <Grid.Column width={8}>
-                                                    <OptimizationMap
-                                                        name="location2"
-                                                        label="Edit Location 2"
-                                                        area={this.props.model.geometry}
-                                                        bbox={this.props.model.bounding_box}
-                                                        location={this.state.selectedObjective.location_2}
-                                                        objects={this.props.objects}
-                                                        gridSize={this.props.model.grid_size}
-                                                        onChange={this.handleChange}
-                                                        readOnly
-                                                    />
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
+                                    <label>Stress Periods</label>
+                                    <Segment style={styles.sliderDiv}>
+                                        <Range
+                                            min={0}
+                                            max={this.props.stressPeriods.dateTimes.length - 1}
+                                            step={1}
+                                            marks={this.sliderMarks()}
+                                            onChange={this.handleChangeStressPeriods}
+                                            defaultValue={[this.state.selectedObjective.location.ts.min, this.state.selectedObjective.location.ts.max]}
+                                            tipFormatter={value => `${this.formatTimestamp(value)}`}
+                                        />
                                     </Segment>
                                 </Form.Field>
-                                }
-                            </Form>
+                                <Form.Field>
+                                    <label>Location</label>
+                                    <Segment>
+                                        <OptimizationMap
+                                            name="location"
+                                            area={this.props.model.geometry}
+                                            bbox={this.props.model.bounding_box}
+                                            location={this.state.selectedObjective.location}
+                                            objects={this.props.objects}
+                                            onlyObjects={this.state.selectedObjective.type === 'flux' || this.state.selectedObjective.type === 'inputConc'}
+                                            gridSize={this.props.model.grid_size}
+                                            onChange={this.handleChange}
+                                            readOnly
+                                        />
+                                    </Segment>
+                                </Form.Field>
+                            </div>
                             }
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </LayoutComponents.Column>
+                            {this.state.selectedObjective.type === 'distance' &&
+                            <Form.Field>
+                                <h4>Distance</h4>
+                                <Segment>
+                                    <Grid divided={'vertically'}>
+                                        <Grid.Row columns={2}>
+                                            <Grid.Column width={8}>
+                                                <OptimizationMap
+                                                    name="location1"
+                                                    label="Edit Location 1"
+                                                    area={this.props.model.geometry}
+                                                    bbox={this.props.model.bounding_box}
+                                                    location={this.state.selectedObjective.location_1}
+                                                    objects={this.props.objects}
+                                                    gridSize={this.props.model.grid_size}
+                                                    onChange={this.handleChange}
+                                                    readOnly
+                                                />
+                                            </Grid.Column>
+                                            <Grid.Column width={8}>
+                                                <OptimizationMap
+                                                    name="location2"
+                                                    label="Edit Location 2"
+                                                    area={this.props.model.geometry}
+                                                    bbox={this.props.model.bounding_box}
+                                                    location={this.state.selectedObjective.location_2}
+                                                    objects={this.props.objects}
+                                                    gridSize={this.props.model.grid_size}
+                                                    onChange={this.handleChange}
+                                                    readOnly
+                                                />
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                    </Grid>
+                                </Segment>
+                            </Form.Field>
+                            }
+                        </Form>
+                        }
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         );
     }
 }

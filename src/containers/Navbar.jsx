@@ -1,12 +1,20 @@
-import '../less/navbar.less';
-
-import PropTypes from 'prop-types';
 import React from 'react';
-
-import Icon from '../components/primitive/Icon';
-import {Link} from 'react-router';
+import PropTypes from 'prop-types';
+import {Dropdown, Icon, Menu} from "semantic-ui-react";
+import {Link, withRouter} from 'react-router';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router';
+
+const styles = {
+    navBar: {
+        borderRadius: 0,
+        padding: '0 101.5px 0 101.5px',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1200
+    }
+};
 
 class NavBar extends React.Component {
 
@@ -36,21 +44,24 @@ class NavBar extends React.Component {
             }
 
             let navElement = (
-                <span className="nav-element" data-active={active}>
+                <Menu.Item
+                    key={index}
+                    active={active}
+                >
                     {l.icon}{l.name}
-                </span>
+                </Menu.Item>
             );
 
             if (l.path) {
                 navElement = (
-                    <Link className="nav-element" to={l.path} data-active={active}>
+                    <Link className="item" to={l.path} data-active={active} key={index}>
                         {l.icon}{l.name}
                     </Link>
                 );
 
                 if (l.path.includes('http')) {
                     navElement = (
-                        <a className="nav-element" href={l.path} target="_blank" data-active={active}>
+                        <a className="item" href={l.path} target="_blank" data-active={active} key={index}>
                             {l.icon}{l.name}
                         </a>
                     );
@@ -58,10 +69,12 @@ class NavBar extends React.Component {
             }
 
             return (
-                <li key={index} className="nav-item">
+                //<li key={index} className="nav-item">
+                <div key={index}>
                     {navElement}
                     {l.sub && <ul className="nav-list">{this.renderLinks(l.sub, recursionDepth + 1)}</ul>}
-                </li>
+                </div>
+                //</li>
             );
         });
     }
@@ -71,9 +84,9 @@ class NavBar extends React.Component {
     renderRoleSpecificItems = roles => {
         if (roles.includes('ROLE_ADMIN')) {
             return (
-                <li className="nav-item">
-                    <button className="nav-element" onClick={() => this.historyPushTo('/admin')}>Admin</button>
-                </li>
+                <Dropdown.Item onClick={() => this.historyPushTo('/admin')}>
+                    Admin
+                </Dropdown.Item>
             );
         }
 
@@ -84,35 +97,27 @@ class NavBar extends React.Component {
         const {roles, name} = this.props.user;
         if (userIsLoggedIn) {
             return (
-                <li className="nav-item nav-item-has-children">
-                    <span className="nav-element">
-                        <Icon name="person"/>{name}
-                    </span>
-                    <ul className="nav-list">
+                <Dropdown item text={name}>
+                    <Dropdown.Menu>
                         {this.renderRoleSpecificItems(roles)}
-                        <li className="nav-item">
-                            <button className="nav-element" onClick={() => this.historyPushTo('/credentials')}>Change
-                                password
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-element" onClick={() => this.historyPushTo('/profile')}>Profile
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-element" onClick={() => this.historyPushTo('/logout')}>Logout
-                            </button>
-                        </li>
-                    </ul>
-                </li>
+                        <Dropdown.Item onClick={() => this.historyPushTo('/credentials')}>
+                            Change password
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => this.historyPushTo('/profile')}>
+                            Profile
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => this.historyPushTo('/logout')}>
+                            Logout
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             );
         }
+
         return (
-            <li className="nav-item nav-item-has-children">
-                <span className="nav-element" onClick={() => this.historyPushTo('/login')}>
-                    <Icon name="person"/>Login
-                </span>
-            </li>
+            <Menu.Item onClick={() => this.historyPushTo('/login')}>
+                <Icon name="user"/> Login
+            </Menu.Item>
         );
     }
 
@@ -129,23 +134,14 @@ class NavBar extends React.Component {
         const userIsLoggedIn = this.props.session.apiKey;
 
         return (
-            <header className="navbar-wrapper">
-                <div className="navbar app-width">
-                    <nav className="nav-left">
-                        <ul className="nav-list">
-                            {this.renderLinks(standardLinks)}
-                            {userIsLoggedIn && this.renderLinks(standardLinksAuthenticationRequired.concat(this.props.links))}
-                            {!userIsLoggedIn && this.props.info && this.renderInfo(this.props.info)}
-                        </ul>
-                    </nav>
-                    <nav className="nav-right">
-                        <ul className="nav-list">
-                            {this.renderUserNavigation(userIsLoggedIn)}
-                        </ul>
-                    </nav>
-
-                </div>
-            </header>
+            <Menu inverted style={styles.navBar} color='grey'>
+                {this.renderLinks(standardLinks)}
+                {userIsLoggedIn && this.renderLinks(standardLinksAuthenticationRequired.concat(this.props.links))}
+                {!userIsLoggedIn && this.props.info && this.renderInfo(this.props.info)}
+                <Menu.Menu position='right'>
+                    {this.renderUserNavigation(userIsLoggedIn)}
+                </Menu.Menu>
+            </Menu>
         );
     }
 }

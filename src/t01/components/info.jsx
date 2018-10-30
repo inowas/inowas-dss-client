@@ -39,7 +39,7 @@ const Info = ({data}) => {
     return (
         <div>
             <div>
-                <Header as="h3">Infiltration capacity reduction</Header>
+                <Header as="h3" textAlign='center'>Infiltration capacity reduction</Header>
                 <ResponsiveContainer width={'100%'} aspect={1.5}>
                     <BarChart data={barChartData1} margin={{top: 5, right: 30, left: 0, bottom: 5}}>
                         <CartesianGrid strokeDasharray="3 3"/>
@@ -56,7 +56,7 @@ const Info = ({data}) => {
                 </ResponsiveContainer>
             </div>
 
-            <Header as="h3">Proportion of infiltration capacity phases</Header>
+            <Header as="h3" textAlign='center'>Proportion of infiltration capacity phases</Header>
             <ResponsiveContainer width={'100%'} aspect={1.5}>
                 <BarChart data={barChartData2} margin={{top: 5, right: 30, left: 0, bottom: 5}}>
                     <CartesianGrid strokeDasharray="3 3"/>

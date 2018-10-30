@@ -2,11 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 
-import '../../less/toolDiagram.less';
-
 import {CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis} from 'recharts';
+import {Grid, Header} from "semantic-ui-react";
 
 const cbPalette = ['#999999', '#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7'];
+
+const styles = {
+    diagram: {
+        position: 'relative'
+    },
+    diagramXLabels: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    diagramYLabels: {
+        position: 'absolute',
+        bottom: '170px',
+        left: '5px',
+        transform: 'rotate(-90deg)'
+    }
+};
 
 const Chart = ({data}) => {
     const scatterLines = data.map(row => {
@@ -31,10 +47,10 @@ const Chart = ({data}) => {
 
     return (
         <div>
-            <h2>Infiltration capacity decline</h2>
-            <div className="grid-container">
-                <div className="col stretch">
-                    <div className="diagram">
+            <Header textAlign='center'>Infiltration capacity decline</Header>
+            <Grid>
+                <Grid.Column>
+                    <div style={styles.diagram}>
                         <ResponsiveContainer width={'100%'} aspect={2}>
                             <ScatterChart data={data} margin={{top: 20, right: 30, left: 20, bottom: 0}}>
                                 <CartesianGrid strokeDasharray="3 3"/>
@@ -46,11 +62,11 @@ const Chart = ({data}) => {
                                 {scatterLines}
                             </ScatterChart>
                         </ResponsiveContainer>
-                        <div className="diagram-ylabels"><strong>V<sub>50</sub>/V<sub>50o</sub></strong></div>
-                        <div className="center-vertical center-horizontal"><strong>Specific volume (L/m<sup>2</sup>)</strong></div>
+                        <div style={styles.diagramYLabels}><strong>V<sub>50</sub>/V<sub>50o</sub></strong></div>
+                        <div style={styles.diagramXLabels}><strong>Specific volume (L/m<sup>2</sup>)</strong></div>
                     </div>
-                </div>
-            </div>
+                </Grid.Column>
+            </Grid>
         </div>
     );
 };
