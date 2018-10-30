@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import '../../less/toolParameters.less';
 import '../../less/input-range.less';
-import {Button, Header, Input} from 'semantic-ui-react';
+import {Button, Header} from 'semantic-ui-react';
 import DataTable from './dataTable';
 
 class Parameters extends React.Component {
