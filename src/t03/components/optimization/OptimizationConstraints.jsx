@@ -39,26 +39,22 @@ class OptimizationConstraintsComponent extends React.Component {
         });
     };
 
-    handleChangeStressPeriods = (e) => {
-        return this.setState({
-            selectedConstraint: {
-                ...this.state.selectedConstraint,
-                location: {
-                    ...this.state.selectedConstraint.location,
-                    ts: {
-                        min: e[0],
-                        max: e[1]
-                    }
+    handleChangeStressPeriods = (e) => this.setState({
+        selectedConstraint: {
+            ...this.state.selectedConstraint,
+            location: {
+                ...this.state.selectedConstraint.location,
+                ts: {
+                    min: e[0],
+                    max: e[1]
                 }
             }
-        });
-    };
+        }
+    });
 
-    onClickBack = () => {
-        return this.setState({
-            selectedConstraint: null
-        });
-    };
+    onClickBack = () => this.setState({
+        selectedConstraint: null
+    });
 
     onClickNew = (e, {name, value}) => {
         const newConstraint = new OptimizationConstraint();
@@ -69,11 +65,9 @@ class OptimizationConstraintsComponent extends React.Component {
         });
     };
 
-    onClickConstraint = (constraint) => {
-        return this.setState({
-            selectedConstraint: constraint
-        });
-    };
+    onClickConstraint = (constraint) => this.setState({
+        selectedConstraint: constraint
+    });
 
     onClickDelete = (constraint) => {
         const constraints = this.state.constraints;

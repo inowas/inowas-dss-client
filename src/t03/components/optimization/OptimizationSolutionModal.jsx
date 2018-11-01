@@ -47,9 +47,7 @@ class OptimizationSolutionModal extends React.Component {
         }
     }
 
-    onCancelModal = () => {
-        return this.props.onCancel();
-    };
+    onCancelModal = () => this.props.onCancel();
 
     onClickAccordion = (e, titleProps) => {
         const {index} = titleProps;
@@ -59,14 +57,11 @@ class OptimizationSolutionModal extends React.Component {
         this.setState({activeIndex: newIndex});
     };
 
-    onSelectObject = (e, {name, value}) => {
-        this.setState({
-            selectedObject: this.props.solution.objects.filter(o => o.id === value)[0]
-        })
-    };
+    onSelectObject = (e, {name, value}) => this.setState({
+        selectedObject: this.props.solution.objects.filter(o => o.id === value)[0]
+    });
 
     render() {
-
         const fluxConfig = [
             {property: 'min', label: 'Min'},
             {property: 'max', label: 'Max'},

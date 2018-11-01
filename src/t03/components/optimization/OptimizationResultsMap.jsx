@@ -13,13 +13,9 @@ class OptimizationResultsMap extends React.Component {
         super(props);
     }
 
-    getBounds = geometry => {
-        return leafletGeoJSON(geometry).getBounds();
-    };
+    getBounds = geometry => leafletGeoJSON(geometry).getBounds();
 
-    generateKeyFunction = geometry => {
-        return md5(JSON.stringify(geometry));
-    };
+    generateKeyFunction = geometry => md5(JSON.stringify(geometry));
 
     drawObject = (boundingBox, gridSize, location, label = null, color = 'red') => {
         const bbXmin = boundingBox[0][0];
@@ -43,11 +39,6 @@ class OptimizationResultsMap extends React.Component {
 
         const dX = (bbXmax - bbXmin) / gridSize.n_x;
         const dY = (bbYmax - bbYmin) / gridSize.n_y;
-
-        const cXmin = bbXmin + location.col.min * dX;
-        const cXmax = bbXmin + location.col.max * dX;
-        const cYmin = bbYmax - location.row.min * dY;
-        const cYmax = bbYmax - location.row.max * dY;
 
         const cXres = bbXmin + location.col.result * dX;
         const cYres = bbYmax - location.row.result * dY;

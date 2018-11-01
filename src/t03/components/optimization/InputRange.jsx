@@ -45,13 +45,11 @@ class InputRange extends React.Component {
         });
     };
 
-    handleSubmit = () => {
-        return this.props.onChange({
-            name: this.props.name,
-            from: this.state.from,
-            to: this.state.to
-        });
-    };
+    handleSubmit = () => this.props.onChange({
+        name: this.props.name,
+        from: this.state.from,
+        to: this.state.to
+    });
 
     render() {
         const styles = {

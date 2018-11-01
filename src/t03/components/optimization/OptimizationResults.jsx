@@ -94,13 +94,11 @@ class OptimizationResultsComponent extends React.Component {
         });
     };
 
-    onCancelModal = () => {
-        return this.setState({
-            localOptimization: null,
-            selectedSolution: null,
-            createdBoundaries: null
-        });
-    };
+    onCancelModal = () => this.setState({
+        localOptimization: null,
+        selectedSolution: null,
+        createdBoundaries: null
+    });
 
     onCalculationStart = (input) => {
         this.onCancelModal();

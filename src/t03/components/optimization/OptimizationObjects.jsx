@@ -79,11 +79,9 @@ class OptimizationObjectsComponent extends React.Component {
         });
     };
 
-    onClickObject = (object) => {
-        return this.setState({
-            selectedObject: object
-        });
-    };
+    onClickObject = (object) => this.setState({
+        selectedObject: object
+    });
 
     handleClickAccordion = (e, titleProps) => {
         const {index} = titleProps;
@@ -93,24 +91,18 @@ class OptimizationObjectsComponent extends React.Component {
         this.setState({activeIndex: newIndex});
     };
 
-    handleChangeFlux = rows => {
-        return this.setState((prevState) => ({
-            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(rows).toObject
-        }));
-    };
+    handleChangeFlux = rows => this.setState((prevState) => ({
+        selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(rows).toObject
+    }));
 
-    handleChangeSubstances = (substances) => {
-        return this.setState((prevState) => ({
-            selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstances(substances).toObject
-        }));
-    };
+    handleChangeSubstances = (substances) => this.setState((prevState) => ({
+        selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstances(substances).toObject
+    }));
 
-    onClickBack = () => {
-        return this.setState({
-            selectedObject: null,
-            selectedSubstance: null
-        });
-    };
+    onClickBack = () => this.setState({
+        selectedObject: null,
+        selectedSubstance: null
+    });
 
     onClickSave = () => {
         const {objects, selectedObject} = this.state;

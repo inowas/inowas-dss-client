@@ -95,11 +95,9 @@ class SubstanceEditor extends React.Component {
         })
     };
 
-    onCancelModal = () => {
-        return this.setState({
-            selectedSubstance: null
-        })
-    };
+    onCancelModal = () => this.setState({
+        selectedSubstance: null
+    });
 
     onSaveModal = () => {
         const substance = this.state.selectedSubstance;

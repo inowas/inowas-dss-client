@@ -38,9 +38,7 @@ class OptimizationLocallyModal extends React.Component {
         });
     }
 
-    onCancelModal = () => {
-        return this.props.onCancel();
-    };
+    onCancelModal = () => this.props.onCancel();
 
     onCalculationClick = () => {
         const input = this.state.optimization;

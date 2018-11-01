@@ -56,11 +56,9 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     };
 
-    onClickBack = () => {
-        return this.setState({
-            selectedObjective: null
-        });
-    };
+    onClickBack = () => this.setState({
+        selectedObjective: null
+    });
 
     onClickNew = (e, {name, value}) => {
         const newObjective = new OptimizationObjective();
@@ -71,11 +69,9 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     };
 
-    onClickObjective = (objective) => {
-        return this.setState({
-            selectedObjective: objective
-        });
-    };
+    onClickObjective = (objective) => this.setState({
+        selectedObjective: objective
+    });
 
     onClickDelete = (objective) => {
         const objectives = this.state.objectives;
