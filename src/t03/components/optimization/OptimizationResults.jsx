@@ -6,8 +6,7 @@ import {LayoutComponents} from '../../../core/index';
 import {Grid, Button, Progress, Segment, List, Popup, Modal, Tab} from 'semantic-ui-react';
 import Chart from './FitnessChart';
 import {
-    OPTIMIZATION_STATE_CANCELLED,
-    getMessage, optimizationHasError
+    OPTIMIZATION_STATE_CANCELLED, optimizationHasError, optimizationInProgress
 } from "../../selectors/optimization";
 import OptimizationSolutionModal from "./OptimizationSolutionModal";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
@@ -18,6 +17,10 @@ import OptimizationInput from "../../../core/optimization/OptimizationInput";
 import OptimizationObject from "../../../core/optimization/OptimizationObject";
 
 const styles = {
+    contentFix: {
+        width: 'auto',
+        maxWidth: '350px'
+    },
     iconfix: {
         width: 'auto',
         height: 'auto'
@@ -27,6 +30,9 @@ const styles = {
     },
     link: {
         cursor: 'pointer'
+    },
+    popupFix: {
+        maxWidth: '350px'
     },
     tablewidth: {
         width: '99%'
@@ -166,8 +172,13 @@ class OptimizationResultsComponent extends React.Component {
                                             {
                                                 this.props.optimization.input.objectives.map((o, oKey) =>
                                                     <List.Item key={oKey}>
-                                                        <Popup trigger={<span>Objective {oKey + 1}</span>}
-                                                               content={o.name}/>: <b>{parseFloat(solution.fitness[oKey]).toFixed(3)}</b>
+                                                        <Popup
+                                                            style={styles.popupFix}
+                                                            trigger={<span>Objective {oKey + 1}</span>}>
+                                                            <Popup.Content style={styles.contentFix}>
+                                                                {o.name}
+                                                            </Popup.Content>
+                                                        </Popup>: <b>{parseFloat(solution.fitness[oKey]).toFixed(3)}</b>
                                                     </List.Item>
                                                 )
                                             }
@@ -203,7 +214,7 @@ class OptimizationResultsComponent extends React.Component {
     };
 
     render() {
-        const {activeIndex} = this.state;
+        const {activeIndex, optimization} = this.state;
         const state = this.props.optimization.state;
 
         const panes = this.props.optimization.methods.map((method, mKey) => {
@@ -218,14 +229,19 @@ class OptimizationResultsComponent extends React.Component {
                 <Grid style={styles.tablewidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column/>
-                        <Grid.Column textAlign="center">
-                            State: {getMessage(state)}
-                        </Grid.Column>
+                        <Grid.Column/>
                         <Grid.Column/>
                     </Grid.Row>
                 </Grid>
                 <Tab menu={{secondary: true, pointing: true}} activeIndex={activeIndex} onTabChange={this.onTabChange}
                      panes={panes} style={styles.tablewidth}/>
+                {optimizationInProgress(optimization.state) && panes.length === 0 ?
+                    <Segment>
+                        <Progress percent={0} progress indicating={true}>
+                            Starting Calculation
+                        </Progress>
+                    </Segment> : <div/>
+                }
                 {this.state.selectedSolution &&
                 <OptimizationSolutionModal
                     model={this.props.model}
