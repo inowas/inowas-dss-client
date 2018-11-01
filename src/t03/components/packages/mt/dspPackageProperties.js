@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Form, Input} from 'semantic-ui-react';
-
 import AbstractPackageProperties from './AbstractPackageProperties';
 import DspPackage from '../../../../core/modflow/mt3d/dspPackage';
+import {documentation} from "../../../selectors/transport";
 
 const styles = {
     inputFix: {
@@ -34,7 +34,7 @@ class DspPackageProperties extends AbstractPackageProperties {
                         onBlur={this.handleOnBlur(parseFloat)}
                         onChange={this.handleOnChange}
                         style={styles.inputFix}
-                        icon={this.renderInfoPopup('PLACEHOLDER', 'AL', 'top right')}
+                        icon={this.renderInfoPopup(documentation.al, 'AL', 'top right')}
                     />
                 </Form.Field>
                 <Form.Group widths='equal'>
@@ -48,7 +48,7 @@ class DspPackageProperties extends AbstractPackageProperties {
                             onBlur={this.handleOnBlur(parseFloat)}
                             onChange={this.handleOnChange}
                             style={styles.inputFix}
-                            icon={this.renderInfoPopup('PLACEHOLDER', 'TRPT', 'top left')}
+                            icon={this.renderInfoPopup(documentation.trpt, 'TRPT', 'top left')}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -61,7 +61,7 @@ class DspPackageProperties extends AbstractPackageProperties {
                             onBlur={this.handleOnBlur(parseFloat)}
                             onChange={this.handleOnChange}
                             style={styles.inputFix}
-                            icon={this.renderInfoPopup('PLACEHOLDER', 'TRPV', 'top right')}
+                            icon={this.renderInfoPopup(documentation.trpv, 'TRPV', 'top right')}
                         />
                     </Form.Field>
                 </Form.Group>
@@ -76,7 +76,7 @@ class DspPackageProperties extends AbstractPackageProperties {
                             onBlur={this.handleOnBlur(parseFloat)}
                             onChange={this.handleOnChange}
                             style={styles.inputFix}
-                            icon={this.renderInfoPopup('PLACEHOLDER', 'DMCOEF', 'top right')}
+                            icon={this.renderInfoPopup(documentation.dmcoef, 'DMCOEF', 'top right')}
                         />
                     </Form.Field>
                 </Form.Group>

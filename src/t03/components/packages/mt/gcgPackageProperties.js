@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Form, Input, Select} from 'semantic-ui-react';
-
 import AbstractPackageProperties from './AbstractPackageProperties';
 import GcgPackage from '../../../../core/modflow/mt3d/gcgPackage';
+import {documentation} from "../../../selectors/transport";
 
 const styles = {
     accordionFix: {
@@ -37,7 +37,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                             onBlur={this.handleOnBlur(parseInt)}
                             onChange={this.handleOnChange}
                             style={styles.inputFix}
-                            icon={this.renderInfoPopup('PLACEHOLDER', 'MXITER', 'top left')}
+                            icon={this.renderInfoPopup(documentation.mxiter, 'MXITER', 'top left')}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -50,7 +50,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                             onBlur={this.handleOnBlur(parseInt)}
                             onChange={this.handleOnChange}
                             style={styles.inputFix}
-                            icon={this.renderInfoPopup('PLACEHOLDER', 'ITER1', 'top right')}
+                            icon={this.renderInfoPopup(documentation.iter1, 'ITER1', 'top right')}
                         />
                     </Form.Field>
                 </Form.Group>
@@ -72,7 +72,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                     </Form.Field>
                     <Form.Field width={1}>
                         <label>&nbsp;</label>
-                        {this.renderInfoPopup('PLACEHOLDER', 'ISOLVE', 'top right', true)}
+                        {this.renderInfoPopup(documentation.isolve, 'ISOLVE', 'top right', true)}
                     </Form.Field>
                 </Form.Group>
                 <Form.Group>
@@ -95,7 +95,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                     </Form.Field>
                     <Form.Field width={1}>
                         <label>&nbsp;</label>
-                        {this.renderInfoPopup('PLACEHOLDER', 'NCRS', 'top right', true)}
+                        {this.renderInfoPopup(documentation.ncrs, 'NCRS', 'top right', true)}
                     </Form.Field>
                 </Form.Group>
                 <Form.Field>
@@ -108,7 +108,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         onBlur={this.handleOnBlur(parseInt)}
                         onChange={this.handleOnChange}
                         style={styles.inputFix}
-                        icon={this.renderInfoPopup('PLACEHOLDER', 'ACCL', 'top right')}
+                        icon={this.renderInfoPopup(documentation.accl, 'ACCL', 'top right')}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -121,7 +121,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         onBlur={this.handleOnBlur(parseFloat)}
                         onChange={this.handleOnChange}
                         style={styles.inputFix}
-                        icon={this.renderInfoPopup('PLACEHOLDER', 'CCLOSE', 'top right')}
+                        icon={this.renderInfoPopup(documentation.cclose, 'CCLOSE', 'top right')}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -134,7 +134,7 @@ class GcgPackageProperties extends AbstractPackageProperties {
                         onBlur={this.handleOnBlur(parseInt)}
                         onChange={this.handleOnChange}
                         style={styles.inputFix}
-                        icon={this.renderInfoPopup('PLACEHOLDER', 'IPRGCG', 'top right')}
+                        icon={this.renderInfoPopup(documentation.iprgcg, 'IPRGCG', 'top right')}
                     />
                 </Form.Field>
             </Form>

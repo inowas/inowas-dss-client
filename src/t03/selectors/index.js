@@ -6,6 +6,7 @@ import * as soilModel from './soilModel';
 import * as optimization from './optimization';
 import * as packages from './packages';
 import * as stressPeriods from './stressPeriods';
+import * as transport from './transport';
 
 export {
     boundary,
@@ -16,4 +17,5 @@ export {
     optimization,
     packages,
     stressPeriods,
+    transport
 };
