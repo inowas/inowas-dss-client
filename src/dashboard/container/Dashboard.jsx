@@ -1,7 +1,4 @@
-import '../../less/dashboard.less';
-
 import ConfiguredRadium from 'ConfiguredRadium';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,59 +7,34 @@ import {loadInstances} from '../actions/queries';
 import {getTool, getTools} from '../selectors/tool';
 import {getActiveToolSlug, getPublic} from '../selectors/ui';
 
-import Button from '../../components/primitive/Button';
 import {Formatter} from '../../core';
-import Icon from '../../components/primitive/Icon';
-import Input from '../../components/primitive/Input';
-import Menu from '../../components/primitive/Menu';
 import Navbar from '../../containers/Navbar';
-import Table from '../../components/primitive/table/Table';
-import Td from '../../components/primitive/table/Td';
-import Tr from '../../components/primitive/table/Tr';
 import {connect} from 'react-redux';
-import styleGlobals from 'styleGlobals';
 
 import {includes} from 'lodash';
 import {withRouter} from 'react-router';
+import {Button, Container, Grid, Header, Icon, Input, Menu, Table} from "semantic-ui-react";
 
 const styles = {
+    wrapper: {
+        padding: '0 40px 0 40px',
+        width: '1280px'
+    },
+    columnPadding: {
+        padding: '12px'
+    },
+    columnContainer: {
+        background: '#fff',
+        boxShadow: '0 1px 2px 0 rgba(34, 36, 38, 0.15)',
+        border: '1px solid rgba(34, 36, 38, 0.15)',
+        borderRadius: '.28571429rem',
+        height: '100%',
+    },
     menu: {
-        width:
-        2 * styleGlobals.dimensions.gridColumn +
-        styleGlobals.dimensions.gridGutter,
-        marginRight: styleGlobals.dimensions.gridGutter
+        width: '100%'
     },
-
-    linkActive: {
-        textDecoration: 'underline'
-    },
-
-    lastTd: {
-        position: 'relative',
-        width: 0,
-        padding: 0
-    },
-
-    actionWrapper: {
-        position: 'absolute',
-        right: 0,
-        width: 500
-    },
-
-    actionContent: {
-        paddingLeft: 50,
-        paddingTop: styleGlobals.dimensions.spacing.small,
-        paddingRight: styleGlobals.dimensions.spacing.small,
-        paddingBottom: styleGlobals.dimensions.spacing.small - 1,
-        background:
-        'linear-gradient(to right, transparent, ' +
-        styleGlobals.colors.background +
-        ' 50px)',
-        float: 'right'
-    },
-
-    action: {
-        marginLeft: styleGlobals.dimensions.spacing.large
+    grid: {
+        marginTop: '25px'
     }
 };
 
@@ -78,7 +50,7 @@ class Dashboard extends React.Component {
             {
                 name: 'Datasets',
                 path: 'https://kb.inowas.hydro.tu-dresden.de',
-                icon: <Icon name="dataset"/>
+                icon: <Icon name="database"/>
             }
         ],
         hoveredInstance: null
@@ -117,73 +89,61 @@ class Dashboard extends React.Component {
     };
 
     renderTableRows(basePath, subPath, instances) {
-        // eslint-disable-next-line no-shadow
         const {publicInstances, cloneToolInstance, deleteToolInstance} = this.props;
-        const {push} = this.props.router;
 
         return instances.map((i, index) => {
             return (
-                <Tr
+                <Table.Row
                     key={index}
-                    onMouseEnter={() =>
-                        this.setState({hoveredInstance: index})}
-                    onMouseLeave={() =>
-                        this.setState({hoveredInstance: null})}
+                    onMouseEnter={() => this.setState({hoveredInstance: index})}
+                    onMouseLeave={() => this.setState({hoveredInstance: null})}
                 >
-                    <Td>
+                    <Table.Cell>
                         {index + 1}
-                    </Td>
-                    <Td>
-                        <Button
-                            type="link"
-                            onClick={() => push(basePath + i.tool + '/' + i.id + subPath)}
-                        >
+                    </Table.Cell>
+                    <Table.Cell>
+                        <Button>
                             {i.name}
                         </Button>
-                    </Td>
-                    <Td>
+                    </Table.Cell>
+                    <Table.Cell>
                         {i.tool}
-                    </Td>
-                    <Td>
+                    </Table.Cell>
+                    <Table.Cell>
                         {Formatter.dateToDatetime(new Date(i.created_at))}
-                    </Td>
-                    <Td>
+                    </Table.Cell>
+                    <Table.Cell>
                         {i.user_name}
-                    </Td>
-                    <Td style={[styles.lastTd]}>
+                    </Table.Cell>
+                    <Table.Cell>
                         {(() => {
                             if (this.state.hoveredInstance === index) {
                                 return (
-                                    <div style={[styles.actionWrapper]}>
-                                        <div style={[styles.actionContent]}>
-                                            {!i.fake &&
-                                            <Button
-                                                style={[styles.action]}
-                                                onClick={() => cloneToolInstance(i.id)}
-                                                type="link"
-                                                icon={<Icon name="clone"/>}
-                                            >
-                                                clone
-                                            </Button>}
-                                            {!i.fake &&
-                                            !publicInstances &&
-                                            <Button
-                                                style={[styles.action]}
-                                                onClick={() => deleteToolInstance(i.id)}
-                                                type="link"
-                                                icon={<Icon name="trash"/>}
-                                            >
-                                                delete
-                                            </Button>}
-                                        </div>
+                                    <div>
+                                        {!i.fake &&
+                                        <Button
+                                            onClick={() => cloneToolInstance(i.id)}
+                                            icon
+                                        >
+                                            <Icon name='clone' />
+                                            clone
+                                        </Button>}
+                                        {!i.fake &&
+                                        !publicInstances &&
+                                        <Button
+                                            onClick={() => deleteToolInstance(i.id)}
+                                            icon
+                                        >
+                                            <Icon name='trash' />
+                                            delete
+                                        </Button>}
                                     </div>
                                 );
                             }
-
                             return null;
                         })()}
-                    </Td>
-                </Tr>
+                    </Table.Cell>
+                </Table.Row>
             );
         });
     }
@@ -191,69 +151,65 @@ class Dashboard extends React.Component {
     renderDataTable() {
         // eslint-disable-next-line no-shadow
         const {activeTool, setPublic, publicInstances} = this.props;
-        const {push} = this.props.router;
         return (
-            <div className="tile col col-abs-3 stretch">
-                <h2 className="section-title">
-                    Instances of {activeTool.slug}
-                </h2>
-                <div className="grid-container toolbar">
-                    <div className="col col-rel-1 toolbar-search">
-                        <Input placeholder="Search..." type="search"/>
-                    </div>
-                    <ul className="col stretch toolbar-edit">
-                        <li>
+            <Grid padded>
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        <Header as='h2'>Instances of {activeTool.slug}</Header>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                    <Grid.Column width={5}>
+                        <Input size='small' type='text' placeholder="Search..."/>
+                    </Grid.Column>
+                    <Grid.Column width={5} textAlign='center'>
+                        <Button icon style={styles.iconFix}>
+                            <Icon name='add' style={styles.iconFix}/>
+                            Add new
+                        </Button>
+                    </Grid.Column>
+                    <Grid.Column width={6} textAlign='right'>
+                        <Button.Group>
                             <Button
-                                type="link"
-                                onClick={() => push(activeTool.path + activeTool.slug)}
-                                icon={<Icon name="add"/>}
-                            >
-                                Add new
-                            </Button>
-                        </li>
-                    </ul>
-                    <ul className="col toolbar-public">
-                        <li>
-                            <Button
-                                style={[publicInstances || styles.linkActive]}
                                 onClick={() => setPublic(false)}
-                                type="link"
+                                positive={!publicInstances}
                             >
                                 Private
                             </Button>
-                        </li>
-                        <li>
+                            <Button.Or/>
                             <Button
-                                style={[publicInstances && styles.linkActive]}
                                 onClick={() => setPublic(true)}
-                                type="link"
+                                positive={publicInstances}
                             >
                                 Public
                             </Button>
-                        </li>
-                    </ul>
-                </div>
-
-                <Table>
-                    <thead>
-                    <Tr head>
-                        <Td head>No.</Td>
-                        <Td head>Name</Td>
-                        <Td head>Tool</Td>
-                        <Td head>Date created</Td>
-                        <Td head>Created by</Td>
-                        <Td style={[styles.lastTd]} head/>
-                    </Tr>
-                    </thead>
-                    <tbody>
-                    {this.renderTableRows(
-                        activeTool.path,
-                        activeTool.subPath,
-                        activeTool.instances
-                    )}
-                    </tbody>
-                </Table>
-            </div>
+                        </Button.Group>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        <Table>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>No.</Table.HeaderCell>
+                                    <Table.HeaderCell>Name</Table.HeaderCell>
+                                    <Table.HeaderCell>Tool</Table.HeaderCell>
+                                    <Table.HeaderCell>Date created</Table.HeaderCell>
+                                    <Table.HeaderCell>Created by</Table.HeaderCell>
+                                    <Table.HeaderCell/>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {this.renderTableRows(
+                                    activeTool.path,
+                                    activeTool.subPath,
+                                    activeTool.instances
+                                )}
+                            </Table.Body>
+                        </Table>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         );
     }
 
@@ -264,7 +220,7 @@ class Dashboard extends React.Component {
         const menuItems = [
             {
                 name: 'Tools',
-                icon: <Icon name="tools"/>,
+                icon: <Icon name="book"/>,
                 items: tools.filter(t => includes(roles, t.role))
                     .map(t => {
                         return {
@@ -277,18 +233,30 @@ class Dashboard extends React.Component {
         ];
 
         return (
-            <div className="dashboard">
+            <Container style={styles.wrapper}>
                 <Navbar links={navigation}/>
-                <div className="app-width grid-container">
-                    <Menu
-                        firstActive={0}
-                        title="Dashboard"
-                        items={menuItems}
-                        style={styles.menu}
-                    />{' '}
-                    {this.renderDataTable()}
-                </div>
-            </div>
+                <Grid padded style={styles.grid}>
+                    <Grid.Column width={6}>
+                        <Menu vertical style={styles.menu}>
+                            <Menu.Item header>Tools</Menu.Item>
+                            {menuItems[0].items.map((item, key) =>
+                                <Menu.Item
+                                    key={key}
+                                    onClick={item.onClick}
+                                    active={item.active}
+                                >
+                                    {item.name}
+                                </Menu.Item>
+                            )}
+                        </Menu>
+                    </Grid.Column>
+                    <Grid.Column width={10}>
+                        <Container style={styles.columnContainer}>
+                            {this.renderDataTable()}
+                        </Container>
+                    </Grid.Column>
+                </Grid>
+            </Container>
         );
     }
 }

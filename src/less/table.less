@@ -1,67 +1,9 @@
 @import "variables.less";
 
 .table {
-    width: 100%;
-    max-width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-
-    thead tr {
-        border-bottom: 1px solid @grey-dark;
-        display: table;
-        table-layout: fixed;
-    }
-
-    tbody tr {
-        border-bottom: 1px solid @grey-semi-bright;
-        display: table;
-        table-layout: fixed;
-    }
-
-    tbody tr.error-row {
-        background-color: @warning-red;
-    }
-
-    thead {
-        flex: 0 0 auto;
-        width: 100%;
-        tr {
-            width: calc(100% - 0.9em); /* 0.9em approximates scrollbar width */
-            display: table;
-        }
-    }
-
-    tbody {
-        display: block;
-        flex: 1 1 auto;
-        overflow-y: scroll;
-
-        tr {
-            width: 100%;
-        }
-
-        tr.selected-row {
-        }
-    }
-
-    td,
-    th {
-        padding: @spacing-small;
-        vertical-align: top;
-        text-align: left;
-    }
-
-    th {
-        font-weight: 700;
-    }
-
-    td {
-        font-weight: 300;
-    }
-
     .sort {
         cursor: pointer;
-        cursor: hand;
+
     }
     .sort-order {
         display:none;
