@@ -16,6 +16,10 @@ import {withRouter} from 'react-router';
 import {Button, Container, Grid, Header, Icon, Menu, Popup, Table} from "semantic-ui-react";
 
 const styles = {
+    actionWrapper: {
+        position: 'absolute',
+        right: 10,
+    },
     wrapper: {
         padding: '0 40px 0 40px',
         width: '1280px'
@@ -120,7 +124,7 @@ class Dashboard extends React.Component {
                     <Table.Cell>
                         {i.user_name}
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell style={styles.actionWrapper}>
                         {(() => {
                             if (this.state.hoveredInstance === index) {
                                 return (
@@ -255,15 +259,19 @@ class Dashboard extends React.Component {
                 <Grid padded style={styles.grid}>
                     <Grid.Column width={6}>
                         <Menu vertical style={styles.menu}>
-                            <Menu.Item header>Tools</Menu.Item>
-                            {menuItems[0].items.map((item, key) =>
-                                <Menu.Item
-                                    key={key}
-                                    onClick={item.onClick}
-                                    active={item.active}
-                                >
-                                    {item.name}
-                                </Menu.Item>
+                            {menuItems.map((category, key) =>
+                                <div key={key}>
+                                    <Menu.Item header>{category.name}</Menu.Item>
+                                    {category.items.map((item, key) =>
+                                        <Menu.Item
+                                            key={key}
+                                            onClick={item.onClick}
+                                            active={item.active}
+                                        >
+                                            {item.name}
+                                        </Menu.Item>
+                                    )}
+                                </div>
                             )}
                         </Menu>
                     </Grid.Column>
