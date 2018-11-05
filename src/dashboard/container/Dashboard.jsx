@@ -13,7 +13,7 @@ import {connect} from 'react-redux';
 
 import {includes} from 'lodash';
 import {withRouter} from 'react-router';
-import {Button, Container, Grid, Header, Icon, Input, Menu, Table} from "semantic-ui-react";
+import {Button, Container, Grid, Header, Icon, Menu, Popup, Table} from "semantic-ui-react";
 
 const styles = {
     wrapper: {
@@ -90,6 +90,7 @@ class Dashboard extends React.Component {
 
     renderTableRows(basePath, subPath, instances) {
         const {publicInstances, cloneToolInstance, deleteToolInstance} = this.props;
+        const {push} = this.props.router;
 
         return instances.map((i, index) => {
             return (
@@ -102,7 +103,11 @@ class Dashboard extends React.Component {
                         {index + 1}
                     </Table.Cell>
                     <Table.Cell>
-                        <Button>
+                        <Button
+                            basic
+                            onClick={() => push(basePath + i.tool + '/' + i.id + subPath)}
+                            size='small'
+                        >
                             {i.name}
                         </Button>
                     </Table.Cell>
@@ -119,25 +124,35 @@ class Dashboard extends React.Component {
                         {(() => {
                             if (this.state.hoveredInstance === index) {
                                 return (
-                                    <div>
+                                    <Button.Group size='small'>
                                         {!i.fake &&
-                                        <Button
-                                            onClick={() => cloneToolInstance(i.id)}
-                                            icon
-                                        >
-                                            <Icon name='clone' />
-                                            clone
-                                        </Button>}
+                                        <Popup
+                                            trigger={
+                                                <Button
+                                                    onClick={() => cloneToolInstance(i.id)}
+                                                    icon
+                                                >
+                                                    <Icon name='clone'/>
+                                                </Button>
+                                            }
+                                            content='Clone'
+                                        />
+                                        }
                                         {!i.fake &&
                                         !publicInstances &&
-                                        <Button
-                                            onClick={() => deleteToolInstance(i.id)}
-                                            icon
-                                        >
-                                            <Icon name='trash' />
-                                            delete
-                                        </Button>}
-                                    </div>
+                                        <Popup
+                                            trigger={
+                                                <Button
+                                                    onClick={() => deleteToolInstance(i.id)}
+                                                    icon
+                                                >
+                                                    <Icon name='trash'/>
+                                                </Button>
+                                            }
+                                            content='Delete'
+                                        />
+                                        }
+                                    </Button.Group>
                                 );
                             }
                             return null;
@@ -151,6 +166,8 @@ class Dashboard extends React.Component {
     renderDataTable() {
         // eslint-disable-next-line no-shadow
         const {activeTool, setPublic, publicInstances} = this.props;
+        const {push} = this.props.router;
+
         return (
             <Grid padded>
                 <Grid.Row columns={1}>
@@ -158,28 +175,28 @@ class Dashboard extends React.Component {
                         <Header as='h2'>Instances of {activeTool.slug}</Header>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row columns={3}>
-                    <Grid.Column width={5}>
-                        <Input size='small' type='text' placeholder="Search..."/>
-                    </Grid.Column>
-                    <Grid.Column width={5} textAlign='center'>
-                        <Button icon style={styles.iconFix}>
+                <Grid.Row columns={2}>
+                    <Grid.Column width={5} floated='left' textAlign='center'>
+                        <Button positive icon fluid
+                                style={styles.iconFix}
+                                onClick={() => push(activeTool.path + activeTool.slug)}
+                        >
                             <Icon name='add' style={styles.iconFix}/>
                             Add new
                         </Button>
                     </Grid.Column>
-                    <Grid.Column width={6} textAlign='right'>
-                        <Button.Group>
+                    <Grid.Column width={5} floated='right' textAlign='right'>
+                        <Button.Group fluid>
                             <Button
                                 onClick={() => setPublic(false)}
-                                positive={!publicInstances}
+                                primary={!publicInstances}
                             >
                                 Private
                             </Button>
                             <Button.Or/>
                             <Button
                                 onClick={() => setPublic(true)}
-                                positive={publicInstances}
+                                primary={publicInstances}
                             >
                                 Public
                             </Button>
