@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {mounding} from 'gwflowjs';
 import {pure} from 'recompose';
 
-import '../../less/toolDiagram.less';
-
 import {
     CartesianGrid,
     Line,
@@ -14,6 +12,36 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+import {Grid, Header} from "semantic-ui-react";
+
+const styles = {
+    diagram: {
+        position: 'relative'
+    },
+    diagramLabelsRight: {
+        position: 'absolute',
+        top: '20px',
+        right: '50px'
+    },
+    diagramXLabels: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    diagramYLabels: {
+        position: 'absolute',
+        bottom: '170px',
+        left: '5px',
+        transform: 'rotate(-90deg)'
+    },
+    diagramLabel: {
+        textAlign: 'center',
+        background: '#EFF3F6',
+        opacity: 0.9,
+        padding: '5px',
+        margin: '5px'
+    }
+};
 
 const calculateDiagramData = (variable, w, L, W, hi, Sy, K, t, min, max, stepSize) => {
     const data = [];
@@ -86,10 +114,10 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
 
     return (
         <div>
-            <h2>Calculation</h2>
-            <div className="grid-container">
-                <div className="col stretch">
-                    <div className="diagram">
+            <Header textAlign='center'>Calculation</Header>
+            <Grid>
+                <Grid.Column>
+                    <div style={styles.diagram}>
                         <ResponsiveContainer width={'100%'} aspect={2.0}>
                             <LineChart data={data} margin={{
                                 top: 20,
@@ -112,23 +140,18 @@ const Chart = ({settings, w, L, W, hi, Sy, K, t}) => {
                                                dot={false}/>
                             </LineChart>
                         </ResponsiveContainer>
-                        <div className="diagram-ylabels">
+                        <div style={styles.diagramYLabels}>
                             <p>h - hi (m)</p>
                         </div>
-                        <div className="diagram-labels-right">
-                            <div className="diagram-label">
-                                <p>
-                                    h<sub>max</sub>
-                                    =
-                                    <strong>{hMax.toFixed(2)}</strong>
-                                    m
-                                </p>
+                        <div style={styles.diagramLabel}>
+                            <div style={styles.diagramLabel}>
+                                h<sub>max</sub>=<strong>{hMax.toFixed(2)}</strong>m
                             </div>
                         </div>
-                        <p className="center-vertical center-horizontal">{xLabel}</p>
+                        <p style={styles.diagramXLabels}>{xLabel}</p>
                     </div>
-                </div>
-            </div>
+                </Grid.Column>
+            </Grid>
         </div>
     );
 };

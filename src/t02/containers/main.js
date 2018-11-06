@@ -4,34 +4,31 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 import uuid from 'uuid';
 
-import '../../less/4TileTool.less';
-import styleGlobals from 'styleGlobals';
 import image from '../images/T02.png';
 
 import {Background, Chart, Parameters, Settings} from '../components';
-import {WebData, LayoutComponents} from '../../core';
+import {WebData} from '../../core';
 
-import Icon from '../../components/primitive/Icon';
 import Navbar from '../../containers/Navbar';
-import Accordion from '../../components/primitive/Accordion';
-import AccordionItem from '../../components/primitive/AccordionItem';
-import Input from '../../components/primitive/Input';
-import Select from '../../components/primitive/Select';
-import Button from '../../components/primitive/Button';
 import {Modifier as Dashboard} from '../../dashboard';
 
 import {each} from 'lodash';
 import {getInitialState} from '../reducers/main';
 import applyParameterUpdate from '../../core/simpleTools/parameterUpdate';
 import {isReadOnly} from '../../core/helpers';
+import {Accordion, Icon, Container, Divider, Grid, Header, Input, Form} from "semantic-ui-react";
+import SliderParameter from "../../core/parameterSlider/SliderParameter";
 
 const styles = {
-    heading: {
-        borderBottom: '1px solid ' + styleGlobals.colors.graySemilight,
-        fontWeight: 300,
-        fontSize: 16,
-        textAlign: 'left',
-        paddingBottom: 10
+    container: {
+        padding: '0 40px 0 40px',
+        width: '1280px'
+    },
+    columnContainer: {
+        background: '#fff',
+        boxShadow: '0 0 2px 0 rgba(76, 76, 76, 0.3)',
+        height: '100%',
+        padding: '12px'
     }
 };
 
@@ -39,12 +36,12 @@ const buildPayload = (data) => {
     return {
         settings: data.settings,
         parameters: data.parameters.map(v => {
-            return {
+            SliderParameter.fromObject({
                 id: v.id,
                 max: v.max,
                 min: v.min,
                 value: v.value,
-            };
+            }).toObject;
         })
     };
 };
@@ -57,13 +54,15 @@ const navigation = [{
 
 class T02 extends React.Component {
 
+    // TODO: get data from saved instance
     constructor() {
         super();
         this.state = getInitialState();
+        this.state.activeIndex = 0;
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState(function(prevState) {
+        this.setState(function (prevState) {
             return {
                 ...prevState,
                 ...newProps.toolInstance,
@@ -113,47 +112,32 @@ class T02 extends React.Component {
         });
     }
 
-    handleInputChange = name => {
-        return value => {
-            this.setState(prevState => {
-                return {
-                    ...prevState,
-                    [ name ]: value
-                };
-            });
+    handleInputChange = (e, {name, value}) => this.setState(prevState => {
+        return {
+            ...prevState,
+            [name]: value
         };
-    };
+    });
 
-    handleSelectChange = name => {
-        return data => {
-            this.handleInputChange(name)(data ? data.value : undefined);
-        };
-    };
-
-    handleChange = (e) => {
-        if (e.target.name === 'variable') {
-            this.updateSettings(e.target.value);
-        }
-
-        if (e.target.name.startsWith('parameter')) {
-            const param = e.target.name.split('_');
-
-            const parameter = {};
-            parameter.id = param[1];
-            parameter[param[2]] = e.target.value;
-
-            this.updateParameter(parameter);
-        }
+    handleChange = parameter => {
+        this.updateParameter(parameter.toObject);
     };
 
     handleReset = () => {
         this.setState(getInitialState());
     };
 
+    handleClickAccordion = (e, titleProps) => {
+        const {index} = titleProps;
+        const {activeIndex} = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({activeIndex: newIndex})
+    };
+
     render() {
-        const {settings, parameters, name, description} = this.state;
-        const {getToolInstanceStatus, updateToolInstanceStatus, createToolInstanceStatus, toolInstance} = this.props;
-        const {id} = this.props.params;
+        const {activeIndex, settings, parameters} = this.state;
+        const {getToolInstanceStatus, toolInstance} = this.props;
         const readOnly = isReadOnly(toolInstance.permissions);
 
         const chartParams = {settings};
@@ -161,92 +145,99 @@ class T02 extends React.Component {
             chartParams[v.id] = v.value;
         });
 
-        const heading = (
-            <div className="grid-container">
-                <div className="col stretch parameters-wrapper">
-                    <Input
-                        type="text"
-                        disabled={readOnly}
-                        name="name"
-                        value={name}
-                        onChange={this.handleInputChange('name')}
-                        placeholder="Name"
-                    />
-                </div>
-                <div className="col col-rel-0-5">
-                    <WebData.Component.Loading status={id ? updateToolInstanceStatus : createToolInstanceStatus}>
-                        <Button type={'accent'} onClick={this.save} disabled={readOnly}>
-                            Save
-                        </Button>
-                    </WebData.Component.Loading>
-                </div>
-            </div>
-        );
-
         return (
-            <div className="app-width">
+            <Container style={styles.container}>
                 <Navbar links={navigation}/>
-                <h3 style={styles.heading}>
-                    T02. Groundwater mounding (Hantush)
-                </h3>
+                <Header as='h3' textAlign='left'>T02. Groundwater mounding (Hantush)</Header>
+                <Divider color='grey'/>
                 <WebData.Component.Loading status={getToolInstanceStatus}>
-                    <div className="grid-container">
-                        <div className="tile col stretch">
-                            <Accordion firstActive={null}>
-                                <AccordionItem heading={heading}>
-                                    <LayoutComponents.InputGroup label="Visibility">
-                                        <Select
-                                            disabled={readOnly}
-                                            clearable={false}
-                                            value={this.state.public}
-                                            onChange={this.handleSelectChange(
-                                                'public'
-                                            )}
-                                            options={[
-                                                {label: 'public', value: true},
-                                                {label: 'private', value: false}
-                                            ]}
-                                        />
-                                    </LayoutComponents.InputGroup>
-                                    <LayoutComponents.InputGroup label="Description">
-                                        <Input
-                                            type="textarea"
-                                            disabled={readOnly}
-                                            name="description"
-                                            value={description}
-                                            onChange={this.handleInputChange('description')}
-                                            placeholder="Description"
-                                        />
-                                    </LayoutComponents.InputGroup>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
-                    </div>
-                    <div className="grid-container">
-                        <section className="tile col col-abs-2 stacked">
-                            <Background image={image}/>
-                        </section>
-
-                        <section className="tile col col-abs-3 stretch">
-                            <Chart {...chartParams}/>
-                        </section>
-                    </div>
-
-                    <div className="grid-container">
-                        <section className="tile col col-abs-2">
-                            <Settings settings={settings} handleChange={this.handleChange} {...chartParams} />
-                        </section>
-
-                        <section className="tile col col-abs-3 stretch">
-                            <Parameters
-                                parameters={parameters}
-                                handleChange={this.handleChange}
-                                handleReset={this.handleReset}
-                            />
-                        </section>
-                    </div>
+                    <Grid padded>
+                        <Grid.Row>
+                            <Grid.Column width={16}>
+                                <Container fluid style={styles.columnContainer}>
+                                    <Accordion>
+                                        <Accordion.Title
+                                            active={activeIndex === 1} index={1} onClick={this.handleClickAccordion}
+                                        >
+                                            <Grid>
+                                                <Grid.Column floated='left' width={6}>
+                                                    <Input
+                                                        fluid
+                                                        icon={
+                                                            <Icon name='save' inverted circular link
+                                                                  onClick={this.save}/>
+                                                        }
+                                                        type="text"
+                                                        disabled={readOnly}
+                                                        name="name"
+                                                        value={this.state.name}
+                                                        onChange={this.handleInputChange}
+                                                        placeholder="Name"
+                                                    />
+                                                </Grid.Column>
+                                                <Grid.Column floated='right' width={1}>
+                                                    <Icon name='dropdown'/>
+                                                </Grid.Column>
+                                            </Grid>
+                                        </Accordion.Title>
+                                        <Accordion.Content active={activeIndex === 1}>
+                                            <Form>
+                                                <Form.Select
+                                                    label='Public'
+                                                    name='public'
+                                                    disabled={readOnly}
+                                                    value={this.state.public}
+                                                    onChange={this.handleInputChange}
+                                                    options={[
+                                                        {key: 0, text: 'public', value: true},
+                                                        {key: 1, text: 'private', value: false}
+                                                    ]}
+                                                />
+                                                <Form.TextArea
+                                                    label="Description"
+                                                    disabled={readOnly}
+                                                    name="description"
+                                                    onChange={this.handleInputChange}
+                                                    placeholder="Description"
+                                                    value={this.state.description}
+                                                />
+                                            </Form>
+                                        </Accordion.Content>
+                                    </Accordion>
+                                </Container>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={6}>
+                                <Container style={styles.columnContainer}>
+                                    <Background image={image}/>
+                                </Container>
+                            </Grid.Column>
+                            <Grid.Column width={10}>
+                                <Container style={styles.columnContainer}>
+                                    <Chart {...chartParams}/>
+                                </Container>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={6}>
+                                <Container style={styles.columnContainer}>
+                                    <Settings settings={settings} handleChange={this.handleChange} {...chartParams} />
+                                </Container>
+                            </Grid.Column>
+                            <Grid.Column width={10}>
+                                <Container style={styles.columnContainer}>
+                                    <Parameters
+                                        parameters={parameters.map(p => SliderParameter.fromObject(p))}
+                                        handleChange={this.handleChange}
+                                        handleReset={this.handleReset}
+                                    />
+                                </Container>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </WebData.Component.Loading>
-            </div>
+            </Container>
         );
     }
 }
@@ -268,7 +259,7 @@ const mapDispatchToProps = (dispatch, props) => {
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
             // eslint-disable-next-line no-loop-func
-            wrappedActions[key] = function() {
+            wrappedActions[key] = function () {
                 const args = Array.prototype.slice.call(arguments);
                 dispatch(actions[key](tool, ...args));
             };

@@ -1,93 +1,103 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import HtmlLabel from '../../components/primitive/HtmlLabel';
+import {Grid, Input} from "semantic-ui-react";
+
+import Slider from 'rc-slider';
+import SliderParameter from "./SliderParameter";
+
+const styles = {
+    extraMini: {
+        width: '100px'
+    }
+};
 
 class ParameterSlider extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            param: props.param,
-            localChange: false
+            param: props.param.toObject
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        const param = {
-            ...nextProps.param,
-            value: Number(nextProps.param.value).toFixed(nextProps.param.decimals)
-        };
-
         this.setState({
             ...this.state,
-            param,
-            localChange: false
+            param: nextProps.param.toObject
         });
     }
 
     handleLocalChange = ({target}) => {
         const {value, name} = target;
+        const param = SliderParameter.fromObject(this.state.param);
 
-        let param;
-        if (name.endsWith('value')) {
-            param = {...this.state.param, value};
-        }
+        param[name] = value;
 
-        if (name.endsWith('min')) {
-            param = {...this.state.param, min: value};
-        }
-
-        if (name.endsWith('max')) {
-            param = {...this.state.param, max: value};
-        }
-
-        this.setState({param, localChange: false});
+        this.setState({
+            param: param.toObject
+        });
     };
 
+    handleSlider = value => {
+        const param = SliderParameter.fromObject(this.state.param);
+        param.value = value;
+
+        return this.setState({
+            param: param
+        });
+    };
+
+    handleChange = () => this.props.handleChange(SliderParameter.fromObject(this.state.param));
+
     render() {
-        const {handleChange} = this.props;
         const {param} = this.state;
 
-        // Should do some refactoring
-        if (!param.label && param.name) {
-            param.label = param.name;
-        }
-
-        let disable = false;
-        if (param.disable) {
-            disable = param.disable;
-        }
-
         return (
-            <tr className="parameter">
-                <td className="parameter-label">
-                    <HtmlLabel html={param.label}/>
-                </td>
-                <td>
-                    <input disabled={disable} name={'parameter_' + param.id + '_min'}
-                           className="parameter-min input-max input-xs" type="number" step={param.stepSize}
-                           value={param.min} onBlur={handleChange} onChange={this.handleLocalChange}
-                    />
-
-                    <input disabled={disable} name={'parameter_' + param.id + '_max'}
-                           className="parameter-max input-max input-xs" type="number" step={param.stepSize}
-                           value={param.max} onBlur={handleChange} onChange={this.handleLocalChange}
-                    />
-
-                    <input disabled={disable} id={param.id + '_range'} name={'parameter_' + param.id + '_value'}
-                           className="parameter-input" type="range" min={param.min} max={param.max}
-                           step={param.stepSize} value={param.value} onChange={handleChange}
-                    />
-                </td>
-                <td>
-                    <input disabled={disable} name={'parameter_' + param.id + '_value'}
-                           className="parameter-max input input-xs"
-                           type="number" step={param.stepSize} min={param.min} max={param.max}
+            <Grid.Row columns={3}>
+                <Grid.Column width={4}>
+                    {param.name}
+                </Grid.Column>
+                <Grid.Column width={8}>
+                    <Grid columns={2} padded>
+                        <Grid.Column width={5} floated='left'>
+                            <Input name='min'
+                                   type="number"
+                                   size='mini'
+                                   style={styles.extraMini}
+                                   value={param.min} onBlur={this.handleChange} onChange={this.handleLocalChange}
+                            />
+                        </Grid.Column>
+                        <Grid.Column width={5} floated='right'>
+                            <Input name='max'
+                                   type="number"
+                                   size='mini'
+                                   style={styles.extraMini}
+                                   value={param.max} onBlur={this.handleChange} onChange={this.handleLocalChange}
+                            />
+                        </Grid.Column>
+                    </Grid>
+                    <Grid padded>
+                        <Grid.Row>
+                            <Slider
+                                min={param.min}
+                                max={param.max}
+                                step={param.stepSize}
+                                defaultValue={param.value}
+                                onChange={this.handleSlider}
+                                onAfterChange={this.handleChange}
+                            />
+                        </Grid.Row>
+                    </Grid>
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    <Input name='value'
+                           type="number"
+                           size='mini'
                            value={param.value} onChange={this.handleLocalChange}
-                           onBlur={handleChange}
+                           onBlur={this.handleChange}
                     />
-                </td>
-            </tr>
+                </Grid.Column>
+            </Grid.Row>
         );
     }
 }

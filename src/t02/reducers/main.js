@@ -18,6 +18,7 @@ export const getInitialState = () => {
             max: 10,
             value: 0.045,
             stepSize: 0.001,
+            type: 'float',
             decimals: 3
         }, {
             order: 1,
@@ -28,6 +29,7 @@ export const getInitialState = () => {
             max: 1000,
             value: 40,
             stepSize: 1,
+            type: 'float',
             decimals: 0
         }, {
             order: 2,
@@ -38,6 +40,7 @@ export const getInitialState = () => {
             max: 100,
             value: 20,
             stepSize: 1,
+            type: 'float',
             decimals: 0
         }, {
             order: 3,
@@ -48,6 +51,7 @@ export const getInitialState = () => {
             max: 100,
             value: 35,
             stepSize: 1,
+            type: 'float',
             decimals: 0
         }, {
             order: 4,
@@ -59,6 +63,7 @@ export const getInitialState = () => {
             validMax: (x) => x <= 0.5,
             value: 0.085,
             stepSize: 0.001,
+            type: 'float',
             decimals: 3
         }, {
             order: 5,
@@ -70,6 +75,7 @@ export const getInitialState = () => {
             validMax: x => x <= 100000,
             value: 1.83,
             stepSize: 0.01,
+            type: 'float',
             decimals: 2
         }, {
             order: 6,
@@ -80,6 +86,7 @@ export const getInitialState = () => {
             max: 100,
             value: 1.5,
             stepSize: 0.1,
+            type: 'float',
             decimals: 1
         }]
     };
