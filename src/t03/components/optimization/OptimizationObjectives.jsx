@@ -4,14 +4,35 @@ import PropTypes from 'prop-types';
 import OptimizationObjective from '../../../core/optimization/OptimizationObjective';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
+import {Button, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './OptimizationMap';
 import Slider from 'rc-slider';
 import {createSliderWithTooltip} from 'rc-slider';
 import Stressperiods from "../../../core/modflow/Stressperiods";
 import {Formatter} from "../../../core";
+import OptimizationToolbar from "./OptimizationToolbar";
+import {OPTIMIZATION_EDIT_NOCHANGES, OPTIMIZATION_EDIT_SAVED, OPTIMIZATION_EDIT_UNSAVED} from "../../selectors/optimization";
 
 const Range = createSliderWithTooltip(Slider.Range);
+
+const styles = {
+    iconFix: {
+        width: 'auto',
+        height: 'auto'
+    },
+    inputFix: {
+        padding: '0'
+    },
+    link: {
+        cursor: 'pointer'
+    },
+    tableWidth: {
+        width: '99%'
+    },
+    sliderDiv: {
+        paddingBottom: 30
+    }
+};
 
 class OptimizationObjectivesComponent extends React.Component {
 
@@ -21,7 +42,8 @@ class OptimizationObjectivesComponent extends React.Component {
             objectives: props.objectives.map((objective) => {
                 return objective.toObject;
             }),
-            selectedObjective: null
+            selectedObjective: null,
+            editState: OPTIMIZATION_EDIT_NOCHANGES
         };
     }
 
@@ -33,13 +55,18 @@ class OptimizationObjectivesComponent extends React.Component {
         });
     }
 
-    handleChange = (e, {name, value}) => {
-        const objective = OptimizationObjective.fromObject(this.state.selectedObjective);
-        objective[name] = value;
-        return this.setState({
-            selectedObjective: objective.toObject
-        });
-    };
+    handleLocalChange = (e, {name, value}) => this.setState({
+        selectedObjective: {
+            ...this.state.selectedObjective,
+            [name]: value
+        },
+        editState: OPTIMIZATION_EDIT_UNSAVED
+    });
+
+    handleChange = () => this.setState({
+        selectedObjective: OptimizationObjective.fromObject(this.state.selectedObjective).toObject,
+        editState: OPTIMIZATION_EDIT_UNSAVED
+    });
 
     handleChangeStressPeriods = (e) => {
         return this.setState({
@@ -52,12 +79,14 @@ class OptimizationObjectivesComponent extends React.Component {
                         max: e[1]
                     }
                 }
-            }
+            },
+            editState: OPTIMIZATION_EDIT_UNSAVED
         });
     };
 
     onClickBack = () => this.setState({
-        selectedObjective: null
+        selectedObjective: null,
+        editState: OPTIMIZATION_EDIT_NOCHANGES
     });
 
     onClickNew = (e, {name, value}) => {
@@ -65,7 +94,8 @@ class OptimizationObjectivesComponent extends React.Component {
         newObjective.type = value;
         newObjective.location.ts.max = this.props.stressPeriods.dateTimes.length - 1;
         return this.setState({
-            selectedObjective: newObjective.toObject
+            selectedObjective: newObjective.toObject,
+            editState: OPTIMIZATION_EDIT_UNSAVED
         });
     };
 
@@ -108,7 +138,8 @@ class OptimizationObjectivesComponent extends React.Component {
         });
 
         return this.setState({
-            selectedObjective: null
+            selectedObjective: null,
+            editState: OPTIMIZATION_EDIT_SAVED
         });
     };
 
@@ -123,25 +154,6 @@ class OptimizationObjectivesComponent extends React.Component {
     };
 
     render() {
-        const styles = {
-            iconfix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            inputfix: {
-                padding: '0'
-            },
-            link: {
-                cursor: 'pointer'
-            },
-            tablewidth: {
-                width: '99%'
-            },
-            sliderDiv: {
-                paddingBottom: 30
-            }
-        };
-
         const typeOptions = [
             {key: 'type1', text: 'Concentration', value: 'concentration'},
             {key: 'type2', text: 'Head', value: 'head'},
@@ -152,42 +164,18 @@ class OptimizationObjectivesComponent extends React.Component {
 
         return (
             <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
-                    <Grid.Row columns={3}>
-                        <Grid.Column>
-                            {this.state.selectedObjective &&
-                            <Button icon
-                                    style={styles.iconfix}
-                                    onClick={this.onClickBack}
-                                    labelPosition="left">
-                                <Icon name="left arrow"/>
-                                Back to List
-                            </Button>
-                            }
-                        </Grid.Column>
-                        <Grid.Column/>
-                        <Grid.Column textAlign="right">
-                            {!this.state.selectedObjective ?
-                                <Dropdown button floating labeled
-                                          direction="left"
-                                          style={styles.iconfix}
-                                          name="type"
-                                          className="icon"
-                                          text="Add New"
-                                          icon="plus"
-                                          options={typeOptions}
-                                          onChange={this.onClickNew}
-                                /> :
-                                <Button icon positive
-                                        style={styles.iconfix}
-                                        onClick={this.onClickSave}
-                                        labelPosition="left">
-                                    <Icon name="save"/>
-                                    Save
-                                </Button>
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
+                <OptimizationToolbar
+                    save={this.state.selectedObjective ? {onClick: this.onClickSave} : null}
+                    back={this.state.selectedObjective ? {onClick: this.onClickBack} : null}
+                    dropdown={ !this.state.selectedObjective ? {
+                        text: 'Add New',
+                        icon: 'plus',
+                        options: typeOptions,
+                        onChange: this.onClickNew
+                    } : null}
+                    editState={this.state.editState}
+                />
+                <Grid style={styles.tableWidth}>
                     <Grid.Row columns={1}>
                         <Grid.Column>
                             {(!this.state.selectedObjective && (!this.state.objectives || this.state.objectives.length < 1)) &&
@@ -217,7 +205,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                 <Table.Cell>{objective.type}</Table.Cell>
                                                 <Table.Cell textAlign="center">
                                                     <Button icon color="red"
-                                                            style={styles.iconfix}
+                                                            style={styles.iconFix}
                                                             size="small"
                                                             onClick={() => this.onClickDelete(objective)}>
                                                         <Icon name="trash"/>
@@ -238,8 +226,9 @@ class OptimizationObjectivesComponent extends React.Component {
                                         name="name"
                                         value={this.state.selectedObjective.name}
                                         placeholder="name ="
-                                        style={styles.inputfix}
-                                        onChange={this.handleChange}
+                                        style={styles.inputFix}
+                                        onChange={this.handleLocalChange}
+                                        onBlur={this.handleChange}
                                     />
                                 </Form.Field>
                                 <Form.Group widths="equal">
@@ -250,13 +239,13 @@ class OptimizationObjectivesComponent extends React.Component {
                                             value={this.state.selectedObjective.type}
                                             placeholder="type ="
                                             options={typeOptions}
-                                            onChange={this.handleChange}
+                                            onChange={this.handleLocalChange}
                                         />
                                     </Form.Field>
                                     <Form.Field>
                                         <label>Method how each objective scalar will be calculated.</label>
                                         <Form.Select
-                                            name="summaryMethod"
+                                            name="summary_method"
                                             value={this.state.selectedObjective.summary_method}
                                             placeholder="summary_method ="
                                             options={[
@@ -264,7 +253,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                 {key: 'max', text: 'Max', value: 'max'},
                                                 {key: 'mean', text: 'Mean', value: 'mean'},
                                             ]}
-                                            onChange={this.handleChange}
+                                            onChange={this.handleLocalChange}
                                         />
                                     </Form.Field>
                                 </Form.Group>
@@ -276,8 +265,9 @@ class OptimizationObjectivesComponent extends React.Component {
                                             name="weight"
                                             value={this.state.selectedObjective.weight}
                                             placeholder="weight ="
-                                            style={styles.inputfix}
-                                            onChange={this.handleChange}
+                                            style={styles.inputFix}
+                                            onChange={this.handleLocalChange}
+                                            onBlur={this.handleChange}
                                             defaultChecked
                                         />
                                     </Form.Field>
@@ -285,11 +275,12 @@ class OptimizationObjectivesComponent extends React.Component {
                                         <label>Objective penalty value</label>
                                         <Form.Input
                                             type="number"
-                                            name="penaltyValue"
+                                            name="penalty_value"
                                             value={this.state.selectedObjective.penalty_value}
                                             placeholder="penalty_value ="
-                                            style={styles.inputfix}
-                                            onChange={this.handleChange}
+                                            style={styles.inputFix}
+                                            onChange={this.handleLocalChange}
+                                            onBlur={this.handleChange}
                                         />
                                     </Form.Field>
                                 </Form.Group>
@@ -320,7 +311,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                 objects={this.props.objects}
                                                 onlyObjects={this.state.selectedObjective.type === 'flux' || this.state.selectedObjective.type === 'inputConc'}
                                                 gridSize={this.props.model.grid_size}
-                                                onChange={this.handleChange}
+                                                onChange={this.handleLocalChange}
                                                 readOnly
                                             />
                                         </Segment>
@@ -342,7 +333,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                         location={this.state.selectedObjective.location_1}
                                                         objects={this.props.objects}
                                                         gridSize={this.props.model.grid_size}
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleLocalChange}
                                                         readOnly
                                                     />
                                                 </Grid.Column>
@@ -355,7 +346,7 @@ class OptimizationObjectivesComponent extends React.Component {
                                                         location={this.state.selectedObjective.location_2}
                                                         objects={this.props.objects}
                                                         gridSize={this.props.model.grid_size}
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleLocalChange}
                                                         readOnly
                                                     />
                                                 </Grid.Column>

@@ -21,11 +21,11 @@ const styles = {
         width: 'auto',
         maxWidth: '350px'
     },
-    iconfix: {
+    iconFix: {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {
@@ -34,7 +34,7 @@ const styles = {
     popupFix: {
         maxWidth: '350px'
     },
-    tablewidth: {
+    tableWidth: {
         width: '99%'
     }
 };
@@ -145,7 +145,7 @@ class OptimizationResultsComponent extends React.Component {
                     </Grid> : <div/>
                 }
                 {method.solutions.length > 0 ?
-                    <Segment style={styles.tablewidth}>
+                    <Segment style={styles.tableWidth}>
                         <Grid divided="vertically">
                             <Grid.Row columns={3}>
                                 <Grid.Column textAlign="center" width={4}>
@@ -185,17 +185,18 @@ class OptimizationResultsComponent extends React.Component {
                                     <Grid.Column textAlign="center" width={6}>
                                         <Button.Group>
                                             <Button color="blue"
+                                                    disabled={optimizationInProgress(this.state.optimization.state)}
                                                     size="small"
-                                                    style={styles.iconfix}
+                                                    style={styles.iconFix}
                                                     onClick={() => this.onClickApply(solution.id)}
                                             >
                                                 Apply
                                             </Button>
                                             <Button.Or/>
                                             <Button color="blue"
-                                                    disabled={this.props.model.dirty}
+                                                    disabled={this.props.model.dirty || optimizationInProgress(this.state.optimization.state)}
                                                     size="small"
-                                                    style={styles.iconfix}
+                                                    style={styles.iconFix}
                                                     onClick={() => this.onClickLocalOptimization(solution.id)}
                                             >
                                                 Optimize Locally
@@ -224,7 +225,7 @@ class OptimizationResultsComponent extends React.Component {
 
         return (
             <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
+                <Grid style={styles.tableWidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column/>
                         <Grid.Column/>
@@ -232,7 +233,7 @@ class OptimizationResultsComponent extends React.Component {
                     </Grid.Row>
                 </Grid>
                 <Tab menu={{secondary: true, pointing: true}} activeIndex={activeIndex} onTabChange={this.onTabChange}
-                     panes={panes} style={styles.tablewidth}/>
+                     panes={panes} style={styles.tableWidth}/>
                 {optimizationInProgress(optimization.state) && panes.length === 0 ?
                     <Segment>
                         <Progress percent={0} progress indicating={true}>

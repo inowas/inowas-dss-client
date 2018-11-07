@@ -4,12 +4,37 @@ import PropTypes from 'prop-types';
 import OptimizationConstraint from '../../../core/optimization/OptimizationConstraint';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Button, Dropdown, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
+import {Button, Form, Grid, Icon, Message, Segment, Table} from 'semantic-ui-react';
 import OptimizationMap from './OptimizationMap';
 import Slider, {createSliderWithTooltip} from 'rc-slider';
 import {Formatter} from "../../../core";
+import OptimizationToolbar from "./OptimizationToolbar";
+import {
+    OPTIMIZATION_EDIT_NOCHANGES,
+    OPTIMIZATION_EDIT_SAVED,
+    OPTIMIZATION_EDIT_UNSAVED
+} from "../../selectors/optimization";
 
 const Range = createSliderWithTooltip(Slider.Range);
+
+const styles = {
+    iconFix: {
+        width: 'auto',
+        height: 'auto'
+    },
+    inputFix: {
+        padding: '0'
+    },
+    link: {
+        cursor: 'pointer'
+    },
+    tableWidth: {
+        width: '99%'
+    },
+    sliderDiv: {
+        paddingBottom: 30
+    }
+};
 
 class OptimizationConstraintsComponent extends React.Component {
 
@@ -19,7 +44,8 @@ class OptimizationConstraintsComponent extends React.Component {
             constraints: props.constraints.map((constraint) => {
                 return constraint.toObject;
             }),
-            selectedConstraint: null
+            selectedConstraint: null,
+            editState: OPTIMIZATION_EDIT_NOCHANGES
         };
     }
 
@@ -31,13 +57,18 @@ class OptimizationConstraintsComponent extends React.Component {
         });
     }
 
-    handleChange = (e, {name, value}) => {
-        const constraint = OptimizationConstraint.fromObject(this.state.selectedConstraint);
-        constraint[name] = value;
-        return this.setState({
-            selectedConstraint: constraint.toObject
-        });
-    };
+    handleLocalChange = (e, {name, value}) => this.setState({
+        selectedConstraint: {
+            ...this.state.selectedConstraint,
+            [name]: value
+        },
+        editState: OPTIMIZATION_EDIT_UNSAVED
+    });
+
+    handleChange = () => this.setState({
+        selectedConstraint: OptimizationConstraint.fromObject(this.state.selectedConstraint).toObject,
+        editState: OPTIMIZATION_EDIT_UNSAVED
+    });
 
     handleChangeStressPeriods = (e) => this.setState({
         selectedConstraint: {
@@ -49,11 +80,13 @@ class OptimizationConstraintsComponent extends React.Component {
                     max: e[1]
                 }
             }
-        }
+        },
+        editState: OPTIMIZATION_EDIT_UNSAVED
     });
 
     onClickBack = () => this.setState({
-        selectedConstraint: null
+        selectedConstraint: null,
+        editState: OPTIMIZATION_EDIT_NOCHANGES
     });
 
     onClickNew = (e, {name, value}) => {
@@ -61,7 +94,8 @@ class OptimizationConstraintsComponent extends React.Component {
         newConstraint.type = value;
         newConstraint.location.ts.max = this.props.stressPeriods.dateTimes.length - 1;
         return this.setState({
-            selectedConstraint: newConstraint.toObject
+            selectedConstraint: newConstraint.toObject,
+            editState: OPTIMIZATION_EDIT_UNSAVED
         });
     };
 
@@ -104,7 +138,8 @@ class OptimizationConstraintsComponent extends React.Component {
         });
 
         return this.setState({
-            selectedConstraint: null
+            selectedConstraint: null,
+            editState: OPTIMIZATION_EDIT_SAVED
         });
     };
 
@@ -119,25 +154,6 @@ class OptimizationConstraintsComponent extends React.Component {
     };
 
     render() {
-        const styles = {
-            iconfix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            inputfix: {
-                padding: '0'
-            },
-            link: {
-                cursor: 'pointer'
-            },
-            tablewidth: {
-                width: '99%'
-            },
-            sliderDiv: {
-                paddingBottom: 30
-            }
-        };
-
         const typeOptions = [
             {key: 'type1', text: 'Concentration', value: 'concentration'},
             {key: 'type2', text: 'Head', value: 'head'},
@@ -148,42 +164,18 @@ class OptimizationConstraintsComponent extends React.Component {
 
         return (
             <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
-                    <Grid.Row columns={3}>
-                        <Grid.Column>
-                            {this.state.selectedConstraint &&
-                            <Button icon
-                                    style={styles.iconfix}
-                                    onClick={this.onClickBack}
-                                    labelPosition="left">
-                                <Icon name="left arrow"/>
-                                Back to List
-                            </Button>
-                            }
-                        </Grid.Column>
-                        <Grid.Column/>
-                        <Grid.Column textAlign="right">
-                            {!this.state.selectedConstraint ?
-                                <Dropdown button floating labeled
-                                          direction="left"
-                                          style={styles.iconfix}
-                                          name="type"
-                                          className="icon"
-                                          text="Add New"
-                                          icon="plus"
-                                          options={typeOptions}
-                                          onChange={this.onClickNew}
-                                /> :
-                                <Button icon positive
-                                        style={styles.iconfix}
-                                        onClick={this.onClickSave}
-                                        labelPosition="left">
-                                    <Icon name="save"/>
-                                    Save
-                                </Button>
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
+                <OptimizationToolbar
+                    save={this.state.selectedConstraint ? {onClick: this.onClickSave} : null}
+                    back={this.state.selectedConstraint ? {onClick: this.onClickBack} : null}
+                    dropdown={!this.state.selectedConstraint ? {
+                        text: 'Add New',
+                        icon: 'plus',
+                        options: typeOptions,
+                        onChange: this.onClickNew
+                    } : null}
+                    editState={this.state.editState}
+                />
+                <Grid style={styles.tableWidth}>
                     <Grid.Row columns={1}>
                         <Grid.Column>
                             {(!this.state.selectedConstraint && (!this.state.constraints || this.state.constraints.length < 1)) &&
@@ -213,7 +205,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                                 <Table.Cell>{constraint.type}</Table.Cell>
                                                 <Table.Cell textAlign="center">
                                                     <Button icon color="red"
-                                                            style={styles.iconfix}
+                                                            style={styles.iconFix}
                                                             size="small"
                                                             onClick={() => this.onClickDelete(constraint)}>
                                                         <Icon name="trash"/>
@@ -234,8 +226,9 @@ class OptimizationConstraintsComponent extends React.Component {
                                         name="name"
                                         value={this.state.selectedConstraint.name}
                                         placeholder="name ="
-                                        style={styles.inputfix}
-                                        onChange={this.handleChange}
+                                        style={styles.inputFix}
+                                        onChange={this.handleLocalChange}
+                                        onBlur={this.handleChange}
                                     />
                                 </Form.Field>
                                 <Form.Group widths="equal">
@@ -246,13 +239,13 @@ class OptimizationConstraintsComponent extends React.Component {
                                             value={this.state.selectedConstraint.type}
                                             placeholder="type ="
                                             options={typeOptions}
-                                            onChange={this.handleChange}
+                                            onChange={this.handleLocalChange}
                                         />
                                     </Form.Field>
                                     <Form.Field>
                                         <label>Method how each constraint scalar will be calculated.</label>
                                         <Form.Select
-                                            name="summaryMethod"
+                                            name="summary_method"
                                             value={this.state.selectedConstraint.summary_method}
                                             placeholder="summary_method ="
                                             options={[
@@ -260,7 +253,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                                 {key: 'max', text: 'Max', value: 'max'},
                                                 {key: 'mean', text: 'Mean', value: 'mean'},
                                             ]}
-                                            onChange={this.handleChange}
+                                            onChange={this.handleLocalChange}
                                         />
                                     </Form.Field>
                                 </Form.Group>
@@ -271,8 +264,9 @@ class OptimizationConstraintsComponent extends React.Component {
                                         name="value"
                                         value={this.state.selectedConstraint.value}
                                         placeholder="value ="
-                                        style={styles.inputfix}
-                                        onChange={this.handleChange}
+                                        style={styles.inputFix}
+                                        onChange={this.handleLocalChange}
+                                        onBlur={this.handleChange}
                                         defaultChecked
                                     />
                                 </Form.Field>
@@ -287,7 +281,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                             {key: 'more', text: 'More', value: 'more'},
                                             {key: 'less', text: 'Less', value: 'less'}
                                         ]}
-                                        onChange={this.handleChange}
+                                        onChange={this.handleLocalChange}
                                     />
                                 </Form.Field>
                                 {this.state.selectedConstraint.type !== 'distance' &&
@@ -317,7 +311,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                                 objects={this.props.objects}
                                                 onlyObjects={this.state.selectedConstraint.type === 'flux' || this.state.selectedConstraint.type === 'inputConc'}
                                                 gridSize={this.props.model.grid_size}
-                                                onChange={this.handleChange}
+                                                onChange={this.handleLocalChange}
                                                 readOnly
                                             />
                                         </Segment>
@@ -339,7 +333,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                                         location={this.state.selectedConstraint.location_1}
                                                         objects={this.props.objects}
                                                         gridSize={this.props.model.grid_size}
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleLocalChange}
                                                         readOnly
                                                     />
                                                 </Grid.Column>
@@ -352,7 +346,7 @@ class OptimizationConstraintsComponent extends React.Component {
                                                         location={this.state.selectedConstraint.location_2}
                                                         objects={this.props.objects}
                                                         gridSize={this.props.model.grid_size}
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleLocalChange}
                                                         readOnly
                                                     />
                                                 </Grid.Column>
@@ -362,7 +356,6 @@ class OptimizationConstraintsComponent extends React.Component {
                                 </Form.Field>
                                 }
                             </Form>
-
                             }
                         </Grid.Column>
                     </Grid.Row>

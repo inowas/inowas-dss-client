@@ -8,17 +8,17 @@ import OptimizationSolution from "../../../core/optimization/OptimizationSolutio
 import OptimizationObjective from "../../../core/optimization/OptimizationObjective";
 
 const styles = {
-    iconfix: {
+    iconFix: {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {
         cursor: 'pointer'
     },
-    tablewidth: {
+    tableWidth: {
         width: '99%'
     }
 };
@@ -105,7 +105,7 @@ class OptimizationLocallyModal extends React.Component {
                                 value={parameters.maxf}
                                 placeholder="maxf ="
                                 onChange={this.handleChange}
-                                style={styles.inputfix}
+                                style={styles.inputFix}
                             />
                         </Form.Field>
                         <Form.Group widths="equal">
@@ -117,7 +117,7 @@ class OptimizationLocallyModal extends React.Component {
                                     value={parameters.xtol}
                                     placeholder="xtol ="
                                     onChange={this.handleChange}
-                                    style={styles.inputfix}
+                                    style={styles.inputFix}
                                 />
                             </Form.Field>
                             <Form.Field>
@@ -128,7 +128,7 @@ class OptimizationLocallyModal extends React.Component {
                                     value={parameters.ftol}
                                     placeholder="ftol ="
                                     onChange={this.handleChange}
-                                    style={styles.inputfix}
+                                    style={styles.inputFix}
                                 />
                             </Form.Field>
                         </Form.Group>
@@ -159,7 +159,7 @@ class OptimizationLocallyModal extends React.Component {
                                                     type="number"
                                                     name="objective"
                                                     placeholder="target ="
-                                                    style={styles.inputfix}
+                                                    style={styles.inputFix}
                                                     value={objective.target || parseFloat(this.props.solution.fitness[key]).toFixed(3)}
                                                     onChange={(e, {name, value}) => this.handleChangeTarget(objective, value)}
                                                 />

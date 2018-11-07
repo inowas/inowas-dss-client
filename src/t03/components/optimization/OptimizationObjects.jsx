@@ -2,22 +2,43 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import React from 'react';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {
-    Button,
-    Dropdown,
-    Message,
-    Form,
-    Grid,
-    Icon,
-    Table,
-    Accordion
-} from 'semantic-ui-react';
+import {Button, Message, Form, Grid, Icon, Table, Accordion} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import OptimizationObject from '../../../core/optimization/OptimizationObject';
 import FluxDataTable from './FluxDataTable';
 import OptimizationMap from './OptimizationMap';
 import Stressperiods from '../../../core/modflow/Stressperiods';
 import SubstanceEditor from './SubstanceEditor';
+import OptimizationToolbar from "./OptimizationToolbar";
+import {
+    OPTIMIZATION_EDIT_NOCHANGES,
+    OPTIMIZATION_EDIT_SAVED,
+    OPTIMIZATION_EDIT_UNSAVED
+} from "../../selectors/optimization";
+
+const styles = {
+    iconFix: {
+        width: 'auto',
+        height: 'auto'
+    },
+    inputFix: {
+        padding: '0'
+    },
+    link: {
+        cursor: 'pointer'
+    },
+    tableWidth: {
+        width: '99%'
+    },
+    buttonFix: {
+        width: 'auto',
+        height: 'auto'
+    },
+    dropDownWithButtons: {
+        marginRight: 0,
+        marginLeft: 0,
+    },
+};
 
 class OptimizationObjectsComponent extends React.Component {
 
@@ -31,7 +52,8 @@ class OptimizationObjectsComponent extends React.Component {
             selectedObject: null,
             selectedSubstance: null,
             activeIndex: 0,
-            showOverlay: false
+            showOverlay: false,
+            editState: OPTIMIZATION_EDIT_NOCHANGES
         };
     }
 
@@ -48,14 +70,16 @@ class OptimizationObjectsComponent extends React.Component {
         selectedObject: {
             ...this.state.selectedObject,
             [name]: value
-        }
+        },
+        editState: OPTIMIZATION_EDIT_UNSAVED
     });
 
     handleChangeLocation = (e, {name, value}) => this.setState({
         selectedObject: {
             ...this.state.selectedObject,
             position: value
-        }
+        },
+        editState: OPTIMIZATION_EDIT_UNSAVED
     });
 
     onClickNew = (e, {name, value}) => {
@@ -63,7 +87,8 @@ class OptimizationObjectsComponent extends React.Component {
         newObject.type = value;
         newObject.numberOfStressPeriods = this.props.stressPeriods.dateTimes.length;
         return this.setState({
-            selectedObject: newObject.toObject
+            selectedObject: newObject.toObject,
+            editState: OPTIMIZATION_EDIT_UNSAVED
         });
     };
 
@@ -92,16 +117,19 @@ class OptimizationObjectsComponent extends React.Component {
     };
 
     handleChangeFlux = rows => this.setState((prevState) => ({
-        selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(rows).toObject
+        selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateFlux(rows).toObject,
+        editState: OPTIMIZATION_EDIT_UNSAVED
     }));
 
     handleChangeSubstances = (substances) => this.setState((prevState) => ({
-        selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstances(substances).toObject
+        selectedObject: OptimizationObject.fromObject(prevState.selectedObject).updateSubstances(substances).toObject,
+        editState: OPTIMIZATION_EDIT_UNSAVED
     }));
 
     onClickBack = () => this.setState({
         selectedObject: null,
-        selectedSubstance: null
+        selectedSubstance: null,
+        editState: OPTIMIZATION_EDIT_NOCHANGES
     });
 
     onClickSave = () => {
@@ -128,35 +156,12 @@ class OptimizationObjectsComponent extends React.Component {
 
         return this.setState({
             selectedObject: null,
-            selectedSubstance: null
+            selectedSubstance: null,
+            editState: OPTIMIZATION_EDIT_SAVED
         });
     };
 
     render() {
-        const styles = {
-            iconfix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            inputfix: {
-                padding: '0'
-            },
-            link: {
-                cursor: 'pointer'
-            },
-            tablewidth: {
-                width: '99%'
-            },
-            buttonFix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            dropDownWithButtons: {
-                marginRight: 0,
-                marginLeft: 0,
-            },
-        };
-
         const typeOptions = [
             {key: 'type1', text: 'Well', value: 'wel'},
         ];
@@ -181,49 +186,24 @@ class OptimizationObjectsComponent extends React.Component {
 
         return (
             <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
-                    <Grid.Row columns={3}>
-                        <Grid.Column>
-                            {(this.state.selectedObject &&
-                                <Button icon
-                                        style={styles.iconfix}
-                                        onClick={this.onClickBack}
-                                        labelPosition="left">
-                                    <Icon name="left arrow"/>
-                                    Back
-                                </Button>
-                            )}
-                        </Grid.Column>
-                        <Grid.Column/>
-                        <Grid.Column textAlign="right">
-                            {!this.state.selectedObject ?
-                                <Dropdown button floating labeled
-                                          direction="left"
-                                          style={styles.iconfix}
-                                          name="type"
-                                          className="icon"
-                                          text="Add New"
-                                          icon="plus"
-                                          options={[
-                                              {
-                                                  key: 'wel',
-                                                  value: 'wel',
-                                                  text: 'Well'
-                                              },
-                                          ]}
-                                          onChange={this.onClickNew}
-                                /> :
-                                <Button icon positive
-                                        style={styles.iconfix}
-                                        labelPosition="left"
-                                        onClick={this.onClickSave}
-                                >
-                                    <Icon name="save"/>
-                                    Save
-                                </Button>
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
+                <OptimizationToolbar
+                    save={this.state.selectedObject ? {onClick: this.onClickSave} : null}
+                    back={this.state.selectedObject ? {onClick: this.onClickBack} : null}
+                    dropdown={ !this.state.selectedObject ? {
+                        text: 'Add New',
+                        icon: 'plus',
+                        options: [
+                            {
+                                key: 'wel',
+                                value: 'wel',
+                                text: 'Well'
+                            },
+                        ],
+                        onChange: this.onClickNew
+                    } : null}
+                    editState={this.state.editState}
+                />
+                <Grid style={styles.tableWidth}>
                     <Grid.Row columns={1}>
                         <Grid.Column>
                             {(!this.state.selectedObject && (!this.state.objects || this.state.objects.length < 1)) ?
@@ -256,7 +236,7 @@ class OptimizationObjectsComponent extends React.Component {
                                                     <Table.Cell textAlign="center">
                                                         <Button icon color="red"
                                                                 size="small"
-                                                                style={styles.iconfix}
+                                                                style={styles.iconFix}
                                                                 onClick={() => this.onClickDelete(object)}
                                                         >
                                                             <Icon name="trash"/>
@@ -289,7 +269,7 @@ class OptimizationObjectsComponent extends React.Component {
                                                 name="name"
                                                 value={this.state.selectedObject.name}
                                                 placeholder="name ="
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                                 onChange={this.handleChange}
                                             />
                                         </Form.Field>

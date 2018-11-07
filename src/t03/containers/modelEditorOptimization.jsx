@@ -51,17 +51,17 @@ const styles = {
         paddingBottom: 10,
         marginTop: 30
     },
-    iconfix: {
+    iconFix: {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {
         cursor: 'pointer'
     },
-    tablewidth: {
+    tableWidth: {
         width: '99%'
     }
 };
@@ -287,7 +287,7 @@ class ModelEditorOptimization extends React.Component {
                         <Popup
                             wide='very'
                             trigger={
-                                <Button primary style={styles.iconfix} icon>
+                                <Button primary style={styles.iconFix} icon>
                                     <Icon name="exclamation"/>
                                 </Button>
                             }

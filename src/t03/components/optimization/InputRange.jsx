@@ -47,8 +47,8 @@ class InputRange extends React.Component {
 
     handleSubmit = () => this.props.onChange({
         name: this.props.name,
-        from: this.state.from,
-        to: this.state.to
+        from: parseFloat(this.state.from),
+        to: parseFloat(this.state.to)
     });
 
     render() {

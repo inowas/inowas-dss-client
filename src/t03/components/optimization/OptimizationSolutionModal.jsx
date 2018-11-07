@@ -18,20 +18,20 @@ import Stressperiods from "../../../core/modflow/Stressperiods";
 import SubstanceEditor from "./SubstanceEditor";
 
 const styles = {
-    iconfix: {
+    iconFix: {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {
         cursor: 'pointer'
     },
-    tablewidth: {
+    tableWidth: {
         width: '99%'
     },
-    formfix: {
+    formFix: {
         width: '100%'
     }
 };
@@ -86,7 +86,7 @@ class OptimizationSolutionModal extends React.Component {
             <Modal size={'large'} open onClose={this.onCancelModal} dimmer={'inverted'}>
                 <Modal.Header>Solution Details</Modal.Header>
                 <Modal.Content>
-                    <Form style={styles.formfix}>
+                    <Form style={styles.formFix}>
                         <Form.Field>
                             <Grid divided={'vertically'}>
                                 <Grid.Row columns={2}>
@@ -129,33 +129,15 @@ class OptimizationSolutionModal extends React.Component {
                                         </Form.Field>
                                         <Form.Field>
                                             <label>Fitness</label>
-                                            <Form.Select
-                                                fluid
-                                                placeholder="Fitness"
-                                                value={this.props.solution.fitness[0]}
-                                                options={this.props.solution.fitness.map((f, key) => {
-                                                    return {
-                                                        key: key,
-                                                        value: f,
-                                                        text: parseFloat(f).toFixed(2)
-                                                    }
-                                                })}
-                                            />
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <label>Variables</label>
-                                            <Form.Select
-                                                fluid
-                                                placeholder="Variables"
-                                                value={this.props.solution.variables[0]}
-                                                options={this.props.solution.variables.map((f, key) => {
-                                                    return {
-                                                        key: key,
-                                                        value: f,
-                                                        text: parseFloat(f).toFixed(2)
-                                                    }
-                                                })}
-                                            />
+                                            <Segment>
+                                                <List>
+                                                    {this.props.solution.fitness.map((f, key) =>
+                                                        <List.Item key={key}>
+                                                            Objective {key + 1}: <b>{parseFloat(f).toFixed(3)}</b>
+                                                        </List.Item>
+                                                    )}
+                                                </List>
+                                            </Segment>
                                         </Form.Field>
                                     </Grid.Column>
                                 </Grid.Row>
