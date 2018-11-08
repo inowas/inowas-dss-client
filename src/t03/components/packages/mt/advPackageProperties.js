@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
+import {documentation} from "../../../selectors/transport";
 import AbstractPackageProperties from './AbstractPackageProperties';
 import AdvPackage from '../../../../core/modflow/mt3d/advPackage';
 import {Accordion, Form, Icon, Input, Segment, Select} from 'semantic-ui-react';
@@ -46,7 +46,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                         </Form.Field>
                         <Form.Field width={1}>
                             <label>&nbsp;</label>
-                            {this.renderInfoPopup('PLACEHOLDER', 'PERCEL', 'top right', true)}
+                            {this.renderInfoPopup(documentation.mixelm, 'MIXELM', 'bottom right', true)}
                         </Form.Field>
                     </Form.Group>
                 </Segment>
@@ -66,7 +66,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 onBlur={this.handleOnBlur(parseFloat)}
                                 onChange={this.handleOnChange}
                                 style={styles.inputFix}
-                                icon={this.renderInfoPopup('PLACEHOLDER', 'PERCEL', 'top right')}
+                                icon={this.renderInfoPopup(documentation.percel, 'PERCEL', 'top right')}
                             />
                         </Form.Field>
                         {[0].includes(mtPackage.mixelm) &&
@@ -86,7 +86,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                             </Form.Field>
                             <Form.Field width={1}>
                                 <label>&nbsp;</label>
-                                {this.renderInfoPopup('PLACEHOLDER', 'NADVFD', 'top right', true)}
+                                {this.renderInfoPopup(documentation.nadvfd, 'NADVFD', 'top right', true)}
                             </Form.Field>
                         </Form.Group>
                         }
@@ -101,7 +101,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                 onBlur={this.handleOnBlur(parseInt)}
                                 onChange={this.handleOnChange}
                                 style={styles.inputFix}
-                                icon={this.renderInfoPopup('PLACEHOLDER', 'MXPART', 'top right')}
+                                icon={this.renderInfoPopup(documentation.mxpart, 'MXPART', 'top right')}
                             />
                         </Form.Field>
                         }
@@ -116,15 +116,15 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                             disabled={readonly}
                                             onChange={this.handleOnSelect}
                                             options={[
-                                                {key: 0, value: 1, text: '0: First-order Euler'},
-                                                {key: 1, value: 2, text: '1: Fourth-order Runge-Kutta'},
-                                                {key: 2, value: 3, text: '2: Hybrid'},
+                                                {key: 0, value: 1, text: '1: First-order Euler'},
+                                                {key: 1, value: 2, text: '2: Fourth-order Runge-Kutta'},
+                                                {key: 2, value: 3, text: '3: Hybrid'},
                                             ]}
                                     />
                                 </Form.Field>
                                 <Form.Field width={1}>
                                     <label>&nbsp;</label>
-                                    {this.renderInfoPopup('PLACEHOLDER', 'NADVFD', 'top right', true)}
+                                    {this.renderInfoPopup(documentation.itrack, 'ITRACK', 'top right', true)}
                                 </Form.Field>
                             </Form.Group>
                             <Form.Field>
@@ -137,7 +137,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                     onBlur={this.handleOnBlur(parseFloat)}
                                     onChange={this.handleOnChange}
                                     style={styles.inputFix}
-                                    icon={this.renderInfoPopup('PLACEHOLDER', 'WD', 'top right')}
+                                    icon={this.renderInfoPopup(documentation.wd, 'WD', 'top right')}
                                 />
                             </Form.Field>
                         </div>
@@ -160,7 +160,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                     onBlur={this.handleOnBlur(parseFloat)}
                                     onChange={this.handleOnChange}
                                     style={styles.inputFix}
-                                    icon={this.renderInfoPopup('PLACEHOLDER', 'DCEPS', 'top right')}
+                                    icon={this.renderInfoPopup(documentation.dceps, 'DCEPS', 'top right')}
                                 />
                             </Form.Field>
                             <Form.Field>
@@ -173,7 +173,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                     onBlur={this.handleOnBlur(parseInt)}
                                     onChange={this.handleOnChange}
                                     style={styles.inputFix}
-                                    icon={this.renderInfoPopup('PLACEHOLDER', 'NPLANE', 'top right')}
+                                    icon={this.renderInfoPopup(documentation.nplane, 'NPLANE', 'top right')}
                                 />
                             </Form.Field>
                             <Form.Group widths='equal'>
@@ -187,7 +187,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                         onBlur={this.handleOnBlur(parseInt)}
                                         onChange={this.handleOnChange}
                                         style={styles.inputFix}
-                                        icon={this.renderInfoPopup('PLACEHOLDER', 'NPL')}
+                                        icon={this.renderInfoPopup(documentation.npl, 'NPL')}
                                     />
                                 </Form.Field>
                                 <Form.Field>
@@ -200,7 +200,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                         onBlur={this.handleOnBlur(parseInt)}
                                         onChange={this.handleOnChange}
                                         style={styles.inputFix}
-                                        icon={this.renderInfoPopup('PLACEHOLDER', 'NPH', 'top right')}
+                                        icon={this.renderInfoPopup(documentation.nph, 'NPH', 'top right')}
                                     />
                                 </Form.Field>
                             </Form.Group>
@@ -215,7 +215,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                         onBlur={this.handleOnBlur(parseInt)}
                                         onChange={this.handleOnChange}
                                         style={styles.inputFix}
-                                        icon={this.renderInfoPopup('PLACEHOLDER', 'NPMIN')}
+                                        icon={this.renderInfoPopup(documentation.npmin, 'NPMIN')}
                                     />
                                 </Form.Field>
                                 <Form.Field>
@@ -228,7 +228,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                         onBlur={this.handleOnBlur(parseInt)}
                                         onChange={this.handleOnChange}
                                         style={styles.inputFix}
-                                        icon={this.renderInfoPopup('PLACEHOLDER', 'NPMAX', 'top right')}
+                                        icon={this.renderInfoPopup(documentation.npmax, 'NPMAX', 'top right')}
                                     />
                                 </Form.Field>
                             </Form.Group>
@@ -253,7 +253,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                         onBlur={this.handleOnBlur(parseInt)}
                                         onChange={this.handleOnChange}
                                         style={styles.inputFix}
-                                        icon={this.renderInfoPopup('PLACEHOLDER', 'NLSINK')}
+                                        icon={this.renderInfoPopup(documentation.nlsink, 'NLSINK')}
                                     />
                                 </Form.Field>
                                 <Form.Field>
@@ -266,7 +266,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                         onBlur={this.handleOnBlur(parseInt)}
                                         onChange={this.handleOnChange}
                                         style={styles.inputFix}
-                                        icon={this.renderInfoPopup('PLACEHOLDER', 'NPSINK', 'top right')}
+                                        icon={this.renderInfoPopup(documentation.npsink, 'NPSINK', 'top right')}
                                     />
                                 </Form.Field>
                             </Form.Group>
@@ -281,7 +281,7 @@ class AdvPackageProperties extends AbstractPackageProperties {
                                     onBlur={this.handleOnBlur(parseFloat)}
                                     onChange={this.handleOnChange}
                                     style={styles.inputFix}
-                                    icon={this.renderInfoPopup('PLACEHOLDER', 'DCHMOC', 'top right')}
+                                    icon={this.renderInfoPopup(documentation.dchmoc, 'DCHMOC', 'top right')}
                                 />
                             </Form.Field>
                             }
