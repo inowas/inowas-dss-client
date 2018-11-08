@@ -46,7 +46,7 @@ class OptimizationObjective {
     }
 
     set name(value) {
-        this._name = value ? value : 'New Optimization Objective';
+        this._name = value !== '' ? value : 'New Optimization Objective';
     }
 
     get type() {
@@ -85,7 +85,7 @@ class OptimizationObjective {
     }
 
     set weight(value) {
-        this._weight = value ? parseFloat(value) : -1;
+        this._weight = value !== '' ? parseFloat(value) : -1;
     }
 
     get penaltyValue() {
@@ -93,7 +93,7 @@ class OptimizationObjective {
     }
 
     set penaltyValue(value) {
-        this._penaltyValue = value ? parseFloat(value) : 999;
+        this._penaltyValue = value !== '' ? parseFloat(value) : 999;
     }
 
     get target() {
@@ -101,7 +101,7 @@ class OptimizationObjective {
     }
 
     set target(value) {
-        this._target = value ? parseFloat(value) : null;
+        this._target = value && value !== '' ? parseFloat(value) : null;
     }
 
     get location() {

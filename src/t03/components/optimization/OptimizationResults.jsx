@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Grid, Button, Progress, Segment, List, Popup, Modal, Tab} from 'semantic-ui-react';
+import {Grid, Button, Progress, Segment, List, Popup, Modal, Tab, Dimmer, Loader} from 'semantic-ui-react';
 import Chart from './FitnessChart';
 import {
     OPTIMIZATION_STATE_CANCELLED, optimizationHasError, optimizationInProgress
@@ -234,12 +234,10 @@ class OptimizationResultsComponent extends React.Component {
                 </Grid>
                 <Tab menu={{secondary: true, pointing: true}} activeIndex={activeIndex} onTabChange={this.onTabChange}
                      panes={panes} style={styles.tableWidth}/>
-                {optimizationInProgress(optimization.state) && panes.length === 0 ?
-                    <Segment>
-                        <Progress percent={0} progress indicating={true}>
-                            Starting Calculation
-                        </Progress>
-                    </Segment> : <div/>
+                {(optimizationInProgress(optimization.state) && panes.length === 0) ?
+                    <Dimmer active inverted>
+                        <Loader inverted content='Starting Calculation' />
+                    </Dimmer> : <div />
                 }
                 {this.state.selectedSolution &&
                 <OptimizationSolutionModal
