@@ -30,7 +30,7 @@ class InputObjectList extends React.Component {
 
     render() {
         const styles = {
-            iconfix: {
+            iconFix: {
                 width: 'auto',
                 height: 'auto'
             },
@@ -74,7 +74,7 @@ class InputObjectList extends React.Component {
                                 <List.Item key={id}>
                                     <List.Content floated="right">
                                         <Button icon color="red"
-                                                style={styles.iconfix}
+                                                style={styles.iconFix}
                                                 size="small"
                                                 onClick={() => this.handleRemove(id)}>
                                             <Icon name="trash"/>

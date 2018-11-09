@@ -8,17 +8,17 @@ import OptimizationSolution from "../../../core/optimization/OptimizationSolutio
 import OptimizationObjective from "../../../core/optimization/OptimizationObjective";
 
 const styles = {
-    iconfix: {
+    iconFix: {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {
         cursor: 'pointer'
     },
-    tablewidth: {
+    tableWidth: {
         width: '99%'
     }
 };
@@ -28,7 +28,8 @@ class OptimizationLocallyModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            optimization: this.props.optimizationInput.toObject
+            optimization: this.props.optimizationInput.toObject,
+            editedObjective: null
         }
     }
 
@@ -38,9 +39,7 @@ class OptimizationLocallyModal extends React.Component {
         });
     }
 
-    onCancelModal = () => {
-        return this.props.onCancel();
-    };
+    onCancelModal = () => this.props.onCancel();
 
     onCalculationClick = () => {
         const input = this.state.optimization;
@@ -54,36 +53,39 @@ class OptimizationLocallyModal extends React.Component {
         return this.props.onCalculationStart(input);
     };
 
-    handleChangeTarget = (obj, value) => {
-        const objective = OptimizationObjective.fromObject(obj);
-        objective.target = value;
-
-        return this.setState({
-            optimization: {
-                ...this.state.optimization,
-                objectives: this.state.optimization.objectives.map(o => {
-                    if (o.id === objective.id) {
-                        return objective.toObject;
-                    }
-                    return o;
-                })
-            }
+    handleChangeTargetLocally = (obj, event) => {
+        obj.target = event.target.value;
+        this.setState({
+            editedObjective: obj
         });
     };
 
-    handleChange = (e, {name, value}) => {
-        const parameters = {
-            ...this.state.optimization.parameters,
-            [name]: value
-        };
+    handleChangeTarget = () => this.setState({
+        optimization: {
+            ...this.state.optimization,
+            objectives: this.state.optimization.objectives.map(o => {
+                if (this.state.editedObjective && o.id === this.state.editedObjective.id) {
+                    return OptimizationObjective.fromObject(this.state.editedObjective).toObject;
+                }
+                return OptimizationObjective.fromObject(o).toObject;
+            })
+        },
+        editedObjective: null
+    });
 
-        return this.setState({
-            optimization: {
-                ...this.state.optimization,
-                parameters: parameters
+    handleLocalChange = (e, {name, value}) => this.setState({
+        optimization: {
+            ...this.state.optimization,
+            parameters: {
+                ...this.state.optimization.parameters,
+                [name]: value
             }
-        });
-    };
+        }
+    });
+
+    handleChange = () => this.setState({
+        optimization: OptimizationInput.fromObject(this.state.optimization).toObject
+    });
 
     render() {
         const parameters = this.state.optimization.parameters;
@@ -106,8 +108,9 @@ class OptimizationLocallyModal extends React.Component {
                                 name="maxf"
                                 value={parameters.maxf}
                                 placeholder="maxf ="
-                                onChange={this.handleChange}
-                                style={styles.inputfix}
+                                onChange={this.handleLocalChange}
+                                onBlur={this.handleChange}
+                                style={styles.inputFix}
                             />
                         </Form.Field>
                         <Form.Group widths="equal">
@@ -118,8 +121,9 @@ class OptimizationLocallyModal extends React.Component {
                                     name="xtol"
                                     value={parameters.xtol}
                                     placeholder="xtol ="
-                                    onChange={this.handleChange}
-                                    style={styles.inputfix}
+                                    onChange={this.handleLocalChange}
+                                    onBlur={this.handleChange}
+                                    style={styles.inputFix}
                                 />
                             </Form.Field>
                             <Form.Field>
@@ -129,8 +133,9 @@ class OptimizationLocallyModal extends React.Component {
                                     name="ftol"
                                     value={parameters.ftol}
                                     placeholder="ftol ="
-                                    onChange={this.handleChange}
-                                    style={styles.inputfix}
+                                    onChange={this.handleLocalChange}
+                                    onBlur={this.handleChange}
+                                    style={styles.inputFix}
                                 />
                             </Form.Field>
                         </Form.Group>
@@ -161,9 +166,14 @@ class OptimizationLocallyModal extends React.Component {
                                                     type="number"
                                                     name="objective"
                                                     placeholder="target ="
-                                                    style={styles.inputfix}
-                                                    value={objective.target || parseFloat(this.props.solution.fitness[key]).toFixed(3)}
-                                                    onChange={(e, {name, value}) => this.handleChangeTarget(objective, value)}
+                                                    style={styles.inputFix}
+                                                    value={
+                                                        this.state.editedObjective && this.state.editedObjective.id === objective.id
+                                                            ? this.state.editedObjective.target
+                                                            : (objective.target || '')
+                                                    }
+                                                    onChange={(e) => this.handleChangeTargetLocally(objective, e)}
+                                                    onBlur={this.handleChangeTarget}
                                                 />
                                             </Form.Field>
                                         </Grid.Column>

@@ -40,24 +40,15 @@ class OptimizationMap extends React.Component {
         });
     }
 
-    toggleEditingState = () => {
-        this.setState({
-            isEditing: !this.state.isEditing
-        });
-    };
+    toggleEditingState = () => this.setState({
+        isEditing: !this.state.isEditing
+    });
 
-    getBounds = geometry => {
-        return leafletGeoJSON(geometry).getBounds();
-    };
+    getBounds = geometry => leafletGeoJSON(geometry).getBounds();
 
-    generateKeyFunction = geometry => {
-        return md5(JSON.stringify(geometry));
-    };
+    generateKeyFunction = geometry => md5(JSON.stringify(geometry));
 
-    validateLocation = p => {
-        return p.col.min <= p.col.max && p.row.min <= p.row.max && p.col.min >= 0 && p.row.min >= 0 &&
-            p.col.max <= this.props.gridSize.n_x && p.row.max <= this.props.gridSize.n_y;
-    };
+    validateLocation = p => p.col.min <= p.col.max && p.row.min <= p.row.max && p.col.min >= 0 && p.row.min >= 0 && p.col.max <= this.props.gridSize.n_x && p.row.max <= this.props.gridSize.n_y;
 
     handleChangeLocation = ({name, from, to}) => {
         const location = {
@@ -75,24 +66,20 @@ class OptimizationMap extends React.Component {
         });
     };
 
-    handleChangeLocationType = (e, {name, value}) => {
-        return this.setState({
-            location: {
-                ...this.state.location,
-                [name]: value
-            },
-            validationWarning: value === 'bbox' && !this.validateLocation(this.state.location)
-        });
-    };
+    handleChangeLocationType = (e, {name, value}) => this.setState({
+        location: {
+            ...this.state.location,
+            [name]: value
+        },
+        validationWarning: value === 'bbox' && !this.validateLocation(this.state.location)
+    });
 
-    handleChangeLocationObjects = objectIds => {
-        return this.setState({
-            location: {
-                ...this.state.location,
-                objects: objectIds
-            }
-        });
-    };
+    handleChangeLocationObjects = objectIds => this.setState({
+        location: {
+            ...this.state.location,
+            objects: objectIds
+        }
+    });
 
     drawObject = (boundingBox, gridSize, location, color = 'red') => {
         const bbXmin = boundingBox[0][0];
@@ -213,17 +200,13 @@ class OptimizationMap extends React.Component {
         });
     };
 
-    onCancelModal = () => {
-        this.setState({
-            showOverlay: false
-        });
-    };
+    onCancelModal = () => this.setState({
+        showOverlay: false
+    });
 
-    onClickToggleMap = () => {
-        this.setState({
-            showOverlay: true
-        });
-    };
+    onClickToggleMap = () => this.setState({
+        showOverlay: true
+    });
 
     printMap(readOnly = false) {
         const options = {

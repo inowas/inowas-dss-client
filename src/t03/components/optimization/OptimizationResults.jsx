@@ -3,11 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
-import {Grid, Button, Progress, Segment, List, Popup, Modal, Tab} from 'semantic-ui-react';
+import {Grid, Button, Progress, Segment, List, Popup, Modal, Tab, Dimmer, Loader} from 'semantic-ui-react';
 import Chart from './FitnessChart';
 import {
-    OPTIMIZATION_STATE_CANCELLED,
-    getMessage, optimizationHasError
+    OPTIMIZATION_STATE_CANCELLED, optimizationHasError, optimizationInProgress
 } from "../../selectors/optimization";
 import OptimizationSolutionModal from "./OptimizationSolutionModal";
 import OptimizationSolution from "../../../core/optimization/OptimizationSolution";
@@ -18,17 +17,24 @@ import OptimizationInput from "../../../core/optimization/OptimizationInput";
 import OptimizationObject from "../../../core/optimization/OptimizationObject";
 
 const styles = {
-    iconfix: {
+    contentFix: {
+        width: 'auto',
+        maxWidth: '350px'
+    },
+    iconFix: {
         width: 'auto',
         height: 'auto'
     },
-    inputfix: {
+    inputFix: {
         padding: '0'
     },
     link: {
         cursor: 'pointer'
     },
-    tablewidth: {
+    popupFix: {
+        maxWidth: '350px'
+    },
+    tableWidth: {
         width: '99%'
     }
 };
@@ -88,13 +94,11 @@ class OptimizationResultsComponent extends React.Component {
         });
     };
 
-    onCancelModal = () => {
-        return this.setState({
-            localOptimization: null,
-            selectedSolution: null,
-            createdBoundaries: null
-        });
-    };
+    onCancelModal = () => this.setState({
+        localOptimization: null,
+        selectedSolution: null,
+        createdBoundaries: null
+    });
 
     onCalculationStart = (input) => {
         this.onCancelModal();
@@ -141,7 +145,7 @@ class OptimizationResultsComponent extends React.Component {
                     </Grid> : <div/>
                 }
                 {method.solutions.length > 0 ?
-                    <Segment style={styles.tablewidth}>
+                    <Segment style={styles.tableWidth}>
                         <Grid divided="vertically">
                             <Grid.Row columns={3}>
                                 <Grid.Column textAlign="center" width={4}>
@@ -166,8 +170,13 @@ class OptimizationResultsComponent extends React.Component {
                                             {
                                                 this.props.optimization.input.objectives.map((o, oKey) =>
                                                     <List.Item key={oKey}>
-                                                        <Popup trigger={<span>Objective {oKey + 1}</span>}
-                                                               content={o.name}/>: <b>{parseFloat(solution.fitness[oKey]).toFixed(3)}</b>
+                                                        <Popup
+                                                            style={styles.popupFix}
+                                                            trigger={<span>Objective {oKey + 1}</span>}>
+                                                            <Popup.Content style={styles.contentFix}>
+                                                                {o.name}
+                                                            </Popup.Content>
+                                                        </Popup>: <b>{parseFloat(solution.fitness[oKey]).toFixed(3)}</b>
                                                     </List.Item>
                                                 )
                                             }
@@ -176,17 +185,18 @@ class OptimizationResultsComponent extends React.Component {
                                     <Grid.Column textAlign="center" width={6}>
                                         <Button.Group>
                                             <Button color="blue"
+                                                    disabled={optimizationInProgress(this.state.optimization.state)}
                                                     size="small"
-                                                    style={styles.iconfix}
+                                                    style={styles.iconFix}
                                                     onClick={() => this.onClickApply(solution.id)}
                                             >
                                                 Apply
                                             </Button>
                                             <Button.Or/>
                                             <Button color="blue"
-                                                    disabled={this.props.model.dirty}
+                                                    disabled={this.props.model.dirty || optimizationInProgress(this.state.optimization.state)}
                                                     size="small"
-                                                    style={styles.iconfix}
+                                                    style={styles.iconFix}
                                                     onClick={() => this.onClickLocalOptimization(solution.id)}
                                             >
                                                 Optimize Locally
@@ -203,7 +213,7 @@ class OptimizationResultsComponent extends React.Component {
     };
 
     render() {
-        const {activeIndex} = this.state;
+        const {activeIndex, optimization} = this.state;
         const state = this.props.optimization.state;
 
         const panes = this.props.optimization.methods.map((method, mKey) => {
@@ -215,17 +225,20 @@ class OptimizationResultsComponent extends React.Component {
 
         return (
             <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
+                <Grid style={styles.tableWidth}>
                     <Grid.Row columns={3}>
                         <Grid.Column/>
-                        <Grid.Column textAlign="center">
-                            State: {getMessage(state)}
-                        </Grid.Column>
+                        <Grid.Column/>
                         <Grid.Column/>
                     </Grid.Row>
                 </Grid>
                 <Tab menu={{secondary: true, pointing: true}} activeIndex={activeIndex} onTabChange={this.onTabChange}
-                     panes={panes} style={styles.tablewidth}/>
+                     panes={panes} style={styles.tableWidth}/>
+                {(optimizationInProgress(optimization.state) && panes.length === 0) ?
+                    <Dimmer active inverted>
+                        <Loader inverted content='Starting Calculation' />
+                    </Dimmer> : <div />
+                }
                 {this.state.selectedSolution &&
                 <OptimizationSolutionModal
                     model={this.props.model}

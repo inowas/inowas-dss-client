@@ -4,11 +4,24 @@ import PropTypes from 'prop-types';
 import {pure} from 'recompose';
 import {LayoutComponents} from '../../../core/index';
 import OptimizationParameters from '../../../core/optimization/OptimizationParameters';
-import {Segment, Form, Grid, Button, Icon, Message, Transition} from 'semantic-ui-react';
+import {Segment, Form, Grid} from 'semantic-ui-react';
+import {OPTIMIZATION_EDIT_NOCHANGES, OPTIMIZATION_EDIT_SAVED, OPTIMIZATION_EDIT_UNSAVED} from "../../selectors/optimization";
+import OptimizationToolbar from "./OptimizationToolbar";
 
-const EDITSTATE_NOCHANGES = 0;
-const EDITSTATE_UNSAVED = 1;
-const EDITSTATE_SAVED = 2;
+const styles = {
+    inputFix: {
+        padding: '0'
+    },
+    tableWidth: {
+        width: '99%',
+        marginBottom: '0'
+    },
+    formFix: {
+        marginRight: '15px',
+        marginLeft: '15px',
+        width: '100%'
+    }
+};
 
 class OptimizationParametersComponent extends React.Component {
 
@@ -16,7 +29,7 @@ class OptimizationParametersComponent extends React.Component {
         super(props);
         this.state = {
             parameters: props.parameters.toObject,
-            editState: EDITSTATE_NOCHANGES
+            editState: OPTIMIZATION_EDIT_NOCHANGES
         };
     }
 
@@ -28,7 +41,7 @@ class OptimizationParametersComponent extends React.Component {
 
     handleSubmit = () => {
         this.setState({
-            editState: EDITSTATE_SAVED
+            editState: OPTIMIZATION_EDIT_SAVED
         });
 
         return this.props.onChange({
@@ -39,38 +52,10 @@ class OptimizationParametersComponent extends React.Component {
 
     handleChange = (e, {name, value}) => this.setState({
         parameters: {...this.state.parameters, [name]: value},
-        editState: EDITSTATE_UNSAVED
+        editState: OPTIMIZATION_EDIT_UNSAVED
     });
 
     render() {
-        const styles = {
-            iconfix: {
-                width: 'auto',
-                height: 'auto'
-            },
-            inputfix: {
-                padding: '0'
-            },
-            link: {
-                cursor: 'pointer'
-            },
-            tablewidth: {
-                width: '99%',
-                marginBottom: '0'
-            },
-            formfix: {
-                marginRight: '15px',
-                marginLeft: '15px',
-                width: '100%'
-            },
-            msgfix: {
-                paddingTop: '6.929px',
-                paddingBottom: '6.929px',
-                fontSize: '1rem',
-                textAlign: 'center'
-            }
-        };
-
         const boolOptions = [
             {
                 key: 'true',
@@ -87,29 +72,15 @@ class OptimizationParametersComponent extends React.Component {
 
         return (
             <LayoutComponents.Column>
-                <Grid style={styles.tablewidth}>
-                    <Grid.Row columns={3}>
-                        <Grid.Column/>
-                        <Grid.Column>
-                            {this.state.editState === EDITSTATE_UNSAVED &&
-                            <Message warning style={styles.msgfix}>Changes not saved!</Message>
-                            }
-                            <Transition visible={this.state.editState === EDITSTATE_SAVED} animation="drop" duration={500}>
-                                <Message positive style={styles.msgfix}>Changes saved!</Message>
-                            </Transition>
-                        </Grid.Column>
-                        <Grid.Column textAlign="right">
-                            <Button icon positive
-                                    style={styles.iconfix}
-                                    onClick={this.handleSubmit}
-                                    labelPosition="left">
-                                <Icon name="save"/>
-                                Save
-                            </Button>
-                        </Grid.Column>
-                    </Grid.Row>
+                <OptimizationToolbar
+                    save={{
+                        onClick: this.handleSubmit
+                    }}
+                    editState={this.state.editState}
+                />
+                <Grid style={styles.tableWidth}>
                     <Grid.Row columns={1}>
-                        <Form style={styles.formfix}>
+                        <Form style={styles.formFix}>
                             <Form.Field>
                                 <label>Method of optimization</label>
                                 <Form.Select
@@ -142,7 +113,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 value={parameters.ngen}
                                                 placeholder="ngen ="
                                                 onChange={this.handleChange}
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                                 disabled={(parameters.method !== 'GA')}
                                             />
                                         </Form.Field>
@@ -154,7 +125,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 value={parameters.pop_size}
                                                 placeholder="pop_size ="
                                                 onChange={this.handleChange}
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                             />
                                         </Form.Field>
                                     </Form.Group>
@@ -167,7 +138,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 value={parameters.mutpb}
                                                 placeholder="mutpb ="
                                                 onChange={this.handleChange}
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -178,7 +149,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 value={parameters.cxpb}
                                                 placeholder="cxpb ="
                                                 onChange={this.handleChange}
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                             />
                                         </Form.Field>
                                     </Form.Group>
@@ -190,7 +161,7 @@ class OptimizationParametersComponent extends React.Component {
                                             value={parameters.eta}
                                             placeholder="eta ="
                                             onChange={this.handleChange}
-                                            style={styles.inputfix}
+                                            style={styles.inputFix}
                                         />
                                     </Form.Field>
                                     <Form.Field>
@@ -201,7 +172,7 @@ class OptimizationParametersComponent extends React.Component {
                                             value={parameters.indpb}
                                             placeholder="indpb ="
                                             onChange={this.handleChange}
-                                            style={styles.inputfix}
+                                            style={styles.inputFix}
                                         />
                                     </Form.Field>
                                     <Segment>
@@ -225,7 +196,7 @@ class OptimizationParametersComponent extends React.Component {
                                                     value={parameters.qbound}
                                                     placeholder="qbound ="
                                                     onChange={this.handleChange}
-                                                    style={styles.inputfix}
+                                                    style={styles.inputFix}
                                                     disabled={(parameters.diversity_flg === false)}
                                                 />
                                             </Form.Field>
@@ -237,7 +208,7 @@ class OptimizationParametersComponent extends React.Component {
                                                     value={parameters.ncls}
                                                     placeholder="ncls ="
                                                     onChange={this.handleChange}
-                                                    style={styles.inputfix}
+                                                    style={styles.inputFix}
                                                     disabled={(parameters.diversity_flg === false)}
                                                 />
                                             </Form.Field>
@@ -256,7 +227,7 @@ class OptimizationParametersComponent extends React.Component {
                                             value={parameters.maxf}
                                             placeholder="maxf ="
                                             onChange={this.handleChange}
-                                            style={styles.inputfix}
+                                            style={styles.inputFix}
                                             disabled={(parameters.method !== 'Simplex')}
                                         />
                                     </Form.Field>
@@ -269,7 +240,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 value={parameters.xtol}
                                                 placeholder="xtol ="
                                                 onChange={this.handleChange}
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                                 disabled={(parameters.method !== 'Simplex')}
                                             />
                                         </Form.Field>
@@ -281,7 +252,7 @@ class OptimizationParametersComponent extends React.Component {
                                                 value={parameters.ftol}
                                                 placeholder="ftol ="
                                                 onChange={this.handleChange}
-                                                style={styles.inputfix}
+                                                style={styles.inputFix}
                                                 disabled={(parameters.method !== 'Simplex')}
                                             />
                                         </Form.Field>
@@ -296,7 +267,7 @@ class OptimizationParametersComponent extends React.Component {
                                     value={parameters.report_frequency}
                                     placeholder="report frequency ="
                                     onChange={this.handleChange}
-                                    style={styles.inputfix}
+                                    style={styles.inputFix}
                                 />
                             </Form.Field>
                         </Form>

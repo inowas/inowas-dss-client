@@ -9,7 +9,7 @@ class OptimizationConstraint {
     _concFileName = 'MT3D001.UCN';
     _summaryMethod = 'mean';
     _value = 0;
-    _operator = '';
+    _operator = 'more';
     _location = new Location();
     _location1 = new Location();
     _location2 = new Location();
@@ -83,7 +83,7 @@ class OptimizationConstraint {
     }
 
     set value(value) {
-        this._value = value ? parseFloat(value) : 0;
+        this._value = value !== '' ? parseFloat(value) : 0;
     }
 
     get operator() {

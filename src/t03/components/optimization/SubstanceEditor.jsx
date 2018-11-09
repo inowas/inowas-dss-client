@@ -95,11 +95,9 @@ class SubstanceEditor extends React.Component {
         })
     };
 
-    onCancelModal = () => {
-        return this.setState({
-            selectedSubstance: null
-        })
-    };
+    onCancelModal = () => this.setState({
+        selectedSubstance: null
+    });
 
     onSaveModal = () => {
         const substance = this.state.selectedSubstance;
@@ -126,17 +124,17 @@ class SubstanceEditor extends React.Component {
 
     render() {
         const styles = {
-            iconfix: {
+            iconFix: {
                 width: 'auto',
                 height: 'auto'
             },
-            inputfix: {
+            inputFix: {
                 padding: '0'
             },
             link: {
                 cursor: 'pointer'
             },
-            tablewidth: {
+            tableWidth: {
                 width: '99%'
             },
             buttonFix: {
