@@ -4,8 +4,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styleGlobals from 'styleGlobals';
-import RasterData from '../../../core/rasterData/components/rasterData';
-import {Soilmodel, SoilmodelLayer} from "../../../core/soilmodel";
+import {SoilmodelLayer} from "../../../core/soilmodel";
 import SoilmodelLayerParameter from "./SoilmodelLayerParameter";
 
 const styles = {
