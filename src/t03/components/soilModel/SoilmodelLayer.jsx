@@ -89,7 +89,7 @@ class SoilmodelLayerComponent extends React.Component {
     };
 
     render() {
-        const {area, boundingBox, gridSize, isLoading, readOnly, updateLayerStatus} = this.props;
+        const {isLoading, readOnly, updateLayerStatus} = this.props;
         const {layer} = this.state;
 
         if (!layer) {
@@ -175,35 +175,20 @@ class SoilmodelLayerComponent extends React.Component {
                             />
                         </Form.Group>
                     </Tab.Pane>
-            },
-            {
-                menuItem: 'Elevation', render: () =>
-                    <Tab.Pane attached={false}>
-                        <RasterData
-                            area={area}
-                            boundingBox={boundingBox}
-                            gridSize={gridSize}
-                            name={'Top elevation'}
-                            unit={'m'}
-                            data={layer.top}
-                            readOnly={readOnly}
-                            onChange={this.handleInputChange('top')}
-                        />
-                        <RasterData
-                            area={area}
-                            boundingBox={boundingBox}
-                            gridSize={gridSize}
-                            name={'Bottom elevation'}
-                            unit={'m'}
-                            data={layer.botm}
-                            readOnly={readOnly}
-                            onChange={this.handleInputChange('botm')}
-                        />
-                    </Tab.Pane>
             }
         ];
 
         const parameters = [
+            {
+                name: 'top',
+                description: 'Top elevation',
+                unit: 'm'
+            },
+            {
+                name: 'botm',
+                description: 'Bottom elevation',
+                unit: 'm'
+            },
             {
                 name: 'hk',
                 description: 'Horizontal conductivity along rows',

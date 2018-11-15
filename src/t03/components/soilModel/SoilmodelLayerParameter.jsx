@@ -3,7 +3,7 @@ import ConfiguredRadium from 'ConfiguredRadium';
 import {SoilmodelLayer, SoilmodelZone} from "../../../core/soilmodel";
 import {pure} from "recompose";
 import React from "react";
-import {Accordion, Button, Dropdown, Form, Grid, Header, Icon, Modal, Segment} from "semantic-ui-react";
+import {Accordion, Button, Form, Grid, Header, Icon, Modal, Segment} from "semantic-ui-react";
 import RasterDataMap from '../../../core/rasterData/components/rasterDataMap';
 import ParameterDataTable from "./ParameterDataTable";
 import {FeatureGroup, GeoJSON, Map, Polygon, TileLayer} from "react-leaflet";
@@ -116,6 +116,8 @@ class SoilmodelLayerParameter extends React.Component {
 
     onChange = e => {
         const layer = SoilmodelLayer.fromObject(this.state.layer);
+
+        console.log(e);
 
         e.map(row => {
             const zone = layer.zones.filter(z => z.id === row.id)[0];
@@ -473,6 +475,28 @@ class SoilmodelLayerParameter extends React.Component {
                                             name="name"
                                             value={selectedZone.name}
                                             placeholder="name ="
+                                            style={styles.inputFix}
+                                            onChange={this.onChangeZone}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <label>top</label>
+                                        <Form.Input
+                                            type="number"
+                                            name="top"
+                                            value={selectedZone.top || ''}
+                                            placeholder="top"
+                                            style={styles.inputFix}
+                                            onChange={this.onChangeZone}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <label>botm</label>
+                                        <Form.Input
+                                            type="number"
+                                            name="botm"
+                                            value={selectedZone.botm || ''}
+                                            placeholder="botm ="
                                             style={styles.inputFix}
                                             onChange={this.onChangeZone}
                                         />
