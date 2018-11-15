@@ -117,8 +117,6 @@ class SoilmodelLayerParameter extends React.Component {
     onChange = e => {
         const layer = SoilmodelLayer.fromObject(this.state.layer);
 
-        console.log(e);
-
         e.map(row => {
             const zone = layer.zones.filter(z => z.id === row.id)[0];
             if (zone && zone[this.state.parameter.name] !== row.value) {
