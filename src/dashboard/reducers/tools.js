@@ -57,6 +57,13 @@ const initialState = [
         role: ROLE_USER,
         instances: []
     }, {
+        slug: 'T11',
+        name: 'MAR model selection',
+        path: '/tools/',
+        subPath: '',
+        role: ROLE_USER,
+        instances: []
+    }, {
         slug: 'T13',
         name: 'Travel time through unconfined aquifer',
         path: '/tools/',
