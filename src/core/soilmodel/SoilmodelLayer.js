@@ -229,7 +229,7 @@ class SoilmodelLayer {
         }
     }
 
-    zonesToParameters(gridSize, parameters = ['hk', 'hani', 'vka', 'ss', 'sy']) {
+    zonesToParameters(gridSize, parameters = ['top', 'botm', 'hk', 'hani', 'vka', 'ss', 'sy']) {
         if (!Array.isArray(parameters)) {
             parameters = [parameters];
         }
