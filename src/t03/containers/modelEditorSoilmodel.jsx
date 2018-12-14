@@ -85,6 +85,7 @@ class ModelEditorSoilmodel extends React.Component {
         zone.geometry = this.props.area;
         zone.activeCells = calculateActiveCells(zone.geometry, this.props.boundingBox, this.props.gridSize);
         zone.priority = layer.zones.length;
+        layer.number = this.props.soilmodel.layers.length;
         layer.addZone(zone);
 
         this.props.createLayer(
