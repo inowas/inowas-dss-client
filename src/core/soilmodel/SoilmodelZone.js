@@ -6,6 +6,8 @@ class SoilmodelZone {
     _geometry = {};
     _activeCells = [];
     _priority = 0;
+    _top = null;
+    _botm = null;
     _hk = null;
     _hani = null;
     _vka = null;
@@ -20,6 +22,8 @@ class SoilmodelZone {
             zone.geometry = obj.geometry;
             zone.activeCells = obj.activeCells;
             zone.priority = obj.priority;
+            zone.top = obj.top;
+            zone.botm = obj.botm;
             zone.hk = obj.hk;
             zone.hani = obj.hani;
             zone.vka = obj.vka;
@@ -32,6 +36,8 @@ class SoilmodelZone {
     static fromDefault() {
         const zone = new SoilmodelZone();
         zone.name = 'Default';
+        zone.top = 1;
+        zone.botm = 0;
         zone.hk = 10;
         zone.hani = 1;
         zone.vka = 1;
@@ -83,6 +89,22 @@ class SoilmodelZone {
         this._priority = value ? parseInt(value) : 0;
     }
 
+    get top() {
+        return this._top;
+    }
+
+    set top(value) {
+        this._top = value && value !== '' ? parseFloat(value) : null;
+    }
+
+    get botm() {
+        return this._botm;
+    }
+
+    set botm(value) {
+        this._botm = value && value !== '' ? parseFloat(value) : null;
+    }
+
     get hk() {
         return this._hk;
     }
@@ -130,6 +152,8 @@ class SoilmodelZone {
             'geometry': this.geometry,
             'activeCells': this.activeCells,
             'priority': this.priority,
+            'top': this.top,
+            'botm': this.botm,
             'hk': this.hk,
             'hani': this.hani,
             'vka': this.vka,
